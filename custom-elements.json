@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/aiChat.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AiChat",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_containerRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "this.shadowRoot!.getElementById('ai-chat-container')"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "key"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "ai-chat",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AiChat",
+          "declaration": {
+            "name": "AiChat",
+            "module": "src/aiChat.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "ai-chat",
+          "declaration": {
+            "name": "AiChat",
+            "module": "src/aiChat.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "ai-chat",
+  "version": "0.0.1",
+  "description": "ai chat",
+  "main": "./dist/aiChat.js",
+  "module": "./dist/aiChat.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "lint": "eslint 'src/**/*.ts'",
+    "serve": "wds --watch",
+    "analyze": "cem analyze --globs \"src/**/*.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OvidijusParsiunas/ai-chat.git"
+  },
+  "author": "OvidijusParsiunas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OvidijusParsiunas/ai-chat/issues"
+  },
+  "homepage": "https://github.com/OvidijusParsiunas/ai-chat#readme",
+  "keywords": [
+    "ai-chat"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint": "^8.15.0",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5",
+    "@web/dev-server": "^0.1.35",
+    "@web/dev-server-legacy": "^1.0.1"
+  },
+  "dependencies": {},
+  "customElements": "custom-elements.json",
+  "files": [
+    "dist/**/*",
+    "custom-elements.json"
+  ]
+}
