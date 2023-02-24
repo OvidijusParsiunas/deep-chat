@@ -1,15 +1,11 @@
-// import {styles} from './styles';
+import {ChatView} from './views/chatView';
 
-const chatView = document.createElement('template');
-chatView.innerHTML = `
-  <div>
-    The key is <span id="key"><span>
-  </div>
-`;
+// import {styles} from './styles';
 
 const insertKeyView = document.createElement('template');
 insertKeyView.innerHTML = `
-  <div>Insert key:
+  <div>
+    Insert key:
     <input></input><button>Submit</button>
   </div>
 `;
@@ -41,8 +37,7 @@ export class AiChat extends HTMLElement {
 
   set key(newValue) {
     console.log('key has changed!');
-    this._containerRef.replaceChildren(chatView.content.cloneNode(true));
-    (this.shadowRoot!.getElementById('key') as HTMLElement).innerText = newValue;
+    new ChatView(this._containerRef, newValue);
   }
 
   static get observedAttributes() {

@@ -1,0 +1,1 @@
+{"version":3,"file":"chat.js","sourceRoot":"","sources":["../../src/views/chat.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,QAAQ;IAEnB,YAAY,SAAsB;QAChC,IAAI,CAAC,UAAU,GAAG,SAAS,CAAC;IAC9B,CAAC;CACF","sourcesContent":["export class ChatView {\n  _resultRef: HTMLElement;\n  constructor(resultRef: HTMLElement) {\n    this._resultRef = resultRef;\n  }\n}\n"]}
