@@ -1,7 +1,6 @@
 export const messageStyle = `
   <style>
     .messages {
-      height: calc(100% - 45px);
       overflow: overlay;
     }
   

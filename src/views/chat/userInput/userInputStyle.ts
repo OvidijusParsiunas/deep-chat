@@ -1,12 +1,10 @@
 export const userInputStyle = `
   <style>
     .user-input {
-      height: 45px;
       width: 80%;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      position: relative;
     }
     #input-content-container {
       background-color: white;
@@ -14,10 +12,10 @@ export const userInputStyle = `
       display: flex;
       border: 1px solid #0000001a;
       border-radius: 5px;
-      position: absolute;
-      bottom: 0px;
+      margin-top: 10px;
       margin-bottom: 10px;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
+      position: relative;
     }
     #input {
       width: calc(100% - 25px);
