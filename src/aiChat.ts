@@ -1,6 +1,5 @@
-import {ChatView} from './views/chatView';
-
-// import {styles} from './styles';
+import {ChatView} from './views/chat/chatView';
+import {aiChatStyle} from './aiChatStyle';
 
 const insertKeyView = document.createElement('template');
 insertKeyView.innerHTML = `
@@ -12,13 +11,9 @@ insertKeyView.innerHTML = `
 
 const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = `
+  ${aiChatStyle}
   <div id="ai-chat-container"></div>
 `;
-
-// template.innerHTML = `
-//   ${styles}
-//   <div class="text">Web component says: <span id="greeting"></span></div>
-// `;
 
 export class AiChat extends HTMLElement {
   _containerRef: HTMLElement;
