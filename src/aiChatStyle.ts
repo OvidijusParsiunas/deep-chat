@@ -9,6 +9,7 @@ export const aiChatStyle = `
       width: 400px;
       height: 300px;
       border: 1px solid grey;
+      border-radius: 3px;
       font-family: Söhne,ui-sans-serif,system-ui;
     }
   </style>

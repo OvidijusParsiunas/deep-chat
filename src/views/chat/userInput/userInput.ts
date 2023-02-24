@@ -1,5 +1,7 @@
+import {SVGIconUtil} from '../../../utils/svgIconUtil';
 import {AddNewMessage} from '../messages/messages';
 import {userInputStyle} from './userInputStyle';
+import {SUBMIT_ICON_STRING} from './submitIcon';
 import {OpenAIClient} from './openAIClient';
 
 const inputTemplate = document.createElement('template');
@@ -18,30 +20,40 @@ export class UserInput {
   }
 
   private buildElements(key: string, addNewMessage: AddNewMessage) {
+    const containerElement = this.createContainerElement();
     const inputElement = this.createInputElement();
-    this._elementRef.appendChild(inputElement);
+    containerElement.appendChild(inputElement);
     const buttonElement = this.createButtonElement(key, addNewMessage, inputElement);
-    this._elementRef.appendChild(buttonElement);
+    containerElement.appendChild(buttonElement);
+    this._elementRef.appendChild(containerElement);
+  }
+
+  private createContainerElement() {
+    const contentContainerElement = document.createElement('div');
+    contentContainerElement.id = 'input-content-container';
+    return contentContainerElement;
   }
 
   private createInputElement() {
-    const inputElement = document.createElement('input');
+    const inputElement = document.createElement('div');
     inputElement.id = 'input';
+    inputElement.contentEditable = 'true';
     return inputElement;
   }
 
-  private createButtonElement(key: string, addNewMessage: AddNewMessage, inputElement: HTMLInputElement) {
-    const buttonElement = document.createElement('button');
-    buttonElement.innerText = 'Call';
+  private createButtonElement(key: string, addNewMessage: AddNewMessage, inputElement: HTMLElement) {
+    const buttonElement = document.createElement('div');
+    const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
+    svgIconElement.id = 'icon';
+    buttonElement.appendChild(svgIconElement);
     buttonElement.id = 'submit-button';
     buttonElement.onmousedown = this.callApi.bind(this, key, inputElement, addNewMessage);
     return buttonElement;
   }
 
-  private callApi(key: string, inputElement: HTMLInputElement, addNewMessage: AddNewMessage) {
-    const inputText = inputElement.value.trim();
-    if (inputText === '') return;
-    addNewMessage(inputText);
+  private callApi(key: string, inputElement: HTMLElement, addNewMessage: AddNewMessage) {
+    const inputText = inputElement.textContent?.trim();
+    if (!inputText || inputText === '') return;
     OpenAIClient.requestCompletion(key, inputText, addNewMessage);
   }
 }

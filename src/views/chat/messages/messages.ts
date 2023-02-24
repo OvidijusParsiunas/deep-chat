@@ -3,7 +3,13 @@ import {messageStyle} from './messageStyle';
 const messagesTemplate = document.createElement('template');
 messagesTemplate.innerHTML = `
   ${messageStyle}
-  <div class="messages"></div>
+  <div class="messages">
+    <div id="placeholder">
+      <div id="placeholder-text">
+        Placeholder text
+      </div>
+    </div>
+  </div>
 `;
 
 export type AddNewMessage = Messages['addNewMessage'];
@@ -29,6 +35,9 @@ export class Messages {
   }
 
   public addNewMessage(text: string) {
+    if (this._messages.length === 0) {
+      this._elementRef.replaceChildren();
+    }
     this._elementRef.appendChild(this.createNewMessage(text));
     this._messages.push(text);
   }
