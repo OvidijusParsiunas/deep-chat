@@ -20,7 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "types": ["vite/client"]
   },
   "include": ["src/**/*.ts"],
   "exclude": []

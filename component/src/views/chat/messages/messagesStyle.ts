@@ -22,14 +22,28 @@ export const messagesStyle = `
       transform: translate(-50%, -50%);
     }
 
-    .message {
+    .message-container {
       border-color: #0000001a;
     }
 
-    .message-text {
+    .message {
       width: 90%;
       margin-left: auto;
       margin-right: auto;
+      display: flex;
+    }
+
+    .avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 1px;
+    }
+
+    .avatar-container {
+      margin: 10px;
+    }
+
+    .message-text {
       color: rgba(52,53,65);
       padding-top: 10px;
       padding-bottom: 10px;

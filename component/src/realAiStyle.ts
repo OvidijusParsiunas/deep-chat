@@ -1,11 +1,11 @@
-export const aiChatStyle = `
+export const realAIStyle = `
   <style>
     :host {
       /* this property prevents outside styles from affecting this component */
       all: initial;
     }
 
-    #ai-chat-container {
+    #real-ai-container {
       width: 400px;
       height: 300px;
       border: 1px solid grey;

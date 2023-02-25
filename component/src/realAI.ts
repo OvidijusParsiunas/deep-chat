@@ -1,5 +1,5 @@
 import {ChatView} from './views/chat/chatView';
-import {aiChatStyle} from './aiChatStyle';
+import {realAIStyle} from './realAIStyle';
 
 const insertKeyView = document.createElement('template');
 insertKeyView.innerHTML = `
@@ -11,17 +11,17 @@ insertKeyView.innerHTML = `
 
 const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = `
-  ${aiChatStyle}
-  <div id="ai-chat-container"></div>
+  ${realAIStyle}
+  <div id="real-ai-container"></div>
 `;
 
-export class AiChat extends HTMLElement {
+export class RealAI extends HTMLElement {
   _containerRef: HTMLElement;
 
   constructor() {
     super();
     this.attachShadow({mode: 'open'}).appendChild(defaultTemplate.content.cloneNode(true));
-    this._containerRef = this.shadowRoot!.getElementById('ai-chat-container') as HTMLElement;
+    this._containerRef = this.shadowRoot!.getElementById('real-ai-container') as HTMLElement;
     this._containerRef.appendChild(insertKeyView.content.cloneNode(true));
   }
 
@@ -45,11 +45,11 @@ export class AiChat extends HTMLElement {
   }
 }
 
-customElements.define('ai-chat', AiChat);
+customElements.define('real-ai', RealAI);
 
 // The following type makes it easier for other projects to use this component with TypeScript
 declare global {
   interface HTMLElementTagNameMap {
-    'ai-chat': AiChat;
+    'real-ai': RealAI;
   }
 }
