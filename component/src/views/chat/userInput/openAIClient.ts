@@ -1,7 +1,9 @@
-import {AddNewMessage} from '../messages/messages';
+export interface CompletionResult {
+  choices: {text: string}[];
+}
 
 export class OpenAIClient {
-  public static requestCompletion(key: string, prompt: string, addNewMessage: AddNewMessage) {
+  public static requestCompletion(key: string, prompt: string, onSuccessfulResult: (result: CompletionResult) => void) {
     fetch('https://api.openai.com/v1/completions', {
       method: 'POST',
       headers: new Headers({
@@ -17,8 +19,8 @@ export class OpenAIClient {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        addNewMessage(data.choices[0].text as string);
+      .then((result: CompletionResult) => {
+        onSuccessfulResult(result);
       })
       .catch((err) => console.log(err));
   }

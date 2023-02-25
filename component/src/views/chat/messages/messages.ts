@@ -6,7 +6,7 @@ messagesTemplate.innerHTML = `
   <div class="messages">
     <div id="placeholder">
       <div id="placeholder-text">
-        Placeholder text
+        AI Chat
       </div>
     </div>
   </div>
