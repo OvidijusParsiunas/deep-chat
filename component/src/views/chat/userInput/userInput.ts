@@ -71,7 +71,7 @@ export class UserInput {
     const inputText = this._inputElementRef.textContent?.trim();
     this._addNewMessage(inputText as string);
     if (!inputText || inputText === '') return;
-    OpenAIClient.requestCompletion(this._key, inputText, this._addNewMessage);
+    // OpenAIClient.requestCompletion(this._key, inputText, this._addNewMessage);
     this._inputElementRef.textContent = '';
   }
 }
