@@ -3,6 +3,7 @@ import {AddNewMessage} from '../messages/messages';
 import {userInputStyle} from './userInputStyle';
 import {SUBMIT_ICON_STRING} from './submitIcon';
 import {OpenAIClient} from './openAIClient';
+import {PasteUtils} from './pasteUtils';
 
 const inputTemplate = document.createElement('template');
 inputTemplate.innerHTML = `
@@ -12,20 +13,26 @@ inputTemplate.innerHTML = `
 
 export class UserInput {
   private readonly _elementRef: HTMLElement;
+  private readonly _key: string;
+  private readonly _addNewMessage: AddNewMessage;
+  private readonly _inputElementRef: HTMLElement;
 
   constructor(parentElement: HTMLElement, key: string, addNewMessage: AddNewMessage) {
     parentElement.appendChild(inputTemplate.content.cloneNode(true));
     this._elementRef = parentElement.getElementsByClassName('user-input')[0] as HTMLElement;
-    this.buildElements(key, addNewMessage);
+    this._key = key;
+    this._addNewMessage = addNewMessage;
+    this._inputElementRef = this.buildElements().inputElement;
   }
 
-  private buildElements(key: string, addNewMessage: AddNewMessage) {
+  private buildElements() {
     const containerElement = this.createContainerElement();
     const inputElement = this.createInputElement();
     containerElement.appendChild(inputElement);
-    const buttonElement = this.createButtonElement(key, addNewMessage, inputElement);
-    containerElement.appendChild(buttonElement);
     this._elementRef.appendChild(containerElement);
+    const buttonElement = this.createButtonElement();
+    this._elementRef.appendChild(buttonElement);
+    return {inputElement};
   }
 
   private createContainerElement() {
@@ -38,22 +45,33 @@ export class UserInput {
     const inputElement = document.createElement('div');
     inputElement.id = 'input';
     inputElement.contentEditable = 'true';
+    inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
+    inputElement.onkeydown = this.onKeydown.bind(this);
     return inputElement;
   }
 
-  private createButtonElement(key: string, addNewMessage: AddNewMessage, inputElement: HTMLElement) {
+  private onKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.submit();
+    }
+  }
+
+  private createButtonElement() {
     const buttonElement = document.createElement('div');
     const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
     svgIconElement.id = 'icon';
     buttonElement.appendChild(svgIconElement);
     buttonElement.id = 'submit-button';
-    buttonElement.onmousedown = this.callApi.bind(this, key, inputElement, addNewMessage);
+    buttonElement.onmousedown = this.submit.bind(this);
     return buttonElement;
   }
 
-  private callApi(key: string, inputElement: HTMLElement, addNewMessage: AddNewMessage) {
-    const inputText = inputElement.textContent?.trim();
+  private submit() {
+    const inputText = this._inputElementRef.textContent?.trim();
+    this._addNewMessage(inputText as string);
     if (!inputText || inputText === '') return;
-    OpenAIClient.requestCompletion(key, inputText, addNewMessage);
+    OpenAIClient.requestCompletion(this._key, inputText, this._addNewMessage);
+    this._inputElementRef.textContent = '';
   }
 }

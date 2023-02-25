@@ -1,7 +1,7 @@
-export const messageStyle = `
+export const messagesStyle = `
   <style>
     .messages {
-      overflow: overlay;
+      overflow: auto;
     }
   
     #placeholder-text {
@@ -13,7 +13,7 @@ export const messageStyle = `
   
     #placeholder {
       position: relative;
-      height: 100%;
+      height: 180%;
     }
 
     .message {
@@ -27,6 +27,7 @@ export const messageStyle = `
       color: rgba(52,53,65);
       padding-top: 10px;
       padding-bottom: 10px;
+      word-wrap: break-word;
     }
   </style>
 `;

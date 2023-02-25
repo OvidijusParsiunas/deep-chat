@@ -5,6 +5,8 @@ export const userInputStyle = `
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      margin-top: auto;
+      position: relative;
     }
     #input-content-container {
       background-color: white;
@@ -15,7 +17,9 @@ export const userInputStyle = `
       margin-top: 10px;
       margin-bottom: 10px;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
-      position: relative;
+      overflow-y: auto;
+      /* Make the minimum height as 200px */
+      max-height: 200px;
     }
     #input {
       width: calc(100% - 25px);
@@ -26,7 +30,7 @@ export const userInputStyle = `
     #submit-button {
       position: absolute;
       right: 4px;
-      bottom: 3px;
+      bottom: 13px;
       width: 22px;
       height: 22px;
       border-radius: 4px;

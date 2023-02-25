@@ -1,8 +1,8 @@
-import {messageStyle} from './messageStyle';
+import {messagesStyle} from './messagesStyle';
 
 const messagesTemplate = document.createElement('template');
 messagesTemplate.innerHTML = `
-  ${messageStyle}
+  ${messagesStyle}
   <div class="messages">
     <div id="placeholder">
       <div id="placeholder-text">
@@ -39,6 +39,7 @@ export class Messages {
       this._elementRef.replaceChildren();
     }
     this._elementRef.appendChild(this.createNewMessage(text));
+    this._elementRef.scrollTop = this._elementRef.scrollHeight;
     this._messages.push(text);
   }
 }

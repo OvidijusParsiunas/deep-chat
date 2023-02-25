@@ -11,6 +11,7 @@ export const aiChatStyle = `
       border: 1px solid grey;
       border-radius: 3px;
       font-family: Söhne,ui-sans-serif,system-ui;
+      font-size: 14px;
     }
   </style>
 `;
