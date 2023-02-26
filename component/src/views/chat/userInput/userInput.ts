@@ -14,6 +14,7 @@ inputTemplate.innerHTML = `
 `;
 
 export class UserInput {
+  private _isLoading: boolean = false;
   private readonly _key: string;
   private readonly _addNewMessage: AddNewMessage;
   private readonly _elementRef: HTMLElement;
@@ -87,23 +88,25 @@ export class UserInput {
 
   private submit() {
     const inputText = this._inputElementRef.textContent?.trim();
+    if (this._isLoading || !inputText || inputText === '') return;
     this.changeToLoadingIcon();
-    if (!inputText || inputText === '') return;
-    this._addNewMessage(inputText as string);
+    this._addNewMessage(inputText as string, false);
     OpenAIClient.requestCompletion(this._key, inputText, this.onSuccessfulResult.bind(this));
     this._inputElementRef.textContent = '';
   }
 
   private onSuccessfulResult(result: CompletionResult) {
-    this._addNewMessage(result.choices[0].text);
+    this._addNewMessage(result.choices[0].text, true);
     this.changeToSubmitIcon();
   }
 
   private changeToLoadingIcon() {
     this._buttonContainerElementRef.replaceChild(this._loadingElementRef, this._buttonElementRef);
+    this._isLoading = true;
   }
 
   private changeToSubmitIcon() {
     this._buttonContainerElementRef.replaceChild(this._buttonElementRef, this._loadingElementRef);
+    this._isLoading = false;
   }
 }
