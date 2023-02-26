@@ -9,20 +9,27 @@ insertKeyView.innerHTML = `
   </div>
 `;
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = `
-  <style>${style}</style>
-  <div id="real-ai-container"></div>
-`;
-
 export class RealAI extends HTMLElement {
-  _containerRef: HTMLElement;
+  _elementRefRef: HTMLElement;
 
   constructor() {
     super();
-    this.attachShadow({mode: 'open'}).appendChild(defaultTemplate.content.cloneNode(true));
-    this._containerRef = this.shadowRoot!.getElementById('real-ai-container') as HTMLElement;
-    this._containerRef.appendChild(insertKeyView.content.cloneNode(true));
+    this._elementRefRef = RealAI.createContainerElement();
+    this.attachShadow({mode: 'open'}).appendChild(this._elementRefRef);
+    this.appendStyleSheet();
+    this._elementRefRef.appendChild(insertKeyView.content.cloneNode(true));
+  }
+
+  private appendStyleSheet() {
+    const styleSheet = new CSSStyleSheet();
+    styleSheet.replaceSync(style);
+    this.shadowRoot!.adoptedStyleSheets = [styleSheet];
+  }
+
+  private static createContainerElement() {
+    const container = document.createElement('div');
+    container.id = 'real-ai-container';
+    return container;
   }
 
   // getter and setter needed for property change monitoring
@@ -32,7 +39,7 @@ export class RealAI extends HTMLElement {
 
   set key(newValue) {
     console.log('key has changed!');
-    new ChatView(this._containerRef, newValue);
+    new ChatView(this._elementRefRef, newValue);
   }
 
   static get observedAttributes() {

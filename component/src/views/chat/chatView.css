@@ -1,4 +1,8 @@
-.chat {
+@import url('./messages/messages.css');
+@import url('./messages/avatar.css');
+@import url('./input/input.css');
+
+#chat {
   height: 100%;
   display: grid;
   grid-template-columns: 400px;

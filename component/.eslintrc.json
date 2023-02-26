@@ -30,8 +30,6 @@
     "semi": "off",
     "prefer-template": "error",
     "no-var": "error",
-    "prefer-const": "error",
-    "@typescript-eslint/prefer-readonly": "error",
-    "@typescript-eslint/no-unsafe-argument": "error"
+    "prefer-const": "error"
   }
 }

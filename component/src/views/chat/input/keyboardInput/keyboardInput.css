@@ -1,0 +1,21 @@
+#keyboard-input-container {
+  background-color: white;
+  width: 100%;
+  display: flex;
+  border: 1px solid #0000001a;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
+  overflow-y: auto;
+  /* TO-DO Make the minimum height as 200px */
+  max-height: 200px;
+}
+
+#keyboard-input {
+  width: calc(100% - 25px);
+  text-align: left;
+  outline: none;
+  padding: 5px 0px 5px 5px;
+  word-wrap: break-word;
+}

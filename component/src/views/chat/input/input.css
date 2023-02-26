@@ -1,0 +1,12 @@
+@import url('./keyboardInput/keyboardInput.css');
+@import url('./submitButton/submitButton.css');
+@import url('./submitButton/loadingIcon.css');
+
+#input {
+  width: 80%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  position: relative;
+}

@@ -1,6 +1,4 @@
-export interface CompletionResult {
-  choices: {text: string}[];
-}
+import {CompletionResult} from '../../../../types/openAIResult';
 
 export class OpenAIClient {
   public static requestCompletion(key: string, prompt: string, onSuccessfulResult: (result: CompletionResult) => void) {

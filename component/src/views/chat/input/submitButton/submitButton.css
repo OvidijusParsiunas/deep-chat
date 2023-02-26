@@ -1,0 +1,26 @@
+#submit-button-container {
+  position: absolute;
+  right: 4px;
+  bottom: 13px;
+}
+
+#submit-button {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#submit-button:hover {
+  background-color: #9c9c9c2e;
+}
+
+#submit-button:active {
+  background-color: #9c9c9c5e;
+}
+
+#icon {
+  position: absolute;
+  right: -4px;
+  top: -1px;
+}
