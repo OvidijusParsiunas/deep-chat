@@ -1,15 +1,15 @@
 import {CompletionResult, OpenAIClient} from './openAIClient';
+import loadingIconStyle from './loadingIcon.css?inline';
 import {SVGIconUtil} from '../../../utils/svgIconUtil';
+import userInputStyle from './userInput.css?inline';
 import {AddNewMessage} from '../messages/messages';
-import {userInputStyle} from './userInputStyle';
 import {SUBMIT_ICON_STRING} from './submitIcon';
-import {loadingIconStyle} from './loadingIcon';
 import {PasteUtils} from './pasteUtils';
 
 const inputTemplate = document.createElement('template');
 inputTemplate.innerHTML = `
-  ${loadingIconStyle}
-  ${userInputStyle}
+  <style>${loadingIconStyle}</style>
+  <style>${userInputStyle}</style>
   <div class="user-input"></div>
 `;
 

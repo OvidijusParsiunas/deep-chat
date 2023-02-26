@@ -1,10 +1,10 @@
 import {UserInput} from './userInput/userInput';
-import {chatViewStyle} from './chatViewStyle';
 import {Messages} from './messages/messages';
+import style from './chatview.css?inline';
 
 const chatView = document.createElement('template');
 chatView.innerHTML = `
-  ${chatViewStyle}
+  <style>${style}</style>
   <div class="chat">
   </div>
 `;

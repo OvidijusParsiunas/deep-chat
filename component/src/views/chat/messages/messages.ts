@@ -1,9 +1,9 @@
 import imgUrl from '../../../../assets/open-ai-logo.png';
-import {messagesStyle} from './messagesStyle';
+import style from './messages.css?inline';
 
 const messagesTemplate = document.createElement('template');
 messagesTemplate.innerHTML = `
-  ${messagesStyle}
+  <style>${style}</style>
   <div class="messages">
     <div id="placeholder">
       <div id="placeholder-text">

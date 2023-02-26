@@ -1,5 +1,5 @@
 import {ChatView} from './views/chat/chatView';
-import {realAIStyle} from './realAIStyle';
+import style from './realAI.css?inline';
 
 const insertKeyView = document.createElement('template');
 insertKeyView.innerHTML = `
@@ -11,7 +11,7 @@ insertKeyView.innerHTML = `
 
 const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = `
-  ${realAIStyle}
+  <style>${style}</style>
   <div id="real-ai-container"></div>
 `;
 
