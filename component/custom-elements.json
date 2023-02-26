@@ -4,20 +4,30 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/realAI.ts",
+      "path": "src/AIAssistant.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "RealAI",
+          "name": "AiAssistant",
           "members": [
             {
               "kind": "field",
-              "name": "_containerRef",
+              "name": "_elementRefRef",
               "type": {
                 "text": "HTMLElement"
-              },
-              "default": "this.shadowRoot!.getElementById('real-ai-container')"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "appendStyleSheet",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true
             },
             {
               "kind": "field",
@@ -35,49 +45,52 @@
           "superclass": {
             "name": "HTMLElement"
           },
-          "tagName": "real-ai",
+          "tagName": "ai-assistant",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "RealAI",
+          "name": "AiAssistant",
           "declaration": {
-            "name": "RealAI",
-            "module": "src/realAI.ts"
+            "name": "AiAssistant",
+            "module": "src/AIAssistant.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "real-ai",
+          "name": "ai-assistant",
           "declaration": {
-            "name": "RealAI",
-            "module": "src/realAI.ts"
+            "name": "AiAssistant",
+            "module": "src/AIAssistant.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/realAIStyle.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "realAIStyle",
-          "default": "`\n  <style>\n    :host {\n      /* this property prevents outside styles from affecting this component */\n      all: initial;\n    }\n\n    #real-ai-container {\n      width: 400px;\n      height: 300px;\n      border: 1px solid grey;\n      border-radius: 3px;\n      font-family: Söhne,ui-sans-serif,system-ui;\n      font-size: 14px;\n    }\n  </style>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "realAIStyle",
-          "declaration": {
-            "name": "realAIStyle",
-            "module": "src/realAIStyle.ts"
-          }
-        }
-      ]
+      "path": "src/types/avatar.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/messages.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIResult.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/styles.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -128,7 +141,17 @@
         {
           "kind": "class",
           "description": "",
-          "name": "ChatView"
+          "name": "ChatView",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "default": "'chat'"
+            }
+          ]
         }
       ],
       "exports": [
@@ -144,21 +167,232 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/chatViewStyle.ts",
+      "path": "src/views/chat/input/input.ts",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "chatViewStyle",
-          "default": "`\n  <style>\n    .chat {\n      height: 100%;\n      display: grid;\n      grid-template-columns: 400px;\n    }\n  </style>`"
+          "kind": "class",
+          "description": "",
+          "name": "Input",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_button",
+              "type": {
+                "text": "SubmitButton"
+              },
+              "privacy": "private",
+              "default": "new SubmitButton(inputElement.inputElementRef, key, addNewMessage)"
+            },
+            {
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "buttonElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "default": "'input'"
+            },
+            {
+              "kind": "field",
+              "name": "submit"
+            }
+          ]
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "chatViewStyle",
+          "name": "Input",
           "declaration": {
-            "name": "chatViewStyle",
-            "module": "src/views/chat/chatViewStyle.ts"
+            "name": "Input",
+            "module": "src/views/chat/input/input.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Avatar",
+          "members": [
+            {
+              "kind": "method",
+              "name": "applyCustomStylesToElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "avatar",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "CustomAvatarStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyCustomStyles",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "avatar",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "CustomAvatarStyles"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAvatar",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "avatarStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomAvatarStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getPosition",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "CustomAvatarStyles"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addAvatar",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messageText",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "CustomAvatarStyles"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "canAvatarBeAdded",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "CustomAvatarStyles"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "src/views/chat/messages/avatar.ts"
           }
         }
       ]
@@ -192,18 +426,116 @@
             },
             {
               "kind": "method",
-              "name": "createAvatar",
-              "privacy": "private"
+              "name": "applyCustomStylesToElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "outerC",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "innerC",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "CustomMessageStyle"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
-              "name": "createNewMessage",
+              "name": "applyCustomStyles",
               "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "outerC",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "innerC",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "CustomMessageStyles"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addInnerContainerElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "innerContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
               "parameters": [
                 {
                   "name": "text",
                   "type": {
                     "text": "string"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
                   }
                 }
               ]
@@ -218,8 +550,34 @@
                   "type": {
                     "text": "string"
                   }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
                 }
               ]
+            },
+            {
+              "kind": "field",
+              "name": "_avatarStyles",
+              "type": {
+                "text": "CustomAvatarStyles"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "{\n    default: {\n      container: {\n        margin: '10px',\n      },\n      avatar: {\n        padding: 'unset',\n      },\n      position: 'left',\n    },\n  }"
+            },
+            {
+              "kind": "field",
+              "name": "_openAIStyles",
+              "type": {
+                "text": "CustomMessageStyles"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "{\n    default: {\n      outerContainer: {\n        borderBottom: '1px solid #c3c3c3',\n      },\n      innerContainer: {\n        width: '90%',\n        marginLeft: 'auto',\n        marginRight: 'auto',\n      },\n      text: {\n        color: 'rgba(52, 53, 65)',\n        margin: 'unset',\n        padding: 'unset',\n        maxWidth: 'unset',\n        border: 'unset',\n        paddingTop: '10px',\n        paddingBottom: '10px',\n        width: 'inherit',\n        backgroundColor: 'unset',\n      },\n    },\n    user: {\n      outerContainer: {\n        backgroundColor: 'white',\n      },\n    },\n    ai: {\n      outerContainer: {\n        backgroundColor: '#d9d9e3cc',\n      },\n    },\n  }"
             }
           ]
         }
@@ -237,49 +595,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/messages/messagesStyle.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "messagesStyle",
-          "default": "`\n  <style>\n    .messages {\n      overflow: auto;\n      /* have this set for placeholder\n        display: contents;        \n      */\n    }\n  \n    #placeholder {\n      position: relative;\n      /* have this set when using placeholder\n        height: 180%;\n      */\n      height: 100%;\n    }\n\n    #placeholder-text {\n      position: absolute;\n      top: 50%;\n      left: 50%;\n      transform: translate(-50%, -50%);\n    }\n\n    .outer-message-container {\n      border-color: #0000001a;\n    }\n\n    .message {\n      width: 90%;\n      margin-left: auto;\n      margin-right: auto;\n      display: flex;\n    }\n\n    .avatar {\n      width: 20px;\n      height: 20px;\n      border-radius: 1px;\n    }\n\n    .avatar-container {\n      margin: 10px;\n    }\n\n    .message-text {\n      color: rgba(52,53,65);\n      padding-top: 10px;\n      padding-bottom: 10px;\n      word-wrap: break-word;\n    }\n  </style>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "messagesStyle",
-          "declaration": {
-            "name": "messagesStyle",
-            "module": "src/views/chat/messages/messagesStyle.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/userInput/loadingIcon.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "loadingIconStyle",
-          "default": "`\n  <style>\n    .dot-typing {\n      position: relative;\n      left: -10005px;\n      width: 3px;\n      height: 3px;\n      border-radius: 5px;\n      background-color: #848484;\n      color: #848484;\n      box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      animation: dot-typing 1.5s infinite linear;\n      bottom: 8px;\n    }\n    \n    @keyframes dot-typing {\n      0% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n      16.667% {\n        box-shadow: 9990px -6px 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n      33.333% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n      50% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px -6px 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n      66.667% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n      83.333% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px -6px 0 0 #848484;\n      }\n      100% {\n        box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;\n      }\n    }\n  </style>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "loadingIconStyle",
-          "declaration": {
-            "name": "loadingIconStyle",
-            "module": "src/views/chat/userInput/loadingIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/userInput/openAIClient.ts",
+      "path": "src/views/chat/input/submitButton/openAIClient.ts",
       "declarations": [
         {
           "kind": "class",
@@ -321,14 +637,235 @@
           "name": "OpenAIClient",
           "declaration": {
             "name": "OpenAIClient",
-            "module": "src/views/chat/userInput/openAIClient.ts"
+            "module": "src/views/chat/input/submitButton/openAIClient.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/userInput/pasteUtils.ts",
+      "path": "src/views/chat/input/submitButton/submitButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SubmitButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_isLoading",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_key",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "key"
+            },
+            {
+              "kind": "field",
+              "name": "_addNewMessage",
+              "type": {
+                "text": "AddNewMessage"
+              },
+              "privacy": "private",
+              "default": "addNewMessage"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "inputElementRef"
+            },
+            {
+              "kind": "field",
+              "name": "_buttonElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "this.elementRef.children[0]"
+            },
+            {
+              "kind": "field",
+              "name": "_loadingElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createButtonElement",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createLoadingElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "submit",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "onSuccessfulResult",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "CompletionResult"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "changeToLoadingIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToSubmitIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "default": "'user-input'"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SubmitButton",
+          "declaration": {
+            "name": "SubmitButton",
+            "module": "src/views/chat/input/submitButton/submitButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/submitButton/submitIcon.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "SUBMIT_ICON_STRING",
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"30\" height=\"24\">\n  <g transform=\"matrix(0.8108108 0 0 0.8108108 0 0)\">\n    <g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n      <g>\n        <path d=\"M496.71 143.12L335.46997 304.46L398.26697 424.72L496.71 143.12zM321.63998 308.26L184.31998 236.54901L187.54657 230.2678L184.31998 236.54901C 180.84338 234.7756 179.48018 230.4396 181.35118 227.0451C 182.28477 225.1857 183.89809 223.98651 185.76527 223.4787L185.76527 223.4787L510.63525 109.9187C 510.80322 109.82886 510.9751 109.75073 511.14307 109.67261L511.14307 109.67261L511.31104 109.67261C 511.56494 109.58276 511.81885 109.50464 511.99463 109.50464C 512.1587 109.414795 512.24854 109.414795 512.4087 109.414795L512.4087 109.414795L512.49854 109.414795L512.5884 109.32495L512.75635 109.32495L513.01807 109.32495L514.45557 109.32495L514.45557 109.414795L514.7993 109.414795L514.9673 109.50464L515.2251 109.50464L515.31494 109.590576L515.56494 109.590576L515.56494 109.68042L515.8345 109.68042L515.99854 109.758545L516.1704 109.84448L516.25635 109.84448C 517.1001 110.196045 517.7797 110.696045 518.37744 111.28978L518.37744 111.28978L518.4634 111.37962L518.5532 111.37962L518.63916 111.551506C 519.2329 112.14135 519.6586 112.82101 519.99854 113.5827L519.99854 113.5827L519.99854 113.67255L520.0845 113.76239L520.0845 113.93817L520.1743 114.0163L520.1743 114.10614L520.26025 114.19208L520.26025 114.28192L520.3501 114.453804L520.3501 114.71162L520.43604 114.78974L520.43604 115.1374L520.5259 115.22724L520.5259 115.73896L520.6157 115.828804L520.6157 116.848305C 520.6157 116.93815 520.5259 117.10612 520.5259 117.19596L520.5259 117.19596L520.5259 117.5319C 520.5259 117.62174 520.43604 117.79362 520.43604 117.879555C 520.3501 118.14127 520.3501 118.38737 520.26807 118.555336L520.26807 118.555336L520.1821 118.72722C 520.0923 118.88347 520.0923 119.063156 520.01416 119.23503L520.01416 119.23503L406.41415 444.14502C 405.90634 445.91843 404.63297 447.6216 402.84775 448.54733C 399.37115 450.34033 395.12506 448.97702 393.34384 445.57852L393.34384 445.57852L399.54303 442.26993L393.34384 445.57852zM486.69998 133.18001L205.19998 231.543L325.46 294.43z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n      </g>\n    </g>\n  </g>\n</svg>\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SUBMIT_ICON_STRING",
+          "declaration": {
+            "name": "SUBMIT_ICON_STRING",
+            "module": "src/views/chat/input/submitButton/submitIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "KeyboardInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "containerElement"
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "inputElement"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "KeyboardInput",
+          "declaration": {
+            "name": "KeyboardInput",
+            "module": "src/views/chat/input/keyboardInput/keyboardInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/pasteUtils.ts",
       "declarations": [
         {
           "kind": "class",
@@ -358,200 +895,7 @@
           "name": "PasteUtils",
           "declaration": {
             "name": "PasteUtils",
-            "module": "src/views/chat/userInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/userInput/submitIcon.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "SUBMIT_ICON_STRING",
-          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"30\" height=\"24\">\n  <g transform=\"matrix(0.8108108 0 0 0.8108108 0 0)\">\n    <g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n      <g>\n        <path d=\"M496.71 143.12L335.46997 304.46L398.26697 424.72L496.71 143.12zM321.63998 308.26L184.31998 236.54901L187.54657 230.2678L184.31998 236.54901C 180.84338 234.7756 179.48018 230.4396 181.35118 227.0451C 182.28477 225.1857 183.89809 223.98651 185.76527 223.4787L185.76527 223.4787L510.63525 109.9187C 510.80322 109.82886 510.9751 109.75073 511.14307 109.67261L511.14307 109.67261L511.31104 109.67261C 511.56494 109.58276 511.81885 109.50464 511.99463 109.50464C 512.1587 109.414795 512.24854 109.414795 512.4087 109.414795L512.4087 109.414795L512.49854 109.414795L512.5884 109.32495L512.75635 109.32495L513.01807 109.32495L514.45557 109.32495L514.45557 109.414795L514.7993 109.414795L514.9673 109.50464L515.2251 109.50464L515.31494 109.590576L515.56494 109.590576L515.56494 109.68042L515.8345 109.68042L515.99854 109.758545L516.1704 109.84448L516.25635 109.84448C 517.1001 110.196045 517.7797 110.696045 518.37744 111.28978L518.37744 111.28978L518.4634 111.37962L518.5532 111.37962L518.63916 111.551506C 519.2329 112.14135 519.6586 112.82101 519.99854 113.5827L519.99854 113.5827L519.99854 113.67255L520.0845 113.76239L520.0845 113.93817L520.1743 114.0163L520.1743 114.10614L520.26025 114.19208L520.26025 114.28192L520.3501 114.453804L520.3501 114.71162L520.43604 114.78974L520.43604 115.1374L520.5259 115.22724L520.5259 115.73896L520.6157 115.828804L520.6157 116.848305C 520.6157 116.93815 520.5259 117.10612 520.5259 117.19596L520.5259 117.19596L520.5259 117.5319C 520.5259 117.62174 520.43604 117.79362 520.43604 117.879555C 520.3501 118.14127 520.3501 118.38737 520.26807 118.555336L520.26807 118.555336L520.1821 118.72722C 520.0923 118.88347 520.0923 119.063156 520.01416 119.23503L520.01416 119.23503L406.41415 444.14502C 405.90634 445.91843 404.63297 447.6216 402.84775 448.54733C 399.37115 450.34033 395.12506 448.97702 393.34384 445.57852L393.34384 445.57852L399.54303 442.26993L393.34384 445.57852zM486.69998 133.18001L205.19998 231.543L325.46 294.43z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n      </g>\n    </g>\n  </g>\n</svg>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SUBMIT_ICON_STRING",
-          "declaration": {
-            "name": "SUBMIT_ICON_STRING",
-            "module": "src/views/chat/userInput/submitIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/userInput/userInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "UserInput",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_key",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "key"
-            },
-            {
-              "kind": "field",
-              "name": "_addNewMessage",
-              "type": {
-                "text": "AddNewMessage"
-              },
-              "privacy": "private",
-              "default": "addNewMessage"
-            },
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "parentElement.getElementsByClassName('user-input')[0]"
-            },
-            {
-              "kind": "field",
-              "name": "_inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "inputElement"
-            },
-            {
-              "kind": "field",
-              "name": "_buttonContainerElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "buttonContainerElement"
-            },
-            {
-              "kind": "field",
-              "name": "_buttonElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "this._buttonContainerElementRef.children[0]"
-            },
-            {
-              "kind": "field",
-              "name": "_loadingElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "addElements",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createButtonElement",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createLoadingElement",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "submit",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "onSuccessfulResult",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "CompletionResult"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "changeToLoadingIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToSubmitIcon",
-              "privacy": "private"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UserInput",
-          "declaration": {
-            "name": "UserInput",
-            "module": "src/views/chat/userInput/userInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/userInput/userInputStyle.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "userInputStyle",
-          "default": "`\n  <style>\n    .user-input {\n      width: 80%;\n      text-align: center;\n      margin-left: auto;\n      margin-right: auto;\n      margin-top: auto;\n      position: relative;\n    }\n\n    #keyboard-input-container {\n      background-color: white;\n      width: 100%;\n      display: flex;\n      border: 1px solid #0000001a;\n      border-radius: 5px;\n      margin-top: 10px;\n      margin-bottom: 10px;\n      box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;\n      overflow-y: auto;\n      /* Make the minimum height as 200px */\n      max-height: 200px;\n    }\n\n    #input {\n      width: calc(100% - 25px);\n      text-align: left;\n      outline: none;\n      padding: 5px 0px 5px 5px;\n      word-wrap: break-word;\n    }\n\n    #submit-button-container {\n      position: absolute;\n      right: 4px;\n      bottom: 13px;\n    }\n\n    #submit-button {\n      width: 22px;\n      height: 22px;\n      border-radius: 4px;\n      cursor: pointer;\n    }\n\n    #icon {\n      position: absolute;\n      right: -4px;\n      top: -1px;\n    }\n\n    #submit-button:hover {\n      background-color: #9c9c9c2e;\n    }\n\n    #submit-button:active {\n      background-color: #9c9c9c5e;\n    }\n  </style>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "userInputStyle",
-          "declaration": {
-            "name": "userInputStyle",
-            "module": "src/views/chat/userInput/userInputStyle.ts"
+            "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
           }
         }
       ]

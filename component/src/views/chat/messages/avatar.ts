@@ -1,4 +1,4 @@
-import {CustomAvatarStyle, CustomAvatarStyles} from '../../../types/messages';
+import {CustomAvatarStyle, CustomAvatarStyles} from '../../../types/avatar';
 import openAILogoUrl from '../../../../assets/open-ai-logo.png';
 import avatarUrl from '../../../../assets/person-avatar.png';
 

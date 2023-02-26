@@ -1,1 +1,1 @@
-# real-ai
+# ai-assistant

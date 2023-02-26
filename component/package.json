@@ -1,9 +1,9 @@
 {
-  "name": "real-ai",
-  "version": "0.0.3",
+  "name": "ai-assistant",
+  "version": "0.0.1",
   "description": "universal ai chat bot component",
-  "main": "./dist/realAI.js",
-  "module": "./dist/realAI.js",
+  "main": "./dist/AIAssistant.js",
+  "module": "./dist/AIAssistant.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,16 +15,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OvidijusParsiunas/real-ai.git"
+    "url": "git+https://github.com/OvidijusParsiunas/ai-assistant.git"
   },
   "author": "OvidijusParsiunas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OvidijusParsiunas/real-ai/issues"
+    "url": "https://github.com/OvidijusParsiunas/ai-assistant/issues"
   },
-  "homepage": "https://github.com/OvidijusParsiunas/real-ai#readme",
+  "homepage": "https://github.com/OvidijusParsiunas/ai-assistant#readme",
   "keywords": [
-    "real-ai"
+    "ai-assistant"
   ],
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.8",

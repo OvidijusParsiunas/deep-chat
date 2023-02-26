@@ -1,4 +1,5 @@
-import {CustomAvatarStyles, CustomMessageStyles, CustomMessageStyle} from '../../../types/messages';
+import {CustomMessageStyles, CustomMessageStyle} from '../../../types/messages';
+import {CustomAvatarStyles} from '../../../types/avatar';
 import {Avatar} from './avatar';
 
 const messagesTemplate = document.createElement('template');
@@ -6,7 +7,7 @@ messagesTemplate.innerHTML = `
   <div class="messages">
     <div id="placeholder">
       <div id="placeholder-text">
-        Real Ai
+        AI Assistant
       </div>
     </div>
   </div>

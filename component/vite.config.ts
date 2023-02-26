@@ -4,9 +4,9 @@ import {defineConfig} from 'vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/realAI.ts',
+      entry: 'src/AIAssistant.ts',
       formats: ['es'],
-      fileName: 'realAI',
+      fileName: 'AIAssistant',
     },
   },
 });

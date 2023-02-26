@@ -1,5 +1,5 @@
 import {ChatView} from './views/chat/chatView';
-import style from './realAI.css?inline';
+import style from './AIAssistant.css?inline';
 
 const insertKeyView = document.createElement('template');
 insertKeyView.innerHTML = `
@@ -9,12 +9,12 @@ insertKeyView.innerHTML = `
   </div>
 `;
 
-export class RealAI extends HTMLElement {
+export class AiAssistant extends HTMLElement {
   _elementRefRef: HTMLElement;
 
   constructor() {
     super();
-    this._elementRefRef = RealAI.createContainerElement();
+    this._elementRefRef = AiAssistant.createContainerElement();
     this.attachShadow({mode: 'open'}).appendChild(this._elementRefRef);
     this.appendStyleSheet();
     this._elementRefRef.appendChild(insertKeyView.content.cloneNode(true));
@@ -28,7 +28,7 @@ export class RealAI extends HTMLElement {
 
   private static createContainerElement() {
     const container = document.createElement('div');
-    container.id = 'real-ai-container';
+    container.id = 'ai-assistant-container';
     return container;
   }
 
@@ -52,11 +52,11 @@ export class RealAI extends HTMLElement {
   }
 }
 
-customElements.define('real-ai', RealAI);
+customElements.define('ai-assistant', AiAssistant);
 
 // The following type makes it easier for other projects to use this component with TypeScript
 declare global {
   interface HTMLElementTagNameMap {
-    'real-ai': RealAI;
+    'ai-assistant': AiAssistant;
   }
 }

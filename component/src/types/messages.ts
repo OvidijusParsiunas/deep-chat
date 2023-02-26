@@ -11,15 +11,3 @@ export interface CustomMessageStyles {
   user?: CustomMessageStyle;
   ai?: CustomMessageStyle;
 }
-
-export interface CustomAvatarStyle {
-  container?: CustomStyle;
-  avatar?: CustomStyle;
-  position?: 'left' | 'right';
-}
-
-export interface CustomAvatarStyles {
-  default?: CustomAvatarStyle;
-  user?: CustomAvatarStyle;
-  ai?: CustomAvatarStyle;
-}
