@@ -1,17 +1,17 @@
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './submitButton/submitButton';
-import {AddNewMessage} from '../messages/messages';
+import {Messages} from '../messages/messages';
 
 export class Input {
   readonly elementRef: HTMLElement;
   private readonly _button: SubmitButton;
 
-  constructor(key: string, addNewMessage: AddNewMessage) {
+  constructor(key: string, messages: Messages) {
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
     const inputElement = new KeyboardInput();
-    this._button = new SubmitButton(inputElement.inputElementRef, key, addNewMessage);
-    inputElement.submit = this._button.submit;
+    this._button = new SubmitButton(inputElement.inputElementRef, key, messages);
+    inputElement.submit = this._button.submit.bind(this._button);
     this.addElements(inputElement.elementRef, this._button.elementRef);
   }
 

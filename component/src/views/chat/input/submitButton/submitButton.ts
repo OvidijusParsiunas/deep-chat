@@ -1,69 +1,92 @@
-import {CompletionResult} from '../../../../types/openAIResult';
 import {SVGIconUtil} from '../../../../utils/svgIconUtil';
-import {AddNewMessage} from '../../messages/messages';
+import {Messages} from '../../messages/messages';
 import {SUBMIT_ICON_STRING} from './submitIcon';
 import {OpenAIClient} from './openAIClient';
 
 export class SubmitButton {
-  private _isLoading = false;
+  private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
+  private _isStreamed = true;
   private readonly _key: string;
-  private readonly _addNewMessage: AddNewMessage;
+  private readonly _messages: Messages;
   readonly elementRef: HTMLElement;
   private readonly _inputElementRef: HTMLElement;
-  private readonly _buttonElementRef: HTMLElement;
-  private readonly _loadingElementRef: HTMLElement;
+  private readonly _submitIconElementRef: HTMLElement;
+  private readonly _stopIconElementRef: HTMLElement;
+  private readonly _loadingIconElementRef: HTMLElement;
+  private readonly _abortStream: AbortController;
 
-  constructor(inputElementRef: HTMLElement, key: string, addNewMessage: AddNewMessage) {
-    this.elementRef = document.createElement('div');
-    this.elementRef.id = 'user-input';
+  constructor(inputElementRef: HTMLElement, key: string, messages: Messages) {
     this._key = key;
-    this._addNewMessage = addNewMessage;
+    this._messages = messages;
     this._inputElementRef = inputElementRef;
     this.elementRef = this.createButtonElement();
-    this._buttonElementRef = this.elementRef.children[0] as HTMLElement;
-    this._loadingElementRef = SubmitButton.createLoadingElement();
+    this._submitIconElementRef = this.elementRef.children[0] as HTMLElement;
+    this._stopIconElementRef = this.createStopIconElement();
+    this._loadingIconElementRef = SubmitButton.createLoadingIconElement();
+    this._abortStream = new AbortController();
   }
 
   private createButtonElement() {
-    const buttonElement = document.createElement('div');
+    const submitIconContainerElement = document.createElement('div');
     const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
-    svgIconElement.id = 'icon';
-    buttonElement.appendChild(svgIconElement);
+    svgIconElement.id = 'submit-icon';
+    submitIconContainerElement.appendChild(svgIconElement);
+    submitIconContainerElement.classList.add('clickable-icon-container');
+    submitIconContainerElement.onclick = this.submit.bind(this);
+    const buttonElement = document.createElement('div');
     buttonElement.id = 'submit-button';
-    buttonElement.onmousedown = this.submit.bind(this);
-    const buttonContainerElement = document.createElement('div');
-    buttonContainerElement.id = 'submit-button-container';
-    buttonContainerElement.appendChild(buttonElement);
-    return buttonContainerElement;
+    buttonElement.appendChild(submitIconContainerElement);
+    return buttonElement;
   }
 
-  private static createLoadingElement() {
-    const loadingElement = document.createElement('div');
-    loadingElement.classList.add('dot-typing');
-    return loadingElement;
+  private static createLoadingIconElement() {
+    const loadingIconElement = document.createElement('div');
+    loadingIconElement.classList.add('dot-typing');
+    return loadingIconElement;
   }
 
+  private createStopIconElement() {
+    const stopIconElement = document.createElement('div');
+    stopIconElement.id = 'stop-icon';
+    const stopIconContainerElement = document.createElement('div');
+    stopIconContainerElement.classList.add('clickable-icon-container');
+    stopIconContainerElement.appendChild(stopIconElement);
+    stopIconContainerElement.onclick = this.stopStream.bind(this);
+    return stopIconContainerElement;
+  }
+
+  // prettier-ignore
   public submit() {
     const inputText = this._inputElementRef.textContent?.trim();
-    if (this._isLoading || !inputText || inputText === '') return;
+    if (this._isRequestInProgress || !inputText || inputText === '') return;
     this.changeToLoadingIcon();
-    this._addNewMessage(inputText as string, false);
-    OpenAIClient.requestCompletion(this._key, inputText, this.onSuccessfulResult.bind(this));
+    this._messages.addNewMessage(inputText as string, false);
     this._inputElementRef.textContent = '';
+    if (this._isStreamed) {
+      OpenAIClient.requestStreamCompletion(this._key, inputText, this._messages,
+        this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
+    } else {
+      OpenAIClient.requestCompletion(this._key, inputText, this._messages, this.changeToSubmitIcon.bind(this));
+    }
   }
 
-  private onSuccessfulResult(result: CompletionResult) {
-    this._addNewMessage(result.choices[0].text, true);
+  private stopStream() {
+    this._abortStream.abort();
     this.changeToSubmitIcon();
   }
 
+  private changeToStopIcon() {
+    this.elementRef.replaceChildren(this._stopIconElementRef);
+    this._isRequestInProgress = true;
+  }
+
   private changeToLoadingIcon() {
-    this.elementRef.replaceChild(this._loadingElementRef, this._buttonElementRef);
-    this._isLoading = true;
+    this.elementRef.replaceChildren(this._loadingIconElementRef);
+    this._isRequestInProgress = true;
   }
 
   private changeToSubmitIcon() {
-    this.elementRef.replaceChild(this._buttonElementRef, this._loadingElementRef);
-    this._isLoading = false;
+    this.elementRef.replaceChildren(this._submitIconElementRef);
+    this._isRequestInProgress = false;
   }
 }

@@ -1,26 +1,36 @@
-#submit-button-container {
+#submit-button {
   position: absolute;
   right: 4px;
   bottom: 13px;
 }
 
-#submit-button {
+.clickable-icon-container {
   width: 22px;
   height: 22px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-#submit-button:hover {
+.clickable-icon-container:hover {
   background-color: #9c9c9c2e;
 }
 
-#submit-button:active {
+.clickable-icon-container:active {
   background-color: #9c9c9c5e;
 }
 
-#icon {
+#submit-icon {
   position: absolute;
   right: -4px;
   top: -1px;
+}
+
+#stop-icon {
+  background-color: #acacac;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
 }

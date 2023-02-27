@@ -17,7 +17,7 @@ export type AddNewMessage = Messages['addNewMessage'];
 
 export class Messages {
   private readonly _elementRef: HTMLElement;
-  private readonly _messages: string[] = [];
+  private readonly _textElementRefs: HTMLElement[] = [];
 
   constructor(parentElement: HTMLElement) {
     parentElement.appendChild(messagesTemplate.content.cloneNode(true));
@@ -52,21 +52,32 @@ export class Messages {
     return {textElement};
   }
 
-  private static createElements(text: string, isAI: boolean) {
+  private createMessageElements(text: string, isAI: boolean) {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
     const {textElement} = Messages.addInnerContainerElements(innerContainer, text, isAI);
     Messages.applyCustomStyles(outerContainer, innerContainer, textElement, Messages._openAIStyles, isAI);
+    this._textElementRefs.push(textElement);
     return outerContainer;
   }
 
   public addNewMessage(text: string, isAI: boolean) {
-    if (this._messages.length === 0) this._elementRef.replaceChildren();
-    this._elementRef.appendChild(Messages.createElements(text, isAI));
+    if (this._textElementRefs.length === 0) this._elementRef.replaceChildren();
+    const messageElement = this.createMessageElements(text, isAI);
+    this._elementRef.appendChild(messageElement);
     this._elementRef.scrollTop = this._elementRef.scrollHeight;
-    this._messages.push(text);
+  }
+
+  public addNewStreamedMessage() {
+    this.addNewMessage('', true);
+    return this._textElementRefs[this._textElementRefs.length - 1];
+  }
+
+  public static updateStreamedMessage(text: string, textElement: HTMLElement) {
+    const textNode = document.createTextNode(text);
+    textElement.appendChild(textNode);
   }
 
   private static readonly _avatarStyles: CustomAvatarStyles = {

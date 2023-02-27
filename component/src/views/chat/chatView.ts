@@ -11,7 +11,7 @@ export class ChatView {
     elementRef.id = 'chat';
     containerRef.replaceChildren(elementRef);
     const messages = new Messages(elementRef);
-    const userInput = new Input(key, messages.addNewMessage.bind(messages));
+    const userInput = new Input(key, messages);
     elementRef.appendChild(userInput.elementRef);
   }
 }

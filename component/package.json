@@ -40,5 +40,8 @@
     "dist/**/*",
     "assets/**/*",
     "custom-elements.json"
-  ]
+  ],
+  "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1"
+  }
 }
