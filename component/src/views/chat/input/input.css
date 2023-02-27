@@ -1,6 +1,7 @@
 @import url('./keyboardInput/keyboardInput.css');
 @import url('./submitButton/submitButton.css');
 @import url('./submitButton/loadingIcon.css');
+@import url('./speechInput/speechInput.css');
 
 #input {
   width: 80%;

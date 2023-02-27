@@ -42,6 +42,7 @@
     "custom-elements.json"
   ],
   "dependencies": {
-    "@microsoft/fetch-event-source": "^2.0.1"
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "@types/dom-speech-recognition": "^0.0.1"
   }
 }

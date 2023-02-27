@@ -1,0 +1,13 @@
+#microphone-button {
+  position: relative;
+  float: right;
+}
+
+#microphone-button-icon {
+  position: absolute;
+  background-color: green;
+  width: 24px;
+  height: 24px;
+  top: -36px;
+  right: -32px;
+}
