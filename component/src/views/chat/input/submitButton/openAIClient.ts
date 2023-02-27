@@ -1,7 +1,8 @@
-import {CompletionResult} from '../../../../types/openAIResult';
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
+import {CompletionResult} from '../../../../types/openAIResult';
 import {Messages} from '../../messages/messages';
 
+// WORK - need error handling for both
 export class OpenAIClient {
   private static readonly _completions_url = 'https://api.openai.com/v1/completions';
 
