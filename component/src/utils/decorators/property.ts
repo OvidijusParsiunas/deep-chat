@@ -1,11 +1,13 @@
+import {AttributeTypeConverter, AvailableTypes} from '../../types/typeConverters';
 import {GenericObject} from '../../types/object';
+import {TypeConverters} from './typeConverters';
 import {RenderControl} from './renderControl';
 import {AiAssistant} from '../../AIAssistant';
 
-// _watchableProps_ exists as a static prop and need it as an instance
-type InternalHTMLInstance = {_watchableProps_: GenericObject<null>};
+// _attributes_ exists as a static prop and need it here as an instance
+type InternalHTMLInstance = {_attributes_: GenericObject<AttributeTypeConverter>};
 
-export function Property() {
+export function Property(type: AvailableTypes) {
   return function (target: Object, propertyKey: string) {
     let value: string;
     const getter = function () {
@@ -20,6 +22,6 @@ export function Property() {
       set: setter,
     });
     // using constructor and not static object in order to not reinstantiate and register the element twice
-    (target.constructor as unknown as InternalHTMLInstance)._watchableProps_[propertyKey] = null;
+    (target.constructor as unknown as InternalHTMLInstance)._attributes_[propertyKey] = TypeConverters.attibutes[type];
   };
 }

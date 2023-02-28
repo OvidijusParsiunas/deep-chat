@@ -15,10 +15,10 @@ insertKeyView.innerHTML = `
 export class AiAssistant extends InternalHTML {
   private readonly _elementRef: HTMLElement;
 
-  @Property()
+  @Property('string')
   key?: string;
 
-  @Property()
+  @Property('boolean')
   stream?: boolean;
 
   constructor() {
@@ -36,8 +36,8 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
+    console.log('render');
     if (this.key) {
-      console.log(this.key);
       ChatView.render(this._elementRef, this.key);
     }
   }
