@@ -16,14 +16,20 @@
   margin-bottom: 15px;
 }
 
+#insert-key-input-container {
+  width: calc(100% - 100px);
+  display: inline-block;
+}
+
 #insert-key-input {
   padding: 3px;
   padding-left: 4px;
+  padding-right: 20px;
   padding-top: 4px;
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
-  width: calc(100% - 80px);
+  width: 100%;
 }
 
 .insert-key-input-valid {
@@ -34,9 +40,40 @@
   border-color: red;
 }
 
+#visibility-icon-container {
+  position: relative;
+  float: right;
+  cursor: pointer;
+  user-select: none;
+}
+
+.visibility-icon {
+  filter: brightness(0) saturate(100%) invert(86%) sepia(0%) saturate(7484%) hue-rotate(125deg) brightness(92%)
+    contrast(90%);
+  position: absolute;
+}
+
+.visibility-icon:hover {
+  filter: unset;
+}
+
+.visibility-icon > * {
+  pointer-events: none;
+}
+
+#visible-icon {
+  right: -23px;
+  top: -19px;
+}
+
+#not-visible-icon {
+  right: -22px;
+  top: -18px;
+}
+
 #submit-key-button {
   float: right;
-  margin-left: 5px;
+  margin-left: 24px;
   border: 1px solid grey;
   color: #454545;
   border-radius: 4px;

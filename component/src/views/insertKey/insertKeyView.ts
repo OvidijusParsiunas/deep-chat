@@ -1,4 +1,5 @@
 import {OpenAIClient} from '../../client/openAI/openAIClient';
+import {VisibilityIcon} from './visibilityIcon';
 
 export class InsertKeyView {
   private static createHelpLink() {
@@ -15,6 +16,19 @@ export class InsertKeyView {
     failElement.id = 'insert-key-input-invalid-text';
     failElement.style.display = 'none';
     return failElement;
+  }
+
+  private static createHelpTextContainer() {
+    const helpTextContainerElement = document.createElement('div');
+    helpTextContainerElement.id = 'insert-key-help-text-container';
+    const helpTextContentsElement = document.createElement('div');
+    helpTextContentsElement.id = 'insert-key-help-text-contents';
+    const failTextElement = InsertKeyView.createFailText();
+    helpTextContentsElement.appendChild(failTextElement);
+    const helpLinkElement = InsertKeyView.createHelpLink();
+    helpTextContentsElement.appendChild(helpLinkElement);
+    helpTextContainerElement.appendChild(helpTextContentsElement);
+    return {helpTextContainerElement, helpLinkElement, failTextElement};
   }
 
   private static onFail(inputEl: HTMLInputElement, failTextEl: HTMLElement, message: string) {
@@ -39,33 +53,26 @@ export class InsertKeyView {
   }
 
   private static createInput() {
+    const inputContainer = document.createElement('div');
+    inputContainer.id = 'insert-key-input-container';
     const inputElement = document.createElement('input');
     inputElement.id = 'insert-key-input';
     inputElement.placeholder = 'OpenAI API Key';
     inputElement.type = 'password';
     inputElement.classList.add('insert-key-input-valid');
     inputElement.onfocus = InsertKeyView.onInputFocus;
-    return inputElement;
-  }
-
-  private static createHelpTextContainer() {
-    const helpTextContainerElement = document.createElement('div');
-    helpTextContainerElement.id = 'insert-key-help-text-container';
-    const helpTextContentsElement = document.createElement('div');
-    helpTextContentsElement.id = 'insert-key-help-text-contents';
-    const failTextElement = InsertKeyView.createFailText();
-    helpTextContentsElement.appendChild(failTextElement);
-    const helpLinkElement = InsertKeyView.createHelpLink();
-    helpTextContentsElement.appendChild(helpLinkElement);
-    helpTextContainerElement.appendChild(helpTextContentsElement);
-    return {helpTextContainerElement, helpLinkElement, failTextElement};
+    inputContainer.appendChild(inputElement);
+    return inputContainer;
   }
 
   private static createContents(changeToChat: (key: string) => void) {
     const contentsElement = document.createElement('div');
     contentsElement.id = 'insert-key-contents';
-    const inputElement = InsertKeyView.createInput();
-    contentsElement.appendChild(inputElement);
+    const inputContainerElement = InsertKeyView.createInput();
+    const inputElement = inputContainerElement.children[0] as HTMLInputElement;
+    const iconContainerElement = VisibilityIcon.create(inputElement);
+    inputContainerElement.appendChild(iconContainerElement);
+    contentsElement.appendChild(inputContainerElement);
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer();
     contentsElement.appendChild(InsertKeyView.createSubmitButton(inputElement, failTextElement, changeToChat));
     contentsElement.appendChild(helpTextContainerElement);
