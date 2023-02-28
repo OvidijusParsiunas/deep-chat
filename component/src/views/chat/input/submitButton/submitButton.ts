@@ -1,7 +1,7 @@
+import {OpenAIClient} from '../../../../client/openAI/openAIClient';
 import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
 import {Messages} from '../../messages/messages';
 import {SUBMIT_ICON_STRING} from './submitIcon';
-import {OpenAIClient} from './openAIClient';
 
 export class SubmitButton {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions

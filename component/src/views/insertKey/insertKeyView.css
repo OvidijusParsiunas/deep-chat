@@ -1,0 +1,84 @@
+#insert-key {
+  height: 100%;
+  position: relative;
+}
+
+#insert-key-contents {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+#insert-key-title {
+  margin-bottom: 15px;
+}
+
+#insert-key-input {
+  padding: 3px;
+  padding-left: 4px;
+  padding-top: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  width: calc(100% - 80px);
+}
+
+.insert-key-input-valid {
+  border-color: grey;
+}
+
+.insert-key-input-invalid {
+  border-color: red;
+}
+
+#submit-key-button {
+  float: right;
+  margin-left: 5px;
+  border: 1px solid grey;
+  color: #454545;
+  border-radius: 4px;
+  width: 55px;
+  height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#submit-key-button:hover {
+  background-color: #f2f2f2;
+}
+
+#submit-key-button:active {
+  background-color: #d2d2d2;
+}
+
+#insert-key-help-text-container {
+  position: relative;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  padding-right: 30px;
+}
+
+#insert-key-help-text-contents {
+  margin-top: 10px;
+  position: absolute;
+  transform: translateX(50%);
+}
+
+#insert-key-input-invalid-text {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  padding-left: 2px;
+  font-size: 15px;
+  color: red;
+}
+
+#help-link {
+  display: block;
+  margin-top: 10px;
+}

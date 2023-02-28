@@ -1,16 +1,9 @@
 import {InternalHTML} from './utils/webComponent/internalHTML';
+import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
 import {Property} from './utils/decorators/property';
 import {ChatView} from './views/chat/chatView';
 import style from './AIAssistant.css?inline';
-
-const insertKeyView = document.createElement('template');
-insertKeyView.innerHTML = `
-  <div>
-    Insert key:
-    <input></input><button>Submit</button>
-  </div>
-`;
 
 export class AiAssistant extends InternalHTML {
   private readonly _elementRef: HTMLElement;
@@ -26,7 +19,12 @@ export class AiAssistant extends InternalHTML {
     this._elementRef = AiAssistant.createContainerElement();
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     StyleUtil.apply(style, this.shadowRoot, this._elementRef);
-    this._elementRef.appendChild(insertKeyView.content.cloneNode(true));
+    InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
+  }
+
+  changeToChatView(newKey: string) {
+    this.key = newKey;
+    this.onRender();
   }
 
   private static createContainerElement() {

@@ -1,10 +1,12 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
-import {CompletionResult} from '../../../../types/openAIResult';
-import {Messages} from '../../messages/messages';
+import {ErrorMessages} from '../errorMessages/errorMessages';
+import {Messages} from '../../views/chat/messages/messages';
+import {CompletionResult} from '../../types/openAIResult';
 
 // WORK - need error handling for both
 export class OpenAIClient {
   private static readonly _completions_url = 'https://api.openai.com/v1/completions';
+  private static readonly _models_url = 'https://api.openai.com/v1/models';
 
   private static buildCompletionsHeaders(key: string) {
     return {
@@ -70,5 +72,34 @@ export class OpenAIClient {
       },
       signal: abortStream.signal,
     });
+  }
+
+  // prettier-ignore
+  public static verifyKey(inputElement: HTMLInputElement,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
+    const key = inputElement.value.trim();
+    if (key === '') return onFail(ErrorMessages.INVALID_KEY);
+    fetch(OpenAIClient._models_url, {
+      method: 'GET',
+      headers: new Headers(OpenAIClient.buildCompletionsHeaders(inputElement.value.trim())),
+      body: null,
+    })
+      .then((response) => response.json())
+      .then((result: CompletionResult) => {
+        console.log(result);
+        if (result.error) {
+          if (result.error.code === 'invalid_api_key') {
+            onFail(ErrorMessages.INVALID_KEY);
+          } else {
+            onFail(ErrorMessages.CONNECTION_FAILED);
+          }
+        } else {
+          onSuccess(key);
+        }
+      })
+      .catch((err) => {
+        onFail(ErrorMessages.CONNECTION_FAILED);
+        console.error(err);
+      });
   }
 }
