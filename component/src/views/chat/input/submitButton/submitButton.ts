@@ -1,4 +1,4 @@
-import {SVGIconUtil} from '../../../../utils/svgIconUtil';
+import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
 import {Messages} from '../../messages/messages';
 import {SUBMIT_ICON_STRING} from './submitIcon';
 import {OpenAIClient} from './openAIClient';
