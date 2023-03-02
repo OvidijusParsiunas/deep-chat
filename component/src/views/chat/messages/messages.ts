@@ -18,6 +18,7 @@ export type AddNewMessage = Messages['addNewMessage'];
 export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
+  messages: {text: string; role: 'ai' | 'user'}[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
 
@@ -66,6 +67,7 @@ export class Messages {
       Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
     }
     this._textElementRefs.push(textElement);
+    this.messages.push({text: text, role: isAI ? 'ai' : 'user'});
     return outerContainer;
   }
 

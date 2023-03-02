@@ -1,8 +1,8 @@
-import {OpenAImessages} from './openAI';
+import {OpenAIMessage} from './openAI';
 
 export interface OpenAIInternalParams {
   model: string;
-  messages?: OpenAImessages;
+  messages?: OpenAIMessage[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;

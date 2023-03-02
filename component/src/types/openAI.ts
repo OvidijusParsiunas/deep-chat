@@ -1,13 +1,13 @@
 // https://platform.openai.com/docs/guides/chat/introduction
-export type OpenAImessages = {
+export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
   content: string;
-}[];
+}
 
 // https://platform.openai.com/docs/api-reference/chat/create
 export interface OpenAIChat {
   model: string;
-  messages: OpenAImessages;
+  messages: OpenAIMessage[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;

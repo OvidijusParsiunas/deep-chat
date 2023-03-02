@@ -3,8 +3,8 @@ import {Messages} from './messages/messages';
 import {Input} from './input/input';
 
 // WORK - API to insert text
-// WORK - emit result
-// WORK - API to programmatically insert text - results to be able to continue the conversation
+// WORK - emit messages
+// WORK - API to programmatically insert all messages to continue a conversation
 // WORK - if minified - show a notification bubble
 export class ChatView {
   private static createElements(key: string, aiAssistant: AiAssistant) {
