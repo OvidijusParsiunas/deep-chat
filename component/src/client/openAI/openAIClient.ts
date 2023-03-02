@@ -76,9 +76,10 @@ export class OpenAIClient {
 
   // prettier-ignore
   public static verifyKey(inputElement: HTMLInputElement,
-      onSuccess: (key: string) => void, onFail: (message: string) => void) {
+      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
     const key = inputElement.value.trim();
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
+    onLoad();
     fetch(OpenAIClient._models_url, {
       method: 'GET',
       headers: new Headers(OpenAIClient.buildCompletionsHeaders(inputElement.value.trim())),

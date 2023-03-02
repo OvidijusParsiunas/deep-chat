@@ -17,15 +17,12 @@
 }
 
 #insert-key-input-container {
-  width: calc(100% - 100px);
+  width: calc(100% - 95px);
   display: inline-block;
 }
 
 #insert-key-input {
-  padding: 3px;
-  padding-left: 4px;
-  padding-right: 20px;
-  padding-top: 4px;
+  padding: 5px 20px 4px 4px;
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
@@ -63,33 +60,37 @@
 
 #visible-icon {
   right: -23px;
-  top: -19px;
+  top: -20px;
 }
 
 #not-visible-icon {
   right: -22px;
-  top: -18px;
+  top: -19px;
 }
 
-#submit-key-button {
+#start-button {
   float: right;
   margin-left: 24px;
   border: 1px solid grey;
   color: #454545;
   border-radius: 4px;
-  width: 55px;
+  width: 46px;
   height: 23px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  padding: 1px;
+  padding-top: 0.5px;
+  padding-bottom: 1.5px;
+  user-select: none;
 }
 
-#submit-key-button:hover {
+#start-button:hover {
   background-color: #f2f2f2;
 }
 
-#submit-key-button:active {
+#start-button:active {
   background-color: #d2d2d2;
 }
 
@@ -109,13 +110,40 @@
 #insert-key-input-invalid-text {
   display: block;
   margin-top: 5px;
-  margin-bottom: 7px;
+  margin-bottom: 12px;
   padding-left: 2px;
   font-size: 15px;
   color: red;
 }
 
-#help-link {
+#insert-key-input-help-link {
   display: block;
   margin-top: 10px;
+}
+
+#loading-ring {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+#loading-ring:after {
+  content: ' ';
+  display: block;
+  width: 11px;
+  height: 11px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 2px solid #0084ff;
+  border-color: #0084ff transparent #0084ff transparent;
+  animation: loading-ring 1.2s linear infinite;
+}
+
+@keyframes loading-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

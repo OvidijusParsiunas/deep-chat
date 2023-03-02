@@ -16,8 +16,9 @@
   width: calc(100% - 25px);
   text-align: left;
   outline: none;
-  padding: 5px 0px 5px 5px;
+  padding: 6px 0px 5px 7px;
   word-wrap: break-word;
+  min-height: 18px;
 }
 
 .keyboard-input-default {

@@ -4,7 +4,7 @@ import {VisibilityIcon} from './visibilityIcon';
 export class InsertKeyView {
   private static createHelpLink() {
     const helpElement = document.createElement('a');
-    helpElement.id = 'help-link';
+    helpElement.id = 'insert-key-input-help-link';
     helpElement.href = 'https://platform.openai.com/account/api-keys';
     helpElement.innerText = 'Get OpenAI API Key';
     helpElement.target = '_blank';
@@ -31,21 +31,26 @@ export class InsertKeyView {
     return {helpTextContainerElement, helpLinkElement, failTextElement};
   }
 
-  private static onFail(inputEl: HTMLInputElement, failTextEl: HTMLElement, message: string) {
+  private static onFail(inputEl: HTMLInputElement, failTextEl: HTMLElement, startEl: HTMLElement, message: string) {
     inputEl.classList.replace('insert-key-input-valid', 'insert-key-input-invalid');
     failTextEl.innerText = message;
     failTextEl.style.display = 'block';
+    startEl.innerText = 'Start';
+  }
+
+  private static onLoad(startEl: HTMLElement) {
+    startEl.innerHTML = '<div id="loading-ring"></div>';
   }
 
   // prettier-ignore
-  private static createSubmitButton(inputEl: HTMLInputElement, failTextEl: HTMLElement,
+  private static createStartButton(inputEl: HTMLInputElement, failTextEl: HTMLElement,
       changeToChat: (key: string) => void) {
-    const submitButton = document.createElement('div');
-    submitButton.id = 'submit-key-button';
-    submitButton.innerText = 'Submit';
-    submitButton.onclick = OpenAIClient.verifyKey.bind(this, inputEl, changeToChat,
-      InsertKeyView.onFail.bind(this, inputEl, failTextEl));
-    return submitButton;
+    const startEl = document.createElement('div');
+    startEl.id = 'start-button';
+    startEl.innerText = 'Start';
+    startEl.onclick = OpenAIClient.verifyKey.bind(this, inputEl, changeToChat,
+      InsertKeyView.onFail.bind(this, inputEl, failTextEl, startEl), InsertKeyView.onLoad.bind(this, startEl));
+    return startEl;
   }
 
   private static onInputFocus(event: FocusEvent) {
@@ -74,7 +79,7 @@ export class InsertKeyView {
     inputContainerElement.appendChild(iconContainerElement);
     contentsElement.appendChild(inputContainerElement);
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer();
-    contentsElement.appendChild(InsertKeyView.createSubmitButton(inputElement, failTextElement, changeToChat));
+    contentsElement.appendChild(InsertKeyView.createStartButton(inputElement, failTextElement, changeToChat));
     contentsElement.appendChild(helpTextContainerElement);
     return contentsElement;
   }
