@@ -2,6 +2,7 @@ import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-sourc
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {CompletionResult} from '../../types/openAIResult';
+import {OpenAICompletions} from '../../types/openAI';
 
 // WORK - need error handling for both
 export class OpenAIClient {
@@ -15,22 +16,17 @@ export class OpenAIClient {
     };
   }
 
-  private static buildCompletionsBody(prompt: string, stream = true) {
-    return JSON.stringify({
-      // text-davinci-003
-      model: 'text-curie-001',
-      prompt,
-      temperature: 0.9,
-      max_tokens: 20,
-      stream,
-    });
+  private static buildCompletionsBody(params: OpenAICompletions, prompt: string) {
+    return JSON.stringify({prompt, ...params});
   }
 
-  public static requestCompletion(key: string, prompt: string, messages: Messages, onSuccessfulResult: () => void) {
+  // prettier-ignore
+  public static requestCompletion(params: OpenAICompletions, key: string, prompt: string,
+      messages: Messages, onSuccessfulResult: () => void) {
     fetch(OpenAIClient._completions_url, {
       method: 'POST',
       headers: new Headers(OpenAIClient.buildCompletionsHeaders(key)),
-      body: OpenAIClient.buildCompletionsBody(prompt),
+      body: OpenAIClient.buildCompletionsBody(params, prompt),
     })
       .then((response) => response.json())
       .then((result: CompletionResult) => {
@@ -42,13 +38,13 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(key: string, prompt: string, messages: Messages,
+  public static requestStreamCompletion(params: OpenAICompletions, key: string, prompt: string, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
     fetchEventSource(OpenAIClient._completions_url, {
       method: 'POST',
       headers: OpenAIClient.buildCompletionsHeaders(key),
-      body: OpenAIClient.buildCompletionsBody(prompt, true),
+      body: OpenAIClient.buildCompletionsBody(params, prompt),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

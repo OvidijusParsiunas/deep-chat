@@ -5,6 +5,8 @@ import {Property} from './utils/decorators/property';
 import {CustomMessageStyles} from './types/messages';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
+import {CustomStyle} from './types/styles';
+import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 
 export class AiAssistant extends InternalHTML {
@@ -22,17 +24,23 @@ export class AiAssistant extends InternalHTML {
   @Property('boolean')
   speechOutput?: boolean;
 
+  @Property('object')
+  containerStyle?: CustomStyle;
+
+  @Property('object')
+  inputStyle?: CustomStyle;
+
   @Property('string')
   defaultInputText?: string;
 
   @Property('object')
-  chatboxStyle?: {};
+  submitButtonStyle?: CustomStyle;
 
   @Property('object')
-  inputStyle?: {};
+  messageStyles?: CustomMessageStyles;
 
   @Property('object')
-  messageStyle?: CustomMessageStyles;
+  avatars?: Avatars;
 
   constructor() {
     super();
@@ -40,6 +48,7 @@ export class AiAssistant extends InternalHTML {
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     StyleUtil.apply(style, this.shadowRoot, this._elementRef);
     InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
+    Object.assign(this._elementRef.style, this.containerStyle);
   }
 
   changeToChatView(newKey: string) {
@@ -56,7 +65,7 @@ export class AiAssistant extends InternalHTML {
   override onRender() {
     console.log('render');
     if (this.key) {
-      ChatView.render(this._elementRef, this.key);
+      ChatView.render(this._elementRef, this.key, this);
     }
   }
 }

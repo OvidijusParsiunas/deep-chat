@@ -1,11 +1,15 @@
+import {OpenAIAssembler} from '../../../../client/openAI/openAIAssembler';
+import {OpenAIInternalParams} from '../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../client/openAI/openAIClient';
 import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
 import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+import {OpenAI} from '../../../../types/openAI';
 import {Messages} from '../../messages/messages';
+import {CustomStyle} from '../../../../types/styles';
 
 export class SubmitButton {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
-  private _isStreamed = true;
+  private _openAIParams: OpenAIInternalParams;
   private readonly _key: string;
   private readonly _messages: Messages;
   readonly elementRef: HTMLElement;
@@ -15,15 +19,16 @@ export class SubmitButton {
   private readonly _loadingIconElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
 
-  constructor(inputElementRef: HTMLElement, key: string, messages: Messages) {
+  constructor(inputElementRef: HTMLElement, messages: Messages, key: string, style?: CustomStyle, openAI?: OpenAI) {
     this._key = key;
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this.elementRef = this.createButtonElement();
     this._submitIconElementRef = this.elementRef.children[0] as HTMLElement;
-    this._stopIconElementRef = this.createStopIconElement();
+    this._stopIconElementRef = this.createStopIconElement(style);
     this._loadingIconElementRef = SubmitButton.createLoadingIconElement();
     this._abortStream = new AbortController();
+    this._openAIParams = OpenAIAssembler.assemble(openAI);
   }
 
   private createButtonElement() {
@@ -45,13 +50,14 @@ export class SubmitButton {
     return loadingIconElement;
   }
 
-  private createStopIconElement() {
+  private createStopIconElement(style?: CustomStyle) {
     const stopIconElement = document.createElement('div');
     stopIconElement.id = 'stop-icon';
     const stopIconContainerElement = document.createElement('div');
     stopIconContainerElement.classList.add('clickable-icon-container');
     stopIconContainerElement.appendChild(stopIconElement);
     stopIconContainerElement.onclick = this.stopStream.bind(this);
+    Object.assign(stopIconContainerElement.style, style);
     return stopIconContainerElement;
   }
 
@@ -62,11 +68,12 @@ export class SubmitButton {
     this.changeToLoadingIcon();
     this._messages.addNewMessage(inputText as string, false);
     this._inputElementRef.textContent = '';
-    if (this._isStreamed) {
-      OpenAIClient.requestStreamCompletion(this._key, inputText, this._messages,
+    if (this._openAIParams.stream) {
+      OpenAIClient.requestStreamCompletion(this._openAIParams, this._key, inputText, this._messages,
         this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
     } else {
-      OpenAIClient.requestCompletion(this._key, inputText, this._messages, this.changeToSubmitIcon.bind(this));
+      OpenAIClient.requestCompletion(this._openAIParams, this._key, inputText, this._messages,
+        this.changeToSubmitIcon.bind(this));
     }
   }
 

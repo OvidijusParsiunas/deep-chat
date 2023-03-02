@@ -16,6 +16,61 @@
     <ai-assistant id="chat-element"></ai-assistant>
     <script type="module">
       const chatElement = document.getElementById('chat-element');
+      chatElement.stream = true;
+      chatElement.avatars = {
+        styles: {
+          default: {
+            container: {
+              marginTop: '10px',
+            },
+            avatar: {
+              padding: 'unset',
+            },
+            position: 'left',
+          },
+        },
+      };
+      chatElement.messageStyles = {
+        default: {
+          outerContainer: {
+            borderBottom: '1px solid #c3c3c3',
+          },
+          innerContainer: {
+            width: '90%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          },
+          text: {
+            color: 'rgba(52, 53, 65)',
+            margin: 'unset',
+            padding: 'unset',
+            maxWidth: 'unset',
+            border: 'unset',
+            paddingTop: '12px',
+            paddingBottom: '10px',
+            width: 'inherit',
+            backgroundColor: 'unset',
+          },
+        },
+        user: {
+          outerContainer: {
+            backgroundColor: 'white',
+          },
+        },
+        ai: {
+          outerContainer: {
+            backgroundColor: '#f3f3f3',
+          },
+        },
+      };
+      chatElement.openAI = {
+        completions: {
+          model: 'text-curie-001',
+          temperature: 0.9,
+          max_tokens: 20,
+          stream: true,
+        },
+      };
       chatElement.key = '';
     </script>
   </body>

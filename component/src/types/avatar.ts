@@ -11,3 +11,5 @@ export interface CustomAvatarStyles {
   user?: CustomAvatarStyle;
   ai?: CustomAvatarStyle;
 }
+
+export type Avatars = true | {styles: CustomAvatarStyles};

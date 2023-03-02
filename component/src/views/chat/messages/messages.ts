@@ -1,5 +1,5 @@
 import {CustomMessageStyles, CustomMessageStyle} from '../../../types/messages';
-import {CustomAvatarStyles} from '../../../types/avatar';
+import {Avatars} from '../../../types/avatar';
 import {Avatar} from './avatar';
 
 const messagesTemplate = document.createElement('template');
@@ -18,10 +18,14 @@ export type AddNewMessage = Messages['addNewMessage'];
 export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
+  private readonly _messageStyles?: CustomMessageStyles;
+  private readonly _avatars?: Avatars;
 
-  constructor(parentElement: HTMLElement) {
+  constructor(parentElement: HTMLElement, messageStyle?: CustomMessageStyles, avatars?: Avatars) {
     parentElement.appendChild(messagesTemplate.content.cloneNode(true));
     this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
+    this._messageStyles = messageStyle;
+    this._avatars = avatars;
   }
 
   // prettier-ignore
@@ -43,12 +47,12 @@ export class Messages {
     }
   }
 
-  private static addInnerContainerElements(innerContainer: HTMLElement, text: string, isAI: boolean) {
+  private addInnerContainerElements(innerContainer: HTMLElement, text: string, isAI: boolean) {
     const textElement = document.createElement('div');
     textElement.classList.add('message-text', isAI ? 'ai-message-text' : 'user-message-text');
     textElement.innerHTML = text;
     innerContainer.appendChild(textElement);
-    if (Avatar.canAvatarBeAdded(Messages._avatarStyles)) Avatar.addAvatar(textElement, Messages._avatarStyles, isAI);
+    if (this._avatars) Avatar.addAvatar(textElement, isAI, this._avatars);
     return {textElement};
   }
 
@@ -57,8 +61,10 @@ export class Messages {
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
-    const {textElement} = Messages.addInnerContainerElements(innerContainer, text, isAI);
-    Messages.applyCustomStyles(outerContainer, innerContainer, textElement, Messages._openAIStyles, isAI);
+    const {textElement} = this.addInnerContainerElements(innerContainer, text, isAI);
+    if (this._messageStyles) {
+      Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
+    }
     this._textElementRefs.push(textElement);
     return outerContainer;
   }
@@ -79,50 +85,4 @@ export class Messages {
     const textNode = document.createTextNode(text);
     textElement.appendChild(textNode);
   }
-
-  private static readonly _avatarStyles: CustomAvatarStyles = {
-    default: {
-      container: {
-        margin: '10px',
-      },
-      avatar: {
-        padding: 'unset',
-      },
-      position: 'left',
-    },
-  };
-
-  private static readonly _openAIStyles: CustomMessageStyles = {
-    default: {
-      outerContainer: {
-        borderBottom: '1px solid #c3c3c3',
-      },
-      innerContainer: {
-        width: '90%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
-      text: {
-        color: 'rgba(52, 53, 65)',
-        margin: 'unset',
-        padding: 'unset',
-        maxWidth: 'unset',
-        border: 'unset',
-        paddingTop: '12px',
-        paddingBottom: '8px',
-        width: 'inherit',
-        backgroundColor: 'unset',
-      },
-    },
-    user: {
-      outerContainer: {
-        backgroundColor: 'white',
-      },
-    },
-    ai: {
-      outerContainer: {
-        backgroundColor: '#d9d9e3cc',
-      },
-    },
-  };
 }

@@ -1,20 +1,22 @@
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './submitButton/submitButton';
 import {SpeechInput} from './speechInput/speechInput';
+import {AiAssistant} from '../../../AiAssistant';
 import {Messages} from '../messages/messages';
 
 export class Input {
   readonly elementRef: HTMLElement;
   private readonly _submitButton: SubmitButton;
 
-  constructor(key: string, messages: Messages) {
+  constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
+    const {inputStyle, defaultInputText, submitButtonStyle, openAI} = aiAssistant;
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
-    const keyboardInput = new KeyboardInput();
-    this._submitButton = new SubmitButton(keyboardInput.inputElementRef, key, messages);
+    const keyboardInput = new KeyboardInput(inputStyle, defaultInputText);
+    this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, submitButtonStyle, openAI);
     keyboardInput.submit = this._submitButton.submit.bind(this._submitButton);
-    const speechInput = new SpeechInput(keyboardInput.inputElementRef);
-    this.addElements(keyboardInput.elementRef, this._submitButton.elementRef, speechInput.elementRef);
+    this.addElements(keyboardInput.elementRef, this._submitButton.elementRef);
+    if (aiAssistant.speechInput) this.addElements(new SpeechInput().elementRef);
   }
 
   private addElements(...elements: HTMLElement[]) {
