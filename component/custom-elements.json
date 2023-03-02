@@ -4,7 +4,7 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/AIAssistant.ts",
+      "path": "src/AiAssistant.ts",
       "declarations": [
         {
           "kind": "class",
@@ -55,7 +55,7 @@
           "name": "AiAssistant",
           "declaration": {
             "name": "AiAssistant",
-            "module": "src/AIAssistant.ts"
+            "module": "src/AiAssistant.ts"
           }
         },
         {
@@ -63,7 +63,7 @@
           "name": "ai-assistant",
           "declaration": {
             "name": "AiAssistant",
-            "module": "src/AIAssistant.ts"
+            "module": "src/AiAssistant.ts"
           }
         }
       ]

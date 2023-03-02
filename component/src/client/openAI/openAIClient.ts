@@ -44,7 +44,7 @@ export class OpenAIClient {
   // prettier-ignore
   public static requestStreamCompletion(key: string, prompt: string, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController) {
-    const textElement = messages.addNewStreamedMessage();
+    let textElement: HTMLElement | null = null;
     fetchEventSource(OpenAIClient._completions_url, {
       method: 'POST',
       headers: OpenAIClient.buildCompletionsHeaders(key),
@@ -52,6 +52,7 @@ export class OpenAIClient {
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {
+          textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
         throw new Error('error');
@@ -60,7 +61,7 @@ export class OpenAIClient {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as CompletionResult;
           const text = response.choices[0].text;
-          Messages.updateStreamedMessage(text, textElement);
+          if (textElement) Messages.updateStreamedMessage(text, textElement);
         }
       },
       onerror(err) {
@@ -87,7 +88,6 @@ export class OpenAIClient {
     })
       .then((response) => response.json())
       .then((result: CompletionResult) => {
-        console.log(result);
         if (result.error) {
           if (result.error.code === 'invalid_api_key') {
             onFail(ErrorMessages.INVALID_KEY);

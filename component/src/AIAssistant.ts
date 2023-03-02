@@ -2,8 +2,10 @@ import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
 import {Property} from './utils/decorators/property';
+import {CustomMessageStyles} from './types/messages';
 import {ChatView} from './views/chat/chatView';
-import style from './AIAssistant.css?inline';
+import style from './AiAssistant.css?inline';
+import {OpenAI} from './types/openAI';
 
 export class AiAssistant extends InternalHTML {
   private readonly _elementRef: HTMLElement;
@@ -11,8 +13,26 @@ export class AiAssistant extends InternalHTML {
   @Property('string')
   key?: string;
 
+  @Property('object')
+  openAI?: OpenAI;
+
   @Property('boolean')
-  stream?: boolean;
+  speechInput?: boolean;
+
+  @Property('boolean')
+  speechOutput?: boolean;
+
+  @Property('string')
+  defaultInputText?: string;
+
+  @Property('object')
+  chatboxStyle?: {};
+
+  @Property('object')
+  inputStyle?: {};
+
+  @Property('object')
+  messageStyle?: CustomMessageStyles;
 
   constructor() {
     super();

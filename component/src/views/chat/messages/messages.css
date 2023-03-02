@@ -22,15 +22,21 @@
 
 .inner-message-container {
   display: flex;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .message-text {
   margin-top: 10px;
-  padding: 10px;
   word-wrap: break-word;
   width: fit-content;
   max-width: 60%;
   border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .user-message-text {
@@ -45,4 +51,5 @@
   background-color: #e4e6eb;
   margin-left: 0px;
   margin-right: auto;
+  min-height: 16px;
 }

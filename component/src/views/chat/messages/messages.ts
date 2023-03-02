@@ -7,7 +7,7 @@ messagesTemplate.innerHTML = `
   <div class="messages">
     <div id="placeholder">
       <div id="placeholder-text">
-        AI Assistant
+        Ai Assistant
       </div>
     </div>
   </div>
@@ -108,8 +108,8 @@ export class Messages {
         padding: 'unset',
         maxWidth: 'unset',
         border: 'unset',
-        paddingTop: '10px',
-        paddingBottom: '10px',
+        paddingTop: '12px',
+        paddingBottom: '8px',
         width: 'inherit',
         backgroundColor: 'unset',
       },

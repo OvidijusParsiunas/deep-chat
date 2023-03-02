@@ -2,7 +2,7 @@ import {AttributeTypeConverter, AvailableTypes} from '../../types/typeConverters
 import {GenericObject} from '../../types/object';
 import {TypeConverters} from './typeConverters';
 import {RenderControl} from './renderControl';
-import {AiAssistant} from '../../AIAssistant';
+import {AiAssistant} from '../../AiAssistant';
 
 // _attributes_ exists as a static prop and need it here as an instance
 type InternalHTMLInstance = {_attributes_: GenericObject<AttributeTypeConverter>};
