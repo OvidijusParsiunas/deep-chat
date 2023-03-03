@@ -1,4 +1,4 @@
-import {CustomMessageStyles, StartMessages} from './types/messages';
+import {CustomMessageStyles, MessageContent, OnNewMessage} from './types/messages';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
@@ -43,7 +43,10 @@ export class AiAssistant extends InternalHTML {
   avatars?: Avatars;
 
   @Property('object')
-  startMessages?: StartMessages;
+  startMessages?: MessageContent[];
+
+  @Property('function')
+  onNewMessage?: OnNewMessage;
 
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');

@@ -2,10 +2,7 @@ import {AiAssistant} from '../../AiAssistant';
 import {Messages} from './messages/messages';
 import {Input} from './input/input';
 
-// WORK - API to insert text
-// WORK - emit messages
-// WORK - API to programmatically insert all messages to continue a conversation
-// WORK - if minified - show a notification bubble
+// TO-DO - if minified - show a notification bubble
 export class ChatView {
   private static createElements(key: string, aiAssistant: AiAssistant) {
     const containerElement = document.createElement('div');

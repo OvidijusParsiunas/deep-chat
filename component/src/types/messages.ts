@@ -12,4 +12,6 @@ export interface CustomMessageStyles {
   ai?: CustomMessageStyle;
 }
 
-export type StartMessages = {role: 'user' | 'ai'; text: string}[];
+export type MessageContent = {role: 'user' | 'ai'; text: string};
+
+export type OnNewMessage = (message: MessageContent) => void;

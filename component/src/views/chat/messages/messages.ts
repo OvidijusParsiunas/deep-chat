@@ -1,4 +1,4 @@
-import {CustomMessageStyles, CustomMessageStyle, StartMessages} from '../../../types/messages';
+import {CustomMessageStyles, CustomMessageStyle, MessageContent, OnNewMessage} from '../../../types/messages';
 import {AiAssistant} from '../../../AiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Avatar} from './avatar';
@@ -21,7 +21,9 @@ export class Messages {
   private readonly _textElementRefs: HTMLElement[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
-  messages: {text: string; role: 'ai' | 'user'}[] = [];
+  private readonly _onNewMessage?: OnNewMessage;
+  private readonly _dispatchEvent: (event: Event) => void;
+  messages: MessageContent[] = [];
 
   constructor(parentElement: HTMLElement, aiAssistant: AiAssistant) {
     parentElement.appendChild(messagesTemplate.content.cloneNode(true));
@@ -29,9 +31,11 @@ export class Messages {
     this._messageStyles = aiAssistant?.messageStyles;
     this._avatars = aiAssistant?.avatars;
     if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
+    this._onNewMessage = aiAssistant.onNewMessage;
+    this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
   }
 
-  private populateInitialMessages(startMessages: StartMessages) {
+  private populateInitialMessages(startMessages: MessageContent[]) {
     startMessages.forEach(({role, text}) => {
       this.addNewMessage(text, role === 'ai');
     });
@@ -65,6 +69,10 @@ export class Messages {
     return {textElement};
   }
 
+  private static createMessageContent(text: string, isAI: boolean) {
+    return {role: isAI ? 'ai' : 'user', text} as const;
+  }
+
   private createMessageElements(text: string, isAI: boolean) {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
@@ -75,8 +83,14 @@ export class Messages {
       Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
     }
     this._textElementRefs.push(textElement);
-    this.messages.push({text: text, role: isAI ? 'ai' : 'user'});
+    this.messages.push(Messages.createMessageContent(text, isAI));
     return outerContainer;
+  }
+
+  private sendClientUpdate(text: string, isAI: boolean) {
+    const messageContent = Messages.createMessageContent(text, isAI);
+    this._onNewMessage?.(messageContent);
+    this._dispatchEvent(new CustomEvent('new-message', {detail: messageContent}));
   }
 
   public addNewMessage(text: string, isAI: boolean) {
@@ -84,6 +98,7 @@ export class Messages {
     const messageElement = this.createMessageElements(text, isAI);
     this._elementRef.appendChild(messageElement);
     this._elementRef.scrollTop = this._elementRef.scrollHeight;
+    this.sendClientUpdate(text, isAI);
   }
 
   public addNewStreamedMessage() {
