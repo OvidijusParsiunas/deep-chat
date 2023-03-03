@@ -14,7 +14,8 @@ export class Input {
     this.elementRef.id = 'input';
     const keyboardInput = new KeyboardInput(inputStyle, defaultInputText);
     this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, submitButtonStyle, openAI);
-    keyboardInput.submit = this._submitButton.submit.bind(this._submitButton);
+    keyboardInput.submit = this._submitButton.submitFromInput.bind(this._submitButton);
+    aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);
     this.addElements(keyboardInput.elementRef, this._submitButton.elementRef);
     if (aiAssistant.speechInput) this.addElements(new SpeechInput().elementRef);
   }

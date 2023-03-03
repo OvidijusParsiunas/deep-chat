@@ -1,8 +1,8 @@
+import {CustomMessageStyles, StartMessages} from './types/messages';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
 import {Property} from './utils/decorators/property';
-import {CustomMessageStyles} from './types/messages';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
@@ -41,6 +41,12 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   avatars?: Avatars;
+
+  @Property('object')
+  startMessages?: StartMessages;
+
+  submitUserMessage: (text: string) => void = () =>
+    console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
   constructor() {
     super();

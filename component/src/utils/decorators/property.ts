@@ -4,9 +4,13 @@ import {TypeConverters} from './typeConverters';
 import {RenderControl} from './renderControl';
 import {AiAssistant} from '../../AiAssistant';
 
-// _attributes_ exists as a static prop and need it here as an instance
-type InternalHTMLInstance = {_attributes_: GenericObject<AttributeTypeConverter>};
+// _attributes_ and _attributeToProperty_ exist as static props and need it here as a class instance type
+type InternalHTML = {
+  _attributes_: GenericObject<AttributeTypeConverter>;
+  _attributeToProperty_: GenericObject<string>;
+};
 
+// used to monitor property changes and automatically view them as attributes
 export function Property(type: AvailableTypes) {
   return function (target: Object, propertyKey: string) {
     let value: string;
@@ -22,6 +26,9 @@ export function Property(type: AvailableTypes) {
       set: setter,
     });
     // using constructor and not static object in order to not reinstantiate and register the element twice
-    (target.constructor as unknown as InternalHTMLInstance)._attributes_[propertyKey] = TypeConverters.attibutes[type];
+    const internalHTML = target.constructor as unknown as InternalHTML;
+    const attributeName = propertyKey.toLocaleLowerCase();
+    internalHTML._attributes_[attributeName] = TypeConverters.attibutes[type];
+    internalHTML._attributeToProperty_[attributeName] = propertyKey;
   };
 }

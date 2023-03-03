@@ -1,73 +1,32 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
-import {OpenAICompletions, OpenAIMessage} from '../../types/openAI';
-import {OpenAIInternalParams} from '../../types/openAIInternal';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {OpenAIClientIO} from './clientIO/openAIClientIO';
 import {OpenAIResult} from '../../types/openAIResult';
+import {OpenAICompletions} from '../../types/openAI';
 
 // WORK - need error handling for both
 export class OpenAIClient {
-  private static readonly _completions_url = 'https://api.openai.com/v1/completions';
-  private static readonly _chat_url = 'https://api.openai.com/v1/chat/completions'; // chat is a form of completions
   private static readonly _models_url = 'https://api.openai.com/v1/models';
 
-  private static buildCompletionsHeaders(key: string) {
+  private static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     };
   }
 
-  private static extractTextFromResult(result: OpenAIResult) {
-    const choice = result.choices[0];
-    if (choice.message) {
-      return choice.message.content;
-    }
-    return choice.text;
-  }
-
-  private static buildCompletionsBody(params: OpenAIInternalParams, prompt: string) {
-    return JSON.stringify({prompt, ...params});
-  }
-
-  private static buildChatBody(params: OpenAIInternalParams, messagesObj: Messages) {
-    const body = JSON.parse(JSON.stringify(params)) as OpenAIInternalParams;
-    const messages: OpenAIMessage[] = messagesObj.messages.map((message) => {
-      return {content: message.text, role: message.role === 'ai' ? 'assistant' : message.role};
-    });
-    if (body.messages) {
-      body.messages.push(...messages);
-    } else {
-      body.messages = messages;
-    }
-    return JSON.stringify(body);
-  }
-
-  private static isChat(params: OpenAIInternalParams) {
-    return params.messages;
-  }
-
-  private static getBody(params: OpenAIInternalParams, prompt: string, messages: Messages) {
-    return OpenAIClient.isChat(params)
-      ? OpenAIClient.buildChatBody(params, messages)
-      : OpenAIClient.buildCompletionsBody(params, prompt);
-  }
-
-  private static getUrl(params: OpenAIInternalParams) {
-    return OpenAIClient.isChat(params) ? OpenAIClient._chat_url : OpenAIClient._completions_url;
-  }
-
   // prettier-ignore
-  public static requestCompletion(params: OpenAICompletions, key: string, prompt: string,
+  public static requestCompletion(io: OpenAIClientIO, params: OpenAICompletions, key: string,
       messages: Messages, onSuccessfulResult: () => void) {
-    fetch(OpenAIClient.getUrl(params), {
+    fetch(io.url, {
       method: 'POST',
-      headers: new Headers(OpenAIClient.buildCompletionsHeaders(key)),
-      body: OpenAIClient.getBody(params, prompt, messages),
+      headers: new Headers(OpenAIClient.buildHeaders(key)),
+      body: io.buildBody(params, messages),
     })
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
-        const text = OpenAIClient.extractTextFromResult(result);
+        const text = io.extractTextFromResult(result);
         messages.addNewMessage(text, true);
         onSuccessfulResult();
       })
@@ -75,13 +34,13 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(params: OpenAICompletions, key: string, prompt: string, messages: Messages,
-      onOpen: () => void, onClose: () => void, abortStream: AbortController) {
+  public static requestStreamCompletion(io: OpenAIClientIO, params: OpenAICompletions, key: string,
+      messages: Messages, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
-    fetchEventSource(OpenAIClient.getUrl(params), {
+    fetchEventSource(io.url, {
       method: 'POST',
-      headers: OpenAIClient.buildCompletionsHeaders(key),
-      body: OpenAIClient.getBody(params, prompt, messages),
+      headers: OpenAIClient.buildHeaders(key),
+      body: io.buildBody(params, messages),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {
@@ -93,7 +52,7 @@ export class OpenAIClient {
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIResult;
-          const text = OpenAIClient.extractTextFromResult(response);
+          const text = io.extractTextFromResult(response);
           if (textElement) Messages.updateStreamedMessage(text, textElement);
         }
       },
@@ -116,7 +75,7 @@ export class OpenAIClient {
     onLoad();
     fetch(OpenAIClient._models_url, {
       method: 'GET',
-      headers: new Headers(OpenAIClient.buildCompletionsHeaders(inputElement.value.trim())),
+      headers: new Headers(OpenAIClient.buildHeaders(inputElement.value.trim())),
       body: null,
     })
       .then((response) => response.json())

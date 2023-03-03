@@ -1,4 +1,5 @@
-import {CustomMessageStyles, CustomMessageStyle} from '../../../types/messages';
+import {CustomMessageStyles, CustomMessageStyle, StartMessages} from '../../../types/messages';
+import {AiAssistant} from '../../../AiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Avatar} from './avatar';
 
@@ -18,15 +19,22 @@ export type AddNewMessage = Messages['addNewMessage'];
 export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
-  messages: {text: string; role: 'ai' | 'user'}[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
+  messages: {text: string; role: 'ai' | 'user'}[] = [];
 
-  constructor(parentElement: HTMLElement, messageStyle?: CustomMessageStyles, avatars?: Avatars) {
+  constructor(parentElement: HTMLElement, aiAssistant: AiAssistant) {
     parentElement.appendChild(messagesTemplate.content.cloneNode(true));
     this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
-    this._messageStyles = messageStyle;
-    this._avatars = avatars;
+    this._messageStyles = aiAssistant?.messageStyles;
+    this._avatars = aiAssistant?.avatars;
+    if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
+  }
+
+  private populateInitialMessages(startMessages: StartMessages) {
+    startMessages.forEach(({role, text}) => {
+      this.addNewMessage(text, role === 'ai');
+    });
   }
 
   // prettier-ignore

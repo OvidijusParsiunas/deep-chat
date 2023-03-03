@@ -10,7 +10,7 @@ export class ChatView {
   private static createElements(key: string, aiAssistant: AiAssistant) {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat';
-    const messages = new Messages(containerElement, aiAssistant.messageStyles, aiAssistant.avatars);
+    const messages = new Messages(containerElement, aiAssistant);
     const userInput = new Input(messages, key, aiAssistant);
     containerElement.appendChild(userInput.elementRef);
     return containerElement;

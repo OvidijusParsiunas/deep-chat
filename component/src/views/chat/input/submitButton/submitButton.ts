@@ -1,4 +1,6 @@
-import {OpenAIAssembler} from '../../../../client/openAI/openAIAssembler';
+import {OpenAIClientIOFactory} from '../../../../client/openAI/clientIO/openAIClientIOFactory';
+import {OpenAIParamAssembler} from '../../../../client/openAI/openAIParamAssembler';
+import {OpenAIClientIO} from '../../../../client/openAI/clientIO/openAIClientIO';
 import {OpenAIInternalParams} from '../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../client/openAI/openAIClient';
 import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
@@ -10,6 +12,7 @@ import {OpenAI} from '../../../../types/openAI';
 export class SubmitButton {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _openAIParams: OpenAIInternalParams;
+  private _clientIO: OpenAIClientIO;
   private readonly _key: string;
   private readonly _messages: Messages;
   readonly elementRef: HTMLElement;
@@ -28,7 +31,8 @@ export class SubmitButton {
     this._stopIconElementRef = this.createStopIconElement(style);
     this._loadingIconElementRef = SubmitButton.createLoadingIconElement();
     this._abortStream = new AbortController();
-    this._openAIParams = OpenAIAssembler.assemble(openAI);
+    this._openAIParams = OpenAIParamAssembler.assemble(openAI);
+    this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIParams);
   }
 
   private createButtonElement() {
@@ -37,7 +41,7 @@ export class SubmitButton {
     svgIconElement.id = 'submit-icon';
     submitIconContainerElement.appendChild(svgIconElement);
     submitIconContainerElement.classList.add('clickable-icon-container');
-    submitIconContainerElement.onclick = this.submit.bind(this);
+    submitIconContainerElement.onclick = this.submitFromInput.bind(this);
     const buttonElement = document.createElement('div');
     buttonElement.id = 'submit-button';
     buttonElement.appendChild(submitIconContainerElement);
@@ -61,18 +65,22 @@ export class SubmitButton {
     return stopIconContainerElement;
   }
 
+  public submitFromInput() {
+    const inputText = this._inputElementRef.textContent?.trim() as string;
+    this.submitUserText(inputText);
+  }
+
   // prettier-ignore
-  public submit() {
-    const inputText = this._inputElementRef.textContent?.trim();
-    if (this._isRequestInProgress || !inputText || inputText === '') return;
+  public submitUserText(userText: string) {
+    if (this._isRequestInProgress || !userText || userText === '') return;
     this.changeToLoadingIcon();
-    this._messages.addNewMessage(inputText as string, false);
+    this._messages.addNewMessage(userText, false);
     this._inputElementRef.textContent = '';
     if (this._openAIParams.stream) {
-      OpenAIClient.requestStreamCompletion(this._openAIParams, this._key, inputText, this._messages,
+      OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIParams, this._key, this._messages,
         this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
     } else {
-      OpenAIClient.requestCompletion(this._openAIParams, this._key, inputText, this._messages,
+      OpenAIClient.requestCompletion(this._clientIO, this._openAIParams, this._key, this._messages,
         this.changeToSubmitIcon.bind(this));
     }
   }

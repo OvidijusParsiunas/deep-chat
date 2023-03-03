@@ -11,3 +11,5 @@ export interface CustomMessageStyles {
   user?: CustomMessageStyle;
   ai?: CustomMessageStyle;
 }
+
+export type StartMessages = {role: 'user' | 'ai'; text: string}[];
