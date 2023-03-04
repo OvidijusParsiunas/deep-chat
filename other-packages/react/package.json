@@ -1,0 +1,34 @@
+{
+  "name": "ai-assistant-react",
+  "version": "0.0.2",
+  "description": "Ai Assistant wrapper for React",
+  "main": "./dist/aiAssistant.js",
+  "module": "./dist/aiAssistant.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Ovidijus Parsiunas",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OvidijusParsiunas/active-table.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OvidijusParsiunas/active-table/issues"
+  },
+  "homepage": "https://github.com/OvidijusParsiunas/active-table",
+  "license": "MIT",
+  "dependencies": {
+    "@lit-labs/react": "^1.1.1",
+    "ai-assistant": "^0.0.4",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "typescript": "^4.9.5"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+}

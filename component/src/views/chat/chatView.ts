@@ -1,4 +1,4 @@
-import {AiAssistant} from '../../AiAssistant';
+import {AiAssistant} from '../../aiAssistant';
 import {Messages} from './messages/messages';
 import {Input} from './input/input';
 

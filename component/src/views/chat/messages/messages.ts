@@ -1,5 +1,5 @@
 import {CustomMessageStyles, CustomMessageStyle, MessageContent, OnNewMessage} from '../../../types/messages';
-import {AiAssistant} from '../../../AiAssistant';
+import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Avatar} from './avatar';
 
@@ -30,9 +30,9 @@ export class Messages {
     this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
     this._messageStyles = aiAssistant?.messageStyles;
     this._avatars = aiAssistant?.avatars;
-    if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
-    this._onNewMessage = aiAssistant.onNewMessage;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
+    this._onNewMessage = aiAssistant.onNewMessage;
+    if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
   }
 
   private populateInitialMessages(startMessages: MessageContent[]) {

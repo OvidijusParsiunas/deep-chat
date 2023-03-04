@@ -4,7 +4,7 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/AiAssistant.ts",
+      "path": "src/aiAssistant.ts",
       "declarations": [
         {
           "kind": "class",
@@ -13,15 +13,114 @@
           "members": [
             {
               "kind": "field",
-              "name": "_elementRefRef",
+              "name": "_elementRef",
               "type": {
                 "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "openAI",
+              "type": {
+                "text": "OpenAI | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "speechInput",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "speechOutput",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "containerStyle",
+              "type": {
+                "text": "CustomStyle | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputStyle",
+              "type": {
+                "text": "CustomStyle | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "defaultInputText",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "submitButtonStyle",
+              "type": {
+                "text": "CustomStyle | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "messageStyles",
+              "type": {
+                "text": "CustomMessageStyles | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "avatars",
+              "type": {
+                "text": "Avatars | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "startMessages",
+              "type": {
+                "text": "MessageContent[] | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "onNewMessage",
+              "type": {
+                "text": "OnNewMessage | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "submitUserMessage",
+              "type": {
+                "text": "(text: string) => void"
               }
             },
             {
               "kind": "method",
-              "name": "appendStyleSheet",
-              "privacy": "private"
+              "name": "changeToChatView",
+              "parameters": [
+                {
+                  "name": "newKey",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -30,20 +129,67 @@
               "static": true
             },
             {
+              "kind": "method",
+              "name": "onRender",
+              "inheritedFrom": {
+                "name": "InternalHTML",
+                "module": "src/utils/webComponent/internalHTML.ts"
+              }
+            },
+            {
               "kind": "field",
-              "name": "key",
+              "name": "_waitingToRender_",
               "type": {
-                "text": "string"
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "InternalHTML",
+                "module": "src/utils/webComponent/internalHTML.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_propUpdated_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "InternalHTML",
+                "module": "src/utils/webComponent/internalHTML.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_attributes_",
+              "type": {
+                "text": "GenericObject<AttributeTypeConverter>"
+              },
+              "static": true,
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "InternalHTML",
+                "module": "src/utils/webComponent/internalHTML.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_attributeToProperty_",
+              "type": {
+                "text": "GenericObject<string>"
+              },
+              "static": true,
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "InternalHTML",
+                "module": "src/utils/webComponent/internalHTML.ts"
               }
             }
           ],
-          "attributes": [
-            {
-              "name": "key"
-            }
-          ],
           "superclass": {
-            "name": "HTMLElement"
+            "name": "InternalHTML",
+            "module": "/src/utils/webComponent/internalHTML"
           },
           "tagName": "ai-assistant",
           "customElement": true
@@ -55,7 +201,7 @@
           "name": "AiAssistant",
           "declaration": {
             "name": "AiAssistant",
-            "module": "src/AiAssistant.ts"
+            "module": "src/aiAssistant.ts"
           }
         },
         {
@@ -63,7 +209,7 @@
           "name": "ai-assistant",
           "declaration": {
             "name": "AiAssistant",
-            "module": "src/AiAssistant.ts"
+            "module": "src/aiAssistant.ts"
           }
         }
       ]
@@ -82,6 +228,24 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/types/object.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAI.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIInternal.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/openAIResult.ts",
       "declarations": [],
       "exports": []
@@ -94,7 +258,432 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/utils/svgIconUtil.ts",
+      "path": "src/types/typeConverters.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/icons/notVisibilityIcon.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "VISIBLE_ICON_STRING",
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"17\" height=\"17\">\n\t<g transform=\"matrix(0.60714287 0 0 0.60714287 0 0)\">\n\t\t<g transform=\"matrix(0.04 0 0 0.04 0 0)\">\n\t\t\t<g>\n\t\t\t\t<path d=\"M396.67 280C 396.67 305.773 375.77502 326.668 350.002 326.668C 324.229 326.668 303.334 305.773 303.334 280C 303.334 254.22699 324.229 233.332 350.002 233.332C 375.77502 233.332 396.67 254.227 396.67 280\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t\t<path d=\"M579.37 266.98C 575.2411 260.8667 476.96 116.67001 350 116.67001C 223.04001 116.67001 124.759995 260.87 120.630005 266.98L120.630005 266.98L111.880005 280L120.630005 293.02C 124.7589 299.1333 223.04001 443.33 350 443.33C 476.96 443.33 575.24 299.13 579.37 293.02L579.37 293.02L588.12 280L579.37 266.98zM350 373.33002C 298.527 373.33002 256.668 331.471 256.668 279.99802C 256.668 228.52502 298.527 186.66602 350 186.66602C 401.473 186.66602 443.332 228.52502 443.332 279.99802C 443.332 331.471 401.473 373.33002 350 373.33002z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t</g>\n\t\t</g>\n\t</g>\n</svg>\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VISIBLE_ICON_STRING",
+          "declaration": {
+            "name": "VISIBLE_ICON_STRING",
+            "module": "src/icons/notVisibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/icons/submitIcon.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "SUBMIT_ICON_STRING",
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"30\" height=\"24\">\n  <g transform=\"matrix(0.8108108 0 0 0.8108108 0 0)\">\n    <g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n      <g>\n        <path d=\"M496.71 143.12L335.46997 304.46L398.26697 424.72L496.71 143.12zM321.63998 308.26L184.31998 236.54901L187.54657 230.2678L184.31998 236.54901C 180.84338 234.7756 179.48018 230.4396 181.35118 227.0451C 182.28477 225.1857 183.89809 223.98651 185.76527 223.4787L185.76527 223.4787L510.63525 109.9187C 510.80322 109.82886 510.9751 109.75073 511.14307 109.67261L511.14307 109.67261L511.31104 109.67261C 511.56494 109.58276 511.81885 109.50464 511.99463 109.50464C 512.1587 109.414795 512.24854 109.414795 512.4087 109.414795L512.4087 109.414795L512.49854 109.414795L512.5884 109.32495L512.75635 109.32495L513.01807 109.32495L514.45557 109.32495L514.45557 109.414795L514.7993 109.414795L514.9673 109.50464L515.2251 109.50464L515.31494 109.590576L515.56494 109.590576L515.56494 109.68042L515.8345 109.68042L515.99854 109.758545L516.1704 109.84448L516.25635 109.84448C 517.1001 110.196045 517.7797 110.696045 518.37744 111.28978L518.37744 111.28978L518.4634 111.37962L518.5532 111.37962L518.63916 111.551506C 519.2329 112.14135 519.6586 112.82101 519.99854 113.5827L519.99854 113.5827L519.99854 113.67255L520.0845 113.76239L520.0845 113.93817L520.1743 114.0163L520.1743 114.10614L520.26025 114.19208L520.26025 114.28192L520.3501 114.453804L520.3501 114.71162L520.43604 114.78974L520.43604 115.1374L520.5259 115.22724L520.5259 115.73896L520.6157 115.828804L520.6157 116.848305C 520.6157 116.93815 520.5259 117.10612 520.5259 117.19596L520.5259 117.19596L520.5259 117.5319C 520.5259 117.62174 520.43604 117.79362 520.43604 117.879555C 520.3501 118.14127 520.3501 118.38737 520.26807 118.555336L520.26807 118.555336L520.1821 118.72722C 520.0923 118.88347 520.0923 119.063156 520.01416 119.23503L520.01416 119.23503L406.41415 444.14502C 405.90634 445.91843 404.63297 447.6216 402.84775 448.54733C 399.37115 450.34033 395.12506 448.97702 393.34384 445.57852L393.34384 445.57852L399.54303 442.26993L393.34384 445.57852zM486.69998 133.18001L205.19998 231.543L325.46 294.43z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n      </g>\n    </g>\n  </g>\n</svg>\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SUBMIT_ICON_STRING",
+          "declaration": {
+            "name": "SUBMIT_ICON_STRING",
+            "module": "src/icons/submitIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/icons/visibleIcon.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "NOT_VISIBLE_ICON_STRING",
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"15\" height=\"15\">\n\t<g transform=\"matrix(0.53571427 0 0 0.53571427 0 0)\">\n\t\t<g transform=\"matrix(0.04 0 0 0.04 0 0)\">\n\t\t\t<g>\n\t\t\t\t<path d=\"M520.04 169.29L587.274 102.05999C 603.657 85.68899 603.657 59.12599 587.274 42.75499C 570.891 26.37199 544.352 26.37199 527.96497 42.75499L527.96497 42.75499L442.32397 128.396C 412.83597 117.938995 381.90997 112.228 350.01498 112.228C 241.03497 112.228 143.27498 177.15399 76.56497 279.98798C 105.67397 324.87897 140.71298 362.51498 180.01497 390.718L180.01497 390.718L112.784966 457.948C 96.40196 474.331 96.40196 500.87 112.784966 517.257C 129.15997 533.64 155.71097 533.64 172.08997 517.257L172.08997 517.257L257.75397 431.59302C 287.22296 442.058 318.12497 447.74902 350.01996 447.74902C 458.99997 447.74902 556.75995 382.83102 623.43994 279.989C 594.3419 235.126 559.32294 197.48502 520.0399 169.28902L520.0399 169.28902L520.04 169.29zM245.19998 279.99C 245.19998 222.178 292.20798 175.15 350.02 175.15C 363.485 175.15 376.305 177.9234 388.141 182.58359L388.141 182.58359L353.309 217.41559C 352.1918 217.3648 351.1488 217.08746 350.0238 217.08746C 315.3438 217.08746 287.1448 245.30646 287.1448 279.98947C 287.1448 281.09497 287.42215 282.16138 287.47293 283.26678L287.47293 283.26678L252.62894 318.10278C 247.97273 306.24377 245.19923 293.4658 245.19923 279.98978zM350.02 384.84C 336.555 384.84 323.766 382.0548 311.93 377.4064L311.93 377.4064L346.766 342.5704C 347.86368 342.6329 348.9066 342.89853 350.0238 342.89853C 384.6838 342.89853 412.9258 314.67953 412.9258 279.98853C 412.9258 278.88303 412.64066 277.84793 412.5977 276.75412L412.5977 276.75412L447.4337 241.91013C 452.0821 253.74612 454.86728 266.52313 454.86728 279.98813C 454.85947 337.80014 407.80127 384.83813 350.01727 384.83813z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t</g>\n\t\t</g>\n\t</g>\n</svg>\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NOT_VISIBLE_ICON_STRING",
+          "declaration": {
+            "name": "NOT_VISIBLE_ICON_STRING",
+            "module": "src/icons/visibleIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/errorMessages/errorMessages.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ErrorMessages",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorMessages",
+          "declaration": {
+            "name": "ErrorMessages",
+            "module": "src/client/errorMessages/errorMessages.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/openAIClient.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIClient",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_models_url",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'https://api.openai.com/v1/models'"
+            },
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "requestCompletion",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "OpenAIClientIO"
+                  }
+                },
+                {
+                  "name": "params",
+                  "type": {
+                    "text": "OpenAICompletions"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "onSuccessfulResult",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "requestStreamCompletion",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "OpenAIClientIO"
+                  }
+                },
+                {
+                  "name": "params",
+                  "type": {
+                    "text": "OpenAICompletions"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "onOpen",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "onClose",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "abortStream",
+                  "type": {
+                    "text": "AbortController"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                },
+                {
+                  "name": "onLoad",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIClient",
+          "declaration": {
+            "name": "OpenAIClient",
+            "module": "src/client/openAI/openAIClient.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/openAIParamAssembler.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIParamAssembler",
+          "members": [
+            {
+              "kind": "field",
+              "name": "DEFAULT_PARAMS",
+              "type": {
+                "text": "OpenAIInternal"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      messages: [{role: 'user', content: 'Hello world'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
+            },
+            {
+              "kind": "method",
+              "name": "assemble",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIInternalParams"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "openAI",
+                  "optional": true,
+                  "type": {
+                    "text": "OpenAI"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIParamAssembler",
+          "declaration": {
+            "name": "OpenAIParamAssembler",
+            "module": "src/client/openAI/openAIParamAssembler.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/property.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Property",
+          "parameters": [
+            {
+              "name": "type",
+              "type": {
+                "text": "AvailableTypes"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Property",
+          "declaration": {
+            "name": "Property",
+            "module": "src/utils/decorators/property.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/renderControl.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RenderControl",
+          "members": [
+            {
+              "kind": "method",
+              "name": "waitForPropertiesToBeUpdatedBeforeRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "attemptRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RenderControl",
+          "declaration": {
+            "name": "RenderControl",
+            "module": "src/utils/decorators/renderControl.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/typeConverters.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TypeConverters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "attibutes",
+              "type": {
+                "text": "AttributeTypeConverters"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TypeConverters",
+          "declaration": {
+            "name": "TypeConverters",
+            "module": "src/utils/decorators/typeConverters.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/svg/svgIconUtil.ts",
       "declarations": [
         {
           "kind": "class",
@@ -129,7 +718,167 @@
           "name": "SVGIconUtil",
           "declaration": {
             "name": "SVGIconUtil",
-            "module": "src/utils/svgIconUtil.ts"
+            "module": "src/utils/svg/svgIconUtil.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/internalHTML.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InternalHTML",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_waitingToRender_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_propUpdated_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_attributes_",
+              "type": {
+                "text": "GenericObject<AttributeTypeConverter>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_attributeToProperty_",
+              "type": {
+                "text": "GenericObject<string>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "method",
+              "name": "onRender"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InternalHTML",
+          "declaration": {
+            "name": "InternalHTML",
+            "module": "src/utils/webComponent/internalHTML.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/styleUtil.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StyleUtil",
+          "members": [
+            {
+              "kind": "method",
+              "name": "apply",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot | null"
+                  }
+                },
+                {
+                  "name": "componentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyStyleSheet",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addStyleElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "componentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StyleUtil",
+          "declaration": {
+            "name": "StyleUtil",
+            "module": "src/utils/webComponent/styleUtil.ts"
           }
         }
       ]
@@ -144,12 +893,50 @@
           "name": "ChatView",
           "members": [
             {
-              "kind": "field",
-              "name": "id",
-              "type": {
-                "text": "string"
-              },
-              "default": "'chat'"
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "AiAssistant"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "AiAssistant"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -161,6 +948,466 @@
           "declaration": {
             "name": "ChatView",
             "module": "src/views/chat/chatView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/insertKeyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InsertKeyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createHelpLink",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createFailText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpTextContainer",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "onFail",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createStartButton",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInputFocus",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "FocusEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInput",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createContents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InsertKeyView",
+          "declaration": {
+            "name": "InsertKeyView",
+            "module": "src/views/insertKey/insertKeyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/visibilityIcon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VisibilityIcon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "VISIBLE_ICON_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'visible-icon'"
+            },
+            {
+              "kind": "method",
+              "name": "changeVisibility",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "visibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "notVisibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIconElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "iconString",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VisibilityIcon",
+          "declaration": {
+            "name": "VisibilityIcon",
+            "module": "src/views/insertKey/visibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIChatIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIChatIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.openai.com/v1/chat/completions'"
+            },
+            {
+              "kind": "method",
+              "name": "buildBody",
+              "parameters": [
+                {
+                  "name": "params",
+                  "type": {
+                    "text": "OpenAIInternalParams"
+                  }
+                },
+                {
+                  "name": "messagesObj",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "extractTextFromResult",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIResult"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIChatIO",
+          "declaration": {
+            "name": "OpenAIChatIO",
+            "module": "src/client/openAI/clientIO/openAIChatIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIClientIO.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIClientIOFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIClientIOFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getClientIO",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIClientIO"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "params",
+                  "type": {
+                    "text": "OpenAIInternalParams"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIClientIOFactory",
+          "declaration": {
+            "name": "OpenAIClientIOFactory",
+            "module": "src/client/openAI/clientIO/openAIClientIOFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAICompletionIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAICompletionIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.openai.com/v1/completions'"
+            },
+            {
+              "kind": "method",
+              "name": "buildBody",
+              "parameters": [
+                {
+                  "name": "params",
+                  "type": {
+                    "text": "OpenAIInternalParams"
+                  }
+                },
+                {
+                  "name": "messagesObj",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "extractTextFromResult",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIResult"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAICompletionIO",
+          "declaration": {
+            "name": "OpenAICompletionIO",
+            "module": "src/client/openAI/clientIO/openAICompletionIO.ts"
           }
         }
       ]
@@ -183,12 +1430,12 @@
             },
             {
               "kind": "field",
-              "name": "_button",
+              "name": "_submitButton",
               "type": {
                 "text": "SubmitButton"
               },
               "privacy": "private",
-              "default": "new SubmitButton(inputElement.inputElementRef, key, addNewMessage)"
+              "default": "new SubmitButton(keyboardInput.inputElementRef, messages, key, submitButtonStyle, openAI)"
             },
             {
               "kind": "method",
@@ -196,15 +1443,9 @@
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "inputElement",
+                  "name": "elements",
                   "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "buttonElement",
-                  "type": {
-                    "text": "HTMLElement"
+                    "text": "HTMLElement[]"
                   }
                 }
               ]
@@ -220,6 +1461,10 @@
             {
               "kind": "field",
               "name": "submit"
+            },
+            {
+              "kind": "field",
+              "name": "submitUserMessage"
             }
           ]
         }
@@ -315,7 +1560,7 @@
                   }
                 },
                 {
-                  "name": "avatarStyles",
+                  "name": "styles",
                   "optional": true,
                   "type": {
                     "text": "CustomAvatarStyles"
@@ -330,15 +1575,16 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "styles",
-                  "type": {
-                    "text": "CustomAvatarStyles"
-                  }
-                },
-                {
                   "name": "isAI",
                   "type": {
                     "text": "boolean"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomAvatarStyles"
                   }
                 }
               ]
@@ -356,29 +1602,15 @@
                   }
                 },
                 {
-                  "name": "styles",
-                  "type": {
-                    "text": "CustomAvatarStyles"
-                  }
-                },
-                {
                   "name": "isAI",
                   "type": {
                     "text": "boolean"
                   }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "canAvatarBeAdded",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
+                },
                 {
-                  "name": "styles",
+                  "name": "avatars",
                   "type": {
-                    "text": "CustomAvatarStyles"
+                    "text": "Avatars"
                   }
                 }
               ]
@@ -417,12 +1649,65 @@
             },
             {
               "kind": "field",
-              "name": "_messages",
+              "name": "_textElementRefs",
               "type": {
-                "text": "string[]"
+                "text": "HTMLElement[]"
               },
               "privacy": "private",
               "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_messageStyles",
+              "type": {
+                "text": "CustomMessageStyles | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_avatars",
+              "type": {
+                "text": "Avatars | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_onNewMessage",
+              "type": {
+                "text": "OnNewMessage | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_dispatchEvent",
+              "type": {
+                "text": "(event: Event) => void"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "messages",
+              "type": {
+                "text": "MessageContent[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "populateInitialMessages",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "startMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -498,7 +1783,6 @@
               "kind": "method",
               "name": "addInnerContainerElements",
               "privacy": "private",
-              "static": true,
               "parameters": [
                 {
                   "name": "innerContainer",
@@ -522,9 +1806,47 @@
             },
             {
               "kind": "method",
-              "name": "createElements",
+              "name": "createMessageContent",
               "privacy": "private",
               "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createMessageElements",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "sendClientUpdate",
+              "privacy": "private",
               "parameters": [
                 {
                   "name": "text",
@@ -560,24 +1882,29 @@
               ]
             },
             {
-              "kind": "field",
-              "name": "_avatarStyles",
-              "type": {
-                "text": "CustomAvatarStyles"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "{\n    default: {\n      container: {\n        margin: '10px',\n      },\n      avatar: {\n        padding: 'unset',\n      },\n      position: 'left',\n    },\n  }"
+              "kind": "method",
+              "name": "addNewStreamedMessage",
+              "privacy": "public"
             },
             {
-              "kind": "field",
-              "name": "_openAIStyles",
-              "type": {
-                "text": "CustomMessageStyles"
-              },
-              "privacy": "private",
+              "kind": "method",
+              "name": "updateStreamedMessage",
+              "privacy": "public",
               "static": true,
-              "default": "{\n    default: {\n      outerContainer: {\n        borderBottom: '1px solid #c3c3c3',\n      },\n      innerContainer: {\n        width: '90%',\n        marginLeft: 'auto',\n        marginRight: 'auto',\n      },\n      text: {\n        color: 'rgba(52, 53, 65)',\n        margin: 'unset',\n        padding: 'unset',\n        maxWidth: 'unset',\n        border: 'unset',\n        paddingTop: '10px',\n        paddingBottom: '10px',\n        width: 'inherit',\n        backgroundColor: 'unset',\n      },\n    },\n    user: {\n      outerContainer: {\n        backgroundColor: 'white',\n      },\n    },\n    ai: {\n      outerContainer: {\n        backgroundColor: '#d9d9e3cc',\n      },\n    },\n  }"
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "textElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -589,206 +1916,6 @@
           "declaration": {
             "name": "Messages",
             "module": "src/views/chat/messages/messages.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/submitButton/openAIClient.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIClient",
-          "members": [
-            {
-              "kind": "method",
-              "name": "requestCompletion",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "prompt",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccessfulResult",
-                  "type": {
-                    "text": "(result: CompletionResult) => void"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIClient",
-          "declaration": {
-            "name": "OpenAIClient",
-            "module": "src/views/chat/input/submitButton/openAIClient.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/submitButton/submitButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SubmitButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_isLoading",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_key",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "key"
-            },
-            {
-              "kind": "field",
-              "name": "_addNewMessage",
-              "type": {
-                "text": "AddNewMessage"
-              },
-              "privacy": "private",
-              "default": "addNewMessage"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "inputElementRef"
-            },
-            {
-              "kind": "field",
-              "name": "_buttonElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "this.elementRef.children[0]"
-            },
-            {
-              "kind": "field",
-              "name": "_loadingElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createButtonElement",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createLoadingElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "submit",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "onSuccessfulResult",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "CompletionResult"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "changeToLoadingIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToSubmitIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "id",
-              "type": {
-                "text": "string"
-              },
-              "default": "'user-input'"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SubmitButton",
-          "declaration": {
-            "name": "SubmitButton",
-            "module": "src/views/chat/input/submitButton/submitButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/submitButton/submitIcon.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "SUBMIT_ICON_STRING",
-          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"30\" height=\"24\">\n  <g transform=\"matrix(0.8108108 0 0 0.8108108 0 0)\">\n    <g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n      <g>\n        <path d=\"M496.71 143.12L335.46997 304.46L398.26697 424.72L496.71 143.12zM321.63998 308.26L184.31998 236.54901L187.54657 230.2678L184.31998 236.54901C 180.84338 234.7756 179.48018 230.4396 181.35118 227.0451C 182.28477 225.1857 183.89809 223.98651 185.76527 223.4787L185.76527 223.4787L510.63525 109.9187C 510.80322 109.82886 510.9751 109.75073 511.14307 109.67261L511.14307 109.67261L511.31104 109.67261C 511.56494 109.58276 511.81885 109.50464 511.99463 109.50464C 512.1587 109.414795 512.24854 109.414795 512.4087 109.414795L512.4087 109.414795L512.49854 109.414795L512.5884 109.32495L512.75635 109.32495L513.01807 109.32495L514.45557 109.32495L514.45557 109.414795L514.7993 109.414795L514.9673 109.50464L515.2251 109.50464L515.31494 109.590576L515.56494 109.590576L515.56494 109.68042L515.8345 109.68042L515.99854 109.758545L516.1704 109.84448L516.25635 109.84448C 517.1001 110.196045 517.7797 110.696045 518.37744 111.28978L518.37744 111.28978L518.4634 111.37962L518.5532 111.37962L518.63916 111.551506C 519.2329 112.14135 519.6586 112.82101 519.99854 113.5827L519.99854 113.5827L519.99854 113.67255L520.0845 113.76239L520.0845 113.93817L520.1743 114.0163L520.1743 114.10614L520.26025 114.19208L520.26025 114.28192L520.3501 114.453804L520.3501 114.71162L520.43604 114.78974L520.43604 115.1374L520.5259 115.22724L520.5259 115.73896L520.6157 115.828804L520.6157 116.848305C 520.6157 116.93815 520.5259 117.10612 520.5259 117.19596L520.5259 117.19596L520.5259 117.5319C 520.5259 117.62174 520.43604 117.79362 520.43604 117.879555C 520.3501 118.14127 520.3501 118.38737 520.26807 118.555336L520.26807 118.555336L520.1821 118.72722C 520.0923 118.88347 520.0923 119.063156 520.01416 119.23503L520.01416 119.23503L406.41415 444.14502C 405.90634 445.91843 404.63297 447.6216 402.84775 448.54733C 399.37115 450.34033 395.12506 448.97702 393.34384 445.57852L393.34384 445.57852L399.54303 442.26993L393.34384 445.57852zM486.69998 133.18001L205.19998 231.543L325.46 294.43z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n      </g>\n    </g>\n  </g>\n</svg>\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SUBMIT_ICON_STRING",
-          "declaration": {
-            "name": "SUBMIT_ICON_STRING",
-            "module": "src/views/chat/input/submitButton/submitIcon.ts"
           }
         }
       ]
@@ -807,16 +1934,14 @@
               "name": "elementRef",
               "type": {
                 "text": "HTMLElement"
-              },
-              "default": "containerElement"
+              }
             },
             {
               "kind": "field",
               "name": "inputElementRef",
               "type": {
                 "text": "HTMLElement"
-              },
-              "default": "inputElement"
+              }
             },
             {
               "kind": "field",
@@ -828,13 +1953,36 @@
             {
               "kind": "method",
               "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "defaultInputText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
               "privacy": "private"
             },
             {
               "kind": "method",
               "name": "createContainerElement",
               "privacy": "private",
-              "static": true
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -896,6 +2044,227 @@
           "declaration": {
             "name": "PasteUtils",
             "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/speechInput/speechInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SpeechInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createMicrophoneElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "start",
+              "privacy": "private",
+              "static": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SpeechInput",
+          "declaration": {
+            "name": "SpeechInput",
+            "module": "src/views/chat/input/speechInput/speechInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/submitButton/submitButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SubmitButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_isRequestInProgress",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_openAIParams",
+              "type": {
+                "text": "OpenAIInternalParams"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_clientIO",
+              "type": {
+                "text": "OpenAIClientIO"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_key",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "key"
+            },
+            {
+              "kind": "field",
+              "name": "_messages",
+              "type": {
+                "text": "Messages"
+              },
+              "privacy": "private",
+              "default": "messages"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "inputElementRef"
+            },
+            {
+              "kind": "field",
+              "name": "_submitIconElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "this.elementRef.children[0]"
+            },
+            {
+              "kind": "field",
+              "name": "_stopIconElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_loadingIconElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_abortStream",
+              "type": {
+                "text": "AbortController"
+              },
+              "privacy": "private",
+              "default": "new AbortController()"
+            },
+            {
+              "kind": "method",
+              "name": "createButtonElement",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createLoadingIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createStopIconElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "style",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "submitFromInput",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "submitUserText",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "userText",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "stopStream",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToStopIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToLoadingIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToSubmitIcon",
+              "privacy": "private"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SubmitButton",
+          "declaration": {
+            "name": "SubmitButton",
+            "module": "src/views/chat/input/submitButton/submitButton.ts"
           }
         }
       ]

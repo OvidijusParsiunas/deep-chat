@@ -4,9 +4,9 @@ import summary from 'rollup-plugin-summary';
 import {terser} from 'rollup-plugin-terser';
 
 export default {
-  input: 'dist/AiAssistant.js',
+  input: 'dist/aiAssistant.js',
   output: {
-    file: 'dist/AiAssistant.bundle.js',
+    file: 'bundle/aiAssistant.bundle.js',
     format: 'esm',
   },
   onwarn(warning) {

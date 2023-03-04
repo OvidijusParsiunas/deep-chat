@@ -1,7 +1,7 @@
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './submitButton/submitButton';
 import {SpeechInput} from './speechInput/speechInput';
-import {AiAssistant} from '../../../AiAssistant';
+import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
 
 export class Input {

@@ -1,16 +1,15 @@
 {
   "name": "ai-assistant",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "universal ai chat bot component",
-  "main": "./dist/AiAssistant.js",
-  "module": "./dist/AiAssistant.js",
+  "main": "./dist/aiAssistant.js",
+  "module": "./dist/aiAssistant.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "build:bundle": "rollup -c",
-    "type:watch": "tsc --watch",
+    "start": "vite",
     "build:watch": "vite build --watch",
+    "build:production": "npm run lint && tsc && vite build && npm run analyze && rollup -c",
+    "type:watch": "tsc --watch",
     "lint": "eslint 'src/**/*.ts'",
     "analyze": "cem analyze --globs \"src/**/*.ts\""
   },
@@ -29,6 +28,9 @@
   ],
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.8",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@types/dom-speech-recognition": "^0.0.1",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.15.0",
@@ -36,10 +38,9 @@
     "rollup": "^2.79.1",
     "rollup-plugin-summary": "^1.4.3",
     "rollup-plugin-terser": "^7.0.2",
-    "@rollup/plugin-replace": "^4.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.1",
     "typescript": "^4.9.5",
-    "vite": "^4.1.4"
+    "vite": "^4.1.4",
+    "vite-plugin-dts": "^2.0.2"
   },
   "customElements": "custom-elements.json",
   "files": [
@@ -48,7 +49,6 @@
     "custom-elements.json"
   ],
   "dependencies": {
-    "@microsoft/fetch-event-source": "^2.0.1",
-    "@types/dom-speech-recognition": "^0.0.1"
+    "@microsoft/fetch-event-source": "^2.0.1"
   }
 }
