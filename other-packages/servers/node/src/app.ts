@@ -1,5 +1,6 @@
 import express, {Express, Request, Response} from 'express';
 import {Configuration, OpenAIApi} from 'openai';
+import {handleStream, Stream} from './stream';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -23,13 +24,21 @@ app.use(express.json());
 // !!!!!!!!!!!!!!!!!! API !!!!!!!!!!!!!!!!!!
 
 app.post('/v1/completions', async (req: Request, res: Response) => {
-  const response = await openai.createCompletion(req.body);
-  res.json(response.data);
+  const response = await openai.createCompletion(req.body, req.body.stream ? {responseType: 'stream'} : {});
+  if (req.body.stream) {
+    handleStream(res, response as unknown as Stream);
+  } else {
+    res.json(response.data);
+  }
 });
 
 app.post('/v1/chat/completions', async (req: Request, res: Response) => {
-  const response = await openai.createChatCompletion(req.body);
-  res.json(response.data);
+  const response = await openai.createChatCompletion(req.body, req.body.stream ? {responseType: 'stream'} : {});
+  if (req.body.stream) {
+    handleStream(res, response as unknown as Stream);
+  } else {
+    res.json(response.data);
+  }
 });
 
 // !!!!!!!!!!!!!!!!!! START SERVER !!!!!!!!!!!!!!!!!!
