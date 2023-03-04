@@ -22,6 +22,12 @@ export class OpenAIChatIO implements OpenAIClientIO {
   }
 
   extractTextFromResult(result: OpenAIResult): string {
-    return result.choices[0].message.content;
+    if (result.choices[0].delta) {
+      return result.choices[0].delta.content || '';
+    }
+    if (result.choices[0].message) {
+      return result.choices[0].message.content;
+    }
+    return '';
   }
 }

@@ -12,6 +12,6 @@ export class OpenAICompletionIO implements OpenAIClientIO {
   }
 
   extractTextFromResult(result: OpenAIResult): string {
-    return result.choices[0].text;
+    return result.choices[0]?.text || '';
   }
 }

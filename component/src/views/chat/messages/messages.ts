@@ -16,6 +16,7 @@ messagesTemplate.innerHTML = `
 
 export type AddNewMessage = Messages['addNewMessage'];
 
+// WORK - Prefix for the message e.g. - you, bot
 export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
