@@ -1,4 +1,4 @@
-import {OpenAIInternalParams} from '../../../types/openAIInternal';
+import {OpenAIInternalBody} from '../../../types/openAIInternal';
 import {Messages} from '../../../views/chat/messages/messages';
 import {OpenAIResult} from '../../../types/openAIResult';
 import {OpenAIMessage} from '../../../types/openAI';
@@ -8,8 +8,8 @@ import {OpenAIClientIO} from './openAIClientIO';
 export class OpenAIChatIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/chat/completions';
 
-  buildBody(params: OpenAIInternalParams, messagesObj: Messages) {
-    const body = JSON.parse(JSON.stringify(params)) as OpenAIInternalParams;
+  buildBody(params: OpenAIInternalBody, messagesObj: Messages) {
+    const body = JSON.parse(JSON.stringify(params)) as OpenAIInternalBody;
     const messages: OpenAIMessage[] = messagesObj.messages.map((message) => {
       return {content: message.text, role: message.role === 'ai' ? 'assistant' : message.role};
     });

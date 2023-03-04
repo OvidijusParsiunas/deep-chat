@@ -2,6 +2,7 @@ import {CustomMessageStyles, MessageContent, OnNewMessage} from './types/message
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
+import {RequestSettings} from './types/requestSettings';
 import {Property} from './utils/decorators/property';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
@@ -17,6 +18,12 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   openAI?: OpenAI;
+
+  @Property('boolean')
+  startWithChat?: boolean;
+
+  @Property('object')
+  requestSettings?: RequestSettings;
 
   @Property('boolean')
   speechInput?: boolean;
@@ -56,8 +63,8 @@ export class AiAssistant extends InternalHTML {
     this._elementRef = AiAssistant.createContainerElement();
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     StyleUtil.apply(style, this.shadowRoot, this._elementRef);
-    InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
     Object.assign(this._elementRef.style, this.containerStyle);
+    InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
   }
 
   changeToChatView(newKey: string) {
@@ -73,8 +80,8 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     console.log('render');
-    if (this.key) {
-      ChatView.render(this._elementRef, this.key, this);
+    if (this.startWithChat || this.key) {
+      ChatView.render(this._elementRef, this.key || '', this);
     }
   }
 }

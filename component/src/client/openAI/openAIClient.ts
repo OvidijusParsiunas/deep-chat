@@ -1,6 +1,7 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestSettings} from '../../types/requestSettings';
 import {OpenAIClientIO} from './clientIO/openAIClientIO';
 import {OpenAIResult} from '../../types/openAIResult';
 import {OpenAICompletions} from '../../types/openAI';
@@ -17,12 +18,12 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestCompletion(io: OpenAIClientIO, params: OpenAICompletions, key: string,
-      messages: Messages, onSuccessfulResult: () => void) {
-    fetch(io.url, {
-      method: 'POST',
-      headers: new Headers(OpenAIClient.buildHeaders(key)),
-      body: io.buildBody(params, messages),
+  public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
+      customRequestSettings: RequestSettings | undefined, messages: Messages, onSuccessfulResult: () => void) {
+    fetch(customRequestSettings?.url || io.url, {
+      method: customRequestSettings?.method || 'POST',
+      headers: customRequestSettings?.headers || new Headers(OpenAIClient.buildHeaders(key)),
+      body: io.buildBody(baseBody, messages),
     })
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
@@ -34,13 +35,14 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(io: OpenAIClientIO, params: OpenAICompletions, key: string,
-      messages: Messages, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
+  public static requestStreamCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
+      customRequestSettings: RequestSettings | undefined, messages: Messages, onOpen: () => void, onClose: () => void,
+      abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
-    fetchEventSource(io.url, {
-      method: 'POST',
-      headers: OpenAIClient.buildHeaders(key),
-      body: io.buildBody(params, messages),
+    fetchEventSource(customRequestSettings?.url || io.url, {
+      method: customRequestSettings?.method || 'POST',
+      headers: customRequestSettings?.headers || OpenAIClient.buildHeaders(key),
+      body: io.buildBody(baseBody, messages),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

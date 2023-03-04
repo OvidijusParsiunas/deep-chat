@@ -9,11 +9,10 @@ export class Input {
   private readonly _submitButton: SubmitButton;
 
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
-    const {inputStyle, defaultInputText, submitButtonStyle, openAI} = aiAssistant;
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
-    const keyboardInput = new KeyboardInput(inputStyle, defaultInputText);
-    this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, submitButtonStyle, openAI);
+    const keyboardInput = new KeyboardInput(aiAssistant.inputStyle, aiAssistant.defaultInputText);
+    this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
     keyboardInput.submit = this._submitButton.submitFromInput.bind(this._submitButton);
     aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);
     this.addElements(keyboardInput.elementRef, this._submitButton.elementRef);

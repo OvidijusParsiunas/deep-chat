@@ -1,6 +1,6 @@
 import {OpenAIMessage} from './openAI';
 
-export interface OpenAIInternalParams {
+export interface OpenAIInternalBody {
   model: string;
   messages?: OpenAIMessage[];
   max_tokens?: number;
@@ -11,6 +11,6 @@ export interface OpenAIInternalParams {
 }
 
 export interface OpenAIInternal {
-  chat: OpenAIInternalParams;
-  completions: OpenAIInternalParams;
+  chat: OpenAIInternalBody;
+  completions: OpenAIInternalBody;
 }

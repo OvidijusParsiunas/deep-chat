@@ -1,17 +1,19 @@
+import {OpenAIBaseBodyAssembler} from '../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
 import {OpenAIClientIOFactory} from '../../../../client/openAI/clientIO/openAIClientIOFactory';
-import {OpenAIParamAssembler} from '../../../../client/openAI/openAIParamAssembler';
 import {OpenAIClientIO} from '../../../../client/openAI/clientIO/openAIClientIO';
-import {OpenAIInternalParams} from '../../../../types/openAIInternal';
+import {OpenAIInternalBody} from '../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../client/openAI/openAIClient';
+import {RequestSettings} from '../../../../types/requestSettings';
 import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
 import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
 import {CustomStyle} from '../../../../types/styles';
+import {AiAssistant} from '../../../../aiAssistant';
 import {Messages} from '../../messages/messages';
-import {OpenAI} from '../../../../types/openAI';
 
 export class SubmitButton {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
-  private _openAIParams: OpenAIInternalParams;
+  private _openAIBaseBody: OpenAIInternalBody;
+  private _customRequestSettings?: RequestSettings;
   private _clientIO: OpenAIClientIO;
   private readonly _key: string;
   private readonly _messages: Messages;
@@ -22,7 +24,8 @@ export class SubmitButton {
   private readonly _loadingIconElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
 
-  constructor(inputElementRef: HTMLElement, messages: Messages, key: string, style?: CustomStyle, openAI?: OpenAI) {
+  constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
+    const {style, openAI, requestSettings} = aiAssistant;
     this._key = key;
     this._messages = messages;
     this._inputElementRef = inputElementRef;
@@ -31,8 +34,9 @@ export class SubmitButton {
     this._stopIconElementRef = this.createStopIconElement(style);
     this._loadingIconElementRef = SubmitButton.createLoadingIconElement();
     this._abortStream = new AbortController();
-    this._openAIParams = OpenAIParamAssembler.assemble(openAI);
-    this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIParams);
+    this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI);
+    this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
+    this._customRequestSettings = requestSettings;
   }
 
   private createButtonElement() {
@@ -76,12 +80,12 @@ export class SubmitButton {
     this.changeToLoadingIcon();
     this._messages.addNewMessage(userText, false);
     this._inputElementRef.textContent = '';
-    if (this._openAIParams.stream) {
-      OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIParams, this._key, this._messages,
-        this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
+    if (this._openAIBaseBody.stream) {
+      OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,
+        this._messages, this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
     } else {
-      OpenAIClient.requestCompletion(this._clientIO, this._openAIParams, this._key, this._messages,
-        this.changeToSubmitIcon.bind(this));
+      OpenAIClient.requestCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,
+        this._messages, this.changeToSubmitIcon.bind(this));
     }
   }
 
