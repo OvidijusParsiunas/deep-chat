@@ -24,13 +24,15 @@ export class Messages {
   private readonly _avatars?: Avatars;
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
+  private readonly _speechOutput?: boolean;
   messages: MessageContent[] = [];
 
   constructor(parentElement: HTMLElement, aiAssistant: AiAssistant) {
     parentElement.appendChild(messagesTemplate.content.cloneNode(true));
     this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
-    this._messageStyles = aiAssistant?.messageStyles;
-    this._avatars = aiAssistant?.avatars;
+    this._messageStyles = aiAssistant.messageStyles;
+    this._avatars = aiAssistant.avatars;
+    this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
     if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
@@ -99,6 +101,10 @@ export class Messages {
     const messageElement = this.createMessageElements(text, isAI);
     this._elementRef.appendChild(messageElement);
     this._elementRef.scrollTop = this._elementRef.scrollHeight;
+    if (this._speechOutput && isAI) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
+    }
     this.sendClientUpdate(text, isAI);
   }
 
