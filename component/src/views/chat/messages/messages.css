@@ -53,3 +53,15 @@
   margin-right: auto;
   min-height: 16px;
 }
+
+.error-message-text {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f4c0c0;
+  color: #1a1a1a;
+  text-align: center;
+  max-width: 100%;
+  border: 1px solid #ff9696;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

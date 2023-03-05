@@ -1,4 +1,4 @@
-import {CustomMessageStyles, MessageContent, OnNewMessage} from './types/messages';
+import {CustomMessageStyles, ErrorMessage, MessageContent, OnNewMessage} from './types/messages';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
@@ -55,6 +55,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   startMessages?: MessageContent[];
+
+  @Property('object')
+  errorMessage?: ErrorMessage;
 
   @Property('function')
   onNewMessage?: OnNewMessage;

@@ -8,8 +8,6 @@
   margin-bottom: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
   overflow-y: auto;
-  /* TO-DO Make the minimum height as 200px */
-  max-height: 200px;
 }
 
 #keyboard-input {

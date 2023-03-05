@@ -1,9 +1,16 @@
-import {CustomMessageStyles, CustomMessageStyle, MessageContent, OnNewMessage} from '../../../types/messages';
+import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Names} from '../../../types/names';
 import {Avatar} from './avatar';
 import {Name} from './name';
+import {
+  CustomMessageStyles,
+  CustomMessageStyle,
+  MessageContent,
+  OnNewMessage,
+  ErrorMessage,
+} from '../../../types/messages';
 
 const messagesTemplate = document.createElement('template');
 messagesTemplate.innerHTML = `
@@ -18,13 +25,13 @@ messagesTemplate.innerHTML = `
 
 export type AddNewMessage = Messages['addNewMessage'];
 
-// WORK - Prefix for the message e.g. - you, bot
 export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
-  private readonly _names?: Names;
   private readonly _avatars?: Avatars;
+  private readonly _names?: Names;
+  private readonly _customErrorMessage?: ErrorMessage;
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
@@ -36,6 +43,7 @@ export class Messages {
     this._messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
     this._names = aiAssistant.names;
+    this._customErrorMessage = aiAssistant.errorMessage;
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
@@ -67,11 +75,9 @@ export class Messages {
     }
   }
 
-  private addInnerContainerElements(innerContainer: HTMLElement, text: string, isAI: boolean) {
-    const textElement = document.createElement('div');
+  private addInnerContainerElements(textElement: HTMLElement, text: string, isAI: boolean) {
     textElement.classList.add('message-text', isAI ? 'ai-message-text' : 'user-message-text');
     textElement.innerHTML = text;
-    innerContainer.appendChild(textElement);
     if (this._avatars) Avatar.add(textElement, isAI, this._avatars);
     if (this._names) Name.add(textElement, isAI, this._names);
     return {textElement};
@@ -81,12 +87,21 @@ export class Messages {
     return {role: isAI ? 'ai' : 'user', text} as const;
   }
 
-  private createMessageElements(text: string, isAI: boolean) {
+  private static createBaseElements() {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
-    const {textElement} = this.addInnerContainerElements(innerContainer, text, isAI);
+    const textElement = document.createElement('div');
+    textElement.classList.add('message-text');
+    innerContainer.appendChild(textElement);
+    return {outerContainer, innerContainer, textElement};
+  }
+
+  private createMessageElements(text: string, isAI: boolean) {
+    const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
+    outerContainer.appendChild(innerContainer);
+    this.addInnerContainerElements(textElement, text, isAI);
     if (this._messageStyles) {
       Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
     }
@@ -95,27 +110,48 @@ export class Messages {
     return outerContainer;
   }
 
-  private sendClientUpdate(text: string, isAI: boolean) {
+  public sendClientUpdate(text: string, isAI: boolean) {
     const messageContent = Messages.createMessageContent(text, isAI);
     this._onNewMessage?.(messageContent);
     this._dispatchEvent(new CustomEvent('new-message', {detail: messageContent}));
   }
 
-  public addNewMessage(text: string, isAI: boolean) {
+  private removeStreamedMessageIfEmpty() {
+    const lastMessage = this._textElementRefs[this._textElementRefs.length - 1];
+    if (lastMessage.classList.contains('streamed-message') && lastMessage.textContent === '') {
+      lastMessage.remove();
+      this._textElementRefs.pop();
+    }
+  }
+
+  public addNewErrorMessage() {
+    this.removeStreamedMessageIfEmpty();
+    const text = this._customErrorMessage?.text || 'Error, please try again.';
+    const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
+    textElement.classList.add('error-message-text');
+    textElement.innerHTML = text;
+    if (this._customErrorMessage?.styles) {
+      Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, this._customErrorMessage.styles);
+    }
+    this._elementRef.appendChild(outerContainer);
+    this._elementRef.scrollTop = this._elementRef.scrollHeight;
+    if (this._speechOutput) TextToSpeech.speak(text);
+  }
+
+  public addNewMessage(text: string, isAI: boolean, update = true) {
     if (this._textElementRefs.length === 0) this._elementRef.replaceChildren();
     const messageElement = this.createMessageElements(text, isAI);
     this._elementRef.appendChild(messageElement);
     this._elementRef.scrollTop = this._elementRef.scrollHeight;
-    if (this._speechOutput && isAI) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      speechSynthesis.speak(utterance);
-    }
-    this.sendClientUpdate(text, isAI);
+    if (this._speechOutput && isAI) TextToSpeech.speak(text);
+    if (update) this.sendClientUpdate(text, isAI);
   }
 
   public addNewStreamedMessage() {
-    this.addNewMessage('', true);
-    return this._textElementRefs[this._textElementRefs.length - 1];
+    this.addNewMessage('', true, false);
+    const streamedMessage = this._textElementRefs[this._textElementRefs.length - 1];
+    streamedMessage.classList.add('streamed-message');
+    return streamedMessage;
   }
 
   public static updateStreamedMessage(text: string, textElement: HTMLElement) {

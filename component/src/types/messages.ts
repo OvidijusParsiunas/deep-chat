@@ -15,3 +15,8 @@ export interface CustomMessageStyles {
 export type MessageContent = {role: 'user' | 'ai'; text: string};
 
 export type OnNewMessage = (message: MessageContent) => void;
+
+export interface ErrorMessage {
+  text?: string;
+  styles?: CustomMessageStyle;
+}

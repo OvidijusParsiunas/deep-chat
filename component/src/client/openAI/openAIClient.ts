@@ -6,7 +6,6 @@ import {OpenAIClientIO} from './clientIO/openAIClientIO';
 import {OpenAIResult} from '../../types/openAIResult';
 import {OpenAICompletions} from '../../types/openAI';
 
-// WORK - need error handling for both
 export class OpenAIClient {
   private static readonly _models_url = 'https://api.openai.com/v1/models';
 
@@ -19,7 +18,7 @@ export class OpenAIClient {
 
   // prettier-ignore
   public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
-      customRequestSettings: RequestSettings | undefined, messages: Messages, onSuccessfulResult: () => void) {
+      customRequestSettings: RequestSettings | undefined, messages: Messages, onFinish: () => void) {
     fetch(customRequestSettings?.url || io.url, {
       method: customRequestSettings?.method || 'POST',
       headers: customRequestSettings?.headers || new Headers(OpenAIClient.buildHeaders(key)),
@@ -29,9 +28,13 @@ export class OpenAIClient {
       .then((result: OpenAIResult) => {
         const text = io.extractTextFromResult(result);
         messages.addNewMessage(text, true);
-        onSuccessfulResult();
+        onFinish();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        messages.addNewErrorMessage();
+        onFinish();
+      });
   }
 
   // prettier-ignore
@@ -49,6 +52,8 @@ export class OpenAIClient {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
+        messages.addNewErrorMessage();
+        onClose();
         throw new Error('error');
       },
       onmessage(message: EventSourceMessage) {
@@ -60,9 +65,12 @@ export class OpenAIClient {
       },
       onerror(err) {
         console.error(err);
+        messages.addNewErrorMessage();
+        onClose();
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },
       onclose() {
+        messages.sendClientUpdate((textElement as HTMLElement)?.innerText, true);
         onClose();
       },
       signal: abortStream.signal,
