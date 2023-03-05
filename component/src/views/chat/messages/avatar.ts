@@ -37,9 +37,10 @@ export class Avatar {
     return position;
   }
 
-  public static addAvatar(messageText: HTMLElement, isAI: boolean, avatars: Avatars) {
+  public static add(messageText: HTMLElement, isAI: boolean, avatars: Avatars) {
     const styles = typeof avatars === 'boolean' ? undefined : avatars.styles;
+    const avatar = Avatar.createAvatar(isAI, styles);
     const position = Avatar.getPosition(isAI, styles);
-    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', Avatar.createAvatar(isAI, styles));
+    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatar);
   }
 }

@@ -1,5 +1,6 @@
 @import url('./messages/messages.css');
 @import url('./messages/avatar.css');
+@import url('./messages/name.css');
 @import url('./input/input.css');
 
 #chat {

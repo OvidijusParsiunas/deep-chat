@@ -9,6 +9,7 @@ import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
 import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
+import {Names} from './types/names';
 
 export class AiAssistant extends InternalHTML {
   private readonly _elementRef: HTMLElement;
@@ -48,6 +49,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   avatars?: Avatars;
+
+  @Property('object')
+  names?: Names;
 
   @Property('object')
   startMessages?: MessageContent[];

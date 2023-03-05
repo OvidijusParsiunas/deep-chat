@@ -1,7 +1,9 @@
 import {CustomMessageStyles, CustomMessageStyle, MessageContent, OnNewMessage} from '../../../types/messages';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
+import {Names} from '../../../types/names';
 import {Avatar} from './avatar';
+import {Name} from './name';
 
 const messagesTemplate = document.createElement('template');
 messagesTemplate.innerHTML = `
@@ -21,6 +23,7 @@ export class Messages {
   private readonly _elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
+  private readonly _names?: Names;
   private readonly _avatars?: Avatars;
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
@@ -32,6 +35,7 @@ export class Messages {
     this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
     this._messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
+    this._names = aiAssistant.names;
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
@@ -68,7 +72,8 @@ export class Messages {
     textElement.classList.add('message-text', isAI ? 'ai-message-text' : 'user-message-text');
     textElement.innerHTML = text;
     innerContainer.appendChild(textElement);
-    if (this._avatars) Avatar.addAvatar(textElement, isAI, this._avatars);
+    if (this._avatars) Avatar.add(textElement, isAI, this._avatars);
+    if (this._names) Name.add(textElement, isAI, this._names);
     return {textElement};
   }
 
