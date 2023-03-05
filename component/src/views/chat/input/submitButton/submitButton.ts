@@ -89,6 +89,7 @@ export class SubmitButton {
     }
   }
 
+  // This will not stop the stream on the server side
   private stopStream() {
     this._abortStream.abort();
     this.changeToSubmitIcon();

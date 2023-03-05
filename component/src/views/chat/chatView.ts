@@ -1,3 +1,4 @@
+import {ElementUtils} from '../../utils/element/elementUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Messages} from './messages/messages';
 import {Input} from './input/input';
@@ -7,9 +8,9 @@ export class ChatView {
   private static createElements(key: string, aiAssistant: AiAssistant) {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat';
-    const messages = new Messages(containerElement, aiAssistant);
+    const messages = new Messages(aiAssistant);
     const userInput = new Input(messages, key, aiAssistant);
-    containerElement.appendChild(userInput.elementRef);
+    ElementUtils.addElements(containerElement, messages.elementRef, userInput.elementRef);
     return containerElement;
   }
 

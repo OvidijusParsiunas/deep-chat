@@ -1,3 +1,4 @@
+import {ElementUtils} from '../../../utils/element/elementUtils';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './submitButton/submitButton';
 import {SpeechInput} from './speechInput/speechInput';
@@ -15,11 +16,7 @@ export class Input {
     this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
     keyboardInput.submit = this._submitButton.submitFromInput.bind(this._submitButton);
     aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);
-    this.addElements(keyboardInput.elementRef, this._submitButton.elementRef);
-    if (aiAssistant.speechInput) this.addElements(new SpeechInput().elementRef);
-  }
-
-  private addElements(...elements: HTMLElement[]) {
-    elements.forEach((element) => this.elementRef.appendChild(element));
+    ElementUtils.addElements(this.elementRef, keyboardInput.elementRef, this._submitButton.elementRef);
+    if (aiAssistant.speechInput) ElementUtils.addElements(this.elementRef, new SpeechInput().elementRef);
   }
 }

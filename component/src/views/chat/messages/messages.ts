@@ -12,21 +12,10 @@ import {
   ErrorMessage,
 } from '../../../types/messages';
 
-const messagesTemplate = document.createElement('template');
-messagesTemplate.innerHTML = `
-  <div class="messages">
-    <div id="placeholder">
-      <div id="placeholder-text">
-        Ai Assistant
-      </div>
-    </div>
-  </div>
-`;
-
 export type AddNewMessage = Messages['addNewMessage'];
 
 export class Messages {
-  private readonly _elementRef: HTMLElement;
+  elementRef: HTMLElement;
   private readonly _textElementRefs: HTMLElement[] = [];
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
@@ -37,9 +26,8 @@ export class Messages {
   private readonly _speechOutput?: boolean;
   messages: MessageContent[] = [];
 
-  constructor(parentElement: HTMLElement, aiAssistant: AiAssistant) {
-    parentElement.appendChild(messagesTemplate.content.cloneNode(true));
-    this._elementRef = parentElement.getElementsByClassName('messages')[0] as HTMLElement;
+  constructor(aiAssistant: AiAssistant) {
+    this.elementRef = Messages.createContainerElement();
     this._messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
     this._names = aiAssistant.names;
@@ -48,6 +36,12 @@ export class Messages {
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
     if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
+  }
+
+  private static createContainerElement() {
+    const container = document.createElement('div');
+    container.id = 'messages';
+    return container;
   }
 
   private populateInitialMessages(startMessages: MessageContent[]) {
@@ -133,16 +127,17 @@ export class Messages {
     if (this._customErrorMessage?.styles) {
       Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, this._customErrorMessage.styles);
     }
-    this._elementRef.appendChild(outerContainer);
-    this._elementRef.scrollTop = this._elementRef.scrollHeight;
+    this.elementRef.appendChild(outerContainer);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput) TextToSpeech.speak(text);
   }
 
   public addNewMessage(text: string, isAI: boolean, update = true) {
-    if (this._textElementRefs.length === 0) this._elementRef.replaceChildren();
+    // this statement will not be necessary if there is nomplaceholder
+    if (this._textElementRefs.length === 0) this.elementRef.replaceChildren();
     const messageElement = this.createMessageElements(text, isAI);
-    this._elementRef.appendChild(messageElement);
-    this._elementRef.scrollTop = this._elementRef.scrollHeight;
+    this.elementRef.appendChild(messageElement);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && isAI) TextToSpeech.speak(text);
     if (update) this.sendClientUpdate(text, isAI);
   }
