@@ -5,7 +5,7 @@ import {OpenAIResult} from '../../../types/openAIResult';
 export interface OpenAIClientIO {
   url: string;
 
-  buildBody(params: OpenAIInternalBody, messages: Messages): string;
+  buildBody(baseBody: OpenAIInternalBody, messages: Messages): string;
 
   extractTextFromResult(result: OpenAIResult): string;
 }

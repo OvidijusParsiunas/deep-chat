@@ -2,7 +2,8 @@ import {OpenAIMessage} from './openAI';
 
 export interface OpenAIInternalBody {
   model: string;
-  messages?: OpenAIMessage[];
+  // unseen messages e.g. system - https://platform.openai.com/docs/guides/chat/introduction
+  startMessages?: OpenAIMessage[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;

@@ -7,7 +7,10 @@ export interface OpenAIMessage {
 // https://platform.openai.com/docs/api-reference/chat/create
 export interface OpenAIChat {
   model: string;
-  messages: OpenAIMessage[];
+  // These messages will not be displayed in the chat and are mostly useful for adding messages for the "system" role
+  // Messages inside chat and in the startMessages will automatically be added to this property
+  // See example details: https://platform.openai.com/docs/guides/chat/introduction
+  messages?: OpenAIMessage[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;

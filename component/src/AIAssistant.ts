@@ -20,7 +20,7 @@ export class AiAssistant extends InternalHTML {
   openAI?: OpenAI;
 
   @Property('boolean')
-  startWithChat?: boolean;
+  startWithChatView?: boolean;
 
   @Property('object')
   requestSettings?: RequestSettings;
@@ -80,7 +80,7 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     console.log('render');
-    if (this.startWithChat || this.key) {
+    if (this.startWithChatView || this.key) {
       ChatView.render(this._elementRef, this.key || '', this);
     }
   }

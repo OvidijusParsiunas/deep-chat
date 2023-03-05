@@ -6,9 +6,9 @@ import {OpenAIClientIO} from './openAIClientIO';
 export class OpenAICompletionIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/completions';
 
-  buildBody(params: OpenAIInternalBody, messagesObj: Messages) {
+  buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
     const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].text;
-    return JSON.stringify({prompt: mostRecentMessageText, ...params});
+    return JSON.stringify({prompt: mostRecentMessageText, ...baseBody});
   }
 
   extractTextFromResult(result: OpenAIResult): string {
