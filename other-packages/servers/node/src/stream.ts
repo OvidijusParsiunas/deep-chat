@@ -4,7 +4,7 @@ export interface Stream {
   data: {on: (message: string, callback: (asdsad: Object) => void) => void};
 }
 
-export async function handleStream(res: Response, stream: Stream) {
+export async function stream(res: Response, stream: Stream) {
   try {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Connection', 'keep-alive');
