@@ -1,4 +1,4 @@
-# AI Assistant Node-Express server example
+# AI Assistant Python-Flask server example
 
 ## Setup
 
@@ -15,3 +15,7 @@ Windows:
 ```
 
 And place your key inside the .env file's OPENAI_API_KEY variable.
+
+pip install flask openai flask-cors load_dotenv
+
+python app.py

@@ -104,7 +104,7 @@ export class Messages {
     return outerContainer;
   }
 
-  public sendClientUpdate(text: string, isAI: boolean) {
+  private sendClientUpdate(text: string, isAI: boolean) {
     const messageContent = Messages.createMessageContent(text, isAI);
     this._onNewMessage?.(messageContent);
     this._dispatchEvent(new CustomEvent('new-message', {detail: messageContent}));
@@ -152,5 +152,10 @@ export class Messages {
   public static updateStreamedMessage(text: string, textElement: HTMLElement) {
     const textNode = document.createTextNode(text);
     textElement.appendChild(textNode);
+  }
+
+  public finaliseStreamedMessage(text: string) {
+    this.sendClientUpdate(text, true);
+    if (this._speechOutput) TextToSpeech.speak(text);
   }
 }

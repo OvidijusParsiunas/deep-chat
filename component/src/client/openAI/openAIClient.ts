@@ -70,7 +70,7 @@ export class OpenAIClient {
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },
       onclose() {
-        messages.sendClientUpdate((textElement as HTMLElement)?.innerText, true);
+        messages.finaliseStreamedMessage((textElement as HTMLElement)?.innerText);
         onClose();
       },
       signal: abortStream.signal,
