@@ -3,6 +3,7 @@ import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {StyleUtil} from './utils/webComponent/styleUtil';
 import {RequestSettings} from './types/requestSettings';
+import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
@@ -40,7 +41,7 @@ export class AiAssistant extends InternalHTML {
   inputStyles?: InputStyles;
 
   @Property('object')
-  submitButtonStyle?: CustomStyle;
+  submitButtonStyles?: SubmitButtonStyles;
 
   @Property('object')
   messageStyles?: CustomMessageStyles;

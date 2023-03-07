@@ -1,6 +1,6 @@
 .dot-typing {
   position: relative;
-  left: -10005px;
+  left: -9986px;
   width: 3px;
   height: 3px;
   border-radius: 5px;
@@ -8,7 +8,7 @@
   color: #848484;
   box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;
   animation: dot-typing 1.5s infinite linear;
-  bottom: 8px;
+  bottom: -10px;
 }
 
 @keyframes dot-typing {

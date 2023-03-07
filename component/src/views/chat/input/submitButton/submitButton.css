@@ -1,25 +1,22 @@
-#submit-button {
+#submit-button-container {
+  border-radius: 4px;
+  cursor: pointer;
   position: absolute;
   right: 4px;
   bottom: 14px;
-}
-
-.clickable-icon-container {
   width: 22px;
   height: 22px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-.clickable-icon-container:hover {
+#submit-button-container:hover {
   background-color: #9c9c9c2e;
 }
 
-.clickable-icon-container:active {
+#submit-button-container:active {
   background-color: #9c9c9c5e;
 }
 
-#submit-icon {
+.clickable-icon {
   position: absolute;
   right: -4px;
   top: -1px;
@@ -28,8 +25,8 @@
 #stop-icon {
   background-color: #acacac;
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 9px;
+  top: 6px;
   width: 12px;
   height: 12px;
   border-radius: 2px;
