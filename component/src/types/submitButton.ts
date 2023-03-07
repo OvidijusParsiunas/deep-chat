@@ -1,3 +1,4 @@
+import {ButtonPosition} from './button';
 import {StatefulStyle} from './styles';
 
 interface SubmitButtonInnerElementStyle {
@@ -15,12 +16,5 @@ export interface SubmitButtonStyles {
   submit?: SubmitButtonElementsStyle;
   loading?: SubmitButtonElementsStyle;
   stop?: SubmitButtonElementsStyle;
-}
-
-export type SubmitButtonInnerElement = HTMLElement | SVGGraphicsElement;
-
-export interface SubmitButtonInnerElements {
-  submit: SubmitButtonInnerElement;
-  loading: SubmitButtonInnerElement;
-  stop: SubmitButtonInnerElement;
+  position?: ButtonPosition;
 }

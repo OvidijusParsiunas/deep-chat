@@ -1,4 +1,5 @@
-import {SubmitButtonInnerElements, SubmitButtonStyles} from '../../../../types/submitButton';
+import {SubmitButtonElStyles, SubmitButtonInnerElements} from '../../../../types/submitButtonInternal';
+import {SubmitButtonStyles} from '../../../../types/submitButton';
 import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
 
 export class CustomInnerElements {
@@ -12,7 +13,7 @@ export class CustomInnerElements {
     return isText ? CustomInnerElements.createTextElement(string) : SVGIconUtil.createSVGElement(string);
   }
 
-  private static createCustomElement(state: keyof SubmitButtonStyles, customStyles?: SubmitButtonStyles) {
+  private static createCustomElement(state: keyof SubmitButtonElStyles, customStyles?: SubmitButtonStyles) {
     if (!customStyles) return;
     const stateStyle = customStyles[state];
     if (stateStyle?.text?.string) return CustomInnerElements.createElement(stateStyle?.text?.string, true);
@@ -21,7 +22,7 @@ export class CustomInnerElements {
   }
 
   private static createSubmitCustomElement(customStyles?: SubmitButtonStyles) {
-    // submit element is using the initial styles so as to allow the user to modify accordingly
+    // submit element is using the initial styles so as to allow the user to modify
     const element = CustomInnerElements.createCustomElement('submit', customStyles);
     if (element) {
       element.id = 'submit-icon';

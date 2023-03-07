@@ -11,6 +11,7 @@ export class Input {
   readonly elementRef: HTMLElement;
   private readonly _submitButton: SubmitButton;
 
+  // prettier-ignore
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
@@ -21,7 +22,8 @@ export class Input {
     ElementUtils.addElements(this.elementRef, keyboardInput.elementRef, this._submitButton.elementRef);
     if (aiAssistant.speechInput) ElementUtils.addElements(this.elementRef, new SpeechInput().elementRef);
     const sideContainers = SideContainers.create();
-    ButtonPosition.add(this.elementRef, sideContainers, this._submitButton.elementRef, 'outside-right');
+    ButtonPosition.add(this.elementRef, sideContainers, this._submitButton.elementRef,
+      aiAssistant.submitButtonStyles?.position || 'inside-right');
     SideContainers.add(this.elementRef, sideContainers);
   }
 }

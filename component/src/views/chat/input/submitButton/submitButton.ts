@@ -1,9 +1,10 @@
 import {OpenAIBaseBodyAssembler} from '../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
 import {OpenAIClientIOFactory} from '../../../../client/openAI/clientIO/openAIClientIOFactory';
-import {SubmitButtonInnerElements, SubmitButtonStyles} from '../../../../types/submitButton';
+import {SubmitButtonInnerElements} from '../../../../types/submitButtonInternal';
 import {OpenAIClientIO} from '../../../../client/openAI/clientIO/openAIClientIO';
 import {OpenAIInternalBody} from '../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../client/openAI/openAIClient';
+import {SubmitButtonStyles} from '../../../../types/submitButton';
 import {RequestSettings} from '../../../../types/requestSettings';
 import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';

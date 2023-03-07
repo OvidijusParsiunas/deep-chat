@@ -11,6 +11,8 @@ export class ButtonPosition {
     } else if (position === 'outside-left') {
       sideContainers[0].appendChild(buttonElement);
     } else {
+      // explicitly defining the class incase client uses an incorrect string
+      buttonElement.classList.add('outside-right');
       sideContainers[1].appendChild(buttonElement);
     }
   }
