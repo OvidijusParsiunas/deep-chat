@@ -16,3 +16,11 @@ export interface SubmitButtonStyles {
   loading?: SubmitButtonElementsStyle;
   stop?: SubmitButtonElementsStyle;
 }
+
+export type SubmitButtonInnerElement = HTMLElement | SVGGraphicsElement;
+
+export interface SubmitButtonInnerElements {
+  submit: SubmitButtonInnerElement;
+  loading: SubmitButtonInnerElement;
+  stop: SubmitButtonInnerElement;
+}

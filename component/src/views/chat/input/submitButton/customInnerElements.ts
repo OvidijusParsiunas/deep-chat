@@ -1,0 +1,40 @@
+import {SubmitButtonInnerElements, SubmitButtonStyles} from '../../../../types/submitButton';
+import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+
+export class CustomInnerElements {
+  private static createTextElement(text: string) {
+    const textElement = document.createElement('div');
+    textElement.innerText = text;
+    return textElement;
+  }
+
+  private static createElement(string: string, isText: boolean) {
+    return isText ? CustomInnerElements.createTextElement(string) : SVGIconUtil.createSVGElement(string);
+  }
+
+  private static createCustomElement(state: keyof SubmitButtonStyles, customStyles?: SubmitButtonStyles) {
+    if (!customStyles) return;
+    const stateStyle = customStyles[state];
+    if (stateStyle?.text?.string) return CustomInnerElements.createElement(stateStyle?.text?.string, true);
+    if (stateStyle?.svg?.string) return CustomInnerElements.createElement(stateStyle?.svg?.string, false);
+    return;
+  }
+
+  private static createSubmitCustomElement(customStyles?: SubmitButtonStyles) {
+    // submit element is using the initial styles so as to allow the user to modify accordingly
+    const element = CustomInnerElements.createCustomElement('submit', customStyles);
+    if (element) {
+      element.id = 'submit-icon';
+      element.classList.add('clickable-icon');
+    }
+    return element;
+  }
+
+  public static create(customStyles?: SubmitButtonStyles): Partial<SubmitButtonInnerElements> {
+    // if the user has provided a string for any state, that element will be reused for others
+    const submit = CustomInnerElements.createSubmitCustomElement(customStyles);
+    const loading = CustomInnerElements.createCustomElement('loading', customStyles) || submit;
+    const stop = CustomInnerElements.createCustomElement('stop', customStyles) || loading;
+    return {submit, loading, stop};
+  }
+}

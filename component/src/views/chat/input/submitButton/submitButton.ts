@@ -1,13 +1,14 @@
 import {OpenAIBaseBodyAssembler} from '../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
 import {OpenAIClientIOFactory} from '../../../../client/openAI/clientIO/openAIClientIOFactory';
+import {SubmitButtonInnerElements, SubmitButtonStyles} from '../../../../types/submitButton';
 import {OpenAIClientIO} from '../../../../client/openAI/clientIO/openAIClientIO';
 import {OpenAIInternalBody} from '../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../client/openAI/openAIClient';
 import {RequestSettings} from '../../../../types/requestSettings';
-import {SubmitButtonStyles} from '../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+import {CustomInnerElements} from './customInnerElements';
 import {StatefulStyle} from '../../../../types/styles';
 import {AiAssistant} from '../../../../aiAssistant';
 import {Messages} from '../../messages/messages';
@@ -23,15 +24,13 @@ export class SubmitButton {
   private _customRequestSettings?: RequestSettings;
   private _customStyles?: SubmitButtonStyles;
   private _clientIO: OpenAIClientIO;
+  readonly elementRef: HTMLElement;
   private readonly _key: string;
   private readonly _messages: Messages;
-  readonly elementRef: HTMLElement;
   private readonly _inputElementRef: HTMLElement;
-  private readonly _submitIconElementRef: SVGGraphicsElement;
-  private readonly _stopIconElementRef: HTMLElement;
-  private readonly _loadingIconElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _mouseState: MouseState = {state: 'default'};
+  private readonly _innerElements: SubmitButtonInnerElements;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
     const {openAI, requestSettings, submitButtonStyles} = aiAssistant;
@@ -39,46 +38,48 @@ export class SubmitButton {
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._customStyles = submitButtonStyles;
-    this._submitIconElementRef = SubmitButton.createSubmitIconElement(this.submitFromInput.bind(this));
-    this.elementRef = this.createButtonElement();
-    this._stopIconElementRef = SubmitButton.createStopIconElement(this.stopStream.bind(this));
-    this._loadingIconElementRef = SubmitButton.createLoadingIconElement();
+    this._innerElements = this.createInnerElements();
+    this.elementRef = this.createButtonContainerElement();
     this._abortStream = new AbortController();
     this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
+    this.changeToSubmitIcon();
   }
 
-  private createButtonElement() {
+  private createInnerElements() {
+    const {submit, loading, stop} = CustomInnerElements.create(this._customStyles);
+    return {
+      submit: submit || SubmitButton.createSubmitIconElement(),
+      loading: loading || SubmitButton.createLoadingIconElement(),
+      stop: stop || SubmitButton.createStopIconElement(),
+    };
+  }
+
+  private createButtonContainerElement() {
     const buttonElement = document.createElement('div');
     buttonElement.id = 'submit-button-container';
-    buttonElement.appendChild(this._submitIconElementRef);
-    if (this._customStyles) SubmitButtonStateStyle.reapply(buttonElement, this._customStyles, this._mouseState, 'submit');
     return buttonElement;
   }
 
-  private static createSubmitIconElement(submitFromInput: () => void) {
+  private static createSubmitIconElement() {
     const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
     svgIconElement.id = 'submit-icon';
     svgIconElement.classList.add('clickable-icon');
-    svgIconElement.onclick = submitFromInput.bind(this);
     return svgIconElement;
   }
 
   private static createLoadingIconElement() {
     const loadingIconElement = document.createElement('div');
-    loadingIconElement.classList.add('dot-typing');
+    loadingIconElement.classList.add('dots-loading');
     return loadingIconElement;
   }
 
-  private static createStopIconElement(stopStream: () => void) {
+  private static createStopIconElement() {
     const stopIconElement = document.createElement('div');
     stopIconElement.id = 'stop-icon';
-    const stopIconContainerElement = document.createElement('div');
-    stopIconContainerElement.classList.add('clickable-icon');
-    stopIconContainerElement.appendChild(stopIconElement);
-    stopIconContainerElement.onclick = stopStream;
-    return stopIconContainerElement;
+    stopIconElement.classList.add('clickable-icon');
+    return stopIconElement;
   }
 
   public submitFromInput() {
@@ -108,27 +109,30 @@ export class SubmitButton {
   }
 
   private changeToStopIcon() {
-    this.elementRef.replaceChildren(this._stopIconElementRef);
+    this.elementRef.replaceChildren(this._innerElements.stop);
     if (this._customStyles) {
       SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'stop', ['loading', 'submit']);
     }
-    this._isRequestInProgress = true;
+    this.elementRef.onclick = this.stopStream.bind(this);
+    this._isLoadingActive = false;
   }
 
   private changeToLoadingIcon() {
-    this.elementRef.replaceChildren(this._loadingIconElementRef);
+    this.elementRef.replaceChildren(this._innerElements.loading);
     if (this._customStyles) {
-      SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'submit', ['loading']);
+      SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'loading', ['submit']);
     }
+    this.elementRef.onclick = () => {};
     this._isRequestInProgress = true;
     this._isLoadingActive = true;
   }
 
   private changeToSubmitIcon() {
-    this.elementRef.replaceChildren(this._submitIconElementRef);
+    this.elementRef.replaceChildren(this._innerElements.submit);
     if (this._customStyles) {
       SubmitButtonStateStyle.resetSubmit(this.elementRef, this._customStyles, this._mouseState, this._isLoadingActive);
     }
+    this.elementRef.onclick = this.submitFromInput.bind(this);
     this._isRequestInProgress = false;
     this._isLoadingActive = false;
   }

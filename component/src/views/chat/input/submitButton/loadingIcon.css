@@ -1,4 +1,4 @@
-.dot-typing {
+.dots-loading {
   position: relative;
   left: -9986px;
   width: 3px;
@@ -7,11 +7,11 @@
   background-color: #848484;
   color: #848484;
   box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;
-  animation: dot-typing 1.5s infinite linear;
+  animation: dots-loading 1.5s infinite linear;
   bottom: -10px;
 }
 
-@keyframes dot-typing {
+@keyframes dots-loading {
   0% {
     box-shadow: 9990px 0 0 0 #848484, 9995px 0 0 0 #848484, 10001px 0 0 0 #848484;
   }
