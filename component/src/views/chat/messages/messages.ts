@@ -133,8 +133,6 @@ export class Messages {
   }
 
   public addNewMessage(text: string, isAI: boolean, update = true) {
-    // this statement will not be necessary if there is nomplaceholder
-    if (this._textElementRefs.length === 0) this.elementRef.replaceChildren();
     const messageElement = this.createMessageElements(text, isAI);
     this.elementRef.appendChild(messageElement);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;

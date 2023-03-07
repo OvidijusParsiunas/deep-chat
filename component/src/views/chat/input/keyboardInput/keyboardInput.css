@@ -8,6 +8,7 @@
   margin-bottom: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
   overflow-y: auto;
+  max-height: 200px;
 }
 
 #keyboard-input {
@@ -17,8 +18,11 @@
   padding: 6px 0px 5px 7px;
   word-wrap: break-word;
   min-height: 18px;
+  /* Use these properties to inline all of the text  */
+  /* white-space: nowrap;
+  overflow: hidden; */
 }
 
-.keyboard-input-default {
+.keyboard-input-placeholder {
   color: grey;
 }

@@ -7,6 +7,7 @@ import {Property} from './utils/decorators/property';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
+import {InputStyles} from './types/input';
 import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
@@ -36,10 +37,7 @@ export class AiAssistant extends InternalHTML {
   containerStyle?: CustomStyle;
 
   @Property('object')
-  inputStyle?: CustomStyle;
-
-  @Property('string')
-  defaultInputText?: string;
+  inputStyles?: InputStyles;
 
   @Property('object')
   submitButtonStyle?: CustomStyle;

@@ -12,7 +12,7 @@ export class Input {
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
-    const keyboardInput = new KeyboardInput(aiAssistant.inputStyle, aiAssistant.defaultInputText);
+    const keyboardInput = new KeyboardInput(aiAssistant.inputStyles);
     this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
     keyboardInput.submit = this._submitButton.submitFromInput.bind(this._submitButton);
     aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);

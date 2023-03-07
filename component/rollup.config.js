@@ -6,7 +6,7 @@ import {terser} from 'rollup-plugin-terser';
 export default {
   input: 'dist/aiAssistant.js',
   output: {
-    file: 'bundle/aiAssistant.bundle.js',
+    file: 'dist/aiAssistant.bundle.js',
     format: 'esm',
   },
   onwarn(warning) {

@@ -35,6 +35,20 @@
             },
             {
               "kind": "field",
+              "name": "startWithChatView",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "RequestSettings | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "speechInput",
               "type": {
                 "text": "boolean | undefined"
@@ -91,9 +105,23 @@
             },
             {
               "kind": "field",
+              "name": "names",
+              "type": {
+                "text": "Names | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "startMessages",
               "type": {
                 "text": "MessageContent[] | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "errorMessage",
+              "type": {
+                "text": "ErrorMessage | undefined"
               }
             },
             {
@@ -216,54 +244,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/types/avatar.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/messages.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/object.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAI.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAIInternal.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAIResult.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/styles.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/typeConverters.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/icons/notVisibilityIcon.ts",
       "declarations": [
         {
@@ -324,6 +304,72 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/avatar.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/messages.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/names.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/object.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAI.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIInternal.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIResult.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/requestSettings.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/styles.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/typeConverters.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/utilityTypes.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -395,7 +441,7 @@
                   }
                 },
                 {
-                  "name": "params",
+                  "name": "baseBody",
                   "type": {
                     "text": "OpenAICompletions"
                   }
@@ -407,13 +453,19 @@
                   }
                 },
                 {
+                  "name": "customRequestSettings",
+                  "type": {
+                    "text": "RequestSettings | undefined"
+                  }
+                },
+                {
                   "name": "messages",
                   "type": {
                     "text": "Messages"
                   }
                 },
                 {
-                  "name": "onSuccessfulResult",
+                  "name": "onFinish",
                   "type": {
                     "text": "() => void"
                   }
@@ -433,7 +485,7 @@
                   }
                 },
                 {
-                  "name": "params",
+                  "name": "baseBody",
                   "type": {
                     "text": "OpenAICompletions"
                   }
@@ -442,6 +494,12 @@
                   "name": "key",
                   "type": {
                     "text": "string"
+                  }
+                },
+                {
+                  "name": "customRequestSettings",
+                  "type": {
+                    "text": "RequestSettings | undefined"
                   }
                 },
                 {
@@ -512,59 +570,6 @@
           "declaration": {
             "name": "OpenAIClient",
             "module": "src/client/openAI/openAIClient.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/openAIParamAssembler.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIParamAssembler",
-          "members": [
-            {
-              "kind": "field",
-              "name": "DEFAULT_PARAMS",
-              "type": {
-                "text": "OpenAIInternal"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      messages: [{role: 'user', content: 'Hello world'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
-            },
-            {
-              "kind": "method",
-              "name": "assemble",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "OpenAIInternalParams"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "openAI",
-                  "optional": true,
-                  "type": {
-                    "text": "OpenAI"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIParamAssembler",
-          "declaration": {
-            "name": "OpenAIParamAssembler",
-            "module": "src/client/openAI/openAIParamAssembler.ts"
           }
         }
       ]
@@ -677,6 +682,49 @@
           "declaration": {
             "name": "TypeConverters",
             "module": "src/utils/decorators/typeConverters.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/element/elementUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ElementUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parent",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "elements",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ElementUtils",
+          "declaration": {
+            "name": "ElementUtils",
+            "module": "src/utils/element/elementUtils.ts"
           }
         }
       ]
@@ -1234,6 +1282,59 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIBaseBodyAssembler",
+          "members": [
+            {
+              "kind": "field",
+              "name": "DEFAULT_PARAMS",
+              "type": {
+                "text": "OpenAIInternal"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      startMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n      stream: true,\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
+            },
+            {
+              "kind": "method",
+              "name": "assemble",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIInternalBody"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "openAI",
+                  "optional": true,
+                  "type": {
+                    "text": "OpenAI"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIBaseBodyAssembler",
+          "declaration": {
+            "name": "OpenAIBaseBodyAssembler",
+            "module": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/client/openAI/clientIO/openAIChatIO.ts",
       "declarations": [
         {
@@ -1247,16 +1348,16 @@
               "type": {
                 "text": "string"
               },
-              "default": "'https://api.openai.com/v1/chat/completions'"
+              "default": "'http://127.0.0.1:3000/v1/chat/completions'"
             },
             {
               "kind": "method",
               "name": "buildBody",
               "parameters": [
                 {
-                  "name": "params",
+                  "name": "baseBody",
                   "type": {
-                    "text": "OpenAIInternalParams"
+                    "text": "OpenAIInternalBody"
                   }
                 },
                 {
@@ -1325,9 +1426,9 @@
               },
               "parameters": [
                 {
-                  "name": "params",
+                  "name": "baseBody",
                   "type": {
-                    "text": "OpenAIInternalParams"
+                    "text": "OpenAIInternalBody"
                   }
                 }
               ]
@@ -1368,9 +1469,9 @@
               "name": "buildBody",
               "parameters": [
                 {
-                  "name": "params",
+                  "name": "baseBody",
                   "type": {
-                    "text": "OpenAIInternalParams"
+                    "text": "OpenAIInternalBody"
                   }
                 },
                 {
@@ -1435,20 +1536,7 @@
                 "text": "SubmitButton"
               },
               "privacy": "private",
-              "default": "new SubmitButton(keyboardInput.inputElementRef, messages, key, submitButtonStyle, openAI)"
-            },
-            {
-              "kind": "method",
-              "name": "addElements",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "elements",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
+              "default": "new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant)"
             },
             {
               "kind": "field",
@@ -1591,7 +1679,7 @@
             },
             {
               "kind": "method",
-              "name": "addAvatar",
+              "name": "add",
               "privacy": "public",
               "static": true,
               "parameters": [
@@ -1640,12 +1728,10 @@
           "members": [
             {
               "kind": "field",
-              "name": "_elementRef",
+              "name": "elementRef",
               "type": {
                 "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "parentElement.getElementsByClassName('messages')[0]"
+              }
             },
             {
               "kind": "field",
@@ -1674,6 +1760,22 @@
             },
             {
               "kind": "field",
+              "name": "_names",
+              "type": {
+                "text": "Names | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_customErrorMessage",
+              "type": {
+                "text": "ErrorMessage | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "_onNewMessage",
               "type": {
                 "text": "OnNewMessage | undefined"
@@ -1690,11 +1792,25 @@
             },
             {
               "kind": "field",
+              "name": "_speechOutput",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "messages",
               "type": {
                 "text": "MessageContent[]"
               },
               "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true
             },
             {
               "kind": "method",
@@ -1785,7 +1901,7 @@
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "innerContainer",
+                  "name": "textElement",
                   "type": {
                     "text": "HTMLElement"
                   }
@@ -1823,6 +1939,12 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "createBaseElements",
+              "privacy": "private",
+              "static": true
             },
             {
               "kind": "method",
@@ -1864,6 +1986,16 @@
             },
             {
               "kind": "method",
+              "name": "removeStreamedMessageIfEmpty",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "addNewErrorMessage",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
               "name": "addNewMessage",
               "privacy": "public",
               "parameters": [
@@ -1878,6 +2010,10 @@
                   "type": {
                     "text": "boolean"
                   }
+                },
+                {
+                  "name": "update",
+                  "default": "true"
                 }
               ]
             },
@@ -1905,6 +2041,19 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "finaliseStreamedMessage",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -1916,6 +2065,141 @@
           "declaration": {
             "name": "Messages",
             "module": "src/views/chat/messages/messages.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/name.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Name",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getPosition",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "names",
+                  "type": {
+                    "text": "CustomNames"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyStyle",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "names",
+                  "type": {
+                    "text": "CustomNames"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getNameText",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "names",
+                  "type": {
+                    "text": "CustomNames"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createName",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "names",
+                  "type": {
+                    "text": "CustomNames"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messageText",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "names",
+                  "type": {
+                    "text": "Names"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Name",
+          "declaration": {
+            "name": "Name",
+            "module": "src/views/chat/messages/name.ts"
           }
         }
       ]
@@ -2110,11 +2394,20 @@
             },
             {
               "kind": "field",
-              "name": "_openAIParams",
+              "name": "_openAIBaseBody",
               "type": {
-                "text": "OpenAIInternalParams"
+                "text": "OpenAIInternalBody"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_customRequestSettings",
+              "type": {
+                "text": "RequestSettings | undefined"
+              },
+              "privacy": "private",
+              "default": "requestSettings"
             },
             {
               "kind": "field",
@@ -2265,6 +2558,43 @@
           "declaration": {
             "name": "SubmitButton",
             "module": "src/views/chat/input/submitButton/submitButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextToSpeech",
+          "members": [
+            {
+              "kind": "method",
+              "name": "speak",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextToSpeech",
+          "declaration": {
+            "name": "TextToSpeech",
+            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
           }
         }
       ]
