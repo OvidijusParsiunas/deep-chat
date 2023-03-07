@@ -1,8 +1,10 @@
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './submitButton/submitButton';
 import {SpeechInput} from './speechInput/speechInput';
 import {AiAssistant} from '../../../aiAssistant';
+import {ButtonPosition} from './buttonPosition';
 import {Messages} from '../messages/messages';
 
 export class Input {
@@ -18,5 +20,8 @@ export class Input {
     aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);
     ElementUtils.addElements(this.elementRef, keyboardInput.elementRef, this._submitButton.elementRef);
     if (aiAssistant.speechInput) ElementUtils.addElements(this.elementRef, new SpeechInput().elementRef);
+    const sideContainers = SideContainers.create();
+    ButtonPosition.add(this.elementRef, sideContainers, this._submitButton.elementRef, 'outside-right');
+    SideContainers.add(this.elementRef, sideContainers);
   }
 }

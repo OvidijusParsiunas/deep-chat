@@ -1,3 +1,4 @@
+@import url('./sideContainers/sideContainers.css');
 @import url('./keyboardInput/keyboardInput.css');
 @import url('./submitButton/submitButton.css');
 @import url('./submitButton/loadingIcon.css');
@@ -5,9 +6,38 @@
 
 #input {
   width: 80%;
+  display: inline-flex;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   position: relative;
+}
+
+/* Using absolute in order to not move the button element when the input el height increases */
+
+/* Input element padding will need to be changed accordingly */
+.inside-right {
+  position: absolute;
+  right: 4px;
+  bottom: 14px;
+}
+
+.inside-left {
+  position: absolute;
+  left: 6px;
+  bottom: 14px;
+}
+
+/* Input container element padding will need to be changed accordingly */
+.outside-left {
+  position: absolute;
+  right: 4px;
+  bottom: 14px;
+}
+
+.outside-right {
+  position: absolute;
+  left: 4px;
+  bottom: 14px;
 }
