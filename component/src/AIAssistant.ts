@@ -5,6 +5,7 @@ import {StyleUtil} from './utils/webComponent/styleUtil';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
+import {SpeechInput} from './types/speechInput';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
@@ -29,7 +30,7 @@ export class AiAssistant extends InternalHTML {
   requestSettings?: RequestSettings;
 
   @Property('boolean')
-  speechInput?: boolean;
+  speechInput?: SpeechInput;
 
   @Property('boolean')
   speechOutput?: boolean;

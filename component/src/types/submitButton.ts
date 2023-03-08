@@ -1,20 +1,8 @@
-import {ButtonPosition} from './button';
-import {StatefulStyle} from './styles';
-
-interface SubmitButtonInnerElementStyle {
-  style?: StatefulStyle;
-  string?: string;
-}
-
-export interface SubmitButtonElementsStyle {
-  container?: StatefulStyle;
-  svg?: SubmitButtonInnerElementStyle;
-  text?: SubmitButtonInnerElementStyle;
-}
+import {ButtonElementStyles, ButtonPosition} from './button';
 
 export interface SubmitButtonStyles {
-  submit?: SubmitButtonElementsStyle;
-  loading?: SubmitButtonElementsStyle;
-  stop?: SubmitButtonElementsStyle;
+  submit?: ButtonElementStyles;
+  loading?: ButtonElementStyles;
+  stop?: ButtonElementStyles;
   position?: ButtonPosition;
 }

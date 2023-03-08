@@ -1,5 +1,5 @@
+import {MicrophoneButton} from './buttons/microphone/microphoneButton';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {Microphone} from './buttons/microphone/microphoneButton';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
@@ -27,7 +27,7 @@ export class Input {
     ButtonPosition.add(this.elementRef, sideContainers, submitButtonEl,
       aiAssistant.submitButtonStyles?.position || 'inside-right');
     if (aiAssistant.speechInput) {
-      ButtonPosition.add(this.elementRef, sideContainers, new Microphone().elementRef,
+      ButtonPosition.add(this.elementRef, sideContainers, new MicrophoneButton(aiAssistant.speechInput).elementRef,
         aiAssistant.submitButtonStyles?.position || 'outside-right');
     }
     SideContainers.add(this.elementRef, sideContainers);

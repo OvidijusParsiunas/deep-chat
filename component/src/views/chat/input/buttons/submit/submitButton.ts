@@ -2,45 +2,37 @@ import {OpenAIBaseBodyAssembler} from '../../../../../client/openAI/assemblers/o
 import {OpenAIClientIOFactory} from '../../../../../client/openAI/clientIO/openAIClientIOFactory';
 import {SubmitButtonInnerElements} from '../../../../../types/submitButtonInternal';
 import {OpenAIClientIO} from '../../../../../client/openAI/clientIO/openAIClientIO';
+import {ButtonStateStyles} from '../../../../../types/buttonInternal';
 import {OpenAIInternalBody} from '../../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../../client/openAI/openAIClient';
-import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {RequestSettings} from '../../../../../types/requestSettings';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
-import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
+import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {CustomInnerElements} from './customInnerElements';
-import {StatefulStyle} from '../../../../../types/styles';
 import {AiAssistant} from '../../../../../aiAssistant';
+import {ButtonStyleEvents} from '../buttonStyleEvents';
 import {Messages} from '../../../messages/messages';
 
-export interface MouseState {
-  state: keyof StatefulStyle;
-}
-
-export class SubmitButton {
+export class SubmitButton extends ButtonStyleEvents {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _isLoadingActive = false;
   private _openAIBaseBody: OpenAIInternalBody;
   private _customRequestSettings?: RequestSettings;
-  private _customStyles?: SubmitButtonStyles;
   private _clientIO: OpenAIClientIO;
-  readonly elementRef: HTMLElement;
   private readonly _key: string;
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
-  private readonly _mouseState: MouseState = {state: 'default'};
   private readonly _innerElements: SubmitButtonInnerElements;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
     const {openAI, requestSettings, submitButtonStyles} = aiAssistant;
+    super(SubmitButton.createButtonContainerElement(), submitButtonStyles as ButtonStateStyles);
     this._key = key;
     this._messages = messages;
     this._inputElementRef = inputElementRef;
-    this._customStyles = submitButtonStyles;
     this._innerElements = this.createInnerElements();
-    this.elementRef = this.createButtonContainerElement();
     this._abortStream = new AbortController();
     this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
@@ -57,7 +49,7 @@ export class SubmitButton {
     };
   }
 
-  private createButtonContainerElement() {
+  private static createButtonContainerElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
     return buttonElement;
@@ -110,9 +102,7 @@ export class SubmitButton {
   private changeToStopIcon() {
     this.elementRef.classList.remove('not-clickable-button');
     this.elementRef.replaceChildren(this._innerElements.stop);
-    if (this._customStyles) {
-      SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'stop', ['loading', 'submit']);
-    }
+    this.reapplyStateStyle('stop', ['loading', 'submit']);
     this.elementRef.onclick = this.stopStream.bind(this);
     this._isLoadingActive = false;
   }
@@ -120,9 +110,7 @@ export class SubmitButton {
   private changeToLoadingIcon() {
     this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.add('not-clickable-button');
-    if (this._customStyles) {
-      SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'loading', ['submit']);
-    }
+    this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};
     this._isRequestInProgress = true;
     this._isLoadingActive = true;
@@ -131,9 +119,7 @@ export class SubmitButton {
   private changeToSubmitIcon() {
     this.elementRef.classList.remove('not-clickable-button');
     this.elementRef.replaceChildren(this._innerElements.submit);
-    if (this._customStyles) {
-      SubmitButtonStateStyle.resetSubmit(this.elementRef, this._customStyles, this._mouseState, this._isLoadingActive);
-    }
+    SubmitButtonStateStyle.resetSubmit(this, this._isLoadingActive);
     this.elementRef.onclick = this.submitFromInput.bind(this);
     this._isRequestInProgress = false;
     this._isLoadingActive = false;
