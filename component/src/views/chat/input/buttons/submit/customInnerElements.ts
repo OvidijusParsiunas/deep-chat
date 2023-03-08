@@ -22,17 +22,14 @@ export class CustomInnerElements {
   }
 
   private static createSubmitCustomElement(customStyles?: SubmitButtonStyles) {
-    // submit element is using the initial styles so as to allow the user to modify
     const element = CustomInnerElements.createCustomElement('submit', customStyles);
-    if (element) {
-      element.id = 'submit-icon';
-      element.classList.add('clickable-icon');
-    }
+    // custom inner element is using the submit icon style
+    if (element) element.id = 'submit-icon';
     return element;
   }
 
   public static create(customStyles?: SubmitButtonStyles): Partial<SubmitButtonInnerElements> {
-    // if the user has provided a string for any state, that element will be reused for others
+    // if the user has specified element for any state, it will be reused for next states
     const submit = CustomInnerElements.createSubmitCustomElement(customStyles);
     const loading = CustomInnerElements.createCustomElement('loading', customStyles) || submit;
     const stop = CustomInnerElements.createCustomElement('stop', customStyles) || loading;

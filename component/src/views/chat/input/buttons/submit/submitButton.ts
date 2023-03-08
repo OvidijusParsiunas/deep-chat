@@ -59,14 +59,13 @@ export class SubmitButton {
 
   private createButtonContainerElement() {
     const buttonElement = document.createElement('div');
-    buttonElement.classList.add('button-container');
+    buttonElement.classList.add('input-button');
     return buttonElement;
   }
 
   private static createSubmitIconElement() {
     const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
     svgIconElement.id = 'submit-icon';
-    svgIconElement.classList.add('clickable-icon');
     return svgIconElement;
   }
 
@@ -79,7 +78,6 @@ export class SubmitButton {
   private static createStopIconElement() {
     const stopIconElement = document.createElement('div');
     stopIconElement.id = 'stop-icon';
-    stopIconElement.classList.add('clickable-icon');
     return stopIconElement;
   }
 
@@ -110,6 +108,7 @@ export class SubmitButton {
   }
 
   private changeToStopIcon() {
+    this.elementRef.classList.remove('not-clickable-button');
     this.elementRef.replaceChildren(this._innerElements.stop);
     if (this._customStyles) {
       SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'stop', ['loading', 'submit']);
@@ -120,6 +119,7 @@ export class SubmitButton {
 
   private changeToLoadingIcon() {
     this.elementRef.replaceChildren(this._innerElements.loading);
+    this.elementRef.classList.add('not-clickable-button');
     if (this._customStyles) {
       SubmitButtonStateStyle.reapply(this.elementRef, this._customStyles, this._mouseState, 'loading', ['submit']);
     }
@@ -129,6 +129,7 @@ export class SubmitButton {
   }
 
   private changeToSubmitIcon() {
+    this.elementRef.classList.remove('not-clickable-button');
     this.elementRef.replaceChildren(this._innerElements.submit);
     if (this._customStyles) {
       SubmitButtonStateStyle.resetSubmit(this.elementRef, this._customStyles, this._mouseState, this._isLoadingActive);

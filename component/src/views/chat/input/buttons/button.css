@@ -2,17 +2,21 @@
 @import url('./submit/submitButton.css');
 @import url('./submit/loadingIcon.css');
 
-.button-container {
+.input-button {
   border-radius: 4px;
   cursor: pointer;
   width: 22px;
   height: 22px;
 }
 
-.button-container:hover {
+.input-button:hover {
   background-color: #9c9c9c2e;
 }
 
-.button-container:active {
+.input-button:active {
   background-color: #9c9c9c5e;
+}
+
+.not-clickable-button {
+  pointer-events: none;
 }
