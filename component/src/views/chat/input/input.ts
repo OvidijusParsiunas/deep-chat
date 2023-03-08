@@ -1,29 +1,35 @@
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {Microphone} from './buttons/microphone/microphoneButton';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
-import {SubmitButton} from './submitButton/submitButton';
-import {SpeechInput} from './speechInput/speechInput';
+import {SubmitButton} from './buttons/submit/submitButton';
+import {ButtonPosition} from './buttons/buttonPosition';
 import {AiAssistant} from '../../../aiAssistant';
-import {ButtonPosition} from './buttonPosition';
 import {Messages} from '../messages/messages';
 
 export class Input {
   readonly elementRef: HTMLElement;
-  private readonly _submitButton: SubmitButton;
 
-  // prettier-ignore
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles);
-    this._submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
-    keyboardInput.submit = this._submitButton.submitFromInput.bind(this._submitButton);
-    aiAssistant.submitUserMessage = this._submitButton.submitUserText.bind(this._submitButton);
-    ElementUtils.addElements(this.elementRef, keyboardInput.elementRef, this._submitButton.elementRef);
-    if (aiAssistant.speechInput) ElementUtils.addElements(this.elementRef, new SpeechInput().elementRef);
+    const submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
+    keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
+    aiAssistant.submitUserMessage = submitButton.submitUserText.bind(submitButton);
+    this.addElements(aiAssistant, keyboardInput.elementRef, submitButton.elementRef);
+  }
+
+  // prettier-ignore
+  private addElements(aiAssistant: AiAssistant, keyboardInputEl: HTMLElement, submitButtonEl: HTMLElement) {
+    ElementUtils.addElements(this.elementRef, keyboardInputEl);
     const sideContainers = SideContainers.create();
-    ButtonPosition.add(this.elementRef, sideContainers, this._submitButton.elementRef,
+    ButtonPosition.add(this.elementRef, sideContainers, submitButtonEl,
       aiAssistant.submitButtonStyles?.position || 'inside-right');
+    if (aiAssistant.speechInput) {
+      ButtonPosition.add(this.elementRef, sideContainers, new Microphone().elementRef,
+        aiAssistant.submitButtonStyles?.position || 'outside-right');
+    }
     SideContainers.add(this.elementRef, sideContainers);
   }
 }

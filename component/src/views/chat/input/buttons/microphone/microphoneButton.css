@@ -1,0 +1,12 @@
+#microphone {
+  padding-top: 0.5px;
+  padding-bottom: 1px;
+}
+
+#microphone-icon {
+  position: absolute;
+  left: -6px;
+  bottom: -9px;
+  filter: brightness(0) saturate(100%) invert(36%) sepia(0%) saturate(507%) hue-rotate(46deg) brightness(99%) contrast(97%);
+  pointer-events: none;
+}

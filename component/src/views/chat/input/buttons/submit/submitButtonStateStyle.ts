@@ -1,5 +1,5 @@
-import {SubmitButtonElStyles} from '../../../../types/submitButtonInternal';
-import {SubmitButtonStyles} from '../../../../types/submitButton';
+import {SubmitButtonElStyles} from '../../../../../types/submitButtonInternal';
+import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SubmitButtonEvents} from './submitButtonEvents';
 import {SubmitButtonCSS} from './submitButtonCSS';
 import {MouseState} from './submitButton';

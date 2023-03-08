@@ -1,6 +1,6 @@
-import {SubmitButtonElementsStyle} from '../../../../types/submitButton';
-import {StyleUtils} from '../../../../utils/element/styleUtils';
-import {StatefulStyle} from '../../../../types/styles';
+import {SubmitButtonElementsStyle} from '../../../../../types/submitButton';
+import {StyleUtils} from '../../../../../utils/element/styleUtils';
+import {StatefulStyle} from '../../../../../types/styles';
 
 export class SubmitButtonCSS {
   public static unsetButtonElementAllCSS(button: HTMLElement, styles: SubmitButtonElementsStyle) {

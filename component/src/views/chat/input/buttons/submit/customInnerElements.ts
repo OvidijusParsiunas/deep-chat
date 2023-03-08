@@ -1,6 +1,6 @@
-import {SubmitButtonElStyles, SubmitButtonInnerElements} from '../../../../types/submitButtonInternal';
-import {SubmitButtonStyles} from '../../../../types/submitButton';
-import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+import {SubmitButtonElStyles, SubmitButtonInnerElements} from '../../../../../types/submitButtonInternal';
+import {SubmitButtonStyles} from '../../../../../types/submitButton';
+import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
 
 export class CustomInnerElements {
   private static createTextElement(text: string) {

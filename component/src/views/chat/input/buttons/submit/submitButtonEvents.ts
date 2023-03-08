@@ -1,4 +1,4 @@
-import {SubmitButtonElementsStyle} from '../../../../types/submitButton';
+import {SubmitButtonElementsStyle} from '../../../../../types/submitButton';
 import {SubmitButtonCSS} from './submitButtonCSS';
 import {MouseState} from './submitButton';
 

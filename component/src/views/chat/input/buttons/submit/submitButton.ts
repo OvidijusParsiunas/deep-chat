@@ -1,18 +1,18 @@
-import {OpenAIBaseBodyAssembler} from '../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
-import {OpenAIClientIOFactory} from '../../../../client/openAI/clientIO/openAIClientIOFactory';
-import {SubmitButtonInnerElements} from '../../../../types/submitButtonInternal';
-import {OpenAIClientIO} from '../../../../client/openAI/clientIO/openAIClientIO';
-import {OpenAIInternalBody} from '../../../../types/openAIInternal';
-import {OpenAIClient} from '../../../../client/openAI/openAIClient';
-import {SubmitButtonStyles} from '../../../../types/submitButton';
-import {RequestSettings} from '../../../../types/requestSettings';
-import {SUBMIT_ICON_STRING} from '../../../../icons/submitIcon';
+import {OpenAIBaseBodyAssembler} from '../../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
+import {OpenAIClientIOFactory} from '../../../../../client/openAI/clientIO/openAIClientIOFactory';
+import {SubmitButtonInnerElements} from '../../../../../types/submitButtonInternal';
+import {OpenAIClientIO} from '../../../../../client/openAI/clientIO/openAIClientIO';
+import {OpenAIInternalBody} from '../../../../../types/openAIInternal';
+import {OpenAIClient} from '../../../../../client/openAI/openAIClient';
+import {SubmitButtonStyles} from '../../../../../types/submitButton';
+import {RequestSettings} from '../../../../../types/requestSettings';
+import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
-import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
 import {CustomInnerElements} from './customInnerElements';
-import {StatefulStyle} from '../../../../types/styles';
-import {AiAssistant} from '../../../../aiAssistant';
-import {Messages} from '../../messages/messages';
+import {StatefulStyle} from '../../../../../types/styles';
+import {AiAssistant} from '../../../../../aiAssistant';
+import {Messages} from '../../../messages/messages';
 
 export interface MouseState {
   state: keyof StatefulStyle;
@@ -59,7 +59,7 @@ export class SubmitButton {
 
   private createButtonContainerElement() {
     const buttonElement = document.createElement('div');
-    buttonElement.id = 'submit-button-container';
+    buttonElement.classList.add('button-container');
     return buttonElement;
   }
 

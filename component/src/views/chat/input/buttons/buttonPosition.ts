@@ -1,5 +1,5 @@
-import {ButtonPosition as ButtonPositionT} from '../../../types/button';
-import {SideContainersT} from './sideContainers/sideContainers';
+import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
+import {SideContainersT} from '../sideContainers/sideContainers';
 
 export class ButtonPosition {
   // prettier-ignore

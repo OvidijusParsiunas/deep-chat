@@ -1,24 +1,28 @@
 /* eslint-disable max-len */
 
+import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
+import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
+
 // WORK - check if webapi is available for browser
 // WORK - chat gpt/microsoft integration
-export class SpeechInput {
+export class Microphone {
   readonly elementRef: HTMLElement;
   // private readonly _inputElementRef: HTMLElement;
 
   constructor() {
-    this.elementRef = SpeechInput.createMicrophoneElement();
+    this.elementRef = Microphone.createMicrophoneElement();
     // this._inputElementRef = inputElement;
   }
 
   private static createMicrophoneElement() {
-    const microphoneButtonElement = document.createElement('div');
-    microphoneButtonElement.id = 'microphone-button';
-    const microphoneIconElement = document.createElement('div');
-    microphoneIconElement.id = 'microphone-button-icon';
-    microphoneIconElement.onclick = SpeechInput.start;
-    microphoneButtonElement.appendChild(microphoneIconElement);
-    return microphoneButtonElement;
+    const buttonElement = document.createElement('div');
+    buttonElement.id = 'microphone';
+    buttonElement.classList.add('button-container');
+    buttonElement.onclick = Microphone.start;
+    const svgIconElement = SVGIconUtil.createSVGElement(MICROPHONE_ICON_STRING);
+    svgIconElement.id = 'microphone-icon';
+    buttonElement.appendChild(svgIconElement);
+    return buttonElement;
   }
 
   private static start() {
