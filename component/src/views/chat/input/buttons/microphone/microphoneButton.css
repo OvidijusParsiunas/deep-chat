@@ -7,10 +7,18 @@
   position: absolute;
   left: -6px;
   bottom: -9px;
-  filter: brightness(0) saturate(100%) invert(36%) sepia(0%) saturate(507%) hue-rotate(46deg) brightness(99%) contrast(97%);
   pointer-events: none;
 }
 
-.disabled-microphone {
+.default-microphone {
+  filter: brightness(0) saturate(100%) invert(36%) sepia(0%) saturate(507%) hue-rotate(46deg) brightness(99%) contrast(97%);
+}
+
+.active-microphone {
+  filter: brightness(0) saturate(100%) invert(72%) sepia(5%) saturate(4533%) hue-rotate(183deg) brightness(100%)
+    contrast(102%);
+}
+
+.unsupported-microphone {
   display: none;
 }

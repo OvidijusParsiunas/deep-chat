@@ -30,7 +30,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
     const {openAI, requestSettings, submitButtonStyles} = aiAssistant;
-    super(SubmitButton.createButtonContainerElement(), submitButtonStyles as Styles);
+    super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._key = key;
     this._messages = messages;
     this._inputElementRef = inputElementRef;

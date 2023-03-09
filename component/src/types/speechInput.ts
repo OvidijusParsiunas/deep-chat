@@ -3,7 +3,7 @@ import {ButtonElementStyles, ButtonPosition} from './button';
 export interface MicrophoneStyles {
   default?: ButtonElementStyles;
   active?: ButtonElementStyles;
-  disabled?: ButtonElementStyles;
+  unsupported?: ButtonElementStyles;
   position?: ButtonPosition;
 }
 

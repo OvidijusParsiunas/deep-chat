@@ -11,7 +11,7 @@ export class ButtonStyleEvents<T> {
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
 
-  constructor(buttonElement: HTMLElement, customStyles: T) {
+  constructor(buttonElement: HTMLElement, customStyles?: T) {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
   }
