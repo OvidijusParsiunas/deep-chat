@@ -1,5 +1,3 @@
-import {SubmitButtonElStyles} from '../../../../types/submitButtonInternal';
-import {ButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonElementStyles} from '../../../../types/button';
 import {StatefulStyle} from '../../../../types/styles';
 import {ButtonCSS} from './buttonCSS';
@@ -8,38 +6,44 @@ interface MouseState {
   state: keyof StatefulStyle;
 }
 
-export class ButtonStyleEvents {
+export class ButtonStyleEvents<T> {
   readonly elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
-  protected readonly _customStyles?: ButtonStateStyles;
+  protected readonly _customStyles?: T;
 
-  constructor(buttonElement: HTMLElement, customStyles: ButtonStateStyles) {
+  constructor(buttonElement: HTMLElement, customStyles: T) {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
   }
-  private buttonMouseLeave(button: HTMLElement, customStyles: ButtonElementStyles) {
-    ButtonCSS.unsetAllCSS(button, customStyles);
-    ButtonCSS.setElementsCSS(button, customStyles, 'default');
+  private buttonMouseLeave(customStyles: ButtonElementStyles) {
+    ButtonCSS.unsetAllCSS(this.elementRef, customStyles);
+    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'default');
     this._mouseState.state = 'default';
   }
 
-  private buttonMouseEnter(button: HTMLElement, customStyles: ButtonElementStyles) {
-    ButtonCSS.setElementsCSS(button, customStyles, 'hover');
+  private buttonMouseEnter(customStyles: ButtonElementStyles) {
+    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
     this._mouseState.state = 'hover';
   }
 
-  private buttonMouseDown(button: HTMLElement, customStyles: ButtonElementStyles) {
-    ButtonCSS.setElementsCSS(button, customStyles, 'click');
+  private buttonMouseDown(customStyles: ButtonElementStyles) {
+    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'click');
     this._mouseState.state = 'click';
   }
 
-  protected setEvents(button: HTMLElement, customStyles: ButtonElementStyles) {
-    button.onmousedown = this.buttonMouseDown.bind(this, button, customStyles);
-    button.onmouseenter = this.buttonMouseEnter.bind(this, button, customStyles);
-    button.onmouseleave = this.buttonMouseLeave.bind(this, button, customStyles);
+  private setEvents(customStyles: ButtonElementStyles) {
+    this.elementRef.onmousedown = this.buttonMouseDown.bind(this, customStyles);
+    this.elementRef.onmouseenter = this.buttonMouseEnter.bind(this, customStyles);
+    this.elementRef.onmouseleave = this.buttonMouseLeave.bind(this, customStyles);
   }
 
-  public unsetFirstAvailableStateStyle(unsetTypes: (keyof SubmitButtonElStyles)[]) {
+  private unsetEvents() {
+    this.elementRef.onmousedown = () => {};
+    this.elementRef.onmouseenter = () => {};
+    this.elementRef.onmouseleave = () => {};
+  }
+
+  public unsetFirstAvailableStateStyle(unsetTypes: (keyof T)[]) {
     if (!this._customStyles) return;
     for (let i = 0; i < unsetTypes.length; i += 1) {
       const type = unsetTypes[i];
@@ -48,13 +52,15 @@ export class ButtonStyleEvents {
     }
   }
 
-  public reapplyStateStyle(setType: keyof SubmitButtonElStyles, unsetTypes?: (keyof SubmitButtonElStyles)[]) {
+  public reapplyStateStyle(isFirst: boolean, setType: keyof T, unsetTypes?: (keyof T)[]) {
     if (!this._customStyles) return;
+    if (unsetTypes) this.unsetFirstAvailableStateStyle(unsetTypes);
     const setStyle = this._customStyles[setType];
     if (setStyle) {
-      if (unsetTypes) this.unsetFirstAvailableStateStyle(unsetTypes);
       ButtonCSS.setElementsCSS(this.elementRef, setStyle, this._mouseState.state);
-      this.setEvents(this.elementRef, setStyle);
+      this.setEvents(setStyle);
+    } else if (isFirst) {
+      this.unsetEvents();
     }
   }
 }

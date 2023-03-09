@@ -12,3 +12,5 @@ type BuildUniqueInterfaces<CompleteInterface, Interfaces> = Interfaces extends o
 type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
 export type InterfacesUnion<Interfaces> = BuildUniqueInterfaces<UnionToIntersection<Interfaces>, Interfaces>;
+
+export type OverrideTypes<T, U> = {[P in keyof T]: U};

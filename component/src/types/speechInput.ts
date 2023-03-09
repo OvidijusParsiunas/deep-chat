@@ -1,10 +1,10 @@
 import {ButtonElementStyles, ButtonPosition} from './button';
 
-export type SpeechInput =
-  | true
-  | {
-      default?: ButtonElementStyles;
-      active?: ButtonElementStyles;
-      disabled?: ButtonElementStyles;
-      position?: ButtonPosition;
-    };
+export interface MicrophoneStyles {
+  default?: ButtonElementStyles;
+  active?: ButtonElementStyles;
+  disabled?: ButtonElementStyles;
+  position?: ButtonPosition;
+}
+
+export type SpeechInput = true | MicrophoneStyles;
