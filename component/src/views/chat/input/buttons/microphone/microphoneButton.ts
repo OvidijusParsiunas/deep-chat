@@ -15,7 +15,7 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
   isActive = false;
   // private readonly _inputElementRef: HTMLElement;
 
-  constructor(speechInput: SpeechInput) {
+  constructor(speechInput: SpeechInput, inputElement: HTMLElement) {
     super(MicrophoneButton.createMicrophoneElement(), typeof speechInput === 'boolean' ? {} : speechInput);
     this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
     this.changeToDefault();
@@ -23,7 +23,7 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
     if (!speechRecognition) {
       this.changeToUnsupported();
     } else {
-      new SpeechToText(this, speechRecognition);
+      new SpeechToText(this, speechRecognition, inputElement);
     }
     // this._inputElementRef = inputElement;
   }

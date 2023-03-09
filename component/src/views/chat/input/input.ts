@@ -10,6 +10,7 @@ import {Messages} from '../messages/messages';
 export class Input {
   readonly elementRef: HTMLElement;
 
+  // prettier-ignore
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
     this.elementRef = document.createElement('div');
     this.elementRef.id = 'input';
@@ -17,18 +18,21 @@ export class Input {
     const submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submitUserText.bind(submitButton);
-    this.addElements(aiAssistant, keyboardInput.elementRef, submitButton.elementRef);
+    const microphoneButton = aiAssistant.speechInput
+      ? new MicrophoneButton(aiAssistant.speechInput, keyboardInput.inputElementRef) : undefined;
+    this.addElements(aiAssistant, keyboardInput.elementRef, submitButton.elementRef, microphoneButton?.elementRef);
   }
 
   // prettier-ignore
-  private addElements(aiAssistant: AiAssistant, keyboardInputEl: HTMLElement, submitButtonEl: HTMLElement) {
+  private addElements(aiAssistant: AiAssistant, keyboardInputEl: HTMLElement, submitButtonEl: HTMLElement,
+      microphoneButton?: HTMLElement) {
     ElementUtils.addElements(this.elementRef, keyboardInputEl);
     const sideContainers = SideContainers.create();
     ButtonPosition.add(this.elementRef, sideContainers, submitButtonEl,
       aiAssistant.submitButtonStyles?.position || 'inside-right');
-    if (aiAssistant.speechInput) {
-      ButtonPosition.add(this.elementRef, sideContainers, new MicrophoneButton(aiAssistant.speechInput).elementRef,
-        aiAssistant.submitButtonStyles?.position || 'outside-right');
+    if (microphoneButton && aiAssistant.speechInput) {
+      const position = typeof aiAssistant.speechInput === 'boolean' ? 'outside-right' : aiAssistant.speechInput.position;
+      ButtonPosition.add(this.elementRef, sideContainers, microphoneButton, position || 'outside-right');
     }
     SideContainers.add(this.elementRef, sideContainers);
   }

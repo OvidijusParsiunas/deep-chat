@@ -1,13 +1,25 @@
+import {KeyboardInput} from '../../keyboardInput/keyboardInput';
 import {MicrophoneButton} from './microphoneButton';
 
 /* eslint-disable max-len */
 export class SpeechToText {
   private readonly _recognition?: SpeechRecognition;
   private readonly _microphone: MicrophoneButton;
+  private readonly _inputElement: HTMLElement;
+  private _interimTextSpan: HTMLSpanElement;
+  private _finalTextSpan: HTMLSpanElement;
+  private _interimTranscript = '';
+  private _finalTranscript = '';
+  private prefixText = '';
 
-  constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}) {
+  constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}, inputElement: HTMLElement) {
     this._microphone = microphone;
     this._recognition = new speechRecognition();
+    this._recognition.continuous = true;
+    this._inputElement = inputElement;
+    this._finalTextSpan = document.createElement('span');
+    this._interimTextSpan = document.createElement('span');
+    this._interimTextSpan.id = 'interim-text';
     microphone.elementRef.onclick = this.buttonClick.bind(this);
   }
 
@@ -19,22 +31,26 @@ export class SpeechToText {
     }
   }
 
+  private onResult(event: SpeechRecognitionEvent) {
+    console.log(event);
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      const speechResult = event.results[i][0].transcript.toLowerCase();
+      if (event.results[i].isFinal) {
+        this._finalTranscript += speechResult;
+      } else {
+        this._interimTranscript += speechResult;
+      }
+      this._finalTranscript = SpeechToText.capitalizeFirstLetter(this._finalTranscript);
+      // this._finalTextSpan.innerHTML = linebreak(final_transcript);
+      this._finalTextSpan.innerHTML = this._finalTranscript;
+      this._interimTextSpan.innerHTML = this._interimTranscript;
+    }
+  }
+
   private start() {
     if (!this._recognition) return;
     this._recognition.start();
-    this._recognition.onresult = function (event) {
-      console.log(event);
-      // const speechResult = event.results[0][0].transcript.toLowerCase();
-      // for (var i = event.resultIndex; i < event.results.length; ++i) {
-      //   if (event.results[i].isFinal) {
-      //     final_transcript += event.results[i][0].transcript;
-      //   } else {
-      //     interim_transcript += event.results[i][0].transcript;
-      //   }
-      // }
-
-      // console.log(`Confidence: ${event.results[0][0].confidence}`);
-    };
+    this._recognition.onresult = this.onResult.bind(this);
     // this._recognition.onspeechend = function () {
     //   this._recognition.stop();
     //   // testBtn.disabled = false;
@@ -55,25 +71,46 @@ export class SpeechToText {
     //   //Fired when the speech recognition service has disconnected.
     //   console.log('SpeechRecognition.onend');
     // };
-
-    // this._recognition.onnomatch = function (event) {
-    //   //Fired when the speech recognition service returns a final result with no significant this._recognition. This may involve some degree of recognition, which doesn't meet or exceed the confidence threshold.
-    //   console.log('SpeechRecognition.onnomatch');
-    // };
-
-    this._recognition.onstart = function (event) {
-      //Fired when the speech recognition service has begun listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition.
-      console.log('SpeechRecognition.onstart');
-    };
   }
 
   private recordingStarted() {
     console.log('audio - start');
+    this.prepareText();
+    this.appendSpans();
     this._microphone.changeToActive();
   }
 
   private recordingEnded() {
     console.log('audio - end');
+    this.removeSpans();
     this._microphone.changeToDefault();
+  }
+
+  private static isCharASpace(character: string) {
+    return !!/^\s*$/.test(character);
+  }
+
+  private prepareText() {
+    KeyboardInput.removeTextIfPlaceholder(this._inputElement);
+    const lastCharacter = this._inputElement.textContent?.charAt(this._inputElement.textContent.length - 1) || '';
+    this.prefixText = SpeechToText.isCharASpace(lastCharacter) ? '' : ' ';
+  }
+
+  private appendSpans() {
+    this._inputElement.appendChild(this._finalTextSpan);
+    this._inputElement.appendChild(this._interimTextSpan);
+  }
+
+  private removeSpans() {
+    this._inputElement.removeChild(this._finalTextSpan);
+    this._inputElement.removeChild(this._interimTextSpan);
+  }
+
+  private processText(text: string, isFinal: boolean) {
+    return `${isFinal ? this.prefixText : ' '}${text}`;
+  }
+
+  private static capitalizeFirstLetter(text: string) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 }

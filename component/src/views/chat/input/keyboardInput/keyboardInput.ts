@@ -26,11 +26,15 @@ export class KeyboardInput {
     return inputElement;
   }
 
-  private onFocus() {
-    if (this.inputElementRef.classList.contains('keyboard-input-placeholder')) {
-      this.inputElementRef.textContent = '';
-      this.inputElementRef.classList.remove('keyboard-input-placeholder');
+  public static removeTextIfPlaceholder(inputElement: HTMLElement) {
+    if (inputElement.classList.contains('keyboard-input-placeholder')) {
+      inputElement.textContent = '';
+      inputElement.classList.remove('keyboard-input-placeholder');
     }
+  }
+
+  private onFocus() {
+    KeyboardInput.removeTextIfPlaceholder(this.inputElementRef);
   }
 
   private static createContainerElement(containerStyle?: CustomStyle) {
