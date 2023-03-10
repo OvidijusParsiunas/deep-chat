@@ -33,6 +33,10 @@ export class KeyboardInput {
     }
   }
 
+  public static toggleEditability(inputElement: HTMLElement, isEditable: boolean) {
+    inputElement.contentEditable = isEditable ? 'true' : 'false';
+  }
+
   private onFocus() {
     KeyboardInput.removeTextIfPlaceholder(this.inputElementRef);
   }

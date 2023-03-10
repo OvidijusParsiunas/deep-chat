@@ -1,7 +1,6 @@
 import {KeyboardInput} from '../../keyboardInput/keyboardInput';
 import {MicrophoneButton} from './microphoneButton';
 
-/* eslint-disable max-len */
 export class SpeechToText {
   private readonly _recognition?: SpeechRecognition;
   private readonly _microphone: MicrophoneButton;
@@ -25,7 +24,7 @@ export class SpeechToText {
 
   private buttonClick() {
     if (this._microphone.isActive) {
-      this._recognition?.stop();
+      this.stop();
     } else {
       this.start();
     }
@@ -75,35 +74,26 @@ export class SpeechToText {
 
   private recordingStarted() {
     console.log('audio - start');
-    this.prepareText();
+    this.prepareInputText();
     this.appendSpans();
     this._microphone.changeToActive();
-  }
-
-  private recordingEnded() {
-    console.log('audio - end');
-    this.removeSpans();
-    this._microphone.changeToDefault();
   }
 
   private static isCharASpace(character: string) {
     return !!/^\s*$/.test(character);
   }
 
-  private prepareText() {
+  private prepareInputText() {
     KeyboardInput.removeTextIfPlaceholder(this._inputElement);
+    KeyboardInput.toggleEditability(this._inputElement, false);
     const lastCharacter = this._inputElement.textContent?.charAt(this._inputElement.textContent.length - 1) || '';
     this.prefixText = SpeechToText.isCharASpace(lastCharacter) ? '' : ' ';
   }
 
+  // spans are removed when input el innertText is set
   private appendSpans() {
     this._inputElement.appendChild(this._finalTextSpan);
     this._inputElement.appendChild(this._interimTextSpan);
-  }
-
-  private removeSpans() {
-    this._inputElement.removeChild(this._finalTextSpan);
-    this._inputElement.removeChild(this._interimTextSpan);
   }
 
   private processText(text: string, isFinal: boolean) {
@@ -112,5 +102,29 @@ export class SpeechToText {
 
   private static capitalizeFirstLetter(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  private stop() {
+    this._recognition?.stop();
+    this.recordingEnded();
+  }
+
+  private recordingEnded() {
+    console.log('audio - end');
+    this._microphone.changeToDefault();
+    this.finaliseInputText();
+    this.resetTranscript();
+  }
+
+  private finaliseInputText() {
+    this._inputElement.textContent = this._inputElement.textContent as string;
+    KeyboardInput.toggleEditability(this._inputElement, true);
+  }
+
+  private resetTranscript() {
+    this._interimTranscript = '';
+    this._finalTranscript = '';
+    this._interimTextSpan.innerHTML = '';
+    this._finalTextSpan.innerHTML = '';
   }
 }
