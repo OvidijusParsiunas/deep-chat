@@ -6,7 +6,7 @@ interface MouseState {
   state: keyof StatefulStyle;
 }
 
-export class ButtonStyleEvents<T> {
+export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
   readonly elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
@@ -15,32 +15,30 @@ export class ButtonStyleEvents<T> {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
   }
-  private buttonMouseLeave(customStyles: ButtonElementStyles) {
-    ButtonCSS.unsetAllCSS(this.elementRef, customStyles);
-    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'default');
+  private buttonMouseLeave(customStyles?: ButtonElementStyles) {
     this._mouseState.state = 'default';
+    if (customStyles) {
+      ButtonCSS.unsetAllCSS(this.elementRef, customStyles);
+      ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'default');
+    }
   }
 
-  private buttonMouseEnter(customStyles: ButtonElementStyles) {
-    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
+  private buttonMouseEnter(customStyles?: ButtonElementStyles) {
     this._mouseState.state = 'hover';
+    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
   }
 
-  private buttonMouseDown(customStyles: ButtonElementStyles) {
-    ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'click');
+  private buttonMouseDown(customStyles?: ButtonElementStyles) {
     this._mouseState.state = 'click';
+    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'click');
   }
 
-  private setEvents(customStyles: ButtonElementStyles) {
+  // be careful not to use onclick as that is used for button functionality
+  private setEvents(customStyles?: ButtonElementStyles) {
     this.elementRef.onmousedown = this.buttonMouseDown.bind(this, customStyles);
+    this.elementRef.onmouseup = this.buttonMouseEnter.bind(this, customStyles);
     this.elementRef.onmouseenter = this.buttonMouseEnter.bind(this, customStyles);
     this.elementRef.onmouseleave = this.buttonMouseLeave.bind(this, customStyles);
-  }
-
-  private unsetEvents() {
-    this.elementRef.onmousedown = () => {};
-    this.elementRef.onmouseenter = () => {};
-    this.elementRef.onmouseleave = () => {};
   }
 
   public unsetFirstAvailableStateStyle(unsetTypes: (keyof T)[]) {
@@ -52,15 +50,11 @@ export class ButtonStyleEvents<T> {
     }
   }
 
-  public reapplyStateStyle(isFirst: boolean, setType: keyof T, unsetTypes?: (keyof T)[]) {
+  public reapplyStateStyle(setType: keyof T, unsetTypes?: (keyof T)[]) {
     if (!this._customStyles) return;
     if (unsetTypes) this.unsetFirstAvailableStateStyle(unsetTypes);
     const setStyle = this._customStyles[setType];
-    if (setStyle) {
-      ButtonCSS.setElementsCSS(this.elementRef, setStyle, this._mouseState.state);
-      this.setEvents(setStyle);
-    } else if (isFirst) {
-      this.unsetEvents();
-    }
+    if (setStyle) ButtonCSS.setElementsCSS(this.elementRef, setStyle, this._mouseState.state);
+    this.setEvents(setStyle);
   }
 }

@@ -106,7 +106,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private changeToStopIcon() {
     this.elementRef.classList.remove('loading-button');
     this.elementRef.replaceChildren(this._innerElements.stop);
-    this.reapplyStateStyle(false, 'stop', ['loading', 'submit']);
+    this.reapplyStateStyle('stop', ['loading', 'submit']);
     this.elementRef.onclick = this.stopStream.bind(this);
     this._isLoadingActive = false;
   }
@@ -114,7 +114,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private changeToLoadingIcon() {
     this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.add('loading-button');
-    this.reapplyStateStyle(false, 'loading', ['submit']);
+    this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};
     this._isRequestInProgress = true;
     this._isLoadingActive = true;

@@ -7,6 +7,6 @@ export class SubmitButtonStateStyle {
     } else {
       submitButton.unsetFirstAvailableStateStyle(['stop', 'loading', 'submit']);
     }
-    submitButton.reapplyStateStyle(true, 'submit');
+    submitButton.reapplyStateStyle('submit');
   }
 }

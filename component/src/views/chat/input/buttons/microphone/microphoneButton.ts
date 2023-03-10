@@ -58,22 +58,33 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
 
   public changeToActive() {
     this.elementRef.replaceChildren(this._innerElements.active);
-    this.elementRef.classList.replace('default-microphone', 'active-microphone');
-    this.reapplyStateStyle(false, 'active', ['default']);
+    this.toggleIconFilter(false);
+    this.reapplyStateStyle('active', ['default']);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
-    this.elementRef.classList.remove('active-microphone');
-    this.elementRef.classList.add('default-microphone');
-    this.reapplyStateStyle(true, 'default', ['active']);
+    this.toggleIconFilter(true);
+    this.reapplyStateStyle('default', ['active']);
     this.isActive = false;
   }
 
   private changeToUnsupported() {
     this.elementRef.replaceChildren(this._innerElements.unsupported);
     this.elementRef.classList.add('unsupported-microphone');
-    this.reapplyStateStyle(true, 'unsupported', ['active']);
+    this.reapplyStateStyle('unsupported', ['active']);
+  }
+
+  private toggleIconFilter(isDefault: boolean) {
+    const iconElement = this.elementRef.children[0];
+    if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
+      if (isDefault) {
+        iconElement.classList.remove('active-microphone');
+        iconElement.classList.add('default-microphone');
+      } else {
+        iconElement.classList.replace('default-microphone', 'active-microphone');
+      }
+    }
   }
 }
