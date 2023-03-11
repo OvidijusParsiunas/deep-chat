@@ -13,7 +13,6 @@ type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 export class MicrophoneButton extends ButtonStyleEvents<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
-  // private readonly _inputElementRef: HTMLElement;
 
   constructor(speechInput: SpeechInput, inputElement: HTMLElement) {
     super(MicrophoneButton.createMicrophoneElement(), typeof speechInput === 'boolean' ? {} : speechInput);
@@ -25,7 +24,6 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
     } else {
       new SpeechToText(this, speechRecognition, inputElement);
     }
-    // this._inputElementRef = inputElement;
   }
 
   private static createInnerElements(customStyles?: Styles) {
@@ -80,10 +78,10 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
     const iconElement = this.elementRef.children[0];
     if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
       if (isDefault) {
-        iconElement.classList.remove('active-microphone');
-        iconElement.classList.add('default-microphone');
+        iconElement.classList.remove('active-microphone-icon');
+        iconElement.classList.add('default-microphone-icon');
       } else {
-        iconElement.classList.replace('default-microphone', 'active-microphone');
+        iconElement.classList.replace('default-microphone-icon', 'active-microphone-icon');
       }
     }
   }

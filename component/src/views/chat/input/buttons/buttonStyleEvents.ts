@@ -54,7 +54,7 @@ export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
     if (!this._customStyles) return;
     if (unsetTypes) this.unsetFirstAvailableStateStyle(unsetTypes);
     const setStyle = this._customStyles[setType];
-    if (setStyle) ButtonCSS.setElementsCSS(this.elementRef, setStyle, this._mouseState.state);
+    if (setStyle) ButtonCSS.setElementCssUpToState(this.elementRef, setStyle, this._mouseState.state);
     this.setEvents(setStyle);
   }
 }
