@@ -13,15 +13,7 @@
           "members": [
             {
               "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "key",
+              "name": "apiKey",
               "type": {
                 "text": "string | undefined"
               }
@@ -51,7 +43,7 @@
               "kind": "field",
               "name": "speechInput",
               "type": {
-                "text": "boolean | undefined"
+                "text": "SpeechInput | undefined"
               }
             },
             {
@@ -63,30 +55,23 @@
             },
             {
               "kind": "field",
-              "name": "containerStyle",
+              "name": "chatboxStyle",
               "type": {
                 "text": "CustomStyle | undefined"
               }
             },
             {
               "kind": "field",
-              "name": "inputStyle",
+              "name": "inputStyles",
               "type": {
-                "text": "CustomStyle | undefined"
+                "text": "InputStyles | undefined"
               }
             },
             {
               "kind": "field",
-              "name": "defaultInputText",
+              "name": "submitButtonStyles",
               "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "submitButtonStyle",
-              "type": {
-                "text": "CustomStyle | undefined"
+                "text": "SubmitButtonStyles | undefined"
               }
             },
             {
@@ -121,7 +106,7 @@
               "kind": "field",
               "name": "errorMessage",
               "type": {
-                "text": "ErrorMessage | undefined"
+                "text": "ErrorMessages | undefined"
               }
             },
             {
@@ -139,8 +124,17 @@
               }
             },
             {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "changeToChatView",
+              "privacy": "private",
               "parameters": [
                 {
                   "name": "newKey",
@@ -244,6 +238,27 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/icons/microphone.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "MICROPHONE_ICON_STRING",
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"body_1\" width=\"35\" height=\"35\">\n\t<g transform=\"matrix(0.9459459 0 0 0.9459459 0 0)\">\n\t\t<g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n\t\t\t<g>\n\t\t\t\t<path d=\"M470.12 273.62C 469.6786 267.0614 464.2333 261.968 457.659 261.968C 451.0848 261.968 445.639 267.0618 445.198 273.62C 445.198 307.632 427.053 339.05798 397.6 356.065C 368.143 373.069 331.854 373.069 302.397 356.065C 272.944 339.057 254.79901 307.631 254.79901 273.62C 254.3576 267.0614 248.91231 261.968 242.33801 261.968C 235.76381 261.968 230.31801 267.0618 229.87701 273.62C 229.90826 303.311 240.92801 331.944 260.811 353.999C 280.694 376.054 308.034 389.968 337.565 393.065L337.565 393.065L337.565 423.362L287.67 423.362C 281.11142 423.8034 276.018 429.2487 276.018 435.823C 276.018 442.3933 281.11182 447.843 287.67 448.284L287.67 448.284L412.33002 448.284C 418.8886 447.8426 423.98203 442.3934 423.98203 435.823C 423.98203 429.2488 418.8882 423.803 412.33002 423.362L412.33002 423.362L362.49002 423.362L362.49002 393.065C 392.01 389.9556 419.338 376.034 439.209 353.979C 459.08002 331.928 470.092 303.303 470.12302 273.62L470.12302 273.62L470.12 273.62z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t\t<path d=\"M350 347.2C 369.453 347.1844 388.102 339.45392 401.855 325.696C 415.613 311.94202 423.34302 293.294 423.359 273.841L423.359 273.841L423.359 185.138C 423.359 158.927 409.379 134.70801 386.67902 121.607C 363.98 108.502 336.019 108.502 313.32 121.607C 290.621 134.709 276.64 158.927 276.64 185.138L276.64 185.138L276.64 273.618C 276.59314 293.10602 284.3041 311.81702 298.062 325.618C 311.824 339.423 330.50702 347.18402 350 347.2zM301.559 185.36002C 301.559 168.05502 310.7934 152.06302 325.78198 143.41101C 340.766 134.75871 359.235 134.75871 374.21997 143.41101C 389.20798 152.06331 398.44296 168.05602 398.44296 185.36002L398.44296 185.36002L398.44296 273.84003C 398.44296 291.14502 389.20856 307.13702 374.21997 315.78903C 359.23596 324.44135 340.76697 324.44135 325.78198 315.78903C 310.79398 307.13672 301.559 291.14404 301.559 273.84003z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t</g>\n\t\t</g>\n\t</g>\n</svg>\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MICROPHONE_ICON_STRING",
+          "declaration": {
+            "name": "MICROPHONE_ICON_STRING",
+            "module": "src/icons/microphone.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/icons/notVisibilityIcon.ts",
       "declarations": [
         {
@@ -313,6 +328,24 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/types/button.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/buttonInternal.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/input.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/messages.ts",
       "declarations": [],
       "exports": []
@@ -355,7 +388,19 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/types/speechInput.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/styles.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/submitButton.ts",
       "declarations": [],
       "exports": []
     },
@@ -570,363 +615,6 @@
           "declaration": {
             "name": "OpenAIClient",
             "module": "src/client/openAI/openAIClient.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/property.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "Property",
-          "parameters": [
-            {
-              "name": "type",
-              "type": {
-                "text": "AvailableTypes"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Property",
-          "declaration": {
-            "name": "Property",
-            "module": "src/utils/decorators/property.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/renderControl.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RenderControl",
-          "members": [
-            {
-              "kind": "method",
-              "name": "waitForPropertiesToBeUpdatedBeforeRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "attemptRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RenderControl",
-          "declaration": {
-            "name": "RenderControl",
-            "module": "src/utils/decorators/renderControl.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/typeConverters.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TypeConverters",
-          "members": [
-            {
-              "kind": "field",
-              "name": "attibutes",
-              "type": {
-                "text": "AttributeTypeConverters"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TypeConverters",
-          "declaration": {
-            "name": "TypeConverters",
-            "module": "src/utils/decorators/typeConverters.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/element/elementUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ElementUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "addElements",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parent",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "elements",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ElementUtils",
-          "declaration": {
-            "name": "ElementUtils",
-            "module": "src/utils/element/elementUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/svg/svgIconUtil.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SVGIconUtil",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createSVGElement",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "SVGGraphicsElement"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "svgString",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SVGIconUtil",
-          "declaration": {
-            "name": "SVGIconUtil",
-            "module": "src/utils/svg/svgIconUtil.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/webComponent/internalHTML.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InternalHTML",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_waitingToRender_",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_propUpdated_",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_attributes_",
-              "type": {
-                "text": "GenericObject<AttributeTypeConverter>"
-              },
-              "static": true,
-              "default": "{}"
-            },
-            {
-              "kind": "field",
-              "name": "_attributeToProperty_",
-              "type": {
-                "text": "GenericObject<string>"
-              },
-              "static": true,
-              "default": "{}"
-            },
-            {
-              "kind": "method",
-              "name": "onRender"
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InternalHTML",
-          "declaration": {
-            "name": "InternalHTML",
-            "module": "src/utils/webComponent/internalHTML.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/webComponent/styleUtil.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StyleUtil",
-          "members": [
-            {
-              "kind": "method",
-              "name": "apply",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot | null"
-                  }
-                },
-                {
-                  "name": "componentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "applyStyleSheet",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addStyleElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "componentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StyleUtil",
-          "declaration": {
-            "name": "StyleUtil",
-            "module": "src/utils/webComponent/styleUtil.ts"
           }
         }
       ]
@@ -1282,6 +970,426 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/utils/decorators/property.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Property",
+          "parameters": [
+            {
+              "name": "type",
+              "type": {
+                "text": "AvailableTypes"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Property",
+          "declaration": {
+            "name": "Property",
+            "module": "src/utils/decorators/property.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/renderControl.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RenderControl",
+          "members": [
+            {
+              "kind": "method",
+              "name": "waitForPropertiesToBeUpdatedBeforeRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "attemptRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RenderControl",
+          "declaration": {
+            "name": "RenderControl",
+            "module": "src/utils/decorators/renderControl.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/typeConverters.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TypeConverters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "attibutes",
+              "type": {
+                "text": "AttributeTypeConverters"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TypeConverters",
+          "declaration": {
+            "name": "TypeConverters",
+            "module": "src/utils/decorators/typeConverters.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/element/elementUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ElementUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parent",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "elements",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ElementUtils",
+          "declaration": {
+            "name": "ElementUtils",
+            "module": "src/utils/element/elementUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/element/styleUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StyleUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetStyle",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetAllCSSMouseStates",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "statefulStyle",
+                  "type": {
+                    "text": "StatefulStyle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StyleUtils",
+          "declaration": {
+            "name": "StyleUtils",
+            "module": "src/utils/element/styleUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/svg/svgIconUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SVGIconUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createSVGElement",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "SVGGraphicsElement"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "svgString",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SVGIconUtils",
+          "declaration": {
+            "name": "SVGIconUtils",
+            "module": "src/utils/svg/svgIconUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/internalHTML.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InternalHTML",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_waitingToRender_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_propUpdated_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_attributes_",
+              "type": {
+                "text": "GenericObject<AttributeTypeConverter>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_attributeToProperty_",
+              "type": {
+                "text": "GenericObject<string>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "method",
+              "name": "onRender"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InternalHTML",
+          "declaration": {
+            "name": "InternalHTML",
+            "module": "src/utils/webComponent/internalHTML.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/webComponentStyleUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WebComponentStyleUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "apply",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot | null"
+                  }
+                },
+                {
+                  "name": "componentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyStyleSheet",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addStyleElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "componentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WebComponentStyleUtils",
+          "declaration": {
+            "name": "WebComponentStyleUtils",
+            "module": "src/utils/webComponent/webComponentStyleUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts",
       "declarations": [
         {
@@ -1297,7 +1405,7 @@
               },
               "privacy": "private",
               "static": true,
-              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      startMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n      stream: true,\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
+              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      startMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
             },
             {
               "kind": "method",
@@ -1348,7 +1456,7 @@
               "type": {
                 "text": "string"
               },
-              "default": "'http://127.0.0.1:3000/v1/chat/completions'"
+              "default": "'https://api.openai.com/v1/chat/completions'"
             },
             {
               "kind": "method",
@@ -1530,21 +1638,58 @@
               }
             },
             {
-              "kind": "field",
-              "name": "_submitButton",
-              "type": {
-                "text": "SubmitButton"
-              },
+              "kind": "method",
+              "name": "createPanelElement",
               "privacy": "private",
-              "default": "new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant)"
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
             },
             {
-              "kind": "field",
-              "name": "id",
-              "type": {
-                "text": "string"
-              },
-              "default": "'input'"
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "panel",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "AiAssistant"
+                  }
+                },
+                {
+                  "name": "keyboardInputEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "submitButtonEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "microphoneButton",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",
@@ -1770,7 +1915,7 @@
               "kind": "field",
               "name": "_customErrorMessage",
               "type": {
-                "text": "ErrorMessage | undefined"
+                "text": "ErrorMessages | undefined"
               },
               "privacy": "private"
             },
@@ -1992,7 +2137,22 @@
             {
               "kind": "method",
               "name": "addNewErrorMessage",
-              "privacy": "public"
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof Omit<ErrorMessages, 'default'>"
+                  }
+                },
+                {
+                  "name": "message",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -2206,6 +2366,430 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonCSS.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonCSS",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetAllCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementsCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementCssUpToState",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonCSS",
+          "declaration": {
+            "name": "ButtonCSS",
+            "module": "src/views/chat/input/buttons/buttonCSS.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonPosition.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonPosition",
+          "members": [
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "sideContainers",
+                  "type": {
+                    "text": "SideContainersT"
+                  }
+                },
+                {
+                  "name": "buttonElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "ButtonPositionT"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonPosition",
+          "declaration": {
+            "name": "ButtonPosition",
+            "module": "src/views/chat/input/buttons/buttonPosition.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonStyleEvents.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonStyleEvents",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement"
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}"
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles"
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetFirstAvailableStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonStyleEvents",
+          "declaration": {
+            "name": "ButtonStyleEvents",
+            "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CustomButtonInnerElements",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createTextElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "string",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isText",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createCustomElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createSpecificStateElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ButtonInnerElements<T>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "states",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                },
+                {
+                  "name": "initId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CustomButtonInnerElements",
+          "declaration": {
+            "name": "CustomButtonInnerElements",
+            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
       "declarations": [
         {
@@ -2240,10 +2824,51 @@
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "defaultInputText",
+                  "name": "textStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "placeholderInputText",
                   "optional": true,
                   "type": {
                     "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
                   }
                 }
               ]
@@ -2260,7 +2885,7 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "inputStyle",
+                  "name": "chatboxStyle",
                   "optional": true,
                   "type": {
                     "text": "CustomStyle"
@@ -2334,19 +2959,156 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/speechInput/speechInput.ts",
+      "path": "src/views/chat/input/sideContainers/sideContainers.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "SpeechInput",
+          "name": "SideContainers",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "sideContainers",
+                  "type": {
+                    "text": "SideContainersT"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SideContainers",
+          "declaration": {
+            "name": "SideContainers",
+            "module": "src/views/chat/input/sideContainers/sideContainers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextToSpeech",
+          "members": [
+            {
+              "kind": "method",
+              "name": "speak",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextToSpeech",
+          "declaration": {
+            "name": "TextToSpeech",
+            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/microphone/microphoneButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MicrophoneButton",
           "members": [
             {
               "kind": "field",
-              "name": "elementRef",
+              "name": "_innerElements",
               "type": {
-                "text": "HTMLElement"
-              }
+                "text": "DefinedButtonInnerElements<Styles>"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "isActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createInnerElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "Styles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInnerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "baseButton",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof MicrophoneButton['_innerElements']"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "Styles"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -2356,9 +3118,424 @@
             },
             {
               "kind": "method",
-              "name": "start",
+              "name": "createSVGIconElement",
               "privacy": "private",
               "static": true
+            },
+            {
+              "kind": "method",
+              "name": "changeToActive",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "changeToDefault",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "changeToUnsupported",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleIconFilter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "isDefault",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unsetFirstAvailableStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ButtonStyleEvents",
+            "module": "/src/views/chat/input/buttons/buttonStyleEvents"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MicrophoneButton",
+          "declaration": {
+            "name": "MicrophoneButton",
+            "module": "src/views/chat/input/buttons/microphone/microphoneButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/microphone/speechToText.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SpeechToText",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_recognition",
+              "type": {
+                "text": "SpeechRecognition | undefined"
+              },
+              "privacy": "private",
+              "default": "new speechRecognition()"
+            },
+            {
+              "kind": "field",
+              "name": "_microphone",
+              "type": {
+                "text": "MicrophoneButton"
+              },
+              "privacy": "private",
+              "default": "microphone"
+            },
+            {
+              "kind": "field",
+              "name": "_inputElement",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "inputElement"
+            },
+            {
+              "kind": "field",
+              "name": "_interimTextSpan",
+              "type": {
+                "text": "HTMLSpanElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_finalTextSpan",
+              "type": {
+                "text": "HTMLSpanElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_interimTranscript",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_finalTranscript",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "prefixText",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_addErrorMessage",
+              "type": {
+                "text": "AddErrorMessage"
+              },
+              "privacy": "private",
+              "default": "addErrorMessage"
+            },
+            {
+              "kind": "method",
+              "name": "buttonClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "onResult",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "SpeechRecognitionEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "start",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "recordingStarted",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isCharASpace",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "character",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "prepareInputText",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "appendSpans",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "processText",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isFinal",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "capitalizeFirstLetter",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "stop",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "recordingEnded",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "finaliseInputText",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "resetTranscript",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "onError",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "continuous",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "default": "'interim-text'"
+            },
+            {
+              "kind": "field",
+              "name": "onclick"
             }
           ]
         }
@@ -2366,17 +3543,17 @@
       "exports": [
         {
           "kind": "js",
-          "name": "SpeechInput",
+          "name": "SpeechToText",
           "declaration": {
-            "name": "SpeechInput",
-            "module": "src/views/chat/input/speechInput/speechInput.ts"
+            "name": "SpeechToText",
+            "module": "src/views/chat/input/buttons/microphone/speechToText.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/submitButton/submitButton.ts",
+      "path": "src/views/chat/input/buttons/submit/submitButton.ts",
       "declarations": [
         {
           "kind": "class",
@@ -2386,6 +3563,15 @@
             {
               "kind": "field",
               "name": "_isRequestInProgress",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_isLoadingActive",
               "type": {
                 "text": "boolean"
               },
@@ -2437,44 +3623,12 @@
             },
             {
               "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
               "name": "_inputElementRef",
               "type": {
                 "text": "HTMLElement"
               },
               "privacy": "private",
               "default": "inputElementRef"
-            },
-            {
-              "kind": "field",
-              "name": "_submitIconElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "this.elementRef.children[0]"
-            },
-            {
-              "kind": "field",
-              "name": "_stopIconElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_loadingIconElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
             },
             {
               "kind": "field",
@@ -2486,9 +3640,29 @@
               "default": "new AbortController()"
             },
             {
-              "kind": "method",
-              "name": "createButtonElement",
+              "kind": "field",
+              "name": "_innerElements",
+              "type": {
+                "text": "DefinedButtonInnerElements<Styles>"
+              },
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createInnerElements",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createButtonContainerElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createSubmitIconElement",
+              "privacy": "private",
+              "static": true
             },
             {
               "kind": "method",
@@ -2500,15 +3674,7 @@
               "kind": "method",
               "name": "createStopIconElement",
               "privacy": "private",
-              "parameters": [
-                {
-                  "name": "style",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
+              "static": true
             },
             {
               "kind": "method",
@@ -2547,8 +3713,163 @@
               "kind": "method",
               "name": "changeToSubmitIcon",
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles",
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonElementStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unsetFirstAvailableStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ButtonStyleEvents",
+                "module": "src/views/chat/input/buttons/buttonStyleEvents.ts"
+              }
             }
-          ]
+          ],
+          "superclass": {
+            "name": "ButtonStyleEvents",
+            "module": "/src/views/chat/input/buttons/buttonStyleEvents"
+          }
         }
       ],
       "exports": [
@@ -2557,30 +3878,36 @@
           "name": "SubmitButton",
           "declaration": {
             "name": "SubmitButton",
-            "module": "src/views/chat/input/submitButton/submitButton.ts"
+            "module": "src/views/chat/input/buttons/submit/submitButton.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
+      "path": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "TextToSpeech",
+          "name": "SubmitButtonStateStyle",
           "members": [
             {
               "kind": "method",
-              "name": "speak",
+              "name": "resetSubmit",
               "privacy": "public",
               "static": true,
               "parameters": [
                 {
-                  "name": "text",
+                  "name": "submitButton",
                   "type": {
-                    "text": "string"
+                    "text": "SubmitButton"
+                  }
+                },
+                {
+                  "name": "wasLoading",
+                  "type": {
+                    "text": "boolean"
                   }
                 }
               ]
@@ -2591,10 +3918,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "TextToSpeech",
+          "name": "SubmitButtonStateStyle",
           "declaration": {
-            "name": "TextToSpeech",
-            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+            "name": "SubmitButtonStateStyle",
+            "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
           }
         }
       ]

@@ -1,6 +1,6 @@
 {
   "name": "ai-assistant-react",
-  "version": "0.0.2",
+  "version": "0.0.14",
   "description": "Ai Assistant wrapper for React",
   "main": "./dist/aiAssistant.js",
   "module": "./dist/aiAssistant.js",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@lit-labs/react": "^1.1.1",
-    "ai-assistant": "^0.0.4",
+    "ai-assistant": "^0.0.16",
     "react": "^18.2.0"
   },
   "devDependencies": {

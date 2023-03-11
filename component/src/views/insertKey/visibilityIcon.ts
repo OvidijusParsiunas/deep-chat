@@ -1,6 +1,6 @@
 import {VISIBLE_ICON_STRING} from '../../icons/notVisibilityIcon';
 import {NOT_VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
-import {SVGIconUtil} from '../../utils/svg/svgIconUtil';
+import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 
 export class VisibilityIcon {
   private static VISIBLE_ICON_ID = 'visible-icon';
@@ -21,7 +21,7 @@ export class VisibilityIcon {
   }
 
   private static createIconElement(iconString: string, id: string) {
-    const iconElement = SVGIconUtil.createSVGElement(iconString);
+    const iconElement = SVGIconUtils.createSVGElement(iconString);
     iconElement.id = id;
     iconElement.classList.add('visibility-icon');
     return iconElement;

@@ -8,7 +8,7 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {RequestSettings} from '../../../../../types/requestSettings';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
-import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
+import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {AiAssistant} from '../../../../../aiAssistant';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
@@ -60,7 +60,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   private static createSubmitIconElement() {
-    const svgIconElement = SVGIconUtil.createSVGElement(SUBMIT_ICON_STRING);
+    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
     svgIconElement.id = 'submit-icon';
     return svgIconElement;
   }

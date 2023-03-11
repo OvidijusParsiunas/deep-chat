@@ -118,16 +118,16 @@ export class Messages {
     }
   }
 
+  // prettier-ignore
   public addNewErrorMessage(type: keyof Omit<ErrorMessages, 'default'>, message?: string) {
     this.removeStreamedMessageIfEmpty();
-    const customDetails = this._customErrorMessage?.[type] || this._customErrorMessage?.default;
-    const text = customDetails?.text || message || 'Error, please try again.';
     const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
     textElement.classList.add('error-message-text');
+    const text = this._customErrorMessage?.[type]?.text || this._customErrorMessage?.default?.text ||
+      message || 'Error, please try again.';
     textElement.innerHTML = text;
-    if (customDetails?.styles) {
-      Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, customDetails.styles);
-    }
+    const styles = this._customErrorMessage?.[type]?.styles || this._customErrorMessage?.default?.styles;
+    if (styles) Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, styles);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);

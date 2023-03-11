@@ -41,10 +41,10 @@ export class KeyboardInput {
     KeyboardInput.removeTextIfPlaceholder(this.inputElementRef);
   }
 
-  private static createContainerElement(containerStyle?: CustomStyle) {
+  private static createContainerElement(chatboxStyle?: CustomStyle) {
     const contentContainerElement = document.createElement('div');
     contentContainerElement.id = 'keyboard-input-container';
-    Object.assign(contentContainerElement.style, containerStyle);
+    Object.assign(contentContainerElement.style, chatboxStyle);
     return contentContainerElement;
   }
 

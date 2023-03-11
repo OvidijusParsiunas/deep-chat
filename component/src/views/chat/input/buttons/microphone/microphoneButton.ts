@@ -2,7 +2,7 @@ import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../
 import {MicrophoneStyles, SpeechInput} from '../../../../../types/speechInput';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
-import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
+import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {AddErrorMessage, SpeechToText} from './speechToText';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
 
@@ -49,7 +49,7 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
   }
 
   private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtil.createSVGElement(MICROPHONE_ICON_STRING);
+    const svgIconElement = SVGIconUtils.createSVGElement(MICROPHONE_ICON_STRING);
     svgIconElement.id = 'microphone-icon';
     return svgIconElement;
   }

@@ -6,5 +6,5 @@
 #chat {
   height: 100%;
   display: grid;
-  grid-template-columns: 400px;
+  grid-template-columns: 100%;
 }

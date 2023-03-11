@@ -1,5 +1,5 @@
 import {ButtonInnerElements, ButtonStateStyles} from '../../../../types/buttonInternal';
-import {SVGIconUtil} from '../../../../utils/svg/svgIconUtil';
+import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 
 export class CustomButtonInnerElements {
   private static createTextElement(text: string) {
@@ -9,7 +9,7 @@ export class CustomButtonInnerElements {
   }
 
   private static createElement(string: string, isText: boolean) {
-    return isText ? CustomButtonInnerElements.createTextElement(string) : SVGIconUtil.createSVGElement(string);
+    return isText ? CustomButtonInnerElements.createTextElement(string) : SVGIconUtils.createSVGElement(string);
   }
 
   private static createCustomElement<T>(customStyles: ButtonStateStyles<T>, state: keyof T) {

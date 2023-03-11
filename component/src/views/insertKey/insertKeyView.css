@@ -6,10 +6,11 @@
 #insert-key-contents {
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: 47%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
+  display: flex;
 }
 
 #insert-key-title {
@@ -17,8 +18,8 @@
 }
 
 #insert-key-input-container {
-  width: calc(100% - 95px);
-  display: inline-block;
+  margin-right: 35px;
+  width: calc(100% - 86px);
 }
 
 #insert-key-input {
@@ -69,21 +70,18 @@
 }
 
 #start-button {
-  float: right;
-  margin-left: 24px;
   border: 1px solid grey;
-  color: #454545;
+  color: rgb(69, 69, 69);
   border-radius: 4px;
-  width: 46px;
+  width: 47px;
   height: 23px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 1px;
-  padding-top: 0.5px;
-  padding-bottom: 1.5px;
+  padding: 0.5px 1px 1.5px;
   user-select: none;
+  background-color: white;
 }
 
 #start-button:hover {
@@ -95,21 +93,23 @@
 }
 
 #insert-key-help-text-container {
-  position: relative;
-  padding-left: 10px;
+  width: 100%;
+  position: absolute;
+  margin-top: 32px;
   margin-bottom: 20px;
+  padding-left: 10px;
   padding-right: 30px;
 }
 
 #insert-key-help-text-contents {
-  margin-top: 10px;
+  margin-left: -14px;
   position: absolute;
   transform: translateX(50%);
 }
 
 #insert-key-input-invalid-text {
   display: block;
-  margin-top: 5px;
+  margin-top: 12px;
   margin-bottom: 12px;
   padding-left: 2px;
   font-size: 15px;
@@ -118,7 +118,7 @@
 
 #insert-key-input-help-link {
   display: block;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 #loading-ring {

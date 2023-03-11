@@ -1,7 +1,7 @@
 import {CustomMessageStyles, ErrorMessages, MessageContent, OnNewMessage} from './types/messages';
+import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
-import {StyleUtil} from './utils/webComponent/styleUtil';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
@@ -15,10 +15,8 @@ import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
 export class AiAssistant extends InternalHTML {
-  private readonly _elementRef: HTMLElement;
-
   @Property('string')
-  key?: string;
+  apiKey?: string;
 
   @Property('object')
   openAI?: OpenAI;
@@ -29,6 +27,7 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   requestSettings?: RequestSettings;
 
+  // WORK - when this is set input class should be set to -5px
   @Property('boolean')
   speechInput?: SpeechInput;
 
@@ -36,7 +35,7 @@ export class AiAssistant extends InternalHTML {
   speechOutput?: boolean;
 
   @Property('object')
-  containerStyle?: CustomStyle;
+  chatboxStyle?: CustomStyle;
 
   @Property('object')
   inputStyles?: InputStyles;
@@ -65,30 +64,30 @@ export class AiAssistant extends InternalHTML {
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
+  // TO-DO - key view style
+  // TO-DO - getMessages()
+
   constructor() {
     super();
-    this._elementRef = AiAssistant.createContainerElement();
+    this._elementRef = document.createElement('div');
+    this._elementRef.id = 'chatbox';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
-    StyleUtil.apply(style, this.shadowRoot, this._elementRef);
-    Object.assign(this._elementRef.style, this.containerStyle);
+    WebComponentStyleUtils.apply(style, this.shadowRoot, this._elementRef);
     InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
   }
 
-  changeToChatView(newKey: string) {
-    this.key = newKey;
-    this.onRender();
-  }
+  private readonly _elementRef: HTMLElement;
 
-  private static createContainerElement() {
-    const container = document.createElement('div');
-    container.id = 'ai-assistant-container';
-    return container;
+  private changeToChatView(newKey: string) {
+    this.apiKey = newKey;
+    this.onRender();
   }
 
   override onRender() {
     console.log('render');
-    if (this.startWithChatView || this.key) {
-      ChatView.render(this._elementRef, this.key || '', this);
+    Object.assign(this._elementRef.style, this.chatboxStyle);
+    if (this.startWithChatView || this.apiKey) {
+      ChatView.render(this._elementRef, this.apiKey || '', this);
     }
   }
 }

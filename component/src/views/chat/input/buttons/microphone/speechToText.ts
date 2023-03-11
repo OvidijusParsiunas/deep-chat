@@ -30,18 +30,10 @@ export class SpeechToText {
   }
 
   private buttonClick() {
-    this.onError();
     if (this._microphone.isActive) {
       this.stop();
     } else {
-      this.recordingStarted();
-      this._finalTextSpan.innerHTML = this.processText('Final', true);
-      this._interimTextSpan.innerHTML = this.processText('Interim', false);
-      setTimeout(() => {
-        this._finalTextSpan.innerHTML = this.processText('Final', true);
-        this._interimTextSpan.innerHTML = this.processText('Interim sdfdsgsdfdsfsdfsdf', false);
-      }, 500);
-      // this.start();
+      this.start();
     }
   }
 
@@ -108,7 +100,8 @@ export class SpeechToText {
   }
 
   private processText(text: string, isFinal: boolean) {
-    return `${isFinal ? this.prefixText : ' '}${text}`;
+    const processedCases = isFinal ? SpeechToText.capitalizeFirstLetter(text) : text;
+    return `${isFinal ? this.prefixText : ' '}${processedCases}`;
   }
 
   private static capitalizeFirstLetter(text: string) {

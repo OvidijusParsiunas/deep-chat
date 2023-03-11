@@ -1,11 +1,11 @@
-export class StyleUtil {
+export class WebComponentStyleUtils {
   public static apply(style: string, shadowRoot: ShadowRoot | null, componentElement: HTMLElement) {
     if (!shadowRoot) return;
     try {
-      StyleUtil.applyStyleSheet(style, shadowRoot);
+      WebComponentStyleUtils.applyStyleSheet(style, shadowRoot);
     } catch (err) {
       // fallback for if CSSStyleSheet is not supported (Safari)
-      StyleUtil.addStyleElement(style, componentElement, shadowRoot);
+      WebComponentStyleUtils.addStyleElement(style, componentElement, shadowRoot);
     }
   }
 

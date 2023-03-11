@@ -6,11 +6,11 @@
   all: initial;
 }
 
-#ai-assistant-container {
-  width: 400px;
-  height: 300px;
-  border: 1px solid grey;
-  border-radius: 3px;
+#chatbox {
+  height: 350px;
+  width: 320px;
+  border: 1px solid #cacaca;
+  border-radius: 8px;
   font-family: Söhne, ui-sans-serif, system-ui;
   font-size: 14px;
   background-color: white;
