@@ -1,0 +1,252 @@
+/**
+ * Any CSS included here will be global.
+ */
+
+:root {
+  --ifm-table-container-background-color: #ffffff;
+  --ifm-table-container-border: 0.5px solid #eeeeee;
+  --ifm-color-primary: #3584d3;
+  --ifm-link-color: #114674;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --feature-title: #3f3f3f;
+  --text-code-background-color: #f0f0f0;
+  --text-code-border-color: rgb(240, 240, 240);
+  --code-background: #fbfbfb;
+  --footer-text-color: #4f4f4f;
+  --code-plain-color: #144367;
+  --code-function-color: #0080ff;
+  --code-tag-color: #1b76bc;
+  --code-punctuation-color: #393a34;
+  --code-attr-name-color: #008af2;
+  --code-attr-value-color: #053466;
+  --start-button-color: #343434;
+  --start-button-border: 1px solid black;
+  --start-button-background-color: white;
+  --start-button-background-hover-color: #f7f7f7;
+  --start-button-background-click-color: #ebebeb;
+}
+
+[data-theme='dark'] {
+  --ifm-table-container-background-color: #282a36;
+  --ifm-table-container-border: unset;
+  --ifm-color-primary: #5da9f6;
+  --ifm-link-color: #c8e6ff;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --feature-title: white;
+  --text-code-border-color: #282a36;
+  --text-code-background-color: #3c3c3c;
+  --code-background: #282a36;
+  --footer-text-color: white;
+  --code-plain-color: white;
+  --code-function-color: white;
+  --code-tag-color: white;
+  --code-punctuation-color: white;
+  --code-attr-name-color: white;
+  --code-attr-value-color: white;
+  --start-button-color: white;
+  --start-button-border: unset;
+  --start-button-background-color: #555555;
+  --start-button-background-hover-color: #3e3e3e;
+  --start-button-background-click-color: #343434;
+}
+
+.theme-doc-sidebar-container {
+  border-right: unset !important;
+}
+
+.menu__link {
+  border-radius: 5px !important;
+}
+
+.menu__link:hover {
+  background-color: #6161610d;
+}
+
+.menu__link--active {
+  background-color: #6161610d !important;
+}
+
+.menu__list {
+  width: 200px !important;
+}
+
+.navbar__link--active {
+  color: var(--feature-title) !important;
+}
+
+.navbar__link--active:hover {
+  color: var(--ifm-color-primary) !important;
+}
+
+.table-of-contents {
+  border-left: unset;
+}
+
+.menu {
+  width: fit-content !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+code {
+  border: 1px solid var(--text-code-border-color) !important;
+  background-color: var(--text-code-background-color);
+  padding: 1.5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.tabs {
+  background-color: var(--ifm-table-container-background-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border: var(--ifm-table-container-border);
+  border-bottom: 'unset';
+  border-top: 'unset';
+}
+
+.margin-top--md {
+  margin-top: 0px !important;
+  border-top: 1px solid #dadde1;
+}
+
+.margin-top--md .language-text {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.margin-top--md code {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+:root {
+  --ifm-code-font-size: 87%;
+}
+
+.documentation-example-container {
+  background-image: linear-gradient(330deg, #3240ff 0%, #00e3ff 100%);
+  justify-content: center;
+  display: flex;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 18px 18px 18px;
+}
+
+.documentation-method-button {
+  padding: 10px;
+  background-color: #3b8ddf;
+  border: unset;
+  border-radius: 5px;
+  color: white;
+  font-size: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.documentation-method-button:hover {
+  background-color: #4b99e7;
+}
+
+.documentation-method-button:active {
+  background-color: #3f90e0;
+}
+
+.prism-code {
+  background-color: var(--code-background);
+}
+
+.navbar__title {
+  background: -webkit-linear-gradient(0deg, rgb(86, 155, 224), #2e60bd);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: -2px;
+  font-size: 20px;
+}
+
+.navbar--fixed-top {
+  box-shadow: unset;
+}
+
+.header-github-link:hover {
+  opacity: 0.6;
+}
+
+.header-github-link:before {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+  content: '';
+  display: flex;
+  height: 22px;
+  width: 22px;
+  filter: brightness(0) saturate(100%) invert(13%) sepia(35%) saturate(1296%) hue-rotate(178deg) brightness(99%)
+    contrast(93%);
+}
+
+html[data-theme='dark'] .header-github-link:before {
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(87%) saturate(2%) hue-rotate(56deg) brightness(106%)
+    contrast(100%);
+}
+
+/* overwriting code blocks */
+
+/* installation */
+.function {
+  color: var(--code-function-color) !important;
+}
+
+.plain {
+  color: var(--code-plain-color) !important;
+}
+
+/* API */
+.tag {
+  color: var(--code-tag-color) !important;
+}
+
+.attr-name {
+  color: var(--code-attr-name-color) !important;
+}
+
+.attr-value {
+  color: var(--code-attr-value-color) !important;
+}
+
+.punctuation {
+  color: var(--code-punctuation-color) !important;
+}
+
+@media (max-width: 575px) {
+  .documentation-example-container {
+    display: none;
+  }
+
+  h4.anchor {
+    display: none;
+  }
+
+  .tabs-container {
+    display: none;
+  }
+}
+
+/* algolia fix to not remove the scrollbar when opened as it would move the tables */
+body.DocSearch--active {
+  overflow: auto !important;
+}

@@ -1,0 +1,27 @@
+#customization {
+  margin-top: 80px;
+}
+
+#customization {
+  margin-top: 80px;
+}
+
+#customization-top {
+  display: flex;
+  margin-top: 30px;
+}
+
+.customization-panel {
+  width: 50%;
+}
+
+.customization-panel-table {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#customization-bottom {
+  display: flex;
+  margin-top: 50px;
+}

@@ -1,0 +1,18 @@
+#programmatic-updates {
+  display: flex;
+  margin-top: 120px;
+}
+
+#programmatic-updates-left {
+  width: 50%;
+}
+
+#programmatic-updates-left-table {
+  width: 85%;
+  float: right;
+  margin-right: 10px;
+}
+
+#programmatic-updates-right {
+  width: 50%;
+}

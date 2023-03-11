@@ -1,0 +1,10 @@
+#responsive-design {
+  margin-top: 120px;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+.responsive-design-panel {
+  width: calc(50% - 20px);
+  display: flex;
+}

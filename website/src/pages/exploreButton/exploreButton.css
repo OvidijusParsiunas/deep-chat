@@ -1,0 +1,27 @@
+#explore-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 120px;
+  margin-bottom: 120px;
+}
+
+#explore-button {
+  color: white;
+  padding-right: 28px !important;
+  padding-left: 28px !important;
+  padding-bottom: 10px !important;
+  background-color: #1c2d4b !important;
+  margin-right: unset !important;
+  height: 50px !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  padding-top: 8px !important;
+}
+
+#explore-button:hover {
+  background-color: #2b4169 !important;
+}
+
+#explore-button:active {
+  background-color: #223558 !important;
+}

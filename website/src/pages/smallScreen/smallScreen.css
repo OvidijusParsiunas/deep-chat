@@ -1,0 +1,10 @@
+#small-screen {
+  display: none;
+}
+
+#small-screen-table {
+  margin-top: 70px;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+}

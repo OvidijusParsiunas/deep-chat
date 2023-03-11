@@ -1,0 +1,32 @@
+#features-container {
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#features-header {
+  background: -webkit-linear-gradient(20deg, rgb(103, 159, 212), rgb(40, 105, 155));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  font-size: 2.9rem;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.25;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
+    'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+.feature-sub-header {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--feature-title);
+}
+
+.feature-text {
+  text-align: center;
+  padding: 10%;
+  font-size: 20px;
+}

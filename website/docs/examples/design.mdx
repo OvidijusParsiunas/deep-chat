@@ -1,0 +1,127 @@
+---
+sidebar_position: 0
+---
+
+# Design
+
+Base table examples to help you get started.
+
+### Unique column types {#uniqueColumnTypes}
+
+This example makes use of the [`customColumnsSettings`](../docs/column#customColumnsSettings) property to set static types for individual columns. The _Date Created_
+column has two available date formats.
+
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import CodeToggle from '@site/src/components/toggle/codeToggle';
+import TableContainer from '@site/src/components/table/tableContainer';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavToggle()}</BrowserOnly>
+
+<TableContainer>
+  <ActiveTable
+    customColumnsSettings={[
+      {headerName: 'Planet', availableDefaultColumnTypes: ['text']},
+      {headerName: 'Age', availableDefaultColumnTypes: ['number']},
+      {headerName: 'Shape', availableDefaultColumnTypes: ['Select']},
+      {
+        headerName: 'Date Created',
+        defaultColumnTypeName: 'Date d-m-y',
+        availableDefaultColumnTypes: ['Date d-m-y', 'Date m-d-y'],
+      },
+    ]}
+    content={[
+      ['Planet', 'Age', 'Shape', 'Date Created'],
+      ['Earth', 12756, 'Sphere', '01-02-2012'],
+      ['Mars', 6792, 'Dinosaur', '14-05-1990'],
+      ['Jupiter', 142984, 'Triangle', '04-12-2020'],
+      ['Saturn', 120536, 'Square', '23-10-2008'],
+      ['Neptune', 49528, 'Flat', '19-02-2006'],
+    ]}
+    tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
+  ></ActiveTable>
+</TableContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<active-table
+  customColumnsSettings='[
+    { "headerName": "Planet", "availableDefaultColumnTypes": ["text"] },
+    { "headerName": "Number", "availableDefaultColumnTypes": ["number"] },
+    { "headerName": "Shape", "availableDefaultColumnTypes": ["Select"] },
+    { "headerName": "Date Created", "defaultColumnTypeName": "Date d-m-y", "availableDefaultColumnTypes": ["Date d-m-y", "Date m-d-y"] }
+  ]'
+  content='[
+    ["Planet", "Age", "Shape", "Date Created"],
+    ["Earth", 12756, "Sphere", "01-02-2012"],
+    ["Mars", 6792, "Dinosaur", "14-05-1990"],
+    ["Jupiter", 142984, "Triangle", "04-12-2020"],
+    ["Saturn", 120536, "Square", "23-10-2008"],
+    ["Neptune", 49528, "Flat", "19-02-2006"]]'
+  tableStyle='{"borderRadius":"2px"}'
+></active-table>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Not editbale {#notEditable}
+
+Data in this table cannot be changed.
+
+<TableContainer minHeight="262">
+  <ActiveTable
+    isCellTextEditable={false}
+    displayAddNewColumn={false}
+    displayAddNewRow={false}
+    columnDropdown={{displaySettings: {isAvailable: false}}}
+    rowDropdown={{displaySettings: {isAvailable: false}}}
+    frameComponentsStyle={{style: {hoverColors: {backgroundColor: 'white'}}}}
+    headerStyles={{hoverColors: {backgroundColor: 'white'}}}
+    content={[
+      ['Planet', 'Diameter', 'Mass', 'Moons', 'Density'],
+      ['Earth', 12756, 5.97, 1, 5514],
+      ['Mars', 6792, 0.642, 2, 3934],
+      ['Jupiter', 142984, 1898, 79, 1326],
+      ['Saturn', 120536, 568, 82, 687],
+      ['Neptune', 49528, 102, 14, 1638],
+    ]}
+    tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
+  ></ActiveTable>
+</TableContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<active-table
+  isCellTextEditable="false"
+  displayAddNewColumn="false"
+  displayAddNewRow="false"
+  columnDropdown='{ "displaySettings": { "isAvailable": "false"}}'
+  rowDropdown='{ "displaySettings": { "isAvailable": "false"}}'
+  frameComponentsStyle='{ "style": { "hoverColors": { "backgroundColor": "white"}}}'
+  headerStyles='{ "hoverColors": { "backgroundColor": "white"}}'
+  content='[
+    ["Planet", "Diameter", "Mass", "Moons","Density"],
+    ["Earth", 12756, 5.97, 1, 5514],
+    ["Mars", 6792, 0.642, 2, 3934],
+    ["Saturn", 120536, 568, 82, 687],
+    ["Neptune", 49528, 102, 14, 1638]]'
+  tableStyle='{"borderRadius":"2px"}'
+></active-table>
+```
+
+</TabItem>
+</CodeToggle>

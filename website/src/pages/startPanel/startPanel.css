@@ -1,0 +1,169 @@
+#start-panel {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  /* prevents panels below from moving to the side if the user adds new rows to the table */
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1%;
+  margin-top: 40px;
+}
+
+#start-panel-content {
+  position: absolute;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  top: 50%;
+  margin-left: 55px;
+  margin-right: 55px;
+  transform: translateY(-60%);
+}
+
+#start-panel-left {
+  float: left;
+  width: 50%;
+  padding-top: 5px;
+}
+
+#start-colored-header {
+  font-weight: 800;
+  font-size: 3.75rem;
+  background-image: linear-gradient(to right, rgb(104, 159, 214), rgb(44, 97, 150), rgb(56, 114, 172), rgb(104, 159, 214));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: color-change 700s linear infinite;
+}
+
+@keyframes color-change {
+  to {
+    background-position: 4500vh;
+  }
+}
+
+/* #start-colored-header {
+  background: -webkit-linear-gradient(20deg, rgb(86, 155, 224), #333);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  font-size: 3.75rem;
+} */
+
+#start-sub-header {
+  font-weight: 800;
+  font-size: 2.7rem;
+}
+
+#start-buttons {
+  margin-top: 30px;
+}
+
+/* need to use !important as it is on an anchor (a) element  */
+.start-button {
+  margin-right: 20px;
+  background-color: var(--start-button-background-color);
+  border: var(--start-button-border) !important;
+  color: var(--start-button-color) !important;
+  font-weight: 500 !important;
+  font-size: 1.05rem !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
+}
+
+.start-button:hover {
+  background-color: var(--start-button-background-hover-color) !important;
+}
+
+.start-button:active {
+  background-color: var(--start-button-background-click-color) !important;
+}
+
+#start-panel-right {
+  float: right;
+  padding-left: 5px;
+  padding-top: 20px;
+  text-align: center;
+  width: 50%;
+}
+
+#start-panel-right-table {
+  width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* REF-39 - fade in */
+
+/* use class instead of a selector when we the required element reference is available from the very start */
+.invisible-component {
+  opacity: 0;
+}
+
+/* using selector for homepage as the navbar needs to have opacity: 0 from the very start and not when the element is found */
+.plugin-pages > body > #__docusaurus > nav {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1.8s !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-height: 800px) {
+  #start-panel {
+    height: calc(100vh - 60px);
+    margin-top: 0px;
+  }
+}
+
+@media (max-height: 620px) {
+  #start-panel-content {
+    transform: translateY(-55%) !important;
+  }
+}
+
+@media (max-height: 500px) {
+  #start-panel-content {
+    transform: translateY(-50%) !important;
+  }
+
+  #features-header {
+    margin-top: 40px !important;
+  }
+}
+
+@media (max-height: 410px) {
+  #start-panel {
+    height: calc(100vh + 10px) !important;
+  }
+}
+
+@media (max-height: 340px) {
+  #start-panel {
+    height: calc(100vh + 40px) !important;
+  }
+}
+
+@media (max-height: 294px) {
+  #start-panel {
+    height: calc(100vh + 55px) !important;
+  }
+}
+
+@media (max-height: 280px) {
+  #start-panel {
+    height: calc(100vh + 120px) !important;
+  }
+}

@@ -1,0 +1,81 @@
+#homepage-content {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* need to use !important as it is on an anchor (a) element  */
+.homepage-button {
+  border: unset;
+  border-radius: 5px !important;
+  transition: 0.1s !important;
+  text-decoration: none !important;
+  user-select: none;
+}
+
+@media (max-width: 1250px) {
+  #start-sub-header {
+    font-size: 2.3rem !important;
+  }
+
+  #start-panel-right-table {
+    width: 100% !important;
+  }
+
+  #start-sub-header {
+    width: 90% !important;
+  }
+}
+
+@media (max-width: 945px) {
+  #start-panel {
+    display: none !important;
+  }
+
+  #features-container {
+    display: none;
+  }
+
+  #small-screen {
+    display: block !important;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+  }
+
+  #start-panel-left {
+    width: 90% !important;
+    margin-left: auto;
+    margin-right: auto;
+    float: none !important;
+  }
+
+  #start-buttons {
+    margin-top: 47px !important;
+  }
+
+  #explore-button-container {
+    margin-top: 60px !important;
+    margin-bottom: 40px !important;
+  }
+
+  #footer {
+    text-align: center;
+  }
+}
+
+@media (max-width: 314px) {
+  #start-buttons {
+    text-align: center;
+    display: grid;
+  }
+
+  .start-button {
+    margin-left: auto;
+    margin-right: auto !important;
+  }
+
+  .start-button:nth-child(2) {
+    margin-top: 10px;
+  }
+}

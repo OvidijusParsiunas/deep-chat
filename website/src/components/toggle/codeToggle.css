@@ -1,0 +1,24 @@
+#code-toggle {
+  background-color: white;
+  border: 1px solid #3584d3;
+  border-radius: 5px;
+  color: #3584d3;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  width: 100px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#code-toggle:hover {
+  background-color: rgb(251, 251, 251);
+}
+
+#code-toggle:active {
+  background-color: rgb(246, 246, 246);
+}
