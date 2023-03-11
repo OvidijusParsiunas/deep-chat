@@ -19,7 +19,8 @@ export class Input {
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submitUserText.bind(submitButton);
     const microphoneButton = aiAssistant.speechInput
-      ? new MicrophoneButton(aiAssistant.speechInput, keyboardInput.inputElementRef) : undefined;
+      ? new MicrophoneButton(aiAssistant.speechInput, keyboardInput.inputElementRef,
+          messages.addNewErrorMessage.bind(messages)) : undefined;
     this.addElements(aiAssistant, keyboardInput.elementRef, submitButton.elementRef, microphoneButton?.elementRef);
   }
 

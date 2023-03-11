@@ -32,7 +32,7 @@ export class OpenAIClient {
       })
       .catch((err) => {
         console.error(err);
-        messages.addNewErrorMessage();
+        messages.addNewErrorMessage('chat');
         onFinish();
       });
   }
@@ -52,7 +52,7 @@ export class OpenAIClient {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
-        messages.addNewErrorMessage();
+        messages.addNewErrorMessage('chat');
         onClose();
         throw new Error('error');
       },
@@ -65,7 +65,7 @@ export class OpenAIClient {
       },
       onerror(err) {
         console.error(err);
-        messages.addNewErrorMessage();
+        messages.addNewErrorMessage('chat');
         onClose();
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },

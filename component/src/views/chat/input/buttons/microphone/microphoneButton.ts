@@ -3,8 +3,8 @@ import {MicrophoneStyles, SpeechInput} from '../../../../../types/speechInput';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtil} from '../../../../../utils/svg/svgIconUtil';
+import {AddErrorMessage, SpeechToText} from './speechToText';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
-import {SpeechToText} from './speechToText';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 
@@ -14,7 +14,7 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 
-  constructor(speechInput: SpeechInput, inputElement: HTMLElement) {
+  constructor(speechInput: SpeechInput, inputElement: HTMLElement, addErrorMessage: AddErrorMessage) {
     super(MicrophoneButton.createMicrophoneElement(), typeof speechInput === 'boolean' ? {} : speechInput);
     this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
     this.changeToDefault();
@@ -22,7 +22,7 @@ export class MicrophoneButton extends ButtonStyleEvents<Styles> {
     if (!speechRecognition) {
       this.changeToUnsupported();
     } else {
-      new SpeechToText(this, speechRecognition, inputElement);
+      new SpeechToText(this, speechRecognition, inputElement, addErrorMessage);
     }
   }
 

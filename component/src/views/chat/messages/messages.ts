@@ -8,8 +8,8 @@ import {
   CustomMessageStyles,
   CustomMessageStyle,
   MessageContent,
+  ErrorMessages,
   OnNewMessage,
-  ErrorMessage,
 } from '../../../types/messages';
 
 export type AddNewMessage = Messages['addNewMessage'];
@@ -20,7 +20,7 @@ export class Messages {
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
-  private readonly _customErrorMessage?: ErrorMessage;
+  private readonly _customErrorMessage?: ErrorMessages;
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
@@ -112,24 +112,25 @@ export class Messages {
 
   private removeStreamedMessageIfEmpty() {
     const lastMessage = this._textElementRefs[this._textElementRefs.length - 1];
-    if (lastMessage.classList.contains('streamed-message') && lastMessage.textContent === '') {
+    if (lastMessage?.classList.contains('streamed-message') && lastMessage.textContent === '') {
       lastMessage.remove();
       this._textElementRefs.pop();
     }
   }
 
-  public addNewErrorMessage() {
+  public addNewErrorMessage(type: keyof Omit<ErrorMessages, 'default'>, message?: string) {
     this.removeStreamedMessageIfEmpty();
-    const text = this._customErrorMessage?.text || 'Error, please try again.';
+    const customDetails = this._customErrorMessage?.[type] || this._customErrorMessage?.default;
+    const text = customDetails?.text || message || 'Error, please try again.';
     const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
     textElement.classList.add('error-message-text');
     textElement.innerHTML = text;
-    if (this._customErrorMessage?.styles) {
-      Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, this._customErrorMessage.styles);
+    if (customDetails?.styles) {
+      Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, customDetails.styles);
     }
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    if (this._speechOutput) TextToSpeech.speak(text);
+    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
   }
 
   public addNewMessage(text: string, isAI: boolean, update = true) {
@@ -154,6 +155,6 @@ export class Messages {
 
   public finaliseStreamedMessage(text: string) {
     this.sendClientUpdate(text, true);
-    if (this._speechOutput) TextToSpeech.speak(text);
+    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
   }
 }

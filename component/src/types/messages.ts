@@ -20,3 +20,9 @@ export interface ErrorMessage {
   text?: string;
   styles?: CustomMessageStyle;
 }
+
+export interface ErrorMessages {
+  default?: ErrorMessage;
+  chat?: ErrorMessage;
+  speechInput?: ErrorMessage;
+}

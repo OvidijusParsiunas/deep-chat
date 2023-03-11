@@ -1,5 +1,8 @@
 import {KeyboardInput} from '../../keyboardInput/keyboardInput';
+import {Messages} from '../../../messages/messages';
 import {MicrophoneButton} from './microphoneButton';
+
+export type AddErrorMessage = Messages['addNewErrorMessage'];
 
 export class SpeechToText {
   private readonly _recognition?: SpeechRecognition;
@@ -10,8 +13,11 @@ export class SpeechToText {
   private _interimTranscript = '';
   private _finalTranscript = '';
   private prefixText = '';
+  private _addErrorMessage: AddErrorMessage;
 
-  constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}, inputElement: HTMLElement) {
+  // prettier-ignore
+  constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}, inputElement: HTMLElement,
+      addErrorMessage: AddErrorMessage) {
     this._microphone = microphone;
     this._recognition = new speechRecognition();
     this._recognition.continuous = true;
@@ -20,13 +26,22 @@ export class SpeechToText {
     this._interimTextSpan = document.createElement('span');
     this._interimTextSpan.id = 'interim-text';
     microphone.elementRef.onclick = this.buttonClick.bind(this);
+    this._addErrorMessage = addErrorMessage;
   }
 
   private buttonClick() {
+    this.onError();
     if (this._microphone.isActive) {
       this.stop();
     } else {
-      this.start();
+      this.recordingStarted();
+      this._finalTextSpan.innerHTML = this.processText('Final', true);
+      this._interimTextSpan.innerHTML = this.processText('Interim', false);
+      setTimeout(() => {
+        this._finalTextSpan.innerHTML = this.processText('Final', true);
+        this._interimTextSpan.innerHTML = this.processText('Interim sdfdsgsdfdsfsdfsdf', false);
+      }, 500);
+      // this.start();
     }
   }
 
@@ -56,15 +71,11 @@ export class SpeechToText {
     //   // testBtn.textContent = 'Start new test';
     // };
 
-    // this._recognition.onerror = function (event) {
-    //   // testBtn.disabled = false;
-    //   // testBtn.textContent = 'Start new test';
-    //   // diagnosticPara.textContent = `Error occurred in recognition: ${event.error}`;
-    // };
-
     this._recognition.onaudiostart = this.recordingStarted.bind(this);
 
     this._recognition.onaudioend = this.recordingEnded.bind(this);
+
+    this._recognition.onerror = this.onError.bind(this);
 
     // this._recognition.onend = function (event) {
     //   //Fired when the speech recognition service has disconnected.
@@ -126,5 +137,10 @@ export class SpeechToText {
     this._finalTranscript = '';
     this._interimTextSpan.innerHTML = '';
     this._finalTextSpan.innerHTML = '';
+  }
+
+  private onError() {
+    this._addErrorMessage('speechInput', 'speech input error');
+    this.recordingEnded();
   }
 }
