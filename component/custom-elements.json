@@ -55,7 +55,7 @@
             },
             {
               "kind": "field",
-              "name": "chatboxStyle",
+              "name": "containerStyle",
               "type": {
                 "text": "CustomStyle | undefined"
               }
@@ -2885,7 +2885,7 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "chatboxStyle",
+                  "name": "containerStyle",
                   "optional": true,
                   "type": {
                     "text": "CustomStyle"

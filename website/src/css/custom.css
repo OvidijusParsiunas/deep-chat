@@ -137,7 +137,7 @@ code {
 }
 
 .documentation-example-container {
-  background-image: linear-gradient(330deg, #3240ff 0%, #00e3ff 100%);
+  background-image: linear-gradient(330deg, #5965ff 0%, #00e3ff 100%);
   justify-content: center;
   display: flex;
   border-top-left-radius: 10px;

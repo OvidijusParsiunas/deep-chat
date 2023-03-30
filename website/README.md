@@ -1,5 +1,5 @@
 Chatbox:
-chatboxStyle?: CustomStyle;
+containerStyle?: CustomStyle;
 startWithChatView?: boolean;
 
 When new API is introduced - rename this section to Models:

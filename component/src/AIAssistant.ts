@@ -35,7 +35,7 @@ export class AiAssistant extends InternalHTML {
   speechOutput?: boolean;
 
   @Property('object')
-  chatboxStyle?: CustomStyle;
+  containerStyle?: CustomStyle;
 
   @Property('object')
   inputStyles?: InputStyles;
@@ -70,7 +70,7 @@ export class AiAssistant extends InternalHTML {
   constructor() {
     super();
     this._elementRef = document.createElement('div');
-    this._elementRef.id = 'chatbox';
+    this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     WebComponentStyleUtils.apply(style, this.shadowRoot, this._elementRef);
     InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
@@ -85,7 +85,7 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     console.log('render');
-    Object.assign(this._elementRef.style, this.chatboxStyle);
+    Object.assign(this._elementRef.style, this.containerStyle);
     if (this.startWithChatView || this.apiKey) {
       ChatView.render(this._elementRef, this.apiKey || '', this);
     }
