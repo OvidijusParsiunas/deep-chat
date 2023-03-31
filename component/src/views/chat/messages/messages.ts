@@ -35,7 +35,7 @@ export class Messages {
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
-    if (aiAssistant.startMessages) this.populateInitialMessages(aiAssistant.startMessages);
+    if (aiAssistant.initMessages) this.populateInitialMessages(aiAssistant.initMessages);
   }
 
   private static createContainerElement() {
@@ -44,8 +44,8 @@ export class Messages {
     return container;
   }
 
-  private populateInitialMessages(startMessages: MessageContent[]) {
-    startMessages.forEach(({role, text}) => {
+  private populateInitialMessages(initMessages: MessageContent[]) {
+    initMessages.forEach(({role, text}) => {
       this.addNewMessage(text, role === 'ai');
     });
   }

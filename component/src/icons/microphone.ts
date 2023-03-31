@@ -3,7 +3,7 @@
 export const MICROPHONE_ICON_STRING =
 `<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1" width="35" height="35">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="35">
 	<g transform="matrix(0.9459459 0 0 0.9459459 0 0)">
 		<g transform="matrix(0.052857142 0 0 0.052857142 0 0)">
 			<g>

@@ -14,6 +14,9 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - rename this file to aiAssistant.ts in github
+// WORK - handle code indentation messages
+// WORK - handle images
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
@@ -52,14 +55,17 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   names?: Names;
 
+  // WORK - initMessages
   @Property('object')
-  startMessages?: MessageContent[];
+  initMessages?: MessageContent[];
 
   @Property('object')
   errorMessage?: ErrorMessages;
 
   @Property('function')
   onNewMessage?: OnNewMessage;
+
+  _hasBeenRendered = false;
 
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
@@ -73,7 +79,9 @@ export class AiAssistant extends InternalHTML {
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     WebComponentStyleUtils.apply(style, this.shadowRoot, this._elementRef);
-    InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
+    setTimeout(() => {
+      if (!this._hasBeenRendered) this.onRender(); // if user has not set anything (to cause onRender to execute), force it
+    }, 1);
   }
 
   private readonly _elementRef: HTMLElement;
@@ -84,11 +92,16 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
-    console.log('render');
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this.startWithChatView || this.apiKey) {
       ChatView.render(this._elementRef, this.apiKey || '', this);
+    } else {
+      // the reason why this is not initiated in the constructor is because properties/attributes are not available
+      // when it is executed, meaning that if the user sets startWithChatView or apiKey to true, this would first
+      // appear and then then the chatview would be rendered after it, which causes a blink and is bad UX
+      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
     }
+    this._hasBeenRendered = true;
   }
 }
 

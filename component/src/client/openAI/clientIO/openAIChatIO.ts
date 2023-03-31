@@ -10,12 +10,12 @@ export class OpenAIChatIO implements OpenAIClientIO {
 
   buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
     const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIChat & OpenAIInternalBody;
-    if (body.startMessages) {
+    if (body.initMessages) {
       const chatMessages: OpenAIMessage[] = messagesObj.messages.map((message) => {
         return {content: message.text, role: message.role === 'ai' ? 'assistant' : message.role};
       });
-      const allMessages = body.startMessages.concat(...chatMessages);
-      delete body.startMessages;
+      const allMessages = body.initMessages.concat(...chatMessages);
+      delete body.initMessages;
       body.messages = allMessages;
     }
     return JSON.stringify(body);

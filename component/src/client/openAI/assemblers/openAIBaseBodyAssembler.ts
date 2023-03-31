@@ -5,7 +5,7 @@ export class OpenAIBaseBodyAssembler {
   private static DEFAULT_PARAMS: OpenAIInternal = {
     chat: {
       model: 'gpt-3.5-turbo',
-      startMessages: [{role: 'system', content: 'You are a helpful assistant.'}],
+      initMessages: [{role: 'system', content: 'You are a helpful assistant.'}],
     },
     completions: {
       model: 'text-curie-001',
@@ -17,7 +17,7 @@ export class OpenAIBaseBodyAssembler {
     if (openAIInternal?.chat) {
       if (typeof openAIInternal.chat === 'boolean') return OpenAIBaseBodyAssembler.DEFAULT_PARAMS.chat;
       const baseBody = Object.assign(OpenAIBaseBodyAssembler.DEFAULT_PARAMS.chat, openAIInternal.chat);
-      baseBody.startMessages = baseBody.messages || baseBody.startMessages;
+      baseBody.initMessages = baseBody.messages || baseBody.initMessages;
       return baseBody;
     }
     if (typeof openAIInternal.completions === 'boolean') return OpenAIBaseBodyAssembler.DEFAULT_PARAMS.completions;
