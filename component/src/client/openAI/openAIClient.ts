@@ -1,4 +1,5 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
+import {RequestInterceptor} from '../../types/requestInterceptor';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
@@ -18,11 +19,12 @@ export class OpenAIClient {
 
   // prettier-ignore
   public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
-      customRequestSettings: RequestSettings | undefined, messages: Messages, onFinish: () => void) {
+      customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
+      onFinish: () => void) {
     fetch(customRequestSettings?.url || io.url, {
       method: customRequestSettings?.method || 'POST',
       headers: customRequestSettings?.headers || new Headers(OpenAIClient.buildHeaders(key)),
-      body: io.buildBody(baseBody, messages),
+      body: JSON.stringify(requestInterceptor(io.buildBody(baseBody, messages))),
     })
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
@@ -39,13 +41,13 @@ export class OpenAIClient {
 
   // prettier-ignore
   public static requestStreamCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
-      customRequestSettings: RequestSettings | undefined, messages: Messages, onOpen: () => void, onClose: () => void,
-      abortStream: AbortController) {
+      customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
+      onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
     fetchEventSource(customRequestSettings?.url || io.url, {
       method: customRequestSettings?.method || 'POST',
       headers: customRequestSettings?.headers || OpenAIClient.buildHeaders(key),
-      body: io.buildBody(baseBody, messages),
+      body: JSON.stringify(requestInterceptor(io.buildBody(baseBody, messages))),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

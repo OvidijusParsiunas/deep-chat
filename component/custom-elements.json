@@ -111,6 +111,13 @@
             },
             {
               "kind": "field",
+              "name": "requestInterceptor",
+              "type": {
+                "text": "RequestInterceptor | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "onNewMessage",
               "type": {
                 "text": "OnNewMessage | undefined"
@@ -308,6 +315,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/types/requestInterceptor.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/requestSettings.ts",
       "declarations": [],
       "exports": []
@@ -428,65 +441,201 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/utils/decorators/property.ts",
+      "path": "src/client/errorMessages/errorMessages.ts",
       "declarations": [
         {
-          "kind": "function",
-          "name": "Property",
-          "parameters": [
-            {
-              "name": "type",
-              "type": {
-                "text": "AvailableTypes"
-              }
-            }
-          ]
+          "kind": "variable",
+          "name": "ErrorMessages",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Property",
+          "name": "ErrorMessages",
           "declaration": {
-            "name": "Property",
-            "module": "src/utils/decorators/property.ts"
+            "name": "ErrorMessages",
+            "module": "src/client/errorMessages/errorMessages.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/utils/decorators/renderControl.ts",
+      "path": "src/client/openAI/openAIClient.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "RenderControl",
+          "name": "OpenAIClient",
           "members": [
             {
+              "kind": "field",
+              "name": "_models_url",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'https://api.openai.com/v1/models'"
+            },
+            {
               "kind": "method",
-              "name": "waitForPropertiesToBeUpdatedBeforeRender",
-              "privacy": "public",
+              "name": "buildHeaders",
+              "privacy": "private",
               "static": true,
               "parameters": [
                 {
-                  "name": "aiAssistant",
+                  "name": "key",
                   "type": {
-                    "text": "InternalHTML"
+                    "text": "string"
                   }
                 }
               ]
             },
             {
               "kind": "method",
-              "name": "attemptRender",
+              "name": "requestCompletion",
               "privacy": "public",
               "static": true,
               "parameters": [
                 {
-                  "name": "aiAssistant",
+                  "name": "io",
                   "type": {
-                    "text": "InternalHTML"
+                    "text": "OpenAIClientIO"
+                  }
+                },
+                {
+                  "name": "baseBody",
+                  "type": {
+                    "text": "OpenAICompletions"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "customRequestSettings",
+                  "type": {
+                    "text": "RequestSettings | undefined"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "requestInterceptor",
+                  "type": {
+                    "text": "RequestInterceptor"
+                  }
+                },
+                {
+                  "name": "onFinish",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "requestStreamCompletion",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "OpenAIClientIO"
+                  }
+                },
+                {
+                  "name": "baseBody",
+                  "type": {
+                    "text": "OpenAICompletions"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "customRequestSettings",
+                  "type": {
+                    "text": "RequestSettings | undefined"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "requestInterceptor",
+                  "type": {
+                    "text": "RequestInterceptor"
+                  }
+                },
+                {
+                  "name": "onOpen",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "onClose",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "abortStream",
+                  "type": {
+                    "text": "AbortController"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                },
+                {
+                  "name": "onLoad",
+                  "type": {
+                    "text": "() => void"
                   }
                 }
               ]
@@ -497,43 +646,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "RenderControl",
+          "name": "OpenAIClient",
           "declaration": {
-            "name": "RenderControl",
-            "module": "src/utils/decorators/renderControl.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/typeConverters.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TypeConverters",
-          "members": [
-            {
-              "kind": "field",
-              "name": "attibutes",
-              "type": {
-                "text": "AttributeTypeConverters"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TypeConverters",
-          "declaration": {
-            "name": "TypeConverters",
-            "module": "src/utils/decorators/typeConverters.ts"
+            "name": "OpenAIClient",
+            "module": "src/client/openAI/openAIClient.ts"
           }
         }
       ]
@@ -640,6 +756,118 @@
           "declaration": {
             "name": "StyleUtils",
             "module": "src/utils/element/styleUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/property.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Property",
+          "parameters": [
+            {
+              "name": "type",
+              "type": {
+                "text": "AvailableTypes"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Property",
+          "declaration": {
+            "name": "Property",
+            "module": "src/utils/decorators/property.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/renderControl.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RenderControl",
+          "members": [
+            {
+              "kind": "method",
+              "name": "waitForPropertiesToBeUpdatedBeforeRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "attemptRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RenderControl",
+          "declaration": {
+            "name": "RenderControl",
+            "module": "src/utils/decorators/renderControl.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/typeConverters.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TypeConverters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "attibutes",
+              "type": {
+                "text": "AttributeTypeConverters"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TypeConverters",
+          "declaration": {
+            "name": "TypeConverters",
+            "module": "src/utils/decorators/typeConverters.ts"
           }
         }
       ]
@@ -1197,189 +1425,39 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/errorMessages/errorMessages.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ErrorMessages",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorMessages",
-          "declaration": {
-            "name": "ErrorMessages",
-            "module": "src/client/errorMessages/errorMessages.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/openAIClient.ts",
+      "path": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "OpenAIClient",
+          "name": "OpenAIBaseBodyAssembler",
           "members": [
             {
               "kind": "field",
-              "name": "_models_url",
+              "name": "DEFAULT_PARAMS",
               "type": {
-                "text": "string"
+                "text": "OpenAIInternal"
               },
               "privacy": "private",
               "static": true,
-              "default": "'https://api.openai.com/v1/models'"
+              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      initMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
             },
             {
               "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "requestCompletion",
+              "name": "assemble",
               "privacy": "public",
               "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "OpenAIClientIO"
-                  }
-                },
-                {
-                  "name": "baseBody",
-                  "type": {
-                    "text": "OpenAICompletions"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "customRequestSettings",
-                  "type": {
-                    "text": "RequestSettings | undefined"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "onFinish",
-                  "type": {
-                    "text": "() => void"
-                  }
+              "return": {
+                "type": {
+                  "text": "OpenAIInternalBody"
                 }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "requestStreamCompletion",
-              "privacy": "public",
-              "static": true,
+              },
               "parameters": [
                 {
-                  "name": "io",
+                  "name": "openAI",
+                  "optional": true,
                   "type": {
-                    "text": "OpenAIClientIO"
-                  }
-                },
-                {
-                  "name": "baseBody",
-                  "type": {
-                    "text": "OpenAICompletions"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "customRequestSettings",
-                  "type": {
-                    "text": "RequestSettings | undefined"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "onOpen",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "onClose",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "abortStream",
-                  "type": {
-                    "text": "AbortController"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                },
-                {
-                  "name": "onLoad",
-                  "type": {
-                    "text": "() => void"
+                    "text": "OpenAI"
                   }
                 }
               ]
@@ -1390,10 +1468,190 @@
       "exports": [
         {
           "kind": "js",
-          "name": "OpenAIClient",
+          "name": "OpenAIBaseBodyAssembler",
           "declaration": {
-            "name": "OpenAIClient",
-            "module": "src/client/openAI/openAIClient.ts"
+            "name": "OpenAIBaseBodyAssembler",
+            "module": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIChatIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIChatIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.openai.com/v1/chat/completions'"
+            },
+            {
+              "kind": "method",
+              "name": "buildBody",
+              "parameters": [
+                {
+                  "name": "baseBody",
+                  "type": {
+                    "text": "OpenAIInternalBody"
+                  }
+                },
+                {
+                  "name": "messagesObj",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "extractTextFromResult",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIResult"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIChatIO",
+          "declaration": {
+            "name": "OpenAIChatIO",
+            "module": "src/client/openAI/clientIO/openAIChatIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIClientIO.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAIClientIOFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIClientIOFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getClientIO",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIClientIO"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "baseBody",
+                  "type": {
+                    "text": "OpenAIInternalBody"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIClientIOFactory",
+          "declaration": {
+            "name": "OpenAIClientIOFactory",
+            "module": "src/client/openAI/clientIO/openAIClientIOFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/openAI/clientIO/openAICompletionIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAICompletionIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.openai.com/v1/completions'"
+            },
+            {
+              "kind": "method",
+              "name": "buildBody",
+              "parameters": [
+                {
+                  "name": "baseBody",
+                  "type": {
+                    "text": "OpenAIInternalBody"
+                  }
+                },
+                {
+                  "name": "messagesObj",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "extractTextFromResult",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIResult"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAICompletionIO",
+          "declaration": {
+            "name": "OpenAICompletionIO",
+            "module": "src/client/openAI/clientIO/openAICompletionIO.ts"
           }
         }
       ]
@@ -2143,239 +2401,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIBaseBodyAssembler",
-          "members": [
-            {
-              "kind": "field",
-              "name": "DEFAULT_PARAMS",
-              "type": {
-                "text": "OpenAIInternal"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      initMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
-            },
-            {
-              "kind": "method",
-              "name": "assemble",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "OpenAIInternalBody"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "openAI",
-                  "optional": true,
-                  "type": {
-                    "text": "OpenAI"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIBaseBodyAssembler",
-          "declaration": {
-            "name": "OpenAIBaseBodyAssembler",
-            "module": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIChatIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIChatIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.openai.com/v1/chat/completions'"
-            },
-            {
-              "kind": "method",
-              "name": "buildBody",
-              "parameters": [
-                {
-                  "name": "baseBody",
-                  "type": {
-                    "text": "OpenAIInternalBody"
-                  }
-                },
-                {
-                  "name": "messagesObj",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "extractTextFromResult",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "OpenAIResult"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIChatIO",
-          "declaration": {
-            "name": "OpenAIChatIO",
-            "module": "src/client/openAI/clientIO/openAIChatIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIClientIO.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIClientIOFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIClientIOFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getClientIO",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "OpenAIClientIO"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "baseBody",
-                  "type": {
-                    "text": "OpenAIInternalBody"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIClientIOFactory",
-          "declaration": {
-            "name": "OpenAIClientIOFactory",
-            "module": "src/client/openAI/clientIO/openAIClientIOFactory.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAICompletionIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAICompletionIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.openai.com/v1/completions'"
-            },
-            {
-              "kind": "method",
-              "name": "buildBody",
-              "parameters": [
-                {
-                  "name": "baseBody",
-                  "type": {
-                    "text": "OpenAIInternalBody"
-                  }
-                },
-                {
-                  "name": "messagesObj",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "extractTextFromResult",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "OpenAIResult"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAICompletionIO",
-          "declaration": {
-            "name": "OpenAICompletionIO",
-            "module": "src/client/openAI/clientIO/openAICompletionIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/buttons/buttonCSS.ts",
       "declarations": [
         {
@@ -2800,175 +2825,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "KeyboardInput",
-          "members": [
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "placeholderInputText",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "KeyboardInput",
-          "declaration": {
-            "name": "KeyboardInput",
-            "module": "src/views/chat/input/keyboardInput/keyboardInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/sideContainers/sideContainers.ts",
       "declarations": [
         {
@@ -3012,43 +2868,6 @@
           "declaration": {
             "name": "SideContainers",
             "module": "src/views/chat/input/sideContainers/sideContainers.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextToSpeech",
-          "members": [
-            {
-              "kind": "method",
-              "name": "speak",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextToSpeech",
-          "declaration": {
-            "name": "TextToSpeech",
-            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
           }
         }
       ]
@@ -3563,6 +3382,43 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextToSpeech",
+          "members": [
+            {
+              "kind": "method",
+              "name": "speak",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextToSpeech",
+          "declaration": {
+            "name": "TextToSpeech",
+            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/buttons/submit/submitButton.ts",
       "declarations": [
         {
@@ -3604,6 +3460,14 @@
               },
               "privacy": "private",
               "default": "requestSettings"
+            },
+            {
+              "kind": "field",
+              "name": "_requestInterceptor",
+              "type": {
+                "text": "RequestInterceptor"
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -3932,6 +3796,175 @@
           "declaration": {
             "name": "SubmitButtonStateStyle",
             "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "KeyboardInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "placeholderInputText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "KeyboardInput",
+          "declaration": {
+            "name": "KeyboardInput",
+            "module": "src/views/chat/input/keyboardInput/keyboardInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
           }
         }
       ]

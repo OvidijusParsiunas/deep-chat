@@ -18,10 +18,11 @@ export class OpenAIChatIO implements OpenAIClientIO {
       delete body.initMessages;
       body.messages = allMessages;
     }
-    return JSON.stringify(body);
+    return body;
   }
 
   extractTextFromResult(result: OpenAIResult): string {
+    if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
       return result.choices[0].delta.content || '';
     }

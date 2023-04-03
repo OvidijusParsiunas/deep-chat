@@ -2,6 +2,7 @@ import {CustomMessageStyles, ErrorMessages, MessageContent, OnNewMessage} from '
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
+import {RequestInterceptor} from './types/requestInterceptor';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
@@ -55,12 +56,14 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   names?: Names;
 
-  // WORK - initMessages
   @Property('object')
   initMessages?: MessageContent[];
 
   @Property('object')
   errorMessage?: ErrorMessages;
+
+  @Property('function')
+  requestInterceptor?: RequestInterceptor;
 
   @Property('function')
   onNewMessage?: OnNewMessage;

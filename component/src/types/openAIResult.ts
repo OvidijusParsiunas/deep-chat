@@ -8,5 +8,5 @@ type ResultChoice = InterfacesUnion<{text: string} | {message: OpenAIMessage} | 
 
 export interface OpenAIResult {
   choices: ResultChoice[];
-  error?: {code: string};
+  error?: {code: string; message: string};
 }

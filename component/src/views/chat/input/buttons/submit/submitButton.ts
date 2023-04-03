@@ -2,6 +2,7 @@ import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../
 import {OpenAIBaseBodyAssembler} from '../../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
 import {OpenAIClientIOFactory} from '../../../../../client/openAI/clientIO/openAIClientIOFactory';
 import {OpenAIClientIO} from '../../../../../client/openAI/clientIO/openAIClientIO';
+import {RequestInterceptor} from '../../../../../types/requestInterceptor';
 import {OpenAIInternalBody} from '../../../../../types/openAIInternal';
 import {OpenAIClient} from '../../../../../client/openAI/openAIClient';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
@@ -21,7 +22,8 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private _isLoadingActive = false;
   private _openAIBaseBody: OpenAIInternalBody;
   private _customRequestSettings?: RequestSettings;
-  private _clientIO: OpenAIClientIO;
+  private readonly _requestInterceptor: RequestInterceptor;
+  private readonly _clientIO: OpenAIClientIO;
   private readonly _key: string;
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
@@ -29,7 +31,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
-    const {openAI, requestSettings, submitButtonStyles} = aiAssistant;
+    const {openAI, requestSettings, submitButtonStyles, requestInterceptor} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._key = key;
     this._messages = messages;
@@ -40,6 +42,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
     this.changeToSubmitIcon();
+    this._requestInterceptor = requestInterceptor || ((body) => body);
   }
 
   // prettier-ignore
@@ -90,10 +93,11 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._inputElementRef.textContent = '';
     if (this._openAIBaseBody.stream) {
       OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,
-        this._messages, this.changeToStopIcon.bind(this), this.changeToSubmitIcon.bind(this), this._abortStream);
+        this._messages, this._requestInterceptor, this.changeToStopIcon.bind(this),
+        this.changeToSubmitIcon.bind(this), this._abortStream);
     } else {
       OpenAIClient.requestCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,
-        this._messages, this.changeToSubmitIcon.bind(this));
+        this._messages, this._requestInterceptor, this.changeToSubmitIcon.bind(this));
     }
   }
 

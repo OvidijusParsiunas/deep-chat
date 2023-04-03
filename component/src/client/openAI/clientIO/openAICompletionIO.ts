@@ -8,10 +8,11 @@ export class OpenAICompletionIO implements OpenAIClientIO {
 
   buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
     const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].text;
-    return JSON.stringify({prompt: mostRecentMessageText, ...baseBody});
+    return {prompt: mostRecentMessageText, ...baseBody};
   }
 
   extractTextFromResult(result: OpenAIResult): string {
+    if (result.error) throw result.error.message;
     return result.choices[0]?.text || '';
   }
 }
