@@ -46,7 +46,7 @@ export class Messages {
 
   private populateInitialMessages(initMessages: MessageContent[]) {
     initMessages.forEach(({role, text}) => {
-      this.addNewMessage(text, role === 'ai');
+      this.addNewMessage(text, role === 'ai', true, true);
     });
   }
 
@@ -104,10 +104,10 @@ export class Messages {
     return outerContainer;
   }
 
-  private sendClientUpdate(text: string, isAI: boolean) {
-    const messageContent = Messages.createMessageContent(text, isAI);
-    this._onNewMessage?.(messageContent);
-    this._dispatchEvent(new CustomEvent('new-message', {detail: messageContent}));
+  private sendClientUpdate(text: string, isAI: boolean, isInitial = false) {
+    const message = Messages.createMessageContent(text, isAI);
+    this._onNewMessage?.(message, isInitial);
+    this._dispatchEvent(new CustomEvent('new-message', {detail: {message, isInitial}}));
   }
 
   private removeStreamedMessageIfEmpty() {
@@ -133,12 +133,12 @@ export class Messages {
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
   }
 
-  public addNewMessage(text: string, isAI: boolean, update = true) {
+  public addNewMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElement = this.createMessageElements(text, isAI);
     this.elementRef.appendChild(messageElement);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && isAI) TextToSpeech.speak(text);
-    if (update) this.sendClientUpdate(text, isAI);
+    if (update) this.sendClientUpdate(text, isAI, isInitial);
   }
 
   public addNewStreamedMessage() {

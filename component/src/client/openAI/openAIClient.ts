@@ -29,7 +29,7 @@ export class OpenAIClient {
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
         const text = io.extractTextFromResult(result);
-        messages.addNewMessage(text, true);
+        messages.addNewMessage(text, true, true);
         onFinish();
       })
       .catch((err) => {

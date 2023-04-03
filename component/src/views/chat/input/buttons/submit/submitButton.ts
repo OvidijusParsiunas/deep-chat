@@ -89,7 +89,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   public submitUserText(userText: string) {
     if (this._isRequestInProgress || !userText || userText === '') return;
     this.changeToLoadingIcon();
-    this._messages.addNewMessage(userText, false);
+    this._messages.addNewMessage(userText, false, true);
     this._inputElementRef.textContent = '';
     if (this._openAIBaseBody.stream) {
       OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,

@@ -83,8 +83,12 @@ export class AiAssistant extends InternalHTML {
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     WebComponentStyleUtils.apply(style, this.shadowRoot, this._elementRef);
     setTimeout(() => {
-      if (!this._hasBeenRendered) this.onRender(); // if user has not set anything (to cause onRender to execute), force it
-    }, 1);
+      // if user has not set anything (to cause onRender to execute), force it
+      // this.initMessages is a safety measure so that events are definitely not fired twice
+      if (!this._hasBeenRendered && !this.initMessages) {
+        this.onRender();
+      }
+    }, 20); // rendering takes time, hence this is a high value to be safe
   }
 
   private readonly _elementRef: HTMLElement;
