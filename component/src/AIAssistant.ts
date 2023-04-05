@@ -1,5 +1,6 @@
 import {CustomMessageStyles, ErrorMessages, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
+import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {RequestInterceptor} from './types/requestInterceptor';
@@ -44,6 +45,9 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   inputStyles?: InputStyles;
 
+  @Property('number')
+  inputCharacterLimit?: number;
+
   @Property('object')
   submitButtonStyles?: SubmitButtonStyles;
 
@@ -67,6 +71,10 @@ export class AiAssistant extends InternalHTML {
 
   @Property('function')
   onNewMessage?: OnNewMessage;
+
+  focusInput: () => void = () => {
+    if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
+  };
 
   _hasBeenRendered = false;
 
@@ -100,7 +108,7 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     Object.assign(this._elementRef.style, this.containerStyle);
-    if (this.startWithChatView || this.apiKey) {
+    if (ChatView.shouldBeRendered(this)) {
       ChatView.render(this._elementRef, this.apiKey || '', this);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available

@@ -1,21 +1,26 @@
 import {CustomStyle} from '../../../../types/styles';
 import {InputStyles} from '../../../../types/input';
 import {PasteUtils} from './pasteUtils';
+import {InputLimit} from './inputLimit';
 
 export class KeyboardInput {
+  public static KEYBOARD_INPUT_ID = 'keyboard-input';
   readonly elementRef: HTMLElement;
   readonly inputElementRef: HTMLElement;
   submit?: () => void;
 
-  constructor(inputStyles?: InputStyles) {
+  constructor(inputStyles?: InputStyles, inputCharacterLimit?: number) {
     this.elementRef = KeyboardInput.createContainerElement(inputStyles?.container);
     this.inputElementRef = this.createInputElement(inputStyles?.text, inputStyles?.placeholderText);
     this.elementRef.appendChild(this.inputElementRef);
+    if (typeof inputCharacterLimit === 'number' && inputCharacterLimit > 0) {
+      InputLimit.add(this.inputElementRef, inputCharacterLimit);
+    }
   }
 
   private createInputElement(textStyle?: CustomStyle, placeholderInputText?: string) {
     const inputElement = document.createElement('div');
-    inputElement.id = 'keyboard-input';
+    inputElement.id = KeyboardInput.KEYBOARD_INPUT_ID;
     inputElement.classList.add('keyboard-input-placeholder');
     inputElement.contentEditable = 'true';
     inputElement.innerText = placeholderInputText || 'Ask me anything!';

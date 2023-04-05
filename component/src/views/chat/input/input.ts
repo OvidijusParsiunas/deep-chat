@@ -14,7 +14,7 @@ export class Input {
   // prettier-ignore
   constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
-    const keyboardInput = new KeyboardInput(aiAssistant.inputStyles);
+    const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
     const submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submitUserText.bind(submitButton);
