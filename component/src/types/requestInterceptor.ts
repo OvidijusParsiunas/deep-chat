@@ -1,3 +1,3 @@
-import {OpenAIChat, OpenAICompletions} from './openAI';
+import {OpenAIChatBody, OpenAICompletionsBody} from './openAIBodies';
 
-export type RequestInterceptor = (requestBody: OpenAIChat | OpenAICompletions) => object;
+export type RequestInterceptor = (requestBody: OpenAIChatBody | OpenAICompletionsBody) => object;

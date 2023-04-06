@@ -31,14 +31,14 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
-    const {openAI, requestSettings, submitButtonStyles, requestInterceptor} = aiAssistant;
+    const {openAI, context, requestSettings, submitButtonStyles, requestInterceptor} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._key = key;
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
-    this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI);
+    this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI, context);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
     this.changeToSubmitIcon();

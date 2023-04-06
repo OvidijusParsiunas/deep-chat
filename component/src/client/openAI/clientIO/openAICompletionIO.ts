@@ -7,7 +7,7 @@ export class OpenAICompletionIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/completions';
 
   buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
-    const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].text;
+    const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].content;
     return {prompt: mostRecentMessageText, ...baseBody};
   }
 

@@ -118,6 +118,13 @@
             },
             {
               "kind": "field",
+              "name": "context",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "requestInterceptor",
               "type": {
                 "text": "RequestInterceptor | undefined"
@@ -132,9 +139,23 @@
             },
             {
               "kind": "field",
+              "name": "additionalStyle",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "focusInput",
               "type": {
                 "text": "() => void"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "submitUserMessage",
+              "type": {
+                "text": "(text: string) => void"
               }
             },
             {
@@ -147,10 +168,11 @@
             },
             {
               "kind": "field",
-              "name": "submitUserMessage",
+              "name": "_additionalStyleApplied",
               "type": {
-                "text": "(text: string) => void"
-              }
+                "text": "boolean"
+              },
+              "default": "false"
             },
             {
               "kind": "field",
@@ -269,108 +291,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/types/avatar.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/button.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/buttonInternal.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/input.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/messages.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/names.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/object.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAI.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAIInternal.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/openAIResult.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/requestInterceptor.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/requestSettings.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/speechInput.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/styles.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/submitButton.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/typeConverters.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/utilityTypes.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/icons/microphone.ts",
       "declarations": [
         {
@@ -452,6 +372,114 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/avatar.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/button.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/buttonInternal.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/input.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/messages.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/names.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/object.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAI.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIBodies.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIInternal.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/openAIResult.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/requestInterceptor.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/requestSettings.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/speechInput.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/styles.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/submitButton.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/typeConverters.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/utilityTypes.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -1019,12 +1047,6 @@
                   "type": {
                     "text": "ShadowRoot | null"
                   }
-                },
-                {
-                  "name": "componentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
                 }
               ]
             },
@@ -1058,12 +1080,6 @@
                   "name": "style",
                   "type": {
                     "text": "string"
-                  }
-                },
-                {
-                  "name": "componentElement",
-                  "type": {
-                    "text": "HTMLElement"
                   }
                 },
                 {
@@ -1468,7 +1484,7 @@
               },
               "privacy": "private",
               "static": true,
-              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      initMessages: [{role: 'system', content: 'You are a helpful assistant.'}],\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
+              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      systemMessage: {role: 'system', content: 'You are a helpful assistant.'},\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
             },
             {
               "kind": "method",
@@ -1486,6 +1502,13 @@
                   "optional": true,
                   "type": {
                     "text": "OpenAI"
+                  }
+                },
+                {
+                  "name": "context",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
                   }
                 }
               ]

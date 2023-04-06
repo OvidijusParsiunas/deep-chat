@@ -1,6 +1,6 @@
 import {OpenAIInternalBody} from '../../../types/openAIInternal';
-import {OpenAIChat, OpenAIMessage} from '../../../types/openAI';
 import {Messages} from '../../../views/chat/messages/messages';
+import {OpenAIChatBody} from '../../../types/openAIBodies';
 import {OpenAIResult} from '../../../types/openAIResult';
 import {OpenAIClientIO} from './openAIClientIO';
 
@@ -9,14 +9,10 @@ export class OpenAIChatIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/chat/completions';
 
   buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
-    const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIChat & OpenAIInternalBody;
-    if (body.initMessages) {
-      const chatMessages: OpenAIMessage[] = messagesObj.messages.map((message) => {
-        return {content: message.text, role: message.role === 'ai' ? 'assistant' : message.role};
-      });
-      const allMessages = body.initMessages.concat(...chatMessages);
-      delete body.initMessages;
-      body.messages = allMessages;
+    const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIChatBody & OpenAIInternalBody;
+    if (body.systemMessage) {
+      body.messages = [body.systemMessage, ...messagesObj.messages];
+      delete body.systemMessage;
     }
     return body;
   }

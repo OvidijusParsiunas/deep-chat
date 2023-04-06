@@ -5,19 +5,19 @@ export class OpenAIBaseBodyAssembler {
   private static DEFAULT_PARAMS: OpenAIInternal = {
     chat: {
       model: 'gpt-3.5-turbo',
-      initMessages: [{role: 'system', content: 'You are a helpful assistant.'}],
+      systemMessage: {role: 'system', content: 'You are a helpful assistant.'},
     },
     completions: {
       model: 'text-curie-001',
     },
   };
 
-  public static assemble(openAI?: OpenAI): OpenAIInternalBody {
+  public static assemble(openAI?: OpenAI, context?: string): OpenAIInternalBody {
     const openAIInternal: OpenAI = JSON.parse(JSON.stringify(openAI || OpenAIBaseBodyAssembler.DEFAULT_PARAMS));
     if (openAIInternal?.chat) {
       if (typeof openAIInternal.chat === 'boolean') return OpenAIBaseBodyAssembler.DEFAULT_PARAMS.chat;
       const baseBody = Object.assign(OpenAIBaseBodyAssembler.DEFAULT_PARAMS.chat, openAIInternal.chat);
-      baseBody.initMessages = baseBody.messages || baseBody.initMessages;
+      if (context) baseBody.systemMessage = {role: 'system', content: context};
       return baseBody;
     }
     if (typeof openAIInternal.completions === 'boolean') return OpenAIBaseBodyAssembler.DEFAULT_PARAMS.completions;

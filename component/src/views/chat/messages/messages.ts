@@ -45,8 +45,8 @@ export class Messages {
   }
 
   private populateInitialMessages(initMessages: MessageContent[]) {
-    initMessages.forEach(({role, text}) => {
-      this.addNewMessage(text, role === 'ai', true, true);
+    initMessages.forEach(({role, content}) => {
+      this.addNewMessage(content, role === 'assistant', true, true);
     });
   }
 
@@ -78,7 +78,7 @@ export class Messages {
   }
 
   private static createMessageContent(text: string, isAI: boolean) {
-    return {role: isAI ? 'ai' : 'user', text} as const;
+    return {role: isAI ? 'assistant' : 'user', content: text} as const;
   }
 
   private static createBaseElements() {

@@ -12,7 +12,7 @@ export interface CustomMessageStyles {
   ai?: CustomMessageStyle;
 }
 
-export type MessageContent = {role: 'user' | 'ai'; text: string};
+export type MessageContent = {role: 'user' | 'assistant'; content: string};
 
 export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
 

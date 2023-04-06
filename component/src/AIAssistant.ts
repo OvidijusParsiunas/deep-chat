@@ -16,6 +16,8 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - introductory message
+// WORK - custom model - not chatgpt
 // WORK - rename this file to aiAssistant.ts in github
 // WORK - handle code indentation messages
 // WORK - handle images
@@ -66,20 +68,28 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   errorMessage?: ErrorMessages;
 
+  @Property('string')
+  context?: string;
+
   @Property('function')
   requestInterceptor?: RequestInterceptor;
 
   @Property('function')
   onNewMessage?: OnNewMessage;
 
+  @Property('string')
+  additionalStyle?: string;
+
   focusInput: () => void = () => {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
   };
 
-  _hasBeenRendered = false;
-
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
+
+  _hasBeenRendered = false;
+
+  _additionalStyleApplied = false;
 
   // TO-DO - key view style
   // TO-DO - getMessages()
@@ -89,7 +99,7 @@ export class AiAssistant extends InternalHTML {
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
-    WebComponentStyleUtils.apply(style, this.shadowRoot, this._elementRef);
+    WebComponentStyleUtils.apply(style, this.shadowRoot);
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it
       // this.initMessages is a safety measure so that events are definitely not fired twice
@@ -107,6 +117,10 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
+    if (this.additionalStyle && !this._additionalStyleApplied) {
+      WebComponentStyleUtils.apply(this.additionalStyle, this.shadowRoot);
+      this._additionalStyleApplied = true;
+    }
     Object.assign(this._elementRef.style, this.containerStyle);
     if (ChatView.shouldBeRendered(this)) {
       ChatView.render(this._elementRef, this.apiKey || '', this);
