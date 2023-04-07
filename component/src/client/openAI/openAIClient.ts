@@ -5,7 +5,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {OpenAIClientIO} from './clientIO/openAIClientIO';
 import {OpenAIResult} from '../../types/openAIResult';
-import {OpenAICompletions} from '../../types/openAI';
+import {OpenAIConfig} from '../../types/openAI';
 
 export class OpenAIClient {
   private static readonly _models_url = 'https://api.openai.com/v1/models';
@@ -18,7 +18,7 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
+  public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAIConfig, key: string,
       customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
       onFinish: () => void) {
     fetch(customRequestSettings?.url || io.url, {
@@ -40,7 +40,7 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(io: OpenAIClientIO, baseBody: OpenAICompletions, key: string,
+  public static requestStreamCompletion(io: OpenAIClientIO, baseBody: OpenAIConfig, key: string,
       customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
       onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;

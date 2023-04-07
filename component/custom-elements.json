@@ -553,7 +553,7 @@
                 {
                   "name": "baseBody",
                   "type": {
-                    "text": "OpenAICompletions"
+                    "text": "OpenAIConfig"
                   }
                 },
                 {
@@ -603,7 +603,7 @@
                 {
                   "name": "baseBody",
                   "type": {
-                    "text": "OpenAICompletions"
+                    "text": "OpenAIConfig"
                   }
                 },
                 {

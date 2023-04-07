@@ -1,6 +1,5 @@
-import {OpenAICompletions} from './openAI';
+import {OpenAIConfig} from './openAI';
 
-// https://platform.openai.com/docs/guides/chat/introduction
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
   content: string;
@@ -16,5 +15,4 @@ export interface OpenAIChatBody {
   stream?: boolean;
 }
 
-// https://platform.openai.com/docs/api-reference/completions
-export type OpenAICompletionsBody = OpenAICompletions;
+export type OpenAICompletionsBody = OpenAIConfig;
