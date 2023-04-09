@@ -1,6 +1,6 @@
 import {OpenAIMessage} from './openAIBodies';
 
-export interface OpenAIRequestBody {
+export interface RequestBody {
   model: string;
   // only for chat
   messages?: OpenAIMessage[];
@@ -11,4 +11,4 @@ export interface OpenAIRequestBody {
   stream?: boolean;
 }
 
-export type RequestInterceptor = (requestBody: OpenAIRequestBody) => object;
+export type RequestInterceptor = (requestBody: RequestBody) => object;

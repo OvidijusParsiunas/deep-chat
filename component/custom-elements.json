@@ -139,7 +139,7 @@
             },
             {
               "kind": "field",
-              "name": "additionalStyle",
+              "name": "auxiliaryStyle",
               "type": {
                 "text": "string | undefined"
               }
@@ -168,7 +168,7 @@
             },
             {
               "kind": "field",
-              "name": "_additionalStyleApplied",
+              "name": "_auxiliaryStyleApplied",
               "type": {
                 "text": "boolean"
               },
@@ -698,414 +698,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/utils/decorators/property.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "Property",
-          "parameters": [
-            {
-              "name": "type",
-              "type": {
-                "text": "AvailableTypes"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Property",
-          "declaration": {
-            "name": "Property",
-            "module": "src/utils/decorators/property.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/renderControl.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RenderControl",
-          "members": [
-            {
-              "kind": "method",
-              "name": "waitForPropertiesToBeUpdatedBeforeRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "attemptRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RenderControl",
-          "declaration": {
-            "name": "RenderControl",
-            "module": "src/utils/decorators/renderControl.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/typeConverters.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TypeConverters",
-          "members": [
-            {
-              "kind": "field",
-              "name": "attibutes",
-              "type": {
-                "text": "AttributeTypeConverters"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TypeConverters",
-          "declaration": {
-            "name": "TypeConverters",
-            "module": "src/utils/decorators/typeConverters.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/element/elementUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ElementUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "addElements",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parent",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "elements",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ElementUtils",
-          "declaration": {
-            "name": "ElementUtils",
-            "module": "src/utils/element/elementUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/element/styleUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StyleUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "unsetStyle",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetAllCSSMouseStates",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "statefulStyle",
-                  "type": {
-                    "text": "StatefulStyle"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StyleUtils",
-          "declaration": {
-            "name": "StyleUtils",
-            "module": "src/utils/element/styleUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/svg/svgIconUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SVGIconUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createSVGElement",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "SVGGraphicsElement"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "svgString",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SVGIconUtils",
-          "declaration": {
-            "name": "SVGIconUtils",
-            "module": "src/utils/svg/svgIconUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/webComponent/internalHTML.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InternalHTML",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_waitingToRender_",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_propUpdated_",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_attributes_",
-              "type": {
-                "text": "GenericObject<AttributeTypeConverter>"
-              },
-              "static": true,
-              "default": "{}"
-            },
-            {
-              "kind": "field",
-              "name": "_attributeToProperty_",
-              "type": {
-                "text": "GenericObject<string>"
-              },
-              "static": true,
-              "default": "{}"
-            },
-            {
-              "kind": "method",
-              "name": "onRender"
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InternalHTML",
-          "declaration": {
-            "name": "InternalHTML",
-            "module": "src/utils/webComponent/internalHTML.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/webComponent/webComponentStyleUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "WebComponentStyleUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "apply",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot | null"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "applyStyleSheet",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addStyleElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "shadowRoot",
-                  "type": {
-                    "text": "ShadowRoot"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "WebComponentStyleUtils",
-          "declaration": {
-            "name": "WebComponentStyleUtils",
-            "module": "src/utils/webComponent/webComponentStyleUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/chatView.ts",
       "declarations": [
         {
@@ -1463,6 +1055,414 @@
           "declaration": {
             "name": "VisibilityIcon",
             "module": "src/views/insertKey/visibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/element/elementUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ElementUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parent",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "elements",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ElementUtils",
+          "declaration": {
+            "name": "ElementUtils",
+            "module": "src/utils/element/elementUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/element/styleUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StyleUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetStyle",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetAllCSSMouseStates",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "statefulStyle",
+                  "type": {
+                    "text": "StatefulStyle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StyleUtils",
+          "declaration": {
+            "name": "StyleUtils",
+            "module": "src/utils/element/styleUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/svg/svgIconUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SVGIconUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createSVGElement",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "SVGGraphicsElement"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "svgString",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SVGIconUtils",
+          "declaration": {
+            "name": "SVGIconUtils",
+            "module": "src/utils/svg/svgIconUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/internalHTML.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InternalHTML",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_waitingToRender_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_propUpdated_",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_attributes_",
+              "type": {
+                "text": "GenericObject<AttributeTypeConverter>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_attributeToProperty_",
+              "type": {
+                "text": "GenericObject<string>"
+              },
+              "static": true,
+              "default": "{}"
+            },
+            {
+              "kind": "method",
+              "name": "onRender"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InternalHTML",
+          "declaration": {
+            "name": "InternalHTML",
+            "module": "src/utils/webComponent/internalHTML.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/webComponent/webComponentStyleUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WebComponentStyleUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "apply",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyStyleSheet",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addStyleElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "shadowRoot",
+                  "type": {
+                    "text": "ShadowRoot"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WebComponentStyleUtils",
+          "declaration": {
+            "name": "WebComponentStyleUtils",
+            "module": "src/utils/webComponent/webComponentStyleUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/property.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Property",
+          "parameters": [
+            {
+              "name": "type",
+              "type": {
+                "text": "AvailableTypes"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Property",
+          "declaration": {
+            "name": "Property",
+            "module": "src/utils/decorators/property.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/renderControl.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RenderControl",
+          "members": [
+            {
+              "kind": "method",
+              "name": "waitForPropertiesToBeUpdatedBeforeRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "attemptRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RenderControl",
+          "declaration": {
+            "name": "RenderControl",
+            "module": "src/utils/decorators/renderControl.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/typeConverters.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TypeConverters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "attibutes",
+              "type": {
+                "text": "AttributeTypeConverters"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TypeConverters",
+          "declaration": {
+            "name": "TypeConverters",
+            "module": "src/utils/decorators/typeConverters.ts"
           }
         }
       ]

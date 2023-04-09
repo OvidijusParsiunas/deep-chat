@@ -8,5 +8,6 @@ type ResultChoice = InterfacesUnion<{text: string} | {message: OpenAIMessage} | 
 
 export interface OpenAIResult {
   choices: ResultChoice[];
+  usage: {total_tokens: number};
   error?: {code: string; message: string};
 }

@@ -16,6 +16,7 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - typing message loading icon
 // WORK - introductory message
 // WORK - custom model - not chatgpt
 // WORK - rename this file to aiAssistant.ts in github
@@ -78,7 +79,7 @@ export class AiAssistant extends InternalHTML {
   onNewMessage?: OnNewMessage;
 
   @Property('string')
-  additionalStyle?: string;
+  auxiliaryStyle?: string;
 
   focusInput: () => void = () => {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
@@ -89,7 +90,7 @@ export class AiAssistant extends InternalHTML {
 
   _hasBeenRendered = false;
 
-  _additionalStyleApplied = false;
+  _auxiliaryStyleApplied = false;
 
   // TO-DO - key view style
   // TO-DO - getMessages()
@@ -117,9 +118,9 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
-    if (this.additionalStyle && !this._additionalStyleApplied) {
-      WebComponentStyleUtils.apply(this.additionalStyle, this.shadowRoot);
-      this._additionalStyleApplied = true;
+    if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
+      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
+      this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
     if (ChatView.shouldBeRendered(this)) {
