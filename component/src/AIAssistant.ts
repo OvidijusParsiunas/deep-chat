@@ -16,6 +16,7 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - change visibility icons to scalable
 // WORK - typing message loading icon
 // WORK - introductory message
 // WORK - custom model - not chatgpt
@@ -35,7 +36,7 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   requestSettings?: RequestSettings;
 
-  // WORK - when this is set input class should be set to -5px
+  // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('boolean')
   speechInput?: SpeechInput;
 

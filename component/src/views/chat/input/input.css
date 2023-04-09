@@ -17,25 +17,25 @@
 /* Input element padding will need to be changed accordingly */
 .inside-right {
   position: absolute;
-  right: 4px;
-  bottom: 14px;
+  right: 0.22rem;
+  bottom: 0.82rem;
 }
 
 .inside-left {
   position: absolute;
-  left: 6px;
-  bottom: 14px;
+  left: 0.22rem;
+  bottom: 0.82rem;
 }
 
 /* Input container element padding will need to be changed accordingly */
 .outside-left {
   position: absolute;
-  right: 4px;
-  bottom: 14px;
+  right: calc(12px - 0.55rem);
+  bottom: 0.8rem;
 }
 
 .outside-right {
   position: absolute;
-  left: 4px;
-  bottom: 14px;
+  left: calc(12px - 0.55rem);
+  bottom: 0.8rem;
 }

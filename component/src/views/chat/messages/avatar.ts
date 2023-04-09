@@ -22,7 +22,7 @@ export class Avatar {
   private static createAvatar(isAI: boolean, styles?: CustomAvatarStyles) {
     const avatar = document.createElement('img');
     avatar.src = isAI ? openAILogoUrl : avatarUrl;
-    avatar.classList.add('avatar');
+    avatar.classList.add('avatar', isAI ? 'ai-avatar' : 'user-avatar');
     const avatarContainer = document.createElement('div');
     avatarContainer.classList.add('avatar-container');
     avatarContainer.appendChild(avatar);

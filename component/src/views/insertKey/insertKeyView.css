@@ -9,7 +9,7 @@
   top: 47%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
+  width: 82%;
   display: flex;
 }
 
@@ -18,16 +18,17 @@
 }
 
 #insert-key-input-container {
-  margin-right: 35px;
-  width: calc(100% - 86px);
+  margin-right: 2.4rem;
+  width: 80%;
 }
 
 #insert-key-input {
-  padding: 5px 20px 4px 4px;
+  padding: 0.3rem 1.4rem 0.3rem 0.3rem;
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
   width: 100%;
+  font-size: inherit;
 }
 
 .insert-key-input-valid {
@@ -60,26 +61,26 @@
 }
 
 #visible-icon {
-  right: -23px;
-  top: -20px;
+  right: -1.55rem;
+  top: -1.3rem;
 }
 
 #not-visible-icon {
-  right: -22px;
-  top: -19px;
+  right: -1.5rem;
+  top: -1.25rem;
 }
 
 #start-button {
   border: 1px solid grey;
   color: rgb(69, 69, 69);
   border-radius: 4px;
-  width: 47px;
-  height: 23px;
+  width: 3rem;
+  height: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 0.5px 1px 1.5px;
+  padding: 0.05rem 0.15rem 0.05rem;
   user-select: none;
   background-color: white;
 }
@@ -97,22 +98,17 @@
   position: absolute;
   margin-top: 32px;
   margin-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 30px;
 }
 
 #insert-key-help-text-contents {
-  margin-left: -14px;
+  width: 100%;
   position: absolute;
-  transform: translateX(50%);
 }
 
 #insert-key-input-invalid-text {
   display: block;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  padding-left: 2px;
-  font-size: 15px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   color: red;
 }
 

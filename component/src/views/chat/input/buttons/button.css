@@ -6,8 +6,10 @@
 .input-button {
   border-radius: 4px;
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 1.5rem;
+  height: 1.5rem;
+  bottom: 1rem;
+  margin-bottom: 0.2rem;
 }
 
 .input-button:hover {

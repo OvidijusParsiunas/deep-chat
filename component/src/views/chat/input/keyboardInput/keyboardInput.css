@@ -4,20 +4,21 @@
   display: flex;
   border: 1px solid #0000001a;
   border-radius: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
   overflow-y: auto;
   max-height: 200px;
+  position: relative;
 }
 
 #keyboard-input {
-  width: calc(100% - 31px);
+  width: calc(100% - 2rem);
   text-align: left;
   outline: none;
-  padding: 6px 0px 5px 7px;
+  padding: 0.4rem 0px 0.4rem 0.5rem;
+  padding-right: 0px;
   word-wrap: break-word;
-  min-height: 18px;
   /* Use these properties to inline all of the text  */
   /* white-space: nowrap;
   overflow: hidden; */

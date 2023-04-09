@@ -1,15 +1,14 @@
 #submit-icon {
-  position: absolute;
-  left: -4px;
-  bottom: -1px;
+  height: 100%;
+  filter: brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%);
 }
 
 #stop-icon {
   background-color: #acacac;
   position: absolute;
-  left: 5px;
-  bottom: 5px;
-  width: 12px;
-  height: 12px;
+  width: 0.9rem;
+  height: 0.9rem;
+  left: 0.3rem;
+  bottom: 0.3rem;
   border-radius: 2px;
 }
