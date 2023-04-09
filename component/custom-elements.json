@@ -296,7 +296,7 @@
         {
           "kind": "variable",
           "name": "MICROPHONE_ICON_STRING",
-          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"35\" height=\"35\">\n\t<g transform=\"matrix(0.9459459 0 0 0.9459459 0 0)\">\n\t\t<g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n\t\t\t<g>\n\t\t\t\t<path d=\"M470.12 273.62C 469.6786 267.0614 464.2333 261.968 457.659 261.968C 451.0848 261.968 445.639 267.0618 445.198 273.62C 445.198 307.632 427.053 339.05798 397.6 356.065C 368.143 373.069 331.854 373.069 302.397 356.065C 272.944 339.057 254.79901 307.631 254.79901 273.62C 254.3576 267.0614 248.91231 261.968 242.33801 261.968C 235.76381 261.968 230.31801 267.0618 229.87701 273.62C 229.90826 303.311 240.92801 331.944 260.811 353.999C 280.694 376.054 308.034 389.968 337.565 393.065L337.565 393.065L337.565 423.362L287.67 423.362C 281.11142 423.8034 276.018 429.2487 276.018 435.823C 276.018 442.3933 281.11182 447.843 287.67 448.284L287.67 448.284L412.33002 448.284C 418.8886 447.8426 423.98203 442.3934 423.98203 435.823C 423.98203 429.2488 418.8882 423.803 412.33002 423.362L412.33002 423.362L362.49002 423.362L362.49002 393.065C 392.01 389.9556 419.338 376.034 439.209 353.979C 459.08002 331.928 470.092 303.303 470.12302 273.62L470.12302 273.62L470.12 273.62z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t\t<path d=\"M350 347.2C 369.453 347.1844 388.102 339.45392 401.855 325.696C 415.613 311.94202 423.34302 293.294 423.359 273.841L423.359 273.841L423.359 185.138C 423.359 158.927 409.379 134.70801 386.67902 121.607C 363.98 108.502 336.019 108.502 313.32 121.607C 290.621 134.709 276.64 158.927 276.64 185.138L276.64 185.138L276.64 273.618C 276.59314 293.10602 284.3041 311.81702 298.062 325.618C 311.824 339.423 330.50702 347.18402 350 347.2zM301.559 185.36002C 301.559 168.05502 310.7934 152.06302 325.78198 143.41101C 340.766 134.75871 359.235 134.75871 374.21997 143.41101C 389.20798 152.06331 398.44296 168.05602 398.44296 185.36002L398.44296 185.36002L398.44296 273.84003C 398.44296 291.14502 389.20856 307.13702 374.21997 315.78903C 359.23596 324.44135 340.76697 324.44135 325.78198 315.78903C 310.79398 307.13672 301.559 291.14404 301.559 273.84003z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n\t\t\t</g>\n\t\t</g>\n\t</g>\n</svg>\n`"
+          "default": "`<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n<svg height=\"1.4rem\" width=\"1.4rem\" version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" \n\t viewBox=\"0 0 490.9 490.9\" xml:space=\"preserve\">\n<g>\n\t<g>\n\t\t<path d=\"M245.5,322.9c53,0,96.2-43.2,96.2-96.2V96.2c0-53-43.2-96.2-96.2-96.2s-96.2,43.2-96.2,96.2v130.5\n\t\t\tC149.3,279.8,192.5,322.9,245.5,322.9z M173.8,96.2c0-39.5,32.2-71.7,71.7-71.7s71.7,32.2,71.7,71.7v130.5\n\t\t\tc0,39.5-32.2,71.7-71.7,71.7s-71.7-32.2-71.7-71.7V96.2z\"/>\n\t\t<path d=\"M94.4,214.5c-6.8,0-12.3,5.5-12.3,12.3c0,85.9,66.7,156.6,151.1,162.8v76.7h-63.9c-6.8,0-12.3,5.5-12.3,12.3\n\t\t\ts5.5,12.3,12.3,12.3h152.3c6.8,0,12.3-5.5,12.3-12.3s-5.5-12.3-12.3-12.3h-63.9v-76.7c84.4-6.3,151.1-76.9,151.1-162.8\n\t\t\tc0-6.8-5.5-12.3-12.3-12.3s-12.3,5.5-12.3,12.3c0,76.6-62.3,138.9-138.9,138.9s-138.9-62.3-138.9-138.9\n\t\t\tC106.6,220,101.2,214.5,94.4,214.5z\"/>\n\t</g>\n</g>\n</svg>\n`"
         }
       ],
       "exports": [
@@ -338,7 +338,7 @@
         {
           "kind": "variable",
           "name": "SUBMIT_ICON_STRING",
-          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"30\" height=\"24\">\n  <g transform=\"matrix(0.8108108 0 0 0.8108108 0 0)\">\n    <g transform=\"matrix(0.052857142 0 0 0.052857142 0 0)\">\n      <g>\n        <path d=\"M496.71 143.12L335.46997 304.46L398.26697 424.72L496.71 143.12zM321.63998 308.26L184.31998 236.54901L187.54657 230.2678L184.31998 236.54901C 180.84338 234.7756 179.48018 230.4396 181.35118 227.0451C 182.28477 225.1857 183.89809 223.98651 185.76527 223.4787L185.76527 223.4787L510.63525 109.9187C 510.80322 109.82886 510.9751 109.75073 511.14307 109.67261L511.14307 109.67261L511.31104 109.67261C 511.56494 109.58276 511.81885 109.50464 511.99463 109.50464C 512.1587 109.414795 512.24854 109.414795 512.4087 109.414795L512.4087 109.414795L512.49854 109.414795L512.5884 109.32495L512.75635 109.32495L513.01807 109.32495L514.45557 109.32495L514.45557 109.414795L514.7993 109.414795L514.9673 109.50464L515.2251 109.50464L515.31494 109.590576L515.56494 109.590576L515.56494 109.68042L515.8345 109.68042L515.99854 109.758545L516.1704 109.84448L516.25635 109.84448C 517.1001 110.196045 517.7797 110.696045 518.37744 111.28978L518.37744 111.28978L518.4634 111.37962L518.5532 111.37962L518.63916 111.551506C 519.2329 112.14135 519.6586 112.82101 519.99854 113.5827L519.99854 113.5827L519.99854 113.67255L520.0845 113.76239L520.0845 113.93817L520.1743 114.0163L520.1743 114.10614L520.26025 114.19208L520.26025 114.28192L520.3501 114.453804L520.3501 114.71162L520.43604 114.78974L520.43604 115.1374L520.5259 115.22724L520.5259 115.73896L520.6157 115.828804L520.6157 116.848305C 520.6157 116.93815 520.5259 117.10612 520.5259 117.19596L520.5259 117.19596L520.5259 117.5319C 520.5259 117.62174 520.43604 117.79362 520.43604 117.879555C 520.3501 118.14127 520.3501 118.38737 520.26807 118.555336L520.26807 118.555336L520.1821 118.72722C 520.0923 118.88347 520.0923 119.063156 520.01416 119.23503L520.01416 119.23503L406.41415 444.14502C 405.90634 445.91843 404.63297 447.6216 402.84775 448.54733C 399.37115 450.34033 395.12506 448.97702 393.34384 445.57852L393.34384 445.57852L399.54303 442.26993L393.34384 445.57852zM486.69998 133.18001L205.19998 231.543L325.46 294.43z\" stroke=\"none\" fill=\"#000000\" fill-rule=\"nonzero\" />\n      </g>\n    </g>\n  </g>\n</svg>\n`"
+          "default": "`<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"1\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" height=\"1.1rem\" width=\"1.1rem\">\n  <line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"14\"></line>\n  <polygon points=\"22 2 15 22 11 14 2 10 22 2\"></polygon>\n</svg>\n`"
         }
       ],
       "exports": [
@@ -480,30 +480,6 @@
       "path": "src/types/utilityTypes.ts",
       "declarations": [],
       "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/errorMessages/errorMessages.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ErrorMessages",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorMessages",
-          "declaration": {
-            "name": "ErrorMessages",
-            "module": "src/client/errorMessages/errorMessages.ts"
-          }
-        }
-      ]
     },
     {
       "kind": "javascript-module",
@@ -692,6 +668,30 @@
           "declaration": {
             "name": "OpenAIClient",
             "module": "src/client/openAI/openAIClient.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/client/errorMessages/errorMessages.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ErrorMessages",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorMessages",
+          "declaration": {
+            "name": "ErrorMessages",
+            "module": "src/client/errorMessages/errorMessages.ts"
           }
         }
       ]
@@ -1061,6 +1061,118 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/utils/decorators/property.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Property",
+          "parameters": [
+            {
+              "name": "type",
+              "type": {
+                "text": "AvailableTypes"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Property",
+          "declaration": {
+            "name": "Property",
+            "module": "src/utils/decorators/property.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/renderControl.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RenderControl",
+          "members": [
+            {
+              "kind": "method",
+              "name": "waitForPropertiesToBeUpdatedBeforeRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "attemptRender",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "InternalHTML"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RenderControl",
+          "declaration": {
+            "name": "RenderControl",
+            "module": "src/utils/decorators/renderControl.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/decorators/typeConverters.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TypeConverters",
+          "members": [
+            {
+              "kind": "field",
+              "name": "attibutes",
+              "type": {
+                "text": "AttributeTypeConverters"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TypeConverters",
+          "declaration": {
+            "name": "TypeConverters",
+            "module": "src/utils/decorators/typeConverters.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/element/elementUtils.ts",
       "declarations": [
         {
@@ -1351,118 +1463,6 @@
           "declaration": {
             "name": "WebComponentStyleUtils",
             "module": "src/utils/webComponent/webComponentStyleUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/property.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "Property",
-          "parameters": [
-            {
-              "name": "type",
-              "type": {
-                "text": "AvailableTypes"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Property",
-          "declaration": {
-            "name": "Property",
-            "module": "src/utils/decorators/property.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/renderControl.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RenderControl",
-          "members": [
-            {
-              "kind": "method",
-              "name": "waitForPropertiesToBeUpdatedBeforeRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "attemptRender",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "aiAssistant",
-                  "type": {
-                    "text": "InternalHTML"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RenderControl",
-          "declaration": {
-            "name": "RenderControl",
-            "module": "src/utils/decorators/renderControl.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/decorators/typeConverters.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TypeConverters",
-          "members": [
-            {
-              "kind": "field",
-              "name": "attibutes",
-              "type": {
-                "text": "AttributeTypeConverters"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "{\n    string: (value: string) => value,\n    number: (value: string) => parseFloat(value),\n    boolean: (value: string) => value === 'true',\n    object: (value: string) => JSON.parse(value),\n    function: (value: string) => eval(value),\n  }"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TypeConverters",
-          "declaration": {
-            "name": "TypeConverters",
-            "module": "src/utils/decorators/typeConverters.ts"
           }
         }
       ]
