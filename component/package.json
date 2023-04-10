@@ -9,9 +9,8 @@
     "start": "vite",
     "build:watch": "vite build --watch",
     "build:production": "npm run lint && tsc && vite build && npm run analyze && rollup -c",
-    "type:watch": "tsc --watch",
-    "lint": "eslint 'src/**/*.ts'",
-    "analyze": "cem analyze --globs \"src/**/*.ts\""
+    "analyze": "cem analyze --globs \"src/**/*.ts\"",
+    "lint": "eslint --parser-options '{'project':'./tsconfig.json'}' 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",

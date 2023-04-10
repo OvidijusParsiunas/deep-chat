@@ -1546,7 +1546,7 @@
             },
             {
               "kind": "method",
-              "name": "buildBody",
+              "name": "preprocessBody",
               "parameters": [
                 {
                   "name": "baseBody",
@@ -1660,7 +1660,7 @@
             },
             {
               "kind": "method",
-              "name": "buildBody",
+              "name": "preprocessBody",
               "parameters": [
                 {
                   "name": "baseBody",

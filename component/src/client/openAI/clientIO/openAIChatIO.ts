@@ -1,6 +1,5 @@
 import {OpenAIInternalBody} from '../../../types/openAIInternal';
 import {Messages} from '../../../views/chat/messages/messages';
-import {OpenAIChatBody} from '../../../types/openAIBodies';
 import {OpenAIResult} from '../../../types/openAIResult';
 import {OpenAIClientIO} from './openAIClientIO';
 
@@ -8,8 +7,8 @@ import {OpenAIClientIO} from './openAIClientIO';
 export class OpenAIChatIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/chat/completions';
 
-  buildBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
-    const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIChatBody & OpenAIInternalBody;
+  preprocessBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
+    const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIInternalBody;
     if (body.systemMessage) {
       body.messages = [body.systemMessage, ...messagesObj.messages];
       delete body.systemMessage;

@@ -3,7 +3,7 @@ import {NOT_VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
 import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 
 export class VisibilityIcon {
-  private static VISIBLE_ICON_ID = 'visible-icon';
+  private static readonly VISIBLE_ICON_ID = 'visible-icon';
 
   // prettier-ignore
   private static changeVisibility(inputElement: HTMLInputElement,

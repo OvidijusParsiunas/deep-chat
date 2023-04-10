@@ -1,5 +1,5 @@
 import {InterfacesUnion} from './utilityTypes';
-import {OpenAIMessage} from './openAIBodies';
+import {OpenAIMessage} from './openAI';
 
 // text for completion request & stream
 // message for chat completion request

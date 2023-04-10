@@ -1,5 +1,5 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {OpenAIBaseBodyAssembler} from '../../../../../client/openAI/assemblers/openAIBaseBodyAssembler';
+import {OpenAIBaseBodyGenerator} from '../../../../../client/openAI/body/openAIBaseBodyGenerator';
 import {OpenAIClientIOFactory} from '../../../../../client/openAI/clientIO/openAIClientIOFactory';
 import {OpenAIClientIO} from '../../../../../client/openAI/clientIO/openAIClientIO';
 import {RequestInterceptor} from '../../../../../types/requestInterceptor';
@@ -20,8 +20,8 @@ type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
 export class SubmitButton extends ButtonStyleEvents<Styles> {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _isLoadingActive = false;
-  private _openAIBaseBody: OpenAIInternalBody;
-  private _customRequestSettings?: RequestSettings;
+  private readonly _openAIBaseBody: OpenAIInternalBody;
+  private readonly _customRequestSettings?: RequestSettings;
   private readonly _requestInterceptor: RequestInterceptor;
   private readonly _clientIO: OpenAIClientIO;
   private readonly _key: string;
@@ -38,7 +38,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._inputElementRef = inputElementRef;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
-    this._openAIBaseBody = OpenAIBaseBodyAssembler.assemble(openAI, context);
+    this._openAIBaseBody = OpenAIBaseBodyGenerator.assemble(openAI, context);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
     this.changeToSubmitIcon();
@@ -70,7 +70,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
 
   private static createLoadingIconElement() {
     const loadingIconElement = document.createElement('div');
-    loadingIconElement.classList.add('dots-loading');
+    loadingIconElement.classList.add('dots-jumping');
     return loadingIconElement;
   }
 

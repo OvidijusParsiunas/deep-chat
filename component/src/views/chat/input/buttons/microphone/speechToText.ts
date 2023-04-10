@@ -8,12 +8,12 @@ export class SpeechToText {
   private readonly _recognition?: SpeechRecognition;
   private readonly _microphone: MicrophoneButton;
   private readonly _inputElement: HTMLElement;
-  private _interimTextSpan: HTMLSpanElement;
-  private _finalTextSpan: HTMLSpanElement;
+  private readonly _interimTextSpan: HTMLSpanElement;
+  private readonly _finalTextSpan: HTMLSpanElement;
   private _interimTranscript = '';
   private _finalTranscript = '';
   private prefixText = '';
-  private _addErrorMessage: AddErrorMessage;
+  private readonly _addErrorMessage: AddErrorMessage;
 
   // prettier-ignore
   constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}, inputElement: HTMLElement,

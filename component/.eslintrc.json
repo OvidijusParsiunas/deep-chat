@@ -7,8 +7,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module"
+    "project": "component/tsconfig.json"
   },
   "plugins": ["@typescript-eslint"],
   "env": {
@@ -30,6 +29,8 @@
     "semi": "off",
     "prefer-template": "error",
     "no-var": "error",
-    "prefer-const": "error"
-  }
+    "prefer-const": "error",
+    "@typescript-eslint/prefer-readonly": "error"
+  },
+  "ignorePatterns": ["vite.config.ts"]
 }

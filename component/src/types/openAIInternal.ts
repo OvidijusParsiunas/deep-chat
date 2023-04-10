@@ -1,7 +1,10 @@
+import {OpenAIMessage} from './openAI';
+
 export interface OpenAIInternalBody {
   model: string;
-  systemMessage?: {role: 'system'; content: string};
-  max_tokens?: number;
+  systemMessage?: {role: 'system'; content: string}; // only for chat
+  messages?: OpenAIMessage[]; // only for chat
+  max_tokens: number;
   temperature?: number;
   top_p?: number;
   n?: number;

@@ -1,4 +1,4 @@
-.dots-loading {
+.dots-jumping {
   position: relative;
   left: calc(-9990px + 0.25rem);
   width: 0.2rem;
@@ -7,11 +7,11 @@
   background-color: #848484;
   color: #848484;
   box-shadow: 9990px 0 0 0 #848484, calc(9990px + 0.4rem) 0 0 0 #848484, calc(9990px + 0.8rem) 0 0 0 #848484;
-  animation: dots-loading 1.5s infinite linear;
+  animation: dots-jumping 1.5s infinite linear;
   bottom: -0.7rem;
 }
 
-@keyframes dots-loading {
+@keyframes dots-jumping {
   0% {
     box-shadow: 9990px 0 0 0 #848484, calc(9990px + 0.4rem) 0 0 0 #848484, calc(9990px + 0.8rem) 0 0 0 #848484;
   }
@@ -32,5 +32,56 @@
   }
   100% {
     box-shadow: 9990px 0 0 0 #848484, calc(9990px + 0.4rem) 0 0 0 #848484, calc(9990px + 0.8rem) 0 0 0 #848484;
+  }
+}
+
+.dots-flashing {
+  position: relative;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 5px;
+  background-color: #848484;
+  color: #848484;
+  animation: dots-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.dots-flashing::before,
+.dots-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dots-flashing::before {
+  left: -0.6rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 5px;
+  background-color: #848484;
+  color: #848484;
+  animation: dots-flashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dots-flashing::after {
+  left: 0.6rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 5px;
+  background-color: #848484;
+  color: #848484;
+  animation: dots-flashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dots-flashing {
+  0% {
+    background-color: #848484;
+  }
+  50%,
+  100% {
+    background-color: rgba(85, 85, 85, 0.2);
   }
 }
