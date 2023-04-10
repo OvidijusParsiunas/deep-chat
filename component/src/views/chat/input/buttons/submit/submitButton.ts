@@ -29,6 +29,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
+  private _isSVGLoadingOverriden = false;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
     const {openAI, context, requestSettings, submitButtonStyles, requestInterceptor} = aiAssistant;
@@ -41,6 +42,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._openAIBaseBody = OpenAIBaseBodyGenerator.assemble(openAI, context);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
+    if (!this._customStyles?.loading) this.overwriteLoadingStyleIfNoLoadingMessage(aiAssistant);
     this.changeToSubmitIcon();
     this._requestInterceptor = requestInterceptor || ((body) => body);
   }
@@ -80,6 +82,19 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     return stopIconElement;
   }
 
+  private overwriteLoadingStyleIfNoLoadingMessage(aiAssistant: AiAssistant) {
+    if (aiAssistant.displayLoadingMessage === undefined || aiAssistant.displayLoadingMessage === true) {
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        .loading-button > * {
+          filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%)
+            contrast(96%) !important;
+        }`;
+      aiAssistant.shadowRoot?.appendChild(styleElement);
+      this._isSVGLoadingOverriden = true;
+    }
+  }
+
   public submitFromInput() {
     const inputText = this._inputElementRef.textContent?.trim() as string;
     this.submitUserText(inputText);
@@ -90,6 +105,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     if (this._isRequestInProgress || !userText || userText === '') return;
     this.changeToLoadingIcon();
     this._messages.addNewMessage(userText, false, true);
+    this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     if (this._openAIBaseBody.stream) {
       OpenAIClient.requestStreamCompletion(this._clientIO, this._openAIBaseBody, this._key, this._customRequestSettings,
@@ -116,7 +132,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   private changeToLoadingIcon() {
-    this.elementRef.replaceChildren(this._innerElements.loading);
+    if (!this._isSVGLoadingOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.add('loading-button');
     this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};

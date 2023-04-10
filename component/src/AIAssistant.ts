@@ -16,8 +16,10 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - cut off total characters or number of messages
+// chat should be the default
+// WORK - display character limit like in bing
 // WORK - change visibility icons to scalable
-// WORK - typing message loading icon
 // WORK - introductory message
 // WORK - custom model - not chatgpt
 // WORK - rename this file to aiAssistant.ts in github
@@ -66,6 +68,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   initMessages?: MessageContent[];
+
+  @Property('boolean')
+  displayLoadingMessage?: boolean;
 
   @Property('object')
   errorMessage?: ErrorMessages;

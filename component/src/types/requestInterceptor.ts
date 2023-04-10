@@ -2,9 +2,8 @@ import {OpenAIMessage} from './openAI';
 
 export interface RequestBody {
   model: string;
-  // only for chat
-  messages?: OpenAIMessage[];
-  max_tokens: number;
+  messages?: OpenAIMessage[]; // only for chat
+  max_tokens?: number;
   temperature?: number;
   top_p?: number;
   n?: number;

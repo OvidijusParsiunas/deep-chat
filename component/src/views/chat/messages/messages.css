@@ -44,3 +44,10 @@
   margin-top: 14px;
   margin-bottom: 10px;
 }
+
+.loading-message-text {
+  padding-left: 1.1rem;
+  width: 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}

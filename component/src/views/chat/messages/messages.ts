@@ -14,9 +14,16 @@ import {
 
 export type AddNewMessage = Messages['addNewMessage'];
 
+interface MessageElements {
+  outerContainer: HTMLElement;
+  innerContainer: HTMLElement;
+  textElement: HTMLElement;
+}
+
 export class Messages {
   elementRef: HTMLElement;
-  private readonly _textElementRefs: HTMLElement[] = [];
+  private readonly _messageElementRefs: MessageElements[] = [];
+
   private readonly _messageStyles?: CustomMessageStyles;
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
@@ -24,6 +31,7 @@ export class Messages {
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
+  private readonly _displayLoadingMessage?: boolean;
   messages: MessageContent[] = [];
 
   constructor(aiAssistant: AiAssistant) {
@@ -35,6 +43,7 @@ export class Messages {
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
+    this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
     if (aiAssistant.initMessages) this.populateInitialMessages(aiAssistant.initMessages);
   }
 
@@ -81,7 +90,7 @@ export class Messages {
     return {role: isAI ? 'assistant' : 'user', content: text} as const;
   }
 
-  private static createBaseElements() {
+  private static createBaseElements(): MessageElements {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
@@ -92,16 +101,17 @@ export class Messages {
     return {outerContainer, innerContainer, textElement};
   }
 
-  private createMessageElements(text: string, isAI: boolean) {
-    const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
+  private createMessageElements(text: string, isAI: boolean, addToMesages = true) {
+    const messageElements = Messages.createBaseElements();
+    const {outerContainer, innerContainer, textElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(textElement, text, isAI);
     if (this._messageStyles) {
       Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
     }
-    this._textElementRefs.push(textElement);
-    this.messages.push(Messages.createMessageContent(text, isAI));
-    return outerContainer;
+    this._messageElementRefs.push(messageElements);
+    if (addToMesages) this.messages.push(Messages.createMessageContent(text, isAI));
+    return messageElements;
   }
 
   private sendClientUpdate(text: string, isAI: boolean, isInitial = false) {
@@ -110,17 +120,19 @@ export class Messages {
     this._dispatchEvent(new CustomEvent('new-message', {detail: {message, isInitial}}));
   }
 
-  private removeStreamedMessageIfEmpty() {
-    const lastMessage = this._textElementRefs[this._textElementRefs.length - 1];
-    if (lastMessage?.classList.contains('streamed-message') && lastMessage.textContent === '') {
-      lastMessage.remove();
-      this._textElementRefs.pop();
+  // prettier-ignore
+  private removeMessageOnError() {
+    const lastTextElement = this._messageElementRefs[this._messageElementRefs.length - 1]?.textElement;
+    if ((lastTextElement?.classList.contains('streamed-message') && lastTextElement.textContent === '') ||
+        lastTextElement?.classList.contains('loading-message-text')) {
+      lastTextElement.remove();
+      this._messageElementRefs.pop();
     }
   }
 
   // prettier-ignore
   public addNewErrorMessage(type: keyof Omit<ErrorMessages, 'default'>, message?: string) {
-    this.removeStreamedMessageIfEmpty();
+    this.removeMessageOnError();
     const {outerContainer, innerContainer, textElement} = Messages.createBaseElements();
     textElement.classList.add('error-message-text');
     const text = this._customErrorMessage?.[type]?.text || this._customErrorMessage?.default?.text ||
@@ -133,19 +145,41 @@ export class Messages {
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
   }
 
+  private createNewMessageElement(text: string, isAI: boolean) {
+    const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
+    if (isAI && lastMessageElements?.textElement.classList.contains('loading-message-text')) {
+      lastMessageElements.textElement.classList.remove('loading-message-text');
+      lastMessageElements.textElement.innerHTML = text;
+      return lastMessageElements;
+    }
+    const messageElements = this.createMessageElements(text, isAI);
+    this.elementRef.appendChild(messageElements.outerContainer);
+    return messageElements;
+  }
+
   public addNewMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
-    const messageElement = this.createMessageElements(text, isAI);
-    this.elementRef.appendChild(messageElement);
+    const messageElements = this.createNewMessageElement(text, isAI);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && isAI) TextToSpeech.speak(text);
     if (update) this.sendClientUpdate(text, isAI, isInitial);
+    return messageElements;
+  }
+
+  public addLoadingMessage() {
+    if (!this._displayLoadingMessage) return;
+    const {outerContainer, textElement} = this.createMessageElements('', true, false);
+    textElement.classList.add('loading-message-text');
+    const dotsElement = document.createElement('div');
+    dotsElement.classList.add('dots-flashing');
+    textElement.appendChild(dotsElement);
+    this.elementRef.appendChild(outerContainer);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
   public addNewStreamedMessage() {
-    this.addNewMessage('', true, false);
-    const streamedMessage = this._textElementRefs[this._textElementRefs.length - 1];
-    streamedMessage.classList.add('streamed-message');
-    return streamedMessage;
+    const {textElement} = this.addNewMessage('', true, false);
+    textElement.classList.add('streamed-message');
+    return textElement;
   }
 
   public static updateStreamedMessage(text: string, textElement: HTMLElement) {
