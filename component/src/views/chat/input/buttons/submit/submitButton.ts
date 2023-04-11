@@ -39,7 +39,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._inputElementRef = inputElementRef;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
-    this._openAIBaseBody = OpenAIBaseBodyGenerator.assemble(openAI, context);
+    this._openAIBaseBody = OpenAIBaseBodyGenerator.generate(openAI, context);
     this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
     this._customRequestSettings = requestSettings;
     if (!this._customStyles?.loading) this.overwriteLoadingStyleIfNoLoadingMessage(aiAssistant);

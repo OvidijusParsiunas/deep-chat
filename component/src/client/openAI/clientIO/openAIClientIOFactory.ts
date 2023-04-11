@@ -7,8 +7,8 @@ import {OpenAIChatIO} from './openAIChatIO';
 export class OpenAIClientIOFactory {
   public static getClientIO(baseBody: OpenAIInternalBody): OpenAIClientIO {
     if (baseBody.model?.startsWith(OpenAIBaseBodyGenerator.GPT_CHAT_TURBO_MODEL)) {
-      return new OpenAIChatIO();
+      return new OpenAIChatIO(baseBody.total_messages_max_char_length);
     }
-    return new OpenAICompletionIO();
+    return new OpenAICompletionIO(baseBody.max_char_length);
   }
 }

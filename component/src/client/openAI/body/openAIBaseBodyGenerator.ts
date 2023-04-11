@@ -2,6 +2,8 @@ import {OpenAIInternal, OpenAIInternalBody} from '../../../types/openAIInternal'
 import {OpenAI} from '../../../types/openAI';
 
 export class OpenAIBaseBodyGenerator {
+  // roughly adds up to 3,804 tokens just to be safe
+  public static readonly MAX_CHAR_LENGTH: number = 13352;
   public static readonly GPT_CHAT_TURBO_MODEL = 'gpt-3.5-turbo';
   private static readonly GPT_COMPLETIONS_DAVINCI_MODEL = 'text-davinci-003';
 
@@ -22,18 +24,13 @@ export class OpenAIBaseBodyGenerator {
     return baseBody;
   }
 
-  public static assemble(openAI?: OpenAI, context?: string): OpenAIInternalBody {
+  public static generate(openAI?: OpenAI, context?: string): OpenAIInternalBody {
     const openAIInternal: OpenAI = JSON.parse(JSON.stringify(openAI || OpenAIBaseBodyGenerator.DEFAULT_PARAMS));
     if (openAIInternal?.chat) {
       const baseBody = OpenAIBaseBodyGenerator.buildBaseBody(openAIInternal, 'chat');
       if (context) baseBody.systemMessage = {role: 'system', content: context};
       return baseBody;
     }
-    const baseBody = OpenAIBaseBodyGenerator.buildBaseBody(openAIInternal, 'completions');
-    // Completions with no max_tokens behave weirdly and do not give full responses
-    // text-davinci-003 total max limit is 4097, hence setting max_totals (number of tokens to reply) to 2000 to allow
-    // the insertion of same amount of tokens. Client should specify their own max_tokens.
-    baseBody.max_tokens ??= 2000;
-    return baseBody;
+    return OpenAIBaseBodyGenerator.buildBaseBody(openAIInternal, 'completions');
   }
 }

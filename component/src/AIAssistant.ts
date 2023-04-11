@@ -16,8 +16,6 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
-// WORK - cut off total characters or number of messages
-// chat should be the default
 // WORK - display character limit like in bing
 // WORK - change visibility icons to scalable
 // WORK - custom model - not chatgpt
