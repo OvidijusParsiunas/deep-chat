@@ -8,32 +8,30 @@ import {OpenAIClientIO} from './openAIClientIO';
 // chat is a form of completions
 export class OpenAIChatIO implements OpenAIClientIO {
   url = 'https://api.openai.com/v1/chat/completions';
-  private readonly _totalMessagesMaxCharLength: number = OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH;
-  private readonly _maxMessages?: number;
 
-  constructor(totalMessagesMaxCharLength?: number, maxMessages?: number) {
-    if (totalMessagesMaxCharLength) this._totalMessagesMaxCharLength = totalMessagesMaxCharLength;
-    this._maxMessages = maxMessages;
-  }
-
+  // prettier-ignore
   preprocessBody(baseBody: OpenAIInternalBody, messagesObj: Messages) {
     const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIInternalBody;
     const messages = JSON.parse(JSON.stringify(messagesObj.messages)) as MessageContent[];
     if (body.systemMessage) {
-      const processedMessages = this.processMessages(messages, body.systemMessage.content.length);
+      const totalMessagesMaxCharLength = body.total_messages_max_char_length || OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH;
+      const processedMessages = this.processMessages(messages, body.systemMessage.content.length,
+        totalMessagesMaxCharLength, baseBody.max_messages);
       body.messages = [body.systemMessage, ...processedMessages];
-      delete body.systemMessage;
+      this.cleanBody(body);
     }
     return body;
   }
 
-  private processMessages(messages: MessageContent[], systemMessageLength: number) {
+  // prettier-ignore
+  private processMessages(messages: MessageContent[], systemMessageLength: number, totalMessagesMaxCharLength: number,
+      maxMessages?: number) {
     let totalCharacters = 0;
-    if (this._maxMessages !== undefined && this._maxMessages > 0) {
-      messages = messages.splice(Math.max(messages.length - this._maxMessages, 0));
+    if (maxMessages !== undefined && maxMessages > 0) {
+      messages = messages.splice(Math.max(messages.length - maxMessages, 0));
     }
     // Not removing the first message in order to retain the initial 'system' message
-    const limit = this._totalMessagesMaxCharLength - systemMessageLength;
+    const limit = totalMessagesMaxCharLength - systemMessageLength;
     let i = messages.length - 1;
     for (i; i >= 0; i -= 1) {
       totalCharacters += messages[i].content.length;
@@ -42,7 +40,13 @@ export class OpenAIChatIO implements OpenAIClientIO {
         break;
       }
     }
-    return messages.slice(i);
+    return messages.slice(Math.max(i, 0));
+  }
+
+  private cleanBody(body: OpenAIInternalBody) {
+    delete body.systemMessage;
+    delete body.total_messages_max_char_length;
+    delete body.max_messages;
   }
 
   extractTextFromResult(result: OpenAIResult): string {

@@ -32,7 +32,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private _isSVGLoadingOverriden = false;
 
   constructor(inputElementRef: HTMLElement, messages: Messages, key: string, aiAssistant: AiAssistant) {
-    const {openAI, context, requestSettings, submitButtonStyles, requestInterceptor} = aiAssistant;
+    const {openAI, context, requestSettings, submitButtonStyles, requestInterceptor, inputCharacterLimit} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._key = key;
     this._messages = messages;
@@ -40,7 +40,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._openAIBaseBody = OpenAIBaseBodyGenerator.generate(openAI, context);
-    this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody);
+    this._clientIO = OpenAIClientIOFactory.getClientIO(this._openAIBaseBody, inputCharacterLimit);
     this._customRequestSettings = requestSettings;
     if (!this._customStyles?.loading) this.overwriteLoadingStyleIfNoLoadingMessage(aiAssistant);
     this.changeToSubmitIcon();

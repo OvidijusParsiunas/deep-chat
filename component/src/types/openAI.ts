@@ -15,12 +15,12 @@ export interface OpenAIConfig {
 }
 
 export interface OpenAICustomChatLimits {
-  total_messages_max_char_length?: number;
+  total_messages_max_char_length?: number; // uses OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
   max_messages?: number;
 }
 
 export interface OpenAICustomCompletionLimits {
-  max_char_length?: number;
+  max_char_length?: number; // uses inputCharacterLimit or OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
 }
 
 export interface OpenAI {

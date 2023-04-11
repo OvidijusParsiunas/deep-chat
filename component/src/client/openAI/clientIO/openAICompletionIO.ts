@@ -12,8 +12,14 @@ export class OpenAICompletionIO implements OpenAIClientIO {
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
 
-  constructor(maxCharLength?: number) {
-    if (maxCharLength) this._maxCharLength = maxCharLength;
+  constructor(baseBody: OpenAIInternalBody, inputCharacterLimit?: number) {
+    const newMaxCharLength = baseBody.max_char_length || inputCharacterLimit;
+    if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
+    this.cleanBody(baseBody);
+  }
+
+  private cleanBody(body: OpenAIInternalBody) {
+    delete body.max_char_length;
   }
 
   // prettier-ignore

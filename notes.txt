@@ -4,3 +4,6 @@ remove the dist file in the repo
 Custom tts API props
 Custom stt API props
 Java example
+
+Potential features:
+display character limit like in bing
