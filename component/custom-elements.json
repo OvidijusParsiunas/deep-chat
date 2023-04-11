@@ -104,9 +104,23 @@
             },
             {
               "kind": "field",
-              "name": "initMessages",
+              "name": "initialMessages",
               "type": {
                 "text": "MessageContent[] | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "introMessage",
+              "type": {
+                "text": "IntroMessage | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "displayLoadingMessage",
+              "type": {
+                "text": "boolean | undefined"
               }
             },
             {
@@ -149,6 +163,13 @@
               "name": "focusInput",
               "type": {
                 "text": "() => void"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getMessages",
+              "type": {
+                "text": "() => MessageContent[]"
               }
             },
             {
@@ -423,12 +444,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/types/openAIBodies.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/types/openAIInternal.ts",
       "declarations": [],
       "exports": []
@@ -483,6 +498,30 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/client/errorMessages/errorMessages.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ErrorMessages",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorMessages",
+          "declaration": {
+            "name": "ErrorMessages",
+            "module": "src/client/errorMessages/errorMessages.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/client/openAI/openAIClient.ts",
       "declarations": [
         {
@@ -529,7 +568,7 @@
                 {
                   "name": "baseBody",
                   "type": {
-                    "text": "OpenAIConfig"
+                    "text": "OpenAIInternalBody"
                   }
                 },
                 {
@@ -579,7 +618,7 @@
                 {
                   "name": "baseBody",
                   "type": {
-                    "text": "OpenAIConfig"
+                    "text": "OpenAIInternalBody"
                   }
                 },
                 {
@@ -668,30 +707,6 @@
           "declaration": {
             "name": "OpenAIClient",
             "module": "src/client/openAI/openAIClient.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/client/errorMessages/errorMessages.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "ErrorMessages",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorMessages",
-          "declaration": {
-            "name": "ErrorMessages",
-            "module": "src/client/errorMessages/errorMessages.ts"
           }
         }
       ]
@@ -1469,13 +1484,33 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts",
+      "path": "src/client/openAI/body/openAIBaseBodyGenerator.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "OpenAIBaseBodyAssembler",
+          "name": "OpenAIBaseBodyGenerator",
           "members": [
+            {
+              "kind": "field",
+              "name": "GPT_CHAT_TURBO_MODEL",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'gpt-3.5-turbo'"
+            },
+            {
+              "kind": "field",
+              "name": "GPT_COMPLETIONS_DAVINCI_MODEL",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'text-davinci-003'"
+            },
             {
               "kind": "field",
               "name": "DEFAULT_PARAMS",
@@ -1484,7 +1519,27 @@
               },
               "privacy": "private",
               "static": true,
-              "default": "{\n    chat: {\n      model: 'gpt-3.5-turbo',\n      systemMessage: {role: 'system', content: 'You are a helpful assistant.'},\n    },\n    completions: {\n      model: 'text-curie-001',\n    },\n  }"
+              "default": "{\n    chat: {\n      model: OpenAIBaseBodyGenerator.GPT_CHAT_TURBO_MODEL,\n      systemMessage: {role: 'system', content: 'You are a helpful assistant.'},\n    },\n    completions: {\n      model: OpenAIBaseBodyGenerator.GPT_COMPLETIONS_DAVINCI_MODEL,\n    },\n  }"
+            },
+            {
+              "kind": "method",
+              "name": "buildBaseBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "openAIInternal",
+                  "type": {
+                    "text": "OpenAI"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof OpenAI"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -1519,10 +1574,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "OpenAIBaseBodyAssembler",
+          "name": "OpenAIBaseBodyGenerator",
           "declaration": {
-            "name": "OpenAIBaseBodyAssembler",
-            "module": "src/client/openAI/assemblers/openAIBaseBodyAssembler.ts"
+            "name": "OpenAIBaseBodyGenerator",
+            "module": "src/client/openAI/body/openAIBaseBodyGenerator.ts"
           }
         }
       ]
@@ -1966,9 +2021,9 @@
             },
             {
               "kind": "field",
-              "name": "_textElementRefs",
+              "name": "_messageElementRefs",
               "type": {
-                "text": "HTMLElement[]"
+                "text": "MessageElements[]"
               },
               "privacy": "private",
               "default": "[]"
@@ -2031,6 +2086,14 @@
             },
             {
               "kind": "field",
+              "name": "_displayLoadingMessage",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "messages",
               "type": {
                 "text": "MessageContent[]"
@@ -2045,11 +2108,24 @@
             },
             {
               "kind": "method",
+              "name": "addIntroductoryMessage",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "introMessage",
+                  "type": {
+                    "text": "IntroMessage"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "populateInitialMessages",
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "initMessages",
+                  "name": "initialMessages",
                   "type": {
                     "text": "MessageContent[]"
                   }
@@ -2175,7 +2251,12 @@
               "kind": "method",
               "name": "createBaseElements",
               "privacy": "private",
-              "static": true
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "MessageElements"
+                }
+              }
             },
             {
               "kind": "method",
@@ -2198,7 +2279,7 @@
             },
             {
               "kind": "method",
-              "name": "sendClientUpdate",
+              "name": "createNewMessageElement",
               "privacy": "private",
               "parameters": [
                 {
@@ -2212,34 +2293,24 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             },
             {
               "kind": "method",
-              "name": "removeStreamedMessageIfEmpty",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "addNewErrorMessage",
-              "privacy": "public",
+              "name": "createAndAppendNewMessageElement",
+              "privacy": "private",
               "parameters": [
                 {
-                  "name": "type",
+                  "name": "text",
                   "type": {
-                    "text": "keyof Omit<ErrorMessages, 'default'>"
+                    "text": "string"
                   }
                 },
                 {
-                  "name": "message",
-                  "optional": true,
+                  "name": "isAI",
                   "type": {
-                    "text": "string"
+                    "text": "boolean"
                   }
                 }
               ]
@@ -2272,6 +2343,59 @@
                   "default": "false"
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "sendClientUpdate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "isInitial",
+                  "default": "false"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeMessageOnError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "addNewErrorMessage",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof Omit<ErrorMessages, 'default'>"
+                  }
+                },
+                {
+                  "name": "message",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addLoadingMessage",
+              "privacy": "public"
             },
             {
               "kind": "method",
@@ -2310,6 +2434,10 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "field",
+              "name": "getMessages"
             }
           ]
         }
@@ -2456,6 +2584,340 @@
           "declaration": {
             "name": "Name",
             "module": "src/views/chat/messages/name.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/focusUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FocusUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "focusEndOfInput",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "focusFromParentElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FocusUtils",
+          "declaration": {
+            "name": "FocusUtils",
+            "module": "src/views/chat/input/keyboardInput/focusUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/inputLimit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputLimit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "ALLOWED_KEYS",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>([\n      'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control'\n    ])"
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputELement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "inputCharacterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeyDown",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputCharacterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isKeyCombinationAllowed",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputCharacterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputLimit",
+          "declaration": {
+            "name": "InputLimit",
+            "module": "src/views/chat/input/keyboardInput/inputLimit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "KeyboardInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "KEYBOARD_INPUT_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'keyboard-input'"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "placeholderInputText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "KeyboardInput",
+          "declaration": {
+            "name": "KeyboardInput",
+            "module": "src/views/chat/input/keyboardInput/keyboardInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/keyboardInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
           }
         }
       ]
@@ -2880,340 +3342,6 @@
           "declaration": {
             "name": "CustomButtonInnerElements",
             "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/focusUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FocusUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "focusEndOfInput",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "focusFromParentElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FocusUtils",
-          "declaration": {
-            "name": "FocusUtils",
-            "module": "src/views/chat/input/keyboardInput/focusUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/inputLimit.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputLimit",
-          "members": [
-            {
-              "kind": "field",
-              "name": "ALLOWED_KEYS",
-              "privacy": "private",
-              "static": true,
-              "default": "new Set<string>([\n      'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control'\n    ])"
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputELement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "inputCharacterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeyDown",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputCharacterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isKeyCombinationAllowed",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputCharacterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputLimit",
-          "declaration": {
-            "name": "InputLimit",
-            "module": "src/views/chat/input/keyboardInput/inputLimit.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/keyboardInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "KeyboardInput",
-          "members": [
-            {
-              "kind": "field",
-              "name": "KEYBOARD_INPUT_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'keyboard-input'"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "placeholderInputText",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "KeyboardInput",
-          "declaration": {
-            "name": "KeyboardInput",
-            "module": "src/views/chat/input/keyboardInput/keyboardInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/keyboardInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/keyboardInput/pasteUtils.ts"
           }
         }
       ]
@@ -3917,6 +4045,15 @@
               "privacy": "private"
             },
             {
+              "kind": "field",
+              "name": "_isSVGLoadingOverriden",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
               "kind": "method",
               "name": "createInnerElements",
               "privacy": "private"
@@ -3944,6 +4081,19 @@
               "name": "createStopIconElement",
               "privacy": "private",
               "static": true
+            },
+            {
+              "kind": "method",
+              "name": "overwriteLoadingStyleIfNoLoadingMessage",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "aiAssistant",
+                  "type": {
+                    "text": "AiAssistant"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",

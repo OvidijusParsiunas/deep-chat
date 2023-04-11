@@ -1,4 +1,4 @@
-import {CustomMessageStyles, ErrorMessages, MessageContent, OnNewMessage} from './types/messages';
+import {CustomMessageStyles, ErrorMessages, IntroMessage, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
@@ -20,7 +20,6 @@ import {Names} from './types/names';
 // chat should be the default
 // WORK - display character limit like in bing
 // WORK - change visibility icons to scalable
-// WORK - introductory message
 // WORK - custom model - not chatgpt
 // WORK - rename this file to aiAssistant.ts in github
 // WORK - handle code indentation messages
@@ -67,7 +66,10 @@ export class AiAssistant extends InternalHTML {
   names?: Names;
 
   @Property('object')
-  initMessages?: MessageContent[];
+  initialMessages?: MessageContent[];
+
+  @Property('string')
+  introMessage?: IntroMessage;
 
   @Property('boolean')
   displayLoadingMessage?: boolean;
@@ -91,6 +93,8 @@ export class AiAssistant extends InternalHTML {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
   };
 
+  getMessages: () => MessageContent[] = () => [];
+
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
@@ -99,7 +103,6 @@ export class AiAssistant extends InternalHTML {
   _auxiliaryStyleApplied = false;
 
   // TO-DO - key view style
-  // TO-DO - getMessages()
 
   constructor() {
     super();
@@ -109,8 +112,7 @@ export class AiAssistant extends InternalHTML {
     WebComponentStyleUtils.apply(style, this.shadowRoot);
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it
-      // this.initMessages is a safety measure so that events are definitely not fired twice
-      if (!this._hasBeenRendered && !this.initMessages) {
+      if (!this._hasBeenRendered) {
         this.onRender();
       }
     }, 20); // rendering takes time, hence this is a high value to be safe

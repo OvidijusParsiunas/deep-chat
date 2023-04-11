@@ -16,6 +16,11 @@ export type MessageContent = {role: 'user' | 'assistant'; content: string};
 
 export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
 
+export interface IntroMessage {
+  content: string;
+  styles?: CustomMessageStyle;
+}
+
 export interface ErrorMessage {
   text?: string;
   styles?: CustomMessageStyle;

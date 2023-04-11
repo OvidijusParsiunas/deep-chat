@@ -10,6 +10,7 @@ import {
   MessageContent,
   ErrorMessages,
   OnNewMessage,
+  IntroMessage,
 } from '../../../types/messages';
 
 export type AddNewMessage = Messages['addNewMessage'];
@@ -44,7 +45,9 @@ export class Messages {
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
     this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
-    if (aiAssistant.initMessages) this.populateInitialMessages(aiAssistant.initMessages);
+    if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
+    if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
+    aiAssistant.getMessages = () => this.messages;
   }
 
   private static createContainerElement() {
@@ -53,8 +56,17 @@ export class Messages {
     return container;
   }
 
-  private populateInitialMessages(initMessages: MessageContent[]) {
-    initMessages.forEach(({role, content}) => {
+  // prettier-ignore
+  private addIntroductoryMessage(introMessage: IntroMessage) {
+    const {outerContainer, innerContainer, textElement} = this.createAndAppendNewMessageElement(
+      introMessage.content || '', true);
+    if (introMessage.styles) {
+      Messages.applyCustomStylesToElements(outerContainer, innerContainer, textElement, introMessage.styles);
+    }
+  }
+
+  private populateInitialMessages(initialMessages: MessageContent[]) {
+    initialMessages.forEach(({role, content}) => {
       this.addNewMessage(content, role === 'assistant', true, true);
     });
   }
@@ -101,7 +113,7 @@ export class Messages {
     return {outerContainer, innerContainer, textElement};
   }
 
-  private createMessageElements(text: string, isAI: boolean, addToMesages = true) {
+  private createMessageElements(text: string, isAI: boolean) {
     const messageElements = Messages.createBaseElements();
     const {outerContainer, innerContainer, textElement} = messageElements;
     outerContainer.appendChild(innerContainer);
@@ -110,7 +122,31 @@ export class Messages {
       Messages.applyCustomStyles(outerContainer, innerContainer, textElement, this._messageStyles, isAI);
     }
     this._messageElementRefs.push(messageElements);
-    if (addToMesages) this.messages.push(Messages.createMessageContent(text, isAI));
+    return messageElements;
+  }
+
+  private createNewMessageElement(text: string, isAI: boolean) {
+    const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
+    if (isAI && lastMessageElements?.textElement.classList.contains('loading-message-text')) {
+      lastMessageElements.textElement.classList.remove('loading-message-text');
+      lastMessageElements.textElement.innerHTML = text;
+      return lastMessageElements;
+    }
+    return this.createMessageElements(text, isAI);
+  }
+
+  private createAndAppendNewMessageElement(text: string, isAI: boolean) {
+    const messageElements = this.createNewMessageElement(text, isAI);
+    this.elementRef.appendChild(messageElements.outerContainer);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    if (this._speechOutput && isAI) TextToSpeech.speak(text);
+    return messageElements;
+  }
+
+  public addNewMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
+    const messageElements = this.createAndAppendNewMessageElement(text, isAI);
+    this.messages.push(Messages.createMessageContent(text, isAI));
+    if (update) this.sendClientUpdate(text, isAI, isInitial);
     return messageElements;
   }
 
@@ -145,29 +181,9 @@ export class Messages {
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
   }
 
-  private createNewMessageElement(text: string, isAI: boolean) {
-    const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (isAI && lastMessageElements?.textElement.classList.contains('loading-message-text')) {
-      lastMessageElements.textElement.classList.remove('loading-message-text');
-      lastMessageElements.textElement.innerHTML = text;
-      return lastMessageElements;
-    }
-    const messageElements = this.createMessageElements(text, isAI);
-    this.elementRef.appendChild(messageElements.outerContainer);
-    return messageElements;
-  }
-
-  public addNewMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
-    const messageElements = this.createNewMessageElement(text, isAI);
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    if (this._speechOutput && isAI) TextToSpeech.speak(text);
-    if (update) this.sendClientUpdate(text, isAI, isInitial);
-    return messageElements;
-  }
-
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
-    const {outerContainer, textElement} = this.createMessageElements('', true, false);
+    const {outerContainer, textElement} = this.createMessageElements('', true);
     textElement.classList.add('loading-message-text');
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('dots-flashing');

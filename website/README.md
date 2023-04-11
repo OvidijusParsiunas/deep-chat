@@ -15,7 +15,7 @@ inputStyles?: InputStyles;
 submitButtonStyles?: SubmitButtonStyles;
 
 Messages:
-initMessages?: MessageContent[];
+initialMessages?: MessageContent[];
 names?: Names;
 avatars?: Avatars;
 errorMessage?: ErrorMessages;
