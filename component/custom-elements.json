@@ -566,7 +566,7 @@
                   }
                 },
                 {
-                  "name": "baseBody",
+                  "name": "body",
                   "type": {
                     "text": "OpenAIInternalBody"
                   }
@@ -616,7 +616,7 @@
                   }
                 },
                 {
-                  "name": "baseBody",
+                  "name": "body",
                   "type": {
                     "text": "OpenAIInternalBody"
                   }
@@ -1604,7 +1604,7 @@
               "name": "preprocessBody",
               "parameters": [
                 {
-                  "name": "baseBody",
+                  "name": "body",
                   "type": {
                     "text": "OpenAIInternalBody"
                   }
@@ -1675,7 +1675,7 @@
               },
               "parameters": [
                 {
-                  "name": "baseBody",
+                  "name": "body",
                   "type": {
                     "text": "OpenAIInternalBody"
                   }
@@ -1718,7 +1718,7 @@
               "name": "preprocessBody",
               "parameters": [
                 {
-                  "name": "baseBody",
+                  "name": "body",
                   "type": {
                     "text": "OpenAIInternalBody"
                   }

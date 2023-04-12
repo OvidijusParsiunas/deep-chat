@@ -11,12 +11,12 @@ export type HandleVerificationResult = (
 
 export class HTTPRequest {
   // prettier-ignore
-  public static requestCompletion(io: ServiceIO, baseBody: object, messages: Messages,
+  public static requestCompletion(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onFinish: () => void) {
-    fetch(io.requestSettings?.url || io.url, {
+    fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(baseBody, messages))),
+      body: JSON.stringify(requestInterceptor(io.preprocessBody(body, messages))),
     })
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
@@ -32,13 +32,13 @@ export class HTTPRequest {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(io: ServiceIO, baseBody: object, messages: Messages,
+  public static requestStreamCompletion(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
-    fetchEventSource(io.requestSettings?.url || io.url, {
+    fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(baseBody, messages))),
+      body: JSON.stringify(requestInterceptor(io.preprocessBody(body, messages))),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

@@ -5,8 +5,8 @@ import {RequestInterceptor} from '../../types/requestInterceptor';
 import {RequestSettings} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {OpenAIResult} from '../../types/openAIResult';
 import {OpenAIBaseBody} from './utils/openAIBaseBody';
+import {OpenAIResult} from '../../types/openAIResult';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
@@ -14,7 +14,7 @@ import {AiAssistant} from '../../aiAssistant';
 // chat is a form of completions
 export class OpenAIChatIO implements ServiceIO<OpenAIResult> {
   url = 'https://api.openai.com/v1/chat/completions';
-  private readonly _baseBody: OpenAIBodyInternal;
+  private readonly _body: OpenAIBodyInternal;
   requestSettings?: RequestSettings;
   private readonly _requestInterceptor: RequestInterceptor;
   private readonly _systemMessage: SystemMessageInternal;
@@ -32,7 +32,7 @@ export class OpenAIChatIO implements ServiceIO<OpenAIResult> {
     this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this._requestInterceptor = requestInterceptor || ((body) => body);
-    this._baseBody = OpenAIBaseBody.build(OpenAIBaseBody.GPT_CHAT_TURBO_MODEL, config);
+    this._body = OpenAIBaseBody.build(OpenAIBaseBody.GPT_CHAT_TURBO_MODEL, config);
   }
 
   private cleanConfig(config: OpenAICustomChatLimits) {
@@ -57,8 +57,8 @@ export class OpenAIChatIO implements ServiceIO<OpenAIResult> {
   }
 
   // prettier-ignore
-  preprocessBody(baseBody: OpenAIBodyInternal, messagesObj: Messages) {
-    const body = JSON.parse(JSON.stringify(baseBody)) as OpenAIBodyInternal;
+  preprocessBody(_body: OpenAIBodyInternal, messagesObj: Messages) {
+    const body = JSON.parse(JSON.stringify(_body)) as OpenAIBodyInternal;
     const messages = JSON.parse(JSON.stringify(messagesObj.messages)) as MessageContent[];
     const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.MAX_CHAR_LENGTH;
     const processedMessages = this.processMessages(messages, this._systemMessage.content.length,
@@ -90,11 +90,11 @@ export class OpenAIChatIO implements ServiceIO<OpenAIResult> {
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (this._baseBody.stream) {
-      HTTPRequest.requestStreamCompletion(this, this._baseBody, messages, this._requestInterceptor,
+    if (this._body.stream) {
+      HTTPRequest.requestStreamCompletion(this, this._body, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.requestCompletion(this, this._baseBody, messages, this._requestInterceptor,
+      HTTPRequest.requestCompletion(this, this._body, messages, this._requestInterceptor,
         completionsHandlers.onFinish);
     }
   }

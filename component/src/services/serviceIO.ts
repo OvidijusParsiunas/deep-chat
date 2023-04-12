@@ -18,12 +18,12 @@ export interface KeyVerificationHandlers {
 }
 
 export interface ServiceIO<Result = object> {
-  url: string;
+  url?: string;
   requestSettings?: RequestSettings;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  preprocessBody(baseBody: object, messages: Messages): object;
+  preprocessBody(body: object, messages: Messages): object;
 
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
 

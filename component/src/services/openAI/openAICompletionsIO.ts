@@ -17,7 +17,7 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
   private readonly full_transaction_max_tokens = 4000;
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
-  private readonly _baseBody: OpenAIBodyInternal;
+  private readonly _config: OpenAIBodyInternal;
   requestSettings?: RequestSettings;
   private readonly _requestInterceptor: RequestInterceptor;
 
@@ -33,7 +33,7 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
     }
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this._requestInterceptor = requestInterceptor || ((body) => body);
-    this._baseBody = OpenAIBaseBody.build(OpenAIBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    this._config = OpenAIBaseBody.build(OpenAIBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 
   private cleanConfig(config: OpenAICustomCompletionLimits) {
@@ -52,23 +52,23 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
   }
 
   // prettier-ignore
-  preprocessBody(baseBody: OpenAIBodyInternal, messagesObj: Messages) {
+  preprocessBody(body: OpenAIBodyInternal, messagesObj: Messages) {
     const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].content;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
-    const maxTokens = baseBody.max_tokens
+    const maxTokens = body.max_tokens
       || this.full_transaction_max_tokens - processedMessage.length / this.numberOfCharsPerToken;
     const maxTokensInt = Math.floor(maxTokens);
-    return {prompt: processedMessage, max_tokens: maxTokensInt, ...baseBody};
+    return {prompt: processedMessage, max_tokens: maxTokensInt, ...body};
   }
 
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (this._baseBody.stream) {
-      HTTPRequest.requestStreamCompletion(this, this._baseBody, messages, this._requestInterceptor,
+    if (this._config.stream) {
+      HTTPRequest.requestStreamCompletion(this, this._config, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.requestCompletion(this, this._baseBody, messages, this._requestInterceptor,
+      HTTPRequest.requestCompletion(this, this._config, messages, this._requestInterceptor,
         completionsHandlers.onFinish);
     }
   }
