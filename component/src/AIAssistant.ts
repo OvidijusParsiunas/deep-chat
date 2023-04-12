@@ -4,6 +4,8 @@ import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {RequestInterceptor} from './types/requestInterceptor';
+import {ServiceIOFactory} from './services/serviceIOFactory';
+import {CustomServiceConfig} from './types/customService';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
@@ -17,7 +19,7 @@ import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
 // WORK - change visibility icons to scalable
-// WORK - custom model - not chatgpt
+// WORK - custom service - not openai
 // WORK - rename this file to aiAssistant.ts in github
 // WORK - handle code indentation messages
 // WORK - handle images
@@ -27,6 +29,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   openAI?: OpenAI;
+
+  @Property('object')
+  customService?: CustomServiceConfig;
 
   @Property('boolean')
   startWithChatView?: boolean;
@@ -109,9 +114,7 @@ export class AiAssistant extends InternalHTML {
     WebComponentStyleUtils.apply(style, this.shadowRoot);
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it
-      if (!this._hasBeenRendered) {
-        this.onRender();
-      }
+      if (!this._hasBeenRendered) this.onRender();
     }, 20); // rendering takes time, hence this is a high value to be safe
   }
 
@@ -123,18 +126,20 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
+    // TO-DO this will be moved to service selection view
+    const serviceIO = ServiceIOFactory.create(this, this.apiKey || '');
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
     if (ChatView.shouldBeRendered(this)) {
-      ChatView.render(this._elementRef, this.apiKey || '', this);
+      ChatView.render(this, this._elementRef, serviceIO);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets startWithChatView or apiKey to true, this would first
       // appear and then then the chatview would be rendered after it, which causes a blink and is bad UX
-      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this));
+      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO);
     }
     this._hasBeenRendered = true;
   }

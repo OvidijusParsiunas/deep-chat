@@ -1,4 +1,4 @@
-import {OpenAIClient} from '../../client/openAI/openAIClient';
+import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
 import {VisibilityIcon} from './visibilityIcon';
 
 export class InsertKeyView {
@@ -44,12 +44,16 @@ export class InsertKeyView {
 
   // prettier-ignore
   private static createStartButton(inputEl: HTMLInputElement, failTextEl: HTMLElement,
-      changeToChat: (key: string) => void) {
+      changeToChat: (key: string) => void, serviceIO: ServiceIO) {
     const startEl = document.createElement('div');
     startEl.id = 'start-button';
     startEl.innerText = 'Start';
-    startEl.onclick = OpenAIClient.verifyKey.bind(this, inputEl, changeToChat,
-      InsertKeyView.onFail.bind(this, inputEl, failTextEl, startEl), InsertKeyView.onLoad.bind(this, startEl));
+    const keyVerificationHandlers: KeyVerificationHandlers = {
+      onSuccess: changeToChat,
+      onFail: InsertKeyView.onFail.bind(this, inputEl, failTextEl, startEl),
+      onLoad: InsertKeyView.onLoad.bind(this, startEl),
+    };
+    startEl.onclick = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
     return startEl;
   }
 
@@ -70,7 +74,7 @@ export class InsertKeyView {
     return inputContainer;
   }
 
-  private static createContents(changeToChat: (key: string) => void) {
+  private static createContents(changeToChat: (key: string) => void, serviceIO: ServiceIO) {
     const contentsElement = document.createElement('div');
     contentsElement.id = 'insert-key-contents';
     const inputContainerElement = InsertKeyView.createInput();
@@ -79,21 +83,21 @@ export class InsertKeyView {
     inputContainerElement.appendChild(iconContainerElement);
     contentsElement.appendChild(inputContainerElement);
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer();
-    contentsElement.appendChild(InsertKeyView.createStartButton(inputElement, failTextElement, changeToChat));
+    contentsElement.appendChild(InsertKeyView.createStartButton(inputElement, failTextElement, changeToChat, serviceIO));
     contentsElement.appendChild(helpTextContainerElement);
     return contentsElement;
   }
 
-  private static createElements(changeToChat: (key: string) => void) {
+  private static createElements(changeToChat: (key: string) => void, serviceIO: ServiceIO) {
     const containerElement = document.createElement('div');
     containerElement.id = 'insert-key';
-    const contentsElement = InsertKeyView.createContents(changeToChat);
+    const contentsElement = InsertKeyView.createContents(changeToChat, serviceIO);
     containerElement.appendChild(contentsElement);
     return containerElement;
   }
 
-  public static render(containerRef: HTMLElement, changeToChat: (key: string) => void) {
-    const containerElement = InsertKeyView.createElements(changeToChat);
+  public static render(containerRef: HTMLElement, changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+    const containerElement = InsertKeyView.createElements(changeToChat, serviceIO);
     containerRef.replaceChildren(containerElement);
   }
 }

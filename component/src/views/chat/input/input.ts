@@ -4,6 +4,7 @@ import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {ButtonPosition} from './buttons/buttonPosition';
+import {ServiceIO} from '../../../services/serviceIO';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
@@ -12,10 +13,10 @@ export class Input {
   readonly elementRef: HTMLElement;
 
   // prettier-ignore
-  constructor(messages: Messages, key: string, aiAssistant: AiAssistant) {
+  constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const submitButton = new SubmitButton(keyboardInput.inputElementRef, messages, key, aiAssistant);
+    const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submitUserText.bind(submitButton);
     const microphoneButton = aiAssistant.speechInput

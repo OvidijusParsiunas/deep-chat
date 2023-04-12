@@ -1,29 +1,21 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {RequestInterceptor} from '../../types/requestInterceptor';
-import {OpenAIInternalBody} from '../../types/openAIInternal';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
-import {RequestSettings} from '../../types/requestSettings';
-import {OpenAIClientIO} from './clientIO/openAIClientIO';
 import {OpenAIResult} from '../../types/openAIResult';
+import {ServiceIO} from '../../services/serviceIO';
 
-export class OpenAIClient {
-  private static readonly _models_url = 'https://api.openai.com/v1/models';
+// prettier-ignore
+export type HandleVerificationResult = (
+  result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
 
-  private static buildHeaders(key: string) {
-    return {
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-    };
-  }
-
+export class HTTPRequest {
   // prettier-ignore
-  public static requestCompletion(io: OpenAIClientIO, baseBody: OpenAIInternalBody, key: string,
-      customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
-      onFinish: () => void) {
-    fetch(customRequestSettings?.url || io.url, {
-      method: customRequestSettings?.method || 'POST',
-      headers: customRequestSettings?.headers || new Headers(OpenAIClient.buildHeaders(key)),
+  public static requestCompletion(io: ServiceIO, baseBody: object, messages: Messages,
+      requestInterceptor: RequestInterceptor, onFinish: () => void) {
+    fetch(io.requestSettings?.url || io.url, {
+      method: io.requestSettings?.method || 'POST',
+      headers: io.requestSettings?.headers,
       body: JSON.stringify(requestInterceptor(io.preprocessBody(baseBody, messages))),
     })
       .then((response) => response.json())
@@ -40,13 +32,12 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(io: OpenAIClientIO, baseBody: OpenAIInternalBody, key: string,
-      customRequestSettings: RequestSettings | undefined, messages: Messages, requestInterceptor: RequestInterceptor,
-      onOpen: () => void, onClose: () => void, abortStream: AbortController) {
+  public static requestStreamCompletion(io: ServiceIO, baseBody: object, messages: Messages,
+      requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
-    fetchEventSource(customRequestSettings?.url || io.url, {
-      method: customRequestSettings?.method || 'POST',
-      headers: customRequestSettings?.headers || OpenAIClient.buildHeaders(key),
+    fetchEventSource(io.requestSettings?.url || io.url, {
+      method: io.requestSettings?.method || 'POST',
+      headers: io.requestSettings?.headers,
       body: JSON.stringify(requestInterceptor(io.preprocessBody(baseBody, messages))),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
@@ -80,27 +71,19 @@ export class OpenAIClient {
   }
 
   // prettier-ignore
-  public static verifyKey(inputElement: HTMLInputElement,
-      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
-    const key = inputElement.value.trim();
+  public static verifyKey(key: string, url: string, headers: HeadersInit,
+      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void,
+      handleVerificationResult: HandleVerificationResult) {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
-    fetch(OpenAIClient._models_url, {
+    fetch(url, {
       method: 'GET',
-      headers: new Headers(OpenAIClient.buildHeaders(inputElement.value.trim())),
+      headers,
       body: null,
     })
       .then((response) => response.json())
-      .then((result: OpenAIResult) => {
-        if (result.error) {
-          if (result.error.code === 'invalid_api_key') {
-            onFail(ErrorMessages.INVALID_KEY);
-          } else {
-            onFail(ErrorMessages.CONNECTION_FAILED);
-          }
-        } else {
-          onSuccess(key);
-        }
+      .then((result: object) => {
+        handleVerificationResult(result, key, onSuccess, onFail);
       })
       .catch((err) => {
         onFail(ErrorMessages.CONNECTION_FAILED);

@@ -578,7 +578,7 @@
                   }
                 },
                 {
-                  "name": "customRequestSettings",
+                  "name": "requestSettings",
                   "type": {
                     "text": "RequestSettings | undefined"
                   }
@@ -628,7 +628,7 @@
                   }
                 },
                 {
-                  "name": "customRequestSettings",
+                  "name": "requestSettings",
                   "type": {
                     "text": "RequestSettings | undefined"
                   }
@@ -1584,7 +1584,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIChatIO.ts",
+      "path": "src/client/openAI/serviceIO/openAIChatIO.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1643,20 +1643,20 @@
           "name": "OpenAIChatIO",
           "declaration": {
             "name": "OpenAIChatIO",
-            "module": "src/client/openAI/clientIO/openAIChatIO.ts"
+            "module": "src/client/openAI/serviceIO/openAIChatIO.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIClientIO.ts",
+      "path": "src/client/openAI/serviceIO/openAIClientIO.ts",
       "declarations": [],
       "exports": []
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAIClientIOFactory.ts",
+      "path": "src/client/openAI/serviceIO/openAIClientIOFactory.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1691,14 +1691,14 @@
           "name": "OpenAIClientIOFactory",
           "declaration": {
             "name": "OpenAIClientIOFactory",
-            "module": "src/client/openAI/clientIO/openAIClientIOFactory.ts"
+            "module": "src/client/openAI/serviceIO/openAIClientIOFactory.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/client/openAI/clientIO/openAICompletionIO.ts",
+      "path": "src/client/openAI/serviceIO/openAICompletionIO.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1757,7 +1757,7 @@
           "name": "OpenAICompletionIO",
           "declaration": {
             "name": "OpenAICompletionIO",
-            "module": "src/client/openAI/clientIO/openAICompletionIO.ts"
+            "module": "src/client/openAI/serviceIO/openAICompletionIO.ts"
           }
         }
       ]
@@ -3977,7 +3977,7 @@
             },
             {
               "kind": "field",
-              "name": "_customRequestSettings",
+              "name": "_requestSettings",
               "type": {
                 "text": "RequestSettings | undefined"
               },
@@ -3994,7 +3994,7 @@
             },
             {
               "kind": "field",
-              "name": "_clientIO",
+              "name": "_serviceIO",
               "type": {
                 "text": "OpenAIClientIO"
               },
