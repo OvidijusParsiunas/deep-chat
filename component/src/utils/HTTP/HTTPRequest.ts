@@ -57,7 +57,7 @@ export class HTTPRequest {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIResult;
           const text = io.extractTextFromResult(response);
-          if (textElement) Messages.updateStreamedMessage(text, textElement);
+          if (textElement) messages.updateStreamedMessage(text, textElement);
         }
       },
       onerror(err) {

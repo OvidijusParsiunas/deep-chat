@@ -1,7 +1,10 @@
+import {ElementUtils} from '../../../utils/element/elementUtils';
+import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Names} from '../../../types/names';
+import {Remarkable} from 'remarkable';
 import {Avatar} from './avatar';
 import {Name} from './name';
 import {
@@ -33,9 +36,12 @@ export class Messages {
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
   private readonly _displayLoadingMessage?: boolean;
+  private readonly _remarkable: Remarkable;
+  private _streamedText = '';
   messages: MessageContent[] = [];
 
   constructor(aiAssistant: AiAssistant) {
+    this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
     this._messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
@@ -92,7 +98,7 @@ export class Messages {
 
   private addInnerContainerElements(textElement: HTMLElement, text: string, isAI: boolean) {
     textElement.classList.add('message-text', isAI ? 'ai-message-text' : 'user-message-text');
-    textElement.innerHTML = text;
+    textElement.innerHTML = this._remarkable.render(text);
     if (this._avatars) Avatar.add(textElement, isAI, this._avatars);
     if (this._names) Name.add(textElement, isAI, this._names);
     return {textElement};
@@ -129,7 +135,7 @@ export class Messages {
     const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
     if (isAI && lastMessageElements?.textElement.classList.contains('loading-message-text')) {
       lastMessageElements.textElement.classList.remove('loading-message-text');
-      lastMessageElements.textElement.innerHTML = text;
+      lastMessageElements.textElement.innerHTML = this._remarkable.render(text);
       return lastMessageElements;
     }
     return this.createMessageElements(text, isAI);
@@ -179,6 +185,7 @@ export class Messages {
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
+    this._streamedText = '';
   }
 
   public addLoadingMessage() {
@@ -198,13 +205,16 @@ export class Messages {
     return textElement;
   }
 
-  public static updateStreamedMessage(text: string, textElement: HTMLElement) {
-    const textNode = document.createTextNode(text);
-    textElement.appendChild(textNode);
+  public updateStreamedMessage(text: string, textElement: HTMLElement) {
+    const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
+    this._streamedText += text;
+    textElement.innerHTML = this._remarkable.render(this._streamedText);
+    if (isScrollbarAtBottomOfElement) this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
   public finaliseStreamedMessage(text: string) {
     this.sendClientUpdate(text, true);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
+    this._streamedText = '';
   }
 }

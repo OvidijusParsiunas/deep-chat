@@ -48,6 +48,8 @@
     "custom-elements.json"
   ],
   "dependencies": {
-    "@microsoft/fetch-event-source": "^2.0.1"
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "highlight.js": "^11.7.0",
+    "remarkable": "^2.0.1"
   }
 }

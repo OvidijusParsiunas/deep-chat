@@ -1,3 +1,5 @@
+@import url('./remarkable/a11y-dark.min.css');
+
 #messages {
   overflow: auto;
 }
@@ -50,4 +52,28 @@
   width: 1rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
+}
+
+.message-text > p:first-child {
+  margin-top: 0px;
+}
+
+.message-text > p:last-child {
+  margin-bottom: 0px;
+}
+
+/* this is for codeblocks */
+pre {
+  overflow: auto;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+  border-radius: 7px;
+  background: #2b2b2b;
+  color: #f8f8f2;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+  padding: 0.6rem;
+  font-size: 0.9em;
+  line-height: 1.5em;
 }
