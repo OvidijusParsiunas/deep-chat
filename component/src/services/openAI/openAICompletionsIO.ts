@@ -7,18 +7,19 @@ import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAIResult} from '../../types/openAIResult';
 import {OpenAIBaseBody} from './utils/openAIBaseBody';
+import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 
-export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
+export class OpenAICompletionsIO implements ServiceIO<OpenAIBodyInternal, OpenAIResult> {
   url = 'https://api.openai.com/v1/completions';
   private readonly _maxCharLength: number = OpenAIUtils.MAX_CHAR_LENGTH;
   // text-davinci-003 total max limit is 4097 - keeping it at 4000 just to be safe
   private readonly full_transaction_max_tokens = 4000;
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
-  private readonly _config: OpenAIBodyInternal;
   requestSettings?: RequestSettings;
+  body: OpenAIBodyInternal;
   private readonly _requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
@@ -33,7 +34,7 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
     }
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this._requestInterceptor = requestInterceptor || ((body) => body);
-    this._config = OpenAIBaseBody.build(OpenAIBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    this.body = OpenAIBaseBody.build(OpenAIBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 
   private cleanConfig(config: OpenAICustomCompletionLimits) {
@@ -52,8 +53,8 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
   }
 
   // prettier-ignore
-  preprocessBody(body: OpenAIBodyInternal, messagesObj: Messages) {
-    const mostRecentMessageText = messagesObj.messages[messagesObj.messages.length - 1].content;
+  preprocessBody(body: OpenAIBodyInternal, messages: MessageContent[]) {
+    const mostRecentMessageText = messages[messages.length - 1].content;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
     const maxTokens = body.max_tokens
       || this.full_transaction_max_tokens - processedMessage.length / this.numberOfCharsPerToken;
@@ -64,11 +65,11 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIResult> {
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (this._config.stream) {
-      HTTPRequest.requestStreamCompletion(this, this._config, messages, this._requestInterceptor,
+    if (this.body.stream) {
+      HTTPRequest.requestStreamCompletion(this, this.body, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.requestCompletion(this, this._config, messages, this._requestInterceptor,
+      HTTPRequest.requestCompletion(this, this.body, messages, this._requestInterceptor,
         completionsHandlers.onFinish);
     }
   }

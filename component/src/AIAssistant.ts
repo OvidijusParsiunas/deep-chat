@@ -19,7 +19,6 @@ import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
 // WORK - change visibility icons to scalable
-// WORK - custom service - not openai
 // WORK - rename this file to aiAssistant.ts in github
 // WORK - handle code indentation messages
 // WORK - handle images

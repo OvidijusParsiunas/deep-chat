@@ -13,10 +13,12 @@ export class HTTPRequest {
   // prettier-ignore
   public static requestCompletion(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onFinish: () => void) {
+    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const messagesCopy = JSON.parse(JSON.stringify(messages.messages));
     fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(body, messages))),
+      body: JSON.stringify(requestInterceptor(io.preprocessBody(bodyCopy, messagesCopy))),
     })
       .then((response) => response.json())
       .then((result: OpenAIResult) => {
@@ -35,10 +37,12 @@ export class HTTPRequest {
   public static requestStreamCompletion(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
+    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const messagesCopy = JSON.parse(JSON.stringify(messages.messages));
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(body, messages))),
+      body: JSON.stringify(requestInterceptor(io.preprocessBody(bodyCopy, messagesCopy))),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

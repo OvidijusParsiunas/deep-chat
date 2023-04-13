@@ -1,5 +1,6 @@
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {MessageContent} from '../types/messages';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -17,13 +18,14 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export interface ServiceIO<Result = object> {
+export interface ServiceIO<Body = object, Result = object> {
   url?: string;
   requestSettings?: RequestSettings;
+  body?: Body;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  preprocessBody(body: object, messages: Messages): object;
+  preprocessBody(body: Body, messages: MessageContent[]): object;
 
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
 

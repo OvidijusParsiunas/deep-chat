@@ -4,5 +4,6 @@ export interface CustomServiceConfig {
 }
 
 export interface CustomServiceResponse {
-  content: string;
+  aiMessage: string;
+  error: string;
 }
