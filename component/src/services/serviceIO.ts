@@ -1,7 +1,6 @@
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
 import {ImageResults} from '../types/imageResult';
-import {MessageContent} from '../types/messages';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -19,16 +18,13 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export interface ServiceIO<Body = object, Result = object> {
+export interface ServiceIO {
   url?: string;
   requestSettings?: RequestSettings;
-  body?: Body;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  preprocessBody(body: Body, messages: MessageContent[]): object;
-
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
 
-  extractResultData(result: Result): string | ImageResults;
+  extractResultData(result: object): string | ImageResults;
 }

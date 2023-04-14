@@ -11,7 +11,7 @@ import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 
-export class OpenAICompletionsIO implements ServiceIO<OpenAIConverseBodyInternal, OpenAIConverseResult> {
+export class OpenAICompletionsIO implements ServiceIO {
   url = 'https://api.openai.com/v1/completions';
   private readonly _maxCharLength: number = OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
   // text-davinci-003 total max limit is 4097 - keeping it at 4000 just to be safe
@@ -19,7 +19,7 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIConverseBodyInternal
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
   requestSettings?: RequestSettings;
-  body: OpenAIConverseBodyInternal;
+  private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
@@ -34,7 +34,7 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIConverseBodyInternal
     }
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this._requestInterceptor = requestInterceptor || ((body) => body);
-    this.body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 
   private cleanConfig(config: OpenAICustomCompletionLimits) {
@@ -53,23 +53,25 @@ export class OpenAICompletionsIO implements ServiceIO<OpenAIConverseBodyInternal
   }
 
   // prettier-ignore
-  preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
+    const bodyCopy = JSON.parse(JSON.stringify(body));
     const mostRecentMessageText = messages[messages.length - 1].content;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
-    const maxTokens = body.max_tokens
+    const maxTokens = bodyCopy.max_tokens
       || this.full_transaction_max_tokens - processedMessage.length / this.numberOfCharsPerToken;
     const maxTokensInt = Math.floor(maxTokens);
-    return {prompt: processedMessage, max_tokens: maxTokensInt, ...body};
+    return {prompt: processedMessage, max_tokens: maxTokensInt, ...bodyCopy};
   }
 
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (this.body.stream) {
-      HTTPRequest.requestStream(this, this.body, messages, this._requestInterceptor,
+    const body = this.preprocessBody(this._raw_body, messages.messages);
+    if (body.stream) {
+      HTTPRequest.requestStream(this, body, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.request(this, this.body, messages, this._requestInterceptor, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages, this._requestInterceptor, completionsHandlers.onFinish);
     }
   }
 

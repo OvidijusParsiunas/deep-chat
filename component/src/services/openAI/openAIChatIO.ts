@@ -4,6 +4,7 @@ import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAI, OpenAICustomChatLimits} from '../../types/openAI';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
+import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {RequestSettings} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -12,10 +13,10 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 
 // chat is a form of completions
-export class OpenAIChatIO implements ServiceIO<OpenAIConverseBodyInternal, OpenAIConverseResult> {
+export class OpenAIChatIO implements ServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   requestSettings?: RequestSettings;
-  body: OpenAIConverseBodyInternal;
+  private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _requestInterceptor: RequestInterceptor;
   private readonly _systemMessage: SystemMessageInternal;
   private readonly _total_messages_max_char_length?: number;
@@ -32,7 +33,7 @@ export class OpenAIChatIO implements ServiceIO<OpenAIConverseBodyInternal, OpenA
     this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this._requestInterceptor = requestInterceptor || ((body) => body);
-    this.body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
+    this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
   }
 
   private cleanConfig(config: OpenAICustomChatLimits) {
@@ -57,15 +58,6 @@ export class OpenAIChatIO implements ServiceIO<OpenAIConverseBodyInternal, OpenA
   }
 
   // prettier-ignore
-  preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
-    const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const processedMessages = this.processMessages(messages, this._systemMessage.content.length,
-      totalMessagesMaxCharLength, this._max_messages);
-    body.messages = [this._systemMessage, ...processedMessages];
-    return body;
-  }
-
-  // prettier-ignore
   private processMessages(messages: MessageContent[], systemMessageLength: number, totalMessagesMaxCharLength: number,
       maxMessages?: number) {
     let totalCharacters = 0;
@@ -86,13 +78,27 @@ export class OpenAIChatIO implements ServiceIO<OpenAIConverseBodyInternal, OpenA
   }
 
   // prettier-ignore
+  private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
+    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const filteredMessages = (messages.filter((message) => {
+      return !message.content.startsWith(BASE_64_PREFIX) && !message.content.startsWith('http');
+    }));
+    const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
+    const processedMessages = this.processMessages(filteredMessages, this._systemMessage.content.length,
+      totalMessagesMaxCharLength, this._max_messages);
+    bodyCopy.messages = [this._systemMessage, ...processedMessages];
+    return bodyCopy;
+  }
+
+  // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (this.body.stream) {
-      HTTPRequest.requestStream(this, this.body, messages, this._requestInterceptor,
+    const body = this.preprocessBody(this._raw_body, messages.messages);
+    if (body.stream) {
+      HTTPRequest.requestStream(this, body, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.request(this, this.body, messages, this._requestInterceptor, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages, this._requestInterceptor, completionsHandlers.onFinish);
     }
   }
 

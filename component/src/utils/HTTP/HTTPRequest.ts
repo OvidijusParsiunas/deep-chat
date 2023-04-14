@@ -13,12 +13,10 @@ export class HTTPRequest {
   // prettier-ignore
   public static request(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onFinish: () => void) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
-    const messagesCopy = JSON.parse(JSON.stringify(messages.messages));
     fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(bodyCopy, messagesCopy))),
+      body: JSON.stringify(requestInterceptor(body)),
     })
       .then((response) => response.json())
       .then((result: OpenAIConverseResult) => {
@@ -37,12 +35,10 @@ export class HTTPRequest {
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
-    const bodyCopy = JSON.parse(JSON.stringify(body));
-    const messagesCopy = JSON.parse(JSON.stringify(messages.messages));
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(io.preprocessBody(bodyCopy, messagesCopy))),
+      body: JSON.stringify(requestInterceptor(body)),
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {
