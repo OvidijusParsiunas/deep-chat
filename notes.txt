@@ -1,5 +1,4 @@
 rename AiAssistant to aiAssistant
-remove the dist file in the repo
 
 Custom tts API props
 Custom stt API props
