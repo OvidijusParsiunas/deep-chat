@@ -1,5 +1,6 @@
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {ImageResults} from '../types/imageResult';
 import {MessageContent} from '../types/messages';
 
 export interface CompletionsHandlers {
@@ -29,5 +30,5 @@ export interface ServiceIO<Body = object, Result = object> {
 
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
 
-  extractTextFromResult(result: Result): string;
+  extractResultData(result: Result): string | ImageResults;
 }

@@ -19,7 +19,6 @@ import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
 // WORK - change visibility icons to scalable
-// WORK - handle code indentation messages
 // WORK - handle images
 export class AiAssistant extends InternalHTML {
   @Property('string')

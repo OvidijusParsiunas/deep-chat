@@ -1,5 +1,7 @@
+import {ImageResult, ImageResults} from '../../../types/imageResult';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {SAMPLE_OPEN_AI_BASE_64} from './sampleOpenAIBase64';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
@@ -15,8 +17,6 @@ import {
   OnNewMessage,
   IntroMessage,
 } from '../../../types/messages';
-
-export type AddNewMessage = Messages['addNewMessage'];
 
 interface MessageElements {
   outerContainer: HTMLElement;
@@ -149,7 +149,15 @@ export class Messages {
     return messageElements;
   }
 
-  public addNewMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
+  public addNewMessage(data: string | ImageResults, isAI: boolean, update: boolean, isInitial = false) {
+    if (typeof data === 'string') {
+      this.addNewTextMessage(data, isAI, update, isInitial);
+    } else {
+      data.forEach((imageData) => this.addNewImageMessage(imageData));
+    }
+  }
+
+  private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
     this.messages.push(Messages.createMessageContent(text, isAI));
     if (update) this.sendClientUpdate(text, isAI, isInitial);
@@ -200,7 +208,7 @@ export class Messages {
   }
 
   public addNewStreamedMessage() {
-    const {textElement} = this.addNewMessage('', true, false);
+    const {textElement} = this.addNewTextMessage('', true, false);
     textElement.classList.add('streamed-message');
     return textElement;
   }
@@ -213,8 +221,33 @@ export class Messages {
   }
 
   public finaliseStreamedMessage(text: string) {
+    // WORK - does this send the full text?
     this.sendClientUpdate(text, true);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
+  }
+
+  private static createImage(imageData: ImageResult) {
+    const data = (imageData.url || imageData.base64) as string;
+    const imageElement = new Image();
+    imageElement.classList.add('image');
+    imageElement.src = data;
+    if (imageData.base64) return imageElement;
+    const linkWrapperElement = document.createElement('a');
+    linkWrapperElement.href = imageData.url as string;
+    linkWrapperElement.target = '_blank';
+    linkWrapperElement.appendChild(imageElement);
+    return linkWrapperElement;
+  }
+
+  private addNewImageMessage(imageData: ImageResult, isInitial = false) {
+    const {outerContainer, textElement} = this.createNewMessageElement('', true);
+    const data = (imageData.url || imageData.base64) as string;
+    const image = Messages.createImage(imageData);
+    textElement.appendChild(image);
+    this.elementRef.appendChild(outerContainer);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.messages.push(Messages.createMessageContent(data, true));
+    this.sendClientUpdate(data, true, isInitial);
   }
 }

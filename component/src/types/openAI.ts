@@ -5,13 +5,20 @@ export interface OpenAIMessage {
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions
-export interface OpenAIConfig {
+export interface OpenAIConverseConfig {
   model?: string;
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
   n?: number;
   stream?: boolean;
+}
+
+export interface OpenAIImagesConfig {
+  n?: number;
+  size?: '256x256' | '512x512' | '1024x1024';
+  response_format?: 'url' | 'b64_json';
+  user?: string;
 }
 
 export interface OpenAICustomChatLimits {
@@ -24,6 +31,7 @@ export interface OpenAICustomCompletionLimits {
 }
 
 export interface OpenAI {
-  chat?: true | (OpenAIConfig & OpenAICustomChatLimits);
-  completions?: true | (OpenAIConfig & OpenAICustomCompletionLimits);
+  chat?: true | (OpenAIConverseConfig & OpenAICustomChatLimits);
+  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionLimits);
+  images?: true | OpenAIConverseConfig;
 }

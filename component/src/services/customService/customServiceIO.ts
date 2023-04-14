@@ -1,7 +1,7 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {CustomServiceResponse} from '../../types/customService';
-import {OpenAIBodyInternal} from '../../types/openAIInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -24,7 +24,7 @@ export class CustomServiceIO implements ServiceIO<any, CustomServiceResponse> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers) {}
 
-  preprocessBody(_: OpenAIBodyInternal, messages: MessageContent[]) {
+  preprocessBody(_: OpenAIConverseBodyInternal, messages: MessageContent[]) {
     return {messages};
   }
 
@@ -32,15 +32,15 @@ export class CustomServiceIO implements ServiceIO<any, CustomServiceResponse> {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (this._config.stream) {
-      HTTPRequest.requestStreamCompletion(this, this._config, messages, this._requestInterceptor,
+      HTTPRequest.requestStream(this, this._config, messages, this._requestInterceptor,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.requestCompletion(this, this._config, messages, this._requestInterceptor,
+      HTTPRequest.request(this, this._config, messages, this._requestInterceptor,
         completionsHandlers.onFinish);
     }
   }
 
-  extractTextFromResult(result: CustomServiceResponse): string {
+  extractResultData(result: CustomServiceResponse): string {
     if (result.error) throw result.error;
     return result.aiMessage;
   }

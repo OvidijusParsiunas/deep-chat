@@ -1,8 +1,8 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {RequestInterceptor} from '../../types/requestInterceptor';
+import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
-import {OpenAIResult} from '../../types/openAIResult';
 import {ServiceIO} from '../../services/serviceIO';
 
 // prettier-ignore
@@ -11,7 +11,7 @@ export type HandleVerificationResult = (
 
 export class HTTPRequest {
   // prettier-ignore
-  public static requestCompletion(io: ServiceIO, body: object, messages: Messages,
+  public static request(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onFinish: () => void) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const messagesCopy = JSON.parse(JSON.stringify(messages.messages));
@@ -21,9 +21,9 @@ export class HTTPRequest {
       body: JSON.stringify(requestInterceptor(io.preprocessBody(bodyCopy, messagesCopy))),
     })
       .then((response) => response.json())
-      .then((result: OpenAIResult) => {
-        const text = io.extractTextFromResult(result);
-        messages.addNewMessage(text, true, true);
+      .then((result: OpenAIConverseResult) => {
+        const resultData = io.extractResultData(result);
+        messages.addNewMessage(resultData, true, true);
         onFinish();
       })
       .catch((err) => {
@@ -34,7 +34,7 @@ export class HTTPRequest {
   }
 
   // prettier-ignore
-  public static requestStreamCompletion(io: ServiceIO, body: object, messages: Messages,
+  public static requestStream(io: ServiceIO, body: object, messages: Messages,
       requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
     let textElement: HTMLElement | null = null;
     const bodyCopy = JSON.parse(JSON.stringify(body));
@@ -55,8 +55,8 @@ export class HTTPRequest {
       },
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
-          const response = JSON.parse(message.data) as unknown as OpenAIResult;
-          const text = io.extractTextFromResult(response);
+          const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
+          const text = io.extractResultData(response) as string;
           if (textElement) messages.updateStreamedMessage(text, textElement);
         }
       },
