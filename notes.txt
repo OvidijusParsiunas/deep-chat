@@ -1,5 +1,3 @@
-rename AiAssistant to aiAssistant
-
 Custom tts API props
 Custom stt API props
 Java example
