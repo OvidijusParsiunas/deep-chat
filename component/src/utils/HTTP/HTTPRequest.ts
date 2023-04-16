@@ -1,5 +1,4 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
-import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
@@ -11,12 +10,12 @@ export type HandleVerificationResult = (
 
 export class HTTPRequest {
   // prettier-ignore
-  public static request(io: ServiceIO, body: object, messages: Messages,
-      requestInterceptor: RequestInterceptor, onFinish: () => void) {
+  public static request(io: ServiceIO, body: object, messages: Messages, onFinish: () => void, stringifyBody = true) {
+    const interceptedBody = io.requestInterceptor(body);
     fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(body)),
+      body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
       .then((response) => response.json())
       .then((result: OpenAIConverseResult) => {
@@ -33,12 +32,13 @@ export class HTTPRequest {
 
   // prettier-ignore
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
-      requestInterceptor: RequestInterceptor, onOpen: () => void, onClose: () => void, abortStream: AbortController) {
+      onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
     let textElement: HTMLElement | null = null;
+    const interceptedBody = io.requestInterceptor(body);
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: io.requestSettings?.headers,
-      body: JSON.stringify(requestInterceptor(body)),
+      body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {

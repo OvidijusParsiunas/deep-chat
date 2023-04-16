@@ -78,6 +78,14 @@ pre {
   line-height: 1.5em;
 }
 
-.image {
-  width: -webkit-fill-available;
+.image-container {
+  padding: 0px;
+  display: flex;
+}
+
+.image-container > *,
+.image-container > * > * {
+  width: 100%;
+  border-radius: 8px;
+  display: flex;
 }

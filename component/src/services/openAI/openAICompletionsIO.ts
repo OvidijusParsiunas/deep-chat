@@ -18,9 +18,9 @@ export class OpenAICompletionsIO implements ServiceIO {
   private readonly full_transaction_max_tokens = 4000;
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
-  requestSettings?: RequestSettings;
   private readonly _raw_body: OpenAIConverseBodyInternal;
-  private readonly _requestInterceptor: RequestInterceptor;
+  requestSettings?: RequestSettings;
+  requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, requestInterceptor, requestSettings, inputCharacterLimit} = aiAssistant;
@@ -33,7 +33,7 @@ export class OpenAICompletionsIO implements ServiceIO {
       this.cleanConfig(config);
     }
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this._requestInterceptor = requestInterceptor || ((body) => body);
+    this.requestInterceptor = requestInterceptor || ((body) => body);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 
@@ -68,10 +68,10 @@ export class OpenAICompletionsIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this._raw_body, messages.messages);
     if (body.stream) {
-      HTTPRequest.requestStream(this, body, messages, this._requestInterceptor,
+      HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.request(this, body, messages, this._requestInterceptor, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }
 

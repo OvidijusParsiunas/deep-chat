@@ -19,13 +19,17 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private _isSVGLoadingOverriden = false;
+  private readonly _imageInputElementRef?: HTMLInputElement;
+  private _isSVGLoadingIconOverriden = false;
 
-  constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO) {
+  // prettier-ignore
+  constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
+      imageInputElement?: HTMLInputElement) {
     const {submitButtonStyles} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
+    this._imageInputElementRef = imageInputElement;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
@@ -77,18 +81,20 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
             contrast(96%) !important;
         }`;
       aiAssistant.shadowRoot?.appendChild(styleElement);
-      this._isSVGLoadingOverriden = true;
+      this._isSVGLoadingIconOverriden = true;
     }
   }
 
   public submitFromInput() {
     const inputText = this._inputElementRef.textContent?.trim() as string;
-    this.submitUserText(inputText);
+    this.submit(inputText);
   }
 
   // prettier-ignore
-  public submitUserText(userText: string) {
-    if (this._isRequestInProgress || !userText || userText === '') return;
+  public submit(userText: string) {
+    // when no image and no text, do not submit
+    if (this._isRequestInProgress || !userText
+      || (!this._imageInputElementRef?.files?.[0] && userText.trim() === '')) return;
     this.changeToLoadingIcon();
     this._messages.addNewMessage(userText, false, true);
     this._messages.addLoadingMessage();
@@ -101,7 +107,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers);
+    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageInputElementRef);
   }
 
   // This will not stop the stream on the server side
@@ -119,7 +125,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   private changeToLoadingIcon() {
-    if (!this._isSVGLoadingOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
+    if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.add('loading-button');
     this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};

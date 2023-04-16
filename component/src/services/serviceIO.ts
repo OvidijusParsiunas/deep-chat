@@ -1,3 +1,4 @@
+import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
 import {ImageResults} from '../types/imageResult';
@@ -21,10 +22,13 @@ export interface KeyVerificationHandlers {
 export interface ServiceIO {
   url?: string;
   requestSettings?: RequestSettings;
+  requestInterceptor: RequestInterceptor;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
+  // prettier-ignore
+  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
+    imageInputElement?: HTMLInputElement): void;
 
   extractResultData(result: object): string | ImageResults;
 }

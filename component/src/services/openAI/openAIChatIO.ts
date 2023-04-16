@@ -16,8 +16,8 @@ import {AiAssistant} from '../../aiAssistant';
 export class OpenAIChatIO implements ServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   requestSettings?: RequestSettings;
+  requestInterceptor: RequestInterceptor;
   private readonly _raw_body: OpenAIConverseBodyInternal;
-  private readonly _requestInterceptor: RequestInterceptor;
   private readonly _systemMessage: SystemMessageInternal;
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
@@ -32,7 +32,7 @@ export class OpenAIChatIO implements ServiceIO {
     }
     this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this._requestInterceptor = requestInterceptor || ((body) => body);
+    this.requestInterceptor = requestInterceptor || ((body) => body);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
   }
 
@@ -95,10 +95,10 @@ export class OpenAIChatIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this._raw_body, messages.messages);
     if (body.stream) {
-      HTTPRequest.requestStream(this, body, messages, this._requestInterceptor,
+      HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.request(this, body, messages, this._requestInterceptor, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }
 

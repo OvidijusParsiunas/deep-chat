@@ -1,7 +1,6 @@
 import {ImageResult, ImageResults} from '../../../types/imageResult';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
-import {SAMPLE_OPEN_AI_BASE_64} from './sampleOpenAIBase64';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
@@ -53,6 +52,16 @@ export class Messages {
     this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
+    // this.addNewMessage(
+    //   [
+    //     {
+    //       // url: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Fischotter%2C_Lutra_Lutra.JPG',
+    //       base64: `data:image/png;base64,${SAMPLE_OPEN_AI_BASE_64}`,
+    //     },
+    //   ],
+    //   true,
+    //   true
+    // );
     aiAssistant.getMessages = () => this.messages;
   }
 
@@ -149,19 +158,19 @@ export class Messages {
     return messageElements;
   }
 
+  private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
+    const messageElements = this.createAndAppendNewMessageElement(text, isAI);
+    this.messages.push(Messages.createMessageContent(text, isAI));
+    if (update) this.sendClientUpdate(text, isAI, isInitial);
+    return messageElements;
+  }
+
   public addNewMessage(data: string | ImageResults, isAI: boolean, update: boolean, isInitial = false) {
     if (typeof data === 'string') {
       this.addNewTextMessage(data, isAI, update, isInitial);
     } else {
       data.forEach((imageData) => this.addNewImageMessage(imageData));
     }
-  }
-
-  private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
-    const messageElements = this.createAndAppendNewMessageElement(text, isAI);
-    this.messages.push(Messages.createMessageContent(text, isAI));
-    if (update) this.sendClientUpdate(text, isAI, isInitial);
-    return messageElements;
   }
 
   private sendClientUpdate(text: string, isAI: boolean, isInitial = false) {
@@ -221,7 +230,6 @@ export class Messages {
   }
 
   public finaliseStreamedMessage(text: string) {
-    // WORK - does this send the full text?
     this.sendClientUpdate(text, true);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
@@ -230,7 +238,6 @@ export class Messages {
   private static createImage(imageData: ImageResult) {
     const data = (imageData.url || imageData.base64) as string;
     const imageElement = new Image();
-    imageElement.classList.add('image');
     imageElement.src = data;
     if (imageData.base64) return imageElement;
     const linkWrapperElement = document.createElement('a');
@@ -241,10 +248,11 @@ export class Messages {
   }
 
   private addNewImageMessage(imageData: ImageResult, isInitial = false) {
-    const {outerContainer, textElement} = this.createNewMessageElement('', true);
+    const {outerContainer, textElement: imageContainer} = this.createNewMessageElement('', true);
     const data = (imageData.url || imageData.base64) as string;
     const image = Messages.createImage(imageData);
-    textElement.appendChild(image);
+    imageContainer.appendChild(image);
+    imageContainer.classList.add('image-container');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     this.messages.push(Messages.createMessageContent(data, true));
