@@ -1,6 +1,6 @@
+import {UploadImagesButton} from './buttons/uploadImages/uploadImagesButton';
 import {MicrophoneButton} from './buttons/microphone/microphoneButton';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {UploadImages} from './buttons/uploadImages/uploadImages';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
@@ -17,8 +17,8 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const uploadImagesButton = UploadImages.isAvailable(serviceIO, aiAssistant.uploadImages)
-      ? new UploadImages() : undefined;
+    const uploadImagesButton = UploadImagesButton.isAvailable(serviceIO, aiAssistant.uploadImages)
+      ? new UploadImagesButton(this.elementRef) : undefined;
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,
       uploadImagesButton?.inputElement);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
@@ -31,10 +31,10 @@ export class Input {
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
-    const element = document.createElement('div');
-    element.id = 'input';
-    Object.assign(element.style, customStyle);
-    return element;
+    const panelElement = document.createElement('div');
+    panelElement.id = 'input';
+    Object.assign(panelElement.style, customStyle);
+    return panelElement;
   }
 
   // prettier-ignore

@@ -252,7 +252,7 @@ export class Messages {
     const data = (imageData.url || imageData.base64) as string;
     const image = Messages.createImage(imageData);
     imageContainer.appendChild(image);
-    imageContainer.classList.add('image-container');
+    imageContainer.classList.add('image-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     this.messages.push(Messages.createMessageContent(data, true));

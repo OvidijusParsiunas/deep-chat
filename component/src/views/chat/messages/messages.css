@@ -78,13 +78,13 @@ pre {
   line-height: 1.5em;
 }
 
-.image-container {
+.image-message {
   padding: 0px;
   display: flex;
 }
 
-.image-container > *,
-.image-container > * > * {
+.image-message > *,
+.image-message > * > * {
   width: 100%;
   border-radius: 8px;
   display: flex;
