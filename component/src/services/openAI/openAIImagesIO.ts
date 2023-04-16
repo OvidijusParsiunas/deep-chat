@@ -1,4 +1,5 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
@@ -17,18 +18,25 @@ export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
   url = ''; // set dynamically
+  canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
+  allowImages = true;
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
   requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit} = aiAssistant;
+    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
     if (key) this.requestSettings = OpenAIUtils.buildRequestSettings(key, requestSettings);
-    this.requestInterceptor = requestInterceptor || ((body) => body);
+    this.requestInterceptor = requestInterceptor || ((details) => details);
     const config = openAI?.completions as OpenAI['images'];
     if (config && typeof config !== 'boolean') this._raw_body = config;
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+  }
+
+  private static canSendMessage(text: string, files?: FileList | null) {
+    return !files?.[0] || text.trim() !== '';
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

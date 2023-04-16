@@ -1,4 +1,5 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {OpenAI, OpenAICustomCompletionLimits} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
@@ -13,6 +14,7 @@ import {AiAssistant} from '../../aiAssistant';
 
 export class OpenAICompletionsIO implements ServiceIO {
   url = 'https://api.openai.com/v1/completions';
+  canSendMessage: ValidateMessageBeforeSending = OpenAICompletionsIO.canSendMessage;
   private readonly _maxCharLength: number = OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
   // text-davinci-003 total max limit is 4097 - keeping it at 4000 just to be safe
   private readonly full_transaction_max_tokens = 4000;
@@ -23,7 +25,7 @@ export class OpenAICompletionsIO implements ServiceIO {
   requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit} = aiAssistant;
+    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.completions as OpenAI['completions'];
     if (config && typeof config !== 'boolean') {
       // Completions with no max_tokens behave weirdly and do not give full responses
@@ -33,12 +35,17 @@ export class OpenAICompletionsIO implements ServiceIO {
       this.cleanConfig(config);
     }
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this.requestInterceptor = requestInterceptor || ((body) => body);
+    this.requestInterceptor = requestInterceptor || ((details) => details);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
   private cleanConfig(config: OpenAICustomCompletionLimits) {
     delete config.max_char_length;
+  }
+
+  private static canSendMessage(text: string) {
+    return text.trim() !== '';
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

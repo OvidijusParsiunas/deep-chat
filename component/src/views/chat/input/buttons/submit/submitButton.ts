@@ -92,9 +92,8 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
 
   // prettier-ignore
   public submit(userText: string) {
-    // when no image and no text, do not submit
     if (this._isRequestInProgress || !userText
-      || (!this._imageInputElementRef?.files?.[0] && userText.trim() === '')) return;
+      || this._serviceIO.canSendMessage(userText, this._imageInputElementRef?.files)) return;
     this.changeToLoadingIcon();
     this._messages.addNewMessage(userText, false, true);
     this._messages.addLoadingMessage();

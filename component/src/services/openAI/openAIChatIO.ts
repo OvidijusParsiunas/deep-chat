@@ -1,5 +1,6 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
+import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAI, OpenAICustomChatLimits} from '../../types/openAI';
 import {RequestInterceptor} from '../../types/requestInterceptor';
@@ -17,13 +18,14 @@ export class OpenAIChatIO implements ServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor;
+  canSendMessage: ValidateMessageBeforeSending = OpenAIChatIO.canSendMessage;
   private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _systemMessage: SystemMessageInternal;
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, context, requestInterceptor, requestSettings} = aiAssistant;
+    const {openAI, context, requestInterceptor, requestSettings, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.chat as OpenAI['chat'];
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
@@ -32,8 +34,9 @@ export class OpenAIChatIO implements ServiceIO {
     }
     this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
     this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this.requestInterceptor = requestInterceptor || ((body) => body);
+    this.requestInterceptor = requestInterceptor || ((details) => details);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
   private cleanConfig(config: OpenAICustomChatLimits) {
@@ -44,6 +47,10 @@ export class OpenAIChatIO implements ServiceIO {
   public static generateSystemMessage(context?: string): SystemMessageInternal {
     if (context) return {role: 'system', content: context};
     return {role: 'system', content: 'You are a helpful assistant.'};
+  }
+
+  private static canSendMessage(text: string) {
+    return text.trim() !== '';
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

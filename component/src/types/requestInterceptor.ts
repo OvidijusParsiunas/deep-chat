@@ -1,3 +1,4 @@
+import {GenericObject} from './object';
 import {OpenAIMessage} from './openAI';
 
 // example body for OpenAI
@@ -11,5 +12,10 @@ export interface OpenAIRequestBody {
   stream?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type RequestInterceptor = (requestBody: any) => any;
+export interface RequestDetails {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body: any;
+  headers?: GenericObject<string>;
+}
+
+export type RequestInterceptor = (details: RequestDetails) => RequestDetails;

@@ -17,7 +17,8 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const uploadImagesButton = new UploadImages();
+    const uploadImagesButton = UploadImages.isAvailable(serviceIO, aiAssistant.uploadImages)
+      ? new UploadImages() : undefined;
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,
       uploadImagesButton?.inputElement);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);

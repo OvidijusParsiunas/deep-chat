@@ -1,5 +1,6 @@
 import {CustomMessageStyles, ErrorMessages, IntroMessage, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
+import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
@@ -9,6 +10,7 @@ import {CustomServiceConfig} from './types/customService';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
+import {UploadImages} from './types/uploadImages';
 import {SpeechInput} from './types/speechInput';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
@@ -37,6 +39,15 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   requestSettings?: RequestSettings;
+
+  // WORK - check if this works as we are optionally using boolean
+  @Property('object')
+  uploadImages?: UploadImages;
+
+  @Property('function')
+  validateMessageBeforeSending?: ValidateMessageBeforeSending;
+
+  // WORK - custom error messages
 
   // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('boolean')

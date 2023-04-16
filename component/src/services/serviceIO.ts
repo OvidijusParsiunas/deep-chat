@@ -1,3 +1,4 @@
+import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
@@ -21,8 +22,10 @@ export interface KeyVerificationHandlers {
 
 export interface ServiceIO {
   url?: string;
+  allowImages?: boolean;
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor;
+  canSendMessage: ValidateMessageBeforeSending;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
