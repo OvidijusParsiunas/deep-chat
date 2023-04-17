@@ -1,54 +1,25 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {UploadImages as UploadImagesT} from '../../../../../types/uploadImages';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/speechInput';
-import {ServiceIO} from '../../../../../services/serviceIO';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
+import {ImageAttachments} from './imageAttachments';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 
 export class UploadImagesButton extends ButtonStyleEvents<Styles> {
-  private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   inputElement: HTMLInputElement;
+  private readonly _innerElements: DefinedButtonInnerElements<Styles>;
+  private readonly _imageAttachments: ImageAttachments;
 
-  constructor(inputElementRef: HTMLElement) {
+  constructor(imageAttachments: ImageAttachments) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
     this.inputElement = UploadImagesButton.createInputElement();
-    this.elementRef.onclick = UploadImagesButton.triggerImportPrompt.bind(this, this.inputElement);
+    this.elementRef.onclick = this.triggerImportPrompt.bind(this, this.inputElement);
     this.changeToDefault();
-    inputElementRef.appendChild(UploadImagesButton.createAttachmentContainer());
-  }
-
-  private static createRemoveAttachmentButton() {
-    const removeImageButtonELement = document.createElement('div');
-    removeImageButtonELement.classList.add('remove-image-attachment-button');
-    const xIcon = document.createElement('div');
-    xIcon.classList.add('x-icon');
-    xIcon.innerText = '×';
-    removeImageButtonELement.appendChild(xIcon);
-    return removeImageButtonELement;
-  }
-
-  private static createContainer() {
-    const image = new Image();
-    image.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Fischotter%2C_Lutra_Lutra.JPG';
-    image.classList.add('image-attachment-src');
-    const imageAttachmentElement = document.createElement('div');
-    imageAttachmentElement.classList.add('image-attachment');
-    imageAttachmentElement.appendChild(image);
-    imageAttachmentElement.appendChild(UploadImagesButton.createRemoveAttachmentButton());
-    return imageAttachmentElement;
-  }
-
-  private static createAttachmentContainer() {
-    const attachmentContainerElement = document.createElement('div');
-    attachmentContainerElement.id = 'image-attachment-container';
-    attachmentContainerElement.appendChild(UploadImagesButton.createContainer());
-    attachmentContainerElement.appendChild(UploadImagesButton.createContainer());
-    return attachmentContainerElement;
+    this._imageAttachments = imageAttachments;
   }
 
   private static createInnerElements(customStyles?: Styles) {
@@ -60,18 +31,21 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     };
   }
 
-  public static triggerImportPrompt(inputElement: HTMLInputElement) {
-    inputElement.onchange = UploadImagesButton.import.bind(this, inputElement);
+  private triggerImportPrompt(inputElement: HTMLInputElement) {
+    inputElement.onchange = this.import.bind(this, inputElement);
     inputElement.click();
   }
 
-  public static import(inputElement: HTMLInputElement) {
-    const reader = new FileReader();
-    const file = inputElement.files?.[0] as Blob;
-    reader.readAsText(file);
-    reader.onload = (event) => {
-      console.log(event);
-    };
+  private import(inputElement: HTMLInputElement) {
+    Array.from(inputElement.files || []).forEach((file: File) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        this._imageAttachments.addImageFile(file, event.target as FileReader);
+      };
+    });
+
+    inputElement.value = '';
   }
 
   public static createInputElement() {
@@ -130,12 +104,5 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
         iconElement.classList.replace('default-microphone-icon', 'active-microphone-icon');
       }
     }
-  }
-
-  public static isAvailable(serviceIO: ServiceIO, uploadImages?: UploadImagesT) {
-    if (uploadImages !== undefined) {
-      return !!uploadImages;
-    }
-    return !!serviceIO.allowImages;
   }
 }

@@ -3,6 +3,7 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
+import {ImageAttachments} from '../uploadImages/imageAttachments';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {AiAssistant} from '../../../../../aiAssistant';
@@ -19,17 +20,17 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private readonly _imageInputElementRef?: HTMLInputElement;
+  private readonly _imageAttachments?: ImageAttachments;
   private _isSVGLoadingIconOverriden = false;
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
-      imageInputElement?: HTMLInputElement) {
+      imageAttachments?: ImageAttachments) {
     const {submitButtonStyles} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
-    this._imageInputElementRef = imageInputElement;
+    this._imageAttachments = imageAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
@@ -86,16 +87,21 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   public submitFromInput() {
-    const inputText = this._inputElementRef.textContent?.trim() as string;
-    this.submit(inputText);
+    if (this._inputElementRef.classList.contains('keyboard-input-placeholder')) {
+      this.submit('');
+    } else {
+      const inputText = this._inputElementRef.textContent?.trim() as string;
+      this.submit(inputText);
+    }
   }
 
   // prettier-ignore
-  public submit(userText: string) {
-    if (this._isRequestInProgress || !userText
-      || this._serviceIO.canSendMessage(userText, this._imageInputElementRef?.files)) return;
+  public async submit(userText: string) {
+    const files = this._imageAttachments?.getFiles();
+    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, files)) return;
     this.changeToLoadingIcon();
-    this._messages.addNewMessage(userText, false, true);
+    if (userText !== '') this._messages.addNewMessage(userText, false, true);
+    if (files) await this._messages.addMultipleImagesFromFiles(files);
     this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     const completionsHandlers = {
@@ -106,7 +112,8 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageInputElementRef);
+    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getFiles());
+    this._imageAttachments?.removeAllFiles();
   }
 
   // This will not stop the stream on the server side

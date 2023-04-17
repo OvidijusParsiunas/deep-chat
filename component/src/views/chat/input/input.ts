@@ -1,4 +1,3 @@
-import {UploadImagesButton} from './buttons/uploadImages/uploadImagesButton';
 import {MicrophoneButton} from './buttons/microphone/microphoneButton';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
@@ -9,6 +8,7 @@ import {ServiceIO} from '../../../services/serviceIO';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
+import {UploadImages} from './uploadImages';
 
 export class Input {
   readonly elementRef: HTMLElement;
@@ -17,17 +17,17 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const uploadImagesButton = UploadImagesButton.isAvailable(serviceIO, aiAssistant.uploadImages)
-      ? new UploadImagesButton(this.elementRef) : undefined;
+    const uploadImages = UploadImages.isAvailable(serviceIO, aiAssistant.uploadImages)
+      ? new UploadImages(this.elementRef) : undefined;
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,
-      uploadImagesButton?.inputElement);
+      uploadImages?.imageAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
     const microphoneButton = aiAssistant.speechInput
       ? new MicrophoneButton(aiAssistant.speechInput, keyboardInput.inputElementRef,
           messages.addNewErrorMessage.bind(messages)) : undefined;
     Input.addElements(this.elementRef, aiAssistant, keyboardInput.elementRef,
-      submitButton.elementRef, microphoneButton?.elementRef, uploadImagesButton?.elementRef);
+      submitButton.elementRef, microphoneButton?.elementRef, uploadImages?.button.elementRef);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {

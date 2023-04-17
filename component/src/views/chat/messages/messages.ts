@@ -169,7 +169,7 @@ export class Messages {
     if (typeof data === 'string') {
       this.addNewTextMessage(data, isAI, update, isInitial);
     } else {
-      data.forEach((imageData) => this.addNewImageMessage(imageData));
+      data.forEach((imageData) => this.addNewImageMessage(imageData, isAI));
     }
   }
 
@@ -247,8 +247,8 @@ export class Messages {
     return linkWrapperElement;
   }
 
-  private addNewImageMessage(imageData: ImageResult, isInitial = false) {
-    const {outerContainer, textElement: imageContainer} = this.createNewMessageElement('', true);
+  private addNewImageMessage(imageData: ImageResult, isAI: boolean, isInitial = false) {
+    const {outerContainer, textElement: imageContainer} = this.createNewMessageElement('', isAI);
     const data = (imageData.url || imageData.base64) as string;
     const image = Messages.createImage(imageData);
     imageContainer.appendChild(image);
@@ -257,5 +257,20 @@ export class Messages {
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     this.messages.push(Messages.createMessageContent(data, true));
     this.sendClientUpdate(data, true, isInitial);
+  }
+
+  async addMultipleImagesFromFiles(files: File[]) {
+    return Promise.all(
+      (files || []).map((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            this.addNewMessage([{base64: reader.result as string}], false, true);
+            resolve(true);
+          };
+        });
+      })
+    );
   }
 }

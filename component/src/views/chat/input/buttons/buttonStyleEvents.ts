@@ -1,9 +1,9 @@
 import {ButtonElementStyles} from '../../../../types/button';
-import {StatefulStyle} from '../../../../types/styles';
+import {StatefulStyles} from '../../../../types/styles';
 import {ButtonCSS} from './buttonCSS';
 
 interface MouseState {
-  state: keyof StatefulStyle;
+  state: keyof StatefulStyles;
 }
 
 export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {

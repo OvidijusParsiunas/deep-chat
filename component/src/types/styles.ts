@@ -1,6 +1,6 @@
 export type CustomStyle = Partial<CSSStyleDeclaration>;
 
-export interface StatefulStyle {
+export interface StatefulStyles {
   default?: CustomStyle;
   hover?: CustomStyle;
   click?: CustomStyle;

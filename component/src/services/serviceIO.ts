@@ -22,16 +22,20 @@ export interface KeyVerificationHandlers {
 
 export interface ServiceIO {
   url?: string;
+
   allowImages?: boolean;
+
   requestSettings?: RequestSettings;
+
   requestInterceptor: RequestInterceptor;
+
   canSendMessage: ValidateMessageBeforeSending;
 
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
 
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
-    imageInputElement?: HTMLInputElement): void;
+    files?: File[]): void;
 
   extractResultData(result: object): string | ImageResults;
 }

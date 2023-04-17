@@ -35,8 +35,8 @@ export class OpenAIImagesIO implements ServiceIO {
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private static canSendMessage(text: string, files?: FileList | null) {
-    return !files?.[0] || text.trim() !== '';
+  private static canSendMessage(text: string, files?: File[]) {
+    return !!files?.[0] || text.trim() !== '';
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {
@@ -72,31 +72,26 @@ export class OpenAIImagesIO implements ServiceIO {
 
   // WORK - ability to add images one after another
   // prettier-ignore
-  private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers,
-      imageInputElement: HTMLInputElement) {
-    if (!imageInputElement?.files) throw new Error('No file was present');
+  private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;
     // if there is a mask image or text, call edit
-    if (imageInputElement.files[1] || messages.messages[messages.messages.length - 1].content.trim() !== '') {
+    if (files[1] || messages.messages[messages.messages.length - 1].content.trim() !== '') {
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_EDIT_URL;
       const body = this.preprocessBody(this._raw_body, messages.messages);
-      formData = OpenAIImagesIO.createFormDataBody(body, imageInputElement.files[0], imageInputElement.files[1]);
+      formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
-      formData = OpenAIImagesIO.createFormDataBody(this._raw_body, imageInputElement.files[0]);
+      formData = OpenAIImagesIO.createFormDataBody(this._raw_body, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
-    imageInputElement.value = ''; // resetting to prevent Chrome issue of not being able to upload same file twice
   }
 
-  // prettier-ignore
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers,
-      imageInputElement?: HTMLInputElement) {
+  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
-    if (imageInputElement?.files?.[0]) {
-      this.callApiWithImage(messages, completionsHandlers, imageInputElement);
+    if (files?.[0]) {
+      this.callApiWithImage(messages, completionsHandlers, files);
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;

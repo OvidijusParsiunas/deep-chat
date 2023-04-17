@@ -1,20 +1,24 @@
 #image-attachment-container {
   position: absolute;
-  height: 57px;
+  height: 3.6rem;
   width: 100%;
-  top: -40px;
+  top: -2.5rem;
   border-radius: 5px;
   overflow: auto;
   overflow: auto;
   text-align: left;
 }
 
+.image-attachment-container-background {
+  background-color: #d7d7d73b;
+}
+
 .image-attachment {
-  width: 46px;
-  height: 46px;
+  width: 2.85rem;
+  height: 2.85rem;
   display: inline-block;
-  margin-right: 10px;
-  margin-bottom: 7px;
+  margin-right: 0.6rem;
+  margin-bottom: 0.44rem;
   margin-top: 4px;
   position: relative;
 }
@@ -27,8 +31,8 @@
 }
 
 .remove-image-attachment-button {
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   border: 1px solid #cfcfcf;
   border-radius: 25px;
   background-color: white;
@@ -51,7 +55,7 @@
 
 .x-icon {
   color: rgb(78, 78, 78);
-  top: -1px;
+  top: -0.075rem;
   position: relative;
   font-size: 1.05rem;
 }

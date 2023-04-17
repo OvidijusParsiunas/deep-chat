@@ -1,12 +1,12 @@
-import {StatefulStyle} from './styles';
+import {StatefulStyles} from './styles';
 
 interface ButtonInnerElementStyles {
-  style?: StatefulStyle;
+  styles?: StatefulStyles;
   string?: string;
 }
 
 export interface ButtonElementStyles {
-  container?: StatefulStyle;
+  container?: StatefulStyles;
   svg?: ButtonInnerElementStyles;
   text?: ButtonInnerElementStyles;
 }

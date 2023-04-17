@@ -1,1 +1,1 @@
-export type ValidateMessageBeforeSending = (text: string, files?: FileList | null) => boolean;
+export type ValidateMessageBeforeSending = (text: string, files?: File[]) => boolean;
