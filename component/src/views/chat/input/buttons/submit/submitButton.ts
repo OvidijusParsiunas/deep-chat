@@ -1,9 +1,9 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
+import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {ImageAttachments} from '../uploadImages/imageAttachments';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {AiAssistant} from '../../../../../aiAssistant';
@@ -20,12 +20,12 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private readonly _imageAttachments?: ImageAttachments;
+  private readonly _imageAttachments?: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
-      imageAttachments?: ImageAttachments) {
+      imageAttachments?: FileAttachments) {
     const {submitButtonStyles} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._messages = messages;

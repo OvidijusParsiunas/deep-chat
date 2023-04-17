@@ -1,25 +1,25 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
+import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/speechInput';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
-import {ImageAttachments} from './imageAttachments';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 
 export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   inputElement: HTMLInputElement;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private readonly _imageAttachments: ImageAttachments;
+  private readonly _fileAttachments: FileAttachments;
 
-  constructor(imageAttachments: ImageAttachments) {
+  constructor(fileAttachments: FileAttachments, allowedFormats?: string) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
-    this.inputElement = UploadImagesButton.createInputElement();
+    this.inputElement = UploadImagesButton.createInputElement(allowedFormats);
     this.elementRef.onclick = this.triggerImportPrompt.bind(this, this.inputElement);
     this.changeToDefault();
-    this._imageAttachments = imageAttachments;
+    this._fileAttachments = fileAttachments;
   }
 
   private static createInnerElements(customStyles?: Styles) {
@@ -37,21 +37,23 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   }
 
   private import(inputElement: HTMLInputElement) {
-    Array.from(inputElement.files || []).forEach((file: File) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        this._imageAttachments.addImageFile(file, event.target as FileReader);
-      };
-    });
+    Array.from(inputElement.files || [])
+      .slice(0, this._fileAttachments.fileLimit)
+      .forEach((file: File) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          this._fileAttachments.addImageFile(file, event.target as FileReader);
+        };
+      });
 
     inputElement.value = '';
   }
 
-  public static createInputElement() {
+  private static createInputElement(allowedFormats?: string) {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = 'image/*';
+    inputElement.accept = allowedFormats || 'image/*';
     inputElement.hidden = true;
     inputElement.multiple = true;
     return inputElement;

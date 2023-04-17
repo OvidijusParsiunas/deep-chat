@@ -55,7 +55,7 @@
             },
             {
               "kind": "field",
-              "name": "containerStyle",
+              "name": "attachmentContainerStyle",
               "type": {
                 "text": "CustomStyle | undefined"
               }
@@ -2850,7 +2850,7 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "containerStyle",
+                  "name": "attachmentContainerStyle",
                   "optional": true,
                   "type": {
                     "text": "CustomStyle"

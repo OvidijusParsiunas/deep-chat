@@ -1,4 +1,4 @@
-#image-attachment-container {
+#file-attachment-container {
   position: absolute;
   height: 3.6rem;
   width: 100%;
@@ -7,13 +7,10 @@
   overflow: auto;
   overflow: auto;
   text-align: left;
-}
-
-.image-attachment-container-background {
   background-color: #d7d7d73b;
 }
 
-.image-attachment {
+.file-attachment {
   width: 2.85rem;
   height: 2.85rem;
   display: inline-block;
@@ -23,14 +20,14 @@
   position: relative;
 }
 
-.image-attachment-src {
+.image-attachment {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.remove-image-attachment-button {
+.remove-file-attachment-button {
   height: 1.25rem;
   width: 1.25rem;
   border: 1px solid #cfcfcf;
@@ -45,11 +42,11 @@
   user-select: none;
 }
 
-.remove-image-attachment-button:hover {
+.remove-file-attachment-button:hover {
   background-color: rgb(228, 228, 228);
 }
 
-.remove-image-attachment-button:active {
+.remove-file-attachment-button:active {
   background-color: rgb(215, 215, 215);
 }
 

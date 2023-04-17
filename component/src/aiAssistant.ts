@@ -9,8 +9,8 @@ import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
+import {FileAttachments} from './types/fileAttachments';
 import {Property} from './utils/decorators/property';
-import {UploadImages} from './types/uploadImages';
 import {SpeechInput} from './types/speechInput';
 import {ChatView} from './views/chat/chatView';
 import style from './AiAssistant.css?inline';
@@ -41,9 +41,8 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   requestSettings?: RequestSettings;
 
-  // WORK - check if this works as we are optionally using boolean
   @Property('object')
-  uploadImages?: UploadImages;
+  fileAttachments?: FileAttachments;
 
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;

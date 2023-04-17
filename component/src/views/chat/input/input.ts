@@ -17,10 +17,10 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const uploadImages = UploadImages.isAvailable(serviceIO, aiAssistant.uploadImages)
-      ? new UploadImages(this.elementRef) : undefined;
+    const uploadImages = UploadImages.isAvailable(serviceIO, aiAssistant.fileAttachments)
+      ? new UploadImages(this.elementRef, serviceIO.allowImages, aiAssistant.fileAttachments) : undefined;
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,
-      uploadImages?.imageAttachments);
+      uploadImages?.fileAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
     const microphoneButton = aiAssistant.speechInput
