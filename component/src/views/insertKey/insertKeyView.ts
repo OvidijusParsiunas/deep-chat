@@ -45,16 +45,16 @@ export class InsertKeyView {
   // prettier-ignore
   private static createStartButton(inputEl: HTMLInputElement, failTextEl: HTMLElement,
       changeToChat: (key: string) => void, serviceIO: ServiceIO) {
-    const startEl = document.createElement('div');
-    startEl.id = 'start-button';
-    startEl.innerText = 'Start';
+    const startButtonElement = document.createElement('div');
+    startButtonElement.id = 'start-button';
+    startButtonElement.innerText = 'Start';
     const keyVerificationHandlers: KeyVerificationHandlers = {
       onSuccess: changeToChat,
-      onFail: InsertKeyView.onFail.bind(this, inputEl, failTextEl, startEl),
-      onLoad: InsertKeyView.onLoad.bind(this, startEl),
+      onFail: InsertKeyView.onFail.bind(this, inputEl, failTextEl, startButtonElement),
+      onLoad: InsertKeyView.onLoad.bind(this, startButtonElement),
     };
-    startEl.onclick = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
-    return startEl;
+    startButtonElement.onclick = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
+    return startButtonElement;
   }
 
   private static onInputFocus(event: FocusEvent) {

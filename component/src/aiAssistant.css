@@ -4,6 +4,8 @@
 :host {
   /* this property prevents outside styles from affecting this component */
   all: initial;
+  /* keeps child absolute elements in place */
+  display: inline-block;
 }
 
 #container {
@@ -13,4 +15,5 @@
   font-family: Söhne, ui-sans-serif, system-ui;
   font-size: 0.9rem;
   background-color: white;
+  position: relative;
 }

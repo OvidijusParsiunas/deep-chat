@@ -14,11 +14,12 @@ export class Input {
   readonly elementRef: HTMLElement;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO) {
+  constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
     const uploadImages = UploadImages.isAvailable(serviceIO, aiAssistant.fileAttachments)
-      ? new UploadImages(this.elementRef, serviceIO.allowImages, aiAssistant.fileAttachments) : undefined;
+      ? new UploadImages(this.elementRef, containerElement, serviceIO.allowImages, aiAssistant.fileAttachments)
+      : undefined;
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,
       uploadImages?.fileAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);

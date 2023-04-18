@@ -1,6 +1,7 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
+import {UploadImagesModal} from '../../uploadImages/uploadImagesModal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/speechInput';
@@ -12,12 +13,13 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   inputElement: HTMLInputElement;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
+  private _hasModalBeenDisplayed = false;
 
-  constructor(fileAttachments: FileAttachments, acceptedFormats?: string) {
+  constructor(fileAttachments: FileAttachments, uploadImagesModal: UploadImagesModal, acceptedFormats?: string) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
     this.inputElement = UploadImagesButton.createInputElement(acceptedFormats);
-    this.elementRef.onclick = this.triggerImportPrompt.bind(this, this.inputElement);
+    this.elementRef.onclick = this.click.bind(this, uploadImagesModal);
     this.changeToDefault();
     this._fileAttachments = fileAttachments;
   }
@@ -105,6 +107,15 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
       } else {
         iconElement.classList.replace('default-microphone-icon', 'active-microphone-icon');
       }
+    }
+  }
+
+  private click(uploadImagesModal: UploadImagesModal) {
+    if (!this._hasModalBeenDisplayed) {
+      uploadImagesModal.open(this.triggerImportPrompt.bind(this, this.inputElement));
+      this._hasModalBeenDisplayed = true;
+    } else {
+      this.triggerImportPrompt(this.inputElement);
     }
   }
 }

@@ -9,7 +9,7 @@ export class ChatView {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat';
     const messages = new Messages(aiAssistant);
-    const userInput = new Input(aiAssistant, messages, serviceIO);
+    const userInput = new Input(aiAssistant, messages, serviceIO, containerElement);
     ElementUtils.addElements(containerElement, messages.elementRef, userInput.elementRef);
     return containerElement;
   }

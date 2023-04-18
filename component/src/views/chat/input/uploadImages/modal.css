@@ -1,0 +1,133 @@
+.modal {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 80%;
+  max-width: 420px;
+  max-height: 80%;
+  margin: auto;
+  inset: 0;
+  z-index: 2;
+}
+
+.modal-text {
+  border-top: 1px solid rgb(217, 217, 217);
+  border-left: 1px solid rgb(217, 217, 217);
+  border-right: 1px solid rgb(217, 217, 217);
+  background-color: white;
+  overflow-y: auto;
+  height: fit-content;
+  max-height: calc(100% - 3.3rem);
+  width: 100%;
+}
+
+.modal-text > p {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.modal-text > ul {
+  margin-right: 1rem;
+}
+
+.modal-button-panel {
+  height: 3.3rem;
+  border: 1px solid;
+  border-color: rgb(223, 223, 223) rgb(217, 217, 217) rgb(217, 217, 217);
+  background-color: white;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+}
+
+.modal-button {
+  width: 2.5rem;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  padding: 0.4rem 0.3rem 0.3rem;
+  height: 1.25rem;
+  background-color: rgb(50, 121, 178);
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-button:hover {
+  background-color: rgb(39, 109, 167);
+}
+
+.modal-button:active {
+  background-color: rgb(27, 86, 135);
+}
+
+#modal-background-panel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #00000042;
+  z-index: 1;
+  display: none;
+}
+
+.show-modal-background {
+  animation: fadeInBackground 0.3s ease-in-out; /* set the animation duration and easing function */
+}
+
+@keyframes fadeInBackground {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.show-modal {
+  animation: fadeInModal 0.3s ease-in-out; /* set the animation duration and easing function */
+}
+
+@keyframes fadeInModal {
+  0% {
+    opacity: 0;
+    scale: 0.95;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.hide-modal-background {
+  animation: fadeOutBackground 0.2s ease-in-out;
+}
+
+@keyframes fadeOutBackground {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.hide-modal {
+  animation: fadeOutModal 0.2s ease-in-out;
+}
+
+@keyframes fadeOutModal {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 0.95;
+  }
+}

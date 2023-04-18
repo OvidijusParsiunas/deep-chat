@@ -2,16 +2,20 @@ import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachm
 import {UploadImagesButton} from '../buttons/uploadImages/uploadImagesButton';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {ServiceIO} from '../../../../services/serviceIO';
+import {UploadImagesModal} from './uploadImagesModal';
 
 export class UploadImages {
   button: UploadImagesButton;
   fileAttachments: FileAttachments;
 
-  constructor(inputElementRef: HTMLElement, allowImages?: ServiceIO['allowImages'], fileAttachments?: FileAttachmentsT) {
+  // prettier-ignore
+  constructor(inputElementRef: HTMLElement, containerElement: HTMLElement, allowImages?: ServiceIO['allowImages'],
+      fileAttachments?: FileAttachmentsT) {
     const maxNumberOfImages = UploadImages.getMaxNumberOfImages(allowImages, fileAttachments);
     this.fileAttachments = new FileAttachments(inputElementRef, fileAttachments, maxNumberOfImages);
     const acceptedFormats = UploadImages.getAcceptedFormats(allowImages, fileAttachments);
-    this.button = new UploadImagesButton(this.fileAttachments, acceptedFormats);
+    const uploadImagesModal = new UploadImagesModal(containerElement);
+    this.button = new UploadImagesButton(this.fileAttachments, uploadImagesModal, acceptedFormats);
   }
 
   private static getMaxNumberOfImages(allowImages?: ServiceIO['allowImages'], fileAttachments?: FileAttachmentsT) {

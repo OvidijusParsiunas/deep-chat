@@ -2,7 +2,6 @@ import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSendin
 import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {FileAttachments} from '../types/fileAttachments';
 import {ImageResults} from '../types/imageResult';
 
 export interface CompletionsHandlers {
