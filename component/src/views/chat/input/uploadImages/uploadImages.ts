@@ -1,5 +1,6 @@
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
 import {UploadImagesButton} from '../buttons/uploadImages/uploadImagesButton';
+import {RemarkableConfig} from '../../messages/remarkable/remarkableConfig';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {UploadImagesModal} from './uploadImagesModal';
@@ -11,14 +12,15 @@ export class UploadImages {
   // prettier-ignore
   constructor(inputElementRef: HTMLElement, containerElement: HTMLElement, allowImages?: ServiceIO['allowImages'],
       fileAttachments?: FileAttachmentsT) {
-    const maxNumberOfImages = UploadImages.getMaxNumberOfImages(allowImages, fileAttachments);
+    const maxNumberOfImages = UploadImages.getMaxNumberOfImages(fileAttachments, allowImages);
     this.fileAttachments = new FileAttachments(inputElementRef, fileAttachments, maxNumberOfImages);
-    const acceptedFormats = UploadImages.getAcceptedFormats(allowImages, fileAttachments);
-    const uploadImagesModal = new UploadImagesModal(containerElement);
-    this.button = new UploadImagesButton(this.fileAttachments, uploadImagesModal, acceptedFormats);
+    const acceptedFormats = UploadImages.getAcceptedFormats(fileAttachments, allowImages);
+    const openModalFunc = UploadImages.getOpenModalFunc(containerElement, fileAttachments, allowImages);
+    const openModalOnce = UploadImages.getOpenModalOnce(fileAttachments, allowImages);
+    this.button = new UploadImagesButton(this.fileAttachments, acceptedFormats, openModalFunc, openModalOnce);
   }
 
-  private static getMaxNumberOfImages(allowImages?: ServiceIO['allowImages'], fileAttachments?: FileAttachmentsT) {
+  private static getMaxNumberOfImages(fileAttachments?: FileAttachmentsT, allowImages?: ServiceIO['allowImages']) {
     if (typeof fileAttachments?.images === 'object') {
       return fileAttachments?.maxNumberOfFiles;
     }
@@ -28,7 +30,7 @@ export class UploadImages {
     return undefined;
   }
 
-  private static getAcceptedFormats(allowImages?: ServiceIO['allowImages'], fileAttachments?: FileAttachmentsT) {
+  private static getAcceptedFormats(fileAttachments?: FileAttachmentsT, allowImages?: ServiceIO['allowImages']) {
     if (typeof fileAttachments?.images === 'object') {
       return fileAttachments?.images?.acceptedFormats;
     }
@@ -38,10 +40,36 @@ export class UploadImages {
     return undefined;
   }
 
-  public static isAvailable(serviceIO: ServiceIO, fileAttachments?: FileAttachmentsT) {
+  // prettier-ignore
+  private static getOpenModalFunc(containerElement: HTMLElement, fileAttachments?: FileAttachmentsT,
+      allowImages?: ServiceIO['allowImages']) {
+    if (typeof fileAttachments?.images === 'object' && fileAttachments.images.infoModal?.textMarkDown) {
+      const remarkable = RemarkableConfig.createNew();
+      const modalTextMarkUp = remarkable.render(fileAttachments.images.infoModal.textMarkDown);
+      const uploadImagesModal = new UploadImagesModal(containerElement);
+      return uploadImagesModal.open.bind(uploadImagesModal, modalTextMarkUp);
+    }
+    if (typeof allowImages === 'object' && allowImages.modalTextMarkUp) {
+      const uploadImagesModal = new UploadImagesModal(containerElement);
+      return uploadImagesModal.open.bind(uploadImagesModal, allowImages.modalTextMarkUp);
+    }
+    return undefined;
+  }
+
+  private static getOpenModalOnce(fileAttachments?: FileAttachmentsT, allowImages?: ServiceIO['allowImages']) {
+    if (typeof fileAttachments?.images === 'object') {
+      return fileAttachments?.images?.infoModal?.openModalOnce;
+    }
+    if (typeof allowImages === 'object') {
+      return allowImages.openModalOnce;
+    }
+    return undefined;
+  }
+
+  public static isAvailable(fileAttachments?: FileAttachmentsT, allowImages?: ServiceIO['allowImages']) {
     if (fileAttachments !== undefined) {
       return !!fileAttachments.images;
     }
-    return !!serviceIO.allowImages;
+    return !!allowImages;
   }
 }

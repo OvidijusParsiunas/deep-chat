@@ -1,13 +1,13 @@
-import {RemarkableConfig} from '../../messages/remarkable/remarkableConfig';
-
 export class UploadImagesModal {
   private readonly _elementRef: HTMLElement;
   private readonly _backgroundPanelRef: HTMLElement;
-  private readonly _button: HTMLElement;
+  private readonly _textRef: HTMLElement;
+  private readonly _buttonRef: HTMLElement;
 
   constructor(viewContainerElement: HTMLElement) {
-    this._button = UploadImagesModal.createButton();
-    this._elementRef = this.createContainer(this._button);
+    this._buttonRef = UploadImagesModal.createButton();
+    this._textRef = UploadImagesModal.createModalText();
+    this._elementRef = this.createContainer(this._buttonRef);
     viewContainerElement.appendChild(this._elementRef);
     this._backgroundPanelRef = UploadImagesModal.createDarkBackgroundPanel();
     viewContainerElement.appendChild(this._backgroundPanelRef);
@@ -16,7 +16,7 @@ export class UploadImagesModal {
   public createContainer(button: HTMLElement) {
     const containerElement = document.createElement('div');
     containerElement.classList.add('modal');
-    containerElement.appendChild(UploadImagesModal.createModalText());
+    containerElement.appendChild(this._textRef);
     containerElement.appendChild(UploadImagesModal.createButtonPanel(button));
     return containerElement;
   }
@@ -24,20 +24,6 @@ export class UploadImagesModal {
   private static createModalText() {
     const textElement = document.createElement('div');
     textElement.classList.add('modal-text');
-    const remarkable = RemarkableConfig.createNew();
-    textElement.innerHTML = remarkable.render(`
-1 image:
-
-- With text - edits image based on the text
-- No text - creates a variation of the image
-
-2 images:
-
-- The second image needs to be a copy of the first with a transparent area where the edit should take place.
-Add text to describe the required modification.
-
-Click here for [more info](https://platform.openai.com/docs/guides/images/introduction).
-`);
     const textContainerElement = document.createElement('div');
     textContainerElement.appendChild(textElement);
     return textElement;
@@ -68,7 +54,8 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     }, 200);
   }
 
-  open(callback: () => void) {
+  open(textHTML: string, callback: () => void) {
+    this._textRef.innerHTML = textHTML;
     this._elementRef.style.display = 'flex';
     this._elementRef.classList.remove('hide-modal');
     this._elementRef.classList.add('show-modal');
@@ -85,7 +72,7 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
   }
 
   private addButtonCallback(callback: () => void) {
-    this._button.onclick = () => {
+    this._buttonRef.onclick = () => {
       this.close();
       setTimeout(() => {
         callback();

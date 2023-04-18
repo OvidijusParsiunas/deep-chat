@@ -1,4 +1,5 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
@@ -17,9 +18,23 @@ export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
+  private static readonly MODAL_MARKDOWN = `
+1 image:
+
+- With text - edits image based on the text
+- No text - creates a variation of the image
+
+2 images:
+
+- The second image needs to be a copy of the first with a transparent area where the edit should take place.
+Add text to describe the required modification.
+
+Click here for [more info](https://platform.openai.com/docs/guides/images/introduction).
+  `;
+
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
-  allowImages = {acceptedFormats: '.png', maxNumberOfFiles: 2};
+  allowImages: ServiceIO['allowImages'] = {acceptedFormats: '.png', maxNumberOfFiles: 2, openModalOnce: true};
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
@@ -33,6 +48,10 @@ export class OpenAIImagesIO implements ServiceIO {
     const config = openAI?.completions as OpenAI['images'];
     if (config && typeof config !== 'boolean') this._raw_body = config;
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    if (typeof this.allowImages === 'object') {
+      const remarkable = RemarkableConfig.createNew();
+      this.allowImages.modalTextMarkUp = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
+    }
   }
 
   private static canSendMessage(text: string, files?: File[]) {

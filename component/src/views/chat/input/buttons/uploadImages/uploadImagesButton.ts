@@ -1,7 +1,6 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
-import {UploadImagesModal} from '../../uploadImages/uploadImagesModal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/speechInput';
@@ -13,15 +12,18 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   inputElement: HTMLInputElement;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
-  private _hasModalBeenDisplayed = false;
+  private _openModalOnce?: boolean | undefined;
 
-  constructor(fileAttachments: FileAttachments, uploadImagesModal: UploadImagesModal, acceptedFormats?: string) {
+  // prettier-ignore
+  constructor(fileAttachments: FileAttachments, acceptedFormats?: string, openModalFunc?: (callback: () => void) => void,
+      openModalOnce?: boolean) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
     this.inputElement = UploadImagesButton.createInputElement(acceptedFormats);
-    this.elementRef.onclick = this.click.bind(this, uploadImagesModal);
+    this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.changeToDefault();
     this._fileAttachments = fileAttachments;
+    this._openModalOnce = openModalOnce;
   }
 
   private static createInnerElements(customStyles?: Styles) {
@@ -110,10 +112,10 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     }
   }
 
-  private click(uploadImagesModal: UploadImagesModal) {
-    if (!this._hasModalBeenDisplayed) {
-      uploadImagesModal.open(this.triggerImportPrompt.bind(this, this.inputElement));
-      this._hasModalBeenDisplayed = true;
+  private click(openModalFunc?: (callback: () => void) => void) {
+    if (openModalFunc && this._openModalOnce) {
+      openModalFunc(this.triggerImportPrompt.bind(this, this.inputElement));
+      this._openModalOnce = undefined;
     } else {
       this.triggerImportPrompt(this.inputElement);
     }
