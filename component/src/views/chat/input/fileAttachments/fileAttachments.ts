@@ -5,15 +5,14 @@ export class FileAttachments {
   private readonly containerElementRef: HTMLElement;
   readonly fileLimit: number = 99;
 
-  constructor(inputElementRef: HTMLElement, fileAttachments?: FileAttachmentsT) {
+  constructor(inputElementRef: HTMLElement, fileAttachments?: FileAttachmentsT, maxNumberOfImages?: number) {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (fileAttachments) {
-      const {attachmentContainerStyle, maxNumberOfFiles} = fileAttachments;
-      Object.assign(this.containerElementRef.style, attachmentContainerStyle);
-      if (maxNumberOfFiles && maxNumberOfFiles > 0) this.fileLimit = maxNumberOfFiles;
+    if (fileAttachments?.attachmentContainerStyle) {
+      Object.assign(this.containerElementRef.style, fileAttachments.attachmentContainerStyle);
     }
+    if (maxNumberOfImages && maxNumberOfImages > 0) this.fileLimit = maxNumberOfImages;
   }
 
   private createAttachmentContainer() {
@@ -72,7 +71,7 @@ export class FileAttachments {
   private removeFile(file: File, imageAttachmentElement: HTMLElement) {
     this._files.delete(file);
     imageAttachmentElement.remove();
-    if (this._files.size === 0) this.toggleContainerDisplay(true);
+    if (this._files.size === 0) this.toggleContainerDisplay(false);
   }
 
   removeAllFiles() {

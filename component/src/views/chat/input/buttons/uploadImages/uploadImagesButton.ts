@@ -13,10 +13,10 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
 
-  constructor(fileAttachments: FileAttachments, allowedFormats?: string) {
+  constructor(fileAttachments: FileAttachments, acceptedFormats?: string) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
-    this.inputElement = UploadImagesButton.createInputElement(allowedFormats);
+    this.inputElement = UploadImagesButton.createInputElement(acceptedFormats);
     this.elementRef.onclick = this.triggerImportPrompt.bind(this, this.inputElement);
     this.changeToDefault();
     this._fileAttachments = fileAttachments;
@@ -50,10 +50,10 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     inputElement.value = '';
   }
 
-  private static createInputElement(allowedFormats?: string) {
+  private static createInputElement(acceptedFormats?: string) {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = allowedFormats || 'image/*';
+    inputElement.accept = acceptedFormats || 'image/*';
     inputElement.hidden = true;
     inputElement.multiple = true;
     return inputElement;

@@ -24,7 +24,7 @@ export interface KeyVerificationHandlers {
 export interface ServiceIO {
   url?: string;
 
-  allowImages?: FileAttachments['images'];
+  allowImages?: boolean | {acceptedFormats?: string; maxNumberOfFiles?: number};
 
   requestSettings?: RequestSettings;
 

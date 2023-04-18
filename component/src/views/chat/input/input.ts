@@ -3,12 +3,12 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
+import {UploadImages} from './uploadImages/uploadImages';
 import {ButtonPosition} from './buttons/buttonPosition';
 import {ServiceIO} from '../../../services/serviceIO';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
-import {UploadImages} from './uploadImages';
 
 export class Input {
   readonly elementRef: HTMLElement;

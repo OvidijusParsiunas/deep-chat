@@ -1,7 +1,7 @@
 import {CustomStyle} from './styles';
 
 export interface FileAttachments {
-  images?: boolean | {allowedFormats?: string};
+  images?: boolean | {acceptedFormats?: string};
   maxNumberOfFiles?: number;
   attachmentContainerStyle?: CustomStyle;
 }

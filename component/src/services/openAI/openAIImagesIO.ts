@@ -19,7 +19,7 @@ export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
-  allowImages = {allowedFormats: '.png'};
+  allowImages = {acceptedFormats: '.png', maxNumberOfFiles: 2};
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
