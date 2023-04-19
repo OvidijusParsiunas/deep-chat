@@ -2,7 +2,7 @@ import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers}
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
-import {OpenAI, OpenAICustomChatLimits} from '../../types/openAI';
+import {OpenAI, OpenAICustomChatConfig} from '../../types/openAI';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
@@ -20,34 +20,36 @@ export class OpenAIChatIO implements ServiceIO {
   requestInterceptor: RequestInterceptor;
   canSendMessage: ValidateMessageBeforeSending = OpenAIChatIO.canSendMessage;
   private readonly _raw_body: OpenAIConverseBodyInternal;
-  private readonly _systemMessage: SystemMessageInternal;
+  private readonly _systemMessage: SystemMessageInternal =
+    OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, context, requestInterceptor, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, requestInterceptor, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.chat as OpenAI['chat'];
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;
-      this.cleanConfig(config);
+      if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
     }
-    this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this.requestInterceptor = requestInterceptor || ((details) => details);
+    if (typeof config === 'object') this.cleanConfig(config);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private cleanConfig(config: OpenAICustomChatLimits) {
-    delete config.total_messages_max_char_length;
-    delete config.max_messages;
+  public static generateSystemMessage(systemPrompt: string): SystemMessageInternal {
+    return {role: 'system', content: systemPrompt};
   }
 
-  public static generateSystemMessage(context?: string): SystemMessageInternal {
-    if (context) return {role: 'system', content: context};
-    return {role: 'system', content: 'You are a helpful assistant.'};
+  private cleanConfig(config: OpenAICustomChatConfig & {request?: RequestSettings}) {
+    delete config.total_messages_max_char_length;
+    delete config.max_messages;
+    delete config.request;
+    delete config.systemPrompt;
   }
 
   private static canSendMessage(text: string) {

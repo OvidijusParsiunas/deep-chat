@@ -84,10 +84,6 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   errorMessage?: ErrorMessages;
 
-  // WORK - only valid for chat?
-  @Property('string')
-  context?: string;
-
   @Property('function')
   requestInterceptor?: RequestInterceptor;
 
@@ -103,7 +99,8 @@ export class AiAssistant extends InternalHTML {
 
   getMessages: () => MessageContent[] = () => [];
 
-  submitUserMessage: (text: string) => void = () =>
+  // will need to add an example for this
+  submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
   _hasBeenRendered = false;

@@ -95,13 +95,12 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     }
   }
 
-  // prettier-ignore
-  public async submit(userText: string) {
-    const files = this._imageAttachments?.getImageFiles();
-    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, files)) return;
+  public async submit(userText: string, files?: File[]) {
+    const uploadFiles = files || this._imageAttachments?.getImageFiles();
+    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadFiles)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage(userText, false, true);
-    if (files) await this._messages.addMultipleImagesFromFiles(files);
+    if (uploadFiles) await this._messages.addMultipleImagesFromFiles(uploadFiles);
     this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     const completionsHandlers = {

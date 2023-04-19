@@ -24,17 +24,18 @@ export interface OpenAIImagesConfig {
   user?: string;
 }
 
-export interface OpenAICustomChatLimits {
+export interface OpenAICustomChatConfig {
   total_messages_max_char_length?: number; // uses OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
   max_messages?: number;
+  systemPrompt?: string;
 }
 
-export interface OpenAICustomCompletionLimits {
+export interface OpenAICustomCompletionConfig {
   max_char_length?: number; // uses inputCharacterLimit or OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
 }
 
 export interface OpenAI {
-  chat?: true | (OpenAIConverseConfig & OpenAICustomChatLimits & {request?: RequestSettings});
-  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionLimits & {request?: RequestSettings});
+  chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & {request?: RequestSettings});
+  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & {request?: RequestSettings});
   images?: true | (OpenAIImagesConfig & CustomFileConfig);
 }

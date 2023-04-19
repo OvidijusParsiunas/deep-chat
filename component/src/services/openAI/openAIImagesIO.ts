@@ -115,7 +115,6 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     return bodyCopy;
   }
 
-  // WORK - ability to add images one after another
   // prettier-ignore
   private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;

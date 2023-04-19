@@ -1,6 +1,6 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {OpenAI, OpenAICustomCompletionLimits} from '../../types/openAI';
+import {OpenAI, OpenAICustomCompletionConfig} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {RequestInterceptor} from '../../types/requestInterceptor';
@@ -42,8 +42,9 @@ export class OpenAICompletionsIO implements ServiceIO {
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private cleanConfig(config: OpenAICustomCompletionLimits) {
+  private cleanConfig(config: OpenAICustomCompletionConfig & {request?: RequestSettings}) {
     delete config.max_char_length;
+    delete config.request;
   }
 
   private static canSendMessage(text: string) {
