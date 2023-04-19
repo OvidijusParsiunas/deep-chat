@@ -1,9 +1,8 @@
 import {CompletionsHandlers, ImagesConfig, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
+import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
 import {RequestInterceptor} from '../../types/requestInterceptor';
-import {CustomServiceResponse} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -17,12 +16,15 @@ export class CustomServiceIO implements ServiceIO {
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   requestInterceptor: RequestInterceptor;
+  private readonly _isStream: boolean = false;
 
   constructor(aiAssistant: AiAssistant) {
-    const {requestInterceptor, requestSettings, customService} = aiAssistant;
-    if (requestSettings) this.requestSettings = requestSettings;
+    const {requestInterceptor, customService} = aiAssistant;
+    if (customService?.request) this.requestSettings = customService.request;
     this.requestInterceptor = requestInterceptor || ((body) => body);
-    if (customService?.images) this.images = CustomServiceIO.preprocessImageBodyConfig(customService.images);
+    if (customService?.images) this.images = CustomServiceIO.parseImagesConfig(customService.images, this.requestSettings);
+    this._isStream = !!customService?.stream;
+    if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
   }
 
@@ -30,21 +32,34 @@ export class CustomServiceIO implements ServiceIO {
     return !files?.[0] || text.trim() !== '';
   }
 
-  private static preprocessImageBodyConfig(config: FileAttachments) {
-    const imagesConfig: ImagesConfig = {};
-    if (config.infoModal) {
-      imagesConfig.infoModal = config.infoModal;
-      if (config.infoModal?.textMarkDown) {
-        const remarkable = RemarkableConfig.createNew();
-        imagesConfig.infoModal.textMarkDown = remarkable.render(config.infoModal?.textMarkDown);
+  private static parseImagesConfig(images: CustomServiceConfig['images'], requestSettings: RequestSettings) {
+    const imagesConfig: ImagesConfig & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
+    if (typeof images === 'object') {
+      const {files, request} = images;
+      if (files) {
+        if (files.infoModal) {
+          imagesConfig.files.infoModal = files.infoModal;
+          if (files.infoModal?.textMarkDown) {
+            const remarkable = RemarkableConfig.createNew();
+            imagesConfig.infoModalTextMarkUp = remarkable.render(files.infoModal.textMarkDown);
+          }
+        }
+        if (files.acceptedFormats) imagesConfig.files.acceptedFormats = files.acceptedFormats;
+        if (files.maxNumberOfFiles) imagesConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
       }
+      imagesConfig.request = {
+        headers: request?.headers || requestSettings.headers,
+        method: request?.method || requestSettings.method,
+        url: request?.url || requestSettings.url,
+      };
     }
-    if (config.acceptedFormats) imagesConfig.acceptedFormats = config.acceptedFormats;
-    if (config.maxNumberOfFiles) imagesConfig.maxNumberOfFiles = config.maxNumberOfFiles;
-    delete config.infoModal;
-    delete config.acceptedFormats;
-    delete config.maxNumberOfFiles;
     return imagesConfig;
+  }
+
+  private static cleanConfig(config: Partial<CustomServiceConfig>) {
+    delete config.images;
+    delete config.request;
+    delete config.stream;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,18 +75,19 @@ export class CustomServiceIO implements ServiceIO {
   // prettier-ignore
   private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
     const formData = CustomServiceIO.createFormDataBody(this._raw_body, files);
-    // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
-      HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
-    // imageInputElement.value = ''; // resetting to prevent Chrome issue of not being able to upload same file twice
+    const previousRequestSettings = this.requestSettings;
+    this.requestSettings = this.images?.request || this.requestSettings;
+    HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
+    this.requestSettings = previousRequestSettings;
   }
 
   // prettier-ignore
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers, files?: File[]) {
+  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
+      imageFiles?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (files) {
-      this.callApiWithImage(messages, completionsHandlers, files);
-    } else if (this._raw_body.stream) {
+    if (imageFiles) {
+      this.callApiWithImage(messages, completionsHandlers, imageFiles);
+    } else if (this._isStream) {
       HTTPRequest.requestStream(this, {stream: true, messages}, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {

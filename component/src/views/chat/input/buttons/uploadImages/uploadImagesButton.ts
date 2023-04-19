@@ -18,11 +18,11 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   constructor(fileAttachments: FileAttachments, images: ImagesConfig, openModalFunc?: (callback: () => void) => void) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
-    this.inputElement = UploadImagesButton.createInputElement(images?.acceptedFormats);
+    this.inputElement = UploadImagesButton.createInputElement(images?.files?.acceptedFormats);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.changeToDefault();
     this._fileAttachments = fileAttachments;
-    this._openModalOnce = images.infoModal?.openModalOnce;
+    this._openModalOnce = images.files?.infoModal?.openModalOnce;
   }
 
   private static createInnerElements(customStyles?: Styles) {

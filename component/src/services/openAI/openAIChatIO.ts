@@ -25,7 +25,7 @@ export class OpenAIChatIO implements ServiceIO {
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, context, requestInterceptor, requestSettings, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, context, requestInterceptor, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.chat as OpenAI['chat'];
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
@@ -33,7 +33,8 @@ export class OpenAIChatIO implements ServiceIO {
       this.cleanConfig(config);
     }
     this._systemMessage = OpenAIChatIO.generateSystemMessage(context);
-    this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
+    const requestSettings = typeof config === 'object' ? config.request : undefined;
+    if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this.requestInterceptor = requestInterceptor || ((details) => details);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;

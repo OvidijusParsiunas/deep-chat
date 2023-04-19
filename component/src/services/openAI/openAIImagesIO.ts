@@ -9,12 +9,15 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
+import {CustomFileConfig} from '../../types/customService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
+
+type Images = ImagesConfig & {files?: FileAttachments};
 
 export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -36,24 +39,26 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
 
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
-  images: ImagesConfig = {acceptedFormats: '.png', maxNumberOfFiles: 2, infoModal: {openModalOnce: true}};
+  images: Images = {files: {acceptedFormats: '.png', maxNumberOfFiles: 2, infoModal: {openModalOnce: true}}};
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
   requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, requestInterceptor, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    if (key) this.requestSettings = OpenAIUtils.buildRequestSettings(key, requestSettings);
     this.requestInterceptor = requestInterceptor || ((details) => details);
     const config = openAI?.completions as OpenAI['images'];
+    const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
+    if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
-      OpenAIImagesIO.preprocessImageBodyConfig(config, this.images, remarkable);
+      if (config.files) OpenAIImagesIO.processImagesConfig(config.files, this.images, remarkable);
+      OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
-    } else if (this.images.infoModal) {
-      this.images.infoModal.textMarkDown = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
+    } else if (this.images?.files?.infoModal) {
+      this.images.infoModalTextMarkUp = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
     }
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
@@ -62,16 +67,21 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static preprocessImageBodyConfig(config: FileAttachments, _images: ImagesConfig, remarkable: Remarkable) {
-    if (_images.infoModal) {
-      Object.assign(_images.infoModal, config.infoModal);
-      _images.infoModal.textMarkDown = remarkable.render(config.infoModal?.textMarkDown || OpenAIImagesIO.MODAL_MARKDOWN);
+  private static processImagesConfig(files: FileAttachments, _images: Images, remarkable: Remarkable) {
+    if (_images.files) {
+      if (_images.files.infoModal) {
+        Object.assign(_images.files.infoModal, files.infoModal);
+        const markdown = files.infoModal?.textMarkDown || OpenAIImagesIO.MODAL_MARKDOWN;
+        _images.infoModalTextMarkUp = remarkable.render(markdown);
+      }
+      if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
+      if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
     }
-    if (config.acceptedFormats) _images.acceptedFormats = config.acceptedFormats;
-    if (config.maxNumberOfFiles) _images.maxNumberOfFiles = config.maxNumberOfFiles;
-    delete config.infoModal;
-    delete config.acceptedFormats;
-    delete config.maxNumberOfFiles;
+  }
+
+  private static cleanConfig(config: CustomFileConfig) {
+    delete config.files;
+    delete config.request;
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

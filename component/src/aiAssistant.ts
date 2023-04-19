@@ -7,7 +7,6 @@ import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {RequestInterceptor} from './types/requestInterceptor';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
-import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {SpeechInput} from './types/speechInput';
@@ -36,9 +35,6 @@ export class AiAssistant extends InternalHTML {
 
   @Property('boolean')
   startWithChatView?: boolean;
-
-  @Property('object')
-  requestSettings?: RequestSettings;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -88,6 +84,7 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   errorMessage?: ErrorMessages;
 
+  // WORK - only valid for chat?
   @Property('string')
   context?: string;
 

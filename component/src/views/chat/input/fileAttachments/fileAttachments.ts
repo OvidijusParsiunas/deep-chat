@@ -10,7 +10,9 @@ export class FileAttachments {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (images?.maxNumberOfFiles && images.maxNumberOfFiles > 0) this.imageCountLimit = images.maxNumberOfFiles;
+    if (images?.files?.maxNumberOfFiles && images.files.maxNumberOfFiles > 0) {
+      this.imageCountLimit = images.files.maxNumberOfFiles;
+    }
     if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
   }
 

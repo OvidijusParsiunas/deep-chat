@@ -1,8 +1,8 @@
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
-import {FileAttachments, InfoModal} from '../types/fileAttachments';
 import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {CustomFileConfig} from '../types/customService';
 import {ImageResults} from '../types/imageResult';
 
 export interface CompletionsHandlers {
@@ -21,7 +21,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type ImagesConfig = FileAttachments & {infoModal?: InfoModal & {textMarkUp?: string}};
+export type ImagesConfig = CustomFileConfig & {infoModalTextMarkUp?: string};
 
 export interface ServiceIO {
   url?: string;

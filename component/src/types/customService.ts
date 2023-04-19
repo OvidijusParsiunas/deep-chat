@@ -1,8 +1,15 @@
 import {FileAttachments} from './fileAttachments';
+import {RequestSettings} from './requestSettings';
+
+export interface CustomFileConfig {
+  files?: FileAttachments;
+  request?: RequestSettings;
+}
 
 export interface CustomServiceConfig {
   stream?: boolean;
-  images?: FileAttachments;
+  images?: boolean | CustomFileConfig;
+  request: RequestSettings;
   [key: string]: unknown;
 }
 

@@ -54,7 +54,7 @@ export class UploadImagesModal {
     setTimeout(() => {
       this._elementRef.style.display = 'none';
       this._backgroundPanelRef.style.display = 'none';
-    }, 200);
+    }, 190);
   }
 
   open(textHTML: string, callback: () => void) {
@@ -79,7 +79,7 @@ export class UploadImagesModal {
       this.close();
       setTimeout(() => {
         callback();
-      }, 150); // the process to open the file window can interrupt the animation - hence closing before executing
+      }, 140); // the process to open the file window can interrupt the animation - hence closing before executing
     };
   }
 }

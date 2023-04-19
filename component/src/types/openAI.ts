@@ -1,4 +1,5 @@
-import {FileAttachments} from './fileAttachments';
+import {RequestSettings} from './requestSettings';
+import {CustomFileConfig} from './customService';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
@@ -33,7 +34,7 @@ export interface OpenAICustomCompletionLimits {
 }
 
 export interface OpenAI {
-  chat?: true | (OpenAIConverseConfig & OpenAICustomChatLimits);
-  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionLimits);
-  images?: true | (OpenAIImagesConfig & FileAttachments);
+  chat?: true | (OpenAIConverseConfig & OpenAICustomChatLimits & {request?: RequestSettings});
+  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionLimits & {request?: RequestSettings});
+  images?: true | (OpenAIImagesConfig & CustomFileConfig);
 }

@@ -17,9 +17,9 @@ export class UploadImages {
   }
 
   private static getOpenModalFunc(viewContainerElement: HTMLElement, images: ImagesConfig) {
-    if (typeof images === 'object' && images.infoModal) {
-      const uploadImagesModal = new UploadImagesModal(viewContainerElement, images.infoModal.containerStyle);
-      return uploadImagesModal.open.bind(uploadImagesModal, images.infoModal.textMarkDown || '');
+    if (typeof images === 'object' && images.files?.infoModal) {
+      const uploadImagesModal = new UploadImagesModal(viewContainerElement, images.files.infoModal.containerStyle);
+      return uploadImagesModal.open.bind(uploadImagesModal, images.infoModalTextMarkUp || '');
     }
     return undefined;
   }

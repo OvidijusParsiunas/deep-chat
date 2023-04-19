@@ -25,16 +25,18 @@ export class OpenAICompletionsIO implements ServiceIO {
   requestInterceptor: RequestInterceptor;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, requestSettings, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, requestInterceptor, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.completions as OpenAI['completions'];
-    if (config && typeof config !== 'boolean') {
+    if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
       const newMaxCharLength = config.max_char_length || inputCharacterLimit;
       if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
       this.cleanConfig(config);
+      this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, config.request) : config.request;
     }
-    this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
+    const requestSettings = typeof config === 'object' ? config.request : undefined;
+    if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     this.requestInterceptor = requestInterceptor || ((details) => details);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
