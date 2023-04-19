@@ -1,5 +1,8 @@
+import {FileAttachments} from './fileAttachments';
+
 export interface CustomServiceConfig {
   stream?: boolean;
+  images?: FileAttachments;
   [key: string]: unknown;
 }
 

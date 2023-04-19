@@ -4,6 +4,7 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/speechInput';
+import {ImagesConfig} from '../../../../../services/serviceIO';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
@@ -14,16 +15,14 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   private readonly _fileAttachments: FileAttachments;
   private _openModalOnce?: boolean | undefined;
 
-  // prettier-ignore
-  constructor(fileAttachments: FileAttachments, acceptedFormats?: string, openModalFunc?: (callback: () => void) => void,
-      openModalOnce?: boolean) {
+  constructor(fileAttachments: FileAttachments, images: ImagesConfig, openModalFunc?: (callback: () => void) => void) {
     super(UploadImagesButton.createMicrophoneElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
-    this.inputElement = UploadImagesButton.createInputElement(acceptedFormats);
+    this.inputElement = UploadImagesButton.createInputElement(images?.acceptedFormats);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.changeToDefault();
     this._fileAttachments = fileAttachments;
-    this._openModalOnce = openModalOnce;
+    this._openModalOnce = images.infoModal?.openModalOnce;
   }
 
   private static createInnerElements(customStyles?: Styles) {

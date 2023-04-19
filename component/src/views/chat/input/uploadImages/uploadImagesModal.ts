@@ -1,23 +1,26 @@
+import {CustomStyle} from '../../../../types/styles';
+
 export class UploadImagesModal {
   private readonly _elementRef: HTMLElement;
   private readonly _backgroundPanelRef: HTMLElement;
   private readonly _textRef: HTMLElement;
   private readonly _buttonRef: HTMLElement;
 
-  constructor(viewContainerElement: HTMLElement) {
+  constructor(viewContainerElement: HTMLElement, containerStyle?: CustomStyle) {
     this._buttonRef = UploadImagesModal.createButton();
     this._textRef = UploadImagesModal.createModalText();
-    this._elementRef = this.createContainer(this._buttonRef);
+    this._elementRef = this.createContainer(this._buttonRef, containerStyle);
     viewContainerElement.appendChild(this._elementRef);
     this._backgroundPanelRef = UploadImagesModal.createDarkBackgroundPanel();
     viewContainerElement.appendChild(this._backgroundPanelRef);
   }
 
-  public createContainer(button: HTMLElement) {
+  public createContainer(button: HTMLElement, containerStyle?: CustomStyle) {
     const containerElement = document.createElement('div');
     containerElement.classList.add('modal');
     containerElement.appendChild(this._textRef);
     containerElement.appendChild(UploadImagesModal.createButtonPanel(button));
+    Object.assign(containerElement.style, containerStyle);
     return containerElement;
   }
 

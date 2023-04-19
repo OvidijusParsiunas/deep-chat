@@ -9,7 +9,6 @@ import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
 import {RequestSettings} from './types/requestSettings';
 import {SubmitButtonStyles} from './types/submitButton';
-import {FileAttachments} from './types/fileAttachments';
 import {Property} from './utils/decorators/property';
 import {SpeechInput} from './types/speechInput';
 import {ChatView} from './views/chat/chatView';
@@ -42,7 +41,7 @@ export class AiAssistant extends InternalHTML {
   requestSettings?: RequestSettings;
 
   @Property('object')
-  fileAttachments?: FileAttachments;
+  attachmentContainerStyle?: CustomStyle;
 
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;

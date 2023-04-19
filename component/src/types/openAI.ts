@@ -1,3 +1,5 @@
+import {FileAttachments} from './fileAttachments';
+
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
   content: string;
@@ -33,5 +35,5 @@ export interface OpenAICustomCompletionLimits {
 export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatLimits);
   completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionLimits);
-  images?: true | OpenAIConverseConfig;
+  images?: true | (OpenAIImagesConfig & FileAttachments);
 }

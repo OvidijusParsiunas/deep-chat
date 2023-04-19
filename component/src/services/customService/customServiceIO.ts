@@ -1,16 +1,19 @@
-import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {CompletionsHandlers, ImagesConfig, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {CustomServiceResponse} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
+import {FileAttachments} from '../../types/fileAttachments';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AiAssistant} from '../../aiAssistant';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
+  images: ImagesConfig | undefined;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   requestInterceptor: RequestInterceptor;
@@ -19,11 +22,29 @@ export class CustomServiceIO implements ServiceIO {
     const {requestInterceptor, requestSettings, customService} = aiAssistant;
     if (requestSettings) this.requestSettings = requestSettings;
     this.requestInterceptor = requestInterceptor || ((body) => body);
+    if (customService?.images) this.images = CustomServiceIO.preprocessImageBodyConfig(customService.images);
     this._raw_body = customService;
   }
 
   private static canSendMessage(text: string, files?: File[]) {
     return !files?.[0] || text.trim() !== '';
+  }
+
+  private static preprocessImageBodyConfig(config: FileAttachments) {
+    const imagesConfig: ImagesConfig = {};
+    if (config.infoModal) {
+      imagesConfig.infoModal = config.infoModal;
+      if (config.infoModal?.textMarkDown) {
+        const remarkable = RemarkableConfig.createNew();
+        imagesConfig.infoModal.textMarkDown = remarkable.render(config.infoModal?.textMarkDown);
+      }
+    }
+    if (config.acceptedFormats) imagesConfig.acceptedFormats = config.acceptedFormats;
+    if (config.maxNumberOfFiles) imagesConfig.maxNumberOfFiles = config.maxNumberOfFiles;
+    delete config.infoModal;
+    delete config.acceptedFormats;
+    delete config.maxNumberOfFiles;
+    return imagesConfig;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

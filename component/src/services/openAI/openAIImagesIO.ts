@@ -1,4 +1,4 @@
-import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {CompletionsHandlers, ImagesConfig, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
@@ -7,12 +7,14 @@ import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
+import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {Remarkable} from 'remarkable';
 
 export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -34,7 +36,7 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
 
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
-  allowImages: ServiceIO['allowImages'] = {acceptedFormats: '.png', maxNumberOfFiles: 2, openModalOnce: true};
+  images: ImagesConfig = {acceptedFormats: '.png', maxNumberOfFiles: 2, infoModal: {openModalOnce: true}};
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
@@ -46,16 +48,30 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     if (key) this.requestSettings = OpenAIUtils.buildRequestSettings(key, requestSettings);
     this.requestInterceptor = requestInterceptor || ((details) => details);
     const config = openAI?.completions as OpenAI['images'];
-    if (config && typeof config !== 'boolean') this._raw_body = config;
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
-    if (typeof this.allowImages === 'object') {
-      const remarkable = RemarkableConfig.createNew();
-      this.allowImages.modalTextMarkUp = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
+    const remarkable = RemarkableConfig.createNew();
+    if (config && typeof config !== 'boolean') {
+      OpenAIImagesIO.preprocessImageBodyConfig(config, this.images, remarkable);
+      this._raw_body = config;
+    } else if (this.images.infoModal) {
+      this.images.infoModal.textMarkDown = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
     }
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
   private static canSendMessage(text: string, files?: File[]) {
     return !!files?.[0] || text.trim() !== '';
+  }
+
+  private static preprocessImageBodyConfig(config: FileAttachments, _images: ImagesConfig, remarkable: Remarkable) {
+    if (_images.infoModal) {
+      Object.assign(_images.infoModal, config.infoModal);
+      _images.infoModal.textMarkDown = remarkable.render(config.infoModal?.textMarkDown || OpenAIImagesIO.MODAL_MARKDOWN);
+    }
+    if (config.acceptedFormats) _images.acceptedFormats = config.acceptedFormats;
+    if (config.maxNumberOfFiles) _images.maxNumberOfFiles = config.maxNumberOfFiles;
+    delete config.infoModal;
+    delete config.acceptedFormats;
+    delete config.maxNumberOfFiles;
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

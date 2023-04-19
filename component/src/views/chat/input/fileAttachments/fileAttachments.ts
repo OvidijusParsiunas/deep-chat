@@ -1,18 +1,17 @@
-import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {ImagesConfig} from '../../../../services/serviceIO';
+import {CustomStyle} from '../../../../types/styles';
 
 export class FileAttachments {
   private readonly _files: Set<File> = new Set();
   private readonly containerElementRef: HTMLElement;
   readonly fileLimit: number = 99;
 
-  constructor(inputElementRef: HTMLElement, fileAttachments?: FileAttachmentsT, maxNumberOfImages?: number) {
+  constructor(inputElementRef: HTMLElement, images?: ImagesConfig, attachmentContainerStyle?: CustomStyle) {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (fileAttachments?.attachmentContainerStyle) {
-      Object.assign(this.containerElementRef.style, fileAttachments.attachmentContainerStyle);
-    }
-    if (maxNumberOfImages && maxNumberOfImages > 0) this.fileLimit = maxNumberOfImages;
+    if (images?.maxNumberOfFiles && images.maxNumberOfFiles > 0) this.fileLimit = images.maxNumberOfFiles;
+    if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
   }
 
   private createAttachmentContainer() {
