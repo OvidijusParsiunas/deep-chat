@@ -97,7 +97,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
 
   // prettier-ignore
   public async submit(userText: string) {
-    const files = this._imageAttachments?.getFiles();
+    const files = this._imageAttachments?.getImageFiles();
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, files)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage(userText, false, true);
@@ -112,7 +112,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getFiles());
+    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getImageFiles());
     this._imageAttachments?.removeAllFiles();
   }
 

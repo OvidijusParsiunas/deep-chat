@@ -41,7 +41,7 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
 
   private import(inputElement: HTMLInputElement) {
     Array.from(inputElement.files || [])
-      .slice(0, this._fileAttachments.fileLimit)
+      .slice(0, this._fileAttachments.imageCountLimit)
       .forEach((file: File) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);

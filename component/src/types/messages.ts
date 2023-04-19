@@ -3,7 +3,9 @@ import {CustomStyle} from './styles';
 export interface CustomMessageStyle {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
+  bubble?: CustomStyle;
   text?: CustomStyle;
+  image?: CustomStyle;
 }
 
 export interface CustomMessageStyles {

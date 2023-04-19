@@ -2,15 +2,15 @@ import {ImagesConfig} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 
 export class FileAttachments {
-  private readonly _files: Set<File> = new Set();
+  private readonly _imageFiles: Set<File> = new Set();
   private readonly containerElementRef: HTMLElement;
-  readonly fileLimit: number = 99;
+  readonly imageCountLimit: number = 99;
 
   constructor(inputElementRef: HTMLElement, images?: ImagesConfig, attachmentContainerStyle?: CustomStyle) {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (images?.maxNumberOfFiles && images.maxNumberOfFiles > 0) this.fileLimit = images.maxNumberOfFiles;
+    if (images?.maxNumberOfFiles && images.maxNumberOfFiles > 0) this.imageCountLimit = images.maxNumberOfFiles;
     if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
   }
 
@@ -35,7 +35,7 @@ export class FileAttachments {
   private createRemoveAttachmentButton(file: File, imageAttachmentElement: HTMLElement) {
     const removeImageButtonELement = document.createElement('div');
     removeImageButtonELement.classList.add('remove-file-attachment-button');
-    removeImageButtonELement.onclick = this.removeFile.bind(this, file, imageAttachmentElement);
+    removeImageButtonELement.onclick = this.removeImageFile.bind(this, file, imageAttachmentElement);
     const xIcon = document.createElement('div');
     xIcon.classList.add('x-icon');
     xIcon.innerText = '×';
@@ -43,20 +43,20 @@ export class FileAttachments {
     return removeImageButtonELement;
   }
 
-  getFiles() {
-    return Array.from(this._files);
+  getImageFiles() {
+    return Array.from(this._imageFiles);
   }
 
   addImageFile(file: File, fileReader: FileReader) {
     const imageAttachment = FileAttachments.createImageAttachment(fileReader.result as string);
-    if (this._files.size >= this.fileLimit) {
+    if (this._imageFiles.size >= this.imageCountLimit) {
       const attachments = this.containerElementRef.children;
       (attachments[attachments.length - 1].children[1] as HTMLElement).click();
       this.containerElementRef.insertBefore(this.createContainer(file, imageAttachment), attachments[0]);
     } else {
       this.containerElementRef.appendChild(this.createContainer(file, imageAttachment));
     }
-    this._files.add(file);
+    this._imageFiles.add(file);
     this.toggleContainerDisplay(true);
   }
 
@@ -67,14 +67,14 @@ export class FileAttachments {
     return image;
   }
 
-  private removeFile(file: File, imageAttachmentElement: HTMLElement) {
-    this._files.delete(file);
+  private removeImageFile(file: File, imageAttachmentElement: HTMLElement) {
+    this._imageFiles.delete(file);
     imageAttachmentElement.remove();
-    if (this._files.size === 0) this.toggleContainerDisplay(false);
+    if (this._imageFiles.size === 0) this.toggleContainerDisplay(false);
   }
 
   removeAllFiles() {
-    this._files.clear();
+    this._imageFiles.clear();
     this.containerElementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }
