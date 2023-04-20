@@ -4,6 +4,8 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {CustomErrors} from '../../../services/serviceIO';
+import {IntroPanel} from '../introPanel/introPanel';
+import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Names} from '../../../types/names';
@@ -29,7 +31,6 @@ type ContentTypes = 'text' | 'image';
 export class Messages {
   elementRef: HTMLElement;
   private readonly _messageElementRefs: MessageElements[] = [];
-
   private readonly _messageStyles?: MessageStyles;
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
@@ -40,10 +41,11 @@ export class Messages {
   private readonly _displayLoadingMessage?: boolean;
   private readonly _remarkable: Remarkable;
   private readonly _permittedErrorPrefixes?: CustomErrors;
+  private _introPanel?: IntroPanel;
   private _streamedText = '';
   messages: MessageContent[] = [];
 
-  constructor(aiAssistant: AiAssistant, permittedErrorPrefixes?: CustomErrors) {
+  constructor(aiAssistant: AiAssistant, introPanelMarkUp?: string, permittedErrorPrefixes?: CustomErrors) {
     this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
     this._messageStyles = aiAssistant.messageStyles;
@@ -68,6 +70,7 @@ export class Messages {
     //   true
     // );
     aiAssistant.getMessages = () => this.messages;
+    this.populateIntroPanel(aiAssistant._isSlotPopulated, introPanelMarkUp, aiAssistant.introPanelStyle);
   }
 
   private static createContainerElement() {
@@ -154,6 +157,7 @@ export class Messages {
   }
 
   private createAndAppendNewMessageElement(text: string, isAI: boolean) {
+    this._introPanel?.hide();
     const messageElements = this.createNewMessageElement(text, isAI);
     this.elementRef.appendChild(messageElements.outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
@@ -250,6 +254,13 @@ export class Messages {
     this.sendClientUpdate(text, true);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
+  }
+
+  private populateIntroPanel(isSlotPopulated: boolean, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
+    if (isSlotPopulated || introPanelMarkUp) {
+      this._introPanel = new IntroPanel(isSlotPopulated, introPanelMarkUp, introPanelStyle);
+      if (this._introPanel._elementRef) this.elementRef.appendChild(this._introPanel._elementRef);
+    }
   }
 
   private createImage(imageData: ImageResult, isAI: boolean) {

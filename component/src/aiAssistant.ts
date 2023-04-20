@@ -20,7 +20,6 @@ import {Names} from './types/names';
 // WORK - change visibility icons to scalable
 // WORK - handle images
 // WORK - the loading icon position adjust
-// WORK - insert starter content through a slot
 // WORK - drag and drop files
 export class AiAssistant extends InternalHTML {
   @Property('string')
@@ -31,9 +30,6 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   customService?: CustomServiceConfig;
-
-  @Property('boolean')
-  startWithChatView?: boolean;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -73,6 +69,9 @@ export class AiAssistant extends InternalHTML {
   introMessage?: string;
 
   @Property('object')
+  introPanelStyle?: CustomStyle;
+
+  @Property('object')
   errorMessageOverrides?: ErrorMessageOverrides;
 
   @Property('boolean')
@@ -97,6 +96,8 @@ export class AiAssistant extends InternalHTML {
   submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
+  _isSlotPopulated = false;
+
   _hasBeenRendered = false;
 
   _auxiliaryStyleApplied = false;
@@ -105,6 +106,7 @@ export class AiAssistant extends InternalHTML {
 
   constructor() {
     super();
+    this._isSlotPopulated = !!this.children[0];
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
@@ -134,8 +136,8 @@ export class AiAssistant extends InternalHTML {
       ChatView.render(this, this._elementRef, serviceIO);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
-      // when it is executed, meaning that if the user sets startWithChatView or apiKey to true, this would first
-      // appear and then then the chatview would be rendered after it, which causes a blink and is bad UX
+      // when it is executed, meaning that if the user sets customService or apiKey, this would first ppear and
+      // then the chatview would be rendered after it, which causes a blink and is bad UX
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO);
     }
     this._hasBeenRendered = true;

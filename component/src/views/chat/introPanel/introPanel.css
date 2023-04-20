@@ -1,0 +1,25 @@
+.intro-panel {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  inset: 0px;
+  margin: auto;
+  height: fit-content;
+}
+
+#internal-intro-panel {
+  top: -2.5rem;
+  width: 250px;
+  height: min-content;
+  display: block;
+  border-radius: 5px;
+  overflow: auto;
+  border: 1px solid rgb(203, 203, 203);
+  padding: 10px;
+  max-height: calc(100% - 100px);
+}
+
+#internal-intro-panel > p {
+  margin-block-start: 0.8em;
+  margin-block-end: 0.8em;
+}

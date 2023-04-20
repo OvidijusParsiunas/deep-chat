@@ -93,11 +93,11 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     this.reapplyStateStyle('default', ['active']);
   }
 
-  private changeToUnsupported() {
-    this.elementRef.replaceChildren(this._innerElements.unsupported);
-    this.elementRef.classList.add('unsupported-microphone');
-    this.reapplyStateStyle('unsupported', ['active']);
-  }
+  // private changeToUnsupported() {
+  //   this.elementRef.replaceChildren(this._innerElements.unsupported);
+  //   this.elementRef.classList.add('unsupported-microphone');
+  //   this.reapplyStateStyle('unsupported', ['active']);
+  // }
 
   private toggleIconFilter(isDefault: boolean) {
     const iconElement = this.elementRef.children[0];

@@ -8,7 +8,7 @@ export class ChatView {
   private static createElements(aiAssistant: AiAssistant, serviceIO: ServiceIO) {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat';
-    const messages = new Messages(aiAssistant, serviceIO.permittedErrorPrefixes);
+    const messages = new Messages(aiAssistant, serviceIO.introPanelMarkUp, serviceIO.permittedErrorPrefixes);
     const userInput = new Input(aiAssistant, messages, serviceIO, containerElement);
     ElementUtils.addElements(containerElement, messages.elementRef, userInput.elementRef);
     return containerElement;
@@ -20,6 +20,6 @@ export class ChatView {
   }
 
   public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.startWithChatView || aiAssistant.apiKey;
+    return aiAssistant.customService || aiAssistant.apiKey;
   }
 }
