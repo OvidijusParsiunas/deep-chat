@@ -18,7 +18,7 @@ Messages:
 initialMessages?: MessageContent[];
 names?: Names;
 avatars?: Avatars;
-errorMessage?: ErrorMessages;
+errorMessageOverrides?: ErrorMessages;
 messageStyles?: CustomMessageStyles;
 speechOutput?: boolean;
 

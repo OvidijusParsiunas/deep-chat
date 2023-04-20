@@ -1,7 +1,9 @@
+import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
 import {ImageResult, ImageResults} from '../../../types/imageResult';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
+import {CustomErrors} from '../../../services/serviceIO';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatar';
 import {Names} from '../../../types/names';
@@ -9,12 +11,11 @@ import {Remarkable} from 'remarkable';
 import {Avatar} from './avatar';
 import {Name} from './name';
 import {
-  CustomMessageStyles,
-  CustomMessageStyle,
+  ErrorMessageOverrides,
+  MessageElementStyles,
   MessageContent,
-  ErrorMessages,
+  MessageStyles,
   OnNewMessage,
-  IntroMessage,
 } from '../../../types/messages';
 
 interface MessageElements {
@@ -29,36 +30,38 @@ export class Messages {
   elementRef: HTMLElement;
   private readonly _messageElementRefs: MessageElements[] = [];
 
-  private readonly _messageStyles?: CustomMessageStyles;
+  private readonly _messageStyles?: MessageStyles;
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
-  private readonly _customErrorMessage?: ErrorMessages;
+  private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: OnNewMessage;
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _remarkable: Remarkable;
+  private readonly _permittedErrorPrefixes?: CustomErrors;
   private _streamedText = '';
   messages: MessageContent[] = [];
 
-  constructor(aiAssistant: AiAssistant) {
+  constructor(aiAssistant: AiAssistant, permittedErrorPrefixes?: CustomErrors) {
     this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
     this._messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
     this._names = aiAssistant.names;
-    this._customErrorMessage = aiAssistant.errorMessage;
+    this._errorMessageOverrides = aiAssistant.errorMessageOverrides;
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
     this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
+    this._permittedErrorPrefixes = permittedErrorPrefixes;
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
     // this.addNewMessage(
     //   [
     //     {
-    //       // url: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Fischotter%2C_Lutra_Lutra.JPG',
-    //       base64: `data:image/png;base64,${SAMPLE_OPEN_AI_BASE_64}`,
+    //       url: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Fischotter%2C_Lutra_Lutra.JPG',
+    //       // base64: `data:image/png;base64,${SAMPLE_OPEN_AI_BASE_64}`,
     //     },
     //   ],
     //   true,
@@ -73,13 +76,10 @@ export class Messages {
     return container;
   }
 
-  // prettier-ignore
-  private addIntroductoryMessage(introMessage: IntroMessage) {
-    const {outerContainer, innerContainer, bubbleElement} = this.createAndAppendNewMessageElement(
-      introMessage.content || '', true);
-    if (introMessage.styles) {
-      Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, introMessage.styles, 'text');
-    }
+  private addIntroductoryMessage(introMessage: string) {
+    const {outerContainer, innerContainer, bubbleElement} = this.createAndAppendNewMessageElement(introMessage, true);
+    const intrStyle = this._messageStyles?.intro;
+    if (intrStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, intrStyle, 'text');
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
@@ -90,7 +90,7 @@ export class Messages {
 
   // prettier-ignore
   private static applyCustomStylesToElements(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, style: CustomMessageStyle, messageType: ContentTypes) {
+      bubble: HTMLElement, style: MessageElementStyles, messageType: ContentTypes) {
     Object.assign(outerC.style, style.outerContainer);
     Object.assign(innerC.style, style.innerContainer);
     Object.assign(bubble.style, style.bubble);
@@ -99,7 +99,7 @@ export class Messages {
 
   // prettier-ignore
   private static applyCustomStyles(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, styles: CustomMessageStyles, isAI: boolean, messageType: ContentTypes) {
+      bubble: HTMLElement, styles: MessageStyles, isAI: boolean, messageType: ContentTypes) {
     if (styles.default) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.default, messageType);
     if (isAI) {
       if (styles.ai) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.ai, messageType);
@@ -193,19 +193,33 @@ export class Messages {
   }
 
   // prettier-ignore
-  public addNewErrorMessage(type: keyof Omit<ErrorMessages, 'default'>, message?: string) {
+  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: string | PermittedErrorMessage) {
     this.removeMessageOnError();
     const {outerContainer, innerContainer, bubbleElement} = Messages.createBaseElements();
     bubbleElement.classList.add('error-message-text');
-    const text = this._customErrorMessage?.[type]?.text || this._customErrorMessage?.default?.text ||
-      message || 'Error, please try again.';
+    const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
+      || this._errorMessageOverrides?.default || 'Error, please try again.';
     bubbleElement.innerHTML = text;
-    const styles = this._customErrorMessage?.[type]?.styles || this._customErrorMessage?.default?.styles;
-    if (styles) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, styles, 'text');
+    const errStyle = this._messageStyles?.error;
+    if (errStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, errStyle, 'text');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
+  }
+
+  private getPermittedMessage(message?: string | PermittedErrorMessage) {
+    if (message) {
+      if (typeof message === 'string' && this._permittedErrorPrefixes) {
+        const errorPrefixes = Array.from(this._permittedErrorPrefixes);
+        for (let i = 0; i < errorPrefixes.length; i += 1) {
+          if (message.startsWith(errorPrefixes[i])) return message;
+        }
+      } else if (typeof message === 'object' && message.permittedErrorMessage) {
+        return message.permittedErrorMessage;
+      }
+    }
+    return undefined;
   }
 
   public addLoadingMessage() {

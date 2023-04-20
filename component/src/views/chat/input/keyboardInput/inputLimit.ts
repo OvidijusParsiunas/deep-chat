@@ -2,7 +2,7 @@ import {FocusUtils} from './focusUtils';
 
 export class InputLimit {
   // prettier-ignore
-  private static readonly ALLOWED_KEYS = new Set<string>([
+  private static readonly PERMITTED_KEYS = new Set<string>([
       'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control'
     ]);
 
@@ -17,12 +17,12 @@ export class InputLimit {
     const inputElement = event.target as HTMLElement;
     const textContent = inputElement.textContent;
     if (textContent && textContent.length >= inputCharacterLimit
-        && !InputLimit.ALLOWED_KEYS.has(event.key) && !InputLimit.isKeyCombinationAllowed(event)) {
+        && !InputLimit.PERMITTED_KEYS.has(event.key) && !InputLimit.isKeyCombinationPermitted(event)) {
       event.preventDefault();
     }
   }
 
-  private static isKeyCombinationAllowed(event: KeyboardEvent) {
+  private static isKeyCombinationPermitted(event: KeyboardEvent) {
     if (event.key === 'a') {
       return event.ctrlKey || event.metaKey;
     }

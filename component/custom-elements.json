@@ -125,7 +125,7 @@
             },
             {
               "kind": "field",
-              "name": "errorMessage",
+              "name": "errorMessageOverrides",
               "type": {
                 "text": "ErrorMessages | undefined"
               }

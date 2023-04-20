@@ -5,11 +5,11 @@ import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {FilesServiceConfig} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
-import {CustomFileConfig} from '../../types/customService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
@@ -39,22 +39,23 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
 
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
+  permittedErrorPrefixes = new Set('Invalid input image');
   images: Images = {files: {acceptedFormats: '.png', maxNumberOfFiles: 2, infoModal: {openModalOnce: true}}};
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
-  requestInterceptor: RequestInterceptor;
+  requestInterceptor: RequestInterceptor = (details) => details;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    this.requestInterceptor = requestInterceptor || ((details) => details);
     const config = openAI?.completions as OpenAI['images'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
       if (config.files) OpenAIImagesIO.processImagesConfig(config.files, this.images, remarkable);
+      if (config.interceptor) this.requestInterceptor = config.interceptor;
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
     } else if (this.images?.files?.infoModal) {
@@ -79,9 +80,10 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     }
   }
 
-  private static cleanConfig(config: CustomFileConfig) {
+  private static cleanConfig(config: FilesServiceConfig) {
     delete config.files;
     delete config.request;
+    delete config.interceptor;
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

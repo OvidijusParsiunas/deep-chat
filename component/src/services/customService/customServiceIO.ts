@@ -2,6 +2,7 @@ import {CompletionsHandlers, ImagesConfig, KeyVerificationHandlers, ServiceIO, S
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
+import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
@@ -15,14 +16,16 @@ export class CustomServiceIO implements ServiceIO {
   images: ImagesConfig | undefined;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
-  requestInterceptor: RequestInterceptor;
+  private readonly displayServiceErrorMessages?: boolean;
+  requestInterceptor: RequestInterceptor = (body) => body;
   private readonly _isStream: boolean = false;
 
   constructor(aiAssistant: AiAssistant) {
-    const {requestInterceptor, customService} = aiAssistant;
+    const {customService} = aiAssistant;
     if (customService?.request) this.requestSettings = customService.request;
-    this.requestInterceptor = requestInterceptor || ((body) => body);
+    if (customService?.interceptor) this.requestInterceptor = customService.interceptor;
     if (customService?.images) this.images = CustomServiceIO.parseImagesConfig(customService.images, this.requestSettings);
+    this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
@@ -35,7 +38,7 @@ export class CustomServiceIO implements ServiceIO {
   private static parseImagesConfig(images: CustomServiceConfig['images'], requestSettings: RequestSettings) {
     const imagesConfig: ImagesConfig & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
     if (typeof images === 'object') {
-      const {files, request} = images;
+      const {files, request, interceptor} = images;
       if (files) {
         if (files.infoModal) {
           imagesConfig.files.infoModal = files.infoModal;
@@ -52,6 +55,7 @@ export class CustomServiceIO implements ServiceIO {
         method: request?.method || requestSettings.method,
         url: request?.url || requestSettings.url,
       };
+      imagesConfig.interceptor = interceptor;
     }
     return imagesConfig;
   }
@@ -60,6 +64,8 @@ export class CustomServiceIO implements ServiceIO {
     delete config.images;
     delete config.request;
     delete config.stream;
+    delete config.interceptor;
+    delete config.displayServiceErrorMessages;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,6 +83,7 @@ export class CustomServiceIO implements ServiceIO {
     const formData = CustomServiceIO.createFormDataBody(this._raw_body, files);
     const previousRequestSettings = this.requestSettings;
     this.requestSettings = this.images?.request || this.requestSettings;
+    this.images?.interceptor?.({body: formData, headers: this.requestSettings.headers});
     HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
     this.requestSettings = previousRequestSettings;
   }
@@ -96,7 +103,13 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   extractResultData(result: CustomServiceResponse): string {
-    if (result.error) throw result.error;
+    if (result.error) {
+      if (this.displayServiceErrorMessages) {
+        // eslint-disable-next-line no-throw-literal
+        throw {permittedErrorMessage: result.error} as PermittedErrorMessage;
+      }
+      throw result.error;
+    }
     return result.aiMessage;
   }
 }

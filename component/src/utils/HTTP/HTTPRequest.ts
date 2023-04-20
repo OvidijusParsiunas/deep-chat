@@ -26,7 +26,7 @@ export class HTTPRequest {
       })
       .catch((err) => {
         console.error(err);
-        messages.addNewErrorMessage('chat');
+        messages.addNewErrorMessage('chat', err);
         onFinish();
       });
   }
@@ -60,7 +60,7 @@ export class HTTPRequest {
       },
       onerror(err) {
         console.error(err);
-        messages.addNewErrorMessage('chat');
+        messages.addNewErrorMessage('chat', err);
         onClose();
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },

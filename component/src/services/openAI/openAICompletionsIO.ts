@@ -1,12 +1,12 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {RequestSettings, ServiceRequestConfig} from '../../types/requestSettings';
 import {OpenAI, OpenAICustomCompletionConfig} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {Messages} from '../../views/chat/messages/messages';
-import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -22,29 +22,30 @@ export class OpenAICompletionsIO implements ServiceIO {
   private readonly numberOfCharsPerToken = 3.5;
   private readonly _raw_body: OpenAIConverseBodyInternal;
   requestSettings?: RequestSettings;
-  requestInterceptor: RequestInterceptor;
+  requestInterceptor: RequestInterceptor = (details) => details;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.completions as OpenAI['completions'];
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
       const newMaxCharLength = config.max_char_length || inputCharacterLimit;
       if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
-      this.cleanConfig(config);
       this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, config.request) : config.request;
+      if (config.interceptor) this.requestInterceptor = config.interceptor;
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this.requestInterceptor = requestInterceptor || ((details) => details);
+    if (typeof config === 'object') this.cleanConfig(config);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private cleanConfig(config: OpenAICustomCompletionConfig & {request?: RequestSettings}) {
+  private cleanConfig(config: OpenAICustomCompletionConfig & ServiceRequestConfig) {
     delete config.max_char_length;
     delete config.request;
+    delete config.interceptor;
   }
 
   private static canSendMessage(text: string) {

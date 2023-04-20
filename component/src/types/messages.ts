@@ -1,6 +1,6 @@
 import {CustomStyle} from './styles';
 
-export interface CustomMessageStyle {
+export interface MessageElementStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
@@ -8,28 +8,20 @@ export interface CustomMessageStyle {
   image?: CustomStyle;
 }
 
-export interface CustomMessageStyles {
-  default?: CustomMessageStyle;
-  user?: CustomMessageStyle;
-  ai?: CustomMessageStyle;
+export interface MessageStyles {
+  default?: MessageElementStyles;
+  user?: MessageElementStyles;
+  ai?: MessageElementStyles;
+  error?: MessageElementStyles;
+  intro?: MessageElementStyles;
 }
 
 export type MessageContent = {role: 'user' | 'assistant'; content: string};
 
 export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
 
-export interface IntroMessage {
-  content: string;
-  styles?: CustomMessageStyle;
-}
-
-export interface ErrorMessage {
-  text?: string;
-  styles?: CustomMessageStyle;
-}
-
-export interface ErrorMessages {
-  default?: ErrorMessage;
-  chat?: ErrorMessage;
-  speechInput?: ErrorMessage;
+export interface ErrorMessageOverrides {
+  default?: string;
+  chat?: string;
+  speechInput?: string;
 }

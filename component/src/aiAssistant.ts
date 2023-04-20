@@ -1,10 +1,9 @@
-import {CustomMessageStyles, ErrorMessages, IntroMessage, MessageContent, OnNewMessage} from './types/messages';
+import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
-import {RequestInterceptor} from './types/requestInterceptor';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
 import {SubmitButtonStyles} from './types/submitButton';
@@ -39,11 +38,6 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
 
-  @Property('function')
-  validateMessageBeforeSending?: ValidateMessageBeforeSending;
-
-  // WORK - custom error messages
-
   // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('boolean')
   speechInput?: SpeechInput;
@@ -64,7 +58,7 @@ export class AiAssistant extends InternalHTML {
   submitButtonStyles?: SubmitButtonStyles;
 
   @Property('object')
-  messageStyles?: CustomMessageStyles;
+  messageStyles?: MessageStyles;
 
   @Property('object')
   avatars?: Avatars;
@@ -76,22 +70,22 @@ export class AiAssistant extends InternalHTML {
   initialMessages?: MessageContent[];
 
   @Property('string')
-  introMessage?: IntroMessage;
+  introMessage?: string;
+
+  @Property('object')
+  errorMessageOverrides?: ErrorMessageOverrides;
 
   @Property('boolean')
   displayLoadingMessage?: boolean;
 
-  @Property('object')
-  errorMessage?: ErrorMessages;
-
-  @Property('function')
-  requestInterceptor?: RequestInterceptor;
+  @Property('string')
+  auxiliaryStyle?: string;
 
   @Property('function')
   onNewMessage?: OnNewMessage;
 
-  @Property('string')
-  auxiliaryStyle?: string;
+  @Property('function')
+  validateMessageBeforeSending?: ValidateMessageBeforeSending;
 
   focusInput: () => void = () => {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);

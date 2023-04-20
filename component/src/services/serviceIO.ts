@@ -1,8 +1,8 @@
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {RequestInterceptor} from '../types/requestInterceptor';
+import {FilesServiceConfig} from '../types/customService';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {CustomFileConfig} from '../types/customService';
 import {ImageResults} from '../types/imageResult';
 
 export interface CompletionsHandlers {
@@ -21,7 +21,9 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type ImagesConfig = CustomFileConfig & {infoModalTextMarkUp?: string};
+export type ImagesConfig = FilesServiceConfig & {infoModalTextMarkUp?: string};
+
+export type CustomErrors = Set<string>;
 
 export interface ServiceIO {
   url?: string;
@@ -29,6 +31,11 @@ export interface ServiceIO {
   images?: ImagesConfig;
 
   requestSettings?: RequestSettings;
+
+  // the reason why we use a Set of prefixes to allow certain errors is because some errors can change
+  // depending on the input e.g. incorrect image dimensions or formatting, hence we identify the permitted
+  // service errors via prefixes
+  permittedErrorPrefixes?: CustomErrors;
 
   requestInterceptor: RequestInterceptor;
 

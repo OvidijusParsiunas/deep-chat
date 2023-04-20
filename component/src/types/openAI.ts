@@ -1,5 +1,5 @@
-import {RequestSettings} from './requestSettings';
-import {CustomFileConfig} from './customService';
+import {ServiceRequestConfig} from './requestSettings';
+import {FilesServiceConfig} from './customService';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
@@ -35,7 +35,7 @@ export interface OpenAICustomCompletionConfig {
 }
 
 export interface OpenAI {
-  chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & {request?: RequestSettings});
-  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & {request?: RequestSettings});
-  images?: true | (OpenAIImagesConfig & CustomFileConfig);
+  chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceRequestConfig);
+  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceRequestConfig);
+  images?: true | (OpenAIImagesConfig & FilesServiceConfig);
 }

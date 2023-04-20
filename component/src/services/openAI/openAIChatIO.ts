@@ -1,12 +1,12 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {RequestSettings, ServiceRequestConfig} from '../../types/requestSettings';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAI, OpenAICustomChatConfig} from '../../types/openAI';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
-import {RequestSettings} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -17,7 +17,7 @@ import {AiAssistant} from '../../aiAssistant';
 export class OpenAIChatIO implements ServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   requestSettings?: RequestSettings;
-  requestInterceptor: RequestInterceptor;
+  requestInterceptor: RequestInterceptor = (details) => details;
   canSendMessage: ValidateMessageBeforeSending = OpenAIChatIO.canSendMessage;
   private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _systemMessage: SystemMessageInternal =
@@ -26,16 +26,16 @@ export class OpenAIChatIO implements ServiceIO {
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, requestInterceptor, validateMessageBeforeSending} = aiAssistant;
+    const {openAI, validateMessageBeforeSending} = aiAssistant;
     const config = openAI?.chat as OpenAI['chat'];
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
+      if (config.interceptor) this.requestInterceptor = config.interceptor;
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    this.requestInterceptor = requestInterceptor || ((details) => details);
     if (typeof config === 'object') this.cleanConfig(config);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
@@ -45,10 +45,11 @@ export class OpenAIChatIO implements ServiceIO {
     return {role: 'system', content: systemPrompt};
   }
 
-  private cleanConfig(config: OpenAICustomChatConfig & {request?: RequestSettings}) {
+  private cleanConfig(config: OpenAICustomChatConfig & ServiceRequestConfig) {
     delete config.total_messages_max_char_length;
     delete config.max_messages;
     delete config.request;
+    delete config.interceptor;
     delete config.systemPrompt;
   }
 
