@@ -147,6 +147,7 @@ export class Messages {
   }
 
   private createNewMessageElement(text: string, isAI: boolean, messageType: ContentTypes = 'text') {
+    this._introPanel?.hide();
     const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
     if (isAI && lastMessageElements?.bubbleElement.classList.contains('loading-message-text')) {
       lastMessageElements.bubbleElement.classList.remove('loading-message-text');
@@ -157,7 +158,6 @@ export class Messages {
   }
 
   private createAndAppendNewMessageElement(text: string, isAI: boolean) {
-    this._introPanel?.hide();
     const messageElements = this.createNewMessageElement(text, isAI);
     this.elementRef.appendChild(messageElements.outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;

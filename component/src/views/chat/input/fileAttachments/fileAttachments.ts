@@ -49,7 +49,25 @@ export class FileAttachments {
     return Array.from(this._imageFiles);
   }
 
-  addImageFile(file: File, fileReader: FileReader) {
+  public addImages(files: File[], acceptedTypePrefixes?: string[], acceptedFileNamePostfixes?: string[]) {
+    Array.from(files)
+      .slice(0, this.imageCountLimit)
+      .forEach((file: File) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          if (acceptedTypePrefixes) {
+            if (!acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return;
+          }
+          if (acceptedFileNamePostfixes) {
+            if (!acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return;
+          }
+          this.addImageToAttachment(file, event.target as FileReader);
+        };
+      });
+  }
+
+  private addImageToAttachment(file: File, fileReader: FileReader) {
     const imageAttachment = FileAttachments.createImageAttachment(fileReader.result as string);
     if (this._imageFiles.size >= this.imageCountLimit) {
       const attachments = this.containerElementRef.children;

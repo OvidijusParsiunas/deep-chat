@@ -40,16 +40,7 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   }
 
   private import(inputElement: HTMLInputElement) {
-    Array.from(inputElement.files || [])
-      .slice(0, this._fileAttachments.imageCountLimit)
-      .forEach((file: File) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          this._fileAttachments.addImageFile(file, event.target as FileReader);
-        };
-      });
-
+    this._fileAttachments.addImages(Array.from(inputElement.files || []));
     inputElement.value = '';
   }
 

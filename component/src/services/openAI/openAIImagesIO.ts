@@ -17,25 +17,11 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
 
-type Images = ImagesConfig & {files?: FileAttachments};
-
 export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
-  private static readonly MODAL_MARKDOWN = `
-1 image:
 
-- With text - edits image based on the text
-- No text - creates a variation of the image
-
-2 images:
-
-- The second image needs to be a copy of the first with a transparent area where the edit should take place.
-Add text to describe the required modification.
-
-Click here for [more info](https://platform.openai.com/docs/guides/images/introduction).
-  `;
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
     <p><b>Insert text</b> to generate an image.</p>
@@ -47,7 +33,9 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid input image');
-  images: Images = {files: {acceptedFormats: '.png', maxNumberOfFiles: 2, infoModal: {openModalOnce: true}}};
+  images: ImagesConfig = {
+    files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+  };
   private readonly _maxCharLength: number = OpenAIUtils.IMAGES_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
@@ -56,7 +44,7 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    const config = openAI?.completions as OpenAI['images'];
+    const config = openAI?.images as OpenAI['images'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
@@ -65,8 +53,6 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
       if (config.interceptor) this.requestInterceptor = config.interceptor;
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
-    } else if (this.images?.files?.infoModal) {
-      this.images.infoModalTextMarkUp = remarkable.render(OpenAIImagesIO.MODAL_MARKDOWN);
     }
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
@@ -75,15 +61,16 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static processImagesConfig(files: FileAttachments, _images: Images, remarkable: Remarkable) {
+  private static processImagesConfig(files: FileAttachments, _images: ImagesConfig, remarkable: Remarkable) {
     if (_images.files) {
       if (_images.files.infoModal) {
         Object.assign(_images.files.infoModal, files.infoModal);
-        const markdown = files.infoModal?.textMarkDown || OpenAIImagesIO.MODAL_MARKDOWN;
-        _images.infoModalTextMarkUp = remarkable.render(markdown);
+        const markdown = files.infoModal?.textMarkDown;
+        _images.infoModalTextMarkUp = remarkable.render(markdown || '');
       }
       if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
+      if (typeof files.dragAndDrop !== undefined) _images.files.dragAndDrop = files.dragAndDrop;
     }
   }
 
@@ -160,4 +147,18 @@ Click here for [more info](https://platform.openai.com/docs/guides/images/introd
       return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
     }) as ImageResults;
   }
+
+  // private static readonly MODAL_MARKDOWN = `
+  // 1 image:
+
+  // - With text - edits image based on the text
+  // - No text - creates a variation of the image
+
+  // 2 images:
+
+  // - The second image needs to be a copy of the first with a transparent area where the edit should take place.
+  // Add text to describe the required modification.
+
+  // Click here for [more info](https://platform.openai.com/docs/guides/images/introduction).
+  //   `;
 }

@@ -49,6 +49,7 @@ export class CustomServiceIO implements ServiceIO {
         }
         if (files.acceptedFormats) imagesConfig.files.acceptedFormats = files.acceptedFormats;
         if (files.maxNumberOfFiles) imagesConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
+        if (files.dragAndDrop) imagesConfig.files.dragAndDrop = files.dragAndDrop;
       }
       imagesConfig.request = {
         headers: request?.headers || requestSettings.headers,

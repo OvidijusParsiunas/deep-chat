@@ -1,3 +1,5 @@
+@import url('./fileDrop.css');
+
 #file-attachment-container {
   position: absolute;
   height: 3.6rem;

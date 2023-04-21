@@ -1,0 +1,9 @@
+#file-drop {
+  position: absolute;
+  display: none;
+  z-index: 10;
+  height: calc(100% - 10px);
+  width: calc(100% - 10px);
+  background-color: #70c6ff4d;
+  border: 5px dashed rgb(47, 141, 255);
+}
