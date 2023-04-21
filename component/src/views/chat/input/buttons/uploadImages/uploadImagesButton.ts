@@ -1,13 +1,13 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
+import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
+import {UPLOAD_IMAGES_ICON_STRING} from '../../../../../icons/uploadImages';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {MicrophoneStyles} from '../../../../../types/speechInput';
 import {ImagesConfig} from '../../../../../services/serviceIO';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
 
-type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
+type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   inputElement: HTMLInputElement;
@@ -16,11 +16,12 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   private _openModalOnce?: boolean | undefined;
 
   constructor(fileAttachments: FileAttachments, images: ImagesConfig, openModalFunc?: (callback: () => void) => void) {
-    super(UploadImagesButton.createMicrophoneElement(), {});
+    super(UploadImagesButton.createImageElement(), {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
     this.inputElement = UploadImagesButton.createInputElement(images?.files?.acceptedFormats);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
-    this.changeToDefault();
+    this.elementRef.replaceChildren(this._innerElements.default);
+    this.reapplyStateStyle('default');
     this._fileAttachments = fileAttachments;
     this._openModalOnce = images.files?.infoModal?.openModalOnce;
   }
@@ -29,8 +30,6 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     const baseButton = UploadImagesButton.createSVGIconElement();
     return {
       default: UploadImagesButton.createInnerElement(baseButton, 'default', customStyles),
-      active: UploadImagesButton.createInnerElement(baseButton, 'active', customStyles),
-      unsupported: UploadImagesButton.createInnerElement(baseButton, 'unsupported', customStyles),
     };
   }
 
@@ -59,47 +58,16 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     return CustomButtonInnerElements.createSpecificStateElement(state, 'image-icon', customStyles) || baseButton;
   }
 
-  private static createMicrophoneElement() {
+  private static createImageElement() {
     const buttonElement = document.createElement('div');
-    buttonElement.id = 'microphone-button';
     buttonElement.classList.add('input-button');
     return buttonElement;
   }
 
   private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(MICROPHONE_ICON_STRING);
-    svgIconElement.id = 'microphone-icon';
+    const svgIconElement = SVGIconUtils.createSVGElement(UPLOAD_IMAGES_ICON_STRING);
+    svgIconElement.id = 'upload-images-icon';
     return svgIconElement;
-  }
-
-  public changeToActive() {
-    this.elementRef.replaceChildren(this._innerElements.active);
-    this.toggleIconFilter(false);
-    this.reapplyStateStyle('active', ['default']);
-  }
-
-  public changeToDefault() {
-    this.elementRef.replaceChildren(this._innerElements.default);
-    this.toggleIconFilter(true);
-    this.reapplyStateStyle('default', ['active']);
-  }
-
-  // private changeToUnsupported() {
-  //   this.elementRef.replaceChildren(this._innerElements.unsupported);
-  //   this.elementRef.classList.add('unsupported-microphone');
-  //   this.reapplyStateStyle('unsupported', ['active']);
-  // }
-
-  private toggleIconFilter(isDefault: boolean) {
-    const iconElement = this.elementRef.children[0];
-    if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
-      if (isDefault) {
-        iconElement.classList.remove('active-microphone-icon');
-        iconElement.classList.add('default-microphone-icon');
-      } else {
-        iconElement.classList.replace('default-microphone-icon', 'active-microphone-icon');
-      }
-    }
   }
 
   private click(openModalFunc?: (callback: () => void) => void) {

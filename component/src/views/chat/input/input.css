@@ -32,7 +32,7 @@
 /* Input container element padding will need to be changed accordingly */
 .outside-left {
   position: absolute;
-  right: calc(12px - 0.55rem);
+  right: calc(13px - 0.55rem);
   bottom: 0.8rem;
 }
 

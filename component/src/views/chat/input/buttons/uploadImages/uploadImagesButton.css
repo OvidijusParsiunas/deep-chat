@@ -1,0 +1,9 @@
+#upload-images-icon {
+  position: absolute;
+  pointer-events: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  left: 0.15rem;
+  bottom: 0.14rem;
+  filter: brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%);
+}

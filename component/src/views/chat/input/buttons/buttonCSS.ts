@@ -24,6 +24,5 @@ export class ButtonCSS {
     ButtonCSS.setElementsCSS(button, styles, 'hover');
     if (style === 'hover') return;
     ButtonCSS.setElementsCSS(button, styles, 'click');
-    return;
   }
 }
