@@ -4,14 +4,14 @@ export interface MessageElementStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
-  text?: CustomStyle;
-  image?: CustomStyle;
+  media?: CustomStyle;
 }
 
 export interface MessageStyles {
   default?: MessageElementStyles;
   user?: MessageElementStyles;
   ai?: MessageElementStyles;
+  loading?: MessageElementStyles;
   error?: MessageElementStyles;
   intro?: MessageElementStyles;
 }

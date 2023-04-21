@@ -10,9 +10,13 @@ export class StyleUtils {
     Object.assign(element.style, unsetStyles);
   }
 
-  public static unsetAllCSSMouseStates(element: HTMLElement, statefulStyle: StatefulStyles) {
+  public static unsetActivityCSSMouseStates(element: HTMLElement, statefulStyle: StatefulStyles) {
     if (statefulStyle.click) StyleUtils.unsetStyle(element, statefulStyle.click);
     if (statefulStyle.hover) StyleUtils.unsetStyle(element, statefulStyle.hover);
+  }
+
+  public static unsetAllCSSMouseStates(element: HTMLElement, statefulStyle: StatefulStyles) {
+    StyleUtils.unsetActivityCSSMouseStates(element, statefulStyle);
     if (statefulStyle.default) StyleUtils.unsetStyle(element, statefulStyle.default);
   }
 }

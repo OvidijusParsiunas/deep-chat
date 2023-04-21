@@ -46,7 +46,7 @@ export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
     for (let i = 0; i < unsetTypes.length; i += 1) {
       const type = unsetTypes[i];
       const style = type && this._customStyles[type];
-      if (style) ButtonCSS.unsetAllCSS(this.elementRef, style);
+      if (style) ButtonCSS.unsetActionCSS(this.elementRef, style);
     }
   }
 

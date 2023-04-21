@@ -19,8 +19,6 @@ import {Names} from './types/names';
 
 // WORK - change visibility icons to scalable
 // WORK - handle images
-// WORK - the loading icon position adjust
-// WORK - drag and drop files
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;

@@ -8,6 +8,11 @@ export class ButtonCSS {
     if (styles.svg?.styles) StyleUtils.unsetAllCSSMouseStates(button.children[0] as HTMLElement, styles.svg.styles);
   }
 
+  public static unsetActionCSS(button: HTMLElement, styles: ButtonElementStyles) {
+    if (styles.container) StyleUtils.unsetActivityCSSMouseStates(button, styles.container);
+    if (styles.svg?.styles) StyleUtils.unsetActivityCSSMouseStates(button.children[0] as HTMLElement, styles.svg.styles);
+  }
+
   public static setElementsCSS(button: HTMLElement, styles: ButtonElementStyles, style: keyof StatefulStyles) {
     Object.assign(button.style, styles.container?.[style]);
     Object.assign((button.children[0] as HTMLElement).style, styles.svg?.styles?.[style]);

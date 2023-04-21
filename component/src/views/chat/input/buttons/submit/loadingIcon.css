@@ -37,8 +37,8 @@
 
 .dots-flashing {
   position: relative;
-  width: 0.4rem;
-  height: 0.4rem;
+  width: 0.45em;
+  height: 0.45em;
   border-radius: 5px;
   background-color: #848484;
   color: #848484;
@@ -55,9 +55,9 @@
 }
 
 .dots-flashing::before {
-  left: -0.6rem;
-  width: 0.4rem;
-  height: 0.4rem;
+  left: -0.7em;
+  width: 0.45em;
+  height: 0.45em;
   border-radius: 5px;
   background-color: #848484;
   color: #848484;
@@ -66,9 +66,9 @@
 }
 
 .dots-flashing::after {
-  left: 0.6rem;
-  width: 0.4rem;
-  height: 0.4rem;
+  left: 0.7em;
+  width: 0.45em;
+  height: 0.45em;
   border-radius: 5px;
   background-color: #848484;
   color: #848484;

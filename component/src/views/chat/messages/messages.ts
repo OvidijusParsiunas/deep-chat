@@ -26,8 +26,6 @@ interface MessageElements {
   bubbleElement: HTMLElement;
 }
 
-type ContentTypes = 'text' | 'image';
-
 export class Messages {
   elementRef: HTMLElement;
   private readonly _messageElementRefs: MessageElements[] = [];
@@ -82,7 +80,7 @@ export class Messages {
   private addIntroductoryMessage(introMessage: string) {
     const {outerContainer, innerContainer, bubbleElement} = this.createAndAppendNewMessageElement(introMessage, true);
     const intrStyle = this._messageStyles?.intro;
-    if (intrStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, intrStyle, 'text');
+    if (intrStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, intrStyle);
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
@@ -93,21 +91,20 @@ export class Messages {
 
   // prettier-ignore
   private static applyCustomStylesToElements(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, style: MessageElementStyles, messageType: ContentTypes) {
+      bubble: HTMLElement, style: MessageElementStyles) {
     Object.assign(outerC.style, style.outerContainer);
     Object.assign(innerC.style, style.innerContainer);
     Object.assign(bubble.style, style.bubble);
-    if (messageType === 'text') Object.assign(bubble.style, style.text);
   }
 
   // prettier-ignore
   private static applyCustomStyles(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, styles: MessageStyles, isAI: boolean, messageType: ContentTypes) {
-    if (styles.default) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.default, messageType);
+      bubble: HTMLElement, styles: MessageStyles, isAI: boolean) {
+    if (styles.default) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.default);
     if (isAI) {
-      if (styles.ai) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.ai, messageType);
+      if (styles.ai) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.ai);
     } else if (styles.user) {
-      Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.user, messageType);
+      Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.user);
     }
   }
 
@@ -134,27 +131,26 @@ export class Messages {
     return {outerContainer, innerContainer, bubbleElement};
   }
 
-  private createMessageElements(text: string, isAI: boolean, messageType: ContentTypes = 'text') {
+  private createMessageElements(text: string, isAI: boolean) {
     const messageElements = Messages.createBaseElements();
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, isAI);
     if (this._messageStyles) {
-      Messages.applyCustomStyles(outerContainer, innerContainer, bubbleElement, this._messageStyles, isAI, messageType);
+      Messages.applyCustomStyles(outerContainer, innerContainer, bubbleElement, this._messageStyles, isAI);
     }
     this._messageElementRefs.push(messageElements);
     return messageElements;
   }
 
-  private createNewMessageElement(text: string, isAI: boolean, messageType: ContentTypes = 'text') {
+  private createNewMessageElement(text: string, isAI: boolean) {
     this._introPanel?.hide();
     const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (isAI && lastMessageElements?.bubbleElement.classList.contains('loading-message-text')) {
-      lastMessageElements.bubbleElement.classList.remove('loading-message-text');
-      lastMessageElements.bubbleElement.innerHTML = this._remarkable.render(text);
-      return lastMessageElements;
+    if (lastMessageElements?.bubbleElement.classList.contains('loading-message-text')) {
+      lastMessageElements.outerContainer.remove();
+      this._messageElementRefs.pop();
     }
-    return this.createMessageElements(text, isAI, messageType);
+    return this.createMessageElements(text, isAI);
   }
 
   private createAndAppendNewMessageElement(text: string, isAI: boolean) {
@@ -205,7 +201,7 @@ export class Messages {
       || this._errorMessageOverrides?.default || 'Error, please try again.';
     bubbleElement.innerHTML = text;
     const errStyle = this._messageStyles?.error;
-    if (errStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, errStyle, 'text');
+    if (errStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, errStyle);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
@@ -228,11 +224,15 @@ export class Messages {
 
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
-    const {outerContainer, bubbleElement} = this.createMessageElements('', true);
+    const {outerContainer, innerContainer, bubbleElement} = this.createMessageElements('', true);
     bubbleElement.classList.add('loading-message-text');
+    const loadStyle = this._messageStyles?.loading;
+    if (loadStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, loadStyle);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('dots-flashing');
     bubbleElement.appendChild(dotsElement);
+    Object.assign(dotsElement.style, this._messageStyles?.default?.media);
+    Object.assign(dotsElement.style, this._messageStyles?.loading?.media);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
@@ -267,8 +267,8 @@ export class Messages {
     const data = (imageData.url || imageData.base64) as string;
     const imageElement = new Image();
     imageElement.src = data;
-    Object.assign(imageElement.style, this._messageStyles?.default?.image);
-    Object.assign(imageElement.style, isAI ? this._messageStyles?.ai?.image : this._messageStyles?.user?.image);
+    Object.assign(imageElement.style, this._messageStyles?.default?.media);
+    Object.assign(imageElement.style, isAI ? this._messageStyles?.ai?.media : this._messageStyles?.user?.media);
     if (imageData.base64) return imageElement;
     const linkWrapperElement = document.createElement('a');
     linkWrapperElement.href = imageData.url as string;
@@ -278,7 +278,7 @@ export class Messages {
   }
 
   private addNewImageMessage(imageData: ImageResult, isAI: boolean, isInitial = false) {
-    const {outerContainer, bubbleElement: imageContainer} = this.createNewMessageElement('', isAI, 'image');
+    const {outerContainer, bubbleElement: imageContainer} = this.createNewMessageElement('', isAI);
     const data = (imageData.url || imageData.base64) as string;
     const image = this.createImage(imageData, isAI);
     imageContainer.appendChild(image);
