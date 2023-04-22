@@ -27,8 +27,8 @@ export class Input {
     const microphoneButton = aiAssistant.speechInput
       ? new MicrophoneButton(aiAssistant.speechInput, keyboardInput.inputElementRef,
           messages.addNewErrorMessage.bind(messages)) : undefined;
-    Input.addElements(this.elementRef, aiAssistant, keyboardInput.elementRef,
-      submitButton.elementRef, microphoneButton?.elementRef, uploadImages?.button.elementRef);
+    Input.addElements(this.elementRef, aiAssistant, serviceIO, keyboardInput.elementRef, submitButton.elementRef,
+      microphoneButton?.elementRef, uploadImages?.button.elementRef);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -39,8 +39,9 @@ export class Input {
   }
 
   // prettier-ignore
-  private static addElements(panel: HTMLElement, aiAssistant: AiAssistant, keyboardInputEl: HTMLElement,
-      submitButtonEl: HTMLElement, microphoneButton?: HTMLElement, uploadImagesButton?: HTMLElement) {
+  private static addElements(panel: HTMLElement, aiAssistant: AiAssistant, serviceIO: ServiceIO,
+      keyboardInputEl: HTMLElement, submitButtonEl: HTMLElement, microphoneButton?: HTMLElement,
+      uploadImagesButton?: HTMLElement) {
     ElementUtils.addElements(panel, keyboardInputEl);
     const sideContainers = SideContainers.create();
     ButtonPosition.add(panel, sideContainers, submitButtonEl, aiAssistant.submitButtonStyles?.position || 'inside-right');
@@ -48,7 +49,9 @@ export class Input {
       const position = typeof aiAssistant.speechInput === 'boolean' ? 'outside-right' : aiAssistant.speechInput.position;
       ButtonPosition.add(panel, sideContainers, microphoneButton, position || 'outside-right');
     }
-    if (uploadImagesButton) ButtonPosition.add(panel, sideContainers, uploadImagesButton, 'outside-left');
+    if (uploadImagesButton) {
+      ButtonPosition.add(panel, sideContainers, uploadImagesButton, serviceIO.images?.button?.position || 'outside-left');
+    }
     SideContainers.add(panel, sideContainers);
   }
 }

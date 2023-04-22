@@ -18,12 +18,12 @@
 }
 
 #insert-key-input-container {
-  margin-right: 2.4rem;
+  margin-right: 2.7rem;
   width: 80%;
 }
 
 #insert-key-input {
-  padding: 0.3rem 1.4rem 0.3rem 0.3rem;
+  padding: 0.3rem 1.7rem 0.3rem 0.3rem;
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
@@ -47,9 +47,10 @@
 }
 
 .visibility-icon {
-  filter: brightness(0) saturate(100%) invert(86%) sepia(0%) saturate(7484%) hue-rotate(125deg) brightness(92%)
-    contrast(90%);
+  filter: brightness(0) saturate(100%) invert(63%) sepia(1%) saturate(9%) hue-rotate(43deg) brightness(98%) contrast(92%);
   position: absolute;
+  right: -1.8em;
+  top: -1.5em;
 }
 
 .visibility-icon:hover {
@@ -58,16 +59,6 @@
 
 .visibility-icon > * {
   pointer-events: none;
-}
-
-#visible-icon {
-  right: -1.55rem;
-  top: -1.3rem;
-}
-
-#not-visible-icon {
-  right: -1.5rem;
-  top: -1.25rem;
 }
 
 #start-button {

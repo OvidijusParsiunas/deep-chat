@@ -17,8 +17,6 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
-// WORK - change visibility icons to scalable
-// WORK - handle images
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
@@ -33,11 +31,9 @@ export class AiAssistant extends InternalHTML {
   attachmentContainerStyle?: CustomStyle;
 
   // WORK - need to automatically adjust position when items are inserted in different positions
-  // WORK - will this work if this is not an actual boolean
-  @Property('boolean')
+  @Property('object')
   speechInput?: SpeechInput;
 
-  // WORK -  no need for speech output if image
   @Property('boolean')
   speechOutput?: boolean;
 

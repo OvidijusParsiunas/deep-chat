@@ -1,5 +1,5 @@
-import {VISIBLE_ICON_STRING} from '../../icons/notVisibilityIcon';
-import {NOT_VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
+import {NOT_VISIBLE_ICON_STRING} from '../../icons/notVisibilityIcon';
+import {VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
 import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 
 export class VisibilityIcon {
