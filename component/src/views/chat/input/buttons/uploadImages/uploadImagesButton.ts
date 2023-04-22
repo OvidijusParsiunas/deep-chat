@@ -16,7 +16,7 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   private _openModalOnce?: boolean | undefined;
 
   constructor(fileAttachments: FileAttachments, images: ImagesConfig, openModalFunc?: (callback: () => void) => void) {
-    super(UploadImagesButton.createImageElement(), {});
+    super(UploadImagesButton.createImageElement(), typeof images.button === 'object' ? images.button : {});
     this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
     this.inputElement = UploadImagesButton.createInputElement(images?.files?.acceptedFormats);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);

@@ -15,6 +15,7 @@ export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
   }
+
   private buttonMouseLeave(customStyles?: ButtonElementStyles) {
     this._mouseState.state = 'default';
     if (customStyles) {
@@ -28,6 +29,11 @@ export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
     if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
   }
 
+  private buttonMouseUp(customStyles?: ButtonElementStyles) {
+    if (customStyles) ButtonCSS.unsetActionCSS(this.elementRef, customStyles);
+    this.buttonMouseEnter(customStyles);
+  }
+
   private buttonMouseDown(customStyles?: ButtonElementStyles) {
     this._mouseState.state = 'click';
     if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'click');
@@ -36,7 +42,7 @@ export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
   // be careful not to use onclick as that is used for button functionality
   private setEvents(customStyles?: ButtonElementStyles) {
     this.elementRef.onmousedown = this.buttonMouseDown.bind(this, customStyles);
-    this.elementRef.onmouseup = this.buttonMouseEnter.bind(this, customStyles);
+    this.elementRef.onmouseup = this.buttonMouseUp.bind(this, customStyles);
     this.elementRef.onmouseenter = this.buttonMouseEnter.bind(this, customStyles);
     this.elementRef.onmouseleave = this.buttonMouseLeave.bind(this, customStyles);
   }

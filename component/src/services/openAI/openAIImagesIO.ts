@@ -5,14 +5,15 @@ import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
-import {FilesServiceConfig} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
+import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
+import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
@@ -49,7 +50,7 @@ export class OpenAIImagesIO implements ServiceIO {
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
-      if (config.files) OpenAIImagesIO.processImagesConfig(config.files, this.images, remarkable);
+      OpenAIImagesIO.processImagesConfig(this.images, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
@@ -61,8 +62,10 @@ export class OpenAIImagesIO implements ServiceIO {
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static processImagesConfig(files: FileAttachments, _images: ImagesConfig, remarkable: Remarkable) {
-    if (_images.files) {
+  // prettier-ignore
+  private static processImagesConfig(_images: ImagesConfig, remarkable: Remarkable, files?: FileAttachments,
+      button?: GenericButton) {
+    if (files && _images.files) {
       if (_images.files.infoModal) {
         Object.assign(_images.files.infoModal, files.infoModal);
         const markdown = files.infoModal?.textMarkDown;
@@ -71,6 +74,10 @@ export class OpenAIImagesIO implements ServiceIO {
       if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
       if (typeof files.dragAndDrop !== undefined) _images.files.dragAndDrop = files.dragAndDrop;
+    }
+    if (button) {
+      _images.button = button;
+      if (_images.button.styles) _images.button.default = _images.button.styles;
     }
   }
 

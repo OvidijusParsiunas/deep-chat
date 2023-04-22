@@ -1,5 +1,5 @@
 import {ServiceRequestConfig} from './requestSettings';
-import {FilesServiceConfig} from './customService';
+import {FilesServiceConfig} from './fileService';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';

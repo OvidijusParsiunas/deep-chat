@@ -1,8 +1,6 @@
-import {RequestSettings, ServiceRequestConfig} from './requestSettings';
 import {RequestInterceptor} from './requestInterceptor';
-import {FileAttachments} from './fileAttachments';
-
-export type FilesServiceConfig = ServiceRequestConfig & {files?: FileAttachments};
+import {RequestSettings} from './requestSettings';
+import {FilesServiceConfig} from './fileService';
 
 export interface CustomServiceConfig {
   request: RequestSettings;

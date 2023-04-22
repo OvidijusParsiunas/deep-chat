@@ -2,7 +2,7 @@ import {StatefulStyles} from './styles';
 
 interface ButtonInnerElementStyles {
   styles?: StatefulStyles;
-  string?: string;
+  content?: string;
 }
 
 export interface ButtonElementStyles {
@@ -12,3 +12,8 @@ export interface ButtonElementStyles {
 }
 
 export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
+
+export interface GenericButton {
+  styles?: ButtonElementStyles;
+  position?: ButtonPosition;
+}

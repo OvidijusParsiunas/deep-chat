@@ -1,8 +1,9 @@
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
+import {ButtonElementStyles, GenericButton} from '../types/button';
 import {RequestInterceptor} from '../types/requestInterceptor';
-import {FilesServiceConfig} from '../types/customService';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {FilesServiceConfig} from '../types/fileService';
 import {ImageResults} from '../types/imageResult';
 
 export interface CompletionsHandlers {
@@ -21,7 +22,10 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type ImagesConfig = FilesServiceConfig & {infoModalTextMarkUp?: string};
+export type ImagesConfig = FilesServiceConfig & {
+  infoModalTextMarkUp?: string;
+  button?: GenericButton & {default?: ButtonElementStyles};
+};
 
 export type CustomErrors = Set<string>;
 

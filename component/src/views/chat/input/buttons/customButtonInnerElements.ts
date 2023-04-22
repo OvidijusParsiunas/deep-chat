@@ -14,8 +14,8 @@ export class CustomButtonInnerElements {
 
   private static createCustomElement<T>(customStyles: ButtonStateStyles<T>, state: keyof T) {
     const stateStyle = customStyles[state];
-    if (stateStyle?.text?.string) return CustomButtonInnerElements.createElement(stateStyle?.text?.string, true);
-    if (stateStyle?.svg?.string) return CustomButtonInnerElements.createElement(stateStyle?.svg?.string, false);
+    if (stateStyle?.text?.content) return CustomButtonInnerElements.createElement(stateStyle?.text?.content, true);
+    if (stateStyle?.svg?.content) return CustomButtonInnerElements.createElement(stateStyle?.svg?.content, false);
     return;
   }
 

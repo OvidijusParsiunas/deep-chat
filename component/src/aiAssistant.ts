@@ -33,9 +33,11 @@ export class AiAssistant extends InternalHTML {
   attachmentContainerStyle?: CustomStyle;
 
   // WORK - need to automatically adjust position when items are inserted in different positions
+  // WORK - will this work if this is not an actual boolean
   @Property('boolean')
   speechInput?: SpeechInput;
 
+  // WORK -  no need for speech output if image
   @Property('boolean')
   speechOutput?: boolean;
 
