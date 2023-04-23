@@ -83,6 +83,7 @@ export class OpenAIImagesIO implements ServiceIO {
 
   private static cleanConfig(config: FilesServiceConfig) {
     delete config.files;
+    delete config.button;
     delete config.request;
     delete config.interceptor;
   }

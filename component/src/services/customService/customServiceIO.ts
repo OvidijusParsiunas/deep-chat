@@ -38,7 +38,7 @@ export class CustomServiceIO implements ServiceIO {
   private static parseImagesConfig(images: CustomServiceConfig['images'], requestSettings: RequestSettings) {
     const imagesConfig: ImagesConfig & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
     if (typeof images === 'object') {
-      const {files, request, interceptor} = images;
+      const {files, request, interceptor, button} = images;
       if (files) {
         if (files.infoModal) {
           imagesConfig.files.infoModal = files.infoModal;
@@ -51,6 +51,7 @@ export class CustomServiceIO implements ServiceIO {
         if (files.maxNumberOfFiles) imagesConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
         if (files.dragAndDrop) imagesConfig.files.dragAndDrop = files.dragAndDrop;
       }
+      imagesConfig.button = button;
       imagesConfig.request = {
         headers: request?.headers || requestSettings.headers,
         method: request?.method || requestSettings.method,

@@ -1,18 +1,18 @@
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
 import {FileAttachments} from './fileAttachments';
 
-export class FileDrop {
+export class DragAndDrop {
   // prettier-ignore
   public static append(containerElement: HTMLElement, fileAttachments: FileAttachments,
       dragAndDrop: FileAttachmentsT['dragAndDrop']) {
-    const fileDropElement = FileDrop.create(dragAndDrop);
-    FileDrop.addEvents(fileDropElement, containerElement, fileAttachments, dragAndDrop);
+    const fileDropElement = DragAndDrop.create(dragAndDrop);
+    DragAndDrop.addEvents(fileDropElement, containerElement, fileAttachments, dragAndDrop);
     containerElement.appendChild(fileDropElement);
   }
 
   private static create(dragAndDrop: FileAttachmentsT['dragAndDrop']) {
     const fileDropElement = document.createElement('div');
-    fileDropElement.id = 'file-drop';
+    fileDropElement.id = 'drag-and-drop';
     if (typeof dragAndDrop === 'object' && dragAndDrop.style) Object.assign(fileDropElement.style, dragAndDrop.style);
     return fileDropElement;
   }
@@ -22,19 +22,19 @@ export class FileDrop {
       dragAndDrop: FileAttachmentsT['dragAndDrop']) {
     containerElement.ondragenter = (event) => {
       event.preventDefault();
-      FileDrop.display(fileDropElement);
+      DragAndDrop.display(fileDropElement);
     };
     fileDropElement.ondragleave = (event) => {
       event.preventDefault();
-      FileDrop.hide(fileDropElement);
+      DragAndDrop.hide(fileDropElement);
     };
     fileDropElement.ondragover = (event) => {
       event.preventDefault();
     };
     fileDropElement.ondrop = (event) => {
       event.preventDefault();
-      FileDrop.uploadFile(fileAttachments, dragAndDrop, event);
-      FileDrop.hide(fileDropElement);
+      DragAndDrop.uploadFile(fileAttachments, dragAndDrop, event);
+      DragAndDrop.hide(fileDropElement);
     };
   }
 
