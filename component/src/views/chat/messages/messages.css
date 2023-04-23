@@ -89,3 +89,14 @@ pre {
   border-radius: 8px;
   display: flex;
 }
+
+.audio-message {
+  width: 60%;
+  max-width: 300px;
+  padding: 0px;
+  background-color: unset;
+}
+
+.audio-player {
+  width: 100%;
+}

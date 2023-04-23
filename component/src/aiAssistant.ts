@@ -21,6 +21,7 @@ export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
 
+  // WORK - test out multiple image uploads
   @Property('object')
   openAI?: OpenAI;
 
@@ -29,6 +30,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
+
+  @Property('object')
+  dragAndDropStyle?: CustomStyle;
 
   // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('object')

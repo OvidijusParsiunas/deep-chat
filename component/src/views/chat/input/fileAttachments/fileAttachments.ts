@@ -1,17 +1,22 @@
-import {ImagesConfig} from '../../../../services/serviceIO';
+import {FileAttachmentsType} from './fileAttachmentsType';
+import {ServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 
 export class FileAttachments {
-  private readonly _imageFiles: Set<File> = new Set();
+  private readonly _fileAttachmentsTypes: FileAttachmentsType[] = [];
   private readonly containerElementRef: HTMLElement;
-  readonly imageCountLimit: number = 99;
 
-  constructor(inputElementRef: HTMLElement, images?: ImagesConfig, attachmentContainerStyle?: CustomStyle) {
+  constructor(inputElementRef: HTMLElement, serviceIO?: ServiceIO, attachmentContainerStyle?: CustomStyle) {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (images?.files?.maxNumberOfFiles && images.files.maxNumberOfFiles > 0) {
-      this.imageCountLimit = images.files.maxNumberOfFiles;
+    if (serviceIO?.images?.files) {
+      const fileAttachmentsType = new FileAttachmentsType(serviceIO.images.files, this.toggleContainerDisplay.bind(this));
+      this._fileAttachmentsTypes.push(fileAttachmentsType);
+    }
+    if (serviceIO?.audio?.files) {
+      const fileAttachmentsType = new FileAttachmentsType(serviceIO.audio.files, this.toggleContainerDisplay.bind(this));
+      this._fileAttachmentsTypes.push(fileAttachmentsType);
     }
     if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
   }
@@ -23,78 +28,34 @@ export class FileAttachments {
   }
 
   private toggleContainerDisplay(display: boolean) {
-    this.containerElementRef.style.display = display ? 'block' : 'none';
-  }
-
-  private createContainer(file: File, attachmentElement: HTMLElement) {
-    const fileAttachmentElement = document.createElement('div');
-    fileAttachmentElement.classList.add('file-attachment');
-    fileAttachmentElement.appendChild(attachmentElement);
-    fileAttachmentElement.appendChild(this.createRemoveAttachmentButton(file, fileAttachmentElement));
-    return fileAttachmentElement;
-  }
-
-  private createRemoveAttachmentButton(file: File, imageAttachmentElement: HTMLElement) {
-    const removeImageButtonELement = document.createElement('div');
-    removeImageButtonELement.classList.add('remove-file-attachment-button');
-    removeImageButtonELement.onclick = this.removeImageFile.bind(this, file, imageAttachmentElement);
-    const xIcon = document.createElement('div');
-    xIcon.classList.add('x-icon');
-    xIcon.innerText = '×';
-    removeImageButtonELement.appendChild(xIcon);
-    return removeImageButtonELement;
-  }
-
-  getImageFiles() {
-    return Array.from(this._imageFiles);
-  }
-
-  public addImages(files: File[], acceptedTypePrefixes?: string[], acceptedFileNamePostfixes?: string[]) {
-    Array.from(files)
-      .slice(0, this.imageCountLimit)
-      .forEach((file: File) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          if (acceptedTypePrefixes) {
-            if (!acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return;
-          }
-          if (acceptedFileNamePostfixes) {
-            if (!acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return;
-          }
-          this.addImageToAttachment(file, event.target as FileReader);
-        };
-      });
-  }
-
-  private addImageToAttachment(file: File, fileReader: FileReader) {
-    const imageAttachment = FileAttachments.createImageAttachment(fileReader.result as string);
-    if (this._imageFiles.size >= this.imageCountLimit) {
-      const attachments = this.containerElementRef.children;
-      (attachments[attachments.length - 1].children[1] as HTMLElement).click();
-      this.containerElementRef.insertBefore(this.createContainer(file, imageAttachment), attachments[0]);
-    } else {
-      this.containerElementRef.appendChild(this.createContainer(file, imageAttachment));
+    if (display) {
+      this.containerElementRef.style.display = 'block';
+    } else if (this.containerElementRef.children.length === 0) {
+      this.containerElementRef.style.display = 'none';
     }
-    this._imageFiles.add(file);
-    this.toggleContainerDisplay(true);
   }
 
-  private static createImageAttachment(src: string) {
-    const image = new Image();
-    image.src = src;
-    image.classList.add('image-attachment');
-    return image;
+  getAllFiles() {
+    return this._fileAttachmentsTypes.map((fileAttachmentType) => Array.from(fileAttachmentType._files)).flat();
   }
 
-  private removeImageFile(file: File, imageAttachmentElement: HTMLElement) {
-    this._imageFiles.delete(file);
-    imageAttachmentElement.remove();
-    if (this._imageFiles.size === 0) this.toggleContainerDisplay(false);
+  // prettier-ignore
+  public addImages(files: File[]) {
+    Array.from(files).forEach((file: File) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        for (let i = 0; this._fileAttachmentsTypes.length; i += 1) {
+          const result = this._fileAttachmentsTypes[i].attemptAddFile(file,
+            (event.target as FileReader).result as string, this.containerElementRef);
+          if (result) break;
+        }
+      };
+    });
   }
 
   removeAllFiles() {
-    this._imageFiles.clear();
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType._files.clear());
     this.containerElementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }

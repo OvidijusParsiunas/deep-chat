@@ -1,25 +1,25 @@
-import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {ServiceIO} from '../../../../services/serviceIO';
+import {CustomStyle} from '../../../../types/styles';
 import {FileAttachments} from './fileAttachments';
 
 export class DragAndDrop {
   // prettier-ignore
-  public static append(containerElement: HTMLElement, fileAttachments: FileAttachments,
-      dragAndDrop: FileAttachmentsT['dragAndDrop']) {
-    const fileDropElement = DragAndDrop.create(dragAndDrop);
-    DragAndDrop.addEvents(fileDropElement, containerElement, fileAttachments, dragAndDrop);
+  public static attemptToAdd(containerElement: HTMLElement, fileAttachments: FileAttachments, serviceIO: ServiceIO,
+      style?: CustomStyle) {
+    if (!DragAndDrop.shouldBeAppended(serviceIO)) return;
+    const fileDropElement = DragAndDrop.create(style);
+    DragAndDrop.addEvents(fileDropElement, containerElement, fileAttachments);
     containerElement.appendChild(fileDropElement);
   }
 
-  private static create(dragAndDrop: FileAttachmentsT['dragAndDrop']) {
+  private static create(style?: CustomStyle) {
     const fileDropElement = document.createElement('div');
     fileDropElement.id = 'drag-and-drop';
-    if (typeof dragAndDrop === 'object' && dragAndDrop.style) Object.assign(fileDropElement.style, dragAndDrop.style);
+    Object.assign(fileDropElement.style, style);
     return fileDropElement;
   }
 
-  // prettier-ignore
-  private static addEvents(fileDropElement: HTMLElement, containerElement: HTMLElement, fileAttachments: FileAttachments,
-      dragAndDrop: FileAttachmentsT['dragAndDrop']) {
+  private static addEvents(fileDropElement: HTMLElement, containerElement: HTMLElement, fileAttachments: FileAttachments) {
     containerElement.ondragenter = (event) => {
       event.preventDefault();
       DragAndDrop.display(fileDropElement);
@@ -33,24 +33,14 @@ export class DragAndDrop {
     };
     fileDropElement.ondrop = (event) => {
       event.preventDefault();
-      DragAndDrop.uploadFile(fileAttachments, dragAndDrop, event);
+      DragAndDrop.uploadFile(fileAttachments, event);
       DragAndDrop.hide(fileDropElement);
     };
   }
 
-  // prettier-ignore
-  private static uploadFile(fileAttachments: FileAttachments, dragAndDrop: FileAttachmentsT['dragAndDrop'],
-      event: DragEvent) {
+  private static uploadFile(fileAttachments: FileAttachments, event: DragEvent) {
     const files = event.dataTransfer?.files;
-    if (files) {
-      let acceptedTypePrefixes;
-      let acceptedFileNamePostfixes;
-      if (typeof dragAndDrop === 'object') {
-        acceptedTypePrefixes = dragAndDrop.acceptedTypePrefixes;
-        acceptedFileNamePostfixes = dragAndDrop.acceptedFileNamePostfixes;
-      }
-      fileAttachments.addImages(Array.from(files), acceptedTypePrefixes, acceptedFileNamePostfixes);
-    }
+    if (files) fileAttachments.addImages(Array.from(files));
   }
 
   private static display(fileDropElement: HTMLElement) {
@@ -59,5 +49,9 @@ export class DragAndDrop {
 
   private static hide(fileDropElement: HTMLElement) {
     fileDropElement.style.display = 'none';
+  }
+
+  private static shouldBeAppended(serviceIO: ServiceIO) {
+    return !!serviceIO.images?.files?.dragAndDrop || serviceIO.audio?.files?.dragAndDrop;
   }
 }

@@ -1,7 +1,6 @@
 import {CustomStyle} from './styles';
 
 export interface DragAndDrop {
-  style?: CustomStyle;
   acceptedTypePrefixes?: string[];
   acceptedFileNamePostfixes?: string[];
 }

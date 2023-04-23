@@ -3,8 +3,8 @@ import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableC
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
-import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {OpenAI, OpenAIAudioConfig} from '../../types/openAI';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -18,12 +18,9 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
 
-export class OpenAIImagesIO implements ServiceIO {
-  private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
-  private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
-  private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
+export class OpenAIAudioIO implements ServiceIO {
+  private static readonly AUDIO_TRANSCRIPTION_URL = 'https://api.openai.com/v1/audio/transcriptions';
 
-  // TO-DO mention in documentation that this can be removed by inserting <div></div> in slot
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
     <p><b>Insert text</b> to generate an image.</p>
@@ -33,27 +30,27 @@ export class OpenAIImagesIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
-  permittedErrorPrefixes = new Set('Invalid input image');
-  images: FileServiceIO = {
-    files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+  canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
+  // permittedErrorPrefixes = new Set('Invalid input image');
+  audio: FileServiceIO = {
+    files: {acceptedFormats: '.mp3', dragAndDrop: {acceptedFileNamePostfixes: ['mp3']}},
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
-  private readonly _raw_body: OpenAIImagesConfig = {};
+  private readonly _raw_body: OpenAIAudioConfig = {};
   requestInterceptor: RequestInterceptor = (details) => details;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    const config = openAI?.images as OpenAI['images'];
+    const config = openAI?.audio as OpenAI['audio'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
-      OpenAIImagesIO.processImagesConfig(this.images, remarkable, config.files, config.button);
+      OpenAIAudioIO.processAudioConfig(this.audio, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
-      OpenAIImagesIO.cleanConfig(config);
+      OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
     }
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
@@ -64,21 +61,21 @@ export class OpenAIImagesIO implements ServiceIO {
   }
 
   // prettier-ignore
-  private static processImagesConfig(_images: FileServiceIO, remarkable: Remarkable, files?: FileAttachments,
+  private static processAudioConfig(_audio: FileServiceIO, remarkable: Remarkable, files?: FileAttachments,
       button?: GenericButton) {
-    if (files && _images.files) {
-      if (_images.files.infoModal) {
-        Object.assign(_images.files.infoModal, files.infoModal);
+    if (files && _audio.files) {
+      if (_audio.files.infoModal) {
+        Object.assign(_audio.files.infoModal, files.infoModal);
         const markdown = files.infoModal?.textMarkDown;
-        _images.infoModalTextMarkUp = remarkable.render(markdown || '');
+        _audio.infoModalTextMarkUp = remarkable.render(markdown || '');
       }
-      if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
-      if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
-      if (typeof files.dragAndDrop !== undefined) _images.files.dragAndDrop = files.dragAndDrop;
+      if (files.acceptedFormats) _audio.files.acceptedFormats = files.acceptedFormats;
+      if (files.maxNumberOfFiles) _audio.files.maxNumberOfFiles = files.maxNumberOfFiles;
+      if (typeof files.dragAndDrop !== undefined) _audio.files.dragAndDrop = files.dragAndDrop;
     }
     if (button) {
-      _images.button = button;
-      if (_images.button.styles) _images.button.default = _images.button.styles;
+      _audio.button = button;
+      if (_audio.button.styles) _audio.button.default = _audio.button.styles;
     }
   }
 
@@ -100,17 +97,16 @@ export class OpenAIImagesIO implements ServiceIO {
       keyVerificationHandlers.onFail, keyVerificationHandlers.onLoad);
   }
 
-  private static createFormDataBody(body: OpenAIImagesConfig, image: File, mask?: File) {
+  private static createFormDataBody(body: OpenAIAudioConfig, audio: File) {
     const formData = new FormData();
-    formData.append('image', image);
-    if (mask) formData.append('mask', mask);
+    formData.append('file', audio);
     Object.keys(body).forEach((key) => {
-      formData.append(key, String(body[key as keyof OpenAIImagesConfig]));
+      formData.append(key, String(body[key as keyof OpenAIAudioConfig]));
     });
     return formData;
   }
 
-  private preprocessBody(body: OpenAIImagesConfig, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIAudioConfig, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     if (messages[messages.length - 1].content.trim() !== '') {
       const mostRecentMessageText = messages[messages.length - 1].content;
@@ -121,32 +117,15 @@ export class OpenAIImagesIO implements ServiceIO {
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
-    let formData: FormData;
-    // if there is a mask image or text, call edit
-    if (files[1] || messages.messages[messages.messages.length - 1].content.trim() !== '') {
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_EDIT_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages);
-      formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
-    } else {
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
-      formData = OpenAIImagesIO.createFormDataBody(this._raw_body, files[0]);
-    }
+  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!files?.[0]) throw new Error('No file was added');
+    this.url = this.requestSettings.url || OpenAIAudioIO.AUDIO_TRANSCRIPTION_URL;
+    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
-  }
-
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
-    if (files?.[0]) {
-      this.callApiWithImage(messages, completionsHandlers, files);
-    } else {
-      if (!this.requestSettings) throw new Error('Request settings have not been set up');
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages);
-      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
-    }
   }
 
   extractResultData(result: OpenAIImageResult): ImageResults {
@@ -156,18 +135,4 @@ export class OpenAIImagesIO implements ServiceIO {
       return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
     }) as ImageResults;
   }
-
-  // private static readonly MODAL_MARKDOWN = `
-  // 1 image:
-
-  // - With text - edits image based on the text
-  // - No text - creates a variation of the image
-
-  // 2 images:
-
-  // - The second image needs to be a copy of the first with a transparent area where the edit should take place.
-  // Add text to describe the required modification.
-
-  // Click here for [more info](https://platform.openai.com/docs/guides/images/introduction).
-  //   `;
 }

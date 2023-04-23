@@ -6,15 +6,11 @@ export interface OpenAIMessage {
   content: string;
 }
 
-// https://platform.openai.com/docs/api-reference/chat/create
-// https://platform.openai.com/docs/api-reference/completions
-export interface OpenAIConverseConfig {
-  model?: string;
-  max_tokens?: number; // number of tokens to reply - recommended to be set by the client
+export interface OpenAIAudioConfig {
+  model?: 'whisper-1';
+  response_format?: 'json' | 'text' | 'srt' | 'verbose_json' | 'vtt';
   temperature?: number;
-  top_p?: number;
-  n?: number;
-  stream?: boolean;
+  language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
 }
 
 export interface OpenAIImagesConfig {
@@ -34,8 +30,20 @@ export interface OpenAICustomCompletionConfig {
   max_char_length?: number; // uses inputCharacterLimit or OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
 }
 
+// https://platform.openai.com/docs/api-reference/chat/create
+// https://platform.openai.com/docs/api-reference/completions
+export interface OpenAIConverseConfig {
+  model?: string;
+  max_tokens?: number; // number of tokens to reply - recommended to be set by the client
+  temperature?: number;
+  top_p?: number;
+  n?: number;
+  stream?: boolean;
+}
+
 export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceRequestConfig);
   completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceRequestConfig);
   images?: true | (OpenAIImagesConfig & FilesServiceConfig);
+  audio?: true | (OpenAIAudioConfig & FilesServiceConfig);
 }

@@ -1,4 +1,4 @@
-import {CompletionsHandlers, ImagesConfig, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
+import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
@@ -13,7 +13,7 @@ import {AiAssistant} from '../../aiAssistant';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
-  images: ImagesConfig | undefined;
+  images: FileServiceIO | undefined;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -36,7 +36,7 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   private static parseImagesConfig(images: CustomServiceConfig['images'], requestSettings: RequestSettings) {
-    const imagesConfig: ImagesConfig & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
+    const imagesConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
     if (typeof images === 'object') {
       const {files, request, interceptor, button} = images;
       if (files) {
@@ -47,7 +47,11 @@ export class CustomServiceIO implements ServiceIO {
             imagesConfig.infoModalTextMarkUp = remarkable.render(files.infoModal.textMarkDown);
           }
         }
-        if (files.acceptedFormats) imagesConfig.files.acceptedFormats = files.acceptedFormats;
+        if (files.acceptedFormats) {
+          imagesConfig.files.acceptedFormats = files.acceptedFormats;
+        } else {
+          imagesConfig.files.acceptedFormats = 'image/*';
+        }
         if (files.maxNumberOfFiles) imagesConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
         if (files.dragAndDrop) imagesConfig.files.dragAndDrop = files.dragAndDrop;
       }

@@ -1,7 +1,7 @@
 @import url('./fileAttachments/fileAttachments.css');
 @import url('./sideContainers/sideContainers.css');
 @import url('./keyboardInput/keyboardInput.css');
-@import url('./uploadImages/modal.css');
+@import url('./fileAttachments/modal.css');
 @import url('./buttons/button.css');
 
 #input {

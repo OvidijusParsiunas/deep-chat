@@ -1,5 +1,6 @@
 import {CustomStyle} from './styles';
 
+// TO-DO add a different style type for image and audio
 export interface MessageElementStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;

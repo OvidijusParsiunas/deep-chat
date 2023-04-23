@@ -22,7 +22,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type ImagesConfig = FilesServiceConfig & {
+export type FileServiceIO = FilesServiceConfig & {
   infoModalTextMarkUp?: string;
   button?: GenericButton & {default?: ButtonElementStyles};
 };
@@ -32,7 +32,9 @@ export type CustomErrors = Set<string>;
 export interface ServiceIO {
   url?: string;
 
-  images?: ImagesConfig;
+  images?: FileServiceIO;
+
+  audio?: FileServiceIO;
 
   requestSettings?: RequestSettings;
 

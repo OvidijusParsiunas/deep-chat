@@ -1,17 +1,18 @@
+import {FileServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 
-export class UploadImagesModal {
+export class Modal {
   private readonly _elementRef: HTMLElement;
   private readonly _backgroundPanelRef: HTMLElement;
   private readonly _textRef: HTMLElement;
   private readonly _buttonRef: HTMLElement;
 
   constructor(viewContainerElement: HTMLElement, containerStyle?: CustomStyle) {
-    this._buttonRef = UploadImagesModal.createButton();
-    this._textRef = UploadImagesModal.createModalText();
+    this._buttonRef = Modal.createButton();
+    this._textRef = Modal.createModalText();
     this._elementRef = this.createContainer(this._buttonRef, containerStyle);
     viewContainerElement.appendChild(this._elementRef);
-    this._backgroundPanelRef = UploadImagesModal.createDarkBackgroundPanel();
+    this._backgroundPanelRef = Modal.createDarkBackgroundPanel();
     viewContainerElement.appendChild(this._backgroundPanelRef);
   }
 
@@ -19,7 +20,7 @@ export class UploadImagesModal {
     const containerElement = document.createElement('div');
     containerElement.classList.add('modal');
     containerElement.appendChild(this._textRef);
-    containerElement.appendChild(UploadImagesModal.createButtonPanel(button));
+    containerElement.appendChild(Modal.createButtonPanel(button));
     Object.assign(containerElement.style, containerStyle);
     return containerElement;
   }
@@ -81,5 +82,13 @@ export class UploadImagesModal {
         callback();
       }, 140); // the process to open the file window can interrupt the animation - hence closing before executing
     };
+  }
+
+  public static getOpenModalFunc(viewContainerElement: HTMLElement, fileIO: FileServiceIO) {
+    if (typeof fileIO === 'object' && fileIO.files?.infoModal) {
+      const modal = new Modal(viewContainerElement, fileIO.files.infoModal.containerStyle);
+      return modal.open.bind(modal, fileIO.infoModalTextMarkUp || '');
+    }
+    return undefined;
   }
 }

@@ -96,7 +96,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   public async submit(userText: string, files?: File[]) {
-    const uploadFiles = files || this._imageAttachments?.getImageFiles();
+    const uploadFiles = files || this._imageAttachments?.getAllFiles();
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadFiles)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage(userText, false, true);
@@ -111,7 +111,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getImageFiles());
+    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getAllFiles());
     this._imageAttachments?.removeAllFiles();
   }
 

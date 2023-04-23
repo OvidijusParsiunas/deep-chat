@@ -7,7 +7,7 @@ import {GenericObject} from '../../../types/object';
 export class OpenAIUtils {
   // 13352 roughly adds up to 3,804 tokens just to be safe
   public static readonly CONVERSE_MAX_CHAR_LENGTH: number = 13352;
-  public static readonly IMAGES_MAX_CHAR_LENGTH: number = 1000;
+  public static readonly FILE_MAX_CHAR_LENGTH: number = 1000;
   private static readonly _models_url = 'https://api.openai.com/v1/models';
 
   public static buildRequestSettings(key: string, requestSettings?: RequestSettings) {

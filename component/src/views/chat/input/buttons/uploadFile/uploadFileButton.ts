@@ -1,24 +1,30 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {UPLOAD_IMAGES_ICON_STRING} from '../../../../../icons/uploadImages';
+import {ButtonPosition as ButtonPositionT} from '../../../../../types/button';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {ImagesConfig} from '../../../../../services/serviceIO';
+import {FileServiceIO} from '../../../../../services/serviceIO';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
+import {Modal} from '../../fileAttachments/modal';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
-export class UploadImagesButton extends ButtonStyleEvents<Styles> {
-  inputElement: HTMLInputElement;
+export class UploadFileButton extends ButtonStyleEvents<Styles> {
+  readonly position: ButtonPositionT = 'outside-left';
+  private readonly _inputElement: HTMLInputElement;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _openModalOnce?: boolean | undefined;
 
-  constructor(fileAttachments: FileAttachments, images: ImagesConfig, openModalFunc?: (callback: () => void) => void) {
-    super(UploadImagesButton.createImageElement(), typeof images.button === 'object' ? images.button : {});
-    this._innerElements = UploadImagesButton.createInnerElements(this._customStyles);
-    this.inputElement = UploadImagesButton.createInputElement(images?.files?.acceptedFormats);
+  // prettier-ignore
+  constructor(containerElement: HTMLElement, fileAttachments: FileAttachments,
+      images: FileServiceIO, iconId: string, iconSVGString: string) {
+    super(UploadFileButton.createImageElement(), typeof images.button === 'object' ? images.button : {});
+    this._innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
+    this._inputElement = UploadFileButton.createInputElement(images?.files?.acceptedFormats);
+    if (images.button?.position) this.position = images.button.position;
+    const openModalFunc = Modal.getOpenModalFunc(containerElement, images);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.elementRef.replaceChildren(this._innerElements.default);
     this.reapplyStateStyle('default');
@@ -26,10 +32,10 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     this._openModalOnce = images.files?.infoModal?.openModalOnce;
   }
 
-  private static createInnerElements(customStyles?: Styles) {
-    const baseButton = UploadImagesButton.createSVGIconElement();
+  private static createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
+    const baseButton = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
     return {
-      default: UploadImagesButton.createInnerElement(baseButton, 'default', customStyles),
+      default: UploadFileButton.createInnerElement(baseButton, 'default', customStyles),
     };
   }
 
@@ -46,6 +52,7 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
   private static createInputElement(acceptedFormats?: string) {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
+    // TO-DO accept all
     inputElement.accept = acceptedFormats || 'image/*';
     inputElement.hidden = true;
     inputElement.multiple = true;
@@ -54,7 +61,7 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
 
   // prettier-ignore
   private static createInnerElement(baseButton: SVGGraphicsElement,
-      state: keyof UploadImagesButton['_innerElements'], customStyles?: Styles) {
+      state: keyof UploadFileButton['_innerElements'], customStyles?: Styles) {
     return CustomButtonInnerElements.createSpecificStateElement(state, 'image-icon', customStyles) || baseButton;
   }
 
@@ -64,18 +71,18 @@ export class UploadImagesButton extends ButtonStyleEvents<Styles> {
     return buttonElement;
   }
 
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(UPLOAD_IMAGES_ICON_STRING);
-    svgIconElement.id = 'upload-images-icon';
+  private static createSVGIconElement(iconId: string, iconSVGString: string) {
+    const svgIconElement = SVGIconUtils.createSVGElement(iconSVGString);
+    svgIconElement.id = iconId;
     return svgIconElement;
   }
 
   private click(openModalFunc?: (callback: () => void) => void) {
     if (openModalFunc && this._openModalOnce) {
-      openModalFunc(this.triggerImportPrompt.bind(this, this.inputElement));
+      openModalFunc(this.triggerImportPrompt.bind(this, this._inputElement));
       this._openModalOnce = undefined;
     } else {
-      this.triggerImportPrompt(this.inputElement);
+      this.triggerImportPrompt(this._inputElement);
     }
   }
 }
