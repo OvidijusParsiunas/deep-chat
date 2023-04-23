@@ -312,16 +312,21 @@ export class Messages {
     this.sendClientUpdate(data, true, isInitial);
   }
 
-  private addNewAudioMessage(audioData: FileResult, isAI: boolean, isInitial = false) {
-    const {outerContainer, bubbleElement: audioContainer} = this.createNewMessageElement('', isAI);
-    const data = audioData.base64 as string;
+  private static createAudioElement(data: string) {
     const audioElement = document.createElement('audio');
     audioElement.src = data;
     audioElement.classList.add('audio-player');
     audioElement.controls = true;
+    if (Browser.IS_SAFARI) audioElement.classList.add('audio-player-safari');
+    return audioElement;
+  }
+
+  private addNewAudioMessage(audioData: FileResult, isAI: boolean, isInitial = false) {
+    const {outerContainer, bubbleElement: audioContainer} = this.createNewMessageElement('', isAI);
+    const data = audioData.base64 as string;
+    const audioElement = Messages.createAudioElement(data);
     audioContainer.appendChild(audioElement);
     audioContainer.classList.add('audio-message');
-    if (Browser.IS_SAFARI) audioElement.classList.add('audio-player-safari');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     this.messages.push(Messages.createMessageContent(data, true));

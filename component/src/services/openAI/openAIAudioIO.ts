@@ -30,9 +30,13 @@ export class OpenAIAudioIO implements ServiceIO {
 
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
-  // permittedErrorPrefixes = new Set('Invalid input image');
+  permittedErrorPrefixes = new Set('Invalid');
   audio: FileServiceIO = {
-    files: {acceptedFormats: '.mp3', dragAndDrop: {acceptedFileNamePostfixes: ['mp3']}},
+    files: {
+      acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
+      dragAndDrop: {acceptedFileNamePostfixes: ['4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg', 'm4a']},
+      maxNumberOfFiles: 1,
+    },
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};

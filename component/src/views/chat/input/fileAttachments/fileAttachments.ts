@@ -40,14 +40,14 @@ export class FileAttachments {
   }
 
   // prettier-ignore
-  public addImages(files: File[]) {
+  public addImages(files: File[], isDragAndDrop = false) {
     Array.from(files).forEach((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (event) => {
         for (let i = 0; this._fileAttachmentsTypes.length; i += 1) {
           const result = this._fileAttachmentsTypes[i].attemptAddFile(file,
-            (event.target as FileReader).result as string, this.containerElementRef);
+            (event.target as FileReader).result as string, this.containerElementRef, isDragAndDrop);
           if (result) break;
         }
       };

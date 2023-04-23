@@ -40,7 +40,7 @@ export class DragAndDrop {
 
   private static uploadFile(fileAttachments: FileAttachments, event: DragEvent) {
     const files = event.dataTransfer?.files;
-    if (files) fileAttachments.addImages(Array.from(files));
+    if (files) fileAttachments.addImages(Array.from(files), true);
   }
 
   private static display(fileDropElement: HTMLElement) {

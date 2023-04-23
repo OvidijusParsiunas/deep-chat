@@ -17,12 +17,14 @@ export class FileAttachmentsType {
     this._toggleContainerDisplay = toggleContainerDisplay;
   }
 
-  attemptAddFile(file: File, fileReaderResult: string, containerElementRef: HTMLElement) {
-    if (this._acceptedTypePrefixes) {
-      if (!this._acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return false;
-    }
-    if (this._acceptedFileNamePostfixes) {
-      if (!this._acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return false;
+  attemptAddFile(file: File, fileReaderResult: string, containerElementRef: HTMLElement, isDragAndDrop: boolean) {
+    if (isDragAndDrop) {
+      if (this._acceptedTypePrefixes) {
+        if (!this._acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return false;
+      }
+      if (this._acceptedFileNamePostfixes) {
+        if (!this._acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return false;
+      }
     }
     this.addAttachmentBasedOnType(file, fileReaderResult, containerElementRef);
     return true;
