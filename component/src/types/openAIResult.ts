@@ -16,3 +16,8 @@ export interface OpenAIImageResult {
   data: InterfacesUnion<{url: string} | {b64_json: string}>[];
   error?: {code: string; message: string};
 }
+
+export interface OpenAIAudioResult {
+  text: string;
+  error?: {code: string; message: string};
+}

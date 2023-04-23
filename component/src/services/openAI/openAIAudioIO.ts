@@ -3,15 +3,13 @@ import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableC
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
-import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {OpenAI, OpenAIAudioConfig} from '../../types/openAI';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
-import {OpenAIImageResult} from '../../types/openAIResult';
+import {OpenAIAudioResult} from '../../types/openAIResult';
 import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -20,6 +18,7 @@ import {Remarkable} from 'remarkable';
 
 export class OpenAIAudioIO implements ServiceIO {
   private static readonly AUDIO_TRANSCRIPTION_URL = 'https://api.openai.com/v1/audio/transcriptions';
+  private static readonly DEFAULT_MODEL = 'whisper-1';
 
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
@@ -37,7 +36,7 @@ export class OpenAIAudioIO implements ServiceIO {
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
-  private readonly _raw_body: OpenAIAudioConfig = {};
+  private readonly _raw_body: OpenAIAudioConfig = {model: OpenAIAudioIO.DEFAULT_MODEL};
   requestInterceptor: RequestInterceptor = (details) => details;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
@@ -51,6 +50,7 @@ export class OpenAIAudioIO implements ServiceIO {
       OpenAIAudioIO.processAudioConfig(this.audio, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
       OpenAIAudioIO.cleanConfig(config);
+      config.model ??= OpenAIAudioIO.DEFAULT_MODEL;
       this._raw_body = config;
     }
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
@@ -128,11 +128,8 @@ export class OpenAIAudioIO implements ServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  extractResultData(result: OpenAIImageResult): ImageResults {
+  extractResultData(result: OpenAIAudioResult): string {
     if (result.error) throw result.error.message;
-    return result.data.map((imageData) => {
-      if (imageData.url) return imageData;
-      return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
-    }) as ImageResults;
+    return result.text;
   }
 }

@@ -100,7 +100,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadFiles)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage(userText, false, true);
-    if (uploadFiles) await this._messages.addMultipleImagesFromFiles(uploadFiles);
+    if (uploadFiles) await this._messages.addMultipleFiles(uploadFiles);
     this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     const completionsHandlers = {

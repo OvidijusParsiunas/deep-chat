@@ -1,9 +1,10 @@
 import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
-import {ImageResult, ImageResults} from '../../../types/imageResult';
+import {FileResult, FileResults} from '../../../types/fileResult';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {CustomErrors} from '../../../services/serviceIO';
+import {Browser} from '../../../utils/browser/browser';
 import {IntroPanel} from '../introPanel/introPanel';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
@@ -168,11 +169,17 @@ export class Messages {
     return messageElements;
   }
 
-  public addNewMessage(data: string | ImageResults, isAI: boolean, update: boolean, isInitial = false) {
+  public addNewMessage(data: string | FileResults, isAI: boolean, update: boolean, isInitial = false) {
     if (typeof data === 'string') {
       this.addNewTextMessage(data, isAI, update, isInitial);
     } else {
-      data.forEach((imageData) => this.addNewImageMessage(imageData, isAI));
+      data.forEach((fileData) => {
+        if (fileData.base64?.startsWith('data:audio')) {
+          this.addNewAudioMessage(fileData, isAI, isInitial);
+        } else {
+          this.addNewImageMessage(fileData, isAI, isInitial);
+        }
+      });
     }
   }
 
@@ -263,7 +270,22 @@ export class Messages {
     }
   }
 
-  private createImage(imageData: ImageResult, isAI: boolean) {
+  async addMultipleFiles(files: File[]) {
+    return Promise.all(
+      (files || []).map((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            this.addNewMessage([{base64: reader.result as string}], false, true);
+            resolve(true);
+          };
+        });
+      })
+    );
+  }
+
+  private createImage(imageData: FileResult, isAI: boolean) {
     const data = (imageData.url || imageData.base64) as string;
     const imageElement = new Image();
     imageElement.src = data;
@@ -277,7 +299,7 @@ export class Messages {
     return linkWrapperElement;
   }
 
-  private addNewImageMessage(imageData: ImageResult, isAI: boolean, isInitial = false) {
+  private addNewImageMessage(imageData: FileResult, isAI: boolean, isInitial = false) {
     const {outerContainer, bubbleElement: imageContainer} = this.createNewMessageElement('', isAI);
     const data = (imageData.url || imageData.base64) as string;
     const image = this.createImage(imageData, isAI);
@@ -285,22 +307,24 @@ export class Messages {
     imageContainer.classList.add('image-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    // TO-DO - not sure if this scrolls down properly when the image is still being rendered
     this.messages.push(Messages.createMessageContent(data, true));
     this.sendClientUpdate(data, true, isInitial);
   }
 
-  async addMultipleImagesFromFiles(files: File[]) {
-    return Promise.all(
-      (files || []).map((file) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        return new Promise((resolve) => {
-          reader.onload = () => {
-            this.addNewMessage([{base64: reader.result as string}], false, true);
-            resolve(true);
-          };
-        });
-      })
-    );
+  private addNewAudioMessage(audioData: FileResult, isAI: boolean, isInitial = false) {
+    const {outerContainer, bubbleElement: audioContainer} = this.createNewMessageElement('', isAI);
+    const data = audioData.base64 as string;
+    const audioElement = document.createElement('audio');
+    audioElement.src = data;
+    audioElement.classList.add('audio-player');
+    audioElement.controls = true;
+    audioContainer.appendChild(audioElement);
+    audioContainer.classList.add('audio-message');
+    if (Browser.IS_SAFARI) audioElement.classList.add('audio-player-safari');
+    this.elementRef.appendChild(outerContainer);
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.messages.push(Messages.createMessageContent(data, true));
+    this.sendClientUpdate(data, true, isInitial);
   }
 }

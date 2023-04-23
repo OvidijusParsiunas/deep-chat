@@ -125,7 +125,7 @@ export class AiAssistant extends InternalHTML {
   }
 
   override onRender() {
-    // TO-DO this will be moved to service selection view
+    // TO-DO - this will be moved to service selection view
     const serviceIO = ServiceIOFactory.create(this, this.apiKey || '');
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);

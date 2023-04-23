@@ -52,8 +52,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   private static createInputElement(acceptedFormats?: string) {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    // TO-DO accept all
-    inputElement.accept = acceptedFormats || 'image/*';
+    inputElement.accept = acceptedFormats || '';
     inputElement.hidden = true;
     inputElement.multiple = true;
     return inputElement;

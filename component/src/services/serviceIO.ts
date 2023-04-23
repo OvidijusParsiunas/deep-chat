@@ -4,7 +4,7 @@ import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
 import {FilesServiceConfig} from '../types/fileService';
-import {ImageResults} from '../types/imageResult';
+import {FileResults} from '../types/fileResult';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -55,5 +55,5 @@ export interface ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
-  extractResultData(result: object): string | ImageResults;
+  extractResultData(result: object): string | FileResults;
 }

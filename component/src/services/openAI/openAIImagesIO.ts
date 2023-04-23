@@ -11,8 +11,8 @@ import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {ImageResults} from '../../types/imageResult';
 import {MessageContent} from '../../types/messages';
+import {FileResults} from '../../types/fileResult';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
@@ -149,12 +149,12 @@ export class OpenAIImagesIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIImageResult): ImageResults {
+  extractResultData(result: OpenAIImageResult): FileResults {
     if (result.error) throw result.error.message;
     return result.data.map((imageData) => {
       if (imageData.url) return imageData;
       return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
-    }) as ImageResults;
+    }) as FileResults;
   }
 
   // private static readonly MODAL_MARKDOWN = `
