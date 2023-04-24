@@ -7,3 +7,15 @@
   bottom: 0.08rem;
   filter: brightness(0) saturate(100%) invert(43%) sepia(0%) saturate(740%) hue-rotate(77deg) brightness(99%) contrast(92%);
 }
+
+#upload-audio-icon {
+  position: absolute;
+  pointer-events: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  left: 0.17rem;
+  bottom: 0.2rem;
+  filter: brightness(0) saturate(100%) invert(37%) sepia(0%) saturate(567%) hue-rotate(101deg) brightness(95%)
+    contrast(98%);
+  transform: scale(0.95, 1);
+}

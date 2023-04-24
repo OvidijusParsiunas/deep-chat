@@ -60,7 +60,6 @@ export class FileAttachmentsType {
     this._files.add(file);
   }
 
-  // TO-DO - util
   private createContainer(file: File, attachmentElement: HTMLElement) {
     const fileAttachmentElement = document.createElement('div');
     fileAttachmentElement.classList.add('file-attachment');

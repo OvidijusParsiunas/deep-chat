@@ -1,9 +1,9 @@
 import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
-import {OpenAI, OpenAIAudioConfig} from '../../types/openAI';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -17,16 +17,15 @@ import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
 
 export class OpenAIAudioIO implements ServiceIO {
-  private static readonly AUDIO_TRANSCRIPTION_URL = 'https://api.openai.com/v1/audio/transcriptions';
+  private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
+  private static readonly AUDIO_TRANSLATIONS_URL = 'https://api.openai.com/v1/audio/translations';
   private static readonly DEFAULT_MODEL = 'whisper-1';
 
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
-    <p><b>Insert text</b> to generate an image.</p>
-    <p><b>Upload 1</b> image to generate a variation and optionally insert text to specify the change.</p>
-    <p><b>Upload 2</b> images where the second is a copy of the first with a transparent area where the edit should
-      take place and text to specify the edit.</p>
-    <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Audio</b></div>
+    <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio
+      processing.
+    <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
@@ -40,7 +39,8 @@ export class OpenAIAudioIO implements ServiceIO {
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
-  private readonly _raw_body: OpenAIAudioConfig = {model: OpenAIAudioIO.DEFAULT_MODEL};
+  private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'text'} = {};
+  private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
   requestInterceptor: RequestInterceptor = (details) => details;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
@@ -53,15 +53,24 @@ export class OpenAIAudioIO implements ServiceIO {
     if (config && typeof config !== 'boolean') {
       OpenAIAudioIO.processAudioConfig(this.audio, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
+      this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
-      config.model ??= OpenAIAudioIO.DEFAULT_MODEL;
       this._raw_body = config;
     }
+    this._raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
+    this._raw_body.response_format = 'text';
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private static canSendMessage(text: string, files?: File[]) {
-    return !!files?.[0] || text.trim() !== '';
+  private static canSendMessage(_: string, files?: File[]) {
+    return !!files?.[0];
+  }
+
+  private processConfig(config?: OpenAIAudioConfig & OpenAIAudioType) {
+    if (config?.type && config.type === 'translations') {
+      this._service_url = OpenAIAudioIO.AUDIO_TRANSLATIONS_URL;
+      delete config.language; // not used for translations
+    }
   }
 
   // prettier-ignore
@@ -124,7 +133,7 @@ export class OpenAIAudioIO implements ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    this.url = this.requestSettings.url || OpenAIAudioIO.AUDIO_TRANSCRIPTION_URL;
+    this.url = this.requestSettings.url || this._service_url;
     const body = this.preprocessBody(this._raw_body, messages.messages);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason

@@ -33,7 +33,7 @@
 .outside-left {
   position: absolute;
   right: calc(13px - 0.55rem);
-  bottom: 0.8rem;
+  bottom: 0.85rem;
 }
 
 .outside-right {

@@ -6,9 +6,13 @@ export interface OpenAIMessage {
   content: string;
 }
 
+export type OpenAIAudioType = {
+  type?: 'transcriptions' | 'translations';
+};
+
+// https://platform.openai.com/docs/api-reference/audio/create
 export interface OpenAIAudioConfig {
   model?: 'whisper-1';
-  response_format?: 'json' | 'text' | 'srt' | 'verbose_json' | 'vtt';
   temperature?: number;
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
 }
@@ -45,5 +49,5 @@ export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceRequestConfig);
   completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceRequestConfig);
   images?: true | (OpenAIImagesConfig & FilesServiceConfig);
-  audio?: true | (OpenAIAudioConfig & FilesServiceConfig);
+  audio?: true | (OpenAIAudioConfig & FilesServiceConfig & OpenAIAudioType);
 }

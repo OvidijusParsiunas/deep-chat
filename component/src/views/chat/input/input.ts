@@ -1,11 +1,12 @@
+import {UPLOAD_IMAGES_ICON_STRING} from '../../../icons/uploadImagesIcon';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {MicrophoneButton} from './buttons/microphone/microphoneButton';
-import {UPLOAD_IMAGES_ICON_STRING} from '../../../icons/uploadImages';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
+import {AUDIO_ICON_STRING} from '../../../icons/audioIcon';
 import {DragAndDrop} from './fileAttachments/dragAndDrop';
 import {ButtonPosition} from './buttons/buttonPosition';
 import {ServiceIO} from '../../../services/serviceIO';
@@ -50,7 +51,7 @@ export class Input {
     }
     if (serviceIO.audio) {
       const button = new UploadFileButton(
-        containerElement, fileAttachments, serviceIO.audio, 'upload-images-icon', UPLOAD_IMAGES_ICON_STRING);
+        containerElement, fileAttachments, serviceIO.audio, 'upload-audio-icon', AUDIO_ICON_STRING);
       uploadFileButtons.push(button);
     }
     return {fileAttachments, uploadFileButtons};

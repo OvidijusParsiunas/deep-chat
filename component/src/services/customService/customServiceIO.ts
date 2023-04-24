@@ -7,6 +7,7 @@ import {RequestInterceptor} from '../../types/requestInterceptor';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
+import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AiAssistant} from '../../aiAssistant';
 
@@ -14,6 +15,7 @@ import {AiAssistant} from '../../aiAssistant';
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   images: FileServiceIO | undefined;
+  audio: FileServiceIO | undefined;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -24,7 +26,12 @@ export class CustomServiceIO implements ServiceIO {
     const {customService} = aiAssistant;
     if (customService?.request) this.requestSettings = customService.request;
     if (customService?.interceptor) this.requestInterceptor = customService.interceptor;
-    if (customService?.images) this.images = CustomServiceIO.parseImagesConfig(customService.images, this.requestSettings);
+    if (customService?.images) {
+      this.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
+    }
+    if (customService?.audio) {
+      this.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
+    }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
@@ -32,42 +39,41 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   private static canSendMessage(text: string, files?: File[]) {
-    return !files?.[0] || text.trim() !== '';
+    return !!files?.[0] || text.trim() !== '';
   }
 
-  private static parseImagesConfig(images: CustomServiceConfig['images'], requestSettings: RequestSettings) {
-    const imagesConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: 'image/*'}};
-    if (typeof images === 'object') {
-      const {files, request, interceptor, button} = images;
+  // prettier-ignore
+  private static parseConfig(fileType: boolean | FilesServiceConfig,
+      requestSettings: RequestSettings, defAcceptedFormats: string) {
+    const fileConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: defAcceptedFormats}};
+    if (typeof fileType === 'object') {
+      const {files, request, interceptor, button} = fileType;
       if (files) {
         if (files.infoModal) {
-          imagesConfig.files.infoModal = files.infoModal;
+          fileConfig.files.infoModal = files.infoModal;
           if (files.infoModal?.textMarkDown) {
             const remarkable = RemarkableConfig.createNew();
-            imagesConfig.infoModalTextMarkUp = remarkable.render(files.infoModal.textMarkDown);
+            fileConfig.infoModalTextMarkUp = remarkable.render(files.infoModal.textMarkDown);
           }
         }
-        if (files.acceptedFormats) {
-          imagesConfig.files.acceptedFormats = files.acceptedFormats;
-        } else {
-          imagesConfig.files.acceptedFormats = 'image/*';
-        }
-        if (files.maxNumberOfFiles) imagesConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
-        if (files.dragAndDrop) imagesConfig.files.dragAndDrop = files.dragAndDrop;
+        if (files.acceptedFormats) fileConfig.files.acceptedFormats = files.acceptedFormats;
+        if (files.maxNumberOfFiles) fileConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
+        if (files.dragAndDrop) fileConfig.files.dragAndDrop = files.dragAndDrop;
       }
-      imagesConfig.button = button;
-      imagesConfig.request = {
+      fileConfig.button = button;
+      fileConfig.request = {
         headers: request?.headers || requestSettings.headers,
         method: request?.method || requestSettings.method,
         url: request?.url || requestSettings.url,
       };
-      imagesConfig.interceptor = interceptor;
+      fileConfig.interceptor = interceptor;
     }
-    return imagesConfig;
+    return fileConfig;
   }
 
   private static cleanConfig(config: Partial<CustomServiceConfig>) {
     delete config.images;
+    delete config.audio;
     delete config.request;
     delete config.stream;
     delete config.interceptor;
@@ -79,33 +85,45 @@ export class CustomServiceIO implements ServiceIO {
 
   private static createFormDataBody(body: any, files: File[]) {
     const formData = new FormData();
-    files.forEach((image, index) => formData.append(`image${index + 1}`, image));
+    files.forEach((file, index) => formData.append(`file${index + 1}`, file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
     return formData;
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
+  private callApiWithImage(messages: Messages,
+      completionsHandlers: CompletionsHandlers, files: File[], fileIO?: FileServiceIO) {
     const formData = CustomServiceIO.createFormDataBody(this._raw_body, files);
     const previousRequestSettings = this.requestSettings;
-    this.requestSettings = this.images?.request || this.requestSettings;
-    this.images?.interceptor?.({body: formData, headers: this.requestSettings.headers});
+    this.requestSettings = fileIO?.request || this.requestSettings;
+    fileIO?.interceptor?.({body: formData, headers: this.requestSettings.headers});
     HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
     this.requestSettings = previousRequestSettings;
   }
 
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
-      imageFiles?: File[]) {
+      files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    if (imageFiles) {
-      this.callApiWithImage(messages, completionsHandlers, imageFiles);
+    if (files) {
+      const fileIO = this.getServiceIOByType(files[0]);
+      this.callApiWithImage(messages, completionsHandlers, files, fileIO);
     } else if (this._isStream) {
       HTTPRequest.requestStream(this, {stream: true, messages}, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
       HTTPRequest.request(this, {stream: false, messages}, messages, completionsHandlers.onFinish);
     }
+  }
+
+  private getServiceIOByType(file: File) {
+    if (file.type.startsWith('audio')) {
+      return this.audio;
+    }
+    if (file.type.startsWith('image')) {
+      return this.images;
+    }
+    return undefined;
   }
 
   extractResultData(result: CustomServiceResponse): string {
