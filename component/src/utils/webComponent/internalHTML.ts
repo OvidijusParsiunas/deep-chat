@@ -1,4 +1,5 @@
 import {AttributeTypeConverter} from '../../types/typeConverters';
+import {RenderControl} from '../decorators/renderControl';
 import {GenericObject} from '../../types/object';
 
 export class InternalHTML extends HTMLElement {
@@ -9,6 +10,29 @@ export class InternalHTML extends HTMLElement {
 
   static get observedAttributes() {
     return Object.keys(InternalHTML._attributes_) || [];
+  }
+
+  constructor() {
+    super();
+    Object.keys(InternalHTML._attributes_).forEach((propertyName) => {
+      this.constructPropertyAccessors(propertyName);
+    });
+  }
+
+  // need to be called here as accessors need to be set for the class instance
+  private constructPropertyAccessors(propertyKey: string) {
+    let value: string;
+    const getter = function () {
+      return value;
+    };
+    const setter = function (this: InternalHTML, newVal: string) {
+      value = newVal;
+      RenderControl.attemptRender(this);
+    };
+    Object.defineProperty(this, propertyKey, {
+      get: getter,
+      set: setter,
+    });
   }
 
   attributeChangedCallback(attributeName: string, oldValue: string, newValue: string) {
