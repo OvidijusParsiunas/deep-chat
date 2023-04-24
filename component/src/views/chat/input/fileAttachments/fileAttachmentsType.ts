@@ -1,5 +1,7 @@
 import {FileAttachments} from '../../../../types/fileAttachments';
-import audio from './File-Audio-256.png';
+import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {PLAY_ICON_STRING} from '../../../../icons/playIcon';
+import {STOP_ICON_STRING} from '../../../../icons/stopIcon';
 
 export class FileAttachmentsType {
   readonly _files: Set<File> = new Set();
@@ -35,7 +37,7 @@ export class FileAttachmentsType {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
       this.addFileAttachment(file, containerElementRef, imageAttachment);
     } else if (file.type.startsWith('audio')) {
-      const imageAttachment = FileAttachmentsType.createImageAttachment(audio);
+      const imageAttachment = FileAttachmentsType.createAudioAttachment(fileReaderResult);
       this.addFileAttachment(file, containerElementRef, imageAttachment);
     }
   }
@@ -45,6 +47,36 @@ export class FileAttachmentsType {
     image.src = src;
     image.classList.add('image-attachment');
     return image;
+  }
+
+  private static createAudioAttachment(fileReaderResult: string) {
+    const container = document.createElement('div');
+    container.classList.add('audio-attachment');
+    const audio = document.createElement('audio');
+    audio.src = fileReaderResult;
+    const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
+    play.classList.add('attachment-icon', 'play-icon');
+    const stop = SVGIconUtils.createSVGElement(STOP_ICON_STRING);
+    stop.classList.add('attachment-icon', 'stop-icon');
+    container.replaceChildren(play);
+    audio.onplay = () => {
+      container.replaceChildren(stop);
+    };
+    audio.onpause = () => {
+      container.replaceChildren(play);
+      audio.currentTime = 0;
+    };
+    audio.onended = () => {
+      container.replaceChildren(play);
+    };
+    container.onclick = () => {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    };
+    return container;
   }
 
   private addFileAttachment(file: File, containerElementRef: HTMLElement, attachmentElement: HTMLElement) {

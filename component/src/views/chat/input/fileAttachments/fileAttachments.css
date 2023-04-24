@@ -3,13 +3,18 @@
 #file-attachment-container {
   position: absolute;
   height: 3.6rem;
-  width: 100%;
+  width: calc(100% - 4px);
   top: -2.5rem;
   border-radius: 5px;
   overflow: auto;
   overflow: auto;
   text-align: left;
   background-color: #d7d7d73b;
+  padding-left: 4px;
+  /* different UX here - test */
+  /* width: 100%;
+  left: 0px;
+  text-align: center; */
 }
 
 .file-attachment {
@@ -20,6 +25,8 @@
   margin-bottom: 0.44rem;
   margin-top: 4px;
   position: relative;
+  background-color: white;
+  border-radius: 5px;
 }
 
 .image-attachment {
@@ -27,6 +34,35 @@
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.audio-attachment-icon-container {
+  cursor: pointer;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border: 1px solid #c3c3c3;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.audio-attachment-icon-container:hover {
+  background-color: rgb(248, 248, 248);
+}
+
+.attachment-icon {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 2px;
+  margin: auto;
+  position: absolute;
+  width: 25px;
+  user-select: none;
+}
+
+.stop-icon {
+  filter: brightness(0) saturate(100%) invert(29%) sepia(90%) saturate(1228%) hue-rotate(198deg) brightness(93%)
+    contrast(98%);
 }
 
 .remove-file-attachment-button {
