@@ -1,5 +1,5 @@
+import {ServiceFileTypes, ServiceIO} from '../../../../services/serviceIO';
 import {FileAttachmentsType} from './fileAttachmentsType';
-import {ServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 
 export class FileAttachments {
@@ -10,14 +10,14 @@ export class FileAttachments {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    if (serviceIO?.images?.files) {
-      const fileAttachmentsType = new FileAttachmentsType(serviceIO.images.files, this.toggleContainerDisplay.bind(this));
-      this._fileAttachmentsTypes.push(fileAttachmentsType);
-    }
-    if (serviceIO?.audio?.files) {
-      const fileAttachmentsType = new FileAttachmentsType(serviceIO.audio.files, this.toggleContainerDisplay.bind(this));
-      this._fileAttachmentsTypes.push(fileAttachmentsType);
-    }
+    const fileTypes = serviceIO?.fileTypes || {};
+    Object.keys(fileTypes).forEach((key) => {
+      const files = fileTypes[key as keyof ServiceFileTypes]?.files;
+      if (files) {
+        const fileAttachmentsType = new FileAttachmentsType(files, this.toggleContainerDisplay.bind(this));
+        this._fileAttachmentsTypes.push(fileAttachmentsType);
+      }
+    });
     if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
   }
 
@@ -40,7 +40,7 @@ export class FileAttachments {
   }
 
   // prettier-ignore
-  public addImages(files: File[], isDragAndDrop = false) {
+  public addFiles(files: File[], isDragAndDrop = false) {
     Array.from(files).forEach((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);

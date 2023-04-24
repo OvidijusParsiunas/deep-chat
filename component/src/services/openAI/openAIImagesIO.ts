@@ -35,8 +35,10 @@ export class OpenAIImagesIO implements ServiceIO {
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid input image');
-  images: FileServiceIO = {
-    files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+  fileTypes = {
+    images: {
+      files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+    },
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
@@ -51,7 +53,7 @@ export class OpenAIImagesIO implements ServiceIO {
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
-      OpenAIImagesIO.processImagesConfig(this.images, remarkable, config.files, config.button);
+      OpenAIImagesIO.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;

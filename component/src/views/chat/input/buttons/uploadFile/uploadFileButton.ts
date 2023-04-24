@@ -19,17 +19,17 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
 
   // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachments: FileAttachments,
-      images: FileServiceIO, iconId: string, iconSVGString: string) {
-    super(UploadFileButton.createImageElement(), typeof images.button === 'object' ? images.button : {});
+      fileService: FileServiceIO, iconId: string, iconSVGString: string) {
+    super(UploadFileButton.createButtonElement(), typeof fileService.button === 'object' ? fileService.button : {});
     this._innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
-    this._inputElement = UploadFileButton.createInputElement(images?.files?.acceptedFormats);
-    if (images.button?.position) this.position = images.button.position;
-    const openModalFunc = Modal.getOpenModalFunc(containerElement, images);
+    this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
+    if (fileService.button?.position) this.position = fileService.button.position;
+    const openModalFunc = Modal.getOpenModalFunc(containerElement, fileService);
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.elementRef.replaceChildren(this._innerElements.default);
     this.reapplyStateStyle('default');
     this._fileAttachments = fileAttachments;
-    this._openModalOnce = images.files?.infoModal?.openModalOnce;
+    this._openModalOnce = fileService.files?.infoModal?.openModalOnce;
   }
 
   private static createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
@@ -45,7 +45,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   }
 
   private import(inputElement: HTMLInputElement) {
-    this._fileAttachments.addImages(Array.from(inputElement.files || []));
+    this._fileAttachments.addFiles(Array.from(inputElement.files || []));
     inputElement.value = '';
   }
 
@@ -61,10 +61,10 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   // prettier-ignore
   private static createInnerElement(baseButton: SVGGraphicsElement,
       state: keyof UploadFileButton['_innerElements'], customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(state, 'image-icon', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
   }
 
-  private static createImageElement() {
+  private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
     return buttonElement;

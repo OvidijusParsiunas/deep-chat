@@ -1,4 +1,3 @@
-import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
@@ -10,12 +9,19 @@ import {FileAttachments} from '../../types/fileAttachments';
 import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AiAssistant} from '../../aiAssistant';
+import {
+  KeyVerificationHandlers,
+  CompletionsHandlers,
+  ServiceFileTypes,
+  StreamHandlers,
+  FileServiceIO,
+  ServiceIO,
+} from '../serviceIO';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
-  images: FileServiceIO | undefined;
-  audio: FileServiceIO | undefined;
+  fileTypes: ServiceFileTypes = {};
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -24,13 +30,17 @@ export class CustomServiceIO implements ServiceIO {
 
   constructor(aiAssistant: AiAssistant) {
     const {customService} = aiAssistant;
-    if (customService?.request) this.requestSettings = customService.request;
-    if (customService?.interceptor) this.requestInterceptor = customService.interceptor;
-    if (customService?.images) {
-      this.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
+    if (!customService) return;
+    if (customService.request) this.requestSettings = customService.request;
+    if (customService.interceptor) this.requestInterceptor = customService.interceptor;
+    if (customService.images) {
+      this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
     }
-    if (customService?.audio) {
-      this.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
+    if (customService.audio) {
+      this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
+    }
+    if (customService.others) {
+      this.fileTypes.others = CustomServiceIO.parseConfig(customService.others, this.requestSettings, '');
     }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
@@ -74,6 +84,7 @@ export class CustomServiceIO implements ServiceIO {
   private static cleanConfig(config: Partial<CustomServiceConfig>) {
     delete config.images;
     delete config.audio;
+    delete config.others;
     delete config.request;
     delete config.stream;
     delete config.interceptor;
@@ -117,13 +128,13 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   private getServiceIOByType(file: File) {
-    if (file.type.startsWith('audio')) {
-      return this.audio;
+    if (file.type.startsWith('audio') && this.fileTypes.audio) {
+      return this.fileTypes.audio;
     }
-    if (file.type.startsWith('image')) {
-      return this.images;
+    if (file.type.startsWith('image') && this.fileTypes.images) {
+      return this.fileTypes.images;
     }
-    return undefined;
+    return this.fileTypes.others;
   }
 
   extractResultData(result: CustomServiceResponse): string {

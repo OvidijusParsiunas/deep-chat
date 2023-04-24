@@ -44,7 +44,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   }
 
   private import(inputElement: HTMLInputElement) {
-    this._fileAttachments.addImages(Array.from(inputElement.files || []));
+    this._fileAttachments.addFiles(Array.from(inputElement.files || []));
     inputElement.value = '';
   }
 

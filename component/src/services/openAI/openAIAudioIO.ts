@@ -30,11 +30,13 @@ export class OpenAIAudioIO implements ServiceIO {
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
-  audio: FileServiceIO = {
-    files: {
-      acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
-      dragAndDrop: {acceptedFileNamePostfixes: ['4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg', 'm4a']},
-      maxNumberOfFiles: 1,
+  fileTypes = {
+    audio: {
+      files: {
+        acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
+        dragAndDrop: {acceptedFileNamePostfixes: ['4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg', 'm4a']},
+        maxNumberOfFiles: 1,
+      },
     },
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
@@ -51,7 +53,7 @@ export class OpenAIAudioIO implements ServiceIO {
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean') {
-      OpenAIAudioIO.processAudioConfig(this.audio, remarkable, config.files, config.button);
+      OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);

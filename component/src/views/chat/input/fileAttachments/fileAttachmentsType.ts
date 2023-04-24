@@ -51,7 +51,7 @@ export class FileAttachmentsType {
 
   private static createAudioAttachment(fileReaderResult: string) {
     const container = document.createElement('div');
-    container.classList.add('audio-attachment');
+    container.classList.add('audio-attachment-icon-container');
     const audio = document.createElement('audio');
     audio.src = fileReaderResult;
     const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
@@ -113,6 +113,10 @@ export class FileAttachmentsType {
 
   private removeFile(file: File, attachmentElement: HTMLElement) {
     this._files.delete(file);
+    const attachmentContent = attachmentElement.children[0] as HTMLElement;
+    if (attachmentContent?.children?.[0]?.classList.contains('stop-icon')) {
+      attachmentContent.click();
+    }
     attachmentElement.remove();
     this._toggleContainerDisplay(false);
   }

@@ -1,4 +1,4 @@
-import {ServiceIO} from '../../../../services/serviceIO';
+import {ServiceFileTypes, ServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 import {FileAttachments} from './fileAttachments';
 
@@ -40,7 +40,7 @@ export class DragAndDrop {
 
   private static uploadFile(fileAttachments: FileAttachments, event: DragEvent) {
     const files = event.dataTransfer?.files;
-    if (files) fileAttachments.addImages(Array.from(files), true);
+    if (files) fileAttachments.addFiles(Array.from(files), true);
   }
 
   private static display(fileDropElement: HTMLElement) {
@@ -52,6 +52,7 @@ export class DragAndDrop {
   }
 
   private static shouldBeAppended(serviceIO: ServiceIO) {
-    return !!serviceIO.images?.files?.dragAndDrop || serviceIO.audio?.files?.dragAndDrop;
+    const fileTypes = serviceIO.fileTypes || {};
+    return Object.keys(fileTypes).find((key) => fileTypes[key as keyof ServiceFileTypes]?.files?.dragAndDrop);
   }
 }

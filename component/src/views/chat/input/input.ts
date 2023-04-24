@@ -1,4 +1,5 @@
-import {UPLOAD_IMAGES_ICON_STRING} from '../../../icons/uploadImagesIcon';
+import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
+import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {MicrophoneButton} from './buttons/microphone/microphoneButton';
 import {FileAttachments} from './fileAttachments/fileAttachments';
@@ -6,10 +7,8 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
-import {AUDIO_ICON_STRING} from '../../../icons/audioIcon';
 import {DragAndDrop} from './fileAttachments/dragAndDrop';
 import {ButtonPosition} from './buttons/buttonPosition';
-import {ServiceIO} from '../../../services/serviceIO';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
@@ -39,21 +38,18 @@ export class Input {
     return panelElement;
   }
 
-  // prettier-ignore
   private createFileUploadComponents(aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement) {
     const fileAttachments = new FileAttachments(this.elementRef, serviceIO, aiAssistant.attachmentContainerStyle);
     DragAndDrop.attemptToAdd(containerElement, fileAttachments, serviceIO, aiAssistant.dragAndDropStyle);
     const uploadFileButtons: UploadFileButton[] = [];
-    if (serviceIO.images) {
-      const button = new UploadFileButton(
-        containerElement, fileAttachments, serviceIO.images, 'upload-images-icon', UPLOAD_IMAGES_ICON_STRING);
+    const fileTypes = serviceIO.fileTypes || {};
+    Object.keys(fileTypes).forEach((key) => {
+      const fileType = key as keyof ServiceFileTypes;
+      const fileService = fileTypes[fileType] as FileServiceIO;
+      const {id, svgString} = FILE_TYPE_BUTTON_ICONS[fileType];
+      const button = new UploadFileButton(containerElement, fileAttachments, fileService, id, svgString);
       uploadFileButtons.push(button);
-    }
-    if (serviceIO.audio) {
-      const button = new UploadFileButton(
-        containerElement, fileAttachments, serviceIO.audio, 'upload-audio-icon', AUDIO_ICON_STRING);
-      uploadFileButtons.push(button);
-    }
+    });
     return {fileAttachments, uploadFileButtons};
   }
 

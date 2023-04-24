@@ -60,6 +60,11 @@
   user-select: none;
 }
 
+.play-icon {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(0%) saturate(1392%) hue-rotate(67deg) brightness(98%)
+    contrast(97%);
+}
+
 .stop-icon {
   filter: brightness(0) saturate(100%) invert(29%) sepia(90%) saturate(1228%) hue-rotate(198deg) brightness(93%)
     contrast(98%);
