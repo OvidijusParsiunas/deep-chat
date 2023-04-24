@@ -5,6 +5,7 @@ import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
 import {FilesServiceConfig} from '../types/fileService';
 import {FileResults} from '../types/fileResult';
+import {FILE_TYPES} from '../types/fileTypes';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -29,12 +30,14 @@ export type FileServiceIO = FilesServiceConfig & {
 
 export type CustomErrors = Set<string>;
 
+export type ServiceFileTypes = {
+  [key in FILE_TYPES]?: FileServiceIO;
+};
+
 export interface ServiceIO {
   url?: string;
 
-  images?: FileServiceIO;
-
-  audio?: FileServiceIO;
+  fileTypes?: ServiceFileTypes;
 
   requestSettings?: RequestSettings;
 
