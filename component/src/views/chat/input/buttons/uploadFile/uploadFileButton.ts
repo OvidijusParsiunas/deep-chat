@@ -1,6 +1,7 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {ButtonPosition as ButtonPositionT} from '../../../../../types/button';
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
@@ -14,11 +15,11 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   readonly position: ButtonPositionT = 'outside-left';
   private readonly _inputElement: HTMLInputElement;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private readonly _fileAttachments: FileAttachments;
+  private readonly _fileAttachmentsType: FileAttachmentsType;
   private _openModalOnce?: boolean | undefined;
 
   // prettier-ignore
-  constructor(containerElement: HTMLElement, fileAttachments: FileAttachments,
+  constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string) {
     super(UploadFileButton.createButtonElement(), typeof fileService.button === 'object' ? fileService.button : {});
     this._innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
@@ -28,7 +29,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
     this.elementRef.onclick = this.click.bind(this, openModalFunc);
     this.elementRef.replaceChildren(this._innerElements.default);
     this.reapplyStateStyle('default');
-    this._fileAttachments = fileAttachments;
+    this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce;
   }
 
@@ -45,7 +46,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   }
 
   private import(inputElement: HTMLInputElement) {
-    this._fileAttachments.addFiles(Array.from(inputElement.files || []));
+    FileAttachments.addFiles(Array.from(inputElement.files || []), [this._fileAttachmentsType], false);
     inputElement.value = '';
   }
 

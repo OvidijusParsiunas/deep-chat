@@ -1,4 +1,4 @@
-import {ServiceFileTypes, ServiceIO} from '../../../../services/serviceIO';
+import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
 import {FileAttachmentsType} from './fileAttachmentsType';
 import {CustomStyle} from '../../../../types/styles';
 
@@ -6,19 +6,19 @@ export class FileAttachments {
   private readonly _fileAttachmentsTypes: FileAttachmentsType[] = [];
   private readonly containerElementRef: HTMLElement;
 
-  constructor(inputElementRef: HTMLElement, serviceIO?: ServiceIO, attachmentContainerStyle?: CustomStyle) {
+  constructor(inputElementRef: HTMLElement, attachmentContainerStyle?: CustomStyle) {
     this.containerElementRef = this.createAttachmentContainer();
     this.toggleContainerDisplay(false);
     inputElementRef.appendChild(this.containerElementRef);
-    const fileTypes = serviceIO?.fileTypes || {};
-    Object.keys(fileTypes).forEach((key) => {
-      const files = fileTypes[key as keyof ServiceFileTypes]?.files;
-      if (files) {
-        const fileAttachmentsType = new FileAttachmentsType(files, this.toggleContainerDisplay.bind(this));
-        this._fileAttachmentsTypes.push(fileAttachmentsType);
-      }
-    });
     if (attachmentContainerStyle) Object.assign(this.containerElementRef.style, attachmentContainerStyle);
+  }
+
+  // prettier-ignore
+  addType(files: FileAttachmentsT) {
+    const fileAttachmentsType = new FileAttachmentsType(
+      files, this.toggleContainerDisplay.bind(this), this.containerElementRef);
+    this._fileAttachmentsTypes.push(fileAttachmentsType);
+    return fileAttachmentsType;
   }
 
   private createAttachmentContainer() {
@@ -36,26 +36,30 @@ export class FileAttachments {
   }
 
   getAllFiles() {
-    return this._fileAttachmentsTypes.map((fileAttachmentType) => Array.from(fileAttachmentType._files)).flat();
+    return this._fileAttachmentsTypes.map((fileAttachmentType) => Array.from(fileAttachmentType.getFiles())).flat();
   }
 
   // prettier-ignore
-  public addFiles(files: File[], isDragAndDrop = false) {
+  public static addFiles(files: File[], fileAttachmentTypes: FileAttachmentsType[], isDragAndDrop = false) {
     Array.from(files).forEach((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (event) => {
-        for (let i = 0; this._fileAttachmentsTypes.length; i += 1) {
-          const result = this._fileAttachmentsTypes[i].attemptAddFile(file,
-            (event.target as FileReader).result as string, this.containerElementRef, isDragAndDrop);
+        for (let i = 0; fileAttachmentTypes.length; i += 1) {
+          const result = fileAttachmentTypes[i].attemptAddFile(file,
+            (event.target as FileReader).result as string, isDragAndDrop);
           if (result) break;
         }
       };
     });
   }
 
+  public addFilesFromDragAndDrop(files: File[]) {
+    FileAttachments.addFiles(files, this._fileAttachmentsTypes, true);
+  }
+
   removeAllFiles() {
-    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType._files.clear());
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.clear());
     this.containerElementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }

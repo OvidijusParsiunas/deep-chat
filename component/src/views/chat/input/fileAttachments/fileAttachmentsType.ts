@@ -3,23 +3,30 @@ import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {PLAY_ICON_STRING} from '../../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../../icons/stopIcon';
 
-export class FileAttachmentsType {
-  readonly _files: Set<File> = new Set();
-  readonly _fileCountLimit: number = 99;
-  readonly _acceptedTypePrefixes?: string[];
-  readonly _acceptedFileNamePostfixes?: string[];
-  readonly _toggleContainerDisplay: (display: boolean) => void;
+interface AttachmentObject {
+  file: File;
+  attachmentElement: HTMLElement;
+}
 
-  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void) {
+export class FileAttachmentsType {
+  private _attachments: AttachmentObject[] = [];
+  private readonly _fileCountLimit: number = 99;
+  private readonly _acceptedTypePrefixes?: string[];
+  private readonly _acceptedFileNamePostfixes?: string[];
+  private readonly _toggleContainerDisplay: (display: boolean) => void;
+  private readonly _fileAttachmentsContainerRef: HTMLElement;
+
+  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, contain: HTMLElement) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
     if (typeof fileAttachments.dragAndDrop === 'object') {
       this._acceptedTypePrefixes = fileAttachments.dragAndDrop.acceptedTypePrefixes;
       this._acceptedFileNamePostfixes = fileAttachments.dragAndDrop.acceptedFileNamePostfixes;
     }
     this._toggleContainerDisplay = toggleContainerDisplay;
+    this._fileAttachmentsContainerRef = contain;
   }
 
-  attemptAddFile(file: File, fileReaderResult: string, containerElementRef: HTMLElement, isDragAndDrop: boolean) {
+  attemptAddFile(file: File, fileReaderResult: string, isDragAndDrop: boolean) {
     if (isDragAndDrop) {
       if (this._acceptedTypePrefixes) {
         if (!this._acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return false;
@@ -28,17 +35,17 @@ export class FileAttachmentsType {
         if (!this._acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return false;
       }
     }
-    this.addAttachmentBasedOnType(file, fileReaderResult, containerElementRef);
+    this.addAttachmentBasedOnType(file, fileReaderResult);
     return true;
   }
 
-  private addAttachmentBasedOnType(file: File, fileReaderResult: string, containerElementRef: HTMLElement) {
+  private addAttachmentBasedOnType(file: File, fileReaderResult: string) {
     if (file.type.startsWith('image')) {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
-      this.addFileAttachment(file, containerElementRef, imageAttachment);
+      this.addFileAttachment(file, imageAttachment);
     } else if (file.type.startsWith('audio')) {
-      const imageAttachment = FileAttachmentsType.createAudioAttachment(fileReaderResult);
-      this.addFileAttachment(file, containerElementRef, imageAttachment);
+      const audioAttachment = FileAttachmentsType.createAudioAttachment(fileReaderResult);
+      this.addFileAttachment(file, audioAttachment);
     }
   }
 
@@ -79,31 +86,32 @@ export class FileAttachmentsType {
     return container;
   }
 
-  private addFileAttachment(file: File, containerElementRef: HTMLElement, attachmentElement: HTMLElement) {
-    // TO-DO - will have to remove the first of type
-    if (this._files.size >= this._fileCountLimit) {
-      const attachments = containerElementRef.children;
-      (attachments[attachments.length - 1].children[1] as HTMLElement).click();
-      containerElementRef.insertBefore(this.createContainer(file, attachmentElement), attachments[0]);
+  private addFileAttachment(file: File, attachmentElement: HTMLElement) {
+    const attachmentObject = {file, attachmentElement};
+    if (this._attachments.length >= this._fileCountLimit) {
+      const attachmentContainer = this._attachments[this._attachments.length - 1].attachmentElement.parentElement;
+      (attachmentContainer?.children[1] as HTMLElement).click();
+      const attachments = this._fileAttachmentsContainerRef.children;
+      this._fileAttachmentsContainerRef.insertBefore(this.createContainer(attachmentObject), attachments[0]);
     } else {
-      containerElementRef.appendChild(this.createContainer(file, attachmentElement));
+      this._fileAttachmentsContainerRef.appendChild(this.createContainer(attachmentObject));
     }
     this._toggleContainerDisplay(true);
-    this._files.add(file);
+    this._attachments.push(attachmentObject);
   }
 
-  private createContainer(file: File, attachmentElement: HTMLElement) {
-    const fileAttachmentElement = document.createElement('div');
-    fileAttachmentElement.classList.add('file-attachment');
-    fileAttachmentElement.appendChild(attachmentElement);
-    fileAttachmentElement.appendChild(this.createRemoveAttachmentButton(file, fileAttachmentElement));
-    return fileAttachmentElement;
+  private createContainer(attachmentObject: AttachmentObject) {
+    const containerElement = document.createElement('div');
+    containerElement.classList.add('file-attachment');
+    containerElement.appendChild(attachmentObject.attachmentElement);
+    containerElement.appendChild(this.createRemoveAttachmentButton(attachmentObject, containerElement));
+    return containerElement;
   }
 
-  private createRemoveAttachmentButton(file: File, attachmentElement: HTMLElement) {
+  private createRemoveAttachmentButton(attachmentObject: AttachmentObject, containerElement: HTMLElement) {
     const removeButtonElement = document.createElement('div');
     removeButtonElement.classList.add('remove-file-attachment-button');
-    removeButtonElement.onclick = this.removeFile.bind(this, file, attachmentElement);
+    removeButtonElement.onclick = this.removeFile.bind(this, attachmentObject, containerElement);
     const xIcon = document.createElement('div');
     xIcon.classList.add('x-icon');
     xIcon.innerText = '×';
@@ -111,13 +119,67 @@ export class FileAttachmentsType {
     return removeButtonElement;
   }
 
-  private removeFile(file: File, attachmentElement: HTMLElement) {
-    this._files.delete(file);
-    const attachmentContent = attachmentElement.children[0] as HTMLElement;
-    if (attachmentContent?.children?.[0]?.classList.contains('stop-icon')) {
-      attachmentContent.click();
+  private removeFile(attachmentObject: AttachmentObject, containerElement: HTMLElement) {
+    const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
+    this._attachments.splice(index, 1);
+    if (attachmentObject.attachmentElement?.children?.[0]?.classList.contains('stop-icon')) {
+      attachmentObject.attachmentElement.click();
     }
-    attachmentElement.remove();
+    containerElement.remove();
     this._toggleContainerDisplay(false);
   }
+
+  getFiles() {
+    return Array.from(this._attachments).map((attachment) => attachment.file);
+  }
+
+  clear() {
+    this._attachments = [];
+  }
 }
+
+/* Drag sort functionality
+
+  private dragSrcEl?: HTMLElement;
+
+  private drop(e) {
+    e.stopPropagation();
+    if (this.dragSrcEl) {
+      console.log(this.dragSrcEl);
+      this.dragSrcEl.style.filter = '';
+    }
+  }
+
+  private dragOver(e) {
+    if (this.isBefore(this.dragSrcEl, e.target)) {
+      e.target.parentNode.insertBefore(this.dragSrcEl, e.target);
+    } else {
+      e.target.parentNode.insertBefore(this.dragSrcEl, e.target.nextSibling);
+    }
+  }
+
+  private dragStart(element: HTMLElement, e) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', null); // Thanks to bqlou for their comment.
+    const img = new Image();
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    // e.dataTransfer.setDragImage(img, 0, 0);
+    this.dragSrcEl = element;
+    setTimeout(() => {
+      element.style.filter = 'contrast(0.5)';
+    });
+  }
+
+  private isBefore(el1, el2) {
+    if (el2.parentNode === el1.parentNode)
+      for (let cur = el1.previousSibling; cur && cur.nodeType !== 9; cur = cur.previousSibling)
+        if (cur === el2) return true;
+    return false;
+  }
+
+  draggable = true;
+
+  .file-attachment > * {
+    pointer-events: none;
+  }
+*/

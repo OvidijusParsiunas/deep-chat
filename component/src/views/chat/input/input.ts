@@ -39,16 +39,19 @@ export class Input {
   }
 
   private createFileUploadComponents(aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement) {
-    const fileAttachments = new FileAttachments(this.elementRef, serviceIO, aiAssistant.attachmentContainerStyle);
+    const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle);
     DragAndDrop.attemptToAdd(containerElement, fileAttachments, serviceIO, aiAssistant.dragAndDropStyle);
     const uploadFileButtons: UploadFileButton[] = [];
     const fileTypes = serviceIO.fileTypes || {};
     Object.keys(fileTypes).forEach((key) => {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
-      const {id, svgString} = FILE_TYPE_BUTTON_ICONS[fileType];
-      const button = new UploadFileButton(containerElement, fileAttachments, fileService, id, svgString);
-      uploadFileButtons.push(button);
+      if (fileService.files) {
+        const fileAttachmentsType = fileAttachments.addType(fileService.files);
+        const {id, svgString} = FILE_TYPE_BUTTON_ICONS[fileType];
+        const button = new UploadFileButton(containerElement, fileAttachmentsType, fileService, id, svgString);
+        uploadFileButtons.push(button);
+      }
     });
     return {fileAttachments, uploadFileButtons};
   }
