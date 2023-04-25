@@ -41,7 +41,7 @@ export class FileAttachments {
 
   // prettier-ignore
   public static addFiles(files: File[], fileAttachmentTypes: FileAttachmentsType[], isDragAndDrop = false) {
-    Array.from(files).forEach((file: File) => {
+    files.forEach((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (event) => {
