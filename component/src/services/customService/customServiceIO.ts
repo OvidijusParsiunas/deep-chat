@@ -38,7 +38,12 @@ export class CustomServiceIO implements ServiceIO {
       this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
     }
     if (customService.camera) {
-      this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
+      if (navigator.mediaDevices.getUserMedia !== undefined) {
+        this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
+        // if camera is not available - fallback to normal image upload
+      } else if (!customService.images) {
+        this.fileTypes.images = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
+      }
     }
     if (customService.audio) {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');

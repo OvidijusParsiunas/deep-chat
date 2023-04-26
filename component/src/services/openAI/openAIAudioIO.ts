@@ -88,10 +88,7 @@ export class OpenAIAudioIO implements ServiceIO {
       if (files.maxNumberOfFiles) _audio.files.maxNumberOfFiles = files.maxNumberOfFiles;
       if (typeof files.dragAndDrop !== undefined) _audio.files.dragAndDrop = files.dragAndDrop;
     }
-    if (button) {
-      _audio.button = button;
-      if (_audio.button.styles) _audio.button.default = _audio.button.styles;
-    }
+    _audio.button = button;
   }
 
   private static cleanConfig(config: FilesServiceConfig) {

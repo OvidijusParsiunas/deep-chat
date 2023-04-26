@@ -1,3 +1,4 @@
+import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 
@@ -50,10 +51,19 @@ export class Modal {
     buttons.forEach((button) => this._buttonPanel.appendChild(button));
   }
 
-  static createButton(text: string) {
+  static createTextButton(text: string) {
     const button = document.createElement('div');
     button.classList.add('modal-button');
     button.textContent = text;
+    return button;
+  }
+
+  static createSVGButton(svgString: string) {
+    const button = document.createElement('div');
+    button.classList.add('modal-button', 'modal-svg-button');
+    const icon = SVGIconUtils.createSVGElement(svgString);
+    icon.classList.add('modal-svg-button-icon');
+    button.appendChild(icon);
     return button;
   }
 
@@ -82,8 +92,8 @@ export class Modal {
     this.displayModalElements();
   }
 
-  addCloseButton(text: string, callback?: () => void) {
-    const closeButton = Modal.createButton(text);
+  addCloseButton(text: string, isSVG: boolean, callback?: () => void) {
+    const closeButton = isSVG ? Modal.createSVGButton(text) : Modal.createTextButton(text);
     this.addButtons(closeButton);
     closeButton.onclick = () => {
       this.close();
@@ -97,7 +107,7 @@ export class Modal {
   public static createTextModalFunc(viewContainerElement: HTMLElement, fileIO: FileServiceIO, closeCallback: () => void) {
     if (typeof fileIO === 'object' && fileIO.files?.infoModal) {
       const modal = new Modal(viewContainerElement, ['modal-content'], fileIO.files.infoModal.containerStyle);
-      modal.addCloseButton('OK', closeCallback);
+      modal.addCloseButton('OK', false, closeCallback);
       return modal.openTextModal.bind(modal, fileIO.infoModalTextMarkUp || '');
     }
     return undefined;

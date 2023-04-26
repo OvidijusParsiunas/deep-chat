@@ -27,6 +27,7 @@
   overflow: hidden;
   text-align: center;
   border: unset;
+  height: 100%;
 }
 
 .modal-content > p {
@@ -74,6 +75,20 @@
 
 .modal-button:active {
   background-color: rgb(27, 86, 135);
+}
+
+.modal-svg-button {
+  padding: 0;
+  width: 2rem;
+  height: 1.8rem;
+  padding-bottom: 2px;
+}
+
+.modal-svg-button-icon {
+  width: 100%;
+  height: 100%;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(15%) saturate(4%) hue-rotate(346deg) brightness(101%)
+    contrast(102%);
 }
 
 #modal-background-panel {

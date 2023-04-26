@@ -1,3 +1,8 @@
+import {REFRESH_ICON_STRING} from '../../../../icons/refreshIcon';
+import {CAPTURE_ICON_STRING} from '../../../../icons/captureIcon';
+import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {CLOSE_ICON_STRING} from '../../../../icons/closeIcon';
+import {TICK_ICON_STRING} from '../../../../icons/tickIcon';
 import {FileAttachmentsType} from './fileAttachmentsType';
 import {FileAttachments} from './fileAttachments';
 import {Modal} from './modal';
@@ -5,26 +10,38 @@ import {Modal} from './modal';
 export class CameraModal extends Modal {
   private _dataURL?: string;
   private _stopped = false;
-  private readonly _video: HTMLVideoElement;
   private readonly _captureButton: HTMLElement;
+  private readonly _submitButton: HTMLElement;
   private readonly _canvas: HTMLCanvasElement;
+  private readonly _captureIcon: SVGGraphicsElement;
+  private readonly _refreshIcon: SVGGraphicsElement;
+  private _mediaStream?: MediaStream;
 
   constructor(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType) {
-    super(viewContainerElement, ['modal-content', 'modal-camera-content'], {});
+    super(viewContainerElement, ['modal-content', 'modal-camera-content'], {}); // style
     this._canvas = document.createElement('canvas');
     this._canvas.classList.add('camera-modal-canvas');
-    this._video = document.createElement('video');
-    this._captureButton = this.addButtonsAndTheirEvents(fileAttachmentsType).captureButton;
+    const {captureButton, submitButton} = this.addButtonsAndTheirEvents(fileAttachmentsType);
+    this._captureButton = captureButton;
+    this._submitButton = submitButton;
+    this._captureIcon = this._captureButton.children[0] as SVGGraphicsElement;
+    this._refreshIcon = SVGIconUtils.createSVGElement(REFRESH_ICON_STRING);
+    this._refreshIcon.classList.add('modal-svg-button-icon', 'modal-svg-refresh-icon');
     this._contentRef.appendChild(this._canvas);
   }
 
   private addButtonsAndTheirEvents(fileAttachmentsType: FileAttachmentsType) {
-    const captureButton = Modal.createButton('Capture');
-    const closeButton = this.addCloseButton('Cancel');
-    const submitButton = Modal.createButton('Submit');
+    const captureButton = Modal.createSVGButton(CAPTURE_ICON_STRING);
+    captureButton.classList.add('modal-svg-camera-button');
+    captureButton.children[0].classList.add('modal-svg-camera-icon');
+    const closeButton = this.addCloseButton(CLOSE_ICON_STRING, true);
+    closeButton.classList.add('modal-svg-close-button');
+    closeButton.children[0].classList.add('modal-svg-close-icon');
+    const submitButton = Modal.createSVGButton(TICK_ICON_STRING);
+    submitButton.classList.add('modal-svg-submit-button');
     this.addButtons(captureButton, submitButton);
     this.addButtonEvents(captureButton, closeButton, submitButton, fileAttachmentsType);
-    return {captureButton};
+    return {captureButton, submitButton};
   }
 
   // prettier-ignore
@@ -43,31 +60,44 @@ export class CameraModal extends Modal {
   }
 
   private stop() {
+    if (this._mediaStream) {
+      this._mediaStream.getTracks().forEach((track) => track.stop());
+    }
     this._stopped = true;
     setTimeout(() => {
-      this._captureButton.textContent = 'Capture';
+      this._captureButton.replaceChildren(this._captureIcon);
+      this._captureButton.classList.replace('modal-svg-refresh-button', 'modal-svg-camera-button');
+      const ctx = this._canvas.getContext('2d');
+      ctx?.clearRect(0, 0, this._canvas.width, this._canvas.height);
     }, Modal.MODAL_CLOSE_TIMEOUT_MS);
   }
 
   start() {
     this._dataURL = undefined;
+    this._submitButton.classList.add('modal-svg-submit-disabled');
     this._stopped = false;
     navigator.mediaDevices
       .getUserMedia({video: true})
       .then((stream) => {
-        this._video.srcObject = stream;
-        this._video.play();
-        requestAnimationFrame(this.updateCanvas.bind(this, this._video, this._canvas));
+        this._mediaStream = stream;
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
+        requestAnimationFrame(this.updateCanvas.bind(this, video, this._canvas));
       })
       .catch((err) => console.error(err));
   }
 
   private capture() {
     if (this._dataURL) {
-      this._captureButton.textContent = 'Capture';
+      this._captureButton.replaceChildren(this._captureIcon);
+      this._captureButton.classList.replace('modal-svg-refresh-button', 'modal-svg-camera-button');
+      this._submitButton.classList.add('modal-svg-submit-disabled');
       this._dataURL = undefined;
     } else {
-      this._captureButton.textContent = 'Reset';
+      this._captureButton.replaceChildren(this._refreshIcon);
+      this._captureButton.classList.replace('modal-svg-camera-button', 'modal-svg-refresh-button');
+      this._submitButton.classList.remove('modal-svg-submit-disabled');
       this._dataURL = this._canvas.toDataURL();
     }
   }

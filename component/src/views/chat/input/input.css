@@ -1,8 +1,9 @@
 @import url('./fileAttachments/fileAttachments.css');
 @import url('./sideContainers/sideContainers.css');
 @import url('./keyboardInput/keyboardInput.css');
-@import url('./fileAttachments/cameraModal.css');
 @import url('./fileAttachments/modal.css');
+/* cameraModal needs to be imported after modal */
+@import url('./fileAttachments/cameraModal.css');
 @import url('./buttons/button.css');
 
 #input {

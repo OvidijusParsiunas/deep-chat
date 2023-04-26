@@ -1,3 +1,60 @@
 .camera-modal-canvas {
   height: 100%;
 }
+
+.modal-svg-submit-button {
+  background-color: green;
+}
+
+.modal-svg-submit-button:hover {
+  background-color: rgb(0, 117, 0);
+}
+
+.modal-svg-submit-button:active {
+  background-color: rgb(0, 101, 0);
+}
+
+.modal-svg-submit-disabled {
+  pointer-events: none;
+  background-color: #747474;
+}
+
+.modal-svg-close-button {
+  height: 1.56rem;
+  padding-top: 0.37rem;
+  padding-bottom: 0px;
+  background-color: #c13e3e;
+}
+
+.modal-svg-close-button:hover {
+  background-color: #b43434;
+}
+
+.modal-svg-close-button:active {
+  background-color: #972929;
+}
+
+.modal-svg-close-icon {
+  width: 80%;
+  height: 80%;
+}
+
+.modal-svg-camera-button {
+  height: 1.6rem;
+  padding-top: 0.38rem;
+  padding-bottom: 0px;
+}
+
+.modal-svg-camera-icon {
+  height: 76%;
+}
+
+.modal-svg-refresh-icon {
+  height: 105%;
+}
+
+.modal-svg-refresh-button {
+  height: 1.66rem;
+  padding-top: 0.11rem;
+  padding-bottom: 0.21rem;
+}
