@@ -6,6 +6,7 @@ import {Messages} from '../views/chat/messages/messages';
 import {FilesServiceConfig} from '../types/fileService';
 import {FileResults} from '../types/fileResult';
 import {FILE_TYPES} from '../types/fileTypes';
+import {CameraFiles} from '../types/camera';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -38,6 +39,8 @@ export interface ServiceIO {
   url?: string;
 
   fileTypes?: ServiceFileTypes;
+
+  camera?: FileServiceIO & CameraFiles;
 
   requestSettings?: RequestSettings;
 

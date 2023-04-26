@@ -12,7 +12,7 @@
   z-index: 2;
 }
 
-.modal-text {
+.modal-content {
   border-top: 1px solid rgb(217, 217, 217);
   border-left: 1px solid rgb(217, 217, 217);
   border-right: 1px solid rgb(217, 217, 217);
@@ -23,12 +23,18 @@
   width: 100%;
 }
 
-.modal-text > p {
+.modal-camera-content {
+  overflow: hidden;
+  text-align: center;
+  border: unset;
+}
+
+.modal-content > p {
   margin-left: 1rem;
   margin-right: 1rem;
 }
 
-.modal-text > ul {
+.modal-content > ul {
   margin-right: 1rem;
 }
 
@@ -44,11 +50,12 @@
 }
 
 .modal-button {
-  width: 2.5rem;
+  min-width: 2.5rem;
   text-align: center;
   color: white;
   border-radius: 5px;
-  padding: 0.4rem 0.3rem 0.3rem;
+  padding: 0.4rem;
+  padding-bottom: 0.3rem;
   height: 1.25rem;
   background-color: rgb(50, 121, 178);
   top: 0;
@@ -57,6 +64,8 @@
   margin-bottom: auto;
   cursor: pointer;
   user-select: none;
+  margin-left: 0.31rem;
+  margin-right: 0.31rem;
 }
 
 .modal-button:hover {

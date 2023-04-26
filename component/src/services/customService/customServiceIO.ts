@@ -22,6 +22,7 @@ import {
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   fileTypes: ServiceFileTypes = {};
+  camera?: FilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -35,6 +36,9 @@ export class CustomServiceIO implements ServiceIO {
     if (customService.interceptor) this.requestInterceptor = customService.interceptor;
     if (customService.images) {
       this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
+    }
+    if (customService.camera) {
+      this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
     }
     if (customService.audio) {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
@@ -83,6 +87,7 @@ export class CustomServiceIO implements ServiceIO {
 
   private static cleanConfig(config: Partial<CustomServiceConfig>) {
     delete config.images;
+    delete config.camera;
     delete config.audio;
     delete config.anyFiles;
     delete config.request;
