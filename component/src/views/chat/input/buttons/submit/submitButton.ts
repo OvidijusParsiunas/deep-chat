@@ -95,12 +95,12 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
     }
   }
 
-  public async submit(userText: string, files?: File[]) {
-    const uploadFiles = files || this._imageAttachments?.getAllFiles();
-    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadFiles)) return;
+  public async submit(userText: string) {
+    const uploadedFiles = this._imageAttachments?.getAllFiles();
+    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadedFiles)) return;
     this.changeToLoadingIcon();
-    if (userText !== '') this._messages.addNewMessage(userText, false, true);
-    if (uploadFiles) await this._messages.addMultipleFiles(uploadFiles);
+    if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
+    if (uploadedFiles) await this._messages.addMultipleFiles(uploadedFiles);
     this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     const completionsHandlers = {

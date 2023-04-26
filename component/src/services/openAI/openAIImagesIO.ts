@@ -12,11 +12,11 @@ import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
-import {FileResults} from '../../types/fileResult';
+import {MessageFiles} from '../../types/messageFile';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {Result} from '../../types/result';
 import {Remarkable} from 'remarkable';
 
 export class OpenAIImagesIO implements ServiceIO {
@@ -124,11 +124,10 @@ export class OpenAIImagesIO implements ServiceIO {
     return formData;
   }
 
-  private preprocessBody(body: OpenAIImagesConfig, lastMessage: MessageContent) {
+  private preprocessBody(body: OpenAIImagesConfig, lastMessage?: string) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    if (lastMessage && lastMessage.content.trim() !== '') {
-      const mostRecentMessageText = lastMessage.content;
-      const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
+    if (lastMessage && lastMessage !== '') {
+      const processedMessage = lastMessage.substring(0, this._maxCharLength);
       bodyCopy.prompt = processedMessage;
     }
     return bodyCopy;
@@ -137,9 +136,9 @@ export class OpenAIImagesIO implements ServiceIO {
   // prettier-ignore
   private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;
-    const lastMessage = messages.messages[messages.messages.length - files.length + 1];
+    const lastMessage = messages.messages[messages.messages.length - files.length + 1]?.text?.trim();
     // if there is a mask image or text, call edit
-    if (files[1] || (lastMessage && lastMessage.content.trim() !== '')) {
+    if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_EDIT_URL;
       const body = this.preprocessBody(this._raw_body, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
@@ -159,17 +158,18 @@ export class OpenAIImagesIO implements ServiceIO {
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages[messages.messages.length - 1]);
+      const body = this.preprocessBody(this._raw_body, messages.messages[messages.messages.length - 1].text);
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }
 
-  extractResultData(result: OpenAIImageResult): FileResults {
+  extractResultData(result: OpenAIImageResult): Result {
     if (result.error) throw result.error.message;
-    return result.data.map((imageData) => {
-      if (imageData.url) return imageData;
+    const files = result.data.map((imageData) => {
+      if (imageData.url) return {imageData};
       return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
-    }) as FileResults;
+    }) as MessageFiles;
+    return {files};
   }
 
   // private static readonly MODAL_MARKDOWN = `

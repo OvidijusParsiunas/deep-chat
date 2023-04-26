@@ -14,6 +14,7 @@ import {MessageContent} from '../../types/messages';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {Result} from '../../types/result';
 import {Remarkable} from 'remarkable';
 
 export class OpenAIAudioIO implements ServiceIO {
@@ -120,10 +121,9 @@ export class OpenAIAudioIO implements ServiceIO {
 
   private preprocessBody(body: OpenAIAudioConfig, messages: MessageContent[], files: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const lastMessage = messages[messages.length - files.length + 1];
-    if (lastMessage && lastMessage.content.trim() !== '') {
-      const mostRecentMessageText = messages[messages.length - 1].content;
-      const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
+    const lastMessage = messages[messages.length - files.length + 1]?.text?.trim();
+    if (lastMessage && lastMessage !== '') {
+      const processedMessage = lastMessage.substring(0, this._maxCharLength);
       bodyCopy.prompt = processedMessage;
     }
     return bodyCopy;
@@ -141,8 +141,8 @@ export class OpenAIAudioIO implements ServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  extractResultData(result: OpenAIAudioResult): string {
+  extractResultData(result: OpenAIAudioResult): Result {
     if (result.error) throw result.error.message;
-    return result.text;
+    return {text: result.text};
   }
 }

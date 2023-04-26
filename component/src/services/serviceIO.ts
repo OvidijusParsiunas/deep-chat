@@ -3,8 +3,8 @@ import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService
 import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {FileResults} from '../types/fileResult';
 import {FILE_TYPES} from '../types/fileTypes';
+import {Result} from '../types/result';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -56,5 +56,5 @@ export interface ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
-  extractResultData(result: object): string | FileResults;
+  extractResultData(result: object): Result;
 }

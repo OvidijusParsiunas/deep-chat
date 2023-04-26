@@ -86,13 +86,16 @@ export class AiAssistant extends InternalHTML {
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;
 
+  @Property('function')
   focusInput: () => void = () => {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
   };
 
+  @Property('function')
   getMessages: () => MessageContent[] = () => [];
 
   // will need to add an example for this
+  @Property('function')
   submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 

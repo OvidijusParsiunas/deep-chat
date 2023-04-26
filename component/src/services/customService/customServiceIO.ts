@@ -10,6 +10,7 @@ import {FileAttachments} from '../../types/fileAttachments';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
+import {Result} from '../../types/result';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,
@@ -158,16 +159,17 @@ export class CustomServiceIO implements ServiceIO {
     if (file.type.startsWith('audio') && this.fileTypes.audio) {
       return this.fileTypes.audio;
     }
-    if (file.type.startsWith('image') && this.fileTypes.images) {
-      return this.fileTypes.images;
-    }
-    if (file.type.startsWith('image') && this.camera) {
-      return this.camera;
+    if (file.type.startsWith('image')) {
+      if (this.fileTypes.images) {
+        return this.fileTypes.images;
+      } else if (this.camera) {
+        return this.camera;
+      }
     }
     return this.fileTypes.anyFiles;
   }
 
-  extractResultData(result: CustomServiceResponse): string {
+  extractResultData(result: CustomServiceResponse): Result {
     if (result.error) {
       if (this.displayServiceErrorMessages) {
         // eslint-disable-next-line no-throw-literal
@@ -175,6 +177,6 @@ export class CustomServiceIO implements ServiceIO {
       }
       throw result.error;
     }
-    return result.aiMessage;
+    return result.result;
   }
 }

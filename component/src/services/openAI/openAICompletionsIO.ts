@@ -11,6 +11,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {Result} from '../../types/result';
 
 export class OpenAICompletionsIO implements ServiceIO {
   url = 'https://api.openai.com/v1/completions';
@@ -66,7 +67,8 @@ export class OpenAICompletionsIO implements ServiceIO {
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const mostRecentMessageText = messages[messages.length - 1].content;
+    const mostRecentMessageText = messages[messages.length - 1].text;
+    if (!mostRecentMessageText) return;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
     const maxTokens = bodyCopy.max_tokens
       || this.full_transaction_max_tokens - processedMessage.length / this.numberOfCharsPerToken;
@@ -86,8 +88,8 @@ export class OpenAICompletionsIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIConverseResult): string {
+  extractResultData(result: OpenAIConverseResult): Result {
     if (result.error) throw result.error.message;
-    return result.choices[0]?.text || '';
+    return {text: result.choices[0]?.text || ''};
   }
 }
