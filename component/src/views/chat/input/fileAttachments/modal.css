@@ -23,13 +23,6 @@
   width: 100%;
 }
 
-.modal-camera-content {
-  overflow: hidden;
-  text-align: center;
-  border: unset;
-  height: 100%;
-}
-
 .modal-content > p {
   margin-left: 1rem;
   margin-right: 1rem;

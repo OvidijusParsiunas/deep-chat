@@ -1,13 +1,12 @@
+import {CameraFilesServiceConfig, FilesServiceConfig} from './fileService';
 import {RequestInterceptor} from './requestInterceptor';
 import {RequestSettings} from './requestSettings';
-import {FilesServiceConfig} from './fileService';
-import {CameraFiles} from './camera';
 
 export interface CustomServiceConfig {
   request: RequestSettings;
   stream?: boolean;
   images?: boolean | FilesServiceConfig;
-  camera?: boolean | FilesServiceConfig<CameraFiles>;
+  camera?: boolean | CameraFilesServiceConfig;
   audio?: boolean | FilesServiceConfig;
   anyFiles?: boolean | FilesServiceConfig;
   interceptor?: RequestInterceptor;

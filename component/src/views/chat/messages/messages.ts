@@ -19,6 +19,7 @@ import {
   MessageContent,
   MessageStyles,
   OnNewMessage,
+  MessageType,
 } from '../../../types/messages';
 
 interface MessageElements {
@@ -117,8 +118,8 @@ export class Messages {
     return {bubbleElement};
   }
 
-  private static createMessageContent(text: string, isAI: boolean) {
-    return {role: isAI ? 'assistant' : 'user', content: text} as const;
+  private static createMessageContent(text: string, isAI: boolean, type: MessageType) {
+    return {role: isAI ? 'assistant' : 'user', content: text, type} as const;
   }
 
   private static createBaseElements(): MessageElements {
@@ -164,8 +165,9 @@ export class Messages {
 
   private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
-    this.messages.push(Messages.createMessageContent(text, isAI));
-    if (update) this.sendClientUpdate(text, isAI, isInitial);
+    const messageContent = Messages.createMessageContent(text, isAI, 'text');
+    this.messages.push(messageContent);
+    if (update) this.sendClientUpdate(messageContent, isInitial);
     return messageElements;
   }
 
@@ -183,8 +185,7 @@ export class Messages {
     }
   }
 
-  private sendClientUpdate(text: string, isAI: boolean, isInitial = false) {
-    const message = Messages.createMessageContent(text, isAI);
+  private sendClientUpdate(message: MessageContent, isInitial = false) {
     this._onNewMessage?.(message, isInitial);
     this._dispatchEvent(new CustomEvent('new-message', {detail: {message, isInitial}}));
   }
@@ -258,7 +259,7 @@ export class Messages {
   }
 
   public finaliseStreamedMessage(text: string) {
-    this.sendClientUpdate(text, true);
+    this.sendClientUpdate(Messages.createMessageContent(text, true, 'text'), false);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
   }
@@ -308,8 +309,9 @@ export class Messages {
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     // TO-DO - not sure if this scrolls down properly when the image is still being rendered
-    this.messages.push(Messages.createMessageContent(data, true));
-    this.sendClientUpdate(data, true, isInitial);
+    const messageContent = Messages.createMessageContent(data, true, 'image');
+    this.messages.push(messageContent);
+    this.sendClientUpdate(messageContent, isInitial);
   }
 
   private static createAudioElement(data: string) {
@@ -329,7 +331,8 @@ export class Messages {
     audioContainer.classList.add('audio-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    this.messages.push(Messages.createMessageContent(data, true));
-    this.sendClientUpdate(data, true, isInitial);
+    const messageContent = Messages.createMessageContent(data, true, 'audio');
+    this.messages.push(messageContent);
+    this.sendClientUpdate(messageContent, isInitial);
   }
 }

@@ -1,4 +1,5 @@
 import {ServiceRequestConfig} from './requestSettings';
+import {ExistingServiceCameraConfig} from './camera';
 import {FilesServiceConfig} from './fileService';
 
 export interface OpenAIMessage {
@@ -48,6 +49,6 @@ export interface OpenAIConverseConfig {
 export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceRequestConfig);
   completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceRequestConfig);
-  images?: true | (OpenAIImagesConfig & FilesServiceConfig);
+  images?: true | (OpenAIImagesConfig & FilesServiceConfig & ExistingServiceCameraConfig);
   audio?: true | (OpenAIAudioConfig & FilesServiceConfig & OpenAIAudioType);
 }

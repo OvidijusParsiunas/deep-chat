@@ -1,12 +1,10 @@
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
-import {ButtonElementStyles, GenericButton} from '../types/button';
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService';
 import {RequestInterceptor} from '../types/requestInterceptor';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {FilesServiceConfig} from '../types/fileService';
 import {FileResults} from '../types/fileResult';
 import {FILE_TYPES} from '../types/fileTypes';
-import {CameraFiles} from '../types/camera';
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -37,7 +35,7 @@ export interface ServiceIO {
 
   fileTypes?: ServiceFileTypes;
 
-  camera?: FileServiceIO & CameraFiles;
+  camera?: CameraFilesServiceConfig;
 
   requestSettings?: RequestSettings;
 

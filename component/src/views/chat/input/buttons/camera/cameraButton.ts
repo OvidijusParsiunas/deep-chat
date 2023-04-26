@@ -7,6 +7,8 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {AUDIO_ICON_STRING} from '../../../../../icons/audioIcon';
 import {CameraModal} from '../../fileAttachments/cameraModal';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {CustomStyle} from '../../../../../types/styles';
+import {CameraFiles} from '../../../../../types/camera';
 import {ButtonStyleEvents} from '../buttonStyleEvents';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
@@ -14,12 +16,14 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 export class CameraButton extends ButtonStyleEvents<Styles> {
   readonly position: ButtonPositionT = 'outside-left';
 
+  // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     super(CameraButton.createButtonElement(), fileService?.button || {});
     const innerElements = CameraButton.createInnerElements(this._customStyles);
     if (fileService) {
       if (fileService.button?.position) this.position = fileService.button.position;
-      this.addClickEvent(containerElement, fileAttachmentsType);
+      this.addClickEvent(
+        containerElement, fileAttachmentsType, fileService?.modalContainerStyle, fileService.files);
       this.elementRef.replaceChildren(innerElements.styles);
       this.reapplyStateStyle('styles');
     }
@@ -47,8 +51,11 @@ export class CameraButton extends ButtonStyleEvents<Styles> {
     return svgIconElement;
   }
 
-  private addClickEvent(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType) {
-    const openModalFunc = CameraModal.createCameraModalFunc(containerElement, fileAttachmentsType);
+  // prettier-ignore
+  private addClickEvent(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
+      modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
+    const openModalFunc = CameraModal.createCameraModalFunc(
+      containerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
     this.elementRef.onclick = openModalFunc.bind(this);
   }
 }

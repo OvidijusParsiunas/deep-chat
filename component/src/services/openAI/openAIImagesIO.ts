@@ -1,15 +1,16 @@
 import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {RequestInterceptor} from '../../types/requestInterceptor';
+import {ExistingServiceCameraConfig} from '../../types/camera';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
-import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {FileResults} from '../../types/fileResult';
@@ -40,6 +41,7 @@ export class OpenAIImagesIO implements ServiceIO {
       files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
     },
   };
+  camera?: CameraFilesServiceConfig;
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
@@ -55,6 +57,7 @@ export class OpenAIImagesIO implements ServiceIO {
     if (config && typeof config !== 'boolean') {
       OpenAIImagesIO.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
       if (config.interceptor) this.requestInterceptor = config.interceptor;
+      if (config.camera) this.camera = OpenAIImagesIO.processCameraConfig(config.camera, config);
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
     }
@@ -81,10 +84,22 @@ export class OpenAIImagesIO implements ServiceIO {
     _images.button = button;
   }
 
-  private static cleanConfig(config: FilesServiceConfig) {
+  private static processCameraConfig(cameraConfig: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
+    const fileConfig: CameraFilesServiceConfig = {files: {}};
+    if (typeof cameraConfig === 'object') {
+      fileConfig.button = cameraConfig.button;
+      fileConfig.modalContainerStyle = cameraConfig.modalContainerStyle;
+      const dimension = images.size ? Number.parseInt(images.size) : undefined;
+      fileConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
+    }
+    return fileConfig;
+  }
+
+  private static cleanConfig(config: FilesServiceConfig & ExistingServiceCameraConfig) {
     delete config.files;
     delete config.button;
     delete config.request;
+    delete config.camera;
     delete config.interceptor;
   }
 
@@ -109,10 +124,10 @@ export class OpenAIImagesIO implements ServiceIO {
     return formData;
   }
 
-  private preprocessBody(body: OpenAIImagesConfig, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIImagesConfig, lastMessage: MessageContent) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    if (messages[messages.length - 1].content.trim() !== '') {
-      const mostRecentMessageText = messages[messages.length - 1].content;
+    if (lastMessage && lastMessage.content.trim() !== '') {
+      const mostRecentMessageText = lastMessage.content;
       const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
       bodyCopy.prompt = processedMessage;
     }
@@ -122,10 +137,11 @@ export class OpenAIImagesIO implements ServiceIO {
   // prettier-ignore
   private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;
+    const lastMessage = messages.messages[messages.messages.length - files.length + 1];
     // if there is a mask image or text, call edit
-    if (files[1] || messages.messages[messages.messages.length - 1].content.trim() !== '') {
+    if (files[1] || (lastMessage && lastMessage.content.trim() !== '')) {
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_EDIT_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages);
+      const body = this.preprocessBody(this._raw_body, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
@@ -143,7 +159,7 @@ export class OpenAIImagesIO implements ServiceIO {
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages);
+      const body = this.preprocessBody(this._raw_body, messages.messages[messages.messages.length - 1]);
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }

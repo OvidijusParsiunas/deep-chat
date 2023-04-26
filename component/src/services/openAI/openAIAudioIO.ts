@@ -41,7 +41,7 @@ export class OpenAIAudioIO implements ServiceIO {
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
-  private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'text'} = {};
+  private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
   requestInterceptor: RequestInterceptor = (details) => details;
 
@@ -60,7 +60,7 @@ export class OpenAIAudioIO implements ServiceIO {
       this._raw_body = config;
     }
     this._raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
-    this._raw_body.response_format = 'text';
+    this._raw_body.response_format = 'json';
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
@@ -118,9 +118,10 @@ export class OpenAIAudioIO implements ServiceIO {
     return formData;
   }
 
-  private preprocessBody(body: OpenAIAudioConfig, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIAudioConfig, messages: MessageContent[], files: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    if (messages[messages.length - 1].content.trim() !== '') {
+    const lastMessage = messages[messages.length - files.length + 1];
+    if (lastMessage && lastMessage.content.trim() !== '') {
       const mostRecentMessageText = messages[messages.length - 1].content;
       const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
       bodyCopy.prompt = processedMessage;
@@ -133,7 +134,7 @@ export class OpenAIAudioIO implements ServiceIO {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;
-    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const body = this.preprocessBody(this._raw_body, messages.messages, files);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,

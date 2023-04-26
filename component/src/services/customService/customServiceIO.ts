@@ -1,13 +1,14 @@
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
 import {RequestInterceptor} from '../../types/requestInterceptor';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
-import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {
   KeyVerificationHandlers,
@@ -22,7 +23,7 @@ import {
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   fileTypes: ServiceFileTypes = {};
-  camera?: FilesServiceConfig;
+  camera?: CameraFilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -37,14 +38,7 @@ export class CustomServiceIO implements ServiceIO {
     if (customService.images) {
       this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
     }
-    if (customService.camera) {
-      if (navigator.mediaDevices.getUserMedia !== undefined) {
-        this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
-        // if camera is not available - fallback to normal image upload
-      } else if (!customService.images) {
-        this.fileTypes.images = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
-      }
-    }
+    this.processCamera(customService);
     if (customService.audio) {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
       if (this.fileTypes.audio.files) this.fileTypes.audio.files.maxNumberOfFiles ??= this.camera?.files?.maxNumberOfFiles;
@@ -91,6 +85,24 @@ export class CustomServiceIO implements ServiceIO {
     return fileConfig;
   }
 
+  private processCamera(customService: CustomServiceConfig) {
+    if (!customService.camera) return;
+    if (navigator.mediaDevices.getUserMedia !== undefined) {
+      this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
+      if (typeof customService.camera === 'object') {
+        this.camera.modalContainerStyle = customService.camera.modalContainerStyle;
+        if (customService.camera.files?.format) {
+          this.camera.files ??= {};
+          this.camera.files.format = customService.camera.files?.format;
+          this.camera.files.dimensions = customService.camera.files?.dimensions;
+        }
+      }
+      // if camera is not available - fallback to normal image upload
+    } else if (!customService.images) {
+      this.fileTypes.images = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
+    }
+  }
+
   private static cleanConfig(config: Partial<CustomServiceConfig>) {
     delete config.images;
     delete config.camera;
@@ -105,19 +117,23 @@ export class CustomServiceIO implements ServiceIO {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   verifyKey(_inputElement: HTMLInputElement, _keyVerificationHandlers: KeyVerificationHandlers) {}
 
-  private static createFormDataBody(body: any, files: File[]) {
+  private static createFormDataBody(body: any, messages: MessageContent[], files: File[]) {
     const formData = new FormData();
     files.forEach((file, index) => formData.append(`file${index + 1}`, file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
+    messages.forEach((message, index) => {
+      formData.append(`messages${index + 1}`, JSON.stringify(message));
+    });
     return formData;
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages,
+  private callApiWithFiles(messages: Messages,
       completionsHandlers: CompletionsHandlers, files: File[], fileIO?: FileServiceIO) {
-    const formData = CustomServiceIO.createFormDataBody(this._raw_body, files);
+    const formData = CustomServiceIO.createFormDataBody(this._raw_body, messages.messages, files);
     const previousRequestSettings = this.requestSettings;
     this.requestSettings = fileIO?.request || this.requestSettings;
+    // this interceptor is for more fine grained monitoring
     fileIO?.interceptor?.({body: formData, headers: this.requestSettings.headers});
     HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
     this.requestSettings = previousRequestSettings;
@@ -129,12 +145,12 @@ export class CustomServiceIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (files) {
       const fileIO = this.getServiceIOByType(files[0]);
-      this.callApiWithImage(messages, completionsHandlers, files, fileIO);
+      this.callApiWithFiles(messages, completionsHandlers, files, fileIO);
     } else if (this._isStream) {
-      HTTPRequest.requestStream(this, {stream: true, messages}, messages,
+      HTTPRequest.requestStream(this, {stream: true, messages: messages.messages}, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
-      HTTPRequest.request(this, {stream: false, messages}, messages, completionsHandlers.onFinish);
+      HTTPRequest.request(this, {stream: false, messages: messages.messages}, messages, completionsHandlers.onFinish);
     }
   }
 

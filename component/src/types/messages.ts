@@ -17,7 +17,9 @@ export interface MessageStyles {
   intro?: MessageElementStyles;
 }
 
-export type MessageContent = {role: 'user' | 'assistant'; content: string};
+export type MessageType = 'text' | 'image' | 'audio' | 'file';
+
+export type MessageContent = {role: 'user' | 'assistant'; content: string; type: MessageType};
 
 export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
 

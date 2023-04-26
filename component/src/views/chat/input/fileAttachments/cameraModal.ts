@@ -1,9 +1,11 @@
+import {CameraDimensions, CameraFiles} from '../../../../types/camera';
 import {REFRESH_ICON_STRING} from '../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../icons/captureIcon';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {CLOSE_ICON_STRING} from '../../../../icons/closeIcon';
 import {TICK_ICON_STRING} from '../../../../icons/tickIcon';
 import {FileAttachmentsType} from './fileAttachmentsType';
+import {CustomStyle} from '../../../../types/styles';
 import {FileAttachments} from './fileAttachments';
 import {Modal} from './modal';
 
@@ -16,9 +18,13 @@ export class CameraModal extends Modal {
   private readonly _captureIcon: SVGGraphicsElement;
   private readonly _refreshIcon: SVGGraphicsElement;
   private _mediaStream?: MediaStream;
+  private readonly _format: 'image/png' | 'image/jpeg' = 'image/png';
+  private readonly _dimensions?: CameraDimensions;
 
-  constructor(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType) {
-    super(viewContainerElement, ['modal-content', 'modal-camera-content'], {}); // style
+  // prettier-ignore
+  constructor(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
+      containerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
+    super(viewContainerElement, ['modal-content', 'modal-camera-content'], containerStyle);
     this._canvas = document.createElement('canvas');
     this._canvas.classList.add('camera-modal-canvas');
     const {captureButton, submitButton} = this.addButtonsAndTheirEvents(fileAttachmentsType);
@@ -27,6 +33,8 @@ export class CameraModal extends Modal {
     this._captureIcon = this._captureButton.children[0] as SVGGraphicsElement;
     this._refreshIcon = SVGIconUtils.createSVGElement(REFRESH_ICON_STRING);
     this._refreshIcon.classList.add('modal-svg-button-icon', 'modal-svg-refresh-icon');
+    if (cameraFiles?.format === 'jpeg') this._format = 'image/jpeg';
+    if (cameraFiles?.dimensions) this._dimensions = cameraFiles.dimensions;
     this._contentRef.appendChild(this._canvas);
   }
 
@@ -77,7 +85,7 @@ export class CameraModal extends Modal {
     this._submitButton.classList.add('modal-svg-submit-disabled');
     this._stopped = false;
     navigator.mediaDevices
-      .getUserMedia({video: true})
+      .getUserMedia({video: this._dimensions || true})
       .then((stream) => {
         this._mediaStream = stream;
         const video = document.createElement('video');
@@ -110,7 +118,7 @@ export class CameraModal extends Modal {
         byteNumbers[i] = binaryData.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], {type: 'image/png'});
+      const blob = new Blob([byteArray], {type: this._format});
       const filename = CameraModal.getFileName();
       return new File([blob], filename, {type: blob.type});
     }
@@ -141,8 +149,10 @@ export class CameraModal extends Modal {
     cameraModal.start();
   }
 
-  public static createCameraModalFunc(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType) {
-    const cameraModal = new CameraModal(viewContainerElement, fileAttachmentsType);
+  // prettier-ignore
+  public static createCameraModalFunc(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
+      modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
+    const cameraModal = new CameraModal(viewContainerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
     return cameraModal.openCameraModal.bind(cameraModal, cameraModal);
   }
 }
