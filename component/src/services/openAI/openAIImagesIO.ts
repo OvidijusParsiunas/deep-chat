@@ -78,10 +78,7 @@ export class OpenAIImagesIO implements ServiceIO {
       if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
       if (typeof files.dragAndDrop !== undefined) _images.files.dragAndDrop = files.dragAndDrop;
     }
-    if (button) {
-      _images.button = button;
-      if (_images.button.styles) _images.button.default = _images.button.styles;
-    }
+    _images.button = button;
   }
 
   private static cleanConfig(config: FilesServiceConfig) {

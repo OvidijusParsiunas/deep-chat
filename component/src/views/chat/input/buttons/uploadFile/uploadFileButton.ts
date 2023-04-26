@@ -20,13 +20,13 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string) {
-    super(UploadFileButton.createButtonElement(), fileService.button || {});
+    super(UploadFileButton.createButtonElement(), fileService.button);
     const innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     if (fileService.button?.position) this.position = fileService.button.position;
     this.addClickEvent(containerElement, fileService);
-    this.elementRef.replaceChildren(innerElements.default);
-    this.reapplyStateStyle('default');
+    this.elementRef.replaceChildren(innerElements.styles);
+    this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce;
   }
@@ -34,7 +34,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   private static createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
     const baseButton = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
     return {
-      default: UploadFileButton.createInnerElement(baseButton, 'default', customStyles),
+      styles: UploadFileButton.createInnerElement(baseButton, 'styles', customStyles),
     };
   }
 
@@ -57,7 +57,7 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
     return inputElement;
   }
 
-  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'default', customStyles?: Styles) {
+  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
     return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
   }
 

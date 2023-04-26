@@ -24,10 +24,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type FileServiceIO = FilesServiceConfig & {
-  infoModalTextMarkUp?: string;
-  button?: GenericButton & {default?: ButtonElementStyles};
-};
+export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string};
 
 export type CustomErrors = Set<string>;
 

@@ -20,18 +20,18 @@ export class CameraButton extends ButtonStyleEvents<Styles> {
     if (fileService) {
       if (fileService.button?.position) this.position = fileService.button.position;
       this.addClickEvent(containerElement, fileAttachmentsType);
-      this.elementRef.replaceChildren(innerElements.default);
-      this.reapplyStateStyle('default');
+      this.elementRef.replaceChildren(innerElements.styles);
+      this.reapplyStateStyle('styles');
     }
   }
 
   private static createInnerElements(customStyles?: Styles) {
     return {
-      default: CameraButton.createInnerElement(CameraButton.createSVGIconElement(), 'default', customStyles),
+      styles: CameraButton.createInnerElement(CameraButton.createSVGIconElement(), 'styles', customStyles),
     };
   }
 
-  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'default', customStyles?: Styles) {
+  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
     return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
   }
 

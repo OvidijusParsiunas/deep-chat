@@ -42,6 +42,7 @@ export class CustomServiceIO implements ServiceIO {
     }
     if (customService.audio) {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
+      if (this.fileTypes.audio.files) this.fileTypes.audio.files.maxNumberOfFiles ??= this.camera?.files?.maxNumberOfFiles;
     }
     if (customService.anyFiles) {
       this.fileTypes.anyFiles = CustomServiceIO.parseConfig(customService.anyFiles, this.requestSettings, '');
@@ -138,6 +139,9 @@ export class CustomServiceIO implements ServiceIO {
     }
     if (file.type.startsWith('image') && this.fileTypes.images) {
       return this.fileTypes.images;
+    }
+    if (file.type.startsWith('image') && this.camera) {
+      return this.camera;
     }
     return this.fileTypes.anyFiles;
   }
