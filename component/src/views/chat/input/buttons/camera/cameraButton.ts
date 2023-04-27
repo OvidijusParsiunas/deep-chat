@@ -16,14 +16,12 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 export class CameraButton extends ButtonStyleEvents<Styles> {
   readonly position: ButtonPositionT = 'outside-left';
 
-  // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     super(CameraButton.createButtonElement(), fileService?.button || {});
     const innerElements = CameraButton.createInnerElements(this._customStyles);
     if (fileService) {
       if (fileService.button?.position) this.position = fileService.button.position;
-      this.addClickEvent(
-        containerElement, fileAttachmentsType, fileService?.modalContainerStyle, fileService.files);
+      this.addClickEvent(containerElement, fileAttachmentsType, fileService?.modalContainerStyle, fileService.files);
       this.elementRef.replaceChildren(innerElements.styles);
       this.reapplyStateStyle('styles');
     }

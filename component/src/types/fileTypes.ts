@@ -1,1 +1,1 @@
-export type FILE_TYPES = 'images' | 'audio' | 'anyFiles';
+export type FILE_TYPES = 'images' | 'audio' | 'mixedFiles';

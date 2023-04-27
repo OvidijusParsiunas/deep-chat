@@ -47,8 +47,8 @@ export class CustomServiceIO implements ServiceIO {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*', 'audio');
       if (this.fileTypes.audio.files) this.fileTypes.audio.files.maxNumberOfFiles ??= this.camera?.files?.maxNumberOfFiles;
     }
-    if (customService.anyFiles) {
-      this.fileTypes.anyFiles = CustomServiceIO.parseConfig(customService.anyFiles, this.requestSettings, '', 'file');
+    if (customService.mixedFiles) {
+      this.fileTypes.mixedFiles = CustomServiceIO.parseConfig(customService.mixedFiles, this.requestSettings, '', 'file');
     }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
@@ -111,7 +111,7 @@ export class CustomServiceIO implements ServiceIO {
     delete config.images;
     delete config.camera;
     delete config.audio;
-    delete config.anyFiles;
+    delete config.mixedFiles;
     delete config.request;
     delete config.stream;
     delete config.requestInterceptor;
@@ -171,7 +171,7 @@ export class CustomServiceIO implements ServiceIO {
         return this.camera;
       }
     }
-    return this.fileTypes.anyFiles;
+    return this.fileTypes.mixedFiles;
   }
 
   extractResultData(result: CustomServiceResponse): Result {

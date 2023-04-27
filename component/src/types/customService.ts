@@ -9,7 +9,7 @@ export interface CustomServiceConfig {
   images?: boolean | FilesServiceConfig;
   camera?: boolean | CameraFilesServiceConfig;
   audio?: boolean | FilesServiceConfig;
-  anyFiles?: boolean | FilesServiceConfig;
+  mixedFiles?: boolean | FilesServiceConfig;
   requestInterceptor?: RequestInterceptor;
   responseInterceptor?: ResponseInterceptor;
   // automatically display all error messages from the service, all others automatically default

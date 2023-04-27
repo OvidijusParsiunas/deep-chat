@@ -321,7 +321,8 @@ export class Messages {
     this.sendClientUpdate(messageContent, isInitial);
   }
 
-  private static createAudioElement(data: string) {
+  private static createAudioElement(audioData: MessageFile) {
+    const data = (audioData.url || audioData.base64) as string;
     const audioElement = document.createElement('audio');
     audioElement.src = data;
     audioElement.classList.add('audio-player');
@@ -332,13 +333,13 @@ export class Messages {
 
   private addNewAudioMessage(audioData: MessageFile, isAI: boolean, isInitial = false) {
     const {outerContainer, bubbleElement: audioContainer} = this.createNewMessageElement('', isAI);
-    const data = audioData.base64 as string;
-    const audioElement = Messages.createAudioElement(data);
+    const audioElement = Messages.createAudioElement(audioData);
     audioContainer.appendChild(audioElement);
     audioContainer.classList.add('audio-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    const messageContent = Messages.createMessageContent(true, undefined, {type: 'audio', base64: data});
+    const fileObject = audioData.url ? {type: 'audio', url: audioData.url} : {type: 'audio', base64: audioData.base64};
+    const messageContent = Messages.createMessageContent(true, undefined, fileObject as MessageFile);
     this.messages.push(messageContent);
     this.sendClientUpdate(messageContent, isInitial);
   }

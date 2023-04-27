@@ -32,7 +32,7 @@
   transform: scale(0.95, 1);
 }
 
-#upload-any-files-icon {
+#upload-mixed-files-icon {
   position: absolute;
   pointer-events: none;
   width: 1.1rem;

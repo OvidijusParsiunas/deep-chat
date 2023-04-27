@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 // prettier-ignore
-export const ANY_FILES_ICON_STRING =
+export const MIXED_FILES_ICON_STRING =
 `<?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <title>file</title>
