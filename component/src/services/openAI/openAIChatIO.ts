@@ -1,23 +1,24 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestSettings, ServiceRequestConfig} from '../../types/requestSettings';
+import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
+import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAI, OpenAICustomChatConfig} from '../../types/openAI';
-import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {Result} from '../../types/result';
 
 // chat is a form of completions
 export class OpenAIChatIO implements ServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
+  resposeInterceptor: ResponseInterceptor = (result) => result;
   canSendMessage: ValidateMessageBeforeSending = OpenAIChatIO.canSendMessage;
   private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _systemMessage: SystemMessageInternal =
@@ -32,7 +33,8 @@ export class OpenAIChatIO implements ServiceIO {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
-      if (config.interceptor) this.requestInterceptor = config.interceptor;
+      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
+      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
@@ -45,12 +47,13 @@ export class OpenAIChatIO implements ServiceIO {
     return {role: 'system', content: systemPrompt};
   }
 
-  private cleanConfig(config: OpenAICustomChatConfig & ServiceRequestConfig) {
+  private cleanConfig(config: OpenAICustomChatConfig & ServiceCallConfig) {
     delete config.total_messages_max_char_length;
     delete config.max_messages;
     delete config.request;
-    delete config.interceptor;
     delete config.systemPrompt;
+    delete config.requestInterceptor;
+    delete config.responseInterceptor;
   }
 
   private static canSendMessage(text: string) {
@@ -79,23 +82,21 @@ export class OpenAIChatIO implements ServiceIO {
     const limit = totalMessagesMaxCharLength - systemMessageLength;
     let i = messages.length - 1;
     for (i; i >= 0; i -= 1) {
-      totalCharacters += messages[i].content.length;
+      const text =  messages[i].text as string;
+      totalCharacters += text.length;
       if (totalCharacters > limit) {
-        messages[i].content = messages[i].content.substring(0, messages[i].content.length - (totalCharacters - limit));
+        messages[i].text = text.substring(0, text.length - (totalCharacters - limit));
         break;
       }
     }
-    return messages.slice(Math.max(i, 0));
+    return messages.map((message) => ({content: message.text, role: message.role})).slice(Math.max(i, 0));
   }
 
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const filteredMessages = (messages.filter((message) => {
-      return !message.content.startsWith(BASE_64_PREFIX) && !message.content.startsWith('http');
-    }));
     const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const processedMessages = this.processMessages(filteredMessages, this._systemMessage.content.length,
+    const processedMessages = this.processMessages(messages, this._systemMessage.content.length,
       totalMessagesMaxCharLength, this._max_messages);
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
@@ -113,14 +114,14 @@ export class OpenAIChatIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIConverseResult): string {
+  extractResultData(result: OpenAIConverseResult): Result {
     if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
-      return result.choices[0].delta.content || '';
+      return {text: result.choices[0].delta.content || ''};
     }
     if (result.choices[0].message) {
-      return result.choices[0].message.content;
+      return {text: result.choices[0].message.content};
     }
-    return '';
+    return {text: ''};
   }
 }

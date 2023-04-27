@@ -1,15 +1,14 @@
-import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
+import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
-import {RequestInterceptor} from '../../types/requestInterceptor';
 import {ExistingServiceCameraConfig} from '../../types/camera';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
+import {FilesServiceConfig} from '../../types/fileService';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
@@ -18,6 +17,15 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {Remarkable} from 'remarkable';
+import {
+  KeyVerificationHandlers,
+  CameraFileServiceIO,
+  CompletionsHandlers,
+  ServiceFileTypes,
+  StreamHandlers,
+  FileServiceIO,
+  ServiceIO,
+} from '../serviceIO';
 
 export class OpenAIImagesIO implements ServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -36,16 +44,18 @@ export class OpenAIImagesIO implements ServiceIO {
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid input image');
-  fileTypes = {
+  fileTypes: ServiceFileTypes = {
     images: {
       files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+      type: 'image',
     },
   };
-  camera?: CameraFilesServiceConfig;
+  camera?: CameraFileServiceIO;
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
   requestInterceptor: RequestInterceptor = (details) => details;
+  resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
@@ -54,9 +64,10 @@ export class OpenAIImagesIO implements ServiceIO {
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
-    if (config && typeof config !== 'boolean') {
+    if (config && typeof config !== 'boolean' && this.fileTypes.images) {
       OpenAIImagesIO.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
-      if (config.interceptor) this.requestInterceptor = config.interceptor;
+      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
+      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
       if (config.camera) this.camera = OpenAIImagesIO.processCameraConfig(config.camera, config);
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
@@ -85,7 +96,7 @@ export class OpenAIImagesIO implements ServiceIO {
   }
 
   private static processCameraConfig(cameraConfig: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
-    const fileConfig: CameraFilesServiceConfig = {files: {}};
+    const fileConfig: CameraFileServiceIO = {files: {}, type: 'image'};
     if (typeof cameraConfig === 'object') {
       fileConfig.button = cameraConfig.button;
       fileConfig.modalContainerStyle = cameraConfig.modalContainerStyle;
@@ -100,7 +111,8 @@ export class OpenAIImagesIO implements ServiceIO {
     delete config.button;
     delete config.request;
     delete config.camera;
-    delete config.interceptor;
+    delete config.requestInterceptor;
+    delete config.responseInterceptor;
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {
@@ -166,8 +178,8 @@ export class OpenAIImagesIO implements ServiceIO {
   extractResultData(result: OpenAIImageResult): Result {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return {imageData};
-      return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`};
+      if (imageData.url) return {url: imageData.url, type: 'image'};
+      return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
     }) as MessageFiles;
     return {files};
   }

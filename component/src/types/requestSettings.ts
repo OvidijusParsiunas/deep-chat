@@ -1,5 +1,6 @@
-import {RequestInterceptor} from './requestInterceptor';
+import {RequestInterceptor} from './interceptors';
 import {GenericObject} from './object';
+import {Result} from './result';
 
 export interface RequestSettings {
   url?: string;
@@ -7,7 +8,9 @@ export interface RequestSettings {
   headers?: GenericObject<string>;
 }
 
-export interface ServiceRequestConfig {
+export interface ServiceCallConfig {
   request?: RequestSettings;
-  interceptor?: RequestInterceptor;
+  requestInterceptor?: RequestInterceptor;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  responseInterceptor?: (response: any) => Result;
 }

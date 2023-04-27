@@ -1,7 +1,8 @@
 import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
-import {FileResult, FileResults} from '../../../types/fileResult';
+import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {Result as MessageData} from '../../../types/result';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {CustomErrors} from '../../../services/serviceIO';
 import {Browser} from '../../../utils/browser/browser';
@@ -19,7 +20,6 @@ import {
   MessageContent,
   MessageStyles,
   OnNewMessage,
-  MessageType,
 } from '../../../types/messages';
 
 interface MessageElements {
@@ -86,8 +86,12 @@ export class Messages {
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
-    initialMessages.forEach(({role, content}) => {
-      this.addNewMessage(content, role === 'assistant', true, true);
+    initialMessages.forEach((message) => {
+      if (message.text) {
+        this.addNewMessage({text: message.text}, message.role === 'assistant', true, true);
+      } else if (message.file) {
+        this.addNewMessage({files: [message.file]}, message.role === 'assistant', true, true);
+      }
     });
   }
 
@@ -118,8 +122,11 @@ export class Messages {
     return {bubbleElement};
   }
 
-  private static createMessageContent(text: string, isAI: boolean, type: MessageType) {
-    return {role: isAI ? 'assistant' : 'user', content: text, type} as const;
+  private static createMessageContent(isAI: boolean, text?: string, file?: MessageFile): MessageContent {
+    if (file) {
+      return {role: isAI ? 'assistant' : 'user', file};
+    }
+    return {role: isAI ? 'assistant' : 'user', text: text || ''};
   }
 
   private static createBaseElements(): MessageElements {
@@ -165,24 +172,24 @@ export class Messages {
 
   private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
-    const messageContent = Messages.createMessageContent(text, isAI, 'text');
+    const messageContent = Messages.createMessageContent(isAI, text);
     this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, isInitial);
     return messageElements;
   }
 
-  public addNewMessage(data: string | FileResults, isAI: boolean, update: boolean, isInitial = false) {
-    if (typeof data === 'string') {
-      this.addNewTextMessage(data, isAI, update, isInitial);
-    } else {
-      data.forEach((fileData) => {
-        if (fileData.base64?.startsWith('data:audio')) {
-          this.addNewAudioMessage(fileData, isAI, isInitial);
-        } else {
-          this.addNewImageMessage(fileData, isAI, isInitial);
-        }
-      });
+  public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
+    if (data.text) {
+      this.addNewTextMessage(data.text, isAI, update, isInitial);
     }
+    data.files?.forEach((fileData) => {
+      // extra checks are used for 'file'
+      if (fileData.type === 'audio' || fileData.base64?.startsWith('data:audio')) {
+        this.addNewAudioMessage(fileData, isAI, isInitial);
+      } else if (fileData.type === 'image' || fileData.base64?.startsWith('data:image')) {
+        this.addNewImageMessage(fileData, isAI, isInitial);
+      }
+    });
   }
 
   private sendClientUpdate(message: MessageContent, isInitial = false) {
@@ -259,7 +266,7 @@ export class Messages {
   }
 
   public finaliseStreamedMessage(text: string) {
-    this.sendClientUpdate(Messages.createMessageContent(text, true, 'text'), false);
+    this.sendClientUpdate(Messages.createMessageContent(true, text), false);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
   }
@@ -271,14 +278,14 @@ export class Messages {
     }
   }
 
-  async addMultipleFiles(files: File[]) {
+  async addMultipleFiles(filesData: {file: File; type: MessageFileType}[]) {
     return Promise.all(
-      (files || []).map((file) => {
+      (filesData || []).map((fileData) => {
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(fileData.file);
         return new Promise((resolve) => {
           reader.onload = () => {
-            this.addNewMessage([{base64: reader.result as string}], false, true);
+            this.addNewMessage({files: [{base64: reader.result as string, type: fileData.type}]}, false, true);
             resolve(true);
           };
         });
@@ -286,7 +293,7 @@ export class Messages {
     );
   }
 
-  private createImage(imageData: FileResult, isAI: boolean) {
+  private createImage(imageData: MessageFile, isAI: boolean) {
     const data = (imageData.url || imageData.base64) as string;
     const imageElement = new Image();
     imageElement.src = data;
@@ -300,16 +307,16 @@ export class Messages {
     return linkWrapperElement;
   }
 
-  private addNewImageMessage(imageData: FileResult, isAI: boolean, isInitial = false) {
+  private addNewImageMessage(imageData: MessageFile, isAI: boolean, isInitial = false) {
     const {outerContainer, bubbleElement: imageContainer} = this.createNewMessageElement('', isAI);
-    const data = (imageData.url || imageData.base64) as string;
     const image = this.createImage(imageData, isAI);
     imageContainer.appendChild(image);
     imageContainer.classList.add('image-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     // TO-DO - not sure if this scrolls down properly when the image is still being rendered
-    const messageContent = Messages.createMessageContent(data, true, 'image');
+    const fileObject = imageData.url ? {type: 'image', url: imageData.url} : {type: 'image', base64: imageData.base64};
+    const messageContent = Messages.createMessageContent(true, undefined, fileObject as MessageFile);
     this.messages.push(messageContent);
     this.sendClientUpdate(messageContent, isInitial);
   }
@@ -323,7 +330,7 @@ export class Messages {
     return audioElement;
   }
 
-  private addNewAudioMessage(audioData: FileResult, isAI: boolean, isInitial = false) {
+  private addNewAudioMessage(audioData: MessageFile, isAI: boolean, isInitial = false) {
     const {outerContainer, bubbleElement: audioContainer} = this.createNewMessageElement('', isAI);
     const data = audioData.base64 as string;
     const audioElement = Messages.createAudioElement(data);
@@ -331,7 +338,7 @@ export class Messages {
     audioContainer.classList.add('audio-message');
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    const messageContent = Messages.createMessageContent(data, true, 'audio');
+    const messageContent = Messages.createMessageContent(true, undefined, {type: 'audio', base64: data});
     this.messages.push(messageContent);
     this.sendClientUpdate(messageContent, isInitial);
   }

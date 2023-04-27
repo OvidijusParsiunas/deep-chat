@@ -1,4 +1,5 @@
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {MessageFileType} from '../../../../types/messageFile';
 import {FileAttachmentsType} from './fileAttachmentsType';
 import {CustomStyle} from '../../../../types/styles';
 
@@ -14,9 +15,9 @@ export class FileAttachments {
   }
 
   // prettier-ignore
-  addType(files: FileAttachmentsT) {
+  addType(files: FileAttachmentsT, type: MessageFileType) {
     const fileAttachmentsType = new FileAttachmentsType(
-      files, this.toggleContainerDisplay.bind(this), this.containerElementRef);
+      files, this.toggleContainerDisplay.bind(this), this.containerElementRef, type);
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }
@@ -35,8 +36,8 @@ export class FileAttachments {
     }
   }
 
-  getAllFiles() {
-    return this._fileAttachmentsTypes.map((fileAttachmentType) => Array.from(fileAttachmentType.getFiles())).flat();
+  getAllFileData() {
+    return this._fileAttachmentsTypes.map((fileAttachmentType) => fileAttachmentType.getFiles()).flat();
   }
 
   // prettier-ignore

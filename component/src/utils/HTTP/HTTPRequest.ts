@@ -19,8 +19,8 @@ export class HTTPRequest {
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
       .then((response) => response.json())
-      .then((result: OpenAIConverseResult) => {
-        const resultData = io.extractResultData(result);
+      .then((result: object) => {
+        const resultData = io.extractResultData(io.resposeInterceptor(result));
         messages.addNewMessage(resultData, true, true);
         onFinish();
       })

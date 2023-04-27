@@ -1,10 +1,10 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestSettings, ServiceRequestConfig} from '../../types/requestSettings';
+import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
+import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {OpenAI, OpenAICustomCompletionConfig} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
-import {RequestInterceptor} from '../../types/requestInterceptor';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -24,6 +24,7 @@ export class OpenAICompletionsIO implements ServiceIO {
   private readonly _raw_body: OpenAIConverseBodyInternal;
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
+  resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
@@ -34,7 +35,8 @@ export class OpenAICompletionsIO implements ServiceIO {
       const newMaxCharLength = config.max_char_length || inputCharacterLimit;
       if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
       this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, config.request) : config.request;
-      if (config.interceptor) this.requestInterceptor = config.interceptor;
+      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
+      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
@@ -43,10 +45,11 @@ export class OpenAICompletionsIO implements ServiceIO {
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private cleanConfig(config: OpenAICustomCompletionConfig & ServiceRequestConfig) {
+  private cleanConfig(config: OpenAICustomCompletionConfig & ServiceCallConfig) {
     delete config.max_char_length;
     delete config.request;
-    delete config.interceptor;
+    delete config.requestInterceptor;
+    delete config.responseInterceptor;
   }
 
   private static canSendMessage(text: string) {

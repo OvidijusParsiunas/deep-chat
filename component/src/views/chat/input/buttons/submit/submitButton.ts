@@ -96,11 +96,12 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   public async submit(userText: string) {
-    const uploadedFiles = this._imageAttachments?.getAllFiles();
-    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, uploadedFiles)) return;
+    const uploadedFilesData = this._imageAttachments?.getAllFileData();
+    const fileData = uploadedFilesData?.map((fileData) => fileData.file);
+    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, fileData)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
-    if (uploadedFiles) await this._messages.addMultipleFiles(uploadedFiles);
+    if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
     this._inputElementRef.textContent = '';
     const completionsHandlers = {
@@ -111,7 +112,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, this._imageAttachments?.getAllFiles());
+    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, fileData);
     this._imageAttachments?.removeAllFiles();
   }
 

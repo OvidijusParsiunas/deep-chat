@@ -1,9 +1,8 @@
-import {CompletionsHandlers, FileServiceIO, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
-import {RequestInterceptor} from '../../types/requestInterceptor';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -16,6 +15,14 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {Remarkable} from 'remarkable';
+import {
+  KeyVerificationHandlers,
+  CompletionsHandlers,
+  ServiceFileTypes,
+  StreamHandlers,
+  FileServiceIO,
+  ServiceIO,
+} from '../serviceIO';
 
 export class OpenAIAudioIO implements ServiceIO {
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
@@ -31,13 +38,14 @@ export class OpenAIAudioIO implements ServiceIO {
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
-  fileTypes = {
+  fileTypes: ServiceFileTypes = {
     audio: {
       files: {
         acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
         dragAndDrop: {acceptedFileNamePostfixes: ['4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg', 'm4a']},
         maxNumberOfFiles: 1,
       },
+      type: 'audio',
     },
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
@@ -45,6 +53,7 @@ export class OpenAIAudioIO implements ServiceIO {
   private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
   requestInterceptor: RequestInterceptor = (details) => details;
+  resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
@@ -53,9 +62,10 @@ export class OpenAIAudioIO implements ServiceIO {
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();
-    if (config && typeof config !== 'boolean') {
+    if (config && typeof config !== 'boolean' && this.fileTypes.audio) {
       OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
-      if (config.interceptor) this.requestInterceptor = config.interceptor;
+      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
+      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
@@ -96,7 +106,8 @@ export class OpenAIAudioIO implements ServiceIO {
     delete config.files;
     delete config.button;
     delete config.request;
-    delete config.interceptor;
+    delete config.requestInterceptor;
+    delete config.responseInterceptor;
   }
 
   private addKey(onSuccess: (key: string) => void, key: string) {

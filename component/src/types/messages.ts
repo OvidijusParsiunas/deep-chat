@@ -1,3 +1,5 @@
+import {InterfacesUnion} from './utilityTypes';
+import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
 // TO-DO add a different style type for image and audio
@@ -17,9 +19,9 @@ export interface MessageStyles {
   intro?: MessageElementStyles;
 }
 
-export type MessageType = 'text' | 'image' | 'audio' | 'file';
+export type MessageRole = 'user' | 'assistant';
 
-export type MessageContent = {role: 'user' | 'assistant'; content: string; type: MessageType};
+export type MessageContent = InterfacesUnion<{role: MessageRole; text: string} | {role: MessageRole; file: MessageFile}>;
 
 export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
 

@@ -1,8 +1,9 @@
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService';
-import {RequestInterceptor} from '../types/requestInterceptor';
+import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {MessageFileType} from '../types/messageFile';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
 
@@ -22,7 +23,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string};
+export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string; type: MessageFileType};
 
 export type CustomErrors = Set<string>;
 
@@ -30,12 +31,14 @@ export type ServiceFileTypes = {
   [key in FILE_TYPES]?: FileServiceIO;
 };
 
+export type CameraFileServiceIO = CameraFilesServiceConfig & {type: MessageFileType};
+
 export interface ServiceIO {
   url?: string;
 
   fileTypes?: ServiceFileTypes;
 
-  camera?: CameraFilesServiceConfig;
+  camera?: CameraFileServiceIO;
 
   requestSettings?: RequestSettings;
 
@@ -46,7 +49,11 @@ export interface ServiceIO {
   // service errors via prefixes
   permittedErrorPrefixes?: CustomErrors;
 
+  // the reason why requestInterceptor and resposeInterceptor are not optional is so that HTTPRequest would not need
+  // to use them as optionals
   requestInterceptor: RequestInterceptor;
+
+  resposeInterceptor: ResponseInterceptor;
 
   canSendMessage: ValidateMessageBeforeSending;
 

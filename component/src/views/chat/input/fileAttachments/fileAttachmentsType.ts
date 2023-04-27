@@ -1,10 +1,12 @@
 import {FileAttachments} from '../../../../types/fileAttachments';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {MessageFileType} from '../../../../types/messageFile';
 import {PLAY_ICON_STRING} from '../../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../../icons/stopIcon';
 
 interface AttachmentObject {
   file: File;
+  fileType: MessageFileType;
   attachmentElement: HTMLElement;
 }
 
@@ -15,13 +17,17 @@ export class FileAttachmentsType {
   private readonly _acceptedFileNamePostfixes?: string[];
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
+  private readonly _type: MessageFileType;
 
-  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, contain: HTMLElement) {
+  // prettier-ignore
+  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, contain: HTMLElement,
+      type: MessageFileType) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
     if (typeof fileAttachments.dragAndDrop === 'object') {
       this._acceptedTypePrefixes = fileAttachments.dragAndDrop.acceptedTypePrefixes;
       this._acceptedFileNamePostfixes = fileAttachments.dragAndDrop.acceptedFileNamePostfixes;
     }
+    this._type = type;
     this._toggleContainerDisplay = toggleContainerDisplay;
     this._fileAttachmentsContainerRef = contain;
   }
@@ -87,7 +93,7 @@ export class FileAttachmentsType {
   }
 
   private addFileAttachment(file: File, attachmentElement: HTMLElement) {
-    const attachmentObject = {file, attachmentElement};
+    const attachmentObject = {file, attachmentElement, fileType: this._type};
     if (this._attachments.length >= this._fileCountLimit) {
       const attachmentContainer = this._attachments[this._attachments.length - 1].attachmentElement.parentElement;
       (attachmentContainer?.children[1] as HTMLElement).click();
@@ -130,7 +136,7 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map((attachment) => attachment.file);
+    return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
   }
 
   clear() {

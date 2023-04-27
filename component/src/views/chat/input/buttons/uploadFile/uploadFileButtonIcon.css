@@ -15,8 +15,20 @@
   height: 1.1rem;
   left: 0.17rem;
   bottom: 0.2rem;
-  filter: brightness(0) saturate(100%) invert(37%) sepia(0%) saturate(567%) hue-rotate(101deg) brightness(95%)
-    contrast(98%);
+  filter: brightness(0) saturate(100%) invert(15%) sepia(0%) saturate(337%) hue-rotate(125deg) brightness(91%)
+    contrast(94%);
+  transform: scale(0.95, 1);
+}
+
+#camera-icon {
+  position: absolute;
+  pointer-events: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  left: 0.22rem;
+  bottom: 0.2rem;
+  filter: brightness(0) saturate(100%) invert(52%) sepia(0%) saturate(161%) hue-rotate(164deg) brightness(91%)
+    contrast(92%);
   transform: scale(0.95, 1);
 }
 

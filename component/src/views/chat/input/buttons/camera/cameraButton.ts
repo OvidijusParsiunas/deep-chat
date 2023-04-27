@@ -4,7 +4,7 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {AUDIO_ICON_STRING} from '../../../../../icons/audioIcon';
+import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {CameraModal} from '../../fileAttachments/cameraModal';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
@@ -46,8 +46,8 @@ export class CameraButton extends ButtonStyleEvents<Styles> {
   }
 
   private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(AUDIO_ICON_STRING);
-    svgIconElement.id = 'upload-audio-icon';
+    const svgIconElement = SVGIconUtils.createSVGElement(CAMERA_ICON_STRING);
+    svgIconElement.id = 'camera-icon';
     return svgIconElement;
   }
 
