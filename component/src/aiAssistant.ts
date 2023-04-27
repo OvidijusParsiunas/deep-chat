@@ -32,7 +32,7 @@ export class AiAssistant extends InternalHTML {
   attachmentContainerStyle?: CustomStyle;
 
   @Property('object')
-  dragAndDropStyle?: CustomStyle;
+  dragAndDrop?: boolean | CustomStyle;
 
   // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('object')

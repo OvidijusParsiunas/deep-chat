@@ -46,7 +46,7 @@ export class OpenAIImagesIO implements ServiceIO {
   permittedErrorPrefixes = new Set('Invalid input image');
   fileTypes: ServiceFileTypes = {
     images: {
-      files: {acceptedFormats: '.png', maxNumberOfFiles: 2, dragAndDrop: {acceptedFileNamePostfixes: ['png']}},
+      files: {acceptedFormats: '.png', maxNumberOfFiles: 2},
       type: 'image',
     },
   };
@@ -90,7 +90,6 @@ export class OpenAIImagesIO implements ServiceIO {
       }
       if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
-      if (typeof files.dragAndDrop !== undefined) _images.files.dragAndDrop = files.dragAndDrop;
     }
     _images.button = button;
   }

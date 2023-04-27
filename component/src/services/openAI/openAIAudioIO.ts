@@ -42,7 +42,6 @@ export class OpenAIAudioIO implements ServiceIO {
     audio: {
       files: {
         acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
-        dragAndDrop: {acceptedFileNamePostfixes: ['4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg', 'm4a']},
         maxNumberOfFiles: 1,
       },
       type: 'audio',
@@ -97,7 +96,6 @@ export class OpenAIAudioIO implements ServiceIO {
       }
       if (files.acceptedFormats) _audio.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) _audio.files.maxNumberOfFiles = files.maxNumberOfFiles;
-      if (typeof files.dragAndDrop !== undefined) _audio.files.dragAndDrop = files.dragAndDrop;
     }
     _audio.button = button;
   }

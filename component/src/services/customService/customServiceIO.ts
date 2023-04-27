@@ -76,7 +76,6 @@ export class CustomServiceIO implements ServiceIO {
         }
         if (files.acceptedFormats) fileConfig.files.acceptedFormats = files.acceptedFormats;
         if (files.maxNumberOfFiles) fileConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
-        if (files.dragAndDrop) fileConfig.files.dragAndDrop = files.dragAndDrop;
       }
       fileConfig.button = button;
       fileConfig.request = {

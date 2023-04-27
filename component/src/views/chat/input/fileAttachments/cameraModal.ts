@@ -61,7 +61,7 @@ export class CameraModal extends Modal {
     closeButton.addEventListener('click', this.stop.bind(this));
     submitButton.onclick = () => {
       const file = this.getFile();
-      if (file) FileAttachments.addFiles([file], [fileAttachmentsType]);
+      if (file) FileAttachments.addFilesToType([file], [fileAttachmentsType]);
       this.stop();
       this.close();
     };

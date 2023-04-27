@@ -44,7 +44,7 @@ export class Input {
 
   private createFileUploadComponents(aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement) {
     const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle);
-    DragAndDrop.attemptToAdd(containerElement, fileAttachments, serviceIO, aiAssistant.dragAndDropStyle);
+    if (aiAssistant.dragAndDrop) DragAndDrop.create(containerElement, fileAttachments, aiAssistant.dragAndDrop);
     const uploadFileButtons: UploadFileButton[] = [];
     const fileAttachmentTypes: {[key in FILE_TYPES]?: FileAttachmentsType} = {};
     Input.addButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, uploadFileButtons, fileAttachmentTypes);

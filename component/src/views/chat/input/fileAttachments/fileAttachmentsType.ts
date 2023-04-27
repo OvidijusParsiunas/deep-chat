@@ -13,36 +13,45 @@ interface AttachmentObject {
 export class FileAttachmentsType {
   private _attachments: AttachmentObject[] = [];
   private readonly _fileCountLimit: number = 99;
-  private readonly _acceptedTypePrefixes?: string[];
-  private readonly _acceptedFileNamePostfixes?: string[];
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
   private readonly _type: MessageFileType;
+  private readonly _acceptedFormat: string = '';
 
   // prettier-ignore
-  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, contain: HTMLElement,
+  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, container: HTMLElement,
       type: MessageFileType) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
-    if (typeof fileAttachments.dragAndDrop === 'object') {
-      this._acceptedTypePrefixes = fileAttachments.dragAndDrop.acceptedTypePrefixes;
-      this._acceptedFileNamePostfixes = fileAttachments.dragAndDrop.acceptedFileNamePostfixes;
-    }
     this._type = type;
     this._toggleContainerDisplay = toggleContainerDisplay;
-    this._fileAttachmentsContainerRef = contain;
+    this._fileAttachmentsContainerRef = container;
+    if (fileAttachments.acceptedFormats) this._acceptedFormat = fileAttachments.acceptedFormats;
   }
 
-  attemptAddFile(file: File, fileReaderResult: string, isDragAndDrop: boolean) {
-    if (isDragAndDrop) {
-      if (this._acceptedTypePrefixes) {
-        if (!this._acceptedTypePrefixes.find((prefix) => file.type.startsWith(prefix))) return false;
-      }
-      if (this._acceptedFileNamePostfixes) {
-        if (!this._acceptedFileNamePostfixes.find((postfix) => file.name.endsWith(postfix))) return false;
+  attemptAddFile(file: File, fileReaderResult: string) {
+    if (FileAttachmentsType.isFileTypeValid(file, this._acceptedFormat)) {
+      this.addAttachmentBasedOnType(file, fileReaderResult);
+      return true;
+    }
+    return false;
+  }
+
+  private static isFileTypeValid(file: File, accept: string) {
+    const validTypes = accept.split(',');
+    for (let i = 0; i < validTypes.length; i++) {
+      const validType = validTypes[i].trim();
+      if (file.type === validType) {
+        return true;
+      } else if (validType.startsWith('.')) {
+        const extension = validType.slice(1);
+        if (file.name.endsWith(extension)) {
+          return true;
+        }
+      } else if (validType.endsWith('/*') && file.type.startsWith(validType.slice(0, -2))) {
+        return true;
       }
     }
-    this.addAttachmentBasedOnType(file, fileReaderResult);
-    return true;
+    return false;
   }
 
   private addAttachmentBasedOnType(file: File, fileReaderResult: string) {
