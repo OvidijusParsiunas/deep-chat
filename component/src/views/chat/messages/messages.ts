@@ -5,6 +5,7 @@ import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {CustomErrors} from '../../../services/serviceIO';
+import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
@@ -17,12 +18,13 @@ import {Name} from './name';
 import {
   ErrorMessageOverrides,
   MessageElementStyles,
+  MessageSideStyles,
   MessageContent,
   MessageStyles,
   OnNewMessage,
 } from '../../../types/messages';
 
-interface MessageElements {
+export interface MessageElements {
   outerContainer: HTMLElement;
   innerContainer: HTMLElement;
   bubbleElement: HTMLElement;
@@ -80,9 +82,8 @@ export class Messages {
   }
 
   private addIntroductoryMessage(introMessage: string) {
-    const {outerContainer, innerContainer, bubbleElement} = this.createAndAppendNewMessageElement(introMessage, true);
-    const intrStyle = this.messageStyles?.intro;
-    if (intrStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, intrStyle);
+    const elements = this.createAndAppendNewMessageElement(introMessage, true);
+    this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
@@ -96,21 +97,10 @@ export class Messages {
   }
 
   // prettier-ignore
-  private static applyCustomStylesToElements(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, style: MessageElementStyles) {
-    Object.assign(outerC.style, style.outerContainer);
-    Object.assign(innerC.style, style.innerContainer);
-    Object.assign(bubble.style, style.bubble);
-  }
-
-  // prettier-ignore
-  private static applyCustomStyles(outerC: HTMLElement, innerC: HTMLElement,
-      bubble: HTMLElement, styles: MessageStyles, isAI: boolean) {
-    if (styles.default) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.default);
-    if (isAI) {
-      if (styles.ai) Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.ai);
-    } else if (styles.user) {
-      Messages.applyCustomStylesToElements(outerC, innerC, bubble, styles.user);
+  public applyCustomStyles(elements: MessageElements, isAI: boolean, media: boolean,
+      otherStyles?: MessageSideStyles | MessageElementStyles) {
+    if (this.messageStyles) {
+      MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, isAI, media, otherStyles);
     }
   }
 
@@ -145,9 +135,6 @@ export class Messages {
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, isAI);
-    if (this.messageStyles) {
-      Messages.applyCustomStyles(outerContainer, innerContainer, bubbleElement, this.messageStyles, isAI);
-    }
     this._messageElementRefs.push(messageElements);
     return messageElements;
   }
@@ -172,6 +159,7 @@ export class Messages {
 
   private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
+    this.applyCustomStyles(messageElements, isAI, false);
     const messageContent = Messages.createMessageContent(isAI, text);
     this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, isInitial);
@@ -212,13 +200,13 @@ export class Messages {
   // prettier-ignore
   public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: string | PermittedErrorMessage) {
     this.removeMessageOnError();
-    const {outerContainer, innerContainer, bubbleElement} = Messages.createBaseElements();
+    const messageElements = Messages.createBaseElements();
+    const {outerContainer, bubbleElement} = messageElements;
     bubbleElement.classList.add('error-message-text');
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
     bubbleElement.innerHTML = text;
-    const errStyle = this.messageStyles?.error;
-    if (errStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, errStyle);
+    this.applyCustomStyles(messageElements, false, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
@@ -241,15 +229,13 @@ export class Messages {
 
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
-    const {outerContainer, innerContainer, bubbleElement} = this.createMessageElements('', true);
+    const messageElements = this.createMessageElements('', true);
+    const {outerContainer, bubbleElement} = messageElements;
     bubbleElement.classList.add('loading-message-text');
-    const loadStyle = this.messageStyles?.loading;
-    if (loadStyle) Messages.applyCustomStylesToElements(outerContainer, innerContainer, bubbleElement, loadStyle);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('dots-flashing');
     bubbleElement.appendChild(dotsElement);
-    Object.assign(dotsElement.style, this.messageStyles?.default?.media);
-    Object.assign(dotsElement.style, this.messageStyles?.loading?.media);
+    this.applyCustomStyles(messageElements, false, false, this.messageStyles?.loading);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }

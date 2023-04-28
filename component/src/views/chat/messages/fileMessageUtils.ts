@@ -1,9 +1,12 @@
+import {MessageStyles, MessageSideStyles} from '../../../types/messages';
 import {MessageFile} from '../../../types/messageFile';
-import {MessageStyles} from '../../../types/messages';
-import {Messages} from './messages';
+import {MessageElements, Messages} from './messages';
 
 export class FileMessageUtils {
-  public static updateMessages(messages: Messages, data: MessageFile, isInitial = false) {
+  // prettier-ignore
+  public static updateMessages(messages: Messages, elements: MessageElements, data: MessageFile,
+      styles: keyof MessageStyles, isAI: boolean, isInitial = false) {
+    messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles] as MessageSideStyles);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
     const messageContent = Messages.createMessageContent(true, undefined, data);
     messages.messages.push(messageContent);
@@ -18,9 +21,7 @@ export class FileMessageUtils {
     return linkWrapperElement;
   }
 
-  public static processContent(contentEl: HTMLElement, isAI: boolean, url?: string, messageStyles?: MessageStyles) {
-    Object.assign(contentEl.style, messageStyles?.default?.media);
-    Object.assign(contentEl.style, isAI ? messageStyles?.ai?.media : messageStyles?.user?.media);
+  public static processContent(contentEl: HTMLElement, url?: string) {
     if (!url) return contentEl;
     return FileMessageUtils.wrapInLink(contentEl, url);
   }

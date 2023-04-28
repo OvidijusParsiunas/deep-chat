@@ -2,7 +2,6 @@ import {InterfacesUnion} from './utilityTypes';
 import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
-// TO-DO add a different style type for image and audio
 export interface MessageElementStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
@@ -10,13 +9,20 @@ export interface MessageElementStyles {
   media?: CustomStyle;
 }
 
-export interface MessageStyles {
-  default?: MessageElementStyles;
+export interface MessageSideStyles {
+  shared?: MessageElementStyles;
   user?: MessageElementStyles;
   ai?: MessageElementStyles;
+}
+
+export interface MessageStyles {
+  default?: MessageSideStyles;
+  image?: MessageSideStyles;
+  audio?: MessageSideStyles;
+  file?: MessageSideStyles;
+  intro?: MessageElementStyles;
   loading?: MessageElementStyles;
   error?: MessageElementStyles;
-  intro?: MessageElementStyles;
 }
 
 export type MessageRole = 'user' | 'assistant';

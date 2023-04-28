@@ -2,26 +2,25 @@ import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
 import {FILE_ICON_STRING} from '../../../icons/fileIcon';
 import {MessageFile} from '../../../types/messageFile';
 import {Browser} from '../../../utils/browser/browser';
-import {MessageStyles} from '../../../types/messages';
 import {FileMessageUtils} from './fileMessageUtils';
 import {Messages} from './messages';
 
 export class FileMessages {
-  private static createImage(imageData: MessageFile, isAI: boolean, messageStyles?: MessageStyles) {
+  private static createImage(imageData: MessageFile) {
     const data = (imageData.url || imageData.base64) as string;
     const imageElement = new Image();
     imageElement.src = data;
-    return FileMessageUtils.processContent(imageElement, isAI, imageData.url, messageStyles);
+    return FileMessageUtils.processContent(imageElement);
   }
 
   public static addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
-    const {outerContainer, bubbleElement: imageContainer} = messages.createNewMessageElement('', isAI);
-    const image = FileMessages.createImage(imageData, isAI, messages.messageStyles);
-    imageContainer.appendChild(image);
-    imageContainer.classList.add('image-message');
-    messages.elementRef.appendChild(outerContainer);
+    const image = FileMessages.createImage(imageData);
+    const elements = messages.createNewMessageElement('', isAI);
+    elements.bubbleElement.appendChild(image);
+    elements.bubbleElement.classList.add('image-message');
+    messages.elementRef.appendChild(elements.outerContainer);
     // TO-DO - not sure if this scrolls down properly when the image is still being rendered
-    FileMessageUtils.updateMessages(messages, imageData, isInitial);
+    FileMessageUtils.updateMessages(messages, elements, imageData, 'image', isAI, isInitial);
   }
 
   private static createAudioElement(audioData: MessageFile) {
@@ -35,15 +34,15 @@ export class FileMessages {
   }
 
   public static addNewAudioMessage(messages: Messages, audioData: MessageFile, isAI: boolean, isInitial = false) {
-    const {outerContainer, bubbleElement: audioContainer} = messages.createNewMessageElement('', isAI);
     const audioElement = FileMessages.createAudioElement(audioData);
-    audioContainer.appendChild(audioElement);
-    audioContainer.classList.add('audio-message');
-    messages.elementRef.appendChild(outerContainer);
-    FileMessageUtils.updateMessages(messages, audioData, isInitial);
+    const elements = messages.createNewMessageElement('', isAI);
+    elements.bubbleElement.appendChild(audioElement);
+    elements.bubbleElement.classList.add('audio-message');
+    messages.elementRef.appendChild(elements.outerContainer);
+    FileMessageUtils.updateMessages(messages, elements, audioData, 'audio', isAI, isInitial);
   }
 
-  private static createAnyFile(imageData: MessageFile, isAI: boolean, messageStyles?: MessageStyles) {
+  private static createAnyFile(imageData: MessageFile) {
     const contents = document.createElement('div');
     contents.classList.add('any-file-message-contents');
     const svgContainer = document.createElement('div');
@@ -56,15 +55,15 @@ export class FileMessages {
     fileNameElement.textContent = imageData.name || 'file';
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
-    return FileMessageUtils.processContent(contents, isAI, imageData.url, messageStyles);
+    return FileMessageUtils.processContent(contents, imageData.url);
   }
 
   public static addNewAnyFileMessage(messages: Messages, data: MessageFile, isAI: boolean, isInitial = false) {
-    const {outerContainer, bubbleElement: fileContainer} = messages.createNewMessageElement('', isAI);
-    const anyFile = FileMessages.createAnyFile(data, isAI, messages.messageStyles);
-    fileContainer.classList.add('any-file-message-bubble');
-    fileContainer.appendChild(anyFile);
-    messages.elementRef.appendChild(outerContainer);
-    FileMessageUtils.updateMessages(messages, data, isInitial);
+    const elements = messages.createNewMessageElement('', isAI);
+    const anyFile = FileMessages.createAnyFile(data);
+    elements.bubbleElement.classList.add('any-file-message-bubble');
+    elements.bubbleElement.appendChild(anyFile);
+    messages.elementRef.appendChild(elements.outerContainer);
+    FileMessageUtils.updateMessages(messages, elements, data, 'file', isAI, isInitial);
   }
 }
