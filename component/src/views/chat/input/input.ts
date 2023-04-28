@@ -50,7 +50,7 @@ export class Input {
     Input.addButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, uploadFileButtons, fileAttachmentTypes);
     let cameraButton: CameraButton | undefined;
     if (serviceIO.camera?.files) {
-      const fileAttachmentsType = fileAttachmentTypes.images || fileAttachments.addType(serviceIO.camera.files, 'image');
+      const fileAttachmentsType = fileAttachmentTypes.images || fileAttachments.addType(serviceIO.camera.files);
       cameraButton = new CameraButton(containerElement, fileAttachmentsType, serviceIO.camera);
     }
     return {fileAttachments, uploadFileButtons, cameraButton};
@@ -63,7 +63,7 @@ export class Input {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
       if (fileService.files) {
-        const fileAttachmentsType = fileAttachments.addType(fileService.files, fileService.type);
+        const fileAttachmentsType = fileAttachments.addType(fileService.files);
         const {id, svgString} = FILE_TYPE_BUTTON_ICONS[fileType];
         const button = new UploadFileButton(containerElement, fileAttachmentsType, fileService, id, svgString);
         uploadFileButtons.push(button);

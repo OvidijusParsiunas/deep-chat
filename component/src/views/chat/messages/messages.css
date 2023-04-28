@@ -109,3 +109,45 @@ pre {
   height: fit-content;
   float: right;
 }
+
+.any-file-message-bubble {
+  padding: 1px;
+}
+
+.any-file-message-contents {
+  display: flex;
+}
+
+.any-file-message-icon-container {
+  width: 1.3rem;
+  min-width: 1.3rem;
+  position: relative;
+  border-radius: 4px;
+  margin-left: 6px;
+  margin-right: 2px;
+}
+
+.any-file-message-icon {
+  background-color: white;
+  border-radius: 4px;
+  position: absolute;
+  width: 1rem;
+  height: 1.25rem;
+  padding: 1px;
+  margin-top: auto;
+  margin-bottom: auto;
+  top: 0;
+  bottom: 0;
+}
+
+.any-file-message-text {
+  padding-top: 5px;
+  overflow-wrap: anywhere;
+  padding-bottom: 5px;
+  padding-right: 7px;
+}
+
+/* If any file message text is a link - inherit the message bubble color */
+.message-bubble > a {
+  color: inherit;
+}

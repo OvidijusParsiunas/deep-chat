@@ -20,7 +20,7 @@
 .file-attachment {
   width: 2.85rem;
   height: 2.85rem;
-  display: inline-block;
+  display: inline-grid;
   margin-right: 0.6rem;
   margin-bottom: 0.44rem;
   margin-top: 4px;
@@ -36,13 +36,21 @@
   border-radius: 5px;
 }
 
-.audio-attachment-icon-container {
-  cursor: pointer;
+.border-bound-attachment {
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   border: 1px solid #c3c3c3;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.border-bound-attachment-safari {
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+}
+
+.audio-attachment-icon-container {
+  cursor: pointer;
 }
 
 .audio-attachment-icon-container:hover {
@@ -68,6 +76,29 @@
 .stop-icon {
   filter: brightness(0) saturate(100%) invert(29%) sepia(90%) saturate(1228%) hue-rotate(198deg) brightness(93%)
     contrast(98%);
+}
+
+.any-file-attachment {
+  padding: 0px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.any-file-attachment-text-container {
+  position: absolute;
+  width: inherit;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  top: -1px;
+}
+
+.any-file-attachment-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-left: 2px;
+  padding-left: 2px;
 }
 
 .remove-file-attachment-button {

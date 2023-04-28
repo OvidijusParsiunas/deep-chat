@@ -1,21 +1,19 @@
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
-import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageFileType} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,
-  CameraFileServiceIO,
   ServiceFileTypes,
   StreamHandlers,
   FileServiceIO,
@@ -26,7 +24,7 @@ import {
 export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   fileTypes: ServiceFileTypes = {};
-  camera?: CameraFileServiceIO;
+  camera?: CameraFilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -40,15 +38,15 @@ export class CustomServiceIO implements ServiceIO {
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
     if (customService.images) {
-      this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*', 'image');
+      this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
     }
     this.processCamera(customService);
     if (customService.audio) {
-      this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*', 'audio');
+      this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
       if (this.fileTypes.audio.files) this.fileTypes.audio.files.maxNumberOfFiles ??= this.camera?.files?.maxNumberOfFiles;
     }
     if (customService.mixedFiles) {
-      this.fileTypes.mixedFiles = CustomServiceIO.parseConfig(customService.mixedFiles, this.requestSettings, '', 'file');
+      this.fileTypes.mixedFiles = CustomServiceIO.parseConfig(customService.mixedFiles, this.requestSettings, '');
     }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
@@ -62,8 +60,8 @@ export class CustomServiceIO implements ServiceIO {
 
   // prettier-ignore
   private static parseConfig(fileType: boolean | FilesServiceConfig,
-      requestSettings: RequestSettings, defAcceptedFormats: string, type: MessageFileType) {
-    const fileConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: defAcceptedFormats}, type};
+      requestSettings: RequestSettings, defAcceptedFormats: string) {
+    const fileConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: defAcceptedFormats}};
     if (typeof fileType === 'object') {
       const {files, request, requestInterceptor, responseInterceptor, button} = fileType;
       if (files) {
@@ -92,7 +90,7 @@ export class CustomServiceIO implements ServiceIO {
   private processCamera(customService: CustomServiceConfig) {
     if (!customService.camera) return;
     if (navigator.mediaDevices.getUserMedia !== undefined) {
-      this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*', 'image');
+      this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
       if (typeof customService.camera === 'object') {
         this.camera.modalContainerStyle = customService.camera.modalContainerStyle;
         if (customService.camera.files?.format) {
@@ -103,7 +101,7 @@ export class CustomServiceIO implements ServiceIO {
       }
       // if camera is not available - fallback to normal image upload
     } else if (!customService.images) {
-      this.fileTypes.images = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*', 'image');
+      this.fileTypes.images = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
     }
   }
 

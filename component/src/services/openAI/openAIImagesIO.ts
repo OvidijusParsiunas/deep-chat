@@ -1,5 +1,6 @@
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {ExistingServiceCameraConfig} from '../../types/camera';
@@ -8,7 +9,6 @@ import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
-import {FilesServiceConfig} from '../../types/fileService';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
@@ -19,7 +19,6 @@ import {Result} from '../../types/result';
 import {Remarkable} from 'remarkable';
 import {
   KeyVerificationHandlers,
-  CameraFileServiceIO,
   CompletionsHandlers,
   ServiceFileTypes,
   StreamHandlers,
@@ -44,13 +43,8 @@ export class OpenAIImagesIO implements ServiceIO {
   url = ''; // set dynamically
   canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid input image');
-  fileTypes: ServiceFileTypes = {
-    images: {
-      files: {acceptedFormats: '.png', maxNumberOfFiles: 2},
-      type: 'image',
-    },
-  };
-  camera?: CameraFileServiceIO;
+  fileTypes: ServiceFileTypes = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
+  camera?: CameraFilesServiceConfig;
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
@@ -94,15 +88,15 @@ export class OpenAIImagesIO implements ServiceIO {
     _images.button = button;
   }
 
-  private static processCameraConfig(cameraConfig: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
-    const fileConfig: CameraFileServiceIO = {files: {}, type: 'image'};
-    if (typeof cameraConfig === 'object') {
-      fileConfig.button = cameraConfig.button;
-      fileConfig.modalContainerStyle = cameraConfig.modalContainerStyle;
+  private static processCameraConfig(camera: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
+    const cameraConfig: CameraFilesServiceConfig = {files: {}};
+    if (typeof camera === 'object') {
+      cameraConfig.button = camera.button;
+      cameraConfig.modalContainerStyle = camera.modalContainerStyle;
       const dimension = images.size ? Number.parseInt(images.size) : undefined;
-      fileConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
+      cameraConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
     }
-    return fileConfig;
+    return cameraConfig;
   }
 
   private static cleanConfig(config: FilesServiceConfig & ExistingServiceCameraConfig) {

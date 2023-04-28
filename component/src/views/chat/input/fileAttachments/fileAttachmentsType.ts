@@ -3,6 +3,7 @@ import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {MessageFileType} from '../../../../types/messageFile';
 import {PLAY_ICON_STRING} from '../../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../../icons/stopIcon';
+import {Browser} from '../../../../utils/browser/browser';
 
 interface AttachmentObject {
   file: File;
@@ -15,15 +16,11 @@ export class FileAttachmentsType {
   private readonly _fileCountLimit: number = 99;
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
-  private readonly _type: MessageFileType;
   private readonly _acceptedFormat: string = '';
 
-  // prettier-ignore
-  constructor(fileAttachments: FileAttachments, toggleContainerDisplay: (display: boolean) => void, container: HTMLElement,
-      type: MessageFileType) {
+  constructor(fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void, container: HTMLElement) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
-    this._type = type;
-    this._toggleContainerDisplay = toggleContainerDisplay;
+    this._toggleContainerDisplay = toggleContainer;
     this._fileAttachmentsContainerRef = container;
     if (fileAttachments.acceptedFormats) this._acceptedFormat = fileAttachments.acceptedFormats;
   }
@@ -37,6 +34,7 @@ export class FileAttachmentsType {
   }
 
   private static isFileTypeValid(file: File, accept: string) {
+    if (accept === '') return true;
     const validTypes = accept.split(',');
     for (let i = 0; i < validTypes.length; i++) {
       const validType = validTypes[i].trim();
@@ -57,10 +55,13 @@ export class FileAttachmentsType {
   private addAttachmentBasedOnType(file: File, fileReaderResult: string) {
     if (file.type.startsWith('image')) {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
-      this.addFileAttachment(file, imageAttachment);
+      this.addFileAttachment(file, 'image', imageAttachment);
     } else if (file.type.startsWith('audio')) {
       const audioAttachment = FileAttachmentsType.createAudioAttachment(fileReaderResult);
-      this.addFileAttachment(file, audioAttachment);
+      this.addFileAttachment(file, 'audio', audioAttachment);
+    } else {
+      const anyFileAttachment = FileAttachmentsType.createAnyFileAttachment(file.name);
+      this.addFileAttachment(file, 'file', anyFileAttachment);
     }
   }
 
@@ -73,7 +74,8 @@ export class FileAttachmentsType {
 
   private static createAudioAttachment(fileReaderResult: string) {
     const container = document.createElement('div');
-    container.classList.add('audio-attachment-icon-container');
+    container.classList.add('border-bound-attachment', 'audio-attachment-icon-container');
+    if (Browser.IS_SAFARI) container.classList.add('border-bound-attachment-safari');
     const audio = document.createElement('audio');
     audio.src = fileReaderResult;
     const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
@@ -101,8 +103,22 @@ export class FileAttachmentsType {
     return container;
   }
 
-  private addFileAttachment(file: File, attachmentElement: HTMLElement) {
-    const attachmentObject = {file, attachmentElement, fileType: this._type};
+  private static createAnyFileAttachment(fileName: string) {
+    const container = document.createElement('div');
+    container.classList.add('border-bound-attachment');
+    if (Browser.IS_SAFARI) container.classList.add('border-bound-attachment-safari');
+    const text = document.createElement('div');
+    text.classList.add('any-file-attachment-text');
+    const textContainer = document.createElement('div');
+    textContainer.classList.add('any-file-attachment-text-container');
+    textContainer.appendChild(text);
+    text.textContent = fileName;
+    container.appendChild(textContainer);
+    return container;
+  }
+
+  private addFileAttachment(file: File, fileType: MessageFileType, attachmentElement: HTMLElement) {
+    const attachmentObject = {file, attachmentElement, fileType};
     if (this._attachments.length >= this._fileCountLimit) {
       const attachmentContainer = this._attachments[this._attachments.length - 1].attachmentElement.parentElement;
       (attachmentContainer?.children[1] as HTMLElement).click();

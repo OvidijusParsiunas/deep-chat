@@ -44,7 +44,6 @@ export class OpenAIAudioIO implements ServiceIO {
         acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
         maxNumberOfFiles: 1,
       },
-      type: 'audio',
     },
   };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;

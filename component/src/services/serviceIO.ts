@@ -3,7 +3,6 @@ import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {MessageFileType} from '../types/messageFile';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
 
@@ -23,7 +22,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string; type: MessageFileType};
+export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string};
 
 export type CustomErrors = Set<string>;
 
@@ -31,14 +30,12 @@ export type ServiceFileTypes = {
   [key in FILE_TYPES]?: FileServiceIO;
 };
 
-export type CameraFileServiceIO = CameraFilesServiceConfig & {type: MessageFileType};
-
 export interface ServiceIO {
   url?: string;
 
   fileTypes?: ServiceFileTypes;
 
-  camera?: CameraFileServiceIO;
+  camera?: CameraFilesServiceConfig;
 
   requestSettings?: RequestSettings;
 
