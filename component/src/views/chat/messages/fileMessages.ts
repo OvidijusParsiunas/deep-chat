@@ -6,20 +6,19 @@ import {FileMessageUtils} from './fileMessageUtils';
 import {Messages} from './messages';
 
 export class FileMessages {
-  private static createImage(imageData: MessageFile) {
-    const data = (imageData.url || imageData.base64) as string;
+  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement) {
     const imageElement = new Image();
-    imageElement.src = data;
-    return FileMessageUtils.processContent(imageElement);
+    imageElement.src = (imageData.url || imageData.base64) as string;
+    if (imageData.url) FileMessageUtils.scrollDownWhenMetaDataLoaded(imageData.url, messagesContainerEl);
+    return FileMessageUtils.processContent(imageElement, imageData.url);
   }
 
-  public static addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
-    const image = FileMessages.createImage(imageData);
+  public static async addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
+    const image = FileMessages.createImage(imageData, messages.elementRef);
     const elements = messages.createNewMessageElement('', isAI);
     elements.bubbleElement.appendChild(image);
     elements.bubbleElement.classList.add('image-message');
     messages.elementRef.appendChild(elements.outerContainer);
-    // TO-DO - not sure if this scrolls down properly when the image is still being rendered
     FileMessageUtils.updateMessages(messages, elements, imageData, 'image', isAI, isInitial);
   }
 

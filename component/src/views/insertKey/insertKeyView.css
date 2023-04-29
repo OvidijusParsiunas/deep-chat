@@ -49,8 +49,8 @@
 .visibility-icon {
   filter: brightness(0) saturate(100%) invert(63%) sepia(1%) saturate(9%) hue-rotate(43deg) brightness(98%) contrast(92%);
   position: absolute;
-  right: -1.8em;
-  top: -1.5em;
+  right: -1.7em;
+  top: -1.47em;
 }
 
 .visibility-icon:hover {
