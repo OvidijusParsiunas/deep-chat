@@ -1,20 +1,20 @@
 #upload-images-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.31rem;
-  height: 1.31rem;
-  left: 0.11rem;
-  bottom: 0.08rem;
+  width: 1.31em;
+  height: 1.31em;
+  left: 0.11em;
+  bottom: 0.08em;
   filter: brightness(0) saturate(100%) invert(43%) sepia(0%) saturate(740%) hue-rotate(77deg) brightness(99%) contrast(92%);
 }
 
 #upload-audio-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.1rem;
-  height: 1.1rem;
-  left: 0.17rem;
-  bottom: 0.2rem;
+  width: 1.1em;
+  height: 1.1em;
+  left: 0.17em;
+  bottom: 0.2em;
   filter: brightness(0) saturate(100%) invert(15%) sepia(0%) saturate(337%) hue-rotate(125deg) brightness(91%)
     contrast(94%);
   transform: scale(0.95, 1);
@@ -23,10 +23,10 @@
 #camera-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.1rem;
-  height: 1.1rem;
-  left: 0.22rem;
-  bottom: 0.2rem;
+  width: 1.1em;
+  height: 1.1em;
+  left: 0.22em;
+  bottom: 0.2em;
   filter: brightness(0) saturate(100%) invert(52%) sepia(0%) saturate(161%) hue-rotate(164deg) brightness(91%)
     contrast(92%);
   transform: scale(0.95, 1);
@@ -35,10 +35,10 @@
 #upload-mixed-files-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.1rem;
-  height: 1.1rem;
-  left: 0.2rem;
-  bottom: 0.2rem;
+  width: 1.1em;
+  height: 1.1em;
+  left: 0.2em;
+  bottom: 0.2em;
   filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(668%) hue-rotate(85deg) brightness(98%) contrast(93%);
   transform: scale(0.95, 1);
 }

@@ -7,10 +7,10 @@
 .input-button {
   border-radius: 4px;
   cursor: pointer;
-  width: 1.5rem;
-  height: 1.5rem;
-  bottom: 1rem;
-  margin-bottom: 0.2rem;
+  width: 1.5em;
+  height: 1.5em;
+  bottom: 1em;
+  margin-bottom: 0.2em;
   user-select: none;
 }
 

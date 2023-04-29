@@ -33,8 +33,8 @@
 }
 
 .modal-svg-close-button {
-  height: 1.56rem;
-  padding-top: 0.37rem;
+  height: 1.56em;
+  padding-top: 0.37em;
   padding-bottom: 0px;
   background-color: #c13e3e;
 }
@@ -53,8 +53,8 @@
 }
 
 .modal-svg-camera-button {
-  height: 1.6rem;
-  padding-top: 0.38rem;
+  height: 1.6em;
+  padding-top: 0.38em;
   padding-bottom: 0px;
 }
 
@@ -67,7 +67,7 @@
 }
 
 .modal-svg-refresh-button {
-  height: 1.66rem;
-  padding-top: 0.11rem;
-  padding-bottom: 0.21rem;
+  height: 1.66em;
+  padding-top: 0.11em;
+  padding-bottom: 0.21em;
 }

@@ -20,17 +20,17 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private readonly _imageAttachments?: FileAttachments;
+  private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
-      imageAttachments?: FileAttachments) {
+      fileAttachments: FileAttachments) {
     const {submitButtonStyles} = aiAssistant;
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
-    this._imageAttachments = imageAttachments;
+    this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
@@ -96,7 +96,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   }
 
   public async submit(userText: string) {
-    const uploadedFilesData = this._imageAttachments?.getAllFileData();
+    const uploadedFilesData = this._fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData.file);
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, fileData)) return;
     this.changeToLoadingIcon();
@@ -113,7 +113,7 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
       abortStream: this._abortStream,
     };
     this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, fileData);
-    this._imageAttachments?.removeAllFiles();
+    this._fileAttachments?.removeAllFiles();
   }
 
   // This will not stop the stream on the server side

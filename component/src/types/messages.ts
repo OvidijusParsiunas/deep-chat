@@ -2,7 +2,7 @@ import {InterfacesUnion} from './utilityTypes';
 import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
-export interface MessageElementStyles {
+export interface MessageElementsStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
@@ -10,9 +10,9 @@ export interface MessageElementStyles {
 }
 
 export interface MessageSideStyles {
-  shared?: MessageElementStyles;
-  user?: MessageElementStyles;
-  ai?: MessageElementStyles;
+  shared?: MessageElementsStyles;
+  user?: MessageElementsStyles;
+  ai?: MessageElementsStyles;
 }
 
 export interface MessageStyles {
@@ -20,9 +20,9 @@ export interface MessageStyles {
   image?: MessageSideStyles;
   audio?: MessageSideStyles;
   file?: MessageSideStyles;
-  intro?: MessageElementStyles;
-  loading?: MessageElementStyles;
-  error?: MessageElementStyles;
+  intro?: MessageElementsStyles;
+  loading?: MessageElementsStyles;
+  error?: MessageElementsStyles;
 }
 
 export type MessageRole = 'user' | 'assistant';

@@ -36,7 +36,8 @@ export class FileAttachments {
   }
 
   getAllFileData() {
-    return this._fileAttachmentsTypes.map((fileAttachmentType) => fileAttachmentType.getFiles()).flat();
+    const files = this._fileAttachmentsTypes.map((fileAttachmentType) => fileAttachmentType.getFiles()).flat();
+    return files.length > 0 ? files : undefined;
   }
 
   public static addFilesToType(files: File[], fileAttachmentTypes: FileAttachmentsType[]) {

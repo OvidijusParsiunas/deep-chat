@@ -4,7 +4,7 @@ export const NOT_VISIBLE_ICON_STRING =
 `<?xml version="1.0" standalone="no"?>
 <svg version="1.1"
 	xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0.9rem" height="0.9rem"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0.9em" height="0.9em"
 	viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200">
 		<path d="
 			M669.727,273.516c-22.891-2.476-46.15-3.895-69.727-4.248c-103.025,0.457-209.823,25.517-310.913,73.536

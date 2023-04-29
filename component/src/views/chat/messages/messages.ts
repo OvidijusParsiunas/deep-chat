@@ -17,7 +17,7 @@ import {Avatar} from './avatar';
 import {Name} from './name';
 import {
   ErrorMessageOverrides,
-  MessageElementStyles,
+  MessageElementsStyles,
   MessageSideStyles,
   MessageContent,
   MessageStyles,
@@ -98,7 +98,7 @@ export class Messages {
 
   // prettier-ignore
   public applyCustomStyles(elements: MessageElements, isAI: boolean, media: boolean,
-      otherStyles?: MessageSideStyles | MessageElementStyles) {
+      otherStyles?: MessageSideStyles | MessageElementsStyles) {
     if (this.messageStyles) {
       MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, isAI, media, otherStyles);
     }
@@ -206,7 +206,10 @@ export class Messages {
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
     bubbleElement.innerHTML = text;
-    this.applyCustomStyles(messageElements, false, false, this.messageStyles?.error);
+    const fontElementStyles = MessageStyleUtils.extractParticularSharedStyles(['fontSize', 'fontFamily'],
+      this.messageStyles?.default);
+    MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
+    MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);

@@ -21,25 +21,25 @@
 /* Input element padding will need to be changed accordingly */
 .inside-right {
   position: absolute;
-  right: 0.22rem;
-  bottom: 0.82rem;
+  right: 0.22em;
+  bottom: 0.82em;
 }
 
 .inside-left {
   position: absolute;
-  left: 0.22rem;
-  bottom: 0.82rem;
+  left: 0.22em;
+  bottom: 0.82em;
 }
 
 /* Input container element padding will need to be changed accordingly */
 .outside-left {
   position: absolute;
-  right: calc(13px - 0.55rem);
-  bottom: 0.85rem;
+  right: calc(13px - 0.55em);
+  bottom: 0.85em;
 }
 
 .outside-right {
   position: absolute;
-  left: calc(12px - 0.55rem);
-  bottom: 0.8rem;
+  left: calc(12px - 0.55em);
+  bottom: 0.8em;
 }

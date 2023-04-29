@@ -18,12 +18,12 @@
 }
 
 #insert-key-input-container {
-  margin-right: 2.7rem;
+  margin-right: 2.7em;
   width: 80%;
 }
 
 #insert-key-input {
-  padding: 0.3rem 1.7rem 0.3rem 0.3rem;
+  padding: 0.3em 1.7em 0.3em 0.3em;
   border-width: 1px;
   border-style: solid;
   border-radius: 3px;
@@ -65,13 +65,12 @@
   border: 1px solid grey;
   color: rgb(69, 69, 69);
   border-radius: 4px;
-  width: 3rem;
-  height: 1.5rem;
+  width: 3em;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 0.05rem 0.15rem 0.05rem;
+  padding: 0.3em 0.15em;
   user-select: none;
   background-color: white;
 }
@@ -98,8 +97,8 @@
 
 #insert-key-input-invalid-text {
   display: block;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
   color: red;
 }
 

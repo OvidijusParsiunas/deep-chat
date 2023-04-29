@@ -6,9 +6,9 @@
 #stop-icon {
   background-color: #acacac;
   position: absolute;
-  width: 0.9rem;
-  height: 0.9rem;
-  left: 0.3rem;
-  bottom: 0.3rem;
+  width: 0.9em;
+  height: 0.9em;
+  left: 0.3em;
+  bottom: 0.3em;
   border-radius: 2px;
 }

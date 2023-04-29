@@ -2,7 +2,7 @@
 // prettier-ignore
 export const MICROPHONE_ICON_STRING =
 `<?xml version="1.0" encoding="iso-8859-1"?>
-<svg height="1.4rem" width="1.4rem" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+<svg height="1.4em" width="1.4em" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 viewBox="0 0 490.9 490.9" xml:space="preserve">
 	<g>
 		<g>

@@ -19,21 +19,21 @@
   background-color: white;
   overflow-y: auto;
   height: fit-content;
-  max-height: calc(100% - 3.3rem);
+  max-height: calc(100% - 3.3em);
   width: 100%;
 }
 
 .modal-content > p {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 .modal-content > ul {
-  margin-right: 1rem;
+  margin-right: 1em;
 }
 
 .modal-button-panel {
-  height: 3.3rem;
+  height: 3.3em;
   border: 1px solid;
   border-color: rgb(223, 223, 223) rgb(217, 217, 217) rgb(217, 217, 217);
   background-color: white;
@@ -44,13 +44,13 @@
 }
 
 .modal-button {
-  min-width: 2.5rem;
+  min-width: 2.5em;
   text-align: center;
   color: white;
   border-radius: 5px;
-  padding: 0.4rem;
-  padding-bottom: 0.3rem;
-  height: 1.25rem;
+  padding: 0.4em;
+  padding-bottom: 0.3em;
+  height: 1.25em;
   background-color: rgb(50, 121, 178);
   top: 0;
   bottom: 0;
@@ -58,8 +58,8 @@
   margin-bottom: auto;
   cursor: pointer;
   user-select: none;
-  margin-left: 0.31rem;
-  margin-right: 0.31rem;
+  margin-left: 0.31em;
+  margin-right: 0.31em;
 }
 
 .modal-button:hover {
@@ -72,8 +72,8 @@
 
 .modal-svg-button {
   padding: 0;
-  width: 2rem;
-  height: 1.8rem;
+  width: 2em;
+  height: 1.8em;
   padding-bottom: 2px;
 }
 
