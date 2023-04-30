@@ -1,3 +1,4 @@
+import {MicrophoneStyles} from './microphone';
 import {GenericButton} from './button';
 import {CustomStyle} from './styles';
 
@@ -21,4 +22,8 @@ export interface ExistingServiceCameraConfig {
         button?: GenericButton;
         modalContainerStyle?: CustomStyle;
       };
+}
+
+export interface ExistingServiceAudioRecordingConfig {
+  microphone?: boolean | MicrophoneStyles;
 }

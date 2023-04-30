@@ -1,12 +1,12 @@
 import {KeyboardInput} from '../../keyboardInput/keyboardInput';
+import {Microphone} from '../../../../../types/microphone';
 import {Messages} from '../../../messages/messages';
 import {MicrophoneButton} from './microphoneButton';
 
 export type AddErrorMessage = Messages['addNewErrorMessage'];
 
-export class SpeechToText {
+export class SpeechToText extends MicrophoneButton {
   private readonly _recognition?: SpeechRecognition;
-  private readonly _microphone: MicrophoneButton;
   private readonly _inputElement: HTMLElement;
   private readonly _interimTextSpan: HTMLSpanElement;
   private readonly _finalTextSpan: HTMLSpanElement;
@@ -15,22 +15,26 @@ export class SpeechToText {
   private prefixText = '';
   private readonly _addErrorMessage: AddErrorMessage;
 
-  // prettier-ignore
-  constructor(microphone: MicrophoneButton, speechRecognition: {new (): SpeechRecognition}, inputElement: HTMLElement,
-      addErrorMessage: AddErrorMessage) {
-    this._microphone = microphone;
+  constructor(microphone: Microphone, inputElement: HTMLElement, addErrorMessage: AddErrorMessage) {
+    super(typeof microphone === 'object' ? microphone : {});
+    const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!speechRecognition) {
+      this.changeToUnsupported();
+    } else {
+      this._recognition = new speechRecognition();
+    }
     this._recognition = new speechRecognition();
     this._recognition.continuous = true;
     this._inputElement = inputElement;
     this._finalTextSpan = document.createElement('span');
     this._interimTextSpan = document.createElement('span');
     this._interimTextSpan.id = 'interim-text';
-    microphone.elementRef.onclick = this.buttonClick.bind(this);
+    this.elementRef.onclick = this.buttonClick.bind(this);
     this._addErrorMessage = addErrorMessage;
   }
 
   private buttonClick() {
-    if (this._microphone.isActive) {
+    if (this.isActive) {
       this.stop();
     } else {
       this.start();
@@ -79,7 +83,7 @@ export class SpeechToText {
     console.log('audio - start');
     this.prepareInputText();
     this.appendSpans();
-    this._microphone.changeToActive();
+    this.changeToActive();
   }
 
   private static isCharASpace(character: string) {
@@ -115,7 +119,7 @@ export class SpeechToText {
 
   private recordingEnded() {
     console.log('audio - end');
-    this._microphone.changeToDefault();
+    this.changeToDefault();
     this.finaliseInputText();
     this.resetTranscript();
   }

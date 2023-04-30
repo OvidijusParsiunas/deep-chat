@@ -7,6 +7,7 @@ import {TICK_ICON_STRING} from '../../../../icons/tickIcon';
 import {FileAttachmentsType} from './fileAttachmentsType';
 import {CustomStyle} from '../../../../types/styles';
 import {FileAttachments} from './fileAttachments';
+import {NewFileName} from './newFileName';
 import {Modal} from './modal';
 
 export class CameraModal extends Modal {
@@ -119,19 +120,12 @@ export class CameraModal extends Modal {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], {type: this._format});
-      const filename = CameraModal.getFileName();
+      // WORK - ability to choose file name
+      const extension = this._format === 'image/jpeg' ? 'jpeg' : 'png';
+      const filename = NewFileName.getFileName('photo', extension);
       return new File([blob], filename, {type: blob.type});
     }
     return undefined;
-  }
-
-  // WORK - api for file type
-  private static getFileName() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `photo-${hours}-${minutes}-${seconds}.png`;
   }
 
   private updateCanvas(video: HTMLVideoElement, canvas: HTMLCanvasElement) {

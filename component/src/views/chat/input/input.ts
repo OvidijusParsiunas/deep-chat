@@ -1,5 +1,4 @@
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
-import {MicrophoneButtonFactory} from './buttons/microphone/microphoneButtonFactory';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentsType';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
@@ -7,6 +6,8 @@ import {MicrophoneButton} from './buttons/microphone/microphoneButton';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
+import {SpeechToText} from './buttons/microphone/speechToText';
+import {RecordAudio} from './buttons/microphone/recordAudio';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
@@ -24,13 +25,14 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const {fileAttachments, uploadFileButtons, cameraButton} = this.createFileUploadComponents(
-      aiAssistant, serviceIO, containerElement);
+    const {fileAttachments, uploadFileButtons, cameraButton, microphoneButton: recordAudioButton} =
+      this.createFileUploadComponents(aiAssistant, serviceIO, containerElement);
+    const microphoneButton = recordAudioButton || (aiAssistant.speechInput && new SpeechToText(
+      aiAssistant.speechInput, keyboardInput.inputElementRef, messages.addNewErrorMessage.bind(messages)));
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,fileAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
-    const microphoneButton = MicrophoneButtonFactory.attemptCreate(
-      aiAssistant, serviceIO, keyboardInput.inputElementRef, messages.addNewErrorMessage.bind(messages));
+    
     Input.addElements(this.elementRef, keyboardInput.elementRef, submitButton, uploadFileButtons,
       microphoneButton, cameraButton);
   }
@@ -53,7 +55,12 @@ export class Input {
       const fileAttachmentsType = fileAttachmentTypes.images || fileAttachments.addType(serviceIO.camera.files);
       cameraButton = new CameraButton(containerElement, fileAttachmentsType, serviceIO.camera);
     }
-    return {fileAttachments, uploadFileButtons, cameraButton};
+    let microphoneButton: MicrophoneButton | undefined;
+    if (serviceIO.recordAudio?.files) {
+      const audioType = fileAttachmentTypes.audio || fileAttachments.addType(serviceIO.recordAudio.files);
+      microphoneButton = new RecordAudio(audioType, serviceIO.recordAudio.button);
+    }
+    return {fileAttachments, uploadFileButtons, cameraButton, microphoneButton};
   }
 
   // prettier-ignore

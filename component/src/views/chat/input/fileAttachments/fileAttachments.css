@@ -102,7 +102,7 @@
   margin-right: auto;
 }
 
-.emove-file-attachment-button {
+.remove-file-attachment-button {
   height: 1.25em;
   width: 1.25em;
   border: 1px solid #cfcfcf;
@@ -117,11 +117,11 @@
   user-select: none;
 }
 
-.emove-file-attachment-button:hover {
+.remove-file-attachment-button:hover {
   background-color: rgb(228, 228, 228);
 }
 
-.emove-file-attachment-button:active {
+.remove-file-attachment-button:active {
   background-color: rgb(215, 215, 215);
 }
 

@@ -1,9 +1,8 @@
+import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../types/fileService';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
-import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService';
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
-import {Microphone} from '../types/microphone';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
 
@@ -38,7 +37,7 @@ export interface ServiceIO {
 
   camera?: CameraFilesServiceConfig;
 
-  microphone?: Microphone;
+  recordAudio?: RecordAudioFilesServiceConfig;
 
   requestSettings?: RequestSettings;
 

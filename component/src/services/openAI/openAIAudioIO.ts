@@ -1,14 +1,14 @@
+import {FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileService';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
-import {Microphone, MicrophoneI} from '../../types/microphone';
+import {ExistingServiceAudioRecordingConfig} from '../../types/camera';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIAudioResult} from '../../types/openAIResult';
-import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {GenericButton} from '../../types/button';
@@ -37,7 +37,7 @@ export class OpenAIAudioIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  microphone?: Microphone;
+  recordAudio?: RecordAudioFilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
   fileTypes: ServiceFileTypes = {
@@ -66,7 +66,7 @@ export class OpenAIAudioIO implements ServiceIO {
       OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
       if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
-      this.microphone = config.microphone;
+      if (config.microphone) this.recordAudio = OpenAIAudioIO.processRecordAudioConfig(config.microphone);
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
@@ -102,7 +102,13 @@ export class OpenAIAudioIO implements ServiceIO {
     _audio.button = button;
   }
 
-  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & MicrophoneI) {
+  private static processRecordAudioConfig(microphone: ExistingServiceAudioRecordingConfig['microphone']) {
+    const recordAudioConfig: RecordAudioFilesServiceConfig = {files: {}};
+    if (typeof microphone === 'object') recordAudioConfig.button = microphone;
+    return recordAudioConfig;
+  }
+
+  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & ExistingServiceAudioRecordingConfig) {
     delete config.files;
     delete config.button;
     delete config.request;
