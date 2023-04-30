@@ -1,18 +1,16 @@
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {ButtonPosition as ButtonPositionT} from '../../../../../types/button';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
-import {ButtonStyleEvents} from '../buttonStyleEvents';
 import {Modal} from '../../fileAttachments/modal';
+import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
-export class UploadFileButton extends ButtonStyleEvents<Styles> {
-  readonly position: ButtonPositionT = 'outside-left';
+export class UploadFileButton extends ButtonStyling<Styles> {
   private readonly _inputElement: HTMLInputElement;
   private readonly _fileAttachmentsType: FileAttachmentsType;
   private _openModalOnce?: boolean | undefined;
@@ -20,10 +18,10 @@ export class UploadFileButton extends ButtonStyleEvents<Styles> {
   // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string) {
-    super(UploadFileButton.createButtonElement(), fileService.button);
+    const defaultPosition = fileService.button?.position || 'outside-left';
+    super(UploadFileButton.createButtonElement(), defaultPosition, fileService.button);
     const innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
-    if (fileService.button?.position) this.position = fileService.button.position;
     this.addClickEvent(containerElement, fileService);
     this.elementRef.replaceChildren(innerElements.styles);
     this.reapplyStateStyle('styles');

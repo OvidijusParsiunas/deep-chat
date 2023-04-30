@@ -10,6 +10,7 @@ import {OpenAIAudioResult} from '../../types/openAIResult';
 import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
+import {Microphone} from '../../types/microphone';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
@@ -36,6 +37,7 @@ export class OpenAIAudioIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
+  microphone?: boolean;
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
   fileTypes: ServiceFileTypes = {
@@ -64,6 +66,7 @@ export class OpenAIAudioIO implements ServiceIO {
       OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
       if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
+      this.microphone = config.microphone;
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
@@ -99,10 +102,12 @@ export class OpenAIAudioIO implements ServiceIO {
     _audio.button = button;
   }
 
-  private static cleanConfig(config: FilesServiceConfig) {
+  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & Microphone) {
     delete config.files;
     delete config.button;
     delete config.request;
+    delete config.type;
+    delete config.microphone;
     delete config.requestInterceptor;
     delete config.responseInterceptor;
   }

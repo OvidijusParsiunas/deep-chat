@@ -1,6 +1,7 @@
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
 import {FilesServiceConfig} from './fileService';
+import {Microphone} from './microphone';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
@@ -50,5 +51,5 @@ export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceCallConfig);
   completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceCallConfig);
   images?: true | (OpenAIImagesConfig & FilesServiceConfig & ExistingServiceCameraConfig);
-  audio?: true | (OpenAIAudioConfig & FilesServiceConfig & OpenAIAudioType);
+  audio?: true | (OpenAIAudioConfig & FilesServiceConfig & OpenAIAudioType & Microphone);
 }

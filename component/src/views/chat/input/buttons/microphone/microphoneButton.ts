@@ -4,18 +4,22 @@ import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {AddErrorMessage, SpeechToText} from './speechToText';
-import {ButtonStyleEvents} from '../buttonStyleEvents';
+import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 
 // WORK - check if webapi is available for browser
 // WORK - chat gpt/microsoft integration
-export class MicrophoneButton extends ButtonStyleEvents<Styles> {
+export class MicrophoneButton extends ButtonStyling<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 
-  constructor(speechInput: SpeechInput, inputElement: HTMLElement, addErrorMessage: AddErrorMessage) {
-    super(MicrophoneButton.createMicrophoneElement(), typeof speechInput === 'boolean' ? {} : speechInput);
+  constructor(inputElement: HTMLElement, addErrorMessage: AddErrorMessage, speechInput?: SpeechInput, record?: boolean) {
+    super(
+      MicrophoneButton.createMicrophoneElement(),
+      'outside-right',
+      typeof speechInput === 'boolean' ? {} : speechInput
+    );
     this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
     this.changeToDefault();
     const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

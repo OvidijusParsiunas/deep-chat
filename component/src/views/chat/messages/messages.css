@@ -81,6 +81,7 @@ pre {
 .image-message {
   padding: 0px;
   display: flex;
+  background-color: grey;
 }
 
 .image-message > *,

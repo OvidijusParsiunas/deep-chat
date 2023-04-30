@@ -1,19 +1,18 @@
-import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {SideContainersT} from '../sideContainers/sideContainers';
+import {ButtonStyling} from './buttonStyling';
 
 export class ButtonPosition {
-  // prettier-ignore
-  public static add(inputContainer: HTMLElement, sideContainers: SideContainersT,
-      buttonElement: HTMLElement, position: ButtonPositionT) {
-    buttonElement.classList.add(position);
+  public static add(inputContainer: HTMLElement, sideContainers: SideContainersT, buttonStyling: ButtonStyling) {
+    const {elementRef, position} = buttonStyling;
+    elementRef.classList.add(position);
     if (position === 'inside-left' || position === 'inside-right') {
-      inputContainer.appendChild(buttonElement);
+      inputContainer.appendChild(elementRef);
     } else if (position === 'outside-left') {
-      sideContainers[0].appendChild(buttonElement);
+      sideContainers[0].appendChild(elementRef);
     } else {
       // explicitly defining the class incase client uses an incorrect string
-      buttonElement.classList.add('outside-right');
-      sideContainers[1].appendChild(buttonElement);
+      elementRef.classList.add('outside-right');
+      sideContainers[1].appendChild(elementRef);
     }
   }
 }

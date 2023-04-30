@@ -7,12 +7,12 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {AiAssistant} from '../../../../../aiAssistant';
-import {ButtonStyleEvents} from '../buttonStyleEvents';
 import {Messages} from '../../../messages/messages';
+import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
 
-export class SubmitButton extends ButtonStyleEvents<Styles> {
+export class SubmitButton extends ButtonStyling<Styles> {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _isLoadingActive = false;
   private readonly _serviceIO: ServiceIO;
@@ -27,7 +27,8 @@ export class SubmitButton extends ButtonStyleEvents<Styles> {
   constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments) {
     const {submitButtonStyles} = aiAssistant;
-    super(SubmitButton.createButtonContainerElement(), submitButtonStyles);
+    const defaultPosition = aiAssistant.submitButtonStyles?.position || 'inside-right';
+    super(SubmitButton.createButtonContainerElement(), defaultPosition, submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._fileAttachments = fileAttachments;

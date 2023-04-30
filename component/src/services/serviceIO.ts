@@ -37,6 +37,8 @@ export interface ServiceIO {
 
   camera?: CameraFilesServiceConfig;
 
+  microphone?: boolean;
+
   requestSettings?: RequestSettings;
 
   introPanelMarkUp?: string;

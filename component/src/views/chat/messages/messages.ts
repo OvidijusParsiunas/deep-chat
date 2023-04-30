@@ -59,20 +59,10 @@ export class Messages {
     this._onNewMessage = aiAssistant.onNewMessage;
     this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
+    this.populateIntroPanel(aiAssistant._isSlotPopulated, introPanelMarkUp, aiAssistant.introPanelStyle);
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
-    // this.addNewMessage(
-    //   [
-    //     {
-    //       url: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Fischotter%2C_Lutra_Lutra.JPG',
-    //       // base64: `data:image/png;base64,${SAMPLE_OPEN_AI_BASE_64}`,
-    //     },
-    //   ],
-    //   true,
-    //   true
-    // );
     aiAssistant.getMessages = () => this.messages;
-    this.populateIntroPanel(aiAssistant._isSlotPopulated, introPanelMarkUp, aiAssistant.introPanelStyle);
   }
 
   private static createContainerElement() {

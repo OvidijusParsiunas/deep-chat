@@ -1,3 +1,4 @@
+import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {ButtonElementStyles} from '../../../../types/button';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonCSS} from './buttonCSS';
@@ -6,14 +7,16 @@ interface MouseState {
   state: keyof StatefulStyles;
 }
 
-export class ButtonStyleEvents<T extends {[key: string]: ButtonElementStyles}> {
+export class ButtonStyling<T extends {[key: string]: ButtonElementStyles} = {}> {
+  readonly position: ButtonPositionT;
   readonly elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
 
-  constructor(buttonElement: HTMLElement, customStyles?: T) {
+  constructor(buttonElement: HTMLElement, position: ButtonPositionT, customStyles?: T) {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
+    this.position = position;
   }
 
   private buttonMouseLeave(customStyles?: ButtonElementStyles) {

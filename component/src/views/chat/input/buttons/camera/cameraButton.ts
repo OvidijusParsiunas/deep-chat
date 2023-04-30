@@ -1,5 +1,4 @@
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {ButtonPosition as ButtonPositionT} from '../../../../../types/button';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
@@ -9,18 +8,16 @@ import {CameraModal} from '../../fileAttachments/cameraModal';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
 import {CameraFiles} from '../../../../../types/camera';
-import {ButtonStyleEvents} from '../buttonStyleEvents';
+import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
-export class CameraButton extends ButtonStyleEvents<Styles> {
-  readonly position: ButtonPositionT = 'outside-left';
-
+export class CameraButton extends ButtonStyling<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
-    super(CameraButton.createButtonElement(), fileService?.button || {});
+    const defaultPosition = fileService?.button?.position || 'outside-left';
+    super(CameraButton.createButtonElement(), defaultPosition, fileService?.button || {});
     const innerElements = CameraButton.createInnerElements(this._customStyles);
     if (fileService) {
-      if (fileService.button?.position) this.position = fileService.button.position;
       this.addClickEvent(containerElement, fileAttachmentsType, fileService?.modalContainerStyle, fileService.files);
       this.elementRef.replaceChildren(innerElements.styles);
       this.reapplyStateStyle('styles');
