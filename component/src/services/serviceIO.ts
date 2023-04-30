@@ -3,6 +3,7 @@ import {CameraFilesServiceConfig, FilesServiceConfig} from '../types/fileService
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {Microphone} from '../types/microphone';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
 
@@ -37,7 +38,7 @@ export interface ServiceIO {
 
   camera?: CameraFilesServiceConfig;
 
-  microphone?: boolean;
+  microphone?: Microphone;
 
   requestSettings?: RequestSettings;
 

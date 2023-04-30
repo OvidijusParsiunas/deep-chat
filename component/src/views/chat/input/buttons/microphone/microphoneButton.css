@@ -17,9 +17,8 @@
 }
 
 .active-microphone-icon {
-  filter: brightness(0) saturate(100%) invert(9%) sepia(100%) saturate(6945%) hue-rotate(250deg) brightness(98%)
-    contrast(129%);
-  background-color: rgba(255, 0, 0, 0.025);
+  filter: brightness(0) saturate(100%) invert(10%) sepia(97%) saturate(7495%) hue-rotate(0deg) brightness(101%)
+    contrast(107%);
   border-radius: 10px;
 }
 

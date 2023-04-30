@@ -3,6 +3,7 @@ import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSen
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
+import {Microphone, MicrophoneI} from '../../types/microphone';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -10,7 +11,6 @@ import {OpenAIAudioResult} from '../../types/openAIResult';
 import {FilesServiceConfig} from '../../types/fileService';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {Microphone} from '../../types/microphone';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
@@ -37,7 +37,7 @@ export class OpenAIAudioIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  microphone?: boolean;
+  microphone?: Microphone;
   canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
   fileTypes: ServiceFileTypes = {
@@ -102,7 +102,7 @@ export class OpenAIAudioIO implements ServiceIO {
     _audio.button = button;
   }
 
-  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & Microphone) {
+  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & MicrophoneI) {
     delete config.files;
     delete config.button;
     delete config.request;

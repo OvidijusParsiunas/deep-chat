@@ -8,8 +8,8 @@ import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
-import {SpeechInput} from './types/speechInput';
 import {ChatView} from './views/chat/chatView';
+import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
 import {InputStyles} from './types/input';
@@ -36,7 +36,7 @@ export class AiAssistant extends InternalHTML {
 
   // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('object')
-  speechInput?: SpeechInput;
+  speechInput?: Microphone;
 
   @Property('boolean')
   speechOutput?: boolean;

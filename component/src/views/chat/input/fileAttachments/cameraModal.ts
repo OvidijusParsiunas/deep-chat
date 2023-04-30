@@ -125,6 +125,7 @@ export class CameraModal extends Modal {
     return undefined;
   }
 
+  // WORK - api for file type
   private static getFileName() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');

@@ -1,4 +1,5 @@
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
+import {MicrophoneButtonFactory} from './buttons/microphone/microphoneButtonFactory';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentsType';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
@@ -28,9 +29,8 @@ export class Input {
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,fileAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
-    const microphoneButton = aiAssistant.speechInput || serviceIO.microphone
-      ? new MicrophoneButton(keyboardInput.inputElementRef, messages.addNewErrorMessage.bind(messages),
-          aiAssistant.speechInput, serviceIO.microphone) : undefined;
+    const microphoneButton = MicrophoneButtonFactory.attemptCreate(
+      aiAssistant, serviceIO, keyboardInput.inputElementRef, messages.addNewErrorMessage.bind(messages));
     Input.addElements(this.elementRef, keyboardInput.elementRef, submitButton, uploadFileButtons,
       microphoneButton, cameraButton);
   }

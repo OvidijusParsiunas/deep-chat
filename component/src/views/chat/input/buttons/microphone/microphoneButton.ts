@@ -1,5 +1,5 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {MicrophoneStyles, SpeechInput} from '../../../../../types/speechInput';
+import {MicrophoneStyles, Microphone} from '../../../../../types/microphone';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
@@ -14,20 +14,16 @@ export class MicrophoneButton extends ButtonStyling<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 
-  constructor(inputElement: HTMLElement, addErrorMessage: AddErrorMessage, speechInput?: SpeechInput, record?: boolean) {
-    super(
-      MicrophoneButton.createMicrophoneElement(),
-      'outside-right',
-      typeof speechInput === 'boolean' ? {} : speechInput
-    );
+  constructor(inputElement: HTMLElement, addErrorMessage: AddErrorMessage, microphone: Microphone) {
+    super(MicrophoneButton.createMicrophoneElement(), 'outside-right', typeof microphone === 'boolean' ? {} : microphone);
     this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
     this.changeToDefault();
-    const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!speechRecognition) {
-      this.changeToUnsupported();
-    } else {
-      new SpeechToText(this, speechRecognition, inputElement, addErrorMessage);
-    }
+    // const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    // if (!speechRecognition) {
+    //   this.changeToUnsupported();
+    // } else {
+    //   new SpeechToText(this, speechRecognition, inputElement, addErrorMessage);
+    // }
   }
 
   private static createInnerElements(customStyles?: Styles) {
