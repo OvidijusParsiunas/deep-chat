@@ -58,7 +58,7 @@ export class Input {
     let microphoneButton: MicrophoneButton | undefined;
     if (serviceIO.recordAudio?.files) {
       const audioType = fileAttachmentTypes.audio || fileAttachments.addType(serviceIO.recordAudio.files);
-      microphoneButton = new RecordAudio(audioType, serviceIO.recordAudio.button);
+      microphoneButton = new RecordAudio(audioType, serviceIO.recordAudio);
     }
     return {fileAttachments, uploadFileButtons, cameraButton, microphoneButton};
   }

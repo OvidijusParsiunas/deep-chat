@@ -1,4 +1,5 @@
-import {ExistingServiceAudioRecordingConfig, ExistingServiceCameraConfig} from './camera';
+import {ExistingServiceAudioRecordingConfig} from './microphone';
+import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
 import {FilesServiceConfig} from './fileService';
 
