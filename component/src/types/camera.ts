@@ -13,6 +13,7 @@ export interface ExistingServiceCameraConfig {
     | boolean
     | {
         button?: GenericButton;
+        newFilePrefix?: string;
         modalContainerStyle?: CustomStyle;
       };
 }

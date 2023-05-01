@@ -10,6 +10,7 @@ export class RecordAudio extends MicrophoneButton {
   private readonly _audioType: AudioFileAttachmentType;
   private readonly _extension: AudioFormat;
   private readonly _maxDurationSeconds?: number;
+  private readonly _newFilePrefix?: string;
 
   constructor(audioType: AudioFileAttachmentType, recordAudioConfig: RecordAudioFilesServiceConfig) {
     super(recordAudioConfig.button);
@@ -17,6 +18,7 @@ export class RecordAudio extends MicrophoneButton {
     this._extension = recordAudioConfig.files?.format || 'mp3';
     this._maxDurationSeconds = recordAudioConfig.files?.maxDurationSeconds;
     this.elementRef.onclick = this.buttonClick.bind(this);
+    this._newFilePrefix = recordAudioConfig.files?.newFilePrefix;
   }
 
   private buttonClick() {
@@ -28,10 +30,15 @@ export class RecordAudio extends MicrophoneButton {
     }
   }
 
-  private stop() {
-    this.changeToDefault();
-    this._mediaRecorder?.stop(); // may not be required
-    this._mediaStream?.getTracks().forEach((track) => track.stop()); // necessary to remove tab bubble
+  private stop(): Promise<void> {
+    return new Promise((resolve) => {
+      this.changeToDefault();
+      this._mediaRecorder?.stop(); // may not be required
+      this._mediaStream?.getTracks().forEach((track) => track.stop()); // necessary to remove tab bubble
+      setTimeout(() => {
+        resolve();
+      }, 10);
+    });
   }
 
   private record() {
@@ -55,7 +62,7 @@ export class RecordAudio extends MicrophoneButton {
 
   private createFile(event: BlobEvent) {
     const blob = new Blob([event.data], {type: `audio/${this._extension}`});
-    const filename = NewFileName.getFileName('audio', this._extension);
+    const filename = NewFileName.getFileName(this._newFilePrefix || 'audio', this._extension);
     const file = new File([blob], filename, {type: blob.type});
     const reader = new FileReader();
     reader.readAsDataURL(file);

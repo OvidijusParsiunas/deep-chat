@@ -1,5 +1,6 @@
 import {FileAttachmentTypeFactory} from './fileAttachmentTypes/fileAttachmentTypeFactory';
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachmentType';
 import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
 import {ServiceFileTypes} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
@@ -40,6 +41,14 @@ export class FileAttachments {
   getAllFileData() {
     const files = this._fileAttachmentsTypes.map((fileAttachmentType) => fileAttachmentType.getFiles()).flat();
     return files.length > 0 ? files : undefined;
+  }
+
+  async completePlaceholders() {
+    await Promise.all(
+      this._fileAttachmentsTypes.map(async (fileAttachmentsType) =>
+        (fileAttachmentsType as AudioFileAttachmentType).stopPlaceholderCallback?.()
+      )
+    );
   }
 
   public static addFilesToType(files: File[], fileAttachmentTypes: FileAttachmentsType[]) {

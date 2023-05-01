@@ -12,6 +12,7 @@ import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
+import {CameraFiles} from '../../types/cameraFiles';
 import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
@@ -89,10 +90,11 @@ export class OpenAIImagesIO implements ServiceIO {
   }
 
   private static processCameraConfig(camera: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
-    const cameraConfig: CameraFilesServiceConfig = {files: {}};
+    const cameraConfig: CameraFilesServiceConfig & {files: CameraFiles} = {files: {}};
     if (typeof camera === 'object') {
       cameraConfig.button = camera.button;
       cameraConfig.modalContainerStyle = camera.modalContainerStyle;
+      cameraConfig.files.newFilePrefix = camera.newFilePrefix;
       const dimension = images.size ? Number.parseInt(images.size) : undefined;
       cameraConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
     }

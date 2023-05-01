@@ -6,6 +6,7 @@ import {STOP_ICON_STRING} from '../../../../../icons/stopIcon';
 import {Browser} from '../../../../../utils/browser/browser';
 
 export class AudioFileAttachmentType extends FileAttachmentsType {
+  stopPlaceholderCallback?: () => Promise<void>;
   private _activePlaceholderTimer?: number;
   private _activePlaceholderAttachment?: AttachmentObject;
   private static readonly TIMER_LIMIT_S = 5999;
@@ -54,27 +55,26 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     return container;
   }
 
-  private static createTimer(text: HTMLElement, stopCallback: () => void, customTimeLimit?: number) {
+  private createTimer(text: HTMLElement, customTimeLimit?: number) {
     let time = 0;
     const secondsLimit =
       customTimeLimit !== undefined && customTimeLimit < AudioFileAttachmentType.TIMER_LIMIT_S
         ? customTimeLimit
         : AudioFileAttachmentType.TIMER_LIMIT_S;
-    const interval = setInterval(() => {
+    return setInterval(() => {
       time += 1;
       if (time === secondsLimit) {
-        clearInterval(interval);
-        stopCallback();
+        this.stopPlaceholderCallback?.();
+        this.clearTimer();
       }
       if (time === 600) text.classList.add('audio-placeholder-text-4-digits');
       const minutes = Math.floor(time / 60);
       const seconds = (time % 60).toString().padStart(2, '0');
       text.textContent = `${minutes}:${seconds}`;
     }, 1000);
-    return interval;
   }
 
-  private createPlaceholderAudioAttachment(stopCallback: () => void, customTimeLimit?: number) {
+  private createPlaceholderAudioAttachment(customTimeLimit?: number) {
     const container = AudioFileAttachmentType.createAudioContainer();
     const text = document.createElement('div');
     text.classList.add('audio-placeholder-text-3-digits');
@@ -82,14 +82,15 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     textContainer.classList.add('file-attachment-text-container', 'audio-placeholder-text-3-digits-container');
     textContainer.appendChild(text);
     text.textContent = '0:00';
-    this._activePlaceholderTimer = AudioFileAttachmentType.createTimer(text, stopCallback, customTimeLimit);
+    this._activePlaceholderTimer = this.createTimer(text, customTimeLimit);
     container.appendChild(textContainer);
     return container;
   }
 
-  addPlaceholderAttachment(stopCallback: () => void, customTimeLimit?: number) {
-    const audioAttachment = this.createPlaceholderAudioAttachment(stopCallback, customTimeLimit);
+  addPlaceholderAttachment(stopCallback: () => Promise<void>, customTimeLimit?: number) {
+    const audioAttachment = this.createPlaceholderAudioAttachment(customTimeLimit);
     this._activePlaceholderAttachment = this.addFileAttachment(new File([], ''), 'audio', audioAttachment, false);
+    this.stopPlaceholderCallback = stopCallback;
   }
 
   // prettier-ignore
@@ -105,7 +106,6 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     this.clearTimer();
   }
 
-  // WORK
   removePlaceholderAttachment() {
     if (this._activePlaceholderAttachment) {
       this.removeFile(this._activePlaceholderAttachment);
@@ -118,6 +118,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     if (this._activePlaceholderTimer !== undefined) {
       clearInterval(this._activePlaceholderTimer);
       this._activePlaceholderTimer = undefined;
+      this.stopPlaceholderCallback = undefined;
     }
   }
 

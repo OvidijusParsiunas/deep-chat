@@ -108,7 +108,8 @@ export class OpenAIAudioIO implements ServiceIO {
     if (typeof microphone === 'object') {
       recordAudioConfig.button = microphone.styles;
       if (microphone.format) recordAudioConfig.files.format = microphone.format;
-      if (microphone.maxDurationSeconds) recordAudioConfig.files.maxDurationSeconds = microphone.maxDurationSeconds;
+      recordAudioConfig.files.maxDurationSeconds = microphone.maxDurationSeconds;
+      recordAudioConfig.files.newFilePrefix = microphone.newFilePrefix;
     }
     return recordAudioConfig;
   }

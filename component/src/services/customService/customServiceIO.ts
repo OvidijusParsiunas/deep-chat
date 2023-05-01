@@ -96,9 +96,10 @@ export class CustomServiceIO implements ServiceIO {
       if (typeof customService.camera === 'object') {
         this.camera.modalContainerStyle = customService.camera.modalContainerStyle;
         // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
-        if (customService.camera.files?.format) {
+        if (customService.camera.files) {
           this.camera.files ??= {}; // for typescript
           this.camera.files.format = customService.camera.files?.format;
+          this.camera.files.newFilePrefix = customService.camera.files?.newFilePrefix;
           this.camera.files.dimensions = customService.camera.files?.dimensions;
         }
       }
@@ -115,9 +116,10 @@ export class CustomServiceIO implements ServiceIO {
       // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
       if (typeof customService.microphoneAudio === 'object') {
         if (customService.microphoneAudio.files) {
-          this.recordAudio.files ??= {};
-          this.recordAudio.files.format = customService.microphoneAudio.files.format;
-          this.recordAudio.files.maxDurationSeconds = customService.microphoneAudio.files.maxDurationSeconds;
+          this.recordAudio.files ??= {}; // for typescript
+          this.recordAudio.files.format = customService.microphoneAudio.files?.format;
+          this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
+          this.recordAudio.files.maxDurationSeconds = customService.microphoneAudio.files?.maxDurationSeconds;
         }
       }
       // if microphone is not available - fallback to normal audio upload

@@ -97,6 +97,7 @@ export class SubmitButton extends ButtonStyling<Styles> {
   }
 
   public async submit(userText: string) {
+    await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData.file);
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, fileData)) return;
