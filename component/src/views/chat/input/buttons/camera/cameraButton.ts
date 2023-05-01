@@ -1,13 +1,13 @@
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
+import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
-import {CameraModal} from '../../fileAttachments/cameraModal';
+import {CameraFiles} from '../../../../../types/cameraFiles';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
-import {CameraFiles} from '../../../../../types/camera';
 import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;

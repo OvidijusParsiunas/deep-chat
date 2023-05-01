@@ -1,4 +1,4 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../types/fileService';
+import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';

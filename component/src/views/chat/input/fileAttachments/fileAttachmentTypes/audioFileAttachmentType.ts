@@ -1,4 +1,4 @@
-import {AttachmentObject, FileAttachmentsType} from '../fileAttachmentsType';
+import {AttachmentObject, FileAttachmentsType} from './fileAttachmentsType';
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {PLAY_ICON_STRING} from '../../../../../icons/playIcon';
@@ -8,6 +8,7 @@ import {Browser} from '../../../../../utils/browser/browser';
 export class AudioFileAttachmentType extends FileAttachmentsType {
   private _activePlaceholderTimer?: number;
   private _activePlaceholderAttachment?: AttachmentObject;
+  private static readonly TIMER_LIMIT_S = 5999;
 
   constructor(fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void, container: HTMLElement) {
     super(fileAttachments, toggleContainer, container);
@@ -53,31 +54,41 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     return container;
   }
 
-  private createPlaceholderAudioAttachment() {
-    const container = AudioFileAttachmentType.createAudioContainer();
-    const text = document.createElement('div');
-    text.classList.add('audio-placeholder-text');
-    const textContainer = document.createElement('div');
-    textContainer.classList.add('file-attachment-text-container', 'audio-placeholder-icon-container');
-    textContainer.appendChild(text);
-    text.textContent = '0:00';
-    this._activePlaceholderTimer = AudioFileAttachmentType.createTimer(text);
-    container.appendChild(textContainer);
-    return container;
-  }
-
-  private static createTimer(text: HTMLElement) {
+  private static createTimer(text: HTMLElement, stopCallback: () => void, customTimeLimit?: number) {
     let time = 0;
-    return setInterval(() => {
+    const secondsLimit =
+      customTimeLimit !== undefined && customTimeLimit < AudioFileAttachmentType.TIMER_LIMIT_S
+        ? customTimeLimit
+        : AudioFileAttachmentType.TIMER_LIMIT_S;
+    const interval = setInterval(() => {
       time += 1;
+      if (time === secondsLimit) {
+        clearInterval(interval);
+        stopCallback();
+      }
+      if (time === 600) text.classList.add('audio-placeholder-text-4-digits');
       const minutes = Math.floor(time / 60);
       const seconds = (time % 60).toString().padStart(2, '0');
       text.textContent = `${minutes}:${seconds}`;
     }, 1000);
+    return interval;
   }
 
-  addPlaceholderAttachment() {
-    const audioAttachment = this.createPlaceholderAudioAttachment();
+  private createPlaceholderAudioAttachment(stopCallback: () => void, customTimeLimit?: number) {
+    const container = AudioFileAttachmentType.createAudioContainer();
+    const text = document.createElement('div');
+    text.classList.add('audio-placeholder-text-3-digits');
+    const textContainer = document.createElement('div');
+    textContainer.classList.add('file-attachment-text-container', 'audio-placeholder-text-3-digits-container');
+    textContainer.appendChild(text);
+    text.textContent = '0:00';
+    this._activePlaceholderTimer = AudioFileAttachmentType.createTimer(text, stopCallback, customTimeLimit);
+    container.appendChild(textContainer);
+    return container;
+  }
+
+  addPlaceholderAttachment(stopCallback: () => void, customTimeLimit?: number) {
+    const audioAttachment = this.createPlaceholderAudioAttachment(stopCallback, customTimeLimit);
     this._activePlaceholderAttachment = this.addFileAttachment(new File([], ''), 'audio', audioAttachment, false);
   }
 
@@ -94,6 +105,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     this.clearTimer();
   }
 
+  // WORK
   removePlaceholderAttachment() {
     if (this._activePlaceholderAttachment) {
       this.removeFile(this._activePlaceholderAttachment);
@@ -111,7 +123,6 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
 
   public static stopAttachmentPlayback(attachmentContainerEl: HTMLElement) {
     if (attachmentContainerEl.children[0]?.children?.[0]?.classList.contains('stop-icon')) {
-      // stops audio before removing
       (attachmentContainerEl.children[0] as HTMLElement).click();
     }
   }

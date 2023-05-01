@@ -1,6 +1,6 @@
+import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {ExistingServiceCameraConfig} from '../../types/camera';

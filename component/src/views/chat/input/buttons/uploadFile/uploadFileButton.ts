@@ -1,11 +1,11 @@
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentsType';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
-import {Modal} from '../../fileAttachments/modal';
+import {Modal} from '../../fileAttachments/modal/modal';
 import {ButtonStyling} from '../buttonStyling';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;

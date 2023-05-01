@@ -1,7 +1,7 @@
 import {ExistingServiceAudioRecordingConfig} from './microphone';
+import {FilesServiceConfig} from './fileServiceConfigs';
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
-import {FilesServiceConfig} from './fileService';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';

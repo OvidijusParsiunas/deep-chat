@@ -8,12 +8,6 @@ export interface CameraDimensions {
 
 export type PhotoFormat = 'png' | 'jpeg';
 
-export interface CameraFiles {
-  maxNumberOfFiles?: number;
-  format?: PhotoFormat;
-  dimensions?: CameraDimensions;
-}
-
 export interface ExistingServiceCameraConfig {
   camera?:
     | boolean

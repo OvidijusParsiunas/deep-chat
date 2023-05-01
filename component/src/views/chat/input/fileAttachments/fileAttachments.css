@@ -1,4 +1,4 @@
-@import url('./dragAndDrop.css');
+@import url('./dragAndDrop/dragAndDrop.css');
 
 #file-attachment-container {
   position: absolute;

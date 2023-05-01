@@ -1,7 +1,7 @@
 import {FileAttachmentTypeFactory} from './fileAttachmentTypes/fileAttachmentTypeFactory';
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
 import {ServiceFileTypes} from '../../../../services/serviceIO';
-import {FileAttachmentsType} from './fileAttachmentsType';
 import {CustomStyle} from '../../../../types/styles';
 
 export class FileAttachments {

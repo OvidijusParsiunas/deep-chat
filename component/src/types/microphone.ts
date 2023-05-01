@@ -11,11 +11,6 @@ export type Microphone = true | MicrophoneStyles;
 
 export type AudioFormat = 'mp3' | '4a' | 'webm' | 'mp4' | 'mpga' | 'wav' | 'mpeg' | 'm4a';
 
-export interface AudioRecordingFiles {
-  format: AudioFormat;
-  maxNumberOfFiles?: number;
-}
-
 export interface ExistingServiceAudioRecordingConfig {
-  microphone?: boolean | MicrophoneStyles;
+  microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat};
 }

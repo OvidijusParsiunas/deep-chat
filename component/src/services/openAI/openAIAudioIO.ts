@@ -1,10 +1,11 @@
-import {FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileService';
+import {FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {ExistingServiceAudioRecordingConfig} from '../../types/microphone';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
+import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
@@ -103,8 +104,12 @@ export class OpenAIAudioIO implements ServiceIO {
   }
 
   private static processRecordAudioConfig(microphone: ExistingServiceAudioRecordingConfig['microphone']) {
-    const recordAudioConfig: RecordAudioFilesServiceConfig = {files: {format: 'mp3'}};
-    if (typeof microphone === 'object') recordAudioConfig.button = microphone;
+    const recordAudioConfig: RecordAudioFilesServiceConfig & {files: AudioRecordingFiles} = {files: {format: 'mp3'}};
+    if (typeof microphone === 'object') {
+      recordAudioConfig.button = microphone.styles;
+      if (microphone.format) recordAudioConfig.files.format = microphone.format;
+      if (microphone.maxDurationSeconds) recordAudioConfig.files.maxDurationSeconds = microphone.maxDurationSeconds;
+    }
     return recordAudioConfig;
   }
 

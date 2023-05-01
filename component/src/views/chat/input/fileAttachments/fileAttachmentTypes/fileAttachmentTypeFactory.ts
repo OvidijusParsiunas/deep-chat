@@ -1,7 +1,7 @@
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {ServiceFileTypes} from '../../../../../services/serviceIO';
 import {AudioFileAttachmentType} from './audioFileAttachmentType';
-import {FileAttachmentsType} from '../fileAttachmentsType';
+import {FileAttachmentsType} from './fileAttachmentsType';
 
 export class FileAttachmentTypeFactory {
   // prettier-ignore

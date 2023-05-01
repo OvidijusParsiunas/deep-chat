@@ -1,7 +1,7 @@
+import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
-import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
 import {Messages} from '../../views/chat/messages/messages';
@@ -25,6 +25,7 @@ export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
+  recordAudio?: RecordAudioFilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
@@ -45,6 +46,7 @@ export class CustomServiceIO implements ServiceIO {
       this.fileTypes.audio = CustomServiceIO.parseConfig(customService.audio, this.requestSettings, 'audio/*');
       if (this.fileTypes.audio.files) this.fileTypes.audio.files.maxNumberOfFiles ??= this.camera?.files?.maxNumberOfFiles;
     }
+    this.processRecordAudio(customService);
     if (customService.mixedFiles) {
       this.fileTypes.mixedFiles = CustomServiceIO.parseConfig(customService.mixedFiles, this.requestSettings, '');
     }
@@ -93,8 +95,9 @@ export class CustomServiceIO implements ServiceIO {
       this.camera = CustomServiceIO.parseConfig(customService.camera, this.requestSettings, 'image/*');
       if (typeof customService.camera === 'object') {
         this.camera.modalContainerStyle = customService.camera.modalContainerStyle;
+        // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
         if (customService.camera.files?.format) {
-          this.camera.files ??= {};
+          this.camera.files ??= {}; // for typescript
           this.camera.files.format = customService.camera.files?.format;
           this.camera.files.dimensions = customService.camera.files?.dimensions;
         }
@@ -105,10 +108,29 @@ export class CustomServiceIO implements ServiceIO {
     }
   }
 
+  private processRecordAudio(customService: CustomServiceConfig) {
+    if (!customService.microphoneAudio) return;
+    if (navigator.mediaDevices.getUserMedia !== undefined) {
+      this.recordAudio = CustomServiceIO.parseConfig(customService.microphoneAudio, this.requestSettings, 'audio/*');
+      // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
+      if (typeof customService.microphoneAudio === 'object') {
+        if (customService.microphoneAudio.files) {
+          this.recordAudio.files ??= {};
+          this.recordAudio.files.format = customService.microphoneAudio.files.format;
+          this.recordAudio.files.maxDurationSeconds = customService.microphoneAudio.files.maxDurationSeconds;
+        }
+      }
+      // if microphone is not available - fallback to normal audio upload
+    } else if (!customService.audio) {
+      this.fileTypes.audio = CustomServiceIO.parseConfig(customService.microphoneAudio, this.requestSettings, 'audio/*');
+    }
+  }
+
   private static cleanConfig(config: Partial<CustomServiceConfig>) {
     delete config.images;
     delete config.camera;
     delete config.audio;
+    delete config.microphoneAudio;
     delete config.mixedFiles;
     delete config.request;
     delete config.stream;

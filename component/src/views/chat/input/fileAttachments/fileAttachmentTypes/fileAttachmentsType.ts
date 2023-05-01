@@ -1,7 +1,7 @@
-import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachmentType';
-import {FileAttachments} from '../../../../types/fileAttachments';
-import {MessageFileType} from '../../../../types/messageFile';
-import {Browser} from '../../../../utils/browser/browser';
+import {FileAttachments} from '../../../../../types/fileAttachments';
+import {AudioFileAttachmentType} from './audioFileAttachmentType';
+import {MessageFileType} from '../../../../../types/messageFile';
+import {Browser} from '../../../../../utils/browser/browser';
 
 export interface AttachmentObject {
   file: File;

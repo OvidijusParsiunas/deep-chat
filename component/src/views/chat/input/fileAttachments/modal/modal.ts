@@ -1,6 +1,6 @@
-import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
-import {FileServiceIO} from '../../../../services/serviceIO';
-import {CustomStyle} from '../../../../types/styles';
+import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
+import {FileServiceIO} from '../../../../../services/serviceIO';
+import {CustomStyle} from '../../../../../types/styles';
 
 export class Modal {
   public static readonly MODAL_CLOSE_TIMEOUT_MS = 190;
