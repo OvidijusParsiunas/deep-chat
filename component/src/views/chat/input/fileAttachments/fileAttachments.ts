@@ -1,4 +1,6 @@
+import {FileAttachmentTypeFactory} from './fileAttachmentTypes/fileAttachmentTypeFactory';
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
+import {ServiceFileTypes} from '../../../../services/serviceIO';
 import {FileAttachmentsType} from './fileAttachmentsType';
 import {CustomStyle} from '../../../../types/styles';
 
@@ -14,9 +16,9 @@ export class FileAttachments {
   }
 
   // prettier-ignore
-  addType(files: FileAttachmentsT) {
-    const fileAttachmentsType = new FileAttachmentsType(
-      files, this.toggleContainerDisplay.bind(this), this._containerElementRef);
+  addType(files: FileAttachmentsT, type: keyof ServiceFileTypes) {
+    const fileAttachmentsType = FileAttachmentTypeFactory.create(
+      files, this.toggleContainerDisplay.bind(this), this._containerElementRef, type);
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }

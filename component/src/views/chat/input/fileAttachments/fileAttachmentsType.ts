@@ -1,14 +1,13 @@
+import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachmentType';
 import {FileAttachments} from '../../../../types/fileAttachments';
-import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {MessageFileType} from '../../../../types/messageFile';
-import {PLAY_ICON_STRING} from '../../../../icons/playIcon';
-import {STOP_ICON_STRING} from '../../../../icons/stopIcon';
 import {Browser} from '../../../../utils/browser/browser';
 
-interface AttachmentObject {
+export interface AttachmentObject {
   file: File;
   fileType: MessageFileType;
-  attachmentElement: HTMLElement;
+  attachmentContainerElement: HTMLElement;
+  removeButton?: HTMLElement;
 }
 
 export class FileAttachmentsType {
@@ -27,7 +26,7 @@ export class FileAttachmentsType {
 
   attemptAddFile(file: File, fileReaderResult: string) {
     if (FileAttachmentsType.isFileTypeValid(file, this._acceptedFormat)) {
-      this.addAttachmentBasedOnType(file, fileReaderResult);
+      this.addAttachmentBasedOnType(file, fileReaderResult, true);
       return true;
     }
     return false;
@@ -52,16 +51,16 @@ export class FileAttachmentsType {
     return false;
   }
 
-  private addAttachmentBasedOnType(file: File, fileReaderResult: string) {
+  private addAttachmentBasedOnType(file: File, fileReaderResult: string, removable: boolean) {
     if (file.type.startsWith('image')) {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
-      this.addFileAttachment(file, 'image', imageAttachment);
+      this.addFileAttachment(file, 'image', imageAttachment, removable);
     } else if (file.type.startsWith('audio')) {
-      const audioAttachment = FileAttachmentsType.createAudioAttachment(fileReaderResult);
-      this.addFileAttachment(file, 'audio', audioAttachment);
+      const audioAttachment = AudioFileAttachmentType.createAudioAttachment(fileReaderResult);
+      this.addFileAttachment(file, 'audio', audioAttachment, removable);
     } else {
       const anyFileAttachment = FileAttachmentsType.createAnyFileAttachment(file.name);
-      this.addFileAttachment(file, 'file', anyFileAttachment);
+      this.addFileAttachment(file, 'file', anyFileAttachment, removable);
     }
   }
 
@@ -72,37 +71,6 @@ export class FileAttachmentsType {
     return image;
   }
 
-  private static createAudioAttachment(fileReaderResult: string) {
-    const container = document.createElement('div');
-    container.classList.add('border-bound-attachment', 'audio-attachment-icon-container');
-    if (Browser.IS_SAFARI) container.classList.add('border-bound-attachment-safari');
-    const audio = document.createElement('audio');
-    audio.src = fileReaderResult;
-    const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
-    play.classList.add('attachment-icon', 'play-icon');
-    const stop = SVGIconUtils.createSVGElement(STOP_ICON_STRING);
-    stop.classList.add('attachment-icon', 'stop-icon');
-    container.replaceChildren(play);
-    audio.onplay = () => {
-      container.replaceChildren(stop);
-    };
-    audio.onpause = () => {
-      container.replaceChildren(play);
-      audio.currentTime = 0;
-    };
-    audio.onended = () => {
-      container.replaceChildren(play);
-    };
-    container.onclick = () => {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    };
-    return container;
-  }
-
   private static createAnyFileAttachment(fileName: string) {
     const container = document.createElement('div');
     container.classList.add('border-bound-attachment');
@@ -110,39 +78,45 @@ export class FileAttachmentsType {
     const text = document.createElement('div');
     text.classList.add('any-file-attachment-text');
     const textContainer = document.createElement('div');
-    textContainer.classList.add('any-file-attachment-text-container');
+    textContainer.classList.add('file-attachment-text-container');
     textContainer.appendChild(text);
     text.textContent = fileName;
     container.appendChild(textContainer);
     return container;
   }
 
-  private addFileAttachment(file: File, fileType: MessageFileType, attachmentElement: HTMLElement) {
-    const attachmentObject = {file, attachmentElement, fileType};
+  addFileAttachment(file: File, fileType: MessageFileType, attachmentElement: HTMLElement, removable: boolean) {
+    const containerElement = FileAttachmentsType.createContainer(attachmentElement);
     if (this._attachments.length >= this._fileCountLimit) {
-      const attachmentContainer = this._attachments[this._attachments.length - 1].attachmentElement.parentElement;
-      (attachmentContainer?.children[1] as HTMLElement).click();
+      const removeButton = this._attachments[this._attachments.length - 1].removeButton;
+      removeButton?.click();
       const attachments = this._fileAttachmentsContainerRef.children;
-      this._fileAttachmentsContainerRef.insertBefore(this.createContainer(attachmentObject), attachments[0]);
+      this._fileAttachmentsContainerRef.insertBefore(containerElement, attachments[0]);
     } else {
-      this._fileAttachmentsContainerRef.appendChild(this.createContainer(attachmentObject));
+      this._fileAttachmentsContainerRef.appendChild(containerElement);
+    }
+    const attachmentObject: AttachmentObject = {file, attachmentContainerElement: containerElement, fileType};
+    if (removable) {
+      attachmentObject.removeButton = this.createRemoveAttachmentButton(attachmentObject);
+      containerElement.appendChild(attachmentObject.removeButton);
     }
     this._toggleContainerDisplay(true);
     this._attachments.push(attachmentObject);
+    this._fileAttachmentsContainerRef.scrollTop = this._fileAttachmentsContainerRef.scrollHeight;
+    return attachmentObject;
   }
 
-  private createContainer(attachmentObject: AttachmentObject) {
+  private static createContainer(attachmentElement: HTMLElement) {
     const containerElement = document.createElement('div');
     containerElement.classList.add('file-attachment');
-    containerElement.appendChild(attachmentObject.attachmentElement);
-    containerElement.appendChild(this.createRemoveAttachmentButton(attachmentObject, containerElement));
+    containerElement.appendChild(attachmentElement);
     return containerElement;
   }
 
-  private createRemoveAttachmentButton(attachmentObject: AttachmentObject, containerElement: HTMLElement) {
+  createRemoveAttachmentButton(attachmentObject: AttachmentObject) {
     const removeButtonElement = document.createElement('div');
     removeButtonElement.classList.add('remove-file-attachment-button');
-    removeButtonElement.onclick = this.removeFile.bind(this, attachmentObject, containerElement);
+    removeButtonElement.onclick = this.removeFile.bind(this, attachmentObject);
     const xIcon = document.createElement('div');
     xIcon.classList.add('x-icon');
     xIcon.innerText = '×';
@@ -150,12 +124,11 @@ export class FileAttachmentsType {
     return removeButtonElement;
   }
 
-  private removeFile(attachmentObject: AttachmentObject, containerElement: HTMLElement) {
+  removeFile(attachmentObject: AttachmentObject) {
     const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
+    const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
-    if (attachmentObject.attachmentElement?.children?.[0]?.classList.contains('stop-icon')) {
-      attachmentObject.attachmentElement.click();
-    }
+    AudioFileAttachmentType.stopAttachmentPlayback(containerElement);
     containerElement.remove();
     this._toggleContainerDisplay(false);
   }

@@ -94,7 +94,11 @@ export class CameraModal extends Modal {
         video.play();
         requestAnimationFrame(this.updateCanvas.bind(this, video, this._canvas));
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        this.stop();
+        this.close();
+      });
   }
 
   private capture() {

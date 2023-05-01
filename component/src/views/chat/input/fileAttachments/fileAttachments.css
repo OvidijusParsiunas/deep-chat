@@ -78,19 +78,31 @@
     contrast(98%);
 }
 
+.audio-placeholder-text-3-digits {
+  padding-left: 0.26rem;
+}
+
+.audio-placeholder-text-4-digits {
+  padding-left: 0.1rem;
+}
+
 .any-file-attachment {
   padding: 0px;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-.any-file-attachment-text-container {
+.file-attachment-text-container {
   position: absolute;
   width: inherit;
   display: flex;
   align-items: center;
   height: 100%;
   top: -1px;
+}
+
+.audio-placeholder-text-3-digits-container {
+  cursor: default;
 }
 
 .any-file-attachment-text {

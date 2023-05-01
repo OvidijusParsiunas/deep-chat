@@ -1,3 +1,4 @@
+import {AudioFileAttachmentType} from './fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentsType';
@@ -52,13 +53,13 @@ export class Input {
     Input.addButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, uploadFileButtons, fileAttachmentTypes);
     let cameraButton: CameraButton | undefined;
     if (serviceIO.camera?.files) {
-      const fileAttachmentsType = fileAttachmentTypes.images || fileAttachments.addType(serviceIO.camera.files);
+      const fileAttachmentsType = fileAttachmentTypes.images || fileAttachments.addType(serviceIO.camera.files, 'images');
       cameraButton = new CameraButton(containerElement, fileAttachmentsType, serviceIO.camera);
     }
     let microphoneButton: MicrophoneButton | undefined;
     if (serviceIO.recordAudio?.files) {
-      const audioType = fileAttachmentTypes.audio || fileAttachments.addType(serviceIO.recordAudio.files);
-      microphoneButton = new RecordAudio(audioType, serviceIO.recordAudio);
+      const audioType = fileAttachmentTypes.audio || fileAttachments.addType(serviceIO.recordAudio.files, 'audio');
+      microphoneButton = new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio);
     }
     return {fileAttachments, uploadFileButtons, cameraButton, microphoneButton};
   }
@@ -70,7 +71,7 @@ export class Input {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
       if (fileService.files) {
-        const fileAttachmentsType = fileAttachments.addType(fileService.files);
+        const fileAttachmentsType = fileAttachments.addType(fileService.files, fileType);
         const {id, svgString} = FILE_TYPE_BUTTON_ICONS[fileType];
         const button = new UploadFileButton(containerElement, fileAttachmentsType, fileService, id, svgString);
         uploadFileButtons.push(button);
