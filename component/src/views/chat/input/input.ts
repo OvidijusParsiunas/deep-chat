@@ -14,6 +14,7 @@ import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
 import {ButtonPosition} from './buttons/buttonPosition';
+import {ButtonStyling} from './buttons/buttonStyling';
 import {FILE_TYPES} from '../../../types/fileTypes';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
@@ -26,16 +27,15 @@ export class Input {
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
     this.elementRef = Input.createPanelElement(aiAssistant.inputStyles?.panel);
     const keyboardInput = new KeyboardInput(aiAssistant.inputStyles, aiAssistant.inputCharacterLimit);
-    const {fileAttachments, uploadFileButtons, cameraButton, microphoneButton: recordAudioButton} =
+    const {fileAttachments, uploadFileButtons, cameraButton, microphoneButton: recordAudioButton, dropupButton} =
       this.createFileUploadComponents(aiAssistant, serviceIO, containerElement);
     const microphoneButton = recordAudioButton || (aiAssistant.speechInput && new SpeechToText(
       aiAssistant.speechInput, keyboardInput.inputElementRef, messages.addNewErrorMessage.bind(messages)));
     const submitButton = new SubmitButton(aiAssistant, keyboardInput.inputElementRef, messages, serviceIO,fileAttachments);
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
-    
-    Input.addElements(this.elementRef, keyboardInput.elementRef, submitButton, uploadFileButtons,
-      microphoneButton, cameraButton);
+    Input.addElements(this.elementRef, keyboardInput.elementRef,
+      [submitButton, microphoneButton, cameraButton, dropupButton, ...uploadFileButtons]);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -80,15 +80,12 @@ export class Input {
     });
   }
 
-  // prettier-ignore
-  private static addElements(panel: HTMLElement, keyboardInputEl: HTMLElement, submitButton: SubmitButton,
-      uploadFileButtons: UploadFileButton[], microphoneButton?: MicrophoneButton, cameraButton?: CameraButton) {
+  private static addElements(panel: HTMLElement, keyboardInputEl: HTMLElement, buttons: (ButtonStyling | undefined)[]) {
     ElementUtils.addElements(panel, keyboardInputEl);
     const sideContainers = SideContainers.create();
-    ButtonPosition.add(panel, sideContainers, submitButton);
-    if (microphoneButton) ButtonPosition.add(panel, sideContainers, microphoneButton);
-    if (cameraButton) ButtonPosition.add(panel, sideContainers, cameraButton);
-    uploadFileButtons.forEach((uploadFileTools) => ButtonPosition.add(panel, sideContainers, uploadFileTools));
+    buttons.forEach((button) => {
+      if (button) ButtonPosition.add(panel, sideContainers, button);
+    });
     SideContainers.add(panel, sideContainers);
   }
 }

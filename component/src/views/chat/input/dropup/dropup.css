@@ -1,0 +1,7 @@
+#dropup-menu {
+  width: 10px;
+  height: 20px;
+  background-color: red;
+  position: absolute;
+  transform: translate(0px, -100%);
+}

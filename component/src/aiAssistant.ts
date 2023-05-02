@@ -21,7 +21,6 @@ export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
 
-  // WORK - test out multiple image uploads
   @Property('object')
   openAI?: OpenAI;
 

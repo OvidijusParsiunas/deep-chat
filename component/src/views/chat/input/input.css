@@ -5,6 +5,7 @@
 /* cameraModal needs to be imported after modal */
 @import url('./fileAttachments/modal/cameraModal.css');
 @import url('./buttons/button.css');
+@import url('./dropup/dropup.css');
 
 #input {
   width: 80%;

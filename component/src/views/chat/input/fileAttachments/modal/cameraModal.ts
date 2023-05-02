@@ -21,6 +21,7 @@ export class CameraModal extends Modal {
   private readonly _refreshIcon: SVGGraphicsElement;
   private _mediaStream?: MediaStream;
   private readonly _format: 'image/png' | 'image/jpeg' = 'image/png';
+  private readonly _newFilePrefix?: string;
   private readonly _dimensions?: CameraDimensions;
 
   // prettier-ignore
@@ -37,6 +38,7 @@ export class CameraModal extends Modal {
     this._refreshIcon.classList.add('modal-svg-button-icon', 'modal-svg-refresh-icon');
     if (cameraFiles?.format === 'jpeg') this._format = 'image/jpeg';
     if (cameraFiles?.dimensions) this._dimensions = cameraFiles.dimensions;
+    // this._newFilePrefix = cameraFiles?.newFilePrefix; // can implement in the future
     this._contentRef.appendChild(this._canvas);
   }
 
@@ -125,9 +127,8 @@ export class CameraModal extends Modal {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], {type: this._format});
-      // WORK - ability to choose file name
       const extension = this._format === 'image/jpeg' ? 'jpeg' : 'png';
-      const filename = NewFileName.getFileName('photo', extension);
+      const filename = NewFileName.getFileName(this._newFilePrefix || 'photo', extension);
       return new File([blob], filename, {type: blob.type});
     }
     return undefined;

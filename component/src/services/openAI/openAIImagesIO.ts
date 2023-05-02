@@ -94,7 +94,7 @@ export class OpenAIImagesIO implements ServiceIO {
     if (typeof camera === 'object') {
       cameraConfig.button = camera.button;
       cameraConfig.modalContainerStyle = camera.modalContainerStyle;
-      cameraConfig.files.newFilePrefix = camera.newFilePrefix;
+      // cameraConfig.files.newFilePrefix = camera.newFilePrefix; // can implement in the future
       const dimension = images.size ? Number.parseInt(images.size) : undefined;
       cameraConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
     }

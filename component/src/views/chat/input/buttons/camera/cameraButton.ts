@@ -17,11 +17,11 @@ export class CameraButton extends ButtonStyling<Styles> {
     const defaultPosition = fileService?.button?.position || 'outside-left';
     super(CameraButton.createButtonElement(), defaultPosition, fileService?.button || {});
     const innerElements = CameraButton.createInnerElements(this._customStyles);
+    this.reapplyStateStyle('styles');
     if (fileService) {
-      this.addClickEvent(containerElement, fileAttachmentsType, fileService?.modalContainerStyle, fileService.files);
-      this.elementRef.replaceChildren(innerElements.styles);
-      this.reapplyStateStyle('styles');
+      this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
+    this.elementRef.appendChild(innerElements.styles);
   }
 
   private static createInnerElements(customStyles?: Styles) {
@@ -51,6 +51,6 @@ export class CameraButton extends ButtonStyling<Styles> {
       modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
     const openModalFunc = CameraModal.createCameraModalFunc(
       containerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
-    this.elementRef.onclick = openModalFunc.bind(this);
+    this.elementRef.onclick = openModalFunc;
   }
 }

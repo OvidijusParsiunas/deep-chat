@@ -99,7 +99,7 @@ export class CustomServiceIO implements ServiceIO {
         if (customService.camera.files) {
           this.camera.files ??= {}; // for typescript
           this.camera.files.format = customService.camera.files?.format;
-          this.camera.files.newFilePrefix = customService.camera.files?.newFilePrefix;
+          // this.camera.files.newFilePrefix = customService.camera.files?.newFilePrefix; // can implement in the future
           this.camera.files.dimensions = customService.camera.files?.dimensions;
         }
       }
@@ -118,7 +118,7 @@ export class CustomServiceIO implements ServiceIO {
         if (customService.microphoneAudio.files) {
           this.recordAudio.files ??= {}; // for typescript
           this.recordAudio.files.format = customService.microphoneAudio.files?.format;
-          this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
+          // this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
           this.recordAudio.files.maxDurationSeconds = customService.microphoneAudio.files?.maxDurationSeconds;
         }
       }

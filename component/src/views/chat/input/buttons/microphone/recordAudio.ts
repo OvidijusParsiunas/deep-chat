@@ -18,7 +18,7 @@ export class RecordAudio extends MicrophoneButton {
     this._extension = recordAudioConfig.files?.format || 'mp3';
     this._maxDurationSeconds = recordAudioConfig.files?.maxDurationSeconds;
     this.elementRef.onclick = this.buttonClick.bind(this);
-    this._newFilePrefix = recordAudioConfig.files?.newFilePrefix;
+    // this._newFilePrefix = recordAudioConfig.files?.newFilePrefix; // can implement in the future
   }
 
   private buttonClick() {
