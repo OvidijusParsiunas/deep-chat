@@ -1,5 +1,5 @@
 import {ButtonElementStyles} from './button';
 
 export interface GenericInputButtonStyles {
-  styles?: ButtonElementStyles;
+  styles?: ButtonElementStyles; // WORK - button
 }

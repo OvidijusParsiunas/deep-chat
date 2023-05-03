@@ -7,11 +7,12 @@ type ServiceFileTypes = {
   [key in FILE_TYPES]: {
     id: string;
     svgString: string;
+    dropupText: string;
   };
 };
 
 export const FILE_TYPE_BUTTON_ICONS: ServiceFileTypes = {
-  images: {id: 'upload-images-icon', svgString: UPLOAD_IMAGES_ICON_STRING},
-  audio: {id: 'upload-audio-icon', svgString: AUDIO_ICON_STRING},
-  mixedFiles: {id: 'upload-mixed-files-icon', svgString: MIXED_FILES_ICON_STRING},
+  images: {id: 'upload-images-icon', svgString: UPLOAD_IMAGES_ICON_STRING, dropupText: 'Image'},
+  audio: {id: 'upload-audio-icon', svgString: AUDIO_ICON_STRING, dropupText: 'Audio'},
+  mixedFiles: {id: 'upload-mixed-files-icon', svgString: MIXED_FILES_ICON_STRING, dropupText: 'File'},
 };

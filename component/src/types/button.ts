@@ -11,7 +11,7 @@ export interface ButtonElementStyles {
   text?: ButtonInnerElementStyles;
 }
 
-export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
+export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right' | 'dropup-menu';
 
 export interface GenericButton {
   styles?: ButtonElementStyles;

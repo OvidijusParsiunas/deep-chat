@@ -47,4 +47,8 @@ export class DropupButton extends ButtonStyling<Styles> {
   private addClickEvent() {
     this.elementRef.onclick = this._menu.open;
   }
+
+  addItem(svgIcon: SVGGraphicsElement | HTMLDivElement, text?: string) {
+    this._menu.addItem(svgIcon, text);
+  }
 }

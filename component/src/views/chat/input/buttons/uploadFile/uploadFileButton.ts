@@ -17,13 +17,13 @@ export class UploadFileButton extends ButtonStyling<Styles> {
 
   // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
-      fileService: FileServiceIO, iconId: string, iconSVGString: string) {
-    const defaultPosition = fileService.button?.position || 'outside-left';
-    super(UploadFileButton.createButtonElement(), defaultPosition, fileService.button);
+      fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
+    super(UploadFileButton.createButtonElement(), fileService.button?.position, fileService.button, dropupText);
     const innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
     this.elementRef.replaceChildren(innerElements.styles);
+    this.svgIconElement = innerElements.styles;
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce;

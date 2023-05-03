@@ -8,15 +8,18 @@ interface MouseState {
 }
 
 export class ButtonStyling<T extends {[key: string]: ButtonElementStyles} = {}> {
-  readonly position: ButtonPositionT;
   readonly elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
+  readonly position?: ButtonPositionT;
+  readonly dropupText?: string;
+  svgIconElement?: SVGGraphicsElement | HTMLDivElement;
 
-  constructor(buttonElement: HTMLElement, position: ButtonPositionT, customStyles?: T) {
+  constructor(buttonElement: HTMLElement, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
     this.position = position;
+    this.dropupText = dropupText;
   }
 
   private buttonMouseLeave(customStyles?: ButtonElementStyles) {

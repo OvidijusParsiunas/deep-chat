@@ -27,8 +27,7 @@ export class SubmitButton extends ButtonStyling<Styles> {
   constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments) {
     const {submitButtonStyles} = aiAssistant;
-    const defaultPosition = aiAssistant.submitButtonStyles?.position || 'inside-right';
-    super(SubmitButton.createButtonContainerElement(), defaultPosition, submitButtonStyles);
+    super(SubmitButton.createButtonContainerElement(), aiAssistant.submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._fileAttachments = fileAttachments;

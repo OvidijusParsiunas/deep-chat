@@ -14,9 +14,9 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class CameraButton extends ButtonStyling<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
-    const defaultPosition = fileService?.button?.position || 'outside-left';
-    super(CameraButton.createButtonElement(), defaultPosition, fileService?.button || {});
+    super(CameraButton.createButtonElement(), fileService?.button?.position, fileService?.button || {}, 'Photo');
     const innerElements = CameraButton.createInnerElements(this._customStyles);
+    this.svgIconElement = innerElements.styles;
     this.reapplyStateStyle('styles');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);

@@ -14,7 +14,7 @@ export class MicrophoneButton extends ButtonStyling<Styles> {
   isActive = false;
 
   constructor(styles?: MicrophoneStyles) {
-    super(MicrophoneButton.createMicrophoneElement(), 'outside-right', styles);
+    super(MicrophoneButton.createMicrophoneElement(), styles?.position, styles);
     this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
     this.changeToDefault();
   }
