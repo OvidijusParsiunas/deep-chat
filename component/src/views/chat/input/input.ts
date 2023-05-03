@@ -12,28 +12,25 @@ import {RecordAudio} from './buttons/microphone/recordAudio';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
+import {ButtonPositions} from './buttons/buttonPositions';
 import {BUTTON_TYPES} from '../../../types/buttonTypes';
 import {ButtonStyling} from './buttons/buttonStyling';
+import {ButtonPosition} from '../../../types/button';
 import {DropupButton} from './dropup/dropupButton';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
 
+type Positions = {[key in ButtonPosition]: ButtonProps[]};
+
+type ButtonProps = {button: ButtonStyling; fileType?: FileAttachmentsType};
+
 type Buttons = {
-  [key in BUTTON_TYPES]?: {button: ButtonStyling; fileType?: FileAttachmentsType};
+  [key in BUTTON_TYPES]?: ButtonProps;
 };
 
 export class Input {
   readonly elementRef: HTMLElement;
-  // this is mostly used for setting a default order for dropup menu items
-  private static readonly BUTTON_ORDER: BUTTON_TYPES[] = [
-    'camera',
-    'images',
-    'audio',
-    'mixedFiles',
-    'submit',
-    'microphone',
-  ];
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
@@ -93,23 +90,30 @@ export class Input {
 
   private static addElements(panel: HTMLElement, keyboardInputEl: HTMLElement, buttons: Buttons) {
     ElementUtils.addElements(panel, keyboardInputEl);
+    const positions = ButtonPositions.generatePositions(buttons);
     const sideContainers = SideContainers.create();
-    const dropupButton = new DropupButton();
-    Input.BUTTON_ORDER.forEach((buttonType) => {
-      const button = buttons[buttonType]?.button;
-      if (button) Input.addElement(button, panel, dropupButton, sideContainers);
-    });
-    SideContainers.addButton(panel, sideContainers, dropupButton);
+    if (positions['dropup-menu'].length > 0) Input.addToDropup(panel, sideContainers, positions);
+    Input.addToSideContainer(panel, sideContainers, positions);
     SideContainers.add(panel, sideContainers);
   }
 
-  // prettier-ignore
-  private static addElement(button: ButtonStyling, panel: HTMLElement, dropupButton: DropupButton,
-      sideContainer: SideContainersT) {
-    if (button.position === 'dropup-menu' && button.svgIconElement) {
-      dropupButton.addItem(button.svgIconElement, button.dropupText);
-    } else {
-      SideContainers.addButton(panel, sideContainer, button);
-    }
+  private static addToDropup(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions) {
+    const dropupButton = new DropupButton();
+    positions['dropup-menu'].forEach((buttonProps) => {
+      if (buttonProps.button.svgIconElement) {
+        dropupButton.addItem(buttonProps.button.svgIconElement, buttonProps.button.dropupText);
+      }
+    });
+    SideContainers.addButton(panel, sideContainers, dropupButton.elementRef, 'outside-left');
+  }
+
+  private static addToSideContainer(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions) {
+    const sideContainerPositions = ['inside-left', 'inside-right', 'outside-left', 'outside-right'];
+    sideContainerPositions.forEach((sideContainerPosition) => {
+      const position = sideContainerPosition as keyof Positions;
+      positions[position].forEach((buttonProps) => {
+        SideContainers.addButton(panel, sideContainers, buttonProps.button.elementRef, position);
+      });
+    });
   }
 }

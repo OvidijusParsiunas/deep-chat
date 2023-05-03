@@ -1,4 +1,4 @@
-import {ButtonStyling} from '../buttons/buttonStyling';
+import {ButtonPosition} from '../../../../types/button';
 
 export type SideContainersT = readonly [HTMLElement, HTMLElement];
 
@@ -16,8 +16,9 @@ export class SideContainers {
     inputContainer.appendChild(sideContainers[1]);
   }
 
-  public static addButton(inputContainer: HTMLElement, sideContainers: SideContainersT, buttonStyling: ButtonStyling) {
-    const {elementRef, position} = buttonStyling;
+  // prettier-ignore
+  public static addButton(inputContainer: HTMLElement, sideContainers: SideContainersT, elementRef: HTMLElement,
+      position: ButtonPosition) {
     elementRef.classList.add(position);
     if (position === 'inside-left' || position === 'inside-right') {
       inputContainer.appendChild(elementRef);
