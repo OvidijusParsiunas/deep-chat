@@ -8,6 +8,7 @@ import {ServiceIOFactory} from './services/serviceIOFactory';
 import {CustomServiceConfig} from './types/customService';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
+import {DropupStyles} from './types/dropupStyles';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
@@ -33,7 +34,6 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   dragAndDrop?: boolean | CustomStyle;
 
-  // WORK - need to automatically adjust position when items are inserted in different positions
   @Property('object')
   speechInput?: Microphone;
 
@@ -42,6 +42,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   containerStyle?: CustomStyle;
+
+  @Property('object')
+  dropupStyles?: DropupStyles;
 
   @Property('object')
   inputStyles?: InputStyles;

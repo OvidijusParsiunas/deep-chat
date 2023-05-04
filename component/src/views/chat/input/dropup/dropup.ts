@@ -3,6 +3,7 @@ import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {CAMERA_ICON_STRING} from '../../../../icons/cameraIcon';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {DropupStyles} from '../../../../types/dropupStyles';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
@@ -12,17 +13,17 @@ export class Dropup extends InputButton<Styles> {
   private readonly _menu: DropupMenu;
   readonly buttonContainer: HTMLElement;
 
-  constructor(containerElement: HTMLElement, styles?: GenericInputButtonStyles) {
-    super(Dropup.createButtonElement(), undefined, styles || {});
+  constructor(containerElement: HTMLElement, styles?: DropupStyles) {
+    super(Dropup.createButtonElement(), undefined, {styles: styles?.button} || {});
     const innerElements = Dropup.createInnerElements(this._customStyles);
-    this.reapplyStateStyle('styles');
-    this._menu = new DropupMenu(containerElement);
+    this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
     this.buttonContainer = document.createElement('div');
     this.elementRef.appendChild(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
     this.elementRef.classList.add('dropup-icon');
     this.buttonContainer.appendChild(this._menu.elementRef);
+    this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
   }
 

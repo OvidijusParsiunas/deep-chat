@@ -1,17 +1,14 @@
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
-import {StatefulStyles} from '../../../../types/styles';
+import {CustomStyle, StatefulStyles} from '../../../../types/styles';
+import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
 export class DropupItem {
-  private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButtonElement: HTMLElement) {
-    const statefulStyles: StatefulStyles = {
-      hover: {backgroundColor: 'rgb(243, 243, 243)'},
-      click: {backgroundColor: 'rgb(235, 235, 235)'},
-    };
-    StatefulEvents.add(item, statefulStyles);
+  private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
+    StatefulEvents.add(item, styles);
     item.addEventListener('click', () => {
-      inputButtonElement.click();
+      inputButton.click();
     });
     item.addEventListener('mouseenter', (event) => {
       menu.highlightedItem = event.target as HTMLElement;
@@ -21,26 +18,39 @@ export class DropupItem {
     });
   }
 
-  private static createItemText(dropupText?: string) {
+  private static generateStatefulStyles(itemStyles?: StatefulStyles): StatefulStyles {
+    return {
+      default: itemStyles?.default || {},
+      hover: Object.assign({backgroundColor: '#f3f3f3'}, itemStyles?.hover),
+      click: Object.assign({backgroundColor: '#ebebeb'}, itemStyles?.click),
+    };
+  }
+
+  private static createItemText(dropupText?: string, textStyle?: CustomStyle) {
     const textElement = document.createElement('div');
+    Object.assign(textElement.style, textStyle);
+    textElement.classList.add('dropup-menu-item-text');
     textElement.textContent = dropupText || 'text';
     return textElement;
   }
 
-  private static createItemIcon(inputButtonElement: HTMLElement) {
+  private static createItemIcon(inputButtonElement: HTMLElement, iconContainerStyle?: CustomStyle) {
     const iconContainer = document.createElement('div');
+    Object.assign(iconContainer.style, iconContainerStyle);
     iconContainer.classList.add('dropup-menu-item-icon');
     iconContainer.appendChild(inputButtonElement.children[0]);
     return iconContainer;
   }
 
-  public static createItem(menu: DropupMenu, inputButton: InputButton) {
+  public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
     const {elementRef, dropupText} = inputButton;
     const item = document.createElement('div');
-    item.appendChild(DropupItem.createItemIcon(elementRef));
-    item.appendChild(DropupItem.createItemText(dropupText));
+    Object.assign(item.style, styles?.item?.default);
+    item.appendChild(DropupItem.createItemIcon(elementRef, styles?.iconContainer));
+    item.appendChild(DropupItem.createItemText(dropupText, styles?.text));
     item.classList.add('dropup-menu-item');
-    DropupItem.addItemEvents(menu, item, elementRef);
+    const eventfulStyles = DropupItem.generateStatefulStyles(styles?.item);
+    DropupItem.addItemEvents(menu, item, elementRef, eventfulStyles);
     return item;
   }
 }

@@ -1,5 +1,7 @@
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {DropupItemNavigation} from './dropupItemNavigation';
+import {CustomStyle} from '../../../../types/styles';
 import {InputButton} from '../buttons/inputButton';
 import {DropupItem} from './dropupItem';
 
@@ -7,12 +9,20 @@ export class DropupMenu {
   readonly elementRef: HTMLElement;
   private _isOpen = true;
   highlightedItem?: HTMLElement;
+  private readonly _styles?: DropupMenuStyles;
 
-  constructor(containerElement: HTMLElement) {
-    this.elementRef = document.createElement('div');
-    this.elementRef.id = 'dropup-menu';
+  constructor(containerElement: HTMLElement, styles?: DropupMenuStyles) {
+    this._styles = styles;
+    this.elementRef = DropupMenu.createElement(this._styles?.container);
     this.close();
-    this.addWindowEvents(containerElement);
+    setTimeout(() => this.addWindowEvents(containerElement));
+  }
+
+  private static createElement(containerStyle?: CustomStyle) {
+    const menuElement = document.createElement('div');
+    menuElement.id = 'dropup-menu';
+    Object.assign(menuElement.style, containerStyle);
+    return menuElement;
   }
 
   private open() {
@@ -36,7 +46,7 @@ export class DropupMenu {
   }
 
   addItem(inputButton: InputButton) {
-    const item = DropupItem.createItem(this, inputButton);
+    const item = DropupItem.createItem(this, inputButton, this._styles);
     this.elementRef.appendChild(item);
   }
 
