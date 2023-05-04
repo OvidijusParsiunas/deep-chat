@@ -1,3 +1,4 @@
+import {KEYBOARD_KEY} from '../../../../../utils/buttons/keyboardKeys';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
@@ -8,6 +9,8 @@ export class Modal {
   private readonly _elementRef: HTMLElement;
   private readonly _backgroundPanelRef: HTMLElement;
   private readonly _buttonPanel: HTMLElement;
+  private _isOpen = false;
+  extensionCloseCallback?: () => void;
 
   constructor(viewContainerElement: HTMLElement, contentClasses: string[], containerStyle?: CustomStyle) {
     this._contentRef = Modal.createModalContent(contentClasses);
@@ -17,6 +20,11 @@ export class Modal {
     viewContainerElement.appendChild(this._elementRef);
     this._backgroundPanelRef = Modal.createDarkBackgroundPanel();
     viewContainerElement.appendChild(this._backgroundPanelRef);
+    this.addWindowEvents();
+  }
+
+  isOpen() {
+    return this._isOpen;
   }
 
   private static createContainer(content: HTMLElement, containerStyle?: CustomStyle) {
@@ -51,14 +59,14 @@ export class Modal {
     buttons.forEach((button) => this._buttonPanel.appendChild(button));
   }
 
-  static createTextButton(text: string) {
+  private static createTextButton(text: string) {
     const button = document.createElement('div');
     button.classList.add('modal-button');
     button.textContent = text;
     return button;
   }
 
-  static createSVGButton(svgString: string) {
+  public static createSVGButton(svgString: string) {
     const button = document.createElement('div');
     button.classList.add('modal-button', 'modal-svg-button');
     const icon = SVGIconUtils.createSVGElement(svgString);
@@ -72,6 +80,7 @@ export class Modal {
     this._elementRef.classList.add('hide-modal');
     this._backgroundPanelRef.classList.remove('show-modal-background');
     this._backgroundPanelRef.classList.add('hide-modal-background');
+    this._isOpen = false;
     setTimeout(() => {
       this._elementRef.style.display = 'none';
       this._backgroundPanelRef.style.display = 'none';
@@ -85,6 +94,7 @@ export class Modal {
     this._backgroundPanelRef.style.display = 'block';
     this._backgroundPanelRef.classList.remove('hide-modal-background');
     this._backgroundPanelRef.classList.add('show-modal-background');
+    this._isOpen = true;
   }
 
   private openTextModal(textHTML: string) {
@@ -111,5 +121,19 @@ export class Modal {
       return modal.openTextModal.bind(modal, fileIO.infoModalTextMarkUp || '');
     }
     return undefined;
+  }
+
+  private addWindowEvents() {
+    window.addEventListener('keydown', (event) => {
+      if (this._isOpen) {
+        if (event.key === KEYBOARD_KEY.ESCAPE) {
+          this.close();
+          this.extensionCloseCallback?.();
+        } else if (event.key === KEYBOARD_KEY.ENTER) {
+          this.close();
+          this.extensionCloseCallback?.();
+        }
+      }
+    });
   }
 }

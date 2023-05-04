@@ -8,15 +8,14 @@ import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {CameraFiles} from '../../../../../types/cameraFiles';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
-import {ButtonStyling} from '../buttonStyling';
+import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
-export class CameraButton extends ButtonStyling<Styles> {
+export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     super(CameraButton.createButtonElement(), fileService?.button?.position, fileService?.button || {}, 'Photo');
     const innerElements = CameraButton.createInnerElements(this._customStyles);
-    this.svgIconElement = innerElements.styles;
     this.reapplyStateStyle('styles');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);

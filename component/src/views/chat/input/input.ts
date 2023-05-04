@@ -2,31 +2,25 @@ import {AudioFileAttachmentType} from './fileAttachments/fileAttachmentTypes/aud
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
-import {SideContainers, SideContainersT} from './sideContainers/sideContainers';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
+import {InputButtonPositions} from './buttons/inputButtonPositions';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {SideContainers} from './sideContainers/sideContainers';
 import {SpeechToText} from './buttons/microphone/speechToText';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {KeyboardInput} from './keyboardInput/keyboardInput';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
-import {ButtonPositions} from './buttons/buttonPositions';
 import {BUTTON_TYPES} from '../../../types/buttonTypes';
-import {ButtonStyling} from './buttons/buttonStyling';
-import {ButtonPosition} from '../../../types/button';
-import {DropupButton} from './dropup/dropupButton';
+import {InputButton} from './buttons/inputButton';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
 
-type Positions = {[key in ButtonPosition]: ButtonProps[]};
-
-type ButtonProps = {button: ButtonStyling; fileType?: FileAttachmentsType};
-
 type Buttons = {
-  [key in BUTTON_TYPES]?: ButtonProps;
+  [key in BUTTON_TYPES]?: {button: InputButton; fileType?: FileAttachmentsType};
 };
 
 export class Input {
@@ -46,7 +40,7 @@ export class Input {
     keyboardInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
     buttons.submit = {button: submitButton};
-    Input.addElements(this.elementRef, keyboardInput.elementRef, buttons);
+    Input.addElements(this.elementRef, keyboardInput.elementRef, buttons, containerElement);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -88,32 +82,10 @@ export class Input {
     });
   }
 
-  private static addElements(panel: HTMLElement, keyboardInputEl: HTMLElement, buttons: Buttons) {
+  private static addElements(panel: HTMLElement, keyboardInputEl: HTMLElement, buttons: Buttons, container: HTMLElement) {
     ElementUtils.addElements(panel, keyboardInputEl);
-    const positions = ButtonPositions.generatePositions(buttons);
     const sideContainers = SideContainers.create();
-    if (positions['dropup-menu'].length > 0) Input.addToDropup(panel, sideContainers, positions);
-    Input.addToSideContainer(panel, sideContainers, positions);
+    InputButtonPositions.addButtonsToPositions(panel, sideContainers, buttons, container);
     SideContainers.add(panel, sideContainers);
-  }
-
-  private static addToDropup(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions) {
-    const dropupButton = new DropupButton();
-    positions['dropup-menu'].forEach((buttonProps) => {
-      if (buttonProps.button.svgIconElement) {
-        dropupButton.addItem(buttonProps.button.svgIconElement, buttonProps.button.dropupText);
-      }
-    });
-    SideContainers.addButton(panel, sideContainers, dropupButton.elementRef, 'outside-left');
-  }
-
-  private static addToSideContainer(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions) {
-    const sideContainerPositions = ['inside-left', 'inside-right', 'outside-left', 'outside-right'];
-    sideContainerPositions.forEach((sideContainerPosition) => {
-      const position = sideContainerPosition as keyof Positions;
-      positions[position].forEach((buttonProps) => {
-        SideContainers.addButton(panel, sideContainers, buttonProps.button.elementRef, position);
-      });
-    });
   }
 }

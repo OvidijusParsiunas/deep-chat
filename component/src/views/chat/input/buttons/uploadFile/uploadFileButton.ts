@@ -6,11 +6,11 @@ import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {Modal} from '../../fileAttachments/modal/modal';
-import {ButtonStyling} from '../buttonStyling';
+import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
-export class UploadFileButton extends ButtonStyling<Styles> {
+export class UploadFileButton extends InputButton<Styles> {
   private readonly _inputElement: HTMLInputElement;
   private readonly _fileAttachmentsType: FileAttachmentsType;
   private _openModalOnce?: boolean | undefined;
@@ -23,7 +23,6 @@ export class UploadFileButton extends ButtonStyling<Styles> {
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
     this.elementRef.replaceChildren(innerElements.styles);
-    this.svgIconElement = innerElements.styles;
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce;

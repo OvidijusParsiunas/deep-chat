@@ -40,6 +40,7 @@ export class CameraModal extends Modal {
     if (cameraFiles?.dimensions) this._dimensions = cameraFiles.dimensions;
     // this._newFilePrefix = cameraFiles?.newFilePrefix; // can implement in the future
     this._contentRef.appendChild(this._canvas);
+    this.extensionCloseCallback = this.stop;
   }
 
   private addButtonsAndTheirEvents(fileAttachmentsType: FileAttachmentsType) {
@@ -92,6 +93,7 @@ export class CameraModal extends Modal {
       .getUserMedia({video: this._dimensions || true})
       .then((stream) => {
         this._mediaStream = stream;
+        if (!this.isOpen()) return this.stop();
         const video = document.createElement('video');
         video.srcObject = stream;
         video.play();

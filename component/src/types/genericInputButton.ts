@@ -1,5 +1,6 @@
 import {ButtonElementStyles} from './button';
 
 export interface GenericInputButtonStyles {
-  styles?: ButtonElementStyles; // WORK - button
+  // the reason why this is called styles is because the GenericButton object encapsulates the style within this property
+  styles?: ButtonElementStyles;
 }

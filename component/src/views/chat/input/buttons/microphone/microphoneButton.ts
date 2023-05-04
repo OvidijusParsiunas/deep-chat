@@ -3,13 +3,13 @@ import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/microphone';
-import {ButtonStyling} from '../buttonStyling';
+import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
 
 // WORK - check if webapi is available for browser
 // WORK - chat gpt/microsoft integration
-export class MicrophoneButton extends ButtonStyling<Styles> {
+export class MicrophoneButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 

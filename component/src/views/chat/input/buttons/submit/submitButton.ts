@@ -8,11 +8,12 @@ import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {AiAssistant} from '../../../../../aiAssistant';
 import {Messages} from '../../../messages/messages';
-import {ButtonStyling} from '../buttonStyling';
+import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
 
-export class SubmitButton extends ButtonStyling<Styles> {
+// WORK - submit button seems to be out of place
+export class SubmitButton extends InputButton<Styles> {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _isLoadingActive = false;
   private readonly _serviceIO: ServiceIO;

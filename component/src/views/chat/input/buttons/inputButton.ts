@@ -7,13 +7,12 @@ interface MouseState {
   state: keyof StatefulStyles;
 }
 
-export class ButtonStyling<T extends {[key: string]: ButtonElementStyles} = {}> {
+export class InputButton<T extends {[key: string]: ButtonElementStyles} = {}> {
   readonly elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
   readonly position?: ButtonPositionT;
   readonly dropupText?: string;
-  svgIconElement?: SVGGraphicsElement | HTMLDivElement;
 
   constructor(buttonElement: HTMLElement, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
     this.elementRef = buttonElement;

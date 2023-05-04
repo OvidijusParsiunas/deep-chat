@@ -4,7 +4,7 @@
 @import url('./fileAttachments/modal/modal.css');
 /* cameraModal needs to be imported after modal */
 @import url('./fileAttachments/modal/cameraModal.css');
-@import url('./buttons/button.css');
+@import url('./buttons/inputButton.css');
 @import url('./dropup/dropup.css');
 
 #input {
@@ -15,32 +15,4 @@
   margin-right: auto;
   margin-top: auto;
   position: relative;
-}
-
-/* Using absolute in order to not move the button element when the input el height increases */
-
-/* Input element padding will need to be changed accordingly */
-.inside-right {
-  position: absolute;
-  right: 0.22em;
-  bottom: 0.82em;
-}
-
-.inside-left {
-  position: absolute;
-  left: 0.22em;
-  bottom: 0.82em;
-}
-
-/* Input container element padding will need to be changed accordingly */
-.outside-left {
-  position: absolute;
-  right: calc(13px - 0.55em);
-  bottom: 0.85em;
-}
-
-.outside-right {
-  position: absolute;
-  left: calc(12px - 0.55em);
-  bottom: 0.8em;
 }
