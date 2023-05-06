@@ -8,24 +8,24 @@
 .inside-right {
   position: absolute;
   right: 0.22em;
-  bottom: 0.82em;
+  bottom: 0.88em;
 }
 
 .inside-left {
   position: absolute;
   left: 0.22em;
-  bottom: 0.82em;
+  bottom: 0.88em;
 }
 
 /* Input container element padding will need to be changed accordingly */
 .outside-left {
   position: absolute;
   right: calc(13px - 0.55em);
-  bottom: 0.85em;
+  bottom: 0.9em;
 }
 
 .outside-right {
   position: absolute;
   left: calc(12px - 0.55em);
-  bottom: 0.8em;
+  bottom: 0.86em;
 }

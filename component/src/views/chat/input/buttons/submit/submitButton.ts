@@ -12,7 +12,6 @@ import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
 
-// WORK - submit button seems to be out of place
 export class SubmitButton extends InputButton<Styles> {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
   private _isLoadingActive = false;
