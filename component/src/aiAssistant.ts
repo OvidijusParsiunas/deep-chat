@@ -11,6 +11,7 @@ import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
+import {AssemblyAI} from './types/assemblyAI';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
 import {InputStyles} from './types/input';
@@ -18,12 +19,18 @@ import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
 
+// WORK - on-render
+// WORK - verify if the passed in key is valid and only open the chat view then
+// WORK - disable the input field
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
 
   @Property('object')
   openAI?: OpenAI;
+
+  @Property('object')
+  assemblyAI?: AssemblyAI;
 
   @Property('object')
   customService?: CustomServiceConfig;

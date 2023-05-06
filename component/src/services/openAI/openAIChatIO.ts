@@ -114,7 +114,7 @@ export class OpenAIChatIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIConverseResult): Result {
+  async extractResultData(result: OpenAIConverseResult): Promise<Result> {
     if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
       return {text: result.choices[0].delta.content || ''};

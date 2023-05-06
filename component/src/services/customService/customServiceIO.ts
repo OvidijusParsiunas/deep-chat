@@ -196,7 +196,7 @@ export class CustomServiceIO implements ServiceIO {
     return this.fileTypes.mixedFiles;
   }
 
-  extractResultData(result: CustomServiceResponse): Result {
+  async extractResultData(result: CustomServiceResponse): Promise<Result> {
     if (result.error) {
       if (this.displayServiceErrorMessages) {
         // eslint-disable-next-line no-throw-literal

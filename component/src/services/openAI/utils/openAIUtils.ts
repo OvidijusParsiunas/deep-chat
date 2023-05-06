@@ -43,7 +43,7 @@ export class OpenAIUtils {
       onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
     const key = inputElement.value.trim();
     const headers = OpenAIUtils.buildHeaders(key);
-    HTTPRequest.verifyKey(key, OpenAIUtils._models_url, headers,
+    HTTPRequest.verifyKey(key, OpenAIUtils._models_url, headers, 'GET',
       onSuccess, onFail, onLoad, OpenAIUtils.handleVerificationResult);
   }
 }

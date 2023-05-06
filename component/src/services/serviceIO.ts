@@ -62,5 +62,5 @@ export interface ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
-  extractResultData(result: object): Result;
+  extractResultData(result: object): Promise<Result>;
 }

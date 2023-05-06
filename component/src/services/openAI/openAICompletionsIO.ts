@@ -91,7 +91,7 @@ export class OpenAICompletionsIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIConverseResult): Result {
+  async extractResultData(result: OpenAIConverseResult): Promise<Result> {
     if (result.error) throw result.error.message;
     return {text: result.choices[0]?.text || ''};
   }

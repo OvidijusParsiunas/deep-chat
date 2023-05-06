@@ -166,7 +166,7 @@ export class OpenAIAudioIO implements ServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  extractResultData(result: OpenAIAudioResult): Result {
+  async extractResultData(result: OpenAIAudioResult): Promise<Result> {
     if (result.error) throw result.error.message;
     return {text: result.text};
   }

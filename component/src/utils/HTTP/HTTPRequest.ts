@@ -8,9 +8,10 @@ import {ServiceIO} from '../../services/serviceIO';
 export type HandleVerificationResult = (
   result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
 
+type Finish = () => void;
+
 export class HTTPRequest {
-  // prettier-ignore
-  public static request(io: ServiceIO, body: object, messages: Messages, onFinish: () => void, stringifyBody = true) {
+  public static request(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} = io.requestInterceptor(requestDetails);
     fetch(io.requestSettings?.url || io.url || '', {
@@ -19,8 +20,8 @@ export class HTTPRequest {
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
       .then((response) => response.json())
-      .then((result: object) => {
-        const resultData = io.extractResultData(io.resposeInterceptor(result));
+      .then(async (result: object) => {
+        const resultData = await io.extractResultData(io.resposeInterceptor(result));
         messages.addNewMessage(resultData, true, true);
         onFinish();
       })
@@ -54,8 +55,9 @@ export class HTTPRequest {
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
-          const text = io.extractResultData(response) as string;
-          if (textElement) messages.updateStreamedMessage(text, textElement);
+          io.extractResultData(response).then((text) => {
+            if (textElement) messages.updateStreamedMessage(text as string, textElement);            
+          });
         }
       },
       onerror(err) {
@@ -73,13 +75,13 @@ export class HTTPRequest {
   }
 
   // prettier-ignore
-  public static verifyKey(key: string, url: string, headers: HeadersInit,
+  public static verifyKey(key: string, url: string, headers: HeadersInit, method: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void,
       handleVerificationResult: HandleVerificationResult) {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
     fetch(url, {
-      method: 'GET',
+      method,
       headers,
       body: null,
     })

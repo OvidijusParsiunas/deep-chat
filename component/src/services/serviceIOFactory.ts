@@ -1,5 +1,6 @@
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {CustomServiceIO} from './customService/customServiceIO';
+import {AssemblyAIAudioIO} from './assemblyAI/openAIAudioIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
@@ -19,6 +20,9 @@ export class ServiceIOFactory {
     }
     if (aiAssistant.openAI?.completions) {
       return new OpenAICompletionsIO(aiAssistant, key);
+    }
+    if (aiAssistant.assemblyAI?.audio) {
+      return new AssemblyAIAudioIO(aiAssistant, key);
     }
     return new OpenAIChatIO(aiAssistant, key);
   }

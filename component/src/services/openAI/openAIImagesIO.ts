@@ -170,7 +170,7 @@ export class OpenAIImagesIO implements ServiceIO {
     }
   }
 
-  extractResultData(result: OpenAIImageResult): Result {
+  async extractResultData(result: OpenAIImageResult): Promise<Result> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
       if (imageData.url) return {url: imageData.url, type: 'image'};
