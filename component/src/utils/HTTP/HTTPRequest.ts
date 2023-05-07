@@ -77,13 +77,13 @@ export class HTTPRequest {
   // prettier-ignore
   public static verifyKey(key: string, url: string, headers: HeadersInit, method: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void,
-      handleVerificationResult: HandleVerificationResult) {
+      handleVerificationResult: HandleVerificationResult, body?: string) {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
     fetch(url, {
       method,
       headers,
-      body: null,
+      body: body || null,
     })
       .then((response) => response.json())
       .then((result: object) => {

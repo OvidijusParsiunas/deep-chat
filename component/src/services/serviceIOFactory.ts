@@ -1,5 +1,6 @@
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
+import {CohereCompletionsIO} from './cohere/cohereCompletionsIO';
 import {CustomServiceIO} from './customService/customServiceIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
@@ -23,6 +24,9 @@ export class ServiceIOFactory {
     }
     if (aiAssistant.assemblyAI?.audio) {
       return new AssemblyAIAudioIO(aiAssistant, key);
+    }
+    if (aiAssistant.cohere?.completions) {
+      return new CohereCompletionsIO(aiAssistant, key);
     }
     return new OpenAIChatIO(aiAssistant, key);
   }

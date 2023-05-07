@@ -3,6 +3,7 @@ import {RequestInterceptor, ResponseInterceptor} from './interceptors';
 import {RequestSettings} from './requestSettings';
 import {Result} from './result';
 
+// WORK - max_char_length
 export interface CustomServiceConfig {
   request: RequestSettings;
   stream?: boolean;

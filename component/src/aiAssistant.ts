@@ -17,11 +17,11 @@ import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
 import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
+import {Cohere} from './types/cohere';
 import {Names} from './types/names';
 
 // WORK - on-render
 // WORK - verify if the passed in key is valid and only open the chat view then
-// WORK - disable the input field
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
@@ -31,6 +31,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   assemblyAI?: AssemblyAI;
+
+  @Property('object')
+  cohere?: Cohere;
 
   @Property('object')
   customService?: CustomServiceConfig;
