@@ -1,7 +1,7 @@
 import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
-import {FocusUtils} from './views/chat/input/keyboardInput/focusUtils';
+import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
@@ -9,12 +9,12 @@ import {CustomServiceConfig} from './types/customService';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
+import {TextInputStyles} from './types/textInput';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
 import {AssemblyAI} from './types/assemblyAI';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
-import {InputStyles} from './types/input';
 import {Avatars} from './types/avatar';
 import {OpenAI} from './types/openAI';
 import {Names} from './types/names';
@@ -54,7 +54,7 @@ export class AiAssistant extends InternalHTML {
   dropupStyles?: DropupStyles;
 
   @Property('object')
-  inputStyles?: InputStyles;
+  textInputStyles?: TextInputStyles;
 
   @Property('number')
   inputCharacterLimit?: number;

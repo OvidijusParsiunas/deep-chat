@@ -10,7 +10,7 @@ requestSettings?: RequestSettings;
 
 Input:
 speechInput?: SpeechInput;
-inputStyles?: InputStyles;
+textInputStyles?: InputStyles;
 submitButtonStyles?: SubmitButtonStyles;
 
 Messages:

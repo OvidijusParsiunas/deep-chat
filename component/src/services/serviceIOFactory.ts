@@ -1,6 +1,6 @@
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
+import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {CustomServiceIO} from './customService/customServiceIO';
-import {AssemblyAIAudioIO} from './assemblyAI/openAIAudioIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';

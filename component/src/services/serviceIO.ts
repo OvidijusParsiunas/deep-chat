@@ -33,6 +33,12 @@ export type ServiceFileTypes = {
 export interface ServiceIO {
   url?: string;
 
+  // overwrites textInput property if not provided
+  isTextInputDisabled?: boolean;
+
+  // overwrites textInput property if not provided
+  placeholderText?: string;
+
   fileTypes?: ServiceFileTypes;
 
   camera?: CameraFilesServiceConfig;

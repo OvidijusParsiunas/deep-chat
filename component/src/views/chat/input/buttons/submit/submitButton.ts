@@ -87,7 +87,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   public submitFromInput() {
-    if (this._inputElementRef.classList.contains('keyboard-input-placeholder')) {
+    if (this._inputElementRef.classList.contains('text-input-placeholder')) {
       this.submit('');
     } else {
       const inputText = this._inputElementRef.textContent?.trim() as string;

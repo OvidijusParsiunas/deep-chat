@@ -1,5 +1,5 @@
-import {KeyboardInput} from '../../keyboardInput/keyboardInput';
 import {Microphone} from '../../../../../types/microphone';
+import {TextInput} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {MicrophoneButton} from './microphoneButton';
 
@@ -91,8 +91,8 @@ export class SpeechToText extends MicrophoneButton {
   }
 
   private prepareInputText() {
-    KeyboardInput.removeTextIfPlaceholder(this._inputElement);
-    KeyboardInput.toggleEditability(this._inputElement, false);
+    TextInput.removeTextIfPlaceholder(this._inputElement);
+    TextInput.toggleEditability(this._inputElement, false);
     const lastCharacter = this._inputElement.textContent?.charAt(this._inputElement.textContent.length - 1) || '';
     this.prefixText = SpeechToText.isCharASpace(lastCharacter) ? '' : ' ';
   }
@@ -126,7 +126,7 @@ export class SpeechToText extends MicrophoneButton {
 
   private finaliseInputText() {
     this._inputElement.textContent = this._inputElement.textContent as string;
-    KeyboardInput.toggleEditability(this._inputElement, true);
+    TextInput.toggleEditability(this._inputElement, true);
   }
 
   private resetTranscript() {

@@ -1,0 +1,33 @@
+#text-input-container {
+  background-color: white;
+  width: 100%;
+  display: flex;
+  border: 1px solid #0000001a;
+  border-radius: 5px;
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
+  overflow-y: auto;
+  max-height: 200px;
+  position: relative;
+}
+
+#text-input {
+  width: calc(100% - 2em);
+  text-align: left;
+  outline: none;
+  padding: 0.4em 0px 0.4em 0.5em;
+  word-wrap: break-word;
+  /* Use these properties to inline all of the text  */
+  /* white-space: nowrap;
+  overflow: hidden; */
+}
+
+.text-input-disabled {
+  pointer-events: none;
+  user-select: none;
+}
+
+.text-input-placeholder {
+  color: grey;
+}
