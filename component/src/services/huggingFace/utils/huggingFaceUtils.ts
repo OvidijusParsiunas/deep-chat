@@ -1,32 +1,30 @@
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CohereCompletionsResult} from '../../../types/cohereResult';
+import {HuggingFaceResult} from '../../../types/huggingFaceResult';
 import {RequestSettings} from '../../../types/requestSettings';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../../types/object';
 
-export class CohereUtils {
-  private static readonly _generate_url = 'https://api.cohere.ai/v1/generate';
+export class HuggingFaceUtils {
+  private static readonly _generate_url = 'https://api-inference.huggingface.co/models/gpt2';
 
   public static buildRequestSettings(key: string, requestSettings?: RequestSettings) {
     const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers ??= CohereUtils.buildHeaders(key) as unknown as GenericObject<string>;
+    requestSettingsObj.headers ??= HuggingFaceUtils.buildHeaders(key) as unknown as GenericObject<string>;
     return requestSettingsObj;
   }
 
   private static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      accept: 'application/json',
     };
   }
 
   // prettier-ignore
   private static handleVerificationResult(result: object, key: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
-    const cohereResult = result as CohereCompletionsResult;
-    // if the token is valid - it will simply error out that the prompt is wrong
-    if (cohereResult.message === 'invalid request: prompt must be at least 1 token long') {
+    const huggingFaceResult = result as HuggingFaceResult;
+    // if the token is valid - it will simply error out that the pameters are required
+    if (Array.isArray(huggingFaceResult.error) && huggingFaceResult.error[0] === 'Error in `parameters`: field required') {
       onSuccess(key);
     } else {
       onFail(ErrorMessages.INVALID_KEY);
@@ -37,8 +35,8 @@ export class CohereUtils {
   public static verifyKey(inputElement: HTMLInputElement,
       onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
     const key = inputElement.value.trim();
-    const headers = CohereUtils.buildHeaders(key);
-    HTTPRequest.verifyKey(key, CohereUtils._generate_url, headers, 'POST',
-      onSuccess, onFail, onLoad, CohereUtils.handleVerificationResult, JSON.stringify({prompt: ''}));
+    const headers = HuggingFaceUtils.buildHeaders(key);
+    HTTPRequest.verifyKey(key, HuggingFaceUtils._generate_url, headers, 'POST',
+      onSuccess, onFail, onLoad, HuggingFaceUtils.handleVerificationResult);
   }
 }

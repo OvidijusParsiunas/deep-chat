@@ -1,9 +1,10 @@
+import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
-import {CohereCompletionsIO} from './cohere/cohereCompletionsIO';
 import {CustomServiceIO} from './customService/customServiceIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
+import {CohereTextIO} from './cohere/cohereTextIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {AiAssistant} from '../aiAssistant';
 import {ServiceIO} from './serviceIO';
@@ -25,8 +26,11 @@ export class ServiceIOFactory {
     if (aiAssistant.assemblyAI?.audio) {
       return new AssemblyAIAudioIO(aiAssistant, key);
     }
-    if (aiAssistant.cohere?.completions) {
-      return new CohereCompletionsIO(aiAssistant, key);
+    if (aiAssistant.cohere?.completions || aiAssistant.cohere?.summarize) {
+      return new CohereTextIO(aiAssistant, key);
+    }
+    if (aiAssistant.huggingFace?.textGeneration) {
+      return new HuggingFaceTextGenerationIO(aiAssistant, key);
     }
     return new OpenAIChatIO(aiAssistant, key);
   }

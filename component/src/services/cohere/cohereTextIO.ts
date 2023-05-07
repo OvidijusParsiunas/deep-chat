@@ -1,28 +1,36 @@
+import {CohereCompletionsResult, CohereSummarizeResult} from '../../types/cohereResult';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO} from '../serviceIO';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
+import {CohereGenerateConfig, CohereSummarizeConfig} from '../../types/cohere';
 import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
-import {Cohere, CohereGenerateConfig} from '../../types/cohere';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {CohereResult} from '../../types/cohereResult';
+import {InterfacesUnion} from '../../types/utilityTypes';
 import {MessageContent} from '../../types/messages';
 import {CohereUtils} from './utils/cohereUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class CohereCompletionsIO implements ServiceIO {
-  placeholderText = 'Once upon a time';
-  url = 'https://api.cohere.ai/v1/generate';
-  canSendMessage: ValidateMessageBeforeSending = CohereCompletionsIO.canSendMessage;
-  private readonly _raw_body: CohereGenerateConfig = {};
+type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizeConfig>;
+
+type TextResult = InterfacesUnion<CohereCompletionsResult | CohereSummarizeResult>;
+
+// completions and summarize combined
+export class CohereTextIO implements ServiceIO {
+  placeholderText: string;
+  url: string;
+  canSendMessage: ValidateMessageBeforeSending = CohereTextIO.canSendMessage;
+  private readonly _raw_body: Body = {};
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
   resposeInterceptor: ResponseInterceptor = (result) => result;
+  private readonly _isSummarize: boolean;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {cohere, validateMessageBeforeSending} = aiAssistant;
-    const config = cohere?.completions as Cohere['completions'];
+    this._isSummarize = !!cohere?.summarize;
+    const config = cohere?.summarize || cohere?.completions;
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
@@ -34,6 +42,8 @@ export class CohereCompletionsIO implements ServiceIO {
     if (key) this.requestSettings = key ? CohereUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     if (typeof config === 'object') this.cleanConfig(config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    this.url = this._isSummarize ? 'https://api.cohere.ai/v1/summarize' : 'https://api.cohere.ai/v1/generate';
+    this.placeholderText = this._isSummarize ? 'Insert text to summarize' : 'Once upon a time';
   }
 
   private cleanConfig(config: ServiceCallConfig) {
@@ -57,10 +67,11 @@ export class CohereCompletionsIO implements ServiceIO {
       keyVerificationHandlers.onFail, keyVerificationHandlers.onLoad);
   }
 
-  private preprocessBody(body: CohereGenerateConfig, messages: MessageContent[]) {
+  private preprocessBody(body: Body, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
+    if (this._isSummarize) return {text: mostRecentMessageText, ...bodyCopy};
     return {prompt: mostRecentMessageText, ...bodyCopy};
   }
 
@@ -70,8 +81,9 @@ export class CohereCompletionsIO implements ServiceIO {
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 
-  async extractResultData(result: CohereResult): Promise<Result> {
+  async extractResultData(result: TextResult): Promise<Result> {
     if (result.message) throw result.message;
+    if (this._isSummarize) return {text: result.summary || ''};
     return {text: result.generations?.[0].text || ''};
   }
 }

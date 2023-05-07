@@ -10,6 +10,7 @@ import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {TextInputStyles} from './types/textInput';
+import {HuggingFace} from './types/huggingFace';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
 import {AssemblyAI} from './types/assemblyAI';
@@ -34,6 +35,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('object')
   cohere?: Cohere;
+
+  @Property('object')
+  huggingFace?: HuggingFace;
 
   @Property('object')
   customService?: CustomServiceConfig;

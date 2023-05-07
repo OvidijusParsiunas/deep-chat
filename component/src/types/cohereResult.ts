@@ -4,8 +4,14 @@ type ErrorMessage = {
   message?: string;
 };
 
-type CompletionResult = {
+type CompletionsResult = {
   generations: {id: string; text: string}[];
 };
 
-export type CohereResult = InterfacesUnion<CompletionResult | ErrorMessage>;
+export type CohereCompletionsResult = InterfacesUnion<CompletionsResult | ErrorMessage>;
+
+type SummarizeResult = {
+  summary: string;
+};
+
+export type CohereSummarizeResult = InterfacesUnion<SummarizeResult | ErrorMessage>;

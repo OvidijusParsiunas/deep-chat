@@ -1,10 +1,20 @@
 import {ServiceCallConfig} from './requestSettings';
 import {GenericObject} from './object';
 
+// https://docs.cohere.com/reference/summarize-2
+export interface CohereSummarizeConfig {
+  model?: 'summarize-medium' | 'summarize-xlarge';
+  length?: 'auto' | 'short' | 'medium' | 'long';
+  format?: 'auto' | 'paragraph' | 'bullets';
+  extractiveness?: 'auto' | 'low' | 'medium' | 'high';
+  temperature?: number;
+  additional_command?: string;
+}
+
 // https://docs.cohere.com/reference/generate
 export interface CohereGenerateConfig {
   model?: 'base-light' | 'base';
-  max_tokens?: number;
+  max_tokens?: number; // we default it to 1000
   temperature?: number;
   k?: number;
   p?: number;
@@ -18,4 +28,5 @@ export interface CohereGenerateConfig {
 
 export interface Cohere {
   completions?: true | (CohereGenerateConfig & ServiceCallConfig);
+  summarize?: true | (CohereSummarizeConfig & ServiceCallConfig);
 }
