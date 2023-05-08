@@ -9,7 +9,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 
-type HuggingFaceServiceConfigObj = {parameters?: object; options?: object};
+type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; context?: string};
 
 type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj & ServiceCallConfig);
 
@@ -17,7 +17,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
   introPanelMarkUp = `
   <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
-  <p>The first call may take an extented amount of time to complete as the model needs to be initialized.`;
+  <p>First message may take an extented amount of time to complete as the model needs to be initialized.</p>`;
 
   url: string;
   placeholderText: string;
@@ -70,7 +70,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
   }
 
   // prettier-ignore
-  private preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContent[]) {
+  preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
       & {options?: {wait_for_model?: boolean}});
     const mostRecentMessageText = messages[messages.length - 1].text;

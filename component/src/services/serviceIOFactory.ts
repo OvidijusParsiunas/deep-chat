@@ -1,5 +1,9 @@
 import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
+import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnswerIO';
+import {HuggingFaceConversationIO} from './huggingFace/huggingFaceConversationIO';
+import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
 import {HuggingFaceSummarizeIO} from './huggingFace/huggingFaceSummarizeIO';
+import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {CustomServiceIO} from './customService/customServiceIO';
@@ -35,6 +39,18 @@ export class ServiceIOFactory {
     }
     if (aiAssistant.huggingFace?.summarize) {
       return new HuggingFaceSummarizeIO(aiAssistant, key);
+    }
+    if (aiAssistant.huggingFace?.translation) {
+      return new HuggingFaceTranslationIO(aiAssistant, key);
+    }
+    if (aiAssistant.huggingFace?.fillMask) {
+      return new HuggingFaceFillMaskIO(aiAssistant, key);
+    }
+    if (aiAssistant.huggingFace?.questionAnswer) {
+      return new HuggingFaceQuestionAnswerIO(aiAssistant, key);
+    }
+    if (aiAssistant.huggingFace?.conversation) {
+      return new HuggingFaceConversationIO(aiAssistant, key);
     }
     return new OpenAIChatIO(aiAssistant, key);
   }

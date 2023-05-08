@@ -206,12 +206,22 @@ export class Messages {
     this._streamedText = '';
   }
 
+  private static checkPermittedErrorPrefixes(errorPrefixes: string[], message: string): string | undefined {
+    for (let i = 0; i < errorPrefixes.length; i += 1) {
+      if (message.startsWith(errorPrefixes[i])) return message;
+    }
+    return undefined;
+  }
   private getPermittedMessage(message?: string | PermittedErrorMessage) {
     if (message) {
       if (typeof message === 'string' && this._permittedErrorPrefixes) {
+        const result = Messages.checkPermittedErrorPrefixes(Array.from(this._permittedErrorPrefixes), message);
+        if (result) return result;
+      } else if (Array.isArray(message) && this._permittedErrorPrefixes) {
         const errorPrefixes = Array.from(this._permittedErrorPrefixes);
-        for (let i = 0; i < errorPrefixes.length; i += 1) {
-          if (message.startsWith(errorPrefixes[i])) return message;
+        for (let i = 0; i < message.length; i += 1) {
+          const result = Messages.checkPermittedErrorPrefixes(errorPrefixes, message[i]);
+          if (result) return result;
         }
       } else if (typeof message === 'object' && message.permittedErrorMessage) {
         return message.permittedErrorMessage;
