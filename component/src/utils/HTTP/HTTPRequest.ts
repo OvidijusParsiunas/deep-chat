@@ -21,6 +21,7 @@ export class HTTPRequest {
     })
       .then((response) => response.json())
       .then(async (result: object) => {
+        if (!io.extractResultData) return;
         const resultData = await io.extractResultData(io.resposeInterceptor(result));
         messages.addNewMessage(resultData, true, true);
         onFinish();
@@ -55,7 +56,7 @@ export class HTTPRequest {
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
-          io.extractResultData(response).then((text) => {
+          io.extractResultData?.(response).then((text) => {
             if (textElement) messages.updateStreamedMessage(text as string, textElement);            
           });
         }
@@ -72,6 +73,43 @@ export class HTTPRequest {
       },
       signal: abortStream.signal,
     });
+  }
+
+  // prettier-ignore
+  private static executePollRequest(io: ServiceIO,
+      url: string, requestInit: RequestInit, messages: Messages, onFinish: Finish) {
+    console.log('calling a request');
+    fetch(url, requestInit)
+      .then((response) => response.json())
+      .then(async (result: object) => {
+        if (!io.extractPollResultData) return;
+        const resultData = await io.extractPollResultData(io.resposeInterceptor(result));
+        if (resultData.timeoutMS) {
+          setTimeout(() => {
+            HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);            
+          }, resultData.timeoutMS);
+        } else {
+          console.log('finishing');
+          messages.addNewMessage(resultData, true, true);
+          onFinish();
+        }
+      })
+      .catch((err) => {
+        console.log('caught an error');
+        console.error(err);
+        messages.addNewErrorMessage('chat', err);
+        onFinish();
+      });
+  }
+
+  public static poll(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+    const requestDetails = {body, headers: io.requestSettings?.headers};
+    const {body: interceptedBody, headers} = io.requestInterceptor(requestDetails);
+    const url = io.requestSettings?.url || io.url || '';
+    const method = io.requestSettings?.method || 'POST';
+    const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
+    const requestInit = {method, body: requestBody, headers};
+    HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);
   }
 
   // prettier-ignore

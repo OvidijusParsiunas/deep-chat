@@ -48,10 +48,11 @@
 }
 
 .loading-message-text {
-  padding-left: 1.1em;
   width: 1em;
   padding-top: 0.6em;
   padding-bottom: 0.6em;
+  padding-left: 1.3em;
+  padding-right: 0.75em;
 }
 
 .message-bubble > p:first-child {

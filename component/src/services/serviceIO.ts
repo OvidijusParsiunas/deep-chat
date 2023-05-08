@@ -3,8 +3,11 @@ import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSendin
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
+import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
+
+export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -68,5 +71,7 @@ export interface ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
-  extractResultData(result: object): Promise<Result>;
+  extractResultData?(result: object): Promise<Result>;
+
+  extractPollResultData?(result: object): PollResult;
 }

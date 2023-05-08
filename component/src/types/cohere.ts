@@ -27,6 +27,6 @@ export interface CohereGenerateConfig {
 }
 
 export interface Cohere {
-  completions?: true | (CohereGenerateConfig & ServiceCallConfig);
+  textGeneration?: true | (CohereGenerateConfig & ServiceCallConfig);
   summarize?: true | (CohereSummarizeConfig & ServiceCallConfig);
 }

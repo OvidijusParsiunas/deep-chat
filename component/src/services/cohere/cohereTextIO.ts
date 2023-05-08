@@ -30,7 +30,7 @@ export class CohereTextIO implements ServiceIO {
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {cohere, validateMessageBeforeSending} = aiAssistant;
     this._isSummarize = !!cohere?.summarize;
-    const config = cohere?.summarize || cohere?.completions;
+    const config = cohere?.summarize || cohere?.textGeneration;
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.

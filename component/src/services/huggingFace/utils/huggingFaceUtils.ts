@@ -1,5 +1,5 @@
+import {HuggingFaceTextGenerationResult} from '../../../types/huggingFaceResult';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {HuggingFaceResult} from '../../../types/huggingFaceResult';
 import {RequestSettings} from '../../../types/requestSettings';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../../types/object';
@@ -16,13 +16,14 @@ export class HuggingFaceUtils {
   private static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
+      'Content-Type': 'application/json', // bigcode/santacoder expects this so adding just-in-case
     };
   }
 
   // prettier-ignore
   private static handleVerificationResult(result: object, key: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
-    const huggingFaceResult = result as HuggingFaceResult;
+    const huggingFaceResult = result as HuggingFaceTextGenerationResult;
     // if the token is valid - it will simply error out that the pameters are required
     if (Array.isArray(huggingFaceResult.error) && huggingFaceResult.error[0] === 'Error in `parameters`: field required') {
       onSuccess(key);
