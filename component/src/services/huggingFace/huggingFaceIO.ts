@@ -33,6 +33,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
     const {validateMessageBeforeSending} = aiAssistant;
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.placeholderText = placeholderText;
+    // don't bother cleaning the config as we construct _raw_body with individual props
     if (typeof config === 'object') {
       this.requestSettings = key ? HuggingFaceUtils.buildRequestSettings(key, config.request) : config.request;
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
@@ -43,15 +44,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? HuggingFaceUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    if (typeof config === 'object') this.cleanConfig(config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
-  }
-
-  private cleanConfig(config: HuggingFaceModel & ServiceCallConfig) {
-    delete config.model;
-    delete config.request;
-    delete config.requestInterceptor;
-    delete config.responseInterceptor;
   }
 
   private static canSendMessage(text: string) {

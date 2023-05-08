@@ -1,10 +1,10 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from './fileServiceConfigs';
 import {RequestInterceptor, ResponseInterceptor} from './interceptors';
 import {RequestSettings} from './requestSettings';
+import {ChatMessageLimits} from './chatLimits';
 import {Result} from './result';
 
-// WORK - max_char_length
-export interface CustomServiceConfig {
+export type CustomServiceConfig = {
   request: RequestSettings;
   stream?: boolean;
   images?: boolean | FilesServiceConfig;
@@ -18,7 +18,7 @@ export interface CustomServiceConfig {
   // to the normal error structure -> type of message -> default -> 'Error, please try again.'
   displayServiceErrorMessages?: boolean;
   [key: string]: unknown;
-}
+} & ChatMessageLimits; // total_messages_max_char_length only applies when no files
 
 export interface CustomServiceResponse {
   result: Result;

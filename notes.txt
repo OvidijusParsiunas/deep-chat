@@ -1,3 +1,6 @@
+https://dashboard.cohere.ai/ - check if chat has been approved from the waitlist
+
+Type property description text
 Custom tts API props
 Custom stt API props
 Java example

@@ -4,10 +4,12 @@ import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSen
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ChatMessageLimits} from '../../types/chatLimits';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -32,6 +34,9 @@ export class CustomServiceIO implements ServiceIO {
   requestInterceptor: RequestInterceptor = (body) => body;
   resposeInterceptor: ResponseInterceptor = (result) => result;
   private readonly _isStream: boolean = false;
+  private readonly _total_messages_max_char_length?: number;
+  private readonly _max_messages?: number;
+  private readonly _isTextOnly?: boolean;
 
   constructor(aiAssistant: AiAssistant) {
     const {customService} = aiAssistant;
@@ -52,8 +57,11 @@ export class CustomServiceIO implements ServiceIO {
     }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
+    this._total_messages_max_char_length = customService.total_messages_max_char_length;
+    this._max_messages = customService.max_messages;
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
+    this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
   }
 
   private static canSendMessage(text: string, files?: File[]) {
@@ -128,7 +136,7 @@ export class CustomServiceIO implements ServiceIO {
     }
   }
 
-  private static cleanConfig(config: Partial<CustomServiceConfig>) {
+  private static cleanConfig(config: Partial<CustomServiceConfig> & ChatMessageLimits) {
     delete config.images;
     delete config.camera;
     delete config.audio;
@@ -139,6 +147,8 @@ export class CustomServiceIO implements ServiceIO {
     delete config.requestInterceptor;
     delete config.responseInterceptor;
     delete config.displayServiceErrorMessages;
+    delete config.max_messages;
+    delete config.total_messages_max_char_length;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -156,9 +166,9 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   // prettier-ignore
-  private callApiWithFiles(messages: Messages,
-      completionsHandlers: CompletionsHandlers, files: File[], fileIO?: FileServiceIO) {
-    const formData = CustomServiceIO.createFormDataBody(this._raw_body, messages.messages, files);
+  private callApiWithFiles(messages: Messages, completionsHandlers: CompletionsHandlers,
+      processedMessages: MessageContent[], files: File[], fileIO?: FileServiceIO) {
+    const formData = CustomServiceIO.createFormDataBody(this._raw_body, processedMessages, files);
     const previousRequestSettings = this.requestSettings;
     this.requestSettings = fileIO?.request || this.requestSettings;
     // this requestInterceptor is for more fine grained monitoring
@@ -171,14 +181,19 @@ export class CustomServiceIO implements ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
       files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    const processedMessages = MessageLimitUtils.processMessages(
+      messages.messages, 0, this._max_messages, this._isTextOnly ? this._total_messages_max_char_length : undefined);
     if (files) {
       const fileIO = this.getServiceIOByType(files[0]);
-      this.callApiWithFiles(messages, completionsHandlers, files, fileIO);
-    } else if (this._isStream) {
-      HTTPRequest.requestStream(this, {stream: true, messages: messages.messages}, messages,
-        streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
+      this.callApiWithFiles(messages, completionsHandlers, processedMessages, files, fileIO);
     } else {
-      HTTPRequest.request(this, {stream: false, messages: messages.messages}, messages, completionsHandlers.onFinish);
+      const body = {messages: processedMessages, ...this._raw_body};
+      if (this._isStream) {
+        HTTPRequest.requestStream(this, body, messages,
+          streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
+      } else {
+        HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+      }
     }
   }
 

@@ -2,6 +2,7 @@ import {ExistingServiceAudioRecordingConfig} from './microphone';
 import {FilesServiceConfig} from './fileServiceConfigs';
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
+import {ChatMessageLimits} from './chatLimits';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'assistant';
@@ -26,15 +27,8 @@ export interface OpenAIImagesConfig {
   user?: string;
 }
 
-export interface OpenAICustomChatConfig {
-  total_messages_max_char_length?: number; // uses OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
-  max_messages?: number;
-  systemPrompt?: string;
-}
-
-export interface OpenAICustomCompletionConfig {
-  max_char_length?: number; // uses inputCharacterLimit or OpenAIBaseBodyGenerator.MAX_CHAR_LENGTH by default
-}
+// total_messages_max_char_length must include systemPrompt length
+export type OpenAICustomChatConfig = {systemPrompt?: string} & ChatMessageLimits;
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions
@@ -49,7 +43,7 @@ export interface OpenAIConverseConfig {
 
 export interface OpenAI {
   chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceCallConfig);
-  completions?: true | (OpenAIConverseConfig & OpenAICustomCompletionConfig & ServiceCallConfig);
+  completions?: true | (OpenAIConverseConfig & ServiceCallConfig);
   images?: true | (OpenAIImagesConfig & FilesServiceConfig & ExistingServiceCameraConfig);
   audio?: true | (OpenAIAudioConfig & FilesServiceConfig & OpenAIAudioType & ExistingServiceAudioRecordingConfig);
 }

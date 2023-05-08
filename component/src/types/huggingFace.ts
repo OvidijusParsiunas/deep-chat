@@ -1,4 +1,5 @@
 import {ServiceCallConfig} from './requestSettings';
+import {ChatMessageLimits} from './chatLimits';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
@@ -70,7 +71,7 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig);
+  conversation?: true | (HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & ChatMessageLimits);
   textGeneration?: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig & ServiceCallConfig);
   summarize?: true | (HuggingFaceModel & HuggingFaceSummarizeConfig & ServiceCallConfig);
   translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);

@@ -2,7 +2,6 @@ import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers}
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
-import {OpenAI, OpenAICustomCompletionConfig} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAIConverseResult} from '../../types/openAIResult';
@@ -11,6 +10,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
+import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
 
 export class OpenAICompletionsIO implements ServiceIO {
@@ -32,7 +32,7 @@ export class OpenAICompletionsIO implements ServiceIO {
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
-      const newMaxCharLength = config.max_char_length || inputCharacterLimit;
+      const newMaxCharLength = inputCharacterLimit;
       if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
       this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, config.request) : config.request;
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
@@ -45,8 +45,7 @@ export class OpenAICompletionsIO implements ServiceIO {
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
   }
 
-  private cleanConfig(config: OpenAICustomCompletionConfig & ServiceCallConfig) {
-    delete config.max_char_length;
+  private cleanConfig(config: ServiceCallConfig) {
     delete config.request;
     delete config.requestInterceptor;
     delete config.responseInterceptor;

@@ -6,6 +6,7 @@ import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {OpenAI, OpenAICustomChatConfig} from '../../types/openAI';
 import {OpenAIConverseResult} from '../../types/openAIResult';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -72,32 +73,11 @@ export class OpenAIChatIO implements ServiceIO {
   }
 
   // prettier-ignore
-  private processMessages(messages: MessageContent[], systemMessageLength: number, totalMessagesMaxCharLength: number,
-      maxMessages?: number) {
-    let totalCharacters = 0;
-    if (maxMessages !== undefined && maxMessages > 0) {
-      messages = messages.splice(Math.max(messages.length - maxMessages, 0));
-    }
-    // Not removing the first message in order to retain the initial 'system' message
-    const limit = totalMessagesMaxCharLength - systemMessageLength;
-    let i = messages.length - 1;
-    for (i; i >= 0; i -= 1) {
-      const text =  messages[i].text as string;
-      totalCharacters += text.length;
-      if (totalCharacters > limit) {
-        messages[i].text = text.substring(0, text.length - (totalCharacters - limit));
-        break;
-      }
-    }
-    return messages.map((message) => ({content: message.text, role: message.role})).slice(Math.max(i, 0));
-  }
-
-  // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const processedMessages = this.processMessages(messages, this._systemMessage.content.length,
-      totalMessagesMaxCharLength, this._max_messages);
+    const processedMessages = MessageLimitUtils.processMessages(messages, this._systemMessage.content.length,
+      this._max_messages, totalMessagesMaxCharLength).map((message) => ({content: message.text, role: message.role}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
   }
