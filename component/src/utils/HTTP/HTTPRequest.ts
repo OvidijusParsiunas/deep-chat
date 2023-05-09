@@ -78,7 +78,7 @@ export class HTTPRequest {
   // prettier-ignore
   private static executePollRequest(io: ServiceIO,
       url: string, requestInit: RequestInit, messages: Messages, onFinish: Finish) {
-    console.log('calling a request');
+    console.log('polling');
     fetch(url, requestInit)
       .then((response) => response.json())
       .then(async (result: object) => {
@@ -89,7 +89,7 @@ export class HTTPRequest {
             HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);            
           }, resultData.timeoutMS);
         } else {
-          console.log('finishing');
+          console.log('finished polling');
           messages.addNewMessage(resultData, true, true);
           onFinish();
         }

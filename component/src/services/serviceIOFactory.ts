@@ -1,4 +1,5 @@
 import {HuggingFaceAudioClassificationIO} from './huggingFace/huggingFaceAudioClassificationIO';
+import {HuggingFaceImageClassificationIO} from './huggingFace/huggingFaceImageClassificationIO';
 import {HuggingFaceAudioRecognitionIO} from './huggingFace/huggingFaceAudioRecognitionIO';
 import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
 import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnswerIO';
@@ -66,6 +67,9 @@ export class ServiceIOFactory {
         }
         if (services.huggingFace.audioClassification) {
           return new HuggingFaceAudioClassificationIO(aiAssistant, key);
+        }
+        if (services.huggingFace.imageClassification) {
+          return new HuggingFaceImageClassificationIO(aiAssistant, key);
         }
         return new HuggingFaceConversationIO(aiAssistant, key);
       }

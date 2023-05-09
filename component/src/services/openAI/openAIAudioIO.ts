@@ -16,7 +16,6 @@ import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
-import {Remarkable} from 'remarkable';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,

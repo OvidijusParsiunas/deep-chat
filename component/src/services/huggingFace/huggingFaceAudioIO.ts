@@ -34,8 +34,9 @@ export class HuggingFaceAudioIO extends HuggingFaceIO {
     super(aiAssistant, placeholderText, defaultModel, config, key);
     if (config && typeof config !== 'boolean' && this.fileTypes.audio) {
       HuggingFaceAudioIO.processAudioConfig(this.fileTypes.audio, config.files, config.button);
-      if (config.microphone)
+      if (config.microphone) {
         this.recordAudio = HuggingFaceAudioIO.processRecordAudioConfig(config.microphone);
+      }
     }
   }
 

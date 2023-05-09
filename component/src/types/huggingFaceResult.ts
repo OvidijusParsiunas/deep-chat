@@ -21,4 +21,4 @@ export type HuggingFaceQuestionAnswerResult = InterfacesUnion<{answer: string} |
 export type HuggingFaceAudioRecognitionResult = InterfacesUnion<{text: string} | HuggingFaceError>;
 
 // the component extracts first label (which has the highest score)
-export type HuggingFaceAudioClassificationResult = InterfacesUnion<{label: string}[] | HuggingFaceError>;
+export type HuggingFaceClassificationResult = InterfacesUnion<{label: string}[] | HuggingFaceError>;
