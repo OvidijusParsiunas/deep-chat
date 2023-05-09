@@ -1,4 +1,3 @@
-import {CohereCompletionsResult, CohereSummarizeResult} from '../../types/cohereResult';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO} from '../serviceIO';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
@@ -8,29 +7,25 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {InterfacesUnion} from '../../types/utilityTypes';
 import {MessageContent} from '../../types/messages';
+import {GenericObject} from '../../types/object';
 import {CohereUtils} from './utils/cohereUtils';
 import {AiAssistant} from '../../aiAssistant';
-import {Result} from '../../types/result';
 
 type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizeConfig>;
 
-type TextResult = InterfacesUnion<CohereCompletionsResult | CohereSummarizeResult>;
+type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
 
-// completions and summarize combined
-export class CohereTextIO implements ServiceIO {
+export class CohereIO implements ServiceIO {
   placeholderText: string;
   url: string;
-  canSendMessage: ValidateMessageBeforeSending = CohereTextIO.canSendMessage;
+  canSendMessage: ValidateMessageBeforeSending = CohereIO.canSendMessage;
   private readonly _raw_body: Body = {};
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
   resposeInterceptor: ResponseInterceptor = (result) => result;
-  private readonly _isSummarize: boolean;
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
-    const {cohere, validateMessageBeforeSending} = aiAssistant;
-    this._isSummarize = !!cohere?.summarize;
-    const config = cohere?.summarize || cohere?.textGeneration;
+  constructor(aiAssistant: AiAssistant, url: string, placeholderText: string, config: CohereServiceConfig, key?: string) {
+    const {validateMessageBeforeSending} = aiAssistant;
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
@@ -42,8 +37,8 @@ export class CohereTextIO implements ServiceIO {
     if (key) this.requestSettings = key ? CohereUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     if (typeof config === 'object') this.cleanConfig(config);
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
-    this.url = this._isSummarize ? 'https://api.cohere.ai/v1/summarize' : 'https://api.cohere.ai/v1/generate';
-    this.placeholderText = this._isSummarize ? 'Insert text to summarize' : 'Once upon a time';
+    this.url = url;
+    this.placeholderText = placeholderText;
   }
 
   private cleanConfig(config: ServiceCallConfig) {
@@ -67,11 +62,10 @@ export class CohereTextIO implements ServiceIO {
       keyVerificationHandlers.onFail, keyVerificationHandlers.onLoad);
   }
 
-  private preprocessBody(body: Body, messages: MessageContent[]) {
+  preprocessBody(body: Body, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
-    if (this._isSummarize) return {text: mostRecentMessageText, ...bodyCopy};
     return {prompt: mostRecentMessageText, ...bodyCopy};
   }
 
@@ -79,11 +73,5 @@ export class CohereTextIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this._raw_body, messages.messages);
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
-  }
-
-  async extractResultData(result: TextResult): Promise<Result> {
-    if (result.message) throw result.message;
-    if (this._isSummarize) return {text: result.summary || ''};
-    return {text: result.generations?.[0].text || ''};
   }
 }

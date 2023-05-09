@@ -11,7 +11,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const config = aiAssistant.huggingFace?.conversation as NonNullable<HuggingFace['conversation']>;
+    const config = aiAssistant.service?.huggingFace?.conversation as NonNullable<HuggingFace['conversation']>;
     super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config, key);
     if (typeof config === 'object') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;

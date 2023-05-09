@@ -11,7 +11,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO<HuggingFaceQuesti
   private readonly context: string;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const config = aiAssistant.huggingFace?.questionAnswer as NonNullable<HuggingFace['questionAnswer']>;
+    const config = aiAssistant.service?.huggingFace?.questionAnswer as NonNullable<HuggingFace['questionAnswer']>;
     super(aiAssistant, 'Ask a question', 'bert-large-uncased-whole-word-masking-finetuned-squad', config, key);
     this.context = config.context;
   }

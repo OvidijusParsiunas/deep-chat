@@ -13,7 +13,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO<HuggingFaceFillMaskConf
   permittedErrorPrefixes = new Set('No mask_token');
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const config = aiAssistant.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
+    const config = aiAssistant.service?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
     super(aiAssistant, 'The goal of life is [MASK].', 'bert-base-uncased', config, key);
   }
 

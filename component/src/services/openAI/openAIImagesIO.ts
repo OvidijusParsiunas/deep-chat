@@ -53,9 +53,9 @@ export class OpenAIImagesIO implements ServiceIO {
   resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    const config = openAI?.images as OpenAI['images'];
+    const config = service?.openAI?.images as OpenAI['images'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();

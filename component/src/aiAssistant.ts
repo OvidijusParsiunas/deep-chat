@@ -21,26 +21,19 @@ import {OpenAI} from './types/openAI';
 import {Cohere} from './types/cohere';
 import {Names} from './types/names';
 
-// WORK - on-render
 // WORK - verify if the passed in key is valid and only open the chat view then
 export class AiAssistant extends InternalHTML {
   @Property('string')
   apiKey?: string;
 
   @Property('object')
-  openAI?: OpenAI;
-
-  @Property('object')
-  assemblyAI?: AssemblyAI;
-
-  @Property('object')
-  cohere?: Cohere;
-
-  @Property('object')
-  huggingFace?: HuggingFace;
-
-  @Property('object')
-  customService?: CustomServiceConfig;
+  service?: {
+    openAI?: OpenAI;
+    assemblyAI?: AssemblyAI;
+    cohere?: Cohere;
+    huggingFace?: HuggingFace;
+    custom?: CustomServiceConfig;
+  };
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -98,6 +91,9 @@ export class AiAssistant extends InternalHTML {
 
   @Property('function')
   onNewMessage?: OnNewMessage;
+
+  @Property('function')
+  onComponentRender?: () => void = () => {};
 
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;
@@ -160,6 +156,7 @@ export class AiAssistant extends InternalHTML {
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO);
     }
     this._hasBeenRendered = true;
+    this.onComponentRender?.();
   }
 }
 

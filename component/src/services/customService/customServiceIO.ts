@@ -39,7 +39,7 @@ export class CustomServiceIO implements ServiceIO {
   private readonly _isTextOnly?: boolean;
 
   constructor(aiAssistant: AiAssistant) {
-    const {customService} = aiAssistant;
+    const customService = aiAssistant.service?.custom;
     if (!customService) return;
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;

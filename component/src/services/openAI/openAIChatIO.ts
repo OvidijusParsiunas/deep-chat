@@ -28,8 +28,8 @@ export class OpenAIChatIO implements ServiceIO {
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, validateMessageBeforeSending} = aiAssistant;
-    const config = openAI?.chat as OpenAI['chat'];
+    const {service, validateMessageBeforeSending} = aiAssistant;
+    const config = service?.openAI?.chat as OpenAI['chat'];
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;

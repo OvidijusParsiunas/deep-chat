@@ -20,6 +20,6 @@ export class ChatView {
   }
 
   public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.customService || aiAssistant.apiKey;
+    return aiAssistant.service?.custom || aiAssistant.apiKey;
   }
 }

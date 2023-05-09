@@ -52,8 +52,8 @@ export class AssemblyAIAudioIO implements ServiceIO {
   resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, validateMessageBeforeSending} = aiAssistant;
-    const config = openAI?.audio as AssemblyAI['audio'];
+    const {service, validateMessageBeforeSending} = aiAssistant;
+    const config = service?.assemblyAI?.audio as AssemblyAI['audio'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? AssemblyAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
     const remarkable = RemarkableConfig.createNew();

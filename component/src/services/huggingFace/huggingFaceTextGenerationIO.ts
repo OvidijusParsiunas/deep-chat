@@ -6,7 +6,7 @@ import {Result} from '../../types/result';
 
 export class HuggingFaceTextGenerationIO extends HuggingFaceIO<HuggingFaceTextGenerationConfig> {
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const config = aiAssistant.huggingFace?.textGeneration as NonNullable<HuggingFace['textGeneration']>;
+    const config = aiAssistant.service?.huggingFace?.textGeneration as NonNullable<HuggingFace['textGeneration']>;
     super(aiAssistant, 'Once upon a time', 'gpt2', config, key);
   }
 

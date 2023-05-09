@@ -27,8 +27,8 @@ export class OpenAICompletionsIO implements ServiceIO {
   resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
-    const {openAI, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
-    const config = openAI?.completions as OpenAI['completions'];
+    const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const config = service?.openAI?.completions as OpenAI['completions'];
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.
