@@ -1,5 +1,5 @@
 import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
-import {HuggingQuestionAnswerResult} from '../../types/huggingFaceResult';
+import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
@@ -24,7 +24,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO<HuggingFaceQuesti
     } as unknown as {inputs: string};
   }
 
-  async extractResultData(result: HuggingQuestionAnswerResult): Promise<Result> {
+  async extractResultData(result: HuggingFaceQuestionAnswerResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result.answer || ''};
   }

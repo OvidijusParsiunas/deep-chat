@@ -40,7 +40,7 @@ export class CustomServiceIO implements ServiceIO {
 
   constructor(aiAssistant: AiAssistant) {
     const customService = aiAssistant.service?.custom;
-    if (!customService) return;
+    if (!customService?.request) throw new Error('request settings are required for custom: {request: ...}');
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
     if (customService.images) {

@@ -62,9 +62,8 @@ export class OpenAIAudioIO implements ServiceIO {
     const config = service?.openAI?.audio as OpenAI['audio'];
     const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
     if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    const remarkable = RemarkableConfig.createNew();
     if (config && typeof config !== 'boolean' && this.fileTypes.audio) {
-      OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
+      OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, config.files, config.button);
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
       if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
       if (config.microphone) this.recordAudio = OpenAIAudioIO.processRecordAudioConfig(config.microphone);
@@ -88,13 +87,12 @@ export class OpenAIAudioIO implements ServiceIO {
     }
   }
 
-  // prettier-ignore
-  private static processAudioConfig(_audio: FileServiceIO, remarkable: Remarkable, files?: FileAttachments,
-      button?: GenericButton) {
+  private static processAudioConfig(_audio: FileServiceIO, files?: FileAttachments, button?: GenericButton) {
     if (files && _audio.files) {
       if (_audio.files.infoModal) {
         Object.assign(_audio.files.infoModal, files.infoModal);
         const markdown = files.infoModal?.textMarkDown;
+        const remarkable = RemarkableConfig.createNew();
         _audio.infoModalTextMarkUp = remarkable.render(markdown || '');
       }
       if (files.acceptedFormats) _audio.files.acceptedFormats = files.acceptedFormats;

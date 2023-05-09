@@ -1,5 +1,5 @@
 import {HuggingFace, HuggingFaceFillMaskConfig} from '../../types/huggingFace';
-import {HuggingFillMaskResult} from '../../types/huggingFaceResult';
+import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -17,7 +17,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO<HuggingFaceFillMaskConf
     super(aiAssistant, 'The goal of life is [MASK].', 'bert-base-uncased', config, key);
   }
 
-  async extractResultData(result: HuggingFillMaskResult): Promise<Result> {
+  async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result[0].sequence || ''};
   }

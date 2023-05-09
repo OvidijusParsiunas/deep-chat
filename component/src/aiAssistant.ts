@@ -5,20 +5,16 @@ import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
-import {CustomServiceConfig} from './types/customService';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {TextInputStyles} from './types/textInput';
-import {HuggingFace} from './types/huggingFace';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
-import {AssemblyAI} from './types/assemblyAI';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
+import {Service} from './types/service';
 import {Avatars} from './types/avatar';
-import {OpenAI} from './types/openAI';
-import {Cohere} from './types/cohere';
 import {Names} from './types/names';
 
 // WORK - verify if the passed in key is valid and only open the chat view then
@@ -27,13 +23,7 @@ export class AiAssistant extends InternalHTML {
   apiKey?: string;
 
   @Property('object')
-  service?: {
-    openAI?: OpenAI;
-    assemblyAI?: AssemblyAI;
-    cohere?: Cohere;
-    huggingFace?: HuggingFace;
-    custom?: CustomServiceConfig;
-  };
+  service?: Service;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;

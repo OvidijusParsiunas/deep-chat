@@ -104,7 +104,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
-    this._inputElementRef.textContent = '';
+    if (!this._inputElementRef.classList.contains('text-input-disabled')) this._inputElementRef.textContent = '';
     const completionsHandlers = {
       onFinish: this.changeToSubmitIcon.bind(this),
     };

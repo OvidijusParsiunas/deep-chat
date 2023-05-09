@@ -1,3 +1,5 @@
+import {ExistingServiceAudioRecordingConfig} from './microphone';
+import {FilesServiceConfig} from './fileServiceConfigs';
 import {ServiceCallConfig} from './requestSettings';
 import {ChatMessageLimits} from './chatLimits';
 
@@ -77,4 +79,10 @@ export interface HuggingFace {
   translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);
   fillMask?: true | (HuggingFaceModel & HuggingFaceFillMaskConfig & ServiceCallConfig);
   questionAnswer?: HuggingFaceQuestionAnswerConfig & HuggingFaceModel & ServiceCallConfig;
+  audioSpeechRecognition?:
+    | true
+    | (HuggingFaceModel & ServiceCallConfig & FilesServiceConfig & ExistingServiceAudioRecordingConfig);
+  audioClassification?:
+    | true
+    | (HuggingFaceModel & ServiceCallConfig & FilesServiceConfig & ExistingServiceAudioRecordingConfig);
 }

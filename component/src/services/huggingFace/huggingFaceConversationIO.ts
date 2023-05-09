@@ -1,5 +1,5 @@
 import {HuggingFaceQuestionAnswerConfig, HuggingFaceConversationConfig, HuggingFace} from '../../types/huggingFace';
-import {HuggingConversationResult} from '../../types/huggingFaceResult';
+import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
@@ -55,7 +55,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
     } as unknown as {inputs: string};
   }
 
-  async extractResultData(result: HuggingConversationResult): Promise<Result> {
+  async extractResultData(result: HuggingFaceConversationResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result.generated_text || ''};
   }

@@ -46,7 +46,10 @@ export class TextInput {
   }
 
   public static removeTextIfPlaceholder(inputElement: HTMLElement) {
-    if (inputElement.classList.contains('text-input-placeholder')) {
+    if (
+      inputElement.classList.contains('text-input-placeholder') &&
+      !inputElement.classList.contains('text-input-disabled')
+    ) {
       inputElement.textContent = '';
       inputElement.classList.remove('text-input-placeholder');
     }

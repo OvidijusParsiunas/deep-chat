@@ -1,5 +1,5 @@
+import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO, StreamHandlers} from '../serviceIO';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {CompletionsHandlers, KeyVerificationHandlers, ServiceIO} from '../serviceIO';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
@@ -13,7 +13,7 @@ type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; conte
 
 type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj & ServiceCallConfig);
 
-export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements ServiceIO {
+export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> implements ServiceIO {
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
   introPanelMarkUp = `
   <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
@@ -63,7 +63,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
   }
 
   // prettier-ignore
-  preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContent[]) {
+  preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContent[], _?: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
       & {options?: {wait_for_model?: boolean}});
     const mostRecentMessageText = messages[messages.length - 1].text;
@@ -73,9 +73,9 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj> implements Ser
     return {inputs: mostRecentMessageText, ...bodyCopy};
   }
 
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers) {
+  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages) as object;
+    const body = this.preprocessBody(this._raw_body, messages.messages, files) as object;
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 }
