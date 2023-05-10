@@ -87,6 +87,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     return container;
   }
 
+  // WORK - when user hovers over with a mouse should display stop button
   addPlaceholderAttachment(stopCallback: () => Promise<void>, customTimeLimit?: number) {
     const audioAttachment = this.createPlaceholderAudioAttachment(customTimeLimit);
     this._activePlaceholderAttachment = this.addFileAttachment(new File([], ''), 'audio', audioAttachment, false);

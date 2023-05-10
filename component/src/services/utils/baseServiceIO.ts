@@ -99,9 +99,9 @@ export class BaseServideIO implements ServiceIO {
 
   // prettier-ignore
   verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers) {
-    const {url, method, handleVerificationResult, body} = this.keyVerificationDetails;
+    const {url, method, handleVerificationResult, createHeaders, body} = this.keyVerificationDetails;
     const key = inputElement.value.trim();
-    const headers = this.buildHeadersFunc(key);
+    const headers = createHeaders?.(key) || this.buildHeadersFunc(key);
     HTTPRequest.verifyKey(key, url, headers, method,
       this.addKey.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
       keyVerificationHandlers.onLoad, handleVerificationResult, body);

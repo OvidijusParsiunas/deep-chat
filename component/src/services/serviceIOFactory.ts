@@ -16,6 +16,7 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {AiAssistant} from '../aiAssistant';
+import {AzureIO} from './azure/azureIO';
 import {ServiceIO} from './serviceIO';
 
 export class ServiceIOFactory {
@@ -72,6 +73,9 @@ export class ServiceIOFactory {
           return new HuggingFaceImageClassificationIO(aiAssistant, key);
         }
         return new HuggingFaceConversationIO(aiAssistant, key);
+      }
+      if (services.azure?.textToSpeech) {
+        return new AzureIO(aiAssistant, key);
       }
     }
     throw new Error("Please define a service in the 'service' property"); // TO-DO - default to service selection view

@@ -29,7 +29,7 @@ export class AiAssistant extends InternalHTML {
   attachmentContainerStyle?: CustomStyle;
 
   @Property('object')
-  dragAndDrop?: boolean | CustomStyle;
+  dragAndDrop?: boolean | CustomStyle; // WORK - this should be enabled by default if files are allowed
 
   @Property('object')
   speechInput?: Microphone;

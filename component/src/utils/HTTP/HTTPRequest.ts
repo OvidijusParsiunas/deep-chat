@@ -19,7 +19,13 @@ export class HTTPRequest {
       headers: interceptedHeaders,
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        const contentType = response.headers.get('content-type');
+        if (contentType?.includes('application/json')) {
+          return response.json();
+        }
+        return response.blob();
+      })
       .then(async (result: object) => {
         if (!io.extractResultData) return;
         const resultData = await io.extractResultData(io.resposeInterceptor(result));
@@ -123,7 +129,13 @@ export class HTTPRequest {
       headers,
       body: body || null,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        const contentType = response.headers.get('content-type');
+        if (contentType?.includes('application/json')) {
+          return response.json();
+        }
+        return response.blob();
+      })
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);
       })
