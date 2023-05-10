@@ -8,7 +8,7 @@ export class FileMessageUtils {
       styles: keyof MessageStyles, isAI: boolean, isInitial = false) {
     messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles] as MessageSideStyles);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
-    const messageContent = Messages.createMessageContent(true, undefined, data);
+    const messageContent = Messages.createMessageContent(isAI, undefined, data);
     messages.messages.push(messageContent);
     messages.sendClientUpdate(messageContent, isInitial);
   }

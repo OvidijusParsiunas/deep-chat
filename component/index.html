@@ -14,7 +14,8 @@
     </style>
   </head>
   <body>
-    <ai-assistant id="chat-element"></ai-assistant>
+    <ai-assistant id="chat-element" style="float: left"></ai-assistant>
+    <!-- <ai-assistant id="chat-element-2"></ai-assistant> -->
     <script type="module">
       const chatElement = document.getElementById('chat-element');
       // chatElement.onNewMessage = (result) => {
@@ -22,7 +23,7 @@
       // };
       // chatElement.initialMessages = [
       //   {role: 'user', content: 'Hey'},
-      //   {role: 'assistant', content: 'how are you today'},
+      //   {role: 'ai', content: 'how are you today'},
       // ];
       // chatElement.auxiliaryStyle = `
       // ::-webkit-scrollbar {
@@ -102,12 +103,20 @@
       //   },
       // };
       // chatElement.openAI = {
-      //   completions: {
-      //     temperature: 0.9,
-      //     stream: true,
-      //     max_tokens: 200
+      //   audio: {
+      //     microphone: true,
       //   },
       // };
+      // chatElement.dragAndDrop = true;
+      // const chatElement2 = document.getElementById('chat-element-2');
+      // chatElement2.customService = {
+      //   camera: true,
+      //   audio: true,
+      //   microphoneAudio: true,
+      //   images: true,
+      //   mixedFiles: true,
+      // };
+      // chatElement2.dragAndDrop = true;
       // chatElement.requestSettings = {
       //   url: 'http://127.0.0.1:3000/v1/chat/completions',
       // };

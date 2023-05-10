@@ -79,9 +79,9 @@ export class Messages {
   private populateInitialMessages(initialMessages: MessageContent[]) {
     initialMessages.forEach((message) => {
       if (message.text) {
-        this.addNewMessage({text: message.text}, message.role === 'assistant', true, true);
+        this.addNewMessage({text: message.text}, message.role === 'ai', true, true);
       } else if (message.file) {
-        this.addNewMessage({files: [message.file]}, message.role === 'assistant', true, true);
+        this.addNewMessage({files: [message.file]}, message.role === 'ai', true, true);
       }
     });
   }
@@ -104,9 +104,9 @@ export class Messages {
 
   public static createMessageContent(isAI: boolean, text?: string, file?: MessageFile): MessageContent {
     if (file) {
-      return {role: isAI ? 'assistant' : 'user', file};
+      return {role: isAI ? 'ai' : 'user', file};
     }
-    return {role: isAI ? 'assistant' : 'user', text: text || ''};
+    return {role: isAI ? 'ai' : 'user', text: text || ''};
   }
 
   private static createBaseElements(): MessageElements {
@@ -147,17 +147,23 @@ export class Messages {
     return messageElements;
   }
 
+  private static editEmptyMessageElement(bubbleElement: HTMLElement) {
+    bubbleElement.textContent = '.';
+    bubbleElement.style.color = '#00000000';
+  }
+
   private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
     this.applyCustomStyles(messageElements, isAI, false);
     const messageContent = Messages.createMessageContent(isAI, text);
+    if (text.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
     this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, isInitial);
     return messageElements;
   }
 
   public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
-    if (data.text) {
+    if (data.text !== undefined) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
     } else if (data.files)
       data.files.forEach((fileData) => {

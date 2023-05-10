@@ -1,19 +1,9 @@
+import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {CohereCompletionsResult} from '../../../types/cohereResult';
-import {RequestSettings} from '../../../types/requestSettings';
-import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
-import {GenericObject} from '../../../types/object';
 
 export class CohereUtils {
-  private static readonly _generate_url = 'https://api.cohere.ai/v1/generate';
-
-  public static buildRequestSettings(key: string, requestSettings?: RequestSettings) {
-    const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers ??= CohereUtils.buildHeaders(key) as unknown as GenericObject<string>;
-    return requestSettingsObj;
-  }
-
-  private static buildHeaders(key: string) {
+  public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
@@ -33,12 +23,12 @@ export class CohereUtils {
     }
   }
 
-  // prettier-ignore
-  public static verifyKey(inputElement: HTMLInputElement,
-      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
-    const key = inputElement.value.trim();
-    const headers = CohereUtils.buildHeaders(key);
-    HTTPRequest.verifyKey(key, CohereUtils._generate_url, headers, 'POST',
-      onSuccess, onFail, onLoad, CohereUtils.handleVerificationResult, JSON.stringify({prompt: ''}));
+  public static buildKeyVerificationDetails(): KeyVerificationDetails {
+    return {
+      url: 'https://api.cohere.ai/v1/generate',
+      method: 'POST',
+      handleVerificationResult: CohereUtils.handleVerificationResult,
+      body: JSON.stringify({prompt: ''}),
+    };
   }
 }

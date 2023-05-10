@@ -31,7 +31,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
     if (!mostRecentMessageText) return;
     const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
     const generated_responses = previousMessages
-      .filter((message) => message.role === 'assistant')
+      .filter((message) => message.role === 'ai')
       .map((message) => message.text);
     return {past_user_inputs, generated_responses, mostRecentMessageText};
   }

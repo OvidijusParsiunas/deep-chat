@@ -25,7 +25,7 @@ export interface MessageStyles {
   error?: MessageElementsStyles;
 }
 
-export type MessageRole = 'user' | 'assistant';
+export type MessageRole = 'user' | 'ai';
 
 export type MessageContent = InterfacesUnion<{role: MessageRole; text: string} | {role: MessageRole; file: MessageFile}>;
 

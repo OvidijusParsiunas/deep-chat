@@ -1,12 +1,8 @@
+import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
-import {RequestSettings} from '../../../types/requestSettings';
-import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
-import {GenericObject} from '../../../types/object';
 
 export class AssemblyAIUtils {
-  private static readonly _upload_url = 'https://api.assemblyai.com/v2/upload';
-
   public static async poll(api_token: string, audio_url: string) {
     // Set the headers for the request, including the API token and content type
     const headers = {
@@ -50,13 +46,7 @@ export class AssemblyAIUtils {
     return result as {text: string};
   }
 
-  public static buildRequestSettings(key: string, requestSettings?: RequestSettings) {
-    const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers ??= AssemblyAIUtils.buildHeaders(key) as unknown as GenericObject<string>;
-    return requestSettingsObj;
-  }
-
-  private static buildHeaders(key: string) {
+  public static buildHeaders(key: string) {
     return {
       Authorization: key,
       'Content-Type': 'application/octet-stream',
@@ -78,12 +68,11 @@ export class AssemblyAIUtils {
     }
   }
 
-  // prettier-ignore
-  public static verifyKey(inputElement: HTMLInputElement,
-      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void) {
-    const key = inputElement.value.trim();
-    const headers = AssemblyAIUtils.buildHeaders(key);
-    HTTPRequest.verifyKey(key, AssemblyAIUtils._upload_url, headers, 'POST',
-      onSuccess, onFail, onLoad, AssemblyAIUtils.handleVerificationResult);
+  public static buildKeyVerificationDetails(): KeyVerificationDetails {
+    return {
+      url: 'https://api.assemblyai.com/v2/upload',
+      method: 'POST',
+      handleVerificationResult: AssemblyAIUtils.handleVerificationResult,
+    };
   }
 }

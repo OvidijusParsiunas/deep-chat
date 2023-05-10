@@ -1,33 +1,18 @@
-import {CameraFilesServiceConfig, FilesServiceConfig} from '../../types/fileServiceConfigs';
-import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
-import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
+import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {ExistingServiceCameraConfig} from '../../types/camera';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
-import {RequestSettings} from '../../types/requestSettings';
-import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
-import {CameraFiles} from '../../types/cameraFiles';
-import {GenericButton} from '../../types/button';
+import {BaseServideIO} from '../utils/baseServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
-import {Remarkable} from 'remarkable';
-import {
-  KeyVerificationHandlers,
-  CompletionsHandlers,
-  ServiceFileTypes,
-  StreamHandlers,
-  FileServiceIO,
-  ServiceIO,
-} from '../serviceIO';
 
-export class OpenAIImagesIO implements ServiceIO {
+export class OpenAIImagesIO extends BaseServideIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
@@ -42,83 +27,38 @@ export class OpenAIImagesIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  canSendMessage: ValidateMessageBeforeSending = OpenAIImagesIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid input image');
-  fileTypes: ServiceFileTypes = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
-  camera?: CameraFilesServiceConfig;
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIImagesConfig = {};
-  requestInterceptor: RequestInterceptor = (details) => details;
-  resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const config = service?.openAI?.images as NonNullable<OpenAI['images']>;
+    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key, 'images');
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    const config = service?.openAI?.images as OpenAI['images'];
-    const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
-    if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    const remarkable = RemarkableConfig.createNew();
-    if (config && typeof config !== 'boolean' && this.fileTypes.images) {
-      OpenAIImagesIO.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
-      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
-      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
-      if (config.camera) this.camera = OpenAIImagesIO.processCameraConfig(config.camera, config);
+    if (this.fileTypes?.images?.files) {
+      this.fileTypes.images.files.maxNumberOfFiles = 2;
+      this.fileTypes.images.files.acceptedFormats = '.png';
+    }
+    if (this.camera) {
+      const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
+      this.camera.files = {dimensions: {width: dimension, height: dimension}};
+    }
+    if (typeof config === 'object') {
       OpenAIImagesIO.cleanConfig(config);
       this._raw_body = config;
     }
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
   }
 
-  private static canSendMessage(text: string, files?: File[]) {
+  private static canFileSendMessage(text: string, files?: File[]) {
     return !!files?.[0] || text.trim() !== '';
   }
 
-  // prettier-ignore
-  private static processImagesConfig(_images: FileServiceIO, remarkable: Remarkable, files?: FileAttachments,
-      button?: GenericButton) {
-    if (files && _images.files) {
-      if (_images.files.infoModal) {
-        Object.assign(_images.files.infoModal, files.infoModal);
-        const markdown = files.infoModal?.textMarkDown;
-        _images.infoModalTextMarkUp = remarkable.render(markdown || '');
-      }
-      if (files.acceptedFormats) _images.files.acceptedFormats = files.acceptedFormats;
-      if (files.maxNumberOfFiles) _images.files.maxNumberOfFiles = files.maxNumberOfFiles;
-    }
-    _images.button = button;
-  }
-
-  private static processCameraConfig(camera: ExistingServiceCameraConfig['camera'], images: OpenAIImagesConfig) {
-    const cameraConfig: CameraFilesServiceConfig & {files: CameraFiles} = {files: {}};
-    if (typeof camera === 'object') {
-      cameraConfig.button = camera.button;
-      cameraConfig.modalContainerStyle = camera.modalContainerStyle;
-      // cameraConfig.files.newFilePrefix = camera.newFilePrefix; // can implement in the future
-      const dimension = images.size ? Number.parseInt(images.size) : undefined;
-      cameraConfig.files = {dimensions: {width: dimension || 1024, height: dimension || 1024}}; // 1024x1024 is the default
-    }
-    return cameraConfig;
-  }
-
-  private static cleanConfig(config: FilesServiceConfig & ExistingServiceCameraConfig) {
+  private static cleanConfig(config: ExistingServiceCameraConfig) {
     delete config.files;
     delete config.button;
-    delete config.request;
     delete config.camera;
-    delete config.requestInterceptor;
-    delete config.responseInterceptor;
-  }
-
-  private addKey(onSuccess: (key: string) => void, key: string) {
-    this.requestSettings = OpenAIUtils.buildRequestSettings(key, this.requestSettings);
-    onSuccess(key);
-  }
-
-  // prettier-ignore
-  verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers) {
-    OpenAIUtils.verifyKey(inputElement, this.addKey.bind(this, keyVerificationHandlers.onSuccess),
-      keyVerificationHandlers.onFail, keyVerificationHandlers.onLoad);
   }
 
   private static createFormDataBody(body: OpenAIImagesConfig, image: File, mask?: File) {
@@ -146,11 +86,11 @@ export class OpenAIImagesIO implements ServiceIO {
     const lastMessage = messages.messages[messages.messages.length - files.length + 1]?.text?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_EDIT_URL;
+      this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_EDIT_URL;
       const body = this.preprocessBody(this._raw_body, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
+      this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
       formData = OpenAIImagesIO.createFormDataBody(this._raw_body, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
@@ -158,7 +98,7 @@ export class OpenAIImagesIO implements ServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
       this.callApiWithImage(messages, completionsHandlers, files);

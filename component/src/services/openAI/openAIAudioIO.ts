@@ -1,31 +1,17 @@
-import {FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
-import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
-import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
 import {ExistingServiceAudioRecordingConfig} from '../../types/microphone';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
-import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
+import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
-import {RequestSettings} from '../../types/requestSettings';
-import {FileAttachments} from '../../types/fileAttachments';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
-import {GenericButton} from '../../types/button';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
-import {
-  KeyVerificationHandlers,
-  CompletionsHandlers,
-  ServiceFileTypes,
-  StreamHandlers,
-  FileServiceIO,
-  ServiceIO,
-} from '../serviceIO';
 
-export class OpenAIAudioIO implements ServiceIO {
+export class OpenAIAudioIO extends BaseServideIO {
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
   private static readonly AUDIO_TRANSLATIONS_URL = 'https://api.openai.com/v1/audio/translations';
   private static readonly DEFAULT_MODEL = 'whisper-1';
@@ -37,45 +23,27 @@ export class OpenAIAudioIO implements ServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  recordAudio?: RecordAudioFilesServiceConfig;
-  canSendMessage: ValidateMessageBeforeSending = OpenAIAudioIO.canSendMessage;
   permittedErrorPrefixes = new Set('Invalid');
-  fileTypes: ServiceFileTypes = {
-    audio: {
-      files: {
-        acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a',
-        maxNumberOfFiles: 1,
-      },
-    },
-  };
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  requestSettings: RequestSettings = {};
   private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
-  requestInterceptor: RequestInterceptor = (details) => details;
-  resposeInterceptor: ResponseInterceptor = (result) => result;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const config = service?.openAI?.audio as NonNullable<OpenAI['audio']>;
+    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key, 'audio');
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    const config = service?.openAI?.audio as OpenAI['audio'];
-    const requestSettings = (typeof config === 'object' ? config.request : undefined) || {};
-    if (key) this.requestSettings = key ? OpenAIUtils.buildRequestSettings(key, requestSettings) : requestSettings;
-    if (config && typeof config !== 'boolean' && this.fileTypes.audio) {
-      OpenAIAudioIO.processAudioConfig(this.fileTypes.audio, config.files, config.button);
-      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
-      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
-      if (config.microphone) this.recordAudio = OpenAIAudioIO.processRecordAudioConfig(config.microphone);
+    if (typeof config !== 'boolean') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
     }
     this._raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
     this._raw_body.response_format = 'json';
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    this.canSendMessage = validateMessageBeforeSending || OpenAIAudioIO.canSendFileMessage;
   }
 
-  private static canSendMessage(_: string, files?: File[]) {
+  private static canSendFileMessage(_: string, files?: File[]) {
     return !!files?.[0];
   }
 
@@ -86,50 +54,11 @@ export class OpenAIAudioIO implements ServiceIO {
     }
   }
 
-  private static processAudioConfig(_audio: FileServiceIO, files?: FileAttachments, button?: GenericButton) {
-    if (files && _audio.files) {
-      if (_audio.files.infoModal) {
-        Object.assign(_audio.files.infoModal, files.infoModal);
-        const markdown = files.infoModal?.textMarkDown;
-        const remarkable = RemarkableConfig.createNew();
-        _audio.infoModalTextMarkUp = remarkable.render(markdown || '');
-      }
-      if (files.acceptedFormats) _audio.files.acceptedFormats = files.acceptedFormats;
-      if (files.maxNumberOfFiles) _audio.files.maxNumberOfFiles = files.maxNumberOfFiles;
-    }
-    _audio.button = button;
-  }
-
-  private static processRecordAudioConfig(microphone: ExistingServiceAudioRecordingConfig['microphone']) {
-    const recordAudioConfig: RecordAudioFilesServiceConfig & {files: AudioRecordingFiles} = {files: {format: 'mp3'}};
-    if (typeof microphone === 'object') {
-      recordAudioConfig.button = microphone.styles;
-      if (microphone.format) recordAudioConfig.files.format = microphone.format;
-      recordAudioConfig.files.maxDurationSeconds = microphone.maxDurationSeconds;
-      // recordAudioConfig.files.newFilePrefix = microphone.newFilePrefix; // can implement in the future
-    }
-    return recordAudioConfig;
-  }
-
-  private static cleanConfig(config: FilesServiceConfig & OpenAIAudioType & ExistingServiceAudioRecordingConfig) {
+  private static cleanConfig(config: OpenAIAudioType & ExistingServiceAudioRecordingConfig) {
     delete config.files;
     delete config.button;
-    delete config.request;
     delete config.type;
     delete config.microphone;
-    delete config.requestInterceptor;
-    delete config.responseInterceptor;
-  }
-
-  private addKey(onSuccess: (key: string) => void, key: string) {
-    this.requestSettings = OpenAIUtils.buildRequestSettings(key, this.requestSettings);
-    onSuccess(key);
-  }
-
-  // prettier-ignore
-  verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers) {
-    OpenAIUtils.verifyKey(inputElement, this.addKey.bind(this, keyVerificationHandlers.onSuccess),
-      keyVerificationHandlers.onFail, keyVerificationHandlers.onLoad);
   }
 
   private static createFormDataBody(body: OpenAIAudioConfig, audio: File) {
@@ -152,7 +81,7 @@ export class OpenAIAudioIO implements ServiceIO {
   }
 
   // prettier-ignore
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;
