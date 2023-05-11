@@ -10,10 +10,11 @@ type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
 type AzureServiceConfig = AzureRegion & ServiceCallConfig;
 
-export class AzureIO extends BaseServideIO {
+export class AzureSpeechIO extends BaseServideIO {
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: AzureServiceConfig,
      key?: string, fileType?: FILE_TYPES) {
-    super(aiAssistant, AzureUtils.buildKeyVerificationDetails(config.region), buildHeadersFunc, config, key, fileType);
+    super(
+      aiAssistant, AzureUtils.buildSpeechKeyVerificationDetails(config.region), buildHeadersFunc, config, key, fileType);
   }
 }

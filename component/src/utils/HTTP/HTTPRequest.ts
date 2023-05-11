@@ -23,6 +23,7 @@ export class HTTPRequest {
       .then(async (result: object) => {
         if (!io.extractResultData) return;
         const resultData = await io.extractResultData(io.resposeInterceptor(result));
+        if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
       })
@@ -76,7 +77,7 @@ export class HTTPRequest {
   }
 
   // prettier-ignore
-  private static executePollRequest(io: ServiceIO,
+  public static executePollRequest(io: ServiceIO,
       url: string, requestInit: RequestInit, messages: Messages, onFinish: Finish) {
     console.log('polling');
     fetch(url, requestInit)
@@ -138,7 +139,8 @@ export class HTTPRequest {
     if (contentType?.includes('application/json')) {
       return response.json();
     }
-    if (contentType?.includes('text/plain')) {
+    // when no contentType - the response is returned primarily for azure summarization to allow examination of headers
+    if (contentType?.includes('text/plain') || !contentType) {
       return response;
     }
     return response.blob();

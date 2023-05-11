@@ -6,10 +6,10 @@ import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
+import {AzureSpeechIO} from './azureSpeechIO';
 import {Result} from '../../types/result';
-import {AzureIO} from './azureIO';
 
-export class AzureTextToSpeechIO extends AzureIO {
+export class AzureTextToSpeechIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';

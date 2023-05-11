@@ -14,6 +14,7 @@ import {CustomServiceIO} from './customService/customServiceIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {CohereSummarizeIO} from './cohere/cohereSummarizeIO';
+import {AzureSummarizeIO} from './azure/azureSummarizeIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
@@ -83,8 +84,12 @@ export class ServiceIOFactory {
         if (services.azure?.textToSpeech) {
           return new AzureTextToSpeechIO(aiAssistant, key);
         }
+        if (services.azure?.summarize) {
+          return new AzureSummarizeIO(aiAssistant, key);
+        }
       }
     }
+    // create an error view
     throw new Error("Please define a service in the 'service' property"); // TO-DO - default to service selection view
   }
 }

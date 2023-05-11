@@ -4,11 +4,11 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
+import {AzureSpeechIO} from './azureSpeechIO';
 import {Result} from '../../types/result';
 import {Azure} from '../../types/azure';
-import {AzureIO} from './azureIO';
 
-export class AzureSpeechToTextIO extends AzureIO {
+export class AzureSpeechToTextIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';
@@ -28,8 +28,9 @@ export class AzureSpeechToTextIO extends AzureIO {
     const config = service?.azure?.speechToText as NonNullable<Azure['speechToText']>;
     super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, key, 'audio');
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
+    const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len
-    this.url = `https://${config.region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${config.lang}&format=detailed`;
+    this.url = `https://${config.region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`;
     if (this.fileTypes?.audio?.files && !config.files?.acceptedFormats) {
       this.fileTypes.audio.files.acceptedFormats = '.wav,.ogg';
     }

@@ -71,7 +71,7 @@ export interface ServiceIO {
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
-  extractResultData?(result: object): Promise<Result>;
+  extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 }

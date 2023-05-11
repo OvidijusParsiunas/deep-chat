@@ -1,8 +1,18 @@
-import {ExistingServiceAudioRecordingConfig} from './microphone';
+import {FilesServiceConfig} from './fileServiceConfigs';
 import {ServiceCallConfig} from './requestSettings';
 
-export interface AzureoSpeechToTextConfig {
-  lang: string;
+// eslint-disable-next-line max-len
+// https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/quickstart?pivots=rest-api&tabs=document-summarization%2Cwindows
+export interface AzureSummarizeConfig {
+  language?: string;
+}
+
+export interface AzureEndpoint {
+  endpoint: string;
+}
+
+export interface AzureSpeechToTextConfig {
+  lang?: string;
 }
 
 // eslint-disable-next-line max-len
@@ -22,5 +32,6 @@ export interface AzureRegion {
 
 export interface Azure {
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig & ServiceCallConfig;
-  speechToText?: AzureRegion & AzureoSpeechToTextConfig & ExistingServiceAudioRecordingConfig;
+  speechToText?: AzureRegion & AzureSpeechToTextConfig & FilesServiceConfig;
+  summarize?: AzureEndpoint & AzureSummarizeConfig & ServiceCallConfig;
 }
