@@ -1,4 +1,9 @@
+import {ExistingServiceAudioRecordingConfig} from './microphone';
 import {ServiceCallConfig} from './requestSettings';
+
+export interface AzureoSpeechToTextConfig {
+  lang: string;
+}
 
 // eslint-disable-next-line max-len
 // https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/language-support?tabs=tts
@@ -17,4 +22,5 @@ export interface AzureRegion {
 
 export interface Azure {
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig & ServiceCallConfig;
+  speechToText?: AzureRegion & AzureoSpeechToTextConfig & ExistingServiceAudioRecordingConfig;
 }

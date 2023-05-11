@@ -34,11 +34,12 @@ export class OpenAIImagesIO extends BaseServideIO {
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     const config = service?.openAI?.images as NonNullable<OpenAI['images']>;
-    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key, 'images');
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, key, 'images');
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
-    if (this.fileTypes?.images?.files) {
-      this.fileTypes.images.files.maxNumberOfFiles = 2;
-      this.fileTypes.images.files.acceptedFormats = '.png';
+    const files = this.fileTypes?.images?.files;
+    if (files) {
+      if (typeof config === 'boolean' || !config.files?.maxNumberOfFiles) files.maxNumberOfFiles = 2;
+      if (typeof config === 'boolean' || !config.files?.acceptedFormats) files.acceptedFormats = 'png';
     }
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;

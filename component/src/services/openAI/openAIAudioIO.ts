@@ -31,7 +31,7 @@ export class OpenAIAudioIO extends BaseServideIO {
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
     const config = service?.openAI?.audio as NonNullable<OpenAI['audio']>;
-    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key, 'audio');
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, key, 'audio');
     if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
     if (typeof config !== 'boolean') {
       this.processConfig(config);

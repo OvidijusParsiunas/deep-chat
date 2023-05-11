@@ -11,9 +11,10 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant, key?: string) {
+    // config can be undefined as this is the default method
     const config = aiAssistant.service?.huggingFace?.conversation as NonNullable<HuggingFace['conversation']>;
     super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config, key);
-    if (typeof config === 'object') {
+    if (config && typeof config === 'object') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       if (config.max_messages) {
         // needs to be an odd number in order to have an array of previous correspondences and the new user message

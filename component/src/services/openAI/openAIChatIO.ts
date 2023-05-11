@@ -23,8 +23,8 @@ export class OpenAIChatIO extends BaseServideIO {
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service} = aiAssistant;
-    const config = service?.openAI?.chat as NonNullable<OpenAI['chat']>;
-    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key);
+    const config = service?.openAI?.chat as NonNullable<OpenAI['chat']>; // can be undefined as this is the default service
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, key);
     if (config && typeof config !== 'boolean') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;

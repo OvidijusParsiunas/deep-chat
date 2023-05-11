@@ -97,6 +97,9 @@ export class Messages {
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, isAI: boolean) {
     bubbleElement.classList.add('message-bubble', isAI ? 'ai-message-text' : 'user-message-text');
     bubbleElement.innerHTML = this._remarkable.render(text);
+    // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
+    // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
+    if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
     if (this._avatars) Avatar.add(bubbleElement, isAI, this._avatars);
     if (this._names) Name.add(bubbleElement, isAI, this._names);
     return {bubbleElement};

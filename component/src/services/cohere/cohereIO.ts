@@ -19,8 +19,8 @@ export class CohereIO extends BaseServideIO {
   url: string;
   private readonly _raw_body: Body = {};
 
-  constructor(aiAssistant: AiAssistant, url: string, placeholderText: string, config: CohereServiceConfig, key?: string) {
-    super(aiAssistant, config, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, key);
+  constructor(aiAssistant: AiAssistant, url: string, placeholderText: string, config?: CohereServiceConfig, key?: string) {
+    super(aiAssistant, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config, key);
     this.url = url;
     this.placeholderText = placeholderText;
   }

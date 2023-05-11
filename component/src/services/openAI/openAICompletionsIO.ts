@@ -23,7 +23,7 @@ export class OpenAICompletionsIO extends BaseServideIO {
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, inputCharacterLimit} = aiAssistant;
     const config = service?.openAI?.completions as NonNullable<OpenAI['completions']>;
-    super(aiAssistant, config, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, key);
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, key);
     if (typeof config === 'object') {
       // Completions with no max_tokens behave weirdly and do not give full responses
       // Client should specify their own max_tokens.

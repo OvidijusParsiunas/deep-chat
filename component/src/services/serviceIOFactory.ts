@@ -11,14 +11,16 @@ import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {CustomServiceIO} from './customService/customServiceIO';
+import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
+import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {CohereSummarizeIO} from './cohere/cohereSummarizeIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {AiAssistant} from '../aiAssistant';
-import {AzureIO} from './azure/azureIO';
 import {ServiceIO} from './serviceIO';
 
+// exercise caution when defining default returns for services as their configs can be undefined
 export class ServiceIOFactory {
   public static create(aiAssistant: AiAssistant, key?: string): ServiceIO {
     const {service: services} = aiAssistant;
@@ -38,7 +40,7 @@ export class ServiceIOFactory {
         }
         return new OpenAIChatIO(aiAssistant, key);
       }
-      if (services.assemblyAI?.audio) {
+      if (services.assemblyAI) {
         return new AssemblyAIAudioIO(aiAssistant, key);
       }
       if (services.cohere) {
@@ -74,8 +76,13 @@ export class ServiceIOFactory {
         }
         return new HuggingFaceConversationIO(aiAssistant, key);
       }
-      if (services.azure?.textToSpeech) {
-        return new AzureIO(aiAssistant, key);
+      if (services.azure) {
+        if (services.azure?.speechToText) {
+          return new AzureSpeechToTextIO(aiAssistant, key);
+        }
+        if (services.azure?.textToSpeech) {
+          return new AzureTextToSpeechIO(aiAssistant, key);
+        }
       }
     }
     throw new Error("Please define a service in the 'service' property"); // TO-DO - default to service selection view

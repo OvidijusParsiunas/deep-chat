@@ -27,7 +27,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
   constructor(aiAssistant: AiAssistant, placeholderText: string, defaultModel: string,
       config: HuggingFaceServiceConfig, key?: string, fileType?: FILE_TYPES) {
     super(
-      aiAssistant, config, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, key, fileType);
+      aiAssistant, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, key, fileType);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.placeholderText = placeholderText;
     // don't bother cleaning the config as we construct _raw_body with individual props

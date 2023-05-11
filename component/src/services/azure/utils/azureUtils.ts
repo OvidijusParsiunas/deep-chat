@@ -3,11 +3,18 @@ import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {AzureKeyRetrievalResult} from '../../../types/azureResult';
 
 export class AzureUtils {
-  public static buildHeaders(key: string) {
+  public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
     return {
       'Ocp-Apim-Subscription-Key': key,
       'Content-Type': 'application/ssml+xml',
-      'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+      'X-Microsoft-OutputFormat': outputFormat,
+    };
+  }
+
+  public static buildSpeechToTextHeaders(key: string) {
+    return {
+      'Ocp-Apim-Subscription-Key': key,
+      Accept: 'application/json',
     };
   }
 

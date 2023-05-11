@@ -23,13 +23,13 @@ export class AssemblyAIAudioIO extends BaseServideIO {
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, validateMessageBeforeSending} = aiAssistant;
-    const config = service?.assemblyAI?.audio as NonNullable<AssemblyAI['audio']>;
-    super(aiAssistant, config, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, key, 'audio');
+    const config = service?.assemblyAI?.audio as NonNullable<AssemblyAI['audio']>; // used as default assemblyAI
+    super(aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, config, key, 'audio');
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }
 
-  private static canFileSendMessage(text: string, files?: File[]) {
-    return !!files?.[0] || text.trim() !== '';
+  private static canFileSendMessage(_: string, files?: File[]) {
+    return !!files?.[0];
   }
 
   override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {

@@ -36,8 +36,8 @@ export class BaseServideIO implements ServiceIO {
   private readonly buildHeadersFunc: BuildHeadersFunc;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, config: Config, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, key?: string, fileType?: FILE_TYPES) {
+  constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
+      buildHeadersFunc: BuildHeadersFunc, config?: Config, key?: string, fileType?: FILE_TYPES) {
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
     const {validateMessageBeforeSending} = aiAssistant;
@@ -49,8 +49,8 @@ export class BaseServideIO implements ServiceIO {
     if (fileType) {
       this.fileTypes = {};
       const remarkable = RemarkableConfig.createNew();
-      if (fileType === 'audio') this.processAudioConfig(config, remarkable);
-      if (fileType === 'images') this.processImagesConfig(config, remarkable);
+      if (fileType === 'audio') this.processAudioConfig(remarkable, config);
+      if (fileType === 'images') this.processImagesConfig(remarkable, config);
     }
     const requestSettings = typeof config === 'object' ? config.request : undefined;
     if (key) this.requestSettings = key ? this.buildRequestSettings(key, requestSettings) : requestSettings;
@@ -58,19 +58,19 @@ export class BaseServideIO implements ServiceIO {
     if (typeof config === 'object') this.cleanServiceConfig(config);
   }
 
-  private processAudioConfig(config: Config, remarkable: Remarkable) {
+  private processAudioConfig(remarkable: Remarkable, config?: Config) {
     if (!this.fileTypes) return;
     this.fileTypes.audio = {files: {acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a', maxNumberOfFiles: 1}};
-    if (typeof config !== 'boolean') {
+    if (config && typeof config !== 'boolean') {
       ConfigProcessingUtils.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
       if (config?.microphone) this.recordAudio = ConfigProcessingUtils.processRecordAudioConfig(config?.microphone);
     }
   }
 
-  private processImagesConfig(config: Config, remarkable: Remarkable) {
+  private processImagesConfig(remarkable: Remarkable, config?: Config) {
     if (!this.fileTypes) return;
     this.fileTypes.images = {files: {acceptedFormats: '.png,.jpg', maxNumberOfFiles: 1}};
-    if (typeof config !== 'boolean') {
+    if (config && typeof config !== 'boolean') {
       ConfigProcessingUtils.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
       if (config.camera) this.camera = ConfigProcessingUtils.processCameraConfig(config.camera);
     }
