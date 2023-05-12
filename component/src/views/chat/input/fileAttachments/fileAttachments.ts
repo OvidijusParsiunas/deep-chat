@@ -69,7 +69,7 @@ export class FileAttachments {
   }
 
   removeAllFiles() {
-    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.clear());
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.removeAllAttachments());
     this._containerElementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }

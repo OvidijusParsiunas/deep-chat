@@ -49,7 +49,6 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     };
   }
 
-  // WORK - stop playing when send is clicked
   public static createAudioAttachment(fileReaderResult: string) {
     const container = AudioFileAttachmentType.createAudioContainer();
     AudioFileAttachmentType.addAudioElements(container, fileReaderResult);
@@ -82,13 +81,29 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     const textContainer = document.createElement('div');
     textContainer.classList.add('file-attachment-text-container', 'audio-placeholder-text-3-digits-container');
     textContainer.appendChild(text);
+    const stop = SVGIconUtils.createSVGElement(STOP_ICON_STRING);
+    stop.classList.add('attachment-icon', 'stop-icon', 'not-removable-attachment-icon');
     text.textContent = '0:00';
     this._activePlaceholderTimer = this.createTimer(text, customTimeLimit);
     container.appendChild(textContainer);
+    this.addPlaceholderAudioAttachmentEvents(container, stop, textContainer);
     return container;
   }
 
-  // WORK - when user hovers over with a mouse should display stop button
+  private addPlaceholderAudioAttachmentEvents(container: HTMLElement, stop: SVGElement, textContainer: HTMLElement) {
+    const mouseEnter = () => container.replaceChildren(stop);
+    container.addEventListener('mouseenter', mouseEnter);
+    const mouseLeave = () => container.replaceChildren(textContainer);
+    container.addEventListener('mouseleave', mouseLeave);
+    const click = () => {
+      this.stopPlaceholderCallback?.();
+      container.removeEventListener('mouseenter', mouseEnter);
+      container.removeEventListener('mouseleave', mouseLeave);
+      container.removeEventListener('click', click);
+    };
+    container.addEventListener('click', click);
+  }
+
   addPlaceholderAttachment(stopCallback: () => Promise<void>, customTimeLimit?: number) {
     const audioAttachment = this.createPlaceholderAudioAttachment(customTimeLimit);
     this._activePlaceholderAttachment = this.addFileAttachment(new File([], ''), 'audio', audioAttachment, false);
@@ -110,7 +125,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
 
   removePlaceholderAttachment() {
     if (this._activePlaceholderAttachment) {
-      this.removeFile(this._activePlaceholderAttachment);
+      this.removeAttachment(this._activePlaceholderAttachment);
       this._activePlaceholderAttachment = undefined;
       this.clearTimer();
     }

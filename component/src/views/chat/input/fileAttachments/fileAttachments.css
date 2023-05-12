@@ -68,6 +68,10 @@
   user-select: none;
 }
 
+.not-removable-attachment-icon {
+  inset: 0;
+}
+
 .play-icon {
   filter: brightness(0) saturate(100%) invert(17%) sepia(0%) saturate(1392%) hue-rotate(67deg) brightness(98%)
     contrast(97%);

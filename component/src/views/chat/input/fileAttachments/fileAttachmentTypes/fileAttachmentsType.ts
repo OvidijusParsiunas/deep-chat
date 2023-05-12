@@ -11,7 +11,7 @@ export interface AttachmentObject {
 }
 
 export class FileAttachmentsType {
-  private _attachments: AttachmentObject[] = [];
+  private readonly _attachments: AttachmentObject[] = [];
   private readonly _fileCountLimit: number = 99;
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
@@ -116,7 +116,7 @@ export class FileAttachmentsType {
   createRemoveAttachmentButton(attachmentObject: AttachmentObject) {
     const removeButtonElement = document.createElement('div');
     removeButtonElement.classList.add('remove-file-attachment-button');
-    removeButtonElement.onclick = this.removeFile.bind(this, attachmentObject);
+    removeButtonElement.onclick = this.removeAttachment.bind(this, attachmentObject);
     const xIcon = document.createElement('div');
     xIcon.classList.add('x-icon');
     xIcon.innerText = '×';
@@ -124,7 +124,7 @@ export class FileAttachmentsType {
     return removeButtonElement;
   }
 
-  removeFile(attachmentObject: AttachmentObject) {
+  removeAttachment(attachmentObject: AttachmentObject) {
     const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
     const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
@@ -137,8 +137,11 @@ export class FileAttachmentsType {
     return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
   }
 
-  clear() {
-    this._attachments = [];
+  removeAllAttachments() {
+    // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
+    this._attachments.forEach((attachment) => {
+      setTimeout(() => attachment.removeButton?.click());
+    });
   }
 }
 
