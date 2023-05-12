@@ -1,4 +1,5 @@
 import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
+import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
 import {VisibilityIcon} from './visibilityIcon';
 
 // WORK - should submit key on enter
@@ -32,29 +33,38 @@ export class InsertKeyView {
     return {helpTextContainerElement, helpLinkElement, failTextElement};
   }
 
-  private static onFail(inputEl: HTMLInputElement, failTextEl: HTMLElement, startEl: HTMLElement, message: string) {
+  private static onFail(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement, message: string) {
     inputEl.classList.replace('insert-key-input-valid', 'insert-key-input-invalid');
     failTextEl.innerText = message;
     failTextEl.style.display = 'block';
     startEl.innerText = 'Start';
+    inputEl.classList.remove('loading');
   }
 
-  private static onLoad(startEl: HTMLElement) {
+  private static onLoad(inputEl: HTMLInputElement, startEl: HTMLElement) {
+    inputEl.classList.add('loading');
     startEl.innerHTML = '<div id="loading-ring"></div>';
   }
 
   // prettier-ignore
-  private static createStartButton(inputEl: HTMLInputElement, failTextEl: HTMLElement,
+  private static addVerificationEvents(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement,
       changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+    const keyVerificationHandlers: KeyVerificationHandlers = {
+      onSuccess: changeToChat,
+      onFail: InsertKeyView.onFail.bind(this, inputEl, startEl, failTextEl),
+      onLoad: InsertKeyView.onLoad.bind(this, inputEl, startEl),
+    };
+    const verifyKeyFunc = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
+    startEl.onclick = verifyKeyFunc;
+    inputEl.onkeydown = (event) => {
+      if (!inputEl.classList.contains('loading') && event.key === KEYBOARD_KEY.ENTER) verifyKeyFunc();
+    };
+  }
+
+  private static createStartButton() {
     const startButtonElement = document.createElement('div');
     startButtonElement.id = 'start-button';
     startButtonElement.innerText = 'Start';
-    const keyVerificationHandlers: KeyVerificationHandlers = {
-      onSuccess: changeToChat,
-      onFail: InsertKeyView.onFail.bind(this, inputEl, failTextEl, startButtonElement),
-      onLoad: InsertKeyView.onLoad.bind(this, startButtonElement),
-    };
-    startButtonElement.onclick = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
     return startButtonElement;
   }
 
@@ -83,9 +93,11 @@ export class InsertKeyView {
     const iconContainerElement = VisibilityIcon.create(inputElement);
     inputContainerElement.appendChild(iconContainerElement);
     contentsElement.appendChild(inputContainerElement);
+    const startButton = InsertKeyView.createStartButton();
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer();
-    contentsElement.appendChild(InsertKeyView.createStartButton(inputElement, failTextElement, changeToChat, serviceIO));
+    contentsElement.appendChild(startButton);
     contentsElement.appendChild(helpTextContainerElement);
+    InsertKeyView.addVerificationEvents(inputElement, startButton, failTextElement, changeToChat, serviceIO);
     return contentsElement;
   }
 
