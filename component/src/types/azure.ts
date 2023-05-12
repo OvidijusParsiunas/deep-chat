@@ -1,9 +1,14 @@
 import {FilesServiceConfig} from './fileServiceConfigs';
 import {ServiceCallConfig} from './requestSettings';
 
+// https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
+export interface AzureTranslationConfig {
+  language?: string;
+}
+
 // eslint-disable-next-line max-len
 // https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/quickstart?pivots=rest-api&tabs=document-summarization%2Cwindows
-export interface AzureSummarizeConfig {
+export interface AzureSummarizationConfig {
   language?: string;
 }
 
@@ -33,5 +38,6 @@ export interface AzureRegion {
 export interface Azure {
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig & ServiceCallConfig;
   speechToText?: AzureRegion & AzureSpeechToTextConfig & FilesServiceConfig;
-  summarize?: AzureEndpoint & AzureSummarizeConfig & ServiceCallConfig;
+  summarization?: AzureEndpoint & AzureSummarizationConfig & ServiceCallConfig;
+  translation?: Partial<AzureRegion> & AzureTranslationConfig & ServiceCallConfig;
 }

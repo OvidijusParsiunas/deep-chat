@@ -1,4 +1,4 @@
-import {CohereGenerateConfig, CohereSummarizeConfig} from '../../types/cohere';
+import {CohereGenerateConfig, CohereSummarizationConfig} from '../../types/cohere';
 import {ServiceCallConfig} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -10,7 +10,7 @@ import {GenericObject} from '../../types/object';
 import {CohereUtils} from './utils/cohereUtils';
 import {AiAssistant} from '../../aiAssistant';
 
-type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizeConfig>;
+type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizationConfig>;
 
 type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
 

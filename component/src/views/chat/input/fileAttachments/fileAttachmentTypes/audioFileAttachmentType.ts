@@ -49,6 +49,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     };
   }
 
+  // WORK - stop playing when send is clicked
   public static createAudioAttachment(fileReaderResult: string) {
     const container = AudioFileAttachmentType.createAudioContainer();
     AudioFileAttachmentType.addAudioElements(container, fileReaderResult);

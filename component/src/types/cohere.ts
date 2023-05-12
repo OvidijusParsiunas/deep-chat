@@ -2,7 +2,7 @@ import {ServiceCallConfig} from './requestSettings';
 import {GenericObject} from './object';
 
 // https://docs.cohere.com/reference/summarize-2
-export interface CohereSummarizeConfig {
+export interface CohereSummarizationConfig {
   model?: 'summarize-medium' | 'summarize-xlarge';
   length?: 'auto' | 'short' | 'medium' | 'long';
   format?: 'auto' | 'paragraph' | 'bullets';
@@ -28,5 +28,5 @@ export interface CohereGenerateConfig {
 
 export interface Cohere {
   textGeneration?: true | (CohereGenerateConfig & ServiceCallConfig);
-  summarize?: true | (CohereSummarizeConfig & ServiceCallConfig);
+  summarization?: true | (CohereSummarizationConfig & ServiceCallConfig);
 }

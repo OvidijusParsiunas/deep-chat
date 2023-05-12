@@ -3,18 +3,19 @@ import {HuggingFaceImageClassificationIO} from './huggingFace/huggingFaceImageCl
 import {HuggingFaceAudioRecognitionIO} from './huggingFace/huggingFaceAudioRecognitionIO';
 import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
 import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnswerIO';
+import {HuggingFaceSummarizationIO} from './huggingFace/huggingFaceSummarizationIO';
 import {HuggingFaceConversationIO} from './huggingFace/huggingFaceConversationIO';
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
-import {HuggingFaceSummarizeIO} from './huggingFace/huggingFaceSummarizeIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
+import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
+import {AzureSummarizationIO} from './azure/azureSummarizationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {CustomServiceIO} from './customService/customServiceIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
-import {CohereSummarizeIO} from './cohere/cohereSummarizeIO';
-import {AzureSummarizeIO} from './azure/azureSummarizeIO';
+import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
@@ -45,8 +46,8 @@ export class ServiceIOFactory {
         return new AssemblyAIAudioIO(aiAssistant, key);
       }
       if (services.cohere) {
-        if (services.cohere.summarize) {
-          return new CohereSummarizeIO(aiAssistant, key);
+        if (services.cohere.summarization) {
+          return new CohereSummarizationIO(aiAssistant, key);
         }
         return new CohereTextGenerationIO(aiAssistant, key);
       }
@@ -54,8 +55,8 @@ export class ServiceIOFactory {
         if (services.huggingFace.textGeneration) {
           return new HuggingFaceTextGenerationIO(aiAssistant, key);
         }
-        if (services.huggingFace.summarize) {
-          return new HuggingFaceSummarizeIO(aiAssistant, key);
+        if (services.huggingFace.summarization) {
+          return new HuggingFaceSummarizationIO(aiAssistant, key);
         }
         if (services.huggingFace.translation) {
           return new HuggingFaceTranslationIO(aiAssistant, key);
@@ -84,8 +85,11 @@ export class ServiceIOFactory {
         if (services.azure?.textToSpeech) {
           return new AzureTextToSpeechIO(aiAssistant, key);
         }
-        if (services.azure?.summarize) {
-          return new AzureSummarizeIO(aiAssistant, key);
+        if (services.azure?.summarization) {
+          return new AzureSummarizationIO(aiAssistant, key);
+        }
+        if (services.azure?.translation) {
+          return new AzureTranslationIO(aiAssistant, key);
         }
       }
     }

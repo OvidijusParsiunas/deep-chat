@@ -16,3 +16,5 @@ export type AzureSummarizationResult = InterfacesUnion<
     }
   | {error: {code: string}}
 >;
+
+export type AzureTranslationResult = [{translations: {text: string}[]}] | {error: {code: number}};

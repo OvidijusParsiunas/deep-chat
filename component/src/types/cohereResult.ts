@@ -10,8 +10,8 @@ type CompletionsResult = {
 
 export type CohereCompletionsResult = InterfacesUnion<CompletionsResult | ErrorMessage>;
 
-type SummarizeResult = {
+type SummarizationResult = {
   summary: string;
 };
 
-export type CohereSummarizeResult = InterfacesUnion<SummarizeResult | ErrorMessage>;
+export type CohereSummarizationResult = InterfacesUnion<SummarizationResult | ErrorMessage>;

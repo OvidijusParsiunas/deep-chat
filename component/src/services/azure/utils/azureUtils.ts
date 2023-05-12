@@ -1,6 +1,7 @@
 import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/azureResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {GenericObject} from '../../../types/object';
 
 export class AzureUtils {
   public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
@@ -68,5 +69,39 @@ export class AzureUtils {
       },
       handleVerificationResult: AzureUtils.handleLanguageVerificationResult,
     };
+  }
+
+  // prettier-ignore
+  private static handleTranslationVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
+    const azureResult = result as Response;
+    azureResult.json().then((result) => {
+      // if the token is valid - it will throw a different error than a 401000
+      if (!Array.isArray(result) && result.error.code === 401000) {
+        onFail(ErrorMessages.INVALID_KEY);
+      } else {
+        onSuccess(key);
+      }
+    });
+  }
+
+  public static buildTranslationKeyVerificationDetails(region?: string): KeyVerificationDetails {
+    return {
+      url: `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=es`,
+      method: 'POST',
+      createHeaders: (key: string) => {
+        return AzureUtils.buildTranslationHeaders(region, key);
+      },
+      handleVerificationResult: AzureUtils.handleTranslationVerificationResult,
+    };
+  }
+
+  public static buildTranslationHeaders(region: string | undefined, key: string) {
+    const headers: GenericObject<string> = {
+      'Ocp-Apim-Subscription-Key': key,
+      'Content-Type': 'application/json',
+    };
+    if (region) headers['Ocp-Apim-Subscription-Region'] = region;
+    return headers;
   }
 }

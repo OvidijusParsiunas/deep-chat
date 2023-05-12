@@ -38,7 +38,7 @@ export interface HuggingFaceTranslationConfig {
 }
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task
-export interface HuggingFaceSummarizeConfig {
+export interface HuggingFaceSummarizationConfig {
   parameters?: {
     min_length?: number;
     max_length?: number;
@@ -75,7 +75,7 @@ export interface HuggingFaceModel {
 export interface HuggingFace {
   conversation?: true | (HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & ChatMessageLimits);
   textGeneration?: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig & ServiceCallConfig);
-  summarize?: true | (HuggingFaceModel & HuggingFaceSummarizeConfig & ServiceCallConfig);
+  summarization?: true | (HuggingFaceModel & HuggingFaceSummarizationConfig & ServiceCallConfig);
   translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);
   fillMask?: true | (HuggingFaceModel & HuggingFaceFillMaskConfig & ServiceCallConfig);
   questionAnswer?: HuggingFaceQuestionAnswerConfig & HuggingFaceModel & ServiceCallConfig;

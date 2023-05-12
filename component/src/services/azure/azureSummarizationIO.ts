@@ -1,5 +1,5 @@
 import {AzureSummarizationResult} from '../../types/azureResult';
-import {Azure, AzureSummarizeConfig} from '../../types/azure';
+import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {CompletionsHandlers, PollResult} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -9,9 +9,9 @@ import {GenericObject} from '../../types/object';
 import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 
-type RawBody = Required<Pick<AzureSummarizeConfig, 'language'>>;
+type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
-export class AzureSummarizeIO extends AzureLanguageIO {
+export class AzureSummarizationIO extends AzureLanguageIO {
   url = '';
   placeholderText = 'Insert text to summarize';
   private messages?: Messages;
@@ -20,7 +20,7 @@ export class AzureSummarizeIO extends AzureLanguageIO {
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service} = aiAssistant;
-    const config = service?.azure?.summarize as NonNullable<Azure['summarize']>;
+    const config = service?.azure?.summarization as NonNullable<Azure['summarization']>;
     super(aiAssistant, AzureUtils.buildSummarizationHeader, config, key);
     Object.assign(this._raw_body, config);
     this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;

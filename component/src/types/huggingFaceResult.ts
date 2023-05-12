@@ -9,7 +9,7 @@ export type HuggingFaceConversationResult = InterfacesUnion<{generated_text: str
 
 export type HuggingFaceTextGenerationResult = InterfacesUnion<{generated_text: string}[] | HuggingFaceError>;
 
-export type HuggingFaceSummarizeResult = InterfacesUnion<{summary_text: string}[] | HuggingFaceError>;
+export type HuggingFaceSummarizationResult = InterfacesUnion<{summary_text: string}[] | HuggingFaceError>;
 
 export type HuggingFaceTranslationResult = InterfacesUnion<{translation_text: string}[] | HuggingFaceError>;
 
