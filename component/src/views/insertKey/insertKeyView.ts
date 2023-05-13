@@ -2,7 +2,6 @@ import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
 import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
 import {VisibilityIcon} from './visibilityIcon';
 
-// WORK - should submit key on enter
 export class InsertKeyView {
   private static createHelpLink() {
     const helpElement = document.createElement('a');

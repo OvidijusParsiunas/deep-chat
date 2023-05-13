@@ -2,7 +2,7 @@ import {CustomStyle} from '../../../../../types/styles';
 import {FileAttachments} from '../fileAttachments';
 
 export class DragAndDrop {
-  public static create(containerElement: HTMLElement, fileAttachments: FileAttachments, dnd: boolean | CustomStyle) {
+  public static create(containerElement: HTMLElement, fileAttachments: FileAttachments, dnd?: boolean | CustomStyle) {
     const fileDropElement = DragAndDrop.createElement(dnd);
     DragAndDrop.addEvents(fileDropElement, containerElement, fileAttachments);
     containerElement.appendChild(fileDropElement);
@@ -45,5 +45,10 @@ export class DragAndDrop {
 
   private static hide(fileDropElement: HTMLElement) {
     fileDropElement.style.display = 'none';
+  }
+
+  public static isEnabled(fileAttachments: FileAttachments, dragAndDrop?: boolean | CustomStyle) {
+    if (dragAndDrop !== undefined && dragAndDrop === false) return false;
+    return !!dragAndDrop || fileAttachments.getNumberOfTypes() > 0;
   }
 }

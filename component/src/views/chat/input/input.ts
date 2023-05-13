@@ -55,7 +55,6 @@ export class Input {
   private createFileUploadComponents(
       aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
     const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle);
-    if (aiAssistant.dragAndDrop) DragAndDrop.create(containerElement, fileAttachments, aiAssistant.dragAndDrop);
     Input.createUploadButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
     if (serviceIO.camera?.files) {
       const cameraType = buttons.images?.fileType || fileAttachments.addType(serviceIO.camera.files, 'images');
@@ -64,6 +63,9 @@ export class Input {
     if (serviceIO.recordAudio?.files) {
       const audioType = buttons.audio?.fileType || fileAttachments.addType(serviceIO.recordAudio.files, 'audio');
       buttons.microphone = {button: new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio)};
+    }
+    if (DragAndDrop.isEnabled(fileAttachments, aiAssistant.dragAndDrop)) {
+      DragAndDrop.create(containerElement, fileAttachments, aiAssistant.dragAndDrop);
     }
     return fileAttachments;
   }

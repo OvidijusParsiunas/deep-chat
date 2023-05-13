@@ -73,4 +73,8 @@ export class FileAttachments {
     this._containerElementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }
+
+  getNumberOfTypes() {
+    return this._fileAttachmentsTypes.length;
+  }
 }
