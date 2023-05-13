@@ -13,7 +13,7 @@ type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
 export class AzureSummarizationIO extends AzureLanguageIO {
   url = '';
-  placeholderText = 'Insert text to summarize';
+  textInputPlaceholderText = 'Insert text to summarize';
   private messages?: Messages;
   private completionsHandlers?: CompletionsHandlers;
   private readonly _raw_body: RawBody = {language: 'en'};

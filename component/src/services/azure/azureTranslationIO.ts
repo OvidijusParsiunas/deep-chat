@@ -10,6 +10,10 @@ import {Result} from '../../types/result';
 import {Azure} from '../../types/azure';
 
 export class AzureTranslationIO extends BaseServideIO {
+  override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
+  override getKeyLink =
+    // eslint-disable-next-line max-len
+    'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
   url = '';
 
   // prettier-ignore

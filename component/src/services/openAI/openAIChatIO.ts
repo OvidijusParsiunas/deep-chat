@@ -14,6 +14,8 @@ import {Result} from '../../types/result';
 
 // chat is a form of completions
 export class OpenAIChatIO extends BaseServideIO {
+  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
   private readonly _raw_body: OpenAIConverseBodyInternal;
   private readonly _systemMessage: SystemMessageInternal =

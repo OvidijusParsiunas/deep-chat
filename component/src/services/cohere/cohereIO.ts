@@ -15,14 +15,16 @@ type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizationConfig>;
 type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
 
 export class CohereIO extends BaseServideIO {
-  placeholderText: string;
+  override insertKeyPlaceholderText = 'Cohere API Key';
+  override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
+  textInputPlaceholderText: string;
   url: string;
   private readonly _raw_body: Body = {};
 
-  constructor(aiAssistant: AiAssistant, url: string, placeholderText: string, config?: CohereServiceConfig, key?: string) {
+  constructor(aiAssistant: AiAssistant, url: string, inptPlaceholder: string, config?: CohereServiceConfig, key?: string) {
     super(aiAssistant, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config, key);
     this.url = url;
-    this.placeholderText = placeholderText;
+    this.textInputPlaceholderText = inptPlaceholder;
   }
 
   preprocessBody(body: Body, messages: MessageContent[]) {

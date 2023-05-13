@@ -12,6 +12,8 @@ import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
 
 export class OpenAICompletionsIO extends BaseServideIO {
+  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/completions';
   private readonly _maxCharLength: number = OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
   // text-davinci-003 total max limit is 4097 - keeping it at 4000 just to be safe

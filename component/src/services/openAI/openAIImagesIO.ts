@@ -13,6 +13,8 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 export class OpenAIImagesIO extends BaseServideIO {
+  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';

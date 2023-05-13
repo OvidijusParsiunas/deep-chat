@@ -21,7 +21,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
 
   url = '';
   isTextInputDisabled = true;
-  placeholderText = 'Upload an audio file';
+  textInputPlaceholderText = 'Upload an audio file';
 
   constructor(aiAssistant: AiAssistant, key?: string) {
     const {service, validateMessageBeforeSending} = aiAssistant;

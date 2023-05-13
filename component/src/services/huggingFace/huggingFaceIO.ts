@@ -14,22 +14,24 @@ type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; conte
 type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj & ServiceCallConfig);
 
 export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends BaseServideIO {
+  override insertKeyPlaceholderText = 'Hugging Face Access Token';
+  override getKeyLink = 'https://huggingface.co/settings/tokens';
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
     <p>First message may take an extented amount of time to complete as the model needs to be initialized.</p>`;
 
   url: string;
-  placeholderText: string;
+  textInputPlaceholderText: string;
   private readonly _raw_body: T = {} as T;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, placeholderText: string, defaultModel: string,
+  constructor(aiAssistant: AiAssistant, textInputPlaceholderText: string, defaultModel: string,
       config: HuggingFaceServiceConfig, key?: string, fileType?: FILE_TYPES) {
     super(
       aiAssistant, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, key, fileType);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
-    this.placeholderText = placeholderText;
+    this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct _raw_body with individual props
     if (typeof config === 'object') {
       if (config.model) this.url = `${HuggingFaceIO.URL_PREFIX}${config.model}`;

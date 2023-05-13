@@ -9,6 +9,8 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 export class AssemblyAIAudioIO extends BaseServideIO {
+  override insertKeyPlaceholderText = 'AssemblyAI API Key';
+  override getKeyLink = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>AssemblyAI Audio</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text.
@@ -18,7 +20,7 @@ export class AssemblyAIAudioIO extends BaseServideIO {
 
   url = 'https://api.assemblyai.com/v2/upload';
   isTextInputDisabled = true;
-  placeholderText = 'Upload an audio file';
+  textInputPlaceholderText = 'Upload an audio file';
   permittedErrorPrefixes = new Set('Invalid');
 
   constructor(aiAssistant: AiAssistant, key?: string) {

@@ -22,7 +22,7 @@ export class TextInput {
 
   private static processStyles(serviceIO: ServiceIO, textInputStyles?: TextInputStyles) {
     textInputStyles ??= {};
-    textInputStyles.placeholderText ??= serviceIO.placeholderText;
+    textInputStyles.placeholderText ??= serviceIO.textInputPlaceholderText;
     textInputStyles.disabled ??= serviceIO.isTextInputDisabled;
     return textInputStyles;
   }

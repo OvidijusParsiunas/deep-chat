@@ -34,13 +34,17 @@ export type ServiceFileTypes = {
 };
 
 export interface ServiceIO {
+  insertKeyPlaceholderText?: string;
+
+  getKeyLink?: string;
+
   url?: string;
 
-  // overwrites textInput property if not provided
+  // overwrites textInput disabled property if not provided
   isTextInputDisabled?: boolean;
 
-  // overwrites textInput property if not provided
-  placeholderText?: string;
+  // overwrites textInput placeholderText property if not provided
+  textInputPlaceholderText?: string;
 
   fileTypes?: ServiceFileTypes;
 

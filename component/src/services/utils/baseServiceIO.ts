@@ -25,6 +25,8 @@ type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSe
 type Config = true | (FilesServiceConfig & Camera & Microphone);
 
 export class BaseServideIO implements ServiceIO {
+  insertKeyPlaceholderText = 'API Key';
+  getKeyLink = '';
   canSendMessage: ValidateMessageBeforeSending = BaseServideIO.canSendMessage;
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;

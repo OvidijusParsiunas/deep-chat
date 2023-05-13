@@ -11,6 +11,7 @@
   transform: translate(-50%, -50%);
   width: 82%;
   display: flex;
+  max-width: 700px;
 }
 
 #insert-key-title {
@@ -19,7 +20,7 @@
 
 #insert-key-input-container {
   margin-right: 2.7em;
-  width: 80%;
+  width: calc(100% - 80px);
 }
 
 #insert-key-input {
@@ -50,7 +51,11 @@
   filter: brightness(0) saturate(100%) invert(63%) sepia(1%) saturate(9%) hue-rotate(43deg) brightness(98%) contrast(92%);
   position: absolute;
   right: -1.7em;
-  top: -1.47em;
+  top: -1.43em;
+}
+
+#visible-icon {
+  top: -1.4em;
 }
 
 .visibility-icon:hover {

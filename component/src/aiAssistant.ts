@@ -18,6 +18,7 @@ import {Avatars} from './types/avatar';
 import {Names} from './types/names';
 
 // WORK - verify if the passed in key is valid and only open the chat view then
+// WORK - add a wff file for font consistency
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
@@ -31,7 +32,7 @@ export class AiAssistant extends InternalHTML {
   attachmentContainerStyle?: CustomStyle;
 
   @Property('object')
-  dragAndDrop?: boolean | CustomStyle;
+  dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
   speechInput?: Microphone;
