@@ -153,7 +153,7 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  verifyKey(_inputElement: HTMLInputElement, _keyVerificationHandlers: KeyVerificationHandlers) {}
+  verifyKey(_key: string, _keyVerificationHandlers: KeyVerificationHandlers) {}
 
   private static createFormDataBody(body: any, messages: MessageContent[], files: File[]) {
     const formData = new FormData();

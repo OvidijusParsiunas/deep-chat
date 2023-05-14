@@ -58,7 +58,7 @@ export class HTTPRequest {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response).then((text) => {
-            if (textElement) messages.updateStreamedMessage(text as string, textElement);            
+            if (textElement) messages.updateStreamedMessage(text.text as string, textElement);            
           });
         }
       },

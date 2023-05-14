@@ -69,7 +69,7 @@ export interface ServiceIO {
 
   canSendMessage: ValidateMessageBeforeSending;
 
-  verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers): void;
+  verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
   // prettier-ignore
   callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,

@@ -1,10 +1,12 @@
 import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
+import {ValidateApiKeyPropertyView} from './views/validateApiKeyProperty/validateApiKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
+import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
@@ -18,7 +20,6 @@ import {Avatars} from './types/avatar';
 import {Names} from './types/names';
 
 // WORK - verify if the passed in key is valid and only open the chat view then
-// WORK - add a wff file for font consistency
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
@@ -82,6 +83,10 @@ export class AiAssistant extends InternalHTML {
   @Property('string')
   auxiliaryStyle?: string;
 
+  // can only be used if key has been set via the apiKey property
+  @Property('boolean')
+  validateKeyProperty?: boolean;
+
   @Property('function')
   onNewMessage?: OnNewMessage;
 
@@ -114,6 +119,7 @@ export class AiAssistant extends InternalHTML {
 
   constructor() {
     super();
+    GoogleFont.appendStyleSheetToHead();
     this._isSlotPopulated = !!this.children[0];
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
@@ -128,6 +134,7 @@ export class AiAssistant extends InternalHTML {
   private readonly _elementRef: HTMLElement;
 
   private changeToChatView(newKey: string) {
+    this.validateKeyProperty = false;
     this.apiKey = newKey;
     this.onRender();
   }
@@ -140,7 +147,9 @@ export class AiAssistant extends InternalHTML {
       this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
-    if (ChatView.shouldBeRendered(this)) {
+    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.apiKey) {
+      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.apiKey);
+    } else if (ChatView.shouldBeRendered(this)) {
       ChatView.render(this, this._elementRef, serviceIO);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available

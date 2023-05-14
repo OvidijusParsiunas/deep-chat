@@ -1,0 +1,42 @@
+#validate-property-key {
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+#validate-property-key-error {
+  color: red;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  text-align: center;
+}
+
+#large-loading-ring {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+}
+
+#large-loading-ring:after {
+  content: ' ';
+  display: block;
+  width: 38px;
+  height: 38px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #5fb2ff;
+  border-color: #5fb2ff transparent #5fb2ff transparent;
+  animation: large-loading-ring 1.4s linear infinite;
+}
+
+@keyframes large-loading-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

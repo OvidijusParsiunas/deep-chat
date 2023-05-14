@@ -51,7 +51,8 @@ export class OpenAIChatIO extends BaseServideIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this._total_messages_max_char_length || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
     const processedMessages = MessageLimitUtils.processMessages(messages, this._systemMessage.content.length,
-      this._max_messages, totalMessagesMaxCharLength).map((message) => ({content: message.text, role: message.role}));
+      this._max_messages, totalMessagesMaxCharLength
+      ).map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
   }

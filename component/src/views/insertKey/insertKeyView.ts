@@ -48,6 +48,13 @@ export class InsertKeyView {
   }
 
   // prettier-ignore
+  private static verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers,
+      serviceIO: ServiceIO) {
+    const key = inputElement.value.trim();
+    serviceIO.verifyKey.bind(serviceIO, key, keyVerificationHandlers);
+  }
+
+  // prettier-ignore
   private static addVerificationEvents(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement,
       changeToChat: (key: string) => void, serviceIO: ServiceIO) {
     const keyVerificationHandlers: KeyVerificationHandlers = {
@@ -55,7 +62,7 @@ export class InsertKeyView {
       onFail: InsertKeyView.onFail.bind(this, inputEl, startEl, failTextEl),
       onLoad: InsertKeyView.onLoad.bind(this, inputEl, startEl),
     };
-    const verifyKeyFunc = serviceIO.verifyKey.bind(serviceIO, inputEl, keyVerificationHandlers);
+    const verifyKeyFunc = InsertKeyView.verifyKey.bind(this, inputEl, keyVerificationHandlers, serviceIO);
     startEl.onclick = verifyKeyFunc;
     inputEl.onkeydown = (event) => {
       if (!inputEl.classList.contains('loading') && event.key === KEYBOARD_KEY.ENTER) verifyKeyFunc();

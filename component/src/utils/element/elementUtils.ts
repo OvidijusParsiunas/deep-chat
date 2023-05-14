@@ -1,4 +1,6 @@
 export class ElementUtils {
+  private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
+
   public static addElements(parent: HTMLElement, ...elements: HTMLElement[]) {
     elements.forEach((element) => parent.appendChild(element));
   }
@@ -13,6 +15,6 @@ export class ElementUtils {
     const remainingScrollHeight = scrollHeight - visibleHeight;
 
     // Check if the current scroll position is at the bottom
-    return scrollPosition >= remainingScrollHeight;
+    return scrollPosition >= remainingScrollHeight - ElementUtils.CODE_SNIPPET_GENERATION_JUMP;
   }
 }

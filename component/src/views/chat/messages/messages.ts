@@ -260,12 +260,14 @@ export class Messages {
 
   public updateStreamedMessage(text: string, bubbleElement: HTMLElement) {
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
+    if (text.trim().length !== 0) bubbleElement.style.color = '';
     this._streamedText += text;
     bubbleElement.innerHTML = this._remarkable.render(this._streamedText);
     if (isScrollbarAtBottomOfElement) this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
   public finaliseStreamedMessage(text: string) {
+    this.messages[this.messages.length - 1].text = text;
     this.sendClientUpdate(Messages.createMessageContent(true, text), false);
     if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
     this._streamedText = '';
