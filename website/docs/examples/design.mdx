@@ -4,13 +4,14 @@ sidebar_position: 0
 
 # Design
 
-Base table examples to help you get started.
+Basic examples to help you get started with Active Table.
 
 ### Unique column types {#uniqueColumnTypes}
 
 This example makes use of the [`customColumnsSettings`](../docs/column#customColumnsSettings) property to set static types for individual columns. The _Date Created_
 column has two available date formats.
 
+import TableContainerProgrammaticUpdates from '@site/src/components/table/tableContainerProgrammaticUpdates';
 import ActiveTable from '@site/src/components/table/activeTableBrowser';
 import CodeToggle from '@site/src/components/toggle/codeToggle';
 import TableContainer from '@site/src/components/table/tableContainer';
@@ -19,7 +20,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 
-<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavToggle()}</BrowserOnly>
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <TableContainer>
   <ActiveTable
@@ -53,11 +54,12 @@ import Tabs from '@theme/Tabs';
 
 <active-table
   customColumnsSettings='[
-    { "headerName": "Planet", "availableDefaultColumnTypes": ["text"] },
-    { "headerName": "Number", "availableDefaultColumnTypes": ["number"] },
-    { "headerName": "Shape", "availableDefaultColumnTypes": ["Select"] },
-    { "headerName": "Date Created", "defaultColumnTypeName": "Date d-m-y", "availableDefaultColumnTypes": ["Date d-m-y", "Date m-d-y"] }
+    {"headerName": "Planet", "availableDefaultColumnTypes": ["text"]},
+    {"headerName": "Number", "availableDefaultColumnTypes": ["number"]},
+    {"headerName": "Shape", "availableDefaultColumnTypes": ["Select"]},
+    {"headerName": "Date Created", "defaultColumnTypeName": "Date d-m-y", "availableDefaultColumnTypes": ["Date d-m-y", "Date m-d-y"]}
   ]'
+  tableStyle='{"borderRadius":"2px"}'
   content='[
     ["Planet", "Age", "Shape", "Date Created"],
     ["Earth", 12756, "Sphere", "01-02-2012"],
@@ -65,7 +67,6 @@ import Tabs from '@theme/Tabs';
     ["Jupiter", 142984, "Triangle", "04-12-2020"],
     ["Saturn", 120536, "Square", "23-10-2008"],
     ["Neptune", 49528, "Flat", "19-02-2006"]]'
-  tableStyle='{"borderRadius":"2px"}'
 ></active-table>
 ```
 
@@ -74,18 +75,18 @@ import Tabs from '@theme/Tabs';
 
 <LineBreak></LineBreak>
 
-### Not editbale {#notEditable}
+### Not editable {#notEditable}
 
 Data in this table cannot be changed.
 
-<TableContainer minHeight="262">
+<TableContainer minHeight="301">
   <ActiveTable
     isCellTextEditable={false}
     displayAddNewColumn={false}
     displayAddNewRow={false}
     columnDropdown={{displaySettings: {isAvailable: false}}}
     rowDropdown={{displaySettings: {isAvailable: false}}}
-    frameComponentsStyle={{style: {hoverColors: {backgroundColor: 'white'}}}}
+    frameComponentsStyles={{style: {hoverColors: {backgroundColor: 'white'}}}}
     headerStyles={{hoverColors: {backgroundColor: 'white'}}}
     content={[
       ['Planet', 'Diameter', 'Mass', 'Moons', 'Density'],
@@ -109,18 +110,254 @@ Data in this table cannot be changed.
   isCellTextEditable="false"
   displayAddNewColumn="false"
   displayAddNewRow="false"
-  columnDropdown='{ "displaySettings": { "isAvailable": "false"}}'
-  rowDropdown='{ "displaySettings": { "isAvailable": "false"}}'
-  frameComponentsStyle='{ "style": { "hoverColors": { "backgroundColor": "white"}}}'
-  headerStyles='{ "hoverColors": { "backgroundColor": "white"}}'
+  columnDropdown='{"displaySettings": {"isAvailable": false}}'
+  rowDropdown='{"displaySettings": {"isAvailable": false}}'
+  frameComponentsStyles='{"style": {"hoverColors": {"backgroundColor": "white"}}}'
+  headerStyles='{"hoverColors": {"backgroundColor": "white"}}'
+  tableStyle='{"borderRadius":"2px"}'
   content='[
     ["Planet", "Diameter", "Mass", "Moons","Density"],
     ["Earth", 12756, 5.97, 1, 5514],
     ["Mars", 6792, 0.642, 2, 3934],
     ["Saturn", 120536, 568, 82, 687],
     ["Neptune", 49528, 102, 14, 1638]]'
-  tableStyle='{"borderRadius":"2px"}'
 ></active-table>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+// WORK - common striped rows
+
+### Dark theme {#darkTheme}
+
+Table configuration for a dark design.
+
+<TableContainer minHeight="341">
+  <ActiveTable
+    tableStyle={{width: '100%', borderRadius: '5px', border: 'unset', backgroundColor: 'black'}}
+    cellStyle={{color: 'white', borderRight: '1px solid #00000029'}}
+    columnResizerColors={{click: '#727272'}}
+    stripedRows={{odd: {backgroundColor: '#4f4f4f'}, even: {backgroundColor: '#373737'}}}
+    headerIconStyle={{
+      filterColor:
+        'brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)',
+    }}
+    headerStyles={{default: {backgroundColor: '#2d2d2d'}, hoverColors: {backgroundColor: '#353535'}}}
+    frameComponentsStyles={{
+      style: {
+        hoverColors: {backgroundColor: '#5f5f5f'},
+      },
+      inheritHeaderColors: true,
+    }}
+    content={[
+      ['Planet', 'Diameter', 'Mass', 'Moons', 'Density'],
+      ['Earth', 12756, 5.97, 1, 5514],
+      ['Mars', 6792, 0.642, 2, 3934],
+      ['Jupiter', 142984, 1898, 79, 1326],
+      ['Saturn', 120536, 568, 82, 687],
+      ['Neptune', 49528, 102, 14, 1638],
+    ]}
+  ></ActiveTable>
+</TableContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<active-table
+  tableStyle='{"borderRadius": "5px", "border": "unset", "backgroundColor": "black"}'
+  cellStyle='{"color": "white", "borderRight": "1px solid #00000029"}'
+  columnResizerColors='{"click": "#727272"}'
+  stripedRows='{"odd": {"backgroundColor": "#4f4f4f"}, "even": {"backgroundColor": "#373737"}}'
+  headerStyles='{"default": {"backgroundColor": "#2d2d2d"}, "hoverColors": {"backgroundColor": "#353535"}}'
+  headerIconStyle='{
+    "filterColor": "brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)"
+  }'
+  frameComponentsStyles='{
+    "style": {"hoverColors": {"backgroundColor": "#5f5f5f"}},
+    "inheritHeaderColors": true
+  }'
+  content='[
+    ["Planet", "Diameter", "Mass", "Moons", "Density"],
+    ["Earth", 12756, 5.97, 1, 5514],
+    ["Mars", 6792, 0.642, 2, 3934],
+    ["Jupiter", 142984, 1898, 79, 1326],
+    ["Saturn", 120536, 568, 82, 687],
+    ["Neptune", 49528, 102, 14, 1638]]'
+></active-table>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Dynamic updates {#dynamicUpdates}
+
+The programmatic cell update functionality is provided by the [`updateCell`](../docs/methods#updateCell) method that exists on the component element reference.
+The example additionally makes use of properties like [`customColumnsSettings`](../docs/column#customColumnsSettings) and [`stripedRows`](../docs/row#stripedRows)
+to set a stock related look. Whilst all of the columns are set to not be editable, the _Stock_ column allows its data to be changed and its rows to be sorted.
+
+<TableContainerProgrammaticUpdates isStock={true} minHeight="300">
+  <ActiveTable
+    customColumnsSettings={[
+      {
+        headerName: 'Stock',
+        isCellTextEditable: true,
+        columnDropdown: {isSortAvailable: true},
+      },
+      {
+        headerName: 'Current',
+        availableDefaultColumnTypes: ['Currency'],
+        cellStyle: {fontWeight: '500'},
+      },
+      {
+        headerName: 'Last',
+        cellStyle: {fontWeight: '500', color: 'grey'},
+        headerStyles: {default: {color: '#575757'}},
+        availableDefaultColumnTypes: ['Currency'],
+      },
+      {
+        headerName: 'Change',
+        defaultColumnTypeName: 'Change',
+        cellStyle: {fontWeight: '500'},
+        customColumnTypes: [
+          {
+            name: 'Change',
+            customTextProcessing: {
+              changeStyleFunc: (cellText) => {
+                const percentageNumber = Number.parseFloat(cellText);
+                return {color: percentageNumber >= 0 ? 'green' : 'red'};
+              },
+            },
+          },
+        ],
+      },
+    ]}
+    displayIndexColumn={false}
+    displayAddNewColumn={false}
+    displayAddNewRow={false}
+    stripedRows={{odd: {backgroundColor: ''}, even: {backgroundColor: '#eeeeee7a'}}}
+    cellStyle={{paddingLeft: '10px'}}
+    isCellTextEditable={false}
+    availableDefaultColumnTypes={[]}
+    columnDropdown={{
+      displaySettings: {openMethod: {overlayClick: true}},
+      isSortAvailable: false,
+      isDeleteAvailable: false,
+      isInsertLeftAvailable: false,
+      isInsertRightAvailable: false,
+      isMoveAvailable: false,
+    }}
+    rowDropdown={{displaySettings: {isAvailable: false}}}
+    displayHeaderIcons={false}
+    content={[
+      ['Stock', 'Current', 'Last', 'Change', 'Yield'],
+      ['JPA', '$88.22', '$85.73', '-0.1%', '1.4%'],
+      ['REFR', '$18.52', '$88', '1.5%', '0.4%'],
+      ['CORA', '$69.08', '$84.46', '0%', '1.6%'],
+      ['SOR', '$46.84', '$48.69', '0.9%', '2.4%'],
+      ['LCRDA', '$20.25', '$29.3', '0.4%', '0.8%'],
+    ]}
+    tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
+  ></ActiveTable>
+</TableContainerProgrammaticUpdates>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<active-table
+  id="active-table"
+  customColumnsSettings='[
+    {
+      "headerName": "Stock",
+      "isCellTextEditable": true,
+      "columnDropdown": {"isSortAvailable": true}
+    },
+    {
+      "headerName": "Current",
+      "availableDefaultColumnTypes": ["Currency"],
+      "cellStyle": {"fontWeight": "500"}
+    },
+    {
+      "headerName": "Last",
+      "cellStyle": {"fontWeight": "500", "color": "grey"},
+      "headerStyles": {"default": {"color": "#575757"}},
+      "availableDefaultColumnTypes": ["Currency"]
+    },
+    {
+      "headerName": "Change",
+      "defaultColumnTypeName": "Change",
+      "cellStyle": {"fontWeight": "500"},
+      "customColumnTypes": [
+        {
+          "name": "Change",
+          "customTextProcessing": {
+            "changeStyleFunc": "(cellText) => { const percentageNumber = Number.parseFloat(cellText); return {color: percentageNumber >= 0 ? `green` : `red`}; }"
+          }
+        }
+      ]
+    }
+  ]'
+  stripedRows='{"odd": {"backgroundColor": ""}, "even": {"backgroundColor": "#eeeeee7a"}}''
+  cellStyle='{"paddingLeft": "10px"}'
+  isCellTextEditable="false"
+  availableDefaultColumnTypes='[]'
+  columnDropdown='{
+    "displaySettings": {"openMethod": {"overlayClick": true}},
+    "isSortAvailable": false,
+    "isDeleteAvailable": false,
+    "isInsertLeftAvailable": false,
+    "isInsertRightAvailable": false,
+    "isMoveAvailable": false
+  }'
+  rowDropdown='{"displaySettings": {"isAvailable": false}}'
+  displayIndexColumn="false"
+  displayAddNewColumn="false"
+  displayAddNewRow="false"
+  displayHeaderIcons="false"
+  tableStyle='{"borderRadius":"2px"}'
+  content='[
+    ["Stock", "Current", "Last", "Change", "Yield"],
+    ["JPA", "$88.22", "$85.73", "-0.1%", "1.4%"],
+    ["REFR", "$18.52", "$88", "1.5%", "0.4%"],
+    ["CORA", "$69.08", "$84.46", "0%", "1.6%"],
+    ["SOR", "$46.84", "$48.69", "0.9%", "2.4%"],
+    ["LCRDA", "$20.25", "$29.3", "0.4%", "0.8%"]
+  ]'
+></active-table>
+
+<script>
+  function updateCell(tableElement) {
+    if (!tableElement.isConnected) return;
+    setTimeout(() => {
+      const rowIndex = Math.floor(Math.random() * 5 + 1);
+      const columnIndex = Math.floor(Math.random() * 5 + 1);
+      let newText = '';
+      if (columnIndex === 1) {
+        newText = `$${Math.round(Math.random() * 1000 * 10) / 100}`;
+      } else if (columnIndex === 2) {
+        newText = `$${Math.round(Math.random() * 1000 * 10) / 100}`;
+      } else if (columnIndex === 3) {
+        newText = `${((Math.round(Math.random()) ? 1 : -1) * Math.round(Math.random() * 1.5 * 10)) / 10}%`;
+      } else {
+        newText = `${Math.round(Math.random() * 2.5 * 10) / 10}%`;
+      }
+      tableElement.updateCell({newText, rowIndex, columnIndex});
+      updateCell(tableElement);
+    }, 10);
+  }
+  const tableElementRef = document.getElementById('active-table');
+  updateCell(tableElementRef);
+</script>
 ```
 
 </TabItem>

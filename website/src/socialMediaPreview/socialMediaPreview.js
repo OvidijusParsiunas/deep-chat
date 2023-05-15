@@ -13,6 +13,9 @@ function RightPanel() {
           customColumnTypes={[
             {
               name: 'Category',
+              iconSettings: {
+                reusableIconName: 'label',
+              },
               label: {
                 // options: [
                 //   {text: 'Vehicles', backgroundColor: '#d9ebfc'},
@@ -80,10 +83,10 @@ export function LeftPanel() {
       <h1 id="start-colored-header">Active Table</h1>
       <h1 id="start-sub-header">Framework agnostic table component for editable data experience</h1>
       <div id="start-buttons">
-        <a className={'homepage-button start-button'} href="docs/installation">
+        <a className="homepage-button start-button" href="docs/installation">
           Installation
         </a>
-        <a className={'homepage-button start-button'} href="docs/table">
+        <a className="homepage-button start-button" href="docs/table">
           Explore API
         </a>
       </div>

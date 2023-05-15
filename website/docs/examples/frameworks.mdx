@@ -5,16 +5,20 @@ sidebar_position: 1
 # Frameworks
 
 import reactLogo from '/img/reactLogo.png';
+import vueLogo from '/img/vueLogo.png';
+import svelteLogo from '/img/svelteLogo.png';
+import angularLogo from '/img/angularLogo.png';
+import solidLogo from '/img/solidLogo.png';
+import nextLogo from '/img/nextLogo.png';
+import vanillaJSLogo from '/img/vanillaJSLogo.png';
 
 <img src={reactLogo} width="30" style={{float: 'left', marginRight: '10px', marginTop: '22px'}} />
 
 ## React
 
-Make sure to use the `active-table-react` package and define the element tag as `ActiveTable`.
+Make sure to use the `active-table-react` package and define the element tag as `ActiveTable`. [Troubleshooting](https://github.com/OvidijusParsiunas/active-table/issues?q=React).
 
 [Click for Live Example](https://codesandbox.io/s/active-table-react-cstm7k?file=/src/App.tsx)
-
-import vueLogo from '/img/vueLogo.png';
 
 <img src={vueLogo} width="28" style={{float: 'left', marginRight: '10px', marginTop: '27px'}} />
 
@@ -26,8 +30,6 @@ the simple steps outlined [here](https://vuejs.org/guide/extras/web-components.h
 [Click for Live Example - Vue 3](https://codesandbox.io/s/active-table-vue3-z729vs?file=/src/App.vue) <br />
 [Click for Live Example - Vue 2](https://codesandbox.io/s/active-table-vue2-32f04e?file=/src/App.vue)
 
-import svelteLogo from '/img/svelteLogo.png';
-
 <img src={svelteLogo} width="23" style={{float: 'left', marginRight: '13px', marginTop: '25px'}} />
 
 ## Svelte
@@ -35,8 +37,6 @@ import svelteLogo from '/img/svelteLogo.png';
 Everything should be working right out of the box!
 
 [Click for Live Example](https://codesandbox.io/s/active-table-svelte-dbd0qp)
-
-import angularLogo from '/img/angularLogo.png';
 
 <img src={angularLogo} width="36" style={{float: 'left', marginRight: '9px', marginTop: '22px'}} />
 
@@ -47,13 +47,27 @@ as `import 'active-table';`. See this [blog](https://www.thisdot.co/blog/how-to-
 
 [Click for Live Example](https://codesandbox.io/s/active-table-angular-9v8nfe?file=/src/app/app.component.html)
 
-import vanillaJSLogo from '/img/vanillaJSLogo.png';
+<img src={solidLogo} width="28" style={{float: 'left', marginRight: '12px', marginTop: '25px'}} />
+
+## Solid
+
+Make sure to declare a `solid-js` module when working with TypeScript and use hyphen-case syntax for properties that are accessed directly through markup.
+
+[Click for Live Example](https://codesandbox.io/p/sandbox/magical-smoke-1ntsqs?file=%2Fsrc%2FApp.tsx&selection=%5B%7B%22endColumn%22%3A41%2C%22endLineNumber%22%3A16%2C%22startColumn%22%3A41%2C%22startLineNumber%22%3A16%7D%5D)
+
+<img src={nextLogo} width="28" style={{float: 'left', marginRight: '12px', marginTop: '25px'}} />
+
+## Next
+
+Use the `active-table-react` package and lazy load it using Next's `dynamic` extension.
+
+[Click for Live Example](https://codesandbox.io/p/sandbox/old-pond-qegoh8?selection=%5B%7B%22endColumn%22%3A30%2C%22endLineNumber%22%3A28%2C%22startColumn%22%3A30%2C%22startLineNumber%22%3A28%7D%5D&file=%2Fpages%2Findex.tsx)
 
 <img src={vanillaJSLogo} width="28" style={{float: 'left', marginRight: '12px', marginTop: '25px'}} />
 
 ## Vanilla JS
 
-The Live Example demonstrates how to set values via properties (recommended) and attributes, which should additionally be used as a working
+The Live Example demonstrates how to set values via properties (recommended) and attributes, which should also be used as a
 fallback approach for other frameworks. This example also demonstrates how to import the component via a CDN.
 
 [Click for Live Example](https://codesandbox.io/s/active-table-vanillajs-62yrrj?file=/index.html)
@@ -61,4 +75,6 @@ fallback approach for other frameworks. This example also demonstrates how to im
 ## Troubleshooting
 
 If your platform has not been listed and Vanilla JS approach does not work as fallback, or if you are having issues with any of
-the existing examples, please create a [**new issue ticket**](https://github.com/OvidijusParsiunas/active-table/issues/new/choose) on GitHub.
+the existing examples; please see [**github issues**](https://github.com/OvidijusParsiunas/active-table/issues) or create
+a [**new issue ticket**](https://github.com/OvidijusParsiunas/active-table/issues/new/choose) and we will look into
+it as soon as possible.

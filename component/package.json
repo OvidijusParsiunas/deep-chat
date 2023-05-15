@@ -23,7 +23,20 @@
   },
   "homepage": "https://github.com/OvidijusParsiunas/ai-assistant#readme",
   "keywords": [
-    "ai-assistant"
+    "ai",
+    "chat",
+    "bot",
+    "assistant",
+    "react",
+    "vue",
+    "angular",
+    "solid",
+    "svelte",
+    "next",
+    "javascript",
+    "framework-agnostic",
+    "component",
+    "web-component"
   ],
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.8",

@@ -18,20 +18,20 @@ function BottomPanel() {
           tableStyle={{width: '100%', borderRadius: '8px', border: 'unset'}}
           cellStyle={{borderRight: 'unset', color: 'white'}}
           pagination={{
-            style: {
+            styles: {
               pageButtons: {
                 buttons: {
                   default: {
                     color: 'grey',
+                    stroke: 'grey',
                     backgroundColor: 'none',
                     border: 'none',
                     marginTop: '3px',
-                    paddingTop: '5px',
                     borderRadius: '5px',
                   },
                 },
                 activeButton: {default: {backgroundColor: '#2e3c60', border: 'none', color: 'white'}},
-                actionButtons: {default: {fontSize: '13px', paddingTop: '7px', height: '24px', border: 'none'}},
+                actionButtons: {default: {border: 'none'}},
                 disabledButtons: {default: {backgroundColor: 'white'}},
                 firstVisibleButtonOverride: {},
                 lastVisibleButtonOverride: {},
@@ -43,6 +43,7 @@ function BottomPanel() {
             rowsPerPage: 4,
           }}
           stripedRows={{odd: {backgroundColor: '#2e3c60'}, even: {backgroundColor: '#242b4a'}}}
+          columnResizerColors={{hover: '#205be3', click: '#1245b8'}}
           headerIconStyle={{
             filterColor:
               'brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)',
@@ -76,32 +77,30 @@ function BottomPanel() {
           tableStyle={{width: '100%', borderRadius: '8px', border: 'unset'}}
           cellStyle={{borderRight: 'unset', color: 'white'}}
           pagination={{
-            style: {
+            styles: {
               pageButtons: {
                 buttons: {
                   default: {
                     color: 'grey',
+                    stroke: 'grey',
                     border: '1px solid #dedede',
                     marginRight: '5px',
-                    marginTop: '7px',
-                    height: '23px',
+                    marginTop: '5px',
+                    height: '25px',
                     minWidth: '25px',
-                    paddingTop: '3px',
                     borderRadius: '20px',
                   },
                 },
                 activeButton: {
                   default: {
-                    paddingTop: '5px',
-                    marginTop: '5px',
+                    marginTop: '2px',
                     backgroundColor: '#434343',
                     color: 'white',
                     border: '1px solid #434343',
-                    height: '26px',
+                    height: '31px',
                     minWidth: '31px',
                   },
                 },
-                actionButtons: {default: {fontSize: '13px', paddingTop: '4px', height: '22px'}},
                 disabledButtons: {default: {backgroundColor: 'white'}},
                 firstVisibleButtonOverride: {},
                 lastVisibleButtonOverride: {},
@@ -119,6 +118,7 @@ function BottomPanel() {
               'brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)',
           }}
           headerStyles={{default: {backgroundColor: '#2d2d2d'}, hoverColors: {backgroundColor: '#353535'}}}
+          columnResizerColors={{click: '#727272'}}
           displayAddNewRow={false}
           displayAddNewColumn={false}
           content={[
@@ -162,6 +162,7 @@ function TopPanel() {
               'brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)',
           }}
           stripedRows={{odd: {backgroundColor: ''}, even: {backgroundColor: '#edf7ff'}}}
+          columnResizerColors={{hover: '#66b3ff', click: '#4aa5ff'}}
           displayAddNewColumn={false}
           content={[
             ['Planet', 'Diameter', 'Mass', 'Moons'],
@@ -184,6 +185,7 @@ function TopPanel() {
               'brightness(0) saturate(100%) invert(98%) sepia(2%) saturate(6%) hue-rotate(76deg) brightness(100%) contrast(104%)',
           }}
           stripedRows={{odd: {backgroundColor: ''}, even: {backgroundColor: '#ebebeb7a'}}}
+          columnResizerColors={{click: '#727272'}}
           content={[
             ['Planet', 'Diameter', 'Mass', 'Moons'],
             ['Earth', 12756, 5.97, 1],

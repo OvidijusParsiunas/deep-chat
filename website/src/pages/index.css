@@ -7,10 +7,16 @@
 /* need to use !important as it is on an anchor (a) element  */
 .homepage-button {
   border: unset;
-  border-radius: 5px !important;
+  border-radius: 3px !important;
   transition: 0.1s !important;
   text-decoration: none !important;
   user-select: none;
+}
+
+.header-font {
+  font-family: 'inter_webfont', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 @media (max-width: 1250px) {
@@ -55,12 +61,14 @@
   }
 
   #explore-button-container {
-    margin-top: 60px !important;
-    margin-bottom: 40px !important;
+    display: none !important;
   }
 
   #footer {
     text-align: center;
+    margin-top: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

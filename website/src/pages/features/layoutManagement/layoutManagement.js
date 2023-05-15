@@ -37,11 +37,24 @@ function RightPanel() {
 }
 
 function LeftPanel() {
+  // There is a bug where Safari displays a horizontal scroll, hence adding need to set the height property as well
   return (
     <Panel>
       <ActiveTableBrowser
         tableStyle={{borderRadius: '5px', width: '100%'}}
-        overflow={{maxHeight: '258px'}}
+        overflow={{maxHeight: '256px', maxWidth: '100%'}}
+        auxiliaryStyle="
+        ::-webkit-scrollbar {
+          width: 9px;
+          height: 9px;
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: #aaaaaa;
+          border-radius: 5px;
+        }
+        ::-webkit-scrollbar-track {
+          background-color: #f2f2f2;
+        }"
         content={[
           ['Planet', 'Diameter', 'Mass', 'Moons'],
           ['Earth', 12756, 5.97, 1],

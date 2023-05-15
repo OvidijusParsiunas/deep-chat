@@ -5,6 +5,7 @@
 :root {
   --ifm-table-container-background-color: #ffffff;
   --ifm-table-container-border: 0.5px solid #eeeeee;
+  --ifm-table-container-border-top: 1px solid #eeeeee;
   --ifm-color-primary: #3584d3;
   --ifm-link-color: #114674;
   --ifm-color-primary-dark: #29784c;
@@ -31,10 +32,12 @@
   --start-button-background-color: white;
   --start-button-background-hover-color: #f7f7f7;
   --start-button-background-click-color: #ebebeb;
+  --start-header-border-color: white;
 }
 
 [data-theme='dark'] {
   --ifm-table-container-background-color: #282a36;
+  --ifm-table-container-border-top: 1px solid #282a36;
   --ifm-table-container-border: unset;
   --ifm-color-primary: #5da9f6;
   --ifm-link-color: #c8e6ff;
@@ -61,6 +64,23 @@
   --start-button-background-color: #555555;
   --start-button-background-hover-color: #3e3e3e;
   --start-button-background-click-color: #343434;
+  --start-header-border-color: #1b1b1d;
+}
+
+.markdown > h1 {
+  font-family: sans-serif;
+  margin-top: 2px;
+  font-size: 2.95rem;
+}
+
+.markdown > h2 {
+  font-family: sans-serif;
+  letter-spacing: -0.9px;
+}
+
+/* stopping the title beside framework icons from changing font when screen too small (docusaurus framework - max-width: 576px) */
+img + h2 {
+  font-size: 2rem !important;
 }
 
 .theme-doc-sidebar-container {
@@ -69,6 +89,8 @@
 
 .menu__link {
   border-radius: 5px !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: 0.4px;
 }
 
 .menu__link:hover {
@@ -84,7 +106,7 @@
 }
 
 .navbar__link--active {
-  color: var(--feature-title) !important;
+  color: #2b51a5 !important;
 }
 
 .navbar__link--active:hover {
@@ -113,8 +135,8 @@ code {
   background-color: var(--ifm-table-container-background-color);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   border: var(--ifm-table-container-border);
-  border-bottom: 'unset';
-  border-top: 'unset';
+  border-bottom: unset;
+  border-top: var(--ifm-table-container-border-top);
 }
 
 .margin-top--md {
@@ -137,12 +159,9 @@ code {
 }
 
 .documentation-example-container {
-  background-image: linear-gradient(330deg, #5965ff 0%, #00e3ff 100%);
-  justify-content: center;
-  display: flex;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  width: 100%;
   padding: 18px 18px 18px;
+  border: unset;
 }
 
 .documentation-method-button {
@@ -167,6 +186,8 @@ code {
 
 .prism-code {
   background-color: var(--code-background);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
 .navbar__title {
@@ -174,8 +195,13 @@ code {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-top: -2px;
-  font-size: 20px;
+  margin-top: -1.2px;
+  font-size: 19.5px;
+  letter-spacing: -0.2px;
+  /* same font as in .header-font */
+  font-family: 'inter_webfont', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 .navbar--fixed-top {
@@ -230,6 +256,11 @@ html[data-theme='dark'] .header-github-link:before {
 
 .punctuation {
   color: var(--code-punctuation-color) !important;
+}
+
+/* This is used to reduce the space between the Introduction title and its subtitle  */
+h1 + h2 {
+  margin-top: 35px !important;
 }
 
 @media (max-width: 575px) {

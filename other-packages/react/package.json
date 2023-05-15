@@ -8,7 +8,16 @@
   "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "ai",
+    "chat",
+    "bot",
+    "assistant",
+    "react",
+    "framework-agnostic",
+    "component",
+    "web-component"
+  ],
   "author": "Ovidijus Parsiunas",
   "repository": {
     "type": "git",

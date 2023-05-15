@@ -10,7 +10,9 @@ import './features.css';
 export default function Features() {
   return (
     <div id="features-container">
-      <div id="features-header">Main Features</div>
+      <div id="features-header" className="header-font">
+        Main Features
+      </div>
       <ColumnTypes></ColumnTypes>
       <ProgrammaticUpdates></ProgrammaticUpdates>
       <ResponsiveDesign></ResponsiveDesign>

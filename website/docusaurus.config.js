@@ -28,7 +28,7 @@ const config = {
     locales: ['en'],
   },
 
-  // TO-DO - enchich introduction with a section about the community e.g. twitter/sharing-examples
+  // TO-DO - enrich introduction with a section about the community e.g. twitter/sharing-examples
   presets: [
     [
       'classic',
@@ -104,13 +104,11 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
-      algolia: ALGOLIA_APP_ID
-        ? {
-            appId: ALGOLIA_APP_ID,
-            apiKey: ALGOLIA_API_KEY,
-            indexName: 'aiAssistant',
-          }
-        : null,
+      algolia: {
+        appId: 'CQP32TX5E8',
+        apiKey: 'd77116a11a6f89f37f0fc41ef92ad295',
+        indexName: 'activetable',
+      },
     }),
 };
 

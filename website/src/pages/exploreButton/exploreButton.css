@@ -16,6 +16,7 @@
   font-size: 20px !important;
   font-weight: 500 !important;
   padding-top: 8px !important;
+  border-radius: 5px !important;
 }
 
 #explore-button:hover {

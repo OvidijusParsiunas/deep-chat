@@ -1,5 +1,4 @@
 import ActiveTableBrowser from '../../components/table/activeTableBrowser';
-import FadeInContent from '../utils/fadeInContent';
 import React from 'react';
 import './startPanel.css';
 
@@ -12,6 +11,9 @@ function RightPanel() {
           customColumnTypes={[
             {
               name: 'Category',
+              iconSettings: {
+                reusableIconName: 'label',
+              },
               label: {
                 // options: [
                 //   {text: 'Vehicles', backgroundColor: '#d9ebfc'},
@@ -48,11 +50,11 @@ function RightPanel() {
                 //   // {text: 'Clothing', backgroundColor: '#f8e6b2'},
                 // ],
                 options: [
-                  {text: 'Vehicles', backgroundColor: '#afdffd'},
+                  {text: 'Vehicles', backgroundColor: '#fff5a3'},
                   {text: 'Electronics', backgroundColor: '#ccffe2'},
-                  {text: 'Furniture', backgroundColor: '#ffffa3'},
-                  {text: 'Food', backgroundColor: '#a3f5ba'},
-                  {text: 'Jewellery', backgroundColor: '#cdfee9'},
+                  {text: 'Furniture', backgroundColor: '#e1ff8f'},
+                  {text: 'Food', backgroundColor: '#d2eeff'},
+                  {text: 'Jewellery', backgroundColor: '#c4f39e'},
                   {text: 'Clothing', backgroundColor: '#ffdff7'},
                 ],
               },
@@ -84,13 +86,15 @@ function RightPanel() {
 export function LeftPanel() {
   return (
     <div id="start-panel-left">
-      <h1 id="start-colored-header">Active Table</h1>
+      <h1 id="start-colored-header" className="header-font">
+        Active Table
+      </h1>
       <h1 id="start-sub-header">Framework agnostic table component for editable data experience</h1>
       <div id="start-buttons">
-        <a className={'homepage-button start-button'} href="docs/installation">
+        <a className="homepage-button start-button" href="docs/installation">
           Installation
         </a>
-        <a className={'homepage-button start-button'} href="docs/table">
+        <a className="homepage-button start-button" href="docs/table">
           Explore API
         </a>
       </div>
@@ -99,13 +103,11 @@ export function LeftPanel() {
 }
 
 export default function StartPanel() {
-  const contentRef = React.useRef(null);
   return (
     <div id="start-panel">
-      <div ref={contentRef} id="start-panel-content" className="invisible-component">
+      <div id="start-panel-content">
         <LeftPanel></LeftPanel>
         <RightPanel></RightPanel>
-        <FadeInContent contentRef={contentRef}></FadeInContent>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ export function extractChildTableElement(containerElement) {
 
 export default function TableContainer({children, minHeight}) {
   return (
-    <div className="documentation-example-container" style={{minHeight: `${minHeight || 354}px`}}>
+    <div className="documentation-example-container" style={{minHeight: `${minHeight || 343}px`}}>
       <div>{children}</div>
     </div>
   );

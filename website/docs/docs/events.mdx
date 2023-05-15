@@ -1,0 +1,164 @@
+---
+sidebar_position: 11
+---
+
+# Events
+
+Events can be observed in two ways, either by assigning a function to a property or by listening to custom events fired from the element.
+
+:::info
+Take care not to re-render the component when using event information to update parent state.
+:::
+
+### `onCellUpdate` {#onCellUpdate}
+
+- Function: (`cellUpdate:` `Body`) => `void`
+- Event: `cell-update`
+- Body: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`text: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`rowIndex: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`columnIndex: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`updateType: "add"|"update"|"remove"` <br />
+  }
+
+Triggered when any content within the table has changed. Both `rowIndex` and `columnIndex` begin at _0_
+where it is the header row for `rowIndex` and the left-most column for `columnIndex`.
+
+#### Example
+
+import TableContainerEvents from '@site/src/components/table/tableContainerEvents';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<TableContainerEvents propertyname={"onCellUpdate"}>
+  <ActiveTable
+    content={[
+      ["Planet", "Diameter", "Mass", "Moons", "Density"],
+      ["Earth", 12756, 5.97, 1, 5514],
+      ["Mars", 6792, 0.642, 2, 3934],
+      ["Jupiter", 142984, 1898, 79, 1326],
+      ["Saturn", 120536, 568, 82, 687],
+      ["Neptune", 49528, 102, 14, 1638]]}
+    tableStyle={{"width":"100%", "boxShadow": "rgb(172 172 172 / 17%) 0px 0.5px 1px 0px", "borderRadius":"2px"}}
+></ActiveTable>
+
+</TableContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+tableElementRef.onCellUpdate = (cellUpdate) => { console.log(cellUpdate); });
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+tableElementRef.addEventListener('cell-update', (cellUpdate) => { console.log(cellUpdate.detail); });
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `onContentUpdate` {#onContentUpdate}
+
+- Function: (`contentUpdate:` `Body`) => `void`
+- Event: `content-update`
+- Body: `(string|number)[][]`
+
+Similarly to [`onCellUpdate`](#onCellUpdate) this is triggered when any cell is updated - however this property returns the full table contents 2D array instead.
+
+#### Example
+
+<TableContainerEvents propertyname={"onContentUpdate"}>
+  <ActiveTable
+    content={[
+      ["Planet", "Diameter", "Mass", "Moons", "Density"],
+      ["Earth", 12756, 5.97, 1, 5514],
+      ["Mars", 6792, 0.642, 2, 3934],
+      ["Jupiter", 142984, 1898, 79, 1326],
+      ["Saturn", 120536, 568, 82, 687],
+      ["Neptune", 49528, 102, 14, 1638]]}
+    tableStyle={{"width":"100%", "boxShadow": "rgb(172 172 172 / 17%) 0px 0.5px 1px 0px", "borderRadius":"2px"}}
+></ActiveTable>
+
+</TableContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+tableElementRef.onContentUpdate = (contentUpdate) => { console.log(contentUpdate); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+tableElementRef.addEventListener('content-update', (contentUpdate) => { console.log(contentUpdate.detail); });
+```
+
+</TabItem>
+</Tabs>
+
+:::tip
+The first time this event is fired can also be used as an indicator to know when the table has been rendered.
+:::
+
+<LineBreak></LineBreak>
+
+### `onColumnsUpdate` {#onColumnsUpdate}
+
+- Function: (`columnsUpdate:` `Body`) => `void`
+- Event: `columns-update`
+- Body: [`ColumnsDetails`](./sharedTypes#ColumnsDetails)
+
+Triggered when any of the properties inside the [`ColumnsDetails`](./sharedTypes#ColumnsDetails) object are updated. This is particularly useful if the user has made changes to columns and you want to recreate them
+in the next session on the initial load.
+
+#### Example
+
+<TableContainerEvents propertyname={"onColumnsUpdate"}>
+  <ActiveTable
+    content={[
+      ["Planet", "Diameter", "Mass", "Moons", "Density"],
+      ["Earth", 12756, 5.97, 1, 5514],
+      ["Mars", 6792, 0.642, 2, 3934],
+      ["Jupiter", 142984, 1898, 79, 1326],
+      ["Saturn", 120536, 568, 82, 687],
+      ["Neptune", 49528, 102, 14, 1638]]}
+    tableStyle={{"width":"100%", "boxShadow": "rgb(172 172 172 / 17%) 0px 0.5px 1px 0px", "borderRadius":"2px"}}
+></ActiveTable>
+
+</TableContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+tableElementRef.onColumnsUpdate = (columnsUpdate) => { console.log(columnsUpdate); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+tableElementRef.addEventListener('columns-update', (columnsUpdate) => { console.log(columnsUpdate.detail); });
+```
+
+</TabItem>
+</Tabs>

@@ -14,7 +14,7 @@ export default function FadeInNav() {
           if (navbar) navbar.style.opacity = '1';
         }, 1700);
         navToggle.fadeIn();
-        navToggle.readdAutoNavToggle();
+        navToggle.readdAutoNavShadowToggle();
       }}
     </BrowserOnly>
   );

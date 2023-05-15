@@ -43,19 +43,27 @@ function LeftPanel() {
       <div id="programmatic-updates-left-table" ref={tableContainerRef}>
         <ActiveTableBrowser
           tableStyle={{borderRadius: '5px', width: '100%'}}
-          displayIndexColumn={false}
-          displayAddNewColumn={false}
-          displayAddNewRow={false}
           customColumnsSettings={[
             {
               headerName: 'Stock',
               isCellTextEditable: true,
+              columnDropdown: {isSortAvailable: true},
+            },
+            {
+              headerName: 'Current',
+              availableDefaultColumnTypes: ['Currency'],
+              cellStyle: {fontWeight: '500'},
+            },
+            {
+              headerName: 'Last',
+              cellStyle: {fontWeight: '500', color: 'grey'},
+              headerStyles: {default: {color: '#575757'}},
+              availableDefaultColumnTypes: ['Currency'],
             },
             {
               headerName: 'Change',
               defaultColumnTypeName: 'Change',
               cellStyle: {fontWeight: '500'},
-              columnDropdown: {isSortAvailable: false},
               customColumnTypes: [
                 {
                   name: 'Change',
@@ -68,25 +76,23 @@ function LeftPanel() {
                 },
               ],
             },
-            {
-              headerName: 'Current',
-              availableDefaultColumnTypes: ['Currency'],
-              cellStyle: {fontWeight: '500'},
-              columnDropdown: {isSortAvailable: false},
-            },
-            {
-              headerName: 'Last',
-              cellStyle: {fontWeight: '500', color: 'grey'},
-              headerStyles: {default: {color: '#575757'}},
-              availableDefaultColumnTypes: ['Currency'],
-              columnDropdown: {isSortAvailable: false},
-            },
           ]}
+          displayIndexColumn={false}
+          displayAddNewColumn={false}
+          displayAddNewRow={false}
           stripedRows={{odd: {backgroundColor: ''}, even: {backgroundColor: '#eeeeee7a'}}}
           cellStyle={{paddingLeft: '10px'}}
           isCellTextEditable={false}
           availableDefaultColumnTypes={[]}
-          columnDropdown={{displaySettings: {openMethod: {overlayClick: true}}}}
+          columnDropdown={{
+            displaySettings: {openMethod: {overlayClick: true}},
+            isSortAvailable: false,
+            isDeleteAvailable: false,
+            isInsertLeftAvailable: false,
+            isInsertRightAvailable: false,
+            isMoveAvailable: false,
+          }}
+          rowDropdown={{displaySettings: {isAvailable: false}}}
           displayHeaderIcons={false}
           content={[
             ['Stock', 'Current', 'Last', 'Change', 'Yield'],
