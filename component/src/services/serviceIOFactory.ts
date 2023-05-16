@@ -93,7 +93,7 @@ export class ServiceIOFactory {
         }
       }
     }
-    // create an error view
+    // WORK - create an error view
     throw new Error("Please define a service in the 'service' property"); // TO-DO - default to service selection view
   }
 }

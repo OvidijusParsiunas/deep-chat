@@ -33,9 +33,9 @@ export class Input {
     const textInput = new TextInput(serviceIO, aiAssistant.textInputStyles, aiAssistant.inputCharacterLimit);
     const buttons: Buttons = {};
     const fileAttachments = this.createFileUploadComponents(aiAssistant, serviceIO, containerElement, buttons);
-    if (aiAssistant.speechInput) {
-      buttons.microphone = buttons.microphone || {button: new SpeechToText(
-        aiAssistant.speechInput, textInput.inputElementRef, messages.addNewErrorMessage.bind(messages))};
+    if (aiAssistant.speechToTextInput && !buttons.microphone) {
+      buttons.microphone = {button: new SpeechToText(
+        aiAssistant.speechToTextInput, textInput.inputElementRef, messages.addNewErrorMessage.bind(messages))};
     }
     const submitButton = new SubmitButton(aiAssistant, textInput.inputElementRef, messages, serviceIO,fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);

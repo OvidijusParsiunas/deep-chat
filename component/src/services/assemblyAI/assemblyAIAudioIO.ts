@@ -41,8 +41,8 @@ export class AssemblyAIAudioIO extends BaseServideIO {
   }
 
   async extractResultData(result: AssemblyAIResult): Promise<Result> {
-    const apiKey = this.requestSettings?.headers?.['Authorization'] as string;
-    const pollingResult = await AssemblyAIUtils.poll(apiKey, result.upload_url);
+    const key = this.requestSettings?.headers?.['Authorization'] as string;
+    const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
     return {text: pollingResult.text};
   }
 }

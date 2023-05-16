@@ -34,5 +34,5 @@ export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void
 export interface ErrorMessageOverrides {
   default?: string;
   chat?: string;
-  speechInput?: string;
+  speechToTextInput?: string;
 }

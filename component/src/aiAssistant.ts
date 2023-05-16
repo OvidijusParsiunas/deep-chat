@@ -1,5 +1,5 @@
-import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
 import {ValidateApiKeyPropertyView} from './views/validateApiKeyProperty/validateApiKeyPropertyView';
+import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
@@ -19,12 +19,11 @@ import {Service} from './types/service';
 import {Avatars} from './types/avatar';
 import {Names} from './types/names';
 
-// WORK - verify if the passed in key is valid and only open the chat view then
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
   @Property('string')
-  apiKey?: string;
+  key?: string;
 
   @Property('object')
   service?: Service;
@@ -36,7 +35,7 @@ export class AiAssistant extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  speechInput?: Microphone;
+  speechToTextInput?: Microphone = true; // only activated if not used by recording for audio
 
   @Property('boolean')
   speechOutput?: boolean;
@@ -83,7 +82,7 @@ export class AiAssistant extends InternalHTML {
   @Property('string')
   auxiliaryStyle?: string;
 
-  // can only be used if key has been set via the apiKey property
+  // can only be used if key has been set via the key property
   @Property('boolean')
   validateKeyProperty?: boolean;
 
@@ -135,25 +134,25 @@ export class AiAssistant extends InternalHTML {
 
   private changeToChatView(newKey: string) {
     this.validateKeyProperty = false;
-    this.apiKey = newKey;
+    this.key = newKey;
     this.onRender();
   }
 
   override onRender() {
     // TO-DO - this will be moved to service selection view
-    const serviceIO = ServiceIOFactory.create(this, this.apiKey || '');
+    const serviceIO = ServiceIOFactory.create(this, this.key || '');
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
-    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.apiKey) {
-      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.apiKey);
+    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.key) {
+      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.key);
     } else if (ChatView.shouldBeRendered(this)) {
       ChatView.render(this, this._elementRef, serviceIO);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
-      // when it is executed, meaning that if the user sets customService or apiKey, this would first ppear and
+      // when it is executed, meaning that if the user sets customService or key, this would first ppear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO);
     }

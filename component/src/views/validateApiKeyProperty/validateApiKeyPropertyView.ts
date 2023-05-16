@@ -5,7 +5,7 @@ export class ValidateApiKeyPropertyView {
   private static onFail(startEl: HTMLElement) {
     const errorMessageElement = document.createElement('div');
     errorMessageElement.id = 'validate-property-key-error';
-    errorMessageElement.innerText = `Your 'apiKey' has failed authentication`;
+    errorMessageElement.innerText = `Your 'key' has failed authentication`;
     startEl.replaceChildren(errorMessageElement);
   }
 
@@ -31,6 +31,6 @@ export class ValidateApiKeyPropertyView {
   }
 
   public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.apiKey && aiAssistant.validateKeyProperty;
+    return aiAssistant.key && aiAssistant.validateKeyProperty;
   }
 }
