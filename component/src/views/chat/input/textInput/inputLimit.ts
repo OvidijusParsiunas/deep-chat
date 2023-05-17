@@ -3,12 +3,12 @@ import {FocusUtils} from './focusUtils';
 export class InputLimit {
   // prettier-ignore
   private static readonly PERMITTED_KEYS = new Set<string>([
-      'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control'
+      'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control', 'Enter'
     ]);
 
-  public static add(inputELement: HTMLElement, inputCharacterLimit: number) {
-    inputELement.onkeydown = InputLimit.onKeyDown.bind(this, inputCharacterLimit);
-    inputELement.oninput = InputLimit.onInput.bind(this, inputCharacterLimit);
+  public static add(inputElement: HTMLElement, inputCharacterLimit: number) {
+    inputElement.addEventListener('keydown', InputLimit.onKeyDown.bind(this, inputCharacterLimit));
+    inputElement.oninput = InputLimit.onInput.bind(this, inputCharacterLimit);
   }
 
   // preventing insertion early for a nicer UX

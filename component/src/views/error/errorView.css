@@ -1,0 +1,11 @@
+#error-view {
+  color: red;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  margin-top: -5px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

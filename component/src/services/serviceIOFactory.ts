@@ -24,7 +24,7 @@ import {ServiceIO} from './serviceIO';
 
 // exercise caution when defining default returns for services as their configs can be undefined
 export class ServiceIOFactory {
-  public static create(aiAssistant: AiAssistant, key?: string): ServiceIO {
+  public static create(aiAssistant: AiAssistant, key?: string): ServiceIO | undefined {
     const {service: services} = aiAssistant;
     if (services) {
       if (services.custom) {
@@ -93,7 +93,6 @@ export class ServiceIOFactory {
         }
       }
     }
-    // WORK - create an error view
-    throw new Error("Please define a service in the 'service' property"); // TO-DO - default to service selection view
+    return undefined;
   }
 }

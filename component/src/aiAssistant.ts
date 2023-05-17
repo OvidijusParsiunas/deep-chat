@@ -11,6 +11,7 @@ import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {TextInputStyles} from './types/textInput';
+import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
@@ -24,6 +25,10 @@ import {Names} from './types/names';
 export class AiAssistant extends InternalHTML {
   @Property('string')
   serviceKey?: string;
+
+  // can only be used if serviceKey has been set via the key property
+  @Property('boolean')
+  validateKeyProperty?: boolean;
 
   @Property('object')
   service?: Service;
@@ -49,7 +54,6 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   textInputStyles?: TextInputStyles;
 
-  // WORK - this should be applied to all by default
   @Property('number')
   inputCharacterLimit?: number;
 
@@ -82,10 +86,6 @@ export class AiAssistant extends InternalHTML {
 
   @Property('string')
   auxiliaryStyle?: string;
-
-  // can only be used if key has been set via the key property
-  @Property('boolean')
-  validateKeyProperty?: boolean;
 
   @Property('function')
   onNewMessage?: OnNewMessage;
@@ -139,6 +139,8 @@ export class AiAssistant extends InternalHTML {
   override onRender() {
     // TO-DO - this will be moved to service selection view
     const serviceIO = ServiceIOFactory.create(this, this.serviceKey || '');
+    // TO-DO - default to service selection view
+    if (!serviceIO) return ErrorView.render(this._elementRef, "Please define a service in the 'service' property");
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;

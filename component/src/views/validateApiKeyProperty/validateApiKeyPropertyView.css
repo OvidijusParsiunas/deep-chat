@@ -1,17 +1,10 @@
-#validate-property-key {
+#validate-property-key-view {
   height: 100%;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px;
-}
-
-#validate-property-key-error {
-  color: red;
-  font-size: 1.2em;
-  line-height: 1.3em;
-  text-align: center;
 }
 
 #large-loading-ring {

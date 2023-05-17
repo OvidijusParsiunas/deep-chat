@@ -247,7 +247,7 @@ export class Messages {
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('dots-flashing');
     bubbleElement.appendChild(dotsElement);
-    this.applyCustomStyles(messageElements, false, false, this.messageStyles?.loading);
+    this.applyCustomStyles(messageElements, true, false, this.messageStyles?.loading);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }

@@ -38,7 +38,7 @@ export class TextInput {
     } else {
       inputElement.contentEditable = 'true';
       inputElement.onfocus = this.onFocus.bind(this);
-      inputElement.onkeydown = this.onKeydown.bind(this);
+      inputElement.addEventListener('keydown', this.onKeydown.bind(this));
       inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
     }
     Object.assign(inputElement.style, textInputStyles?.disabled);

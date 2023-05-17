@@ -111,7 +111,7 @@ export class InsertKeyView {
 
   private static createElements(changeToChat: (key: string) => void, serviceIO: ServiceIO) {
     const containerElement = document.createElement('div');
-    containerElement.id = 'insert-key';
+    containerElement.id = 'insert-key-view';
     const contentsElement = InsertKeyView.createContents(changeToChat, serviceIO);
     containerElement.appendChild(contentsElement);
     return containerElement;
