@@ -12,9 +12,9 @@ This example makes use of the [`customColumnsSettings`](../docs/column#customCol
 column has two available date formats.
 
 import TableContainerProgrammaticUpdates from '@site/src/components/table/tableContainerProgrammaticUpdates';
+import ComponentContainer from '@site/src/components/table/componentContainer';
 import ActiveTable from '@site/src/components/table/activeTableBrowser';
 import CodeToggle from '@site/src/components/toggle/codeToggle';
-import TableContainer from '@site/src/components/table/tableContainer';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -22,7 +22,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     customColumnsSettings={[
       {headerName: 'Planet', availableDefaultColumnTypes: ['text']},
@@ -44,7 +44,7 @@ import Tabs from '@theme/Tabs';
     ]}
     tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <CodeToggle>
 <TabItem value="js" label="Show code">
@@ -79,7 +79,7 @@ import Tabs from '@theme/Tabs';
 
 Data in this table cannot be changed.
 
-<TableContainer minHeight="301">
+<ComponentContainer minHeight="301">
   <ActiveTable
     isCellTextEditable={false}
     displayAddNewColumn={false}
@@ -98,7 +98,7 @@ Data in this table cannot be changed.
     ]}
     tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <CodeToggle>
 <TabItem value="js" label="Show code">
@@ -133,7 +133,7 @@ Data in this table cannot be changed.
 
 Table configuration for a dark design.
 
-<TableContainer minHeight="341">
+<ComponentContainer minHeight="341">
   <ActiveTable
     tableStyle={{width: '100%', borderRadius: '5px', border: 'unset', backgroundColor: 'black'}}
     cellStyle={{color: 'white', borderRight: '1px solid #00000029'}}
@@ -159,7 +159,7 @@ Table configuration for a dark design.
       ['Neptune', 49528, 102, 14, 1638],
     ]}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <CodeToggle>
 <TabItem value="js" label="Show code">

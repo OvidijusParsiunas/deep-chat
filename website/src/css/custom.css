@@ -162,6 +162,8 @@ code {
   width: 100%;
   padding: 18px 18px 18px;
   border: unset;
+  display: flex;
+  justify-content: center;
 }
 
 .documentation-method-button {

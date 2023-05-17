@@ -1,0 +1,40 @@
+---
+sidebar_position: 2
+---
+
+# Service
+
+Properties related to table container.
+
+### `key` {#key}
+
+- Type: `string`
+
+If the `service` you are using requires an API key or a token, you can insert it to skip the `insert key view`
+and immediately display the chat. If you want this key to be verified, see `validateKeyProperty`.
+
+#### Example
+
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    service={{openAI: true}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'blue'}}}}}
+    service={{cohere: {summarization: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>

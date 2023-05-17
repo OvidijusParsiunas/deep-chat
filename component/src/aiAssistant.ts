@@ -23,7 +23,7 @@ import {Names} from './types/names';
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
   @Property('string')
-  key?: string;
+  serviceKey?: string;
 
   @Property('object')
   service?: Service;
@@ -49,6 +49,7 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   textInputStyles?: TextInputStyles;
 
+  // WORK - this should be applied to all by default
   @Property('number')
   inputCharacterLimit?: number;
 
@@ -95,16 +96,13 @@ export class AiAssistant extends InternalHTML {
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;
 
-  @Property('function')
   focusInput: () => void = () => {
     if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
   };
 
-  @Property('function')
   getMessages: () => MessageContent[] = () => [];
 
   // will need to add an example for this
-  @Property('function')
   submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
@@ -134,20 +132,20 @@ export class AiAssistant extends InternalHTML {
 
   private changeToChatView(newKey: string) {
     this.validateKeyProperty = false;
-    this.key = newKey;
+    this.serviceKey = newKey;
     this.onRender();
   }
 
   override onRender() {
     // TO-DO - this will be moved to service selection view
-    const serviceIO = ServiceIOFactory.create(this, this.key || '');
+    const serviceIO = ServiceIOFactory.create(this, this.serviceKey || '');
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
-    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.key) {
-      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.key);
+    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.serviceKey) {
+      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.serviceKey);
     } else if (ChatView.shouldBeRendered(this)) {
       ChatView.render(this, this._elementRef, serviceIO);
     } else {

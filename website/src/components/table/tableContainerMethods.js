@@ -1,4 +1,4 @@
-import TableContainer, {extractChildTableElement} from '@site/src/components/table/tableContainer';
+import ComponentContainer, {extractChildTableElement} from '@site/src/components/table/componentContainer';
 import LiveTableData from './liveTableData';
 import React from 'react';
 
@@ -37,7 +37,7 @@ export default function TableContainerMethods({children, propertyname, displayRe
   return (
     <div>
       <div ref={tableContainerRef}>
-        <TableContainer>{children}</TableContainer>
+        <ComponentContainer>{children}</ComponentContainer>
       </div>
       <div className="documentation-example-container">
         <button className="documentation-method-button" onClick={click}>

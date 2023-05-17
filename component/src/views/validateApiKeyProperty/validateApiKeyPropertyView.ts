@@ -31,6 +31,6 @@ export class ValidateApiKeyPropertyView {
   }
 
   public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.key && aiAssistant.validateKeyProperty;
+    return aiAssistant.serviceKey && aiAssistant.validateKeyProperty;
   }
 }

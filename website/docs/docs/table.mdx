@@ -14,8 +14,8 @@ Object containing CSS styling properties for the table element. <br />
 
 #### Example
 
+import ComponentContainer from '@site/src/components/table/componentContainer';
 import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import TableContainer from '@site/src/components/table/tableContainer';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -23,7 +23,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     tableStyle={{
       borderRadius: '10px',
@@ -39,7 +39,7 @@ import Tabs from '@theme/Tabs';
       ['Neptune', 49528, 102, 14, 1638],
     ]}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -97,7 +97,7 @@ A scrollbar is introduced on the table if either of the specified dimensions are
 
 #### Example
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     overflow={{maxHeight: '300px', maxWidth: '100%'}}
     tableStyle={{
@@ -118,7 +118,7 @@ A scrollbar is introduced on the table if either of the specified dimensions are
       ['Moon', 3475, 0.073, 0, 3340],
     ]}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -171,7 +171,7 @@ row's `backgroundColor` and text `color`.
 
 #### Example
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     frameComponentsStyles={{
       styles: {
@@ -190,7 +190,7 @@ row's `backgroundColor` and text `color`.
     ]}
     tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -244,7 +244,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 
 #### Example
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     overflow={{maxHeight: '300px', maxWidth: '100%'}}
     tableStyle={{
@@ -274,7 +274,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
         border-radius: 5px;
       }"
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">

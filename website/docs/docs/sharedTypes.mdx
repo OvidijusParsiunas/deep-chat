@@ -31,8 +31,8 @@ and clicking on the overlay via `overlayClick`.
 
 #### Example
 
+import ComponentContainer from '@site/src/components/table/componentContainer';
 import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import TableContainer from '@site/src/components/table/tableContainer';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -40,7 +40,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-<TableContainer>
+<ComponentContainer>
   <ActiveTable
     rowDropdown={{
       displaySettings: {
@@ -63,7 +63,7 @@ import Tabs from '@theme/Tabs';
     ]}
     tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
   ></ActiveTable>
-</TableContainer>
+</ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">

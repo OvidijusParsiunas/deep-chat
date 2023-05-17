@@ -9,6 +9,7 @@ export interface MessageElementsStyles {
   media?: CustomStyle;
 }
 
+// WORK - why is the loading message affected when use style is set
 export interface MessageSideStyles {
   shared?: MessageElementsStyles;
   user?: MessageElementsStyles;

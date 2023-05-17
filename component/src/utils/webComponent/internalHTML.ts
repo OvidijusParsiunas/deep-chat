@@ -12,10 +12,11 @@ export class InternalHTML extends HTMLElement {
     return Object.keys(InternalHTML._attributes_) || [];
   }
 
+  // If this is not working, try using propertyName directly
   constructor() {
     super();
-    Object.keys(InternalHTML._attributes_).forEach((propertyName) => {
-      this.constructPropertyAccessors(propertyName);
+    Object.keys(InternalHTML._attributeToProperty_).forEach((propertyName) => {
+      this.constructPropertyAccessors(InternalHTML._attributeToProperty_[propertyName]);
     });
   }
 

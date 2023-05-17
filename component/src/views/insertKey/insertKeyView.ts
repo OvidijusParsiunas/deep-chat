@@ -51,7 +51,7 @@ export class InsertKeyView {
   private static verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers,
       serviceIO: ServiceIO) {
     const key = inputElement.value.trim();
-    serviceIO.verifyKey.bind(serviceIO, key, keyVerificationHandlers);
+    serviceIO.verifyKey(key, keyVerificationHandlers);
   }
 
   // prettier-ignore

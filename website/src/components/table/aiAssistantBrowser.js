@@ -1,3 +1,4 @@
+import {AiAssistantReact} from './aiAssistantReact';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import React from 'react';
 
@@ -6,8 +7,7 @@ export default function AiAssistantBrowser(props) {
   return (
     <BrowserOnly>
       {() => {
-        const AiAssistant = require('ai-assistant-react').AiAssistant;
-        return <AiAssistant {...props}></AiAssistant>;
+        return <AiAssistantReact {...props}></AiAssistantReact>;
       }}
     </BrowserOnly>
   );

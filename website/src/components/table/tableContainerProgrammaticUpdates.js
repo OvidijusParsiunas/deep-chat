@@ -1,4 +1,4 @@
-import TableContainer, {extractChildTableElement} from '@site/src/components/table/tableContainer';
+import ComponentContainer, {extractChildTableElement} from '@site/src/components/table/componentContainer';
 import React from 'react';
 
 // WARNING:
@@ -62,7 +62,7 @@ export default function TableContainerProgrammaticUpdates({children, isStock, mi
 
   return (
     <div ref={programmaticUpdateTableContainer}>
-      <TableContainer minHeight={minHeight}>{children}</TableContainer>
+      <ComponentContainer minHeight={minHeight}>{children}</ComponentContainer>
     </div>
   );
 }
