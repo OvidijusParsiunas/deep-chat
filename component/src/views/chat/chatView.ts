@@ -18,8 +18,4 @@ export class ChatView {
     const containerElement = ChatView.createElements(aiAssistant, serviceIO);
     containerRef.replaceChildren(containerElement);
   }
-
-  public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.service?.custom || aiAssistant.serviceKey;
-  }
 }

@@ -23,10 +23,10 @@ export class AssemblyAIAudioIO extends BaseServideIO {
   textInputPlaceholderText = 'Upload an audio file';
   permittedErrorPrefixes = new Set('Invalid');
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service, validateMessageBeforeSending} = aiAssistant;
     const config = service?.assemblyAI?.audio as NonNullable<AssemblyAI['audio']>; // used as default assemblyAI
-    super(aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, config, key, 'audio');
+    super(aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, config, 'audio');
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }
 

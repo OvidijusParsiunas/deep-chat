@@ -1,4 +1,5 @@
 import {ServiceCallConfig} from './requestSettings';
+import {Key} from './key';
 
 // https://cloud.google.com/text-to-speech/docs/reference/rest/v1/text/synthesize
 export interface GCPTextToSpeechConfig {
@@ -19,5 +20,5 @@ export interface GCPTextToSpeechConfig {
 }
 
 export interface GCP {
-  textToSpeech?: true | (GCPTextToSpeechConfig & ServiceCallConfig);
+  textToSpeech?: true | (Key & GCPTextToSpeechConfig & ServiceCallConfig);
 }

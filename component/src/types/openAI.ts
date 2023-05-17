@@ -2,6 +2,7 @@ import {ExistingServiceAudioRecordingConfig} from './microphone';
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
 import {ChatMessageLimits} from './chatLimits';
+import {Key} from './key';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'ai';
@@ -41,8 +42,8 @@ export interface OpenAIConverseConfig {
 }
 
 export interface OpenAI {
-  chat?: true | (OpenAIConverseConfig & OpenAICustomChatConfig & ServiceCallConfig);
-  completions?: true | (OpenAIConverseConfig & ServiceCallConfig);
-  images?: true | (OpenAIImagesConfig & ExistingServiceCameraConfig);
-  audio?: true | (OpenAIAudioConfig & OpenAIAudioType & ExistingServiceAudioRecordingConfig);
+  chat?: true | (Key & OpenAIConverseConfig & OpenAICustomChatConfig & ServiceCallConfig);
+  completions?: true | (Key & OpenAIConverseConfig & ServiceCallConfig);
+  images?: true | (Key & OpenAIImagesConfig & ExistingServiceCameraConfig);
+  audio?: true | (Key & OpenAIAudioConfig & OpenAIAudioType & ExistingServiceAudioRecordingConfig);
 }

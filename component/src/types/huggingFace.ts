@@ -2,6 +2,7 @@ import {ExistingServiceAudioRecordingConfig} from './microphone';
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
 import {ChatMessageLimits} from './chatLimits';
+import {Key} from './key';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
@@ -73,13 +74,13 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & ChatMessageLimits);
-  textGeneration?: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig & ServiceCallConfig);
-  summarization?: true | (HuggingFaceModel & HuggingFaceSummarizationConfig & ServiceCallConfig);
-  translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);
-  fillMask?: true | (HuggingFaceModel & HuggingFaceFillMaskConfig & ServiceCallConfig);
-  questionAnswer?: HuggingFaceQuestionAnswerConfig & HuggingFaceModel & ServiceCallConfig;
-  audioSpeechRecognition?: true | (HuggingFaceModel & ExistingServiceAudioRecordingConfig);
-  audioClassification?: true | (HuggingFaceModel & ExistingServiceAudioRecordingConfig);
-  imageClassification?: true | (HuggingFaceModel & ExistingServiceCameraConfig);
+  conversation?: true | (Key & HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & ChatMessageLimits);
+  textGeneration?: true | (Key & HuggingFaceModel & HuggingFaceTextGenerationConfig & ServiceCallConfig);
+  summarization?: true | (Key & HuggingFaceModel & HuggingFaceSummarizationConfig & ServiceCallConfig);
+  translation?: true | (Key & HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);
+  fillMask?: true | (Key & HuggingFaceModel & HuggingFaceFillMaskConfig & ServiceCallConfig);
+  questionAnswer?: Key & HuggingFaceQuestionAnswerConfig & HuggingFaceModel & ServiceCallConfig;
+  audioSpeechRecognition?: true | (Key & HuggingFaceModel & ExistingServiceAudioRecordingConfig);
+  audioClassification?: true | (Key & HuggingFaceModel & ExistingServiceAudioRecordingConfig);
+  imageClassification?: true | (Key & HuggingFaceModel & ExistingServiceCameraConfig);
 }

@@ -1,5 +1,5 @@
-import {ValidateApiKeyPropertyView} from './views/validateApiKeyProperty/validateApiKeyPropertyView';
 import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
+import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
@@ -13,6 +13,7 @@ import {DropupStyles} from './types/dropupStyles';
 import {TextInputStyles} from './types/textInput';
 import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
+import {ServiceIO} from './services/serviceIO';
 import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
 import {CustomStyle} from './types/styles';
@@ -23,9 +24,6 @@ import {Names} from './types/names';
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
-  @Property('string')
-  serviceKey?: string;
-
   // can only be used if serviceKey has been set via the key property
   @Property('boolean')
   validateKeyProperty?: boolean;
@@ -97,7 +95,7 @@ export class AiAssistant extends InternalHTML {
   validateMessageBeforeSending?: ValidateMessageBeforeSending;
 
   focusInput: () => void = () => {
-    if (ChatView.shouldBeRendered(this)) FocusUtils.focusFromParentElement(this._elementRef);
+    FocusUtils.focusFromParentElement(this._elementRef);
   };
 
   getMessages: () => MessageContent[] = () => [];
@@ -111,6 +109,8 @@ export class AiAssistant extends InternalHTML {
   _hasBeenRendered = false;
 
   _auxiliaryStyleApplied = false;
+
+  _activeService?: ServiceIO;
 
   // TO-DO - key view style
 
@@ -130,31 +130,32 @@ export class AiAssistant extends InternalHTML {
 
   private readonly _elementRef: HTMLElement;
 
-  private changeToChatView(newKey: string) {
-    this.validateKeyProperty = false;
-    this.serviceKey = newKey;
+  private changeToChatView() {
+    if (this._activeService) this._activeService.validateConfigKey = false;
     this.onRender();
   }
 
   override onRender() {
     // TO-DO - this will be moved to service selection view
-    const serviceIO = ServiceIOFactory.create(this, this.serviceKey || '');
-    // TO-DO - default to service selection view
-    if (!serviceIO) return ErrorView.render(this._elementRef, "Please define a service in the 'service' property");
+    this._activeService ??= ServiceIOFactory.create(this);
+    if (!this._activeService) {
+      // TO-DO - default to service selection view
+      return ErrorView.render(this._elementRef, "Please define a service in the 'service' property");
+    }
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
     Object.assign(this._elementRef.style, this.containerStyle);
-    if (ValidateApiKeyPropertyView.shouldBeRendered(this) && this.serviceKey) {
-      ValidateApiKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO, this.serviceKey);
-    } else if (ChatView.shouldBeRendered(this)) {
-      ChatView.render(this, this._elementRef, serviceIO);
+    if (this._activeService.key && this._activeService.validateConfigKey) {
+      ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
+    } else if (this._activeService.key || this.service?.custom) {
+      ChatView.render(this, this._elementRef, this._activeService);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first ppear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
-      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), serviceIO);
+      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     }
     this._hasBeenRendered = true;
     this.onComponentRender?.();

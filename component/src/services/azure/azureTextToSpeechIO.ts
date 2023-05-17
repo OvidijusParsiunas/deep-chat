@@ -24,13 +24,11 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   private readonly _raw_body: AzureTextToSpeechConfig = {};
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
-    super(
-      aiAssistant,
-      AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
-      config, key);
+    super(aiAssistant,
+      AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'), config);
     Object.assign(this._raw_body, config);
     this._raw_body.lang ??= 'en-US';
     this._raw_body.gender ??= 'Female';

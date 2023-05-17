@@ -56,7 +56,7 @@ export class InsertKeyView {
 
   // prettier-ignore
   private static addVerificationEvents(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement,
-      changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+      changeToChat: () => void, serviceIO: ServiceIO) {
     const keyVerificationHandlers: KeyVerificationHandlers = {
       onSuccess: changeToChat,
       onFail: InsertKeyView.onFail.bind(this, inputEl, startEl, failTextEl),
@@ -93,7 +93,7 @@ export class InsertKeyView {
     return inputContainer;
   }
 
-  private static createContents(changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+  private static createContents(changeToChat: () => void, serviceIO: ServiceIO) {
     const contentsElement = document.createElement('div');
     contentsElement.id = 'insert-key-contents';
     const inputContainerElement = InsertKeyView.createInput(serviceIO.insertKeyPlaceholderText);
@@ -109,7 +109,7 @@ export class InsertKeyView {
     return contentsElement;
   }
 
-  private static createElements(changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+  private static createElements(changeToChat: () => void, serviceIO: ServiceIO) {
     const containerElement = document.createElement('div');
     containerElement.id = 'insert-key-view';
     const contentsElement = InsertKeyView.createContents(changeToChat, serviceIO);
@@ -117,7 +117,7 @@ export class InsertKeyView {
     return containerElement;
   }
 
-  public static render(containerRef: HTMLElement, changeToChat: (key: string) => void, serviceIO: ServiceIO) {
+  public static render(containerRef: HTMLElement, changeToChat: () => void, serviceIO: ServiceIO) {
     const containerElement = InsertKeyView.createElements(changeToChat, serviceIO);
     containerRef.replaceChildren(containerElement);
   }

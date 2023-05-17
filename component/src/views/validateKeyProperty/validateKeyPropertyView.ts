@@ -1,8 +1,7 @@
 import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {ErrorView} from '../error/errorView';
 
-export class ValidateApiKeyPropertyView {
+export class ValidateKeyPropertyView {
   private static onLoad(startElement: HTMLElement) {
     startElement.innerHTML = '<div id="large-loading-ring"></div>';
   }
@@ -13,18 +12,14 @@ export class ValidateApiKeyPropertyView {
     return containerElement;
   }
 
-  public static render(containerRef: HTMLElement, changeToChat: (key: string) => void, serviceIO: ServiceIO, key: string) {
-    const containerElement = ValidateApiKeyPropertyView.createElements();
+  public static render(containerRef: HTMLElement, changeToChat: () => void, serviceIO: ServiceIO) {
+    const containerElement = ValidateKeyPropertyView.createElements();
     const keyVerificationHandlers: KeyVerificationHandlers = {
       onSuccess: changeToChat,
       onFail: ErrorView.render.bind(this, containerRef, `Your 'key' has failed authentication`),
-      onLoad: ValidateApiKeyPropertyView.onLoad.bind(this, containerElement),
+      onLoad: ValidateKeyPropertyView.onLoad.bind(this, containerElement),
     };
-    serviceIO.verifyKey(key, keyVerificationHandlers);
+    if (serviceIO.key) serviceIO.verifyKey(serviceIO.key, keyVerificationHandlers);
     containerRef.replaceChildren(containerElement);
-  }
-
-  public static shouldBeRendered(aiAssistant: AiAssistant) {
-    return aiAssistant.serviceKey && aiAssistant.validateKeyProperty;
   }
 }

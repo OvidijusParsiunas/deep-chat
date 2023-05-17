@@ -7,13 +7,13 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
+type CohereServiceConfig = GenericObject<string> & ServiceCallConfig;
 
 export class CohereTextGenerationIO extends CohereIO {
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default service
-    const config = aiAssistant.service?.cohere?.textGeneration as CohereServiceConfig;
-    super(aiAssistant, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config, key);
+    const config = aiAssistant.service?.cohere?.textGeneration as CohereServiceConfig | undefined;
+    super(aiAssistant, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config);
   }
 
   override preprocessBody(body: CohereGenerateConfig, messages: MessageContent[]) {

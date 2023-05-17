@@ -5,11 +5,11 @@ import {AiAssistant} from '../../aiAssistant';
 import {PollResult} from '../serviceIO';
 
 export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const config = aiAssistant.service?.huggingFace?.imageClassification as NonNullable<
       HuggingFace['imageClassification']
     >;
-    super(aiAssistant, 'Attach an image file', 'google/vit-base-patch16-224', config, 'images', key);
+    super(aiAssistant, 'Attach an image file', 'google/vit-base-patch16-224', config, 'images');
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

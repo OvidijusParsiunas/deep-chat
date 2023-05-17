@@ -17,14 +17,14 @@ export class AzureTranslationIO extends BaseServideIO {
   url = '';
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.translation as NonNullable<Azure['translation']>;
     super(
       aiAssistant,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),
       AzureUtils.buildTranslationHeaders.bind({}, config?.region),
-      config, key);
+      config);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }
 

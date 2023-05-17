@@ -1,5 +1,6 @@
 import {FilesServiceConfig} from './fileServiceConfigs';
 import {ServiceCallConfig} from './requestSettings';
+import {Key} from './key';
 
 // https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
 export interface AzureTranslationConfig {
@@ -36,8 +37,8 @@ export interface AzureRegion {
 }
 
 export interface Azure {
-  textToSpeech?: AzureRegion & AzureTextToSpeechConfig & ServiceCallConfig;
-  speechToText?: AzureRegion & AzureSpeechToTextConfig & FilesServiceConfig;
-  summarization?: AzureEndpoint & AzureSummarizationConfig & ServiceCallConfig;
-  translation?: Partial<AzureRegion> & AzureTranslationConfig & ServiceCallConfig;
+  textToSpeech?: Key & AzureRegion & AzureTextToSpeechConfig & ServiceCallConfig;
+  speechToText?: Key & AzureRegion & AzureSpeechToTextConfig & FilesServiceConfig;
+  summarization?: Key & AzureEndpoint & AzureSummarizationConfig & ServiceCallConfig;
+  translation?: Key & Partial<AzureRegion> & AzureTranslationConfig & ServiceCallConfig;
 }

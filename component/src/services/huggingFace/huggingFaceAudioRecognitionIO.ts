@@ -5,11 +5,11 @@ import {AiAssistant} from '../../aiAssistant';
 import {PollResult} from '../serviceIO';
 
 export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const config = aiAssistant.service?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
-    super(aiAssistant, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, 'audio', key);
+    super(aiAssistant, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, 'audio');
   }
 
   async extractPollResultData(result: HuggingFaceAudioRecognitionResult): PollResult {

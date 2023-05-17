@@ -18,8 +18,7 @@ export class AzureSpeechIO extends BaseServideIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: AzureServiceConfig,
-     key?: string, fileType?: FILE_TYPES) {
-    super(
-      aiAssistant, AzureUtils.buildSpeechKeyVerificationDetails(config.region), buildHeadersFunc, config, key, fileType);
+     fileType?: FILE_TYPES) {
+    super(aiAssistant, AzureUtils.buildSpeechKeyVerificationDetails(config.region), buildHeadersFunc, config, fileType);
   }
 }

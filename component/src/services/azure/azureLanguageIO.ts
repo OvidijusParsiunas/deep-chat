@@ -18,9 +18,9 @@ export class AzureLanguageIO extends BaseServideIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: AzureServiceConfig,
-     key?: string, fileType?: FILE_TYPES) {
+      fileType?: FILE_TYPES) {
     super(
       aiAssistant, AzureUtils.buildLanguageKeyVerificationDetails(config.endpoint),
-      buildHeadersFunc, config, key, fileType);
+      buildHeadersFunc, config, fileType);
   }
 }

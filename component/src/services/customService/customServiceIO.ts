@@ -38,6 +38,7 @@ export class CustomServiceIO implements ServiceIO {
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
   private readonly _isTextOnly?: boolean;
+  validateConfigKey = false;
 
   constructor(aiAssistant: AiAssistant) {
     const customService = aiAssistant.service?.custom;

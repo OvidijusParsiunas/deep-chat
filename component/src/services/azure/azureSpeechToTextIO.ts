@@ -23,10 +23,10 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   isTextInputDisabled = true;
   textInputPlaceholderText = 'Upload an audio file';
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service, validateMessageBeforeSending} = aiAssistant;
     const config = service?.azure?.speechToText as NonNullable<Azure['speechToText']>;
-    super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, key, 'audio');
+    super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, 'audio');
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
     const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len

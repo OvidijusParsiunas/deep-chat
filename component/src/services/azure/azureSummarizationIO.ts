@@ -18,10 +18,10 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   private completionsHandlers?: CompletionsHandlers;
   private readonly _raw_body: RawBody = {language: 'en'};
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.summarization as NonNullable<Azure['summarization']>;
-    super(aiAssistant, AzureUtils.buildSummarizationHeader, config, key);
+    super(aiAssistant, AzureUtils.buildSummarizationHeader, config);
     Object.assign(this._raw_body, config);
     this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
   }

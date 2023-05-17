@@ -24,7 +24,7 @@ import {ServiceIO} from './serviceIO';
 
 // exercise caution when defining default returns for services as their configs can be undefined
 export class ServiceIOFactory {
-  public static create(aiAssistant: AiAssistant, key?: string): ServiceIO | undefined {
+  public static create(aiAssistant: AiAssistant): ServiceIO | undefined {
     const {service: services} = aiAssistant;
     if (services) {
       if (services.custom) {
@@ -32,64 +32,64 @@ export class ServiceIOFactory {
       }
       if (services.openAI) {
         if (services.openAI.images) {
-          return new OpenAIImagesIO(aiAssistant, key);
+          return new OpenAIImagesIO(aiAssistant);
         }
         if (services.openAI.audio) {
-          return new OpenAIAudioIO(aiAssistant, key);
+          return new OpenAIAudioIO(aiAssistant);
         }
         if (services.openAI.completions) {
-          return new OpenAICompletionsIO(aiAssistant, key);
+          return new OpenAICompletionsIO(aiAssistant);
         }
-        return new OpenAIChatIO(aiAssistant, key);
+        return new OpenAIChatIO(aiAssistant);
       }
       if (services.assemblyAI) {
-        return new AssemblyAIAudioIO(aiAssistant, key);
+        return new AssemblyAIAudioIO(aiAssistant);
       }
       if (services.cohere) {
         if (services.cohere.summarization) {
-          return new CohereSummarizationIO(aiAssistant, key);
+          return new CohereSummarizationIO(aiAssistant);
         }
-        return new CohereTextGenerationIO(aiAssistant, key);
+        return new CohereTextGenerationIO(aiAssistant);
       }
       if (services.huggingFace) {
         if (services.huggingFace.textGeneration) {
-          return new HuggingFaceTextGenerationIO(aiAssistant, key);
+          return new HuggingFaceTextGenerationIO(aiAssistant);
         }
         if (services.huggingFace.summarization) {
-          return new HuggingFaceSummarizationIO(aiAssistant, key);
+          return new HuggingFaceSummarizationIO(aiAssistant);
         }
         if (services.huggingFace.translation) {
-          return new HuggingFaceTranslationIO(aiAssistant, key);
+          return new HuggingFaceTranslationIO(aiAssistant);
         }
         if (services.huggingFace.fillMask) {
-          return new HuggingFaceFillMaskIO(aiAssistant, key);
+          return new HuggingFaceFillMaskIO(aiAssistant);
         }
         if (services.huggingFace.questionAnswer) {
-          return new HuggingFaceQuestionAnswerIO(aiAssistant, key);
+          return new HuggingFaceQuestionAnswerIO(aiAssistant);
         }
         if (services.huggingFace.audioSpeechRecognition) {
-          return new HuggingFaceAudioRecognitionIO(aiAssistant, key);
+          return new HuggingFaceAudioRecognitionIO(aiAssistant);
         }
         if (services.huggingFace.audioClassification) {
-          return new HuggingFaceAudioClassificationIO(aiAssistant, key);
+          return new HuggingFaceAudioClassificationIO(aiAssistant);
         }
         if (services.huggingFace.imageClassification) {
-          return new HuggingFaceImageClassificationIO(aiAssistant, key);
+          return new HuggingFaceImageClassificationIO(aiAssistant);
         }
-        return new HuggingFaceConversationIO(aiAssistant, key);
+        return new HuggingFaceConversationIO(aiAssistant);
       }
       if (services.azure) {
         if (services.azure?.speechToText) {
-          return new AzureSpeechToTextIO(aiAssistant, key);
+          return new AzureSpeechToTextIO(aiAssistant);
         }
         if (services.azure?.textToSpeech) {
-          return new AzureTextToSpeechIO(aiAssistant, key);
+          return new AzureTextToSpeechIO(aiAssistant);
         }
         if (services.azure?.summarization) {
-          return new AzureSummarizationIO(aiAssistant, key);
+          return new AzureSummarizationIO(aiAssistant);
         }
         if (services.azure?.translation) {
-          return new AzureTranslationIO(aiAssistant, key);
+          return new AzureTranslationIO(aiAssistant);
         }
       }
     }

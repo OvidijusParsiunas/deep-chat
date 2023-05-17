@@ -20,7 +20,7 @@ export interface StreamHandlers {
 }
 
 export interface KeyVerificationHandlers {
-  onSuccess: (key: string) => void;
+  onSuccess: () => void;
   onFail: (message: string) => void;
   onLoad: () => void;
 }
@@ -34,6 +34,10 @@ export type ServiceFileTypes = {
 };
 
 export interface ServiceIO {
+  key?: string;
+
+  validateConfigKey: boolean;
+
   insertKeyPlaceholderText?: string;
 
   getKeyLink?: string;

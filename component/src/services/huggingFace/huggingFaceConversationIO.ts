@@ -1,4 +1,4 @@
-import {HuggingFaceQuestionAnswerConfig, HuggingFaceConversationConfig, HuggingFace} from '../../types/huggingFace';
+import {HuggingFaceQuestionAnswerConfig, HuggingFaceConversationConfig} from '../../types/huggingFace';
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContent} from '../../types/messages';
@@ -10,11 +10,11 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default method
-    const config = aiAssistant.service?.huggingFace?.conversation as NonNullable<HuggingFace['conversation']>;
-    super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config, key);
-    if (config && typeof config === 'object') {
+    const config = aiAssistant.service?.huggingFace?.conversation;
+    super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
+    if (typeof config === 'object') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       if (config.max_messages) {
         // needs to be an odd number in order to have an array of previous correspondences and the new user message

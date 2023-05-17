@@ -11,7 +11,7 @@ export class FocusUtils {
   }
 
   public static focusFromParentElement(parentElement: HTMLElement) {
-    const inputElement = parentElement.querySelector(`#${TextInput.TEXT_INPUT_ID}`) as HTMLElement;
-    FocusUtils.focusEndOfInput(inputElement);
+    const inputElement = parentElement.querySelector(`#${TextInput.TEXT_INPUT_ID}`);
+    if (inputElement) FocusUtils.focusEndOfInput(inputElement as HTMLElement);
   }
 }

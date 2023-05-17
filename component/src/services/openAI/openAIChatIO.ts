@@ -1,10 +1,10 @@
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
-import {OpenAI, OpenAICustomChatConfig} from '../../types/openAI';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
+import {OpenAICustomChatConfig} from '../../types/openAI';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
@@ -23,16 +23,16 @@ export class OpenAIChatIO extends BaseServideIO {
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
 
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
-    const config = service?.openAI?.chat as NonNullable<OpenAI['chat']>; // can be undefined as this is the default service
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, key);
-    if (config && typeof config !== 'boolean') {
+    const config = service?.openAI?.chat; // can be undefined as this is the default service
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
+    if (typeof config === 'object') {
       this._total_messages_max_char_length = config.total_messages_max_char_length;
       this._max_messages = config.max_messages;
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
+      this.cleanConfig(config);
     }
-    if (typeof config === 'object') this.cleanConfig(config);
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
   }
 

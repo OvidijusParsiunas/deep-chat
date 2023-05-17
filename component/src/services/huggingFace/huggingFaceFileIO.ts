@@ -13,8 +13,8 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, placeholderText: string, defaultModel: string,
-      config: true | (HuggingFaceModel & ServiceCallConfig), fileType: FILE_TYPES, key?: string) {
-    super(aiAssistant, placeholderText, defaultModel, config, key, fileType);
+      config: true | (HuggingFaceModel & ServiceCallConfig), fileType: FILE_TYPES) {
+    super(aiAssistant, placeholderText, defaultModel, config, fileType);
     this.canSendMessage = aiAssistant.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
   }
 

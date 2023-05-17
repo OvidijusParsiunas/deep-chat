@@ -5,14 +5,15 @@ import {MessageContent} from '../../types/messages';
 import {GenericObject} from '../../types/object';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {Key} from '../../types/key';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
+type CohereServiceConfig = Key & GenericObject<string> & ServiceCallConfig;
 
 export class CohereSummarizationIO extends CohereIO {
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const config = aiAssistant.service?.cohere?.summarization as CohereServiceConfig;
-    super(aiAssistant, 'https://api.cohere.ai/v1/summarize', 'Insert text to summarize', config, key);
+    super(aiAssistant, 'https://api.cohere.ai/v1/summarize', 'Insert text to summarize', config);
   }
 
   override preprocessBody(body: CohereSummarizationConfig, messages: MessageContent[]) {

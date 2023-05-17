@@ -15,6 +15,7 @@ import {GenericButton} from '../../types/button';
 import {CustomStyle} from '../../types/styles';
 import {AiAssistant} from '../../aiAssistant';
 import {Remarkable} from 'remarkable';
+import {Key} from '../../types/key';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
@@ -22,9 +23,11 @@ type Camera = {camera?: true | {button?: GenericButton; modalContainerStyle?: Cu
 
 type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat}};
 
-type Config = true | (FilesServiceConfig & Camera & Microphone);
+type Config = true | (Key & FilesServiceConfig & Camera & Microphone);
 
 export class BaseServideIO implements ServiceIO {
+  key?: string;
+  validateConfigKey = false;
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';
   canSendMessage: ValidateMessageBeforeSending = BaseServideIO.canSendMessage;
@@ -39,7 +42,7 @@ export class BaseServideIO implements ServiceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, config?: Config, key?: string, fileType?: FILE_TYPES) {
+      buildHeadersFunc: BuildHeadersFunc, config?: Config, fileType?: FILE_TYPES) {
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
     const {validateMessageBeforeSending} = aiAssistant;
@@ -54,16 +57,19 @@ export class BaseServideIO implements ServiceIO {
       if (fileType === 'audio') this.processAudioConfig(remarkable, config);
       if (fileType === 'images') this.processImagesConfig(remarkable, config);
     }
-    const requestSettings = typeof config === 'object' ? config.request : undefined;
-    if (key) this.requestSettings = key ? this.buildRequestSettings(key, requestSettings) : requestSettings;
+    if (typeof config === 'object' && config.key) {
+      this.requestSettings = this.buildRequestSettings(config.key, config.request);
+      this.key = config.key;
+    }
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
     if (typeof config === 'object') this.cleanServiceConfig(config);
+    if (aiAssistant.validateKeyProperty) this.validateConfigKey = aiAssistant.validateKeyProperty;
   }
 
   private processAudioConfig(remarkable: Remarkable, config?: Config) {
     if (!this.fileTypes) return;
     this.fileTypes.audio = {files: {acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a', maxNumberOfFiles: 1}};
-    if (config && typeof config !== 'boolean') {
+    if (typeof config === 'object') {
       ConfigProcessingUtils.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
       if (config?.microphone) this.recordAudio = ConfigProcessingUtils.processRecordAudioConfig(config?.microphone);
     }
@@ -72,7 +78,7 @@ export class BaseServideIO implements ServiceIO {
   private processImagesConfig(remarkable: Remarkable, config?: Config) {
     if (!this.fileTypes) return;
     this.fileTypes.images = {files: {acceptedFormats: '.png,.jpg', maxNumberOfFiles: 1}};
-    if (config && typeof config !== 'boolean') {
+    if (typeof config === 'object') {
       ConfigProcessingUtils.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
       if (config.camera) this.camera = ConfigProcessingUtils.processCameraConfig(config.camera);
     }
@@ -84,7 +90,8 @@ export class BaseServideIO implements ServiceIO {
     return requestSettingsObj;
   }
 
-  private cleanServiceConfig(config: ServiceCallConfig) {
+  private cleanServiceConfig(config: Key & ServiceCallConfig) {
+    delete config.key;
     delete config.request;
     delete config.requestInterceptor;
     delete config.responseInterceptor;
@@ -94,9 +101,10 @@ export class BaseServideIO implements ServiceIO {
     return text.trim() !== '';
   }
 
-  private addKey(onSuccess: (key: string) => void, key: string) {
+  private keyAuthenticated(onSuccess: () => void, key: string) {
     this.requestSettings = this.buildRequestSettings(key, this.requestSettings);
-    onSuccess(key);
+    this.key = key;
+    onSuccess();
   }
 
   // prettier-ignore
@@ -104,7 +112,7 @@ export class BaseServideIO implements ServiceIO {
     const {url, method, handleVerificationResult, createHeaders, body} = this.keyVerificationDetails;
     const headers = createHeaders?.(key) || this.buildHeadersFunc(key);
     HTTPRequest.verifyKey(key, url, headers, method,
-      this.addKey.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
+      this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
       keyVerificationHandlers.onLoad, handleVerificationResult, body);
   }
 

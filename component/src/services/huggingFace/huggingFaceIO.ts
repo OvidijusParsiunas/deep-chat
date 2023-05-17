@@ -27,9 +27,9 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, textInputPlaceholderText: string, defaultModel: string,
-      config: HuggingFaceServiceConfig, key?: string, fileType?: FILE_TYPES) {
+      config?: HuggingFaceServiceConfig, fileType?: FILE_TYPES) {
     super(
-      aiAssistant, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, key, fileType);
+      aiAssistant, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, fileType);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct _raw_body with individual props

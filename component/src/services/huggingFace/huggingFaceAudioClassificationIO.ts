@@ -6,12 +6,12 @@ import {PollResult} from '../serviceIO';
 
 export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, key?: string) {
+  constructor(aiAssistant: AiAssistant) {
     const config = aiAssistant.service?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
     super(aiAssistant,
-      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, 'audio', key);
+      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, 'audio');
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {
