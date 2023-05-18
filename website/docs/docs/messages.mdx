@@ -8,16 +8,16 @@ Properties related to chat inputs.
 
 ### `avatars` {#avatars}
 
-- Type: `true`| {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
+- Type: `true` | {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
 
 Used to configure the placement of avatars beside messages. You can simply enable this by using _true_
-or by setting an object. The `default` property's object does not contain `base64` and is used to define
+or by setting an object. The `default` property's object does not contain `src` and is used to define
 features that will be applied to both `ai` and `user`.
 
 ### `Avatar` {#Avatar}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `base64?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `styles?: {` <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: CustomStyle`](./sharedTypes/#customStyle), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](./sharedTypes/#customStyle) <br />
@@ -25,7 +25,7 @@ features that will be applied to both `ai` and `user`.
   }}
 
 This object is used to set the features of an avatar that is to be displayed beside messages. <br />
-`base64` is the binary data used to generate the avatar. <br />
+`src` is the path to a custom avatar image file. <br />
 `avatar` is used to configure the avatar element's properties. <br />
 `container` defines the styling of the element that encapsulates the avatar element. <br />
 `position` defines which side of the message the avatar is going to be displayed.
@@ -34,7 +34,7 @@ This object is used to set the features of an avatar that is to be displayed bes
 
 ### `names` {#names}
 
-- Type: `true`| {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
+- Type: `true` | {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
 
 Used to configure the placement of names beside messages. You can simply enable this by using _true_
 or by setting an object. The `default` property's object does not contain `text` and is used to define

@@ -6,14 +6,13 @@ export interface AvatarStyles {
   position?: 'left' | 'right';
 }
 
-// WORK - ability to set a custom avatar
 export interface Avatar {
-  base64?: string;
+  src?: string;
   styles?: AvatarStyles;
 }
 
 export interface CustomAvatars {
-  default?: Omit<Avatar, 'base64'>;
+  default?: Omit<Avatar, 'src'>;
   user?: Avatar;
   ai?: Avatar;
 }

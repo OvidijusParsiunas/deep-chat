@@ -1,5 +1,5 @@
 import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
-import openAILogoUrl from '../../../../assets/open-ai-logo.png';
+import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
 
 export class AvatarEl {
@@ -21,7 +21,11 @@ export class AvatarEl {
 
   private static createAvatar(isAI: boolean, avatars?: CustomAvatars) {
     const avatar = document.createElement('img');
-    avatar.src = isAI ? openAILogoUrl : avatarUrl;
+    if (isAI) {
+      avatar.src = avatars?.ai?.src || aiLogoUrl;
+    } else {
+      avatar.src = avatars?.user?.src || avatarUrl;
+    }
     avatar.classList.add('avatar', isAI ? 'ai-avatar' : 'user-avatar');
     const avatarContainer = document.createElement('div');
     avatarContainer.classList.add('avatar-container');
