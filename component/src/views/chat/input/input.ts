@@ -16,8 +16,8 @@ import {DropupStyles} from '../../../types/dropupStyles';
 import {BUTTON_TYPES} from '../../../types/buttonTypes';
 import {InputButton} from './buttons/inputButton';
 import {CustomStyle} from '../../../types/styles';
+import {TextInputEl} from './textInput/textInput';
 import {AiAssistant} from '../../../aiAssistant';
-import {TextInput} from './textInput/textInput';
 import {Messages} from '../messages/messages';
 
 type Buttons = {
@@ -29,8 +29,8 @@ export class Input {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
-    this.elementRef = Input.createPanelElement(aiAssistant.textInputStyles?.panel);
-    const textInput = new TextInput(serviceIO, aiAssistant.textInputStyles, aiAssistant.inputCharacterLimit);
+    this.elementRef = Input.createPanelElement(aiAssistant.inputAreaStyle);
+    const textInput = new TextInputEl(serviceIO, aiAssistant.textInput);
     const buttons: Buttons = {};
     const fileAttachments = this.createFileUploadComponents(aiAssistant, serviceIO, containerElement, buttons);
     if (aiAssistant.speechToTextInput && !buttons.microphone) {

@@ -1,0 +1,96 @@
+---
+sidebar_position: 3
+---
+
+# Input
+
+Properties related to chat inputs.
+
+### `inputAreaStyle` {#inputAreaStyle}
+
+- Type: [`CustomStyle`](./sharedTypes/#customStyle)
+
+Styling for the chat view's bottom area that is dedicated for text input and file buttons. <br />
+
+#### Example
+
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    service={{openAI: true}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `textInput` {#textInput}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: TextInputStyles`](#TextInputStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `placeholderText?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
+  }
+
+Custom details for the chat's text input area. <br />
+`styles` defines the styling properties of the various elements that compose the text area. <br />
+`placeholderText` is the initial text that is displayed on the input before the user makes any actions. <br />
+`characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
+`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    service={{openAI: true}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### `TextInputStyles` {#TextInputStyles}
+
+- Type: {[`text?: CustomStyle`](./sharedTypes/#customStyle), [`container?: CustomStyle`](./sharedTypes/#customStyle)}
+
+Styling for text input elements. <br />
+`text` is the input text. <br />
+`container` is the box that encapsulates `text` and other buttons that have a [`position`](HERE) set to `inside-left` or `inside-right`
+(e.g. default [`Submit`](HERE) button position). <br />
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    service={{openAI: true}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+### `dragAndDrop` {#dragAndDrop}
+
+- Type: `boolean` | [`CustomStyle`](./sharedTypes/#customStyle)
+- Default: _false_
+
+Configuration for the drag and drop functionality. If the `service` you are using facilitates file uploads - this is defaulted to _true_.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    service={{openAI: true}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>

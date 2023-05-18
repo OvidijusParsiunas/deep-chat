@@ -74,7 +74,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private overwriteLoadingStyleIfNoLoadingMessage(aiAssistant: AiAssistant) {
-    if (aiAssistant.displayLoadingMessage === undefined || aiAssistant.displayLoadingMessage === true) {
+    if (aiAssistant.displayLoadingBubble === undefined || aiAssistant.displayLoadingBubble === true) {
       const styleElement = document.createElement('style');
       styleElement.textContent = `
         .loading-button > * {

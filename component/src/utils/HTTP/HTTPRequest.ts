@@ -3,6 +3,7 @@ import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
+import {Demo} from '../demo/demo';
 
 // prettier-ignore
 export type HandleVerificationResult = (
@@ -12,6 +13,7 @@ type Finish = () => void;
 
 export class HTTPRequest {
   public static request(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+    if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish);
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} = io.requestInterceptor(requestDetails);
     fetch(io.requestSettings?.url || io.url || '', {
@@ -29,7 +31,7 @@ export class HTTPRequest {
       })
       .catch((err) => {
         console.error(err);
-        messages.addNewErrorMessage('chat', err);
+        messages.addNewErrorMessage('service', err);
         onFinish();
       });
   }
@@ -37,6 +39,7 @@ export class HTTPRequest {
   // prettier-ignore
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
+    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, onOpen, onClose);
     let textElement: HTMLElement | null = null;
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} = io.requestInterceptor(requestDetails);
@@ -50,7 +53,7 @@ export class HTTPRequest {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
-        messages.addNewErrorMessage('chat');
+        messages.addNewErrorMessage('service');
         onClose();
         throw new Error('error');
       },
@@ -64,7 +67,7 @@ export class HTTPRequest {
       },
       onerror(err) {
         console.error(err);
-        messages.addNewErrorMessage('chat', err);
+        messages.addNewErrorMessage('service', err);
         onClose();
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },
@@ -98,7 +101,7 @@ export class HTTPRequest {
       .catch((err) => {
         console.log('caught an error');
         console.error(err);
-        messages.addNewErrorMessage('chat', err);
+        messages.addNewErrorMessage('service', err);
         onFinish();
       });
   }

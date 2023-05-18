@@ -1,9 +1,13 @@
 import {CustomStyle} from './styles';
 
 export interface TextInputStyles {
-  panel?: CustomStyle;
-  container?: CustomStyle;
   text?: CustomStyle;
+  container?: CustomStyle;
+}
+
+export interface TextInput {
+  styles?: TextInputStyles;
   placeholderText?: string;
   disabled?: boolean;
+  characterLimit?: number;
 }

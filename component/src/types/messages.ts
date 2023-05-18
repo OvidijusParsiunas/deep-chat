@@ -33,6 +33,6 @@ export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void
 
 export interface ErrorMessageOverrides {
   default?: string;
-  chat?: string;
+  service?: string;
   speechToTextInput?: string;
 }

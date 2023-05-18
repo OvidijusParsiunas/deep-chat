@@ -23,15 +23,12 @@ export class OpenAICompletionsIO extends BaseServideIO {
   private readonly _raw_body: OpenAIConverseBodyInternal;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service, inputCharacterLimit} = aiAssistant;
+    const {service, textInput} = aiAssistant;
     const config = service?.openAI?.completions as NonNullable<OpenAI['completions']>;
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
-    if (typeof config === 'object') {
-      // Completions with no max_tokens behave weirdly and do not give full responses
-      // Client should specify their own max_tokens.
-      const newMaxCharLength = inputCharacterLimit;
-      if (newMaxCharLength) this._maxCharLength = newMaxCharLength;
-    }
+    // Completions with no max_tokens behave weirdly and do not give full responses
+    // Client should specify their own max_tokens.
+    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 

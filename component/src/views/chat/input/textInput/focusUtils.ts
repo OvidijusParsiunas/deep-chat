@@ -1,4 +1,4 @@
-import {TextInput} from './textInput';
+import {TextInputEl} from './textInput';
 
 export class FocusUtils {
   public static focusEndOfInput(inputElement: HTMLElement) {
@@ -11,7 +11,7 @@ export class FocusUtils {
   }
 
   public static focusFromParentElement(parentElement: HTMLElement) {
-    const inputElement = parentElement.querySelector(`#${TextInput.TEXT_INPUT_ID}`);
+    const inputElement = parentElement.querySelector(`#${TextInputEl.TEXT_INPUT_ID}`);
     if (inputElement) FocusUtils.focusEndOfInput(inputElement as HTMLElement);
   }
 }

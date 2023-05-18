@@ -6,162 +6,17 @@ sidebar_position: 12
 
 Object types that are shared by top level properties.
 
-### `DropdownDisplaySettings` {#DropdownDisplaySettings}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `isAvailable?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`overlayStyles?: DropdownCellOverlayStyle`](#DropdownCellOverlayStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `openMethod?`: { `cellClick?: boolean`, `overlayClick?: boolean` } <br />
-  }
-- Default: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; _isAvailable: true_, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; _openMethod_: { _cellClick: true_ } <br />
-  }
-
-Custom styling for row and column dropdowns. <br />
-`isAvailable` determines if the dropdown is is available/displayed. <br />
-`overlayStyles` property is only applicable if `overlayClick` is set to _true_ and is used to style the background color
-for default and mouse hover states.<br />
-`openMethod` is used to define the method for opening the dropdown. Either by clicking a cell via `cellClick` or hovering over the cell
-and clicking on the overlay via `overlayClick`.
-
-#### `DropdownCellOverlayStyle` {#DropdownCellOverlayStyle}
-
-- Type: { `default?`: { `backgroundColor: string` }, `hover?`: { `backgroundColor: string` } }
-
-#### Example
-
-import ComponentContainer from '@site/src/components/table/componentContainer';
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import LineBreak from '@site/src/components/markdown/lineBreak';
-import BrowserOnly from '@docusaurus/BrowserOnly';
-import TabItem from '@theme/TabItem';
-import Tabs from '@theme/Tabs';
-
-<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
-
-<ComponentContainer>
-  <ActiveTable
-    rowDropdown={{
-      displaySettings: {
-        openMethod: {overlayClick: true},
-      },
-    }}
-    columnDropdown={{
-      displaySettings: {
-        openMethod: {overlayClick: true},
-        overlayStyles: {default: {backgroundColor: 'grey'}, hover: {backgroundColor: 'blue'}},
-      },
-    }}
-    content={[
-      ['Planet', 'Diameter', 'Mass', 'Moons', 'Density'],
-      ['Earth', 12756, 5.97, 1, 5514],
-      ['Mars', 6792, 0.642, 2, 3934],
-      ['Jupiter', 142984, 1898, 79, 1326],
-      ['Saturn', 120536, 568, 82, 687],
-      ['Neptune', 49528, 102, 14, 1638],
-    ]}
-    tableStyle={{width: '100%', boxShadow: 'rgb(172 172 172 / 17%) 0px 0.5px 1px 0px', borderRadius: '2px'}}
-  ></ActiveTable>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<active-table
-  rowDropdown='{"displaySettings": {
-    "openMethod": {"overlayClick": true }}}'
-  columnDropdown='{"displaySettings": {
-    "openMethod": {"overlayClick": true }, "overlayStyles": {"default": {"backgroundColor": "grey"}, "hover": {"backgroundColor": "blue"}}}}'
-></active-table>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<active-table
-  rowDropdown='{"displaySettings": {
-    "openMethod": {"overlayClick": true }}}'
-  columnDropdown='{"displaySettings": {
-    "openMethod": {"overlayClick": true }, "overlayStyles": {"default": {"backgroundColor": "grey"}, "hover": {"backgroundColor": "blue"}}}}'
-  content='[
-    ["Planet", "Diameter", "Mass", "Moons", "Density"],
-    ["Earth", 12756, 5.97, 1, 5514],
-    ["Mars", 6792, 0.642, 2, 3934],
-    ["Jupiter", 142984, 1898, 79, 1326],
-    ["Saturn", 120536, 568, 82, 687],
-    ["Neptune", 49528, 102, 14, 1638]]'
-  tableStyle='{"borderRadius":"2px"}'
-></active-table>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `CSSStyle` {#CSSStyle}
+### `CustomStyle` {#CustomStyle}
 
 - Type: [`CSSStyleDeclaration`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
 
-Object containing all properties defined in the CSSStyleDeclaration [`specification`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
+Object containing properties defined in the CSSStyleDeclaration [`specification`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
 as optionals. A TypeScript example can be found in this [link](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/bf671e99615b06404db7a89fa9ae05bf14a8e47c/baselines/dom.generated.d.ts#L2737).
 
 <LineBreak></LineBreak>
 
-### `HoverableStyles` {#HoverableStyles}
+### `StatefulStyles` {#StatefulStyles}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: NoDimensionCSSStyle`](./sharedTypes#NoDimensionCSSStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `hoverColors?`: {`backgroundColor?: string`, `color?: string`}<br />
-  }
-- Default: _unset_
-
-Styling details for when an element is in default state and when it is hovered with a mouse. `hoverColors` object only accepts
-`backgroundColor` and `color` properties.
-
-<LineBreak></LineBreak>
-
-### `StatefulCSS` {#StatefulCSS}
-
-- Type: {[`default?: CSSStyle`](./sharedTypes#CSSStyle), [`hover?: CSSStyle`](./sharedTypes#CSSStyle), [`click?: CSSStyle`](./sharedTypes#CSSStyle)}
+- Type: {[`default?: CustomStyle`](./sharedTypes#CustomStyle), [`hover?: CustomStyle`](./sharedTypes#CustomStyle), [`click?: CustomStyle`](./sharedTypes#CustomStyle)}
 
 Object defining styling properties for different mouse states on the element.
-
-<LineBreak></LineBreak>
-
-### `NoDimensionCSSStyle` {#NoDimensionCSSStyle}
-
-- Type: { [`CSSStyle`](#CSSStyle) & `!width` & `!minWidth` & `!maxWidth` & `!height` & `!minHeight` & `!maxHeight` }
-
-Object containing all [`CSSStyle`](#CSSStyle) properties except `width`, `minWidth`, `maxWidth`, `height`, `minHeight` and `maxHeight`.
-
-<LineBreak></LineBreak>
-
-### `ColumnsDetails` {#ColumnsDetails}
-
-- Type: { <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;`width: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;`typeName: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;`cellDropdownItems?: {name: string; backgroundColor?: string}[]` <br />
-  }[]
-
-The array elements represent each column in order from left to right. <br />
-`width` is the column width in pixels. <br />
-`typeName` is the name of the currently active type on the column. <br />
-`cellDropdownItems` contains details about the available cell dropdown items if the active column type is using a [`dropdown`](./column#CellDropdown)
-(backgroundColor only for label types). <br />
-
-<LineBreak></LineBreak>
-
-### `OuterContentPosition` {#OuterContentPosition}
-
-- Type: `"top-left"` | `"top-middle"` | `"top-right"` | `"bottom-left"` | `"bottom-middle"` | `"bottom-right"`
-
-Position for a component either above the table (_top_) or below it (_bottom_).
-
-<LineBreak></LineBreak>

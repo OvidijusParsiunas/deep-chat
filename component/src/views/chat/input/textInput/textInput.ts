@@ -1,38 +1,36 @@
-import {TextInputStyles} from '../../../../types/textInput';
 import {ServiceIO} from '../../../../services/serviceIO';
+import {TextInput} from '../../../../types/textInput';
 import {CustomStyle} from '../../../../types/styles';
 import {PasteUtils} from './pasteUtils';
 import {InputLimit} from './inputLimit';
 
-export class TextInput {
+export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
   readonly elementRef: HTMLElement;
   readonly inputElementRef: HTMLElement;
   submit?: () => void;
 
-  constructor(serviceIO: ServiceIO, textInputStyles?: TextInputStyles, inputCharacterLimit?: number) {
-    const processedTextInputStyles = TextInput.processStyles(serviceIO, textInputStyles);
-    this.elementRef = TextInput.createContainerElement(processedTextInputStyles?.container);
+  constructor(serviceIO: ServiceIO, textInput?: TextInput) {
+    const processedTextInputStyles = TextInputEl.processStyles(serviceIO, textInput);
+    this.elementRef = TextInputEl.createContainerElement(processedTextInputStyles?.styles?.container);
     this.inputElementRef = this.createInputElement(processedTextInputStyles);
     this.elementRef.appendChild(this.inputElementRef);
-    if (typeof inputCharacterLimit === 'number' && inputCharacterLimit > 0) {
-      InputLimit.add(this.inputElementRef, inputCharacterLimit);
-    }
+    if (textInput?.characterLimit) InputLimit.add(this.inputElementRef, textInput?.characterLimit);
   }
 
-  private static processStyles(serviceIO: ServiceIO, textInputStyles?: TextInputStyles) {
-    textInputStyles ??= {};
-    textInputStyles.placeholderText ??= serviceIO.textInputPlaceholderText;
-    textInputStyles.disabled ??= serviceIO.isTextInputDisabled;
-    return textInputStyles;
+  private static processStyles(serviceIO: ServiceIO, textInput?: TextInput) {
+    textInput ??= {};
+    textInput.placeholderText ??= serviceIO.textInputPlaceholderText;
+    textInput.disabled ??= serviceIO.isTextInputDisabled;
+    return textInput;
   }
 
-  private createInputElement(textInputStyles?: TextInputStyles) {
+  private createInputElement(textInput?: TextInput) {
     const inputElement = document.createElement('div');
-    inputElement.id = TextInput.TEXT_INPUT_ID;
+    inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-placeholder');
-    inputElement.innerText = textInputStyles?.placeholderText || 'Ask me anything!';
-    if (typeof textInputStyles?.disabled === 'boolean' && textInputStyles.disabled === true) {
+    inputElement.innerText = textInput?.placeholderText || 'Ask me anything!';
+    if (typeof textInput?.disabled === 'boolean' && textInput.disabled === true) {
       inputElement.contentEditable = 'false';
       inputElement.classList.add('text-input-disabled');
     } else {
@@ -41,7 +39,7 @@ export class TextInput {
       inputElement.addEventListener('keydown', this.onKeydown.bind(this));
       inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
     }
-    Object.assign(inputElement.style, textInputStyles?.disabled);
+    Object.assign(inputElement.style, textInput?.styles?.text);
     return inputElement;
   }
 
@@ -60,7 +58,7 @@ export class TextInput {
   }
 
   private onFocus() {
-    TextInput.removeTextIfPlaceholder(this.inputElementRef);
+    TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
   }
 
   private static createContainerElement(containerStyle?: CustomStyle) {

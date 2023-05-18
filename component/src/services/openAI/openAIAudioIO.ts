@@ -31,10 +31,10 @@ export class OpenAIAudioIO extends BaseServideIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service, inputCharacterLimit, validateMessageBeforeSending} = aiAssistant;
+    const {service, validateMessageBeforeSending, textInput} = aiAssistant;
     const config = service?.openAI?.audio as NonNullable<OpenAI['audio']>;
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, 'audio');
-    if (inputCharacterLimit) this._maxCharLength = inputCharacterLimit;
+    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     if (typeof config !== 'boolean') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);

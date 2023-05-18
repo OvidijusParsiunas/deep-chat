@@ -1,8 +1,6 @@
 import {AttributeTypeConverter, AvailableTypes} from '../../types/typeConverters';
 import {GenericObject} from '../../types/object';
 import {TypeConverters} from './typeConverters';
-import {AiAssistant} from '../../aiAssistant';
-import {RenderControl} from './renderControl';
 
 // _attributes_ and _attributeToProperty_ exist as static props as Property is called only once for each field (below)
 type InternalHTML = {
@@ -13,20 +11,10 @@ type InternalHTML = {
 // IMPORTANT - these are called ONCE for each property and for multiple component instances
 // used to monitor property changes and automatically view them as attributes
 export function Property(type: AvailableTypes) {
-  // WORK - try to refactor this somehow that it is activated for environments that need this.
   return function (target: Object, propertyKey: string) {
-    let value: string;
-    const getter = function () {
-      return value;
-    };
-    const setter = function (this: AiAssistant, newVal: string) {
-      value = newVal;
-      RenderControl.attemptRender(this);
-    };
-    Object.defineProperty(target, propertyKey, {
-      get: getter,
-      set: setter,
-    });
+    // this is primarily used for the react wrapper to infer properties, but can be put inside a condition
+    // if it is causing issues for other frameworks
+    Object.defineProperty(target, propertyKey, {});
     // using constructor and not static object in order to not reinstantiate and register the element twice
     const internalHTML = target.constructor as unknown as InternalHTML;
     const attributeName = propertyKey.toLocaleLowerCase();

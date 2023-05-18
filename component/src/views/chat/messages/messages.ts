@@ -9,11 +9,11 @@ import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
-import {Avatars} from '../../../types/avatar';
+import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
 import {Names} from '../../../types/names';
 import {Remarkable} from 'remarkable';
-import {Avatar} from './avatar';
+import {AvatarEl} from './avatar';
 import {Name} from './name';
 import {
   ErrorMessageOverrides,
@@ -57,7 +57,7 @@ export class Messages {
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
-    this._displayLoadingMessage = aiAssistant.displayLoadingMessage ?? true;
+    this._displayLoadingMessage = aiAssistant.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(aiAssistant._isSlotPopulated, introPanelMarkUp, aiAssistant.introPanelStyle);
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
@@ -100,7 +100,7 @@ export class Messages {
     // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
     // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
     if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
-    if (this._avatars) Avatar.add(bubbleElement, isAI, this._avatars);
+    if (this._avatars) AvatarEl.add(bubbleElement, isAI, this._avatars);
     if (this._names) Name.add(bubbleElement, isAI, this._names);
     return {bubbleElement};
   }

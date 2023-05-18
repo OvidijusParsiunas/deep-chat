@@ -10,15 +10,15 @@ import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
-import {TextInputStyles} from './types/textInput';
 import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
+import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
 import {Service} from './types/service';
-import {Avatars} from './types/avatar';
+import {Avatars} from './types/avatars';
 import {Names} from './types/names';
 
 // TO-DO - ability to export files
@@ -50,10 +50,10 @@ export class AiAssistant extends InternalHTML {
   dropupStyles?: DropupStyles;
 
   @Property('object')
-  textInputStyles?: TextInputStyles;
+  textInput?: TextInput;
 
-  @Property('number')
-  inputCharacterLimit?: number;
+  @Property('object')
+  inputAreaStyle?: CustomStyle;
 
   @Property('object')
   submitButtonStyles?: SubmitButtonStyles;
@@ -80,7 +80,7 @@ export class AiAssistant extends InternalHTML {
   errorMessageOverrides?: ErrorMessageOverrides;
 
   @Property('boolean')
-  displayLoadingMessage?: boolean;
+  displayLoadingBubble?: boolean;
 
   @Property('string')
   auxiliaryStyle?: string;

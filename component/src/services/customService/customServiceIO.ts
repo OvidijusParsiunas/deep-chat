@@ -12,6 +12,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ChatMessageLimits} from '../../types/chatLimits';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
+import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
 import {
   KeyVerificationHandlers,
@@ -42,7 +43,9 @@ export class CustomServiceIO implements ServiceIO {
 
   constructor(aiAssistant: AiAssistant) {
     const customService = aiAssistant.service?.custom;
-    if (!customService?.request) throw new Error('request settings are required for custom: {request: ...}');
+    if (!customService?.request && !customService?.demo) {
+      throw new Error('request settings are required for custom: {request: ...}');
+    }
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
     if (customService.images) {
@@ -64,6 +67,7 @@ export class CustomServiceIO implements ServiceIO {
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
     this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
+    if (customService.demo) this.requestSettings.url = Demo.URL;
   }
 
   private static canSendMessage(text: string, files?: File[]) {

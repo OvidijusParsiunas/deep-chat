@@ -17,6 +17,7 @@ export type CustomServiceConfig = {
   // automatically display all error messages from the service, all others automatically default
   // to the normal error structure -> type of message -> default -> 'Error, please try again.'
   displayServiceErrorMessages?: boolean;
+  demo?: boolean;
   [key: string]: unknown;
 } & ChatMessageLimits; // total_messages_max_char_length only applies when no files
 

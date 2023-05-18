@@ -6,17 +6,17 @@ export class InputLimit {
       'Backspace', 'Delete', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Meta', 'Control', 'Enter'
     ]);
 
-  public static add(inputElement: HTMLElement, inputCharacterLimit: number) {
-    inputElement.addEventListener('keydown', InputLimit.onKeyDown.bind(this, inputCharacterLimit));
-    inputElement.oninput = InputLimit.onInput.bind(this, inputCharacterLimit);
+  public static add(inputElement: HTMLElement, characterLimit: number) {
+    inputElement.addEventListener('keydown', InputLimit.onKeyDown.bind(this, characterLimit));
+    inputElement.oninput = InputLimit.onInput.bind(this, characterLimit);
   }
 
   // preventing insertion early for a nicer UX
   // prettier-ignore
-  private static onKeyDown(inputCharacterLimit: number, event: KeyboardEvent) {
+  private static onKeyDown(characterLimit: number, event: KeyboardEvent) {
     const inputElement = event.target as HTMLElement;
     const textContent = inputElement.textContent;
-    if (textContent && textContent.length >= inputCharacterLimit
+    if (textContent && textContent.length >= characterLimit
         && !InputLimit.PERMITTED_KEYS.has(event.key) && !InputLimit.isKeyCombinationPermitted(event)) {
       event.preventDefault();
     }
@@ -30,11 +30,11 @@ export class InputLimit {
   }
 
   // removing text characters after paste or other events
-  private static onInput(inputCharacterLimit: number, event: Event) {
+  private static onInput(characterLimit: number, event: Event) {
     const inputElement = event.target as HTMLElement;
     const textContent = inputElement.textContent;
-    if (textContent && textContent.length > inputCharacterLimit) {
-      inputElement.textContent = textContent.substring(0, inputCharacterLimit);
+    if (textContent && textContent.length > characterLimit) {
+      inputElement.textContent = textContent.substring(0, characterLimit);
       FocusUtils.focusEndOfInput(inputElement);
     }
   }
