@@ -22,9 +22,8 @@ export class SpeechToText extends MicrophoneButton {
       this.changeToUnsupported();
     } else {
       this._recognition = new speechRecognition();
+      this._recognition.continuous = true;
     }
-    this._recognition = new speechRecognition();
-    this._recognition.continuous = true;
     this._inputElement = inputElement;
     this._finalTextSpan = document.createElement('span');
     this._interimTextSpan = document.createElement('span');

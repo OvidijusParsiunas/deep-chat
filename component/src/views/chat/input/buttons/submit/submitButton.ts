@@ -7,6 +7,7 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {AiAssistant} from '../../../../../aiAssistant';
+import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {InputButton} from '../inputButton';
 
@@ -104,7 +105,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
-    if (!this._inputElementRef.classList.contains('text-input-disabled')) this._inputElementRef.textContent = '';
+    TextInputEl.clear(this._inputElementRef);
     const completionsHandlers = {
       onFinish: this.changeToSubmitIcon.bind(this),
     };

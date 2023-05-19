@@ -1,9 +1,12 @@
+import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {TextInput} from '../../../../types/textInput';
 import {CustomStyle} from '../../../../types/styles';
 import {PasteUtils} from './pasteUtils';
 import {InputLimit} from './inputLimit';
 
+// WORK - Safari issue where initial text not selected
 export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
   readonly elementRef: HTMLElement;
@@ -25,11 +28,30 @@ export class TextInputEl {
     return textInput;
   }
 
+  // this is is a bug fix where if the browser is scrolled down and the user types in text that creates new line
+  // the browser scrollbar will move up which leads to undesirable UX.
+  // More details in this Stack Overflow question:
+  // https://stackoverflow.com/questions/76285135/prevent-automatic-scroll-when-text-is-inserted-into-contenteditable-div
+  // prettier-ignore
+  private static preventAutomaticScrollUpOnNewLine(inputElement: HTMLDivElement) {
+    let scrollY: number | undefined;
+    inputElement.addEventListener('keydown', () => {scrollY = window.scrollY;});
+    inputElement.addEventListener('input', () => { if (scrollY !== window.scrollY) window.scrollTo({top: scrollY});});
+  }
+
+  // this also similarly prevents scroll up
+  public static clear(inputElement: HTMLElement) {
+    const scrollY = window.scrollY;
+    if (!inputElement.classList.contains('text-input-disabled')) inputElement.textContent = '';
+    if (Browser.IS_CHROMIUM) window.scrollTo({top: scrollY});
+  }
+
   private createInputElement(textInput?: TextInput) {
     const inputElement = document.createElement('div');
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-placeholder');
     inputElement.innerText = textInput?.placeholderText || 'Ask me anything!';
+    if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof textInput?.disabled === 'boolean' && textInput.disabled === true) {
       inputElement.contentEditable = 'false';
       inputElement.classList.add('text-input-disabled');
@@ -48,7 +70,7 @@ export class TextInputEl {
       inputElement.classList.contains('text-input-placeholder') &&
       !inputElement.classList.contains('text-input-disabled')
     ) {
-      inputElement.textContent = '';
+      TextInputEl.clear(inputElement);
       inputElement.classList.remove('text-input-placeholder');
     }
   }
@@ -69,7 +91,8 @@ export class TextInputEl {
   }
 
   private onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+    // ctrlKey && shiftKey allow the creation of a new line
+    if (event.key === KEYBOARD_KEY.ENTER && !event.ctrlKey && !event.shiftKey) {
       event.preventDefault();
       this.submit?.();
     }
