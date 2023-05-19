@@ -39,6 +39,7 @@ export class CustomServiceIO implements ServiceIO {
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;
   private readonly _isTextOnly?: boolean;
+  demo?: Demo;
   validateConfigKey = false;
 
   constructor(aiAssistant: AiAssistant) {
@@ -67,7 +68,8 @@ export class CustomServiceIO implements ServiceIO {
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
     this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
-    if (customService.demo) this.requestSettings.url = Demo.URL;
+    this.demo = customService.demo;
+    if (this.demo) this.requestSettings.url = Demo.URL;
   }
 
   private static canSendMessage(text: string, files?: File[]) {

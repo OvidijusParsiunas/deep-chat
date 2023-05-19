@@ -4,7 +4,7 @@ export class Name {
   private static getPosition(isAI: boolean, names: CustomNames) {
     let position: NameT['position'] | undefined = isAI ? names?.ai?.position : names?.user?.position;
     if (!position) position = names?.default?.position;
-    if (!position) position = 'left';
+    if (!position) position = isAI ? 'left' : 'right';
     return position;
   }
 
@@ -14,9 +14,9 @@ export class Name {
 
   private static getNameText(isAI: boolean, names: CustomNames) {
     if (isAI) {
-      return names.ai?.text || 'AI:';
+      return names.ai?.text || 'AI';
     }
-    return names.user?.text || 'User:';
+    return names.user?.text || 'User';
   }
 
   private static createName(isAI: boolean, names: CustomNames) {

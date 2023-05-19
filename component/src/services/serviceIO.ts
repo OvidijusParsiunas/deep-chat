@@ -6,6 +6,7 @@ import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Result} from '../types/result';
+import {Demo} from '../types/demo';
 
 export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
 
@@ -82,4 +83,6 @@ export interface ServiceIO {
   extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
+
+  demo?: Demo;
 }

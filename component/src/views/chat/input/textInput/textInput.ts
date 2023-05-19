@@ -6,7 +6,6 @@ import {CustomStyle} from '../../../../types/styles';
 import {PasteUtils} from './pasteUtils';
 import {InputLimit} from './inputLimit';
 
-// WORK - Safari issue where initial text not selected
 export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
   readonly elementRef: HTMLElement;
@@ -80,7 +79,14 @@ export class TextInputEl {
   }
 
   private onFocus() {
-    TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
+    if (Browser.IS_SAFARI) {
+      // timeout used for a bug fix where the user clicks on placeholder text but cursor will not be there
+      setTimeout(() => {
+        TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
+      });
+    } else {
+      TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
+    }
   }
 
   private static createContainerElement(containerStyle?: CustomStyle) {

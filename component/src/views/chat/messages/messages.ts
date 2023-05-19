@@ -1,10 +1,10 @@
 import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
+import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
-import {CustomErrors} from '../../../services/serviceIO';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {CustomStyle} from '../../../types/styles';
@@ -12,6 +12,7 @@ import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
 import {Names} from '../../../types/names';
+import {Demo} from '../../../types/demo';
 import {Remarkable} from 'remarkable';
 import {AvatarEl} from './avatar';
 import {Name} from './name';
@@ -47,7 +48,8 @@ export class Messages {
   private _streamedText = '';
   messages: MessageContent[] = [];
 
-  constructor(aiAssistant: AiAssistant, introPanelMarkUp?: string, permittedErrorPrefixes?: CustomErrors) {
+  constructor(aiAssistant: AiAssistant, serviceIO: ServiceIO) {
+    const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
     this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
     this.messageStyles = aiAssistant.messageStyles;
@@ -63,6 +65,14 @@ export class Messages {
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
     aiAssistant.getMessages = () => this.messages;
+    if (demo) this.prepareDemo(demo);
+  }
+
+  private prepareDemo(demo: Demo) {
+    if (typeof demo === 'object' && demo.displayErrors) {
+      this.addNewErrorMessage('service', '');
+      this.addNewErrorMessage('speechToTextInput', '');
+    }
   }
 
   private static createContainerElement() {
