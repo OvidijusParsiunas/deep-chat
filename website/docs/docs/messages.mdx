@@ -27,11 +27,12 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <AiAssistantBrowser
     initialMessages={[
-      {text: 'Do you have any updog?', role: 'user'},
-      {text: "What's up dog?", role: 'ai'},
-      {text: 'Not much, how about you?', role: 'user'},
-      {text: 'I do not understand', role: 'ai'},
+      {text: 'Beautiful city', role: 'user'},
+      {file: {url: '/img/city.jpeg', type: 'image'}, role: 'ai'},
+      {text: `What's on your mind?`, role: 'user'},
+      {text: 'Peace and tranquility', role: 'ai'},
     ]}
+    containerStyle={{height: '370px'}}
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
@@ -49,7 +50,7 @@ the [`onNewMessage`](HERE) event and will not be part of the returned messages w
 
 <ComponentContainer>
   <AiAssistantBrowser
-    introMessage={'Hi I am AiAssistant, ask me anything!'}
+    introMessage={`Hi I'm an AiAssistant, ask me anything!`}
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
@@ -243,19 +244,40 @@ Entity that has sent the message.
 
 ### `MessageFile` {#MessageFile}
 
-- Type: <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`type: MessageFileType`](#MessageFileType), `url: string`} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`type: MessageFileType`](#MessageFileType), `base64: string`} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`type: MessageFileType`](#MessageFileType), `name: string`} <br />
+- Type: {`name?: string`, [`type?: MessageFileType`](#MessageFileType)} & <br />
+  &nbsp | {`src: string`} <br />
+  &nbsp | {`base64: string`} <br />
 
-Format that defines the properties for a single file. It uses EITHER ONE of the object types above where `url`, `base64` or `name` property is used.
+- Default: _{type: "any", name: "file"}_
+
+Format that defines the properties for a single file. <br />
+The `name` property displays the file name inside the message bubble when `type` is not defined or is set to _"any"_. <br />
+You can optionally define its `type` to help AiAssistant render it inside an interative media bubble. <br />
+Interactive media bubbles need EITHER `src` (path to the file) or `base64` (binary encoding).
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {file: {url: '/img/city.jpeg', type: 'image'}, role: 'user'},
+      {file: {url: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
+      {file: {url: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
+    ]}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+:::info
+_"image"_ and _"any"_ file types containing a `src` property will automatically be wrapped inside a hyperlink.
+:::
 
 <LineBreak></LineBreak>
 
 ### `MessageFileType` {#MessageFileType}
 
-- Type: `"image"` | `"audio"` | `"file"`
+- Type: `"image"` | `"audio"` | `"any"`
 
-Type of a file that was sent out or has been received. `file` is used to define _any_ file type.
+Type of a file stored inside a message. _"any"_ is the default type.
 
 <LineBreak></LineBreak>

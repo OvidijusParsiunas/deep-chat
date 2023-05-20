@@ -72,13 +72,25 @@ to display the file contents. <br />
 
 <LineBreak></LineBreak>
 
-#### Examples
+## Examples
+
+<h3>Message elements in color</h3>
 
 <ComponentContainer>
   <AiAssistantBrowser
+    messageStyles={{
+      default: {
+        shared: {
+          outerContainer: {backgroundColor: 'orange'},
+          innerContainer: {backgroundColor: 'yellow'},
+          bubble: {color: 'black'},
+        },
+        ai: {bubble: {backgroundColor: 'lightgreen'}},
+        user: {bubble: {backgroundColor: 'lightblue'}},
+      },
+    }}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
     initialMessages={[
-      {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
       {text: 'What is the meaning of life?', role: 'user'},
       {
         text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
@@ -86,6 +98,94 @@ to display the file contents. <br />
       },
     ]}
     service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Files</h3>
+
+// WORK
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      image: {
+        shared: {
+          bubble: {border: '5px solid yellow'},
+          media: {borderRadius: '25px'},
+        },
+      },
+      audio: {
+        shared: {
+          bubble: {border: '1px solid green'},
+        },
+      },
+      file: {
+        shared: {
+          bubble: {backgroundColor: 'grey'},
+        },
+      },
+    }}
+    initialMessages={[
+      {file: {url: '/img/city.jpeg', type: 'image'}, role: 'user'},
+      {file: {url: '/audio/cantinaBand.wav', type: 'audio'}, role: 'ai'},
+      {file: {url: '/text/text.txt', type: 'file'}, role: 'user'},
+    ]}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+:::info
+The _"audio"_ media player is controlled by the browser and and its styling may not be overwritable by the `media` property.
+:::
+
+<LineBreak></LineBreak>
+
+<h3>Intro message</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      intro: {
+        bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
+      },
+    }}
+    introMessage={`Hi I'm an AiAssistant, ask me anything!`}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Loading bubble</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      intro: {
+        bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
+      },
+    }}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Error messages</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      error: {
+        bubble: {backgroundColor: '#f98e00', color: 'white', fontSize: '15px'},
+      },
+    }}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: {displayErrors: true}}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
