@@ -26,7 +26,7 @@ export class AvatarEl {
     } else {
       avatar.src = avatars?.user?.src || avatarUrl;
     }
-    avatar.classList.add('avatar', isAI ? 'ai-avatar' : 'user-avatar');
+    avatar.classList.add('avatar');
     const avatarContainer = document.createElement('div');
     avatarContainer.classList.add('avatar-container');
     avatarContainer.appendChild(avatar);
@@ -45,8 +45,9 @@ export class AvatarEl {
 
   public static add(messageText: HTMLElement, isAI: boolean, avatars: Avatars) {
     const styles = typeof avatars === 'boolean' ? undefined : avatars;
-    const avatar = AvatarEl.createAvatar(isAI, styles);
+    const avatarContainerElement = AvatarEl.createAvatar(isAI, styles);
     const position = AvatarEl.getPosition(isAI, styles);
-    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatar);
+    avatarContainerElement.classList.add(position === 'left' ? 'left-item-position' : 'right-item-position');
+    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatarContainerElement);
   }
 }

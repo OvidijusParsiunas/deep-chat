@@ -10,7 +10,6 @@ import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
-import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Microphone} from './types/microphone';
@@ -137,11 +136,8 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     // TO-DO - this will be moved to service selection view
-    this._activeService ??= ServiceIOFactory.create(this);
-    if (!this._activeService) {
-      // TO-DO - default to service selection view
-      return ErrorView.render(this._elementRef, "Please define a service in the 'service' property");
-    }
+    this._activeService ??= ServiceIOFactory.create(this, this._elementRef);
+    if (!this._activeService) return;
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;

@@ -3,6 +3,8 @@ import {MessageFile} from '../../../types/messageFile';
 import {MessageElements, Messages} from './messages';
 
 export class FileMessageUtils {
+  public static readonly DEFAULT_FILE_NAME = 'file';
+
   // prettier-ignore
   public static updateMessages(messages: Messages, elements: MessageElements, data: MessageFile,
       styles: keyof MessageStyles, isAI: boolean, isInitial = false) {

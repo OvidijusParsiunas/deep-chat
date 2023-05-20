@@ -153,3 +153,11 @@ pre {
 .message-bubble > a {
   color: inherit;
 }
+
+.left-item-position {
+  margin-right: 10px;
+}
+
+.right-item-position {
+  margin-left: 10px;
+}

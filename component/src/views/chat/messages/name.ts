@@ -29,8 +29,9 @@ export class Name {
 
   public static add(messageText: HTMLElement, isAI: boolean, names: Names) {
     const customConfig = typeof names === 'boolean' ? {} : names;
-    const name = Name.createName(isAI, customConfig);
+    const nameElement = Name.createName(isAI, customConfig);
     const position = Name.getPosition(isAI, customConfig);
-    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', name);
+    nameElement.classList.add(position === 'left' ? 'left-item-position' : 'right-item-position');
+    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', nameElement);
   }
 }

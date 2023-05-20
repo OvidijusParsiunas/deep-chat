@@ -1,15 +1,4 @@
 .name {
   margin-top: 16px;
-  margin-right: 10px;
-  margin-left: 10px;
   font-size: 15px;
-}
-
-/* This is used to better align names when avatars are present */
-.avatar-container + .name {
-  margin-left: 0px;
-}
-
-.name + .avatar-container {
-  margin-left: -10px;
 }

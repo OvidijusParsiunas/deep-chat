@@ -7,6 +7,7 @@ import {Result as MessageData} from '../../../types/result';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
+import {FileMessageUtils} from './fileMessageUtils';
 import {CustomStyle} from '../../../types/styles';
 import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatars';
@@ -69,9 +70,14 @@ export class Messages {
   }
 
   private prepareDemo(demo: Demo) {
-    if (typeof demo === 'object' && demo.displayErrors) {
-      this.addNewErrorMessage('service', '');
-      this.addNewErrorMessage('speechToTextInput', '');
+    if (typeof demo === 'object') {
+      if (demo.displayErrors) {
+        if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
+        if (demo.displayErrors.speechToTextInput) this.addNewErrorMessage('speechToTextInput', '');
+      }
+      if (demo.displayLoadingBubble) {
+        this.addLoadingMessage();
+      }
     }
   }
 
@@ -180,7 +186,7 @@ export class Messages {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
     } else if (data.files)
       data.files.forEach((fileData) => {
-        // extra checks are used for 'file'
+        // extra checks are used for 'any'
         if (fileData.type === 'audio' || fileData.base64?.startsWith('data:audio')) {
           FileMessages.addNewAudioMessage(this, fileData, isAI, isInitial);
         } else if (fileData.type === 'image' || fileData.base64?.startsWith('data:image')) {
@@ -294,8 +300,9 @@ export class Messages {
     return Promise.all(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
-          if (fileData.type === 'file') {
-            this.addNewMessage({files: [{name: fileData.file.name, type: fileData.type}]}, false, true);
+          if (!fileData.type || fileData.type === 'any') {
+            const fileName = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
+            this.addNewMessage({files: [{name: fileName, type: 'any'}]}, false, true);
             resolve(true);
           } else {
             const reader = new FileReader();

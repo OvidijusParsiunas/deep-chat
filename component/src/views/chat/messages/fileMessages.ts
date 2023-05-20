@@ -51,7 +51,7 @@ export class FileMessages {
     svgContainer.appendChild(svgIconElement);
     const fileNameElement = document.createElement('div');
     fileNameElement.classList.add('any-file-message-text');
-    fileNameElement.textContent = imageData.name || 'file';
+    fileNameElement.textContent = imageData.name || FileMessageUtils.DEFAULT_FILE_NAME;
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
     return FileMessageUtils.processContent(contents, imageData.url);

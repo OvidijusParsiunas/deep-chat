@@ -1,9 +1,9 @@
 import {InterfacesUnion} from './utilityTypes';
 
-export type MessageFileType = 'image' | 'audio' | 'file';
+export type MessageFileType = 'image' | 'audio' | 'any';
 
-export type MessageFile = InterfacesUnion<
-  {url: string; type: MessageFileType} | {base64: string; type: MessageFileType} | {name: string; type: MessageFileType}
->;
+export type MessageFileMarker = InterfacesUnion<{url: string} | {base64: string}>;
+
+export type MessageFile = Partial<MessageFileMarker> & {name?: string; type?: MessageFileType};
 
 export type MessageFiles = MessageFile[];

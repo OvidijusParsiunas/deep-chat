@@ -19,12 +19,13 @@ import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
+import {ErrorView} from '../views/error/errorView';
 import {AiAssistant} from '../aiAssistant';
 import {ServiceIO} from './serviceIO';
 
 // exercise caution when defining default returns for services as their configs can be undefined
 export class ServiceIOFactory {
-  public static create(aiAssistant: AiAssistant): ServiceIO | undefined {
+  private static createService(aiAssistant: AiAssistant): ServiceIO | undefined {
     const {service: services} = aiAssistant;
     if (services) {
       if (services.custom) {
@@ -93,6 +94,16 @@ export class ServiceIOFactory {
         }
       }
     }
-    return undefined;
+    throw new Error("Please define a service in the 'service' property");
+  }
+
+  public static create(aiAssistant: AiAssistant, containerElement: HTMLElement): ServiceIO | undefined {
+    try {
+      return ServiceIOFactory.createService(aiAssistant);
+    } catch (e) {
+      // TO-DO - default to service selection view
+      if (e instanceof Error) ErrorView.render(containerElement, e.message);
+      return undefined;
+    }
   }
 }

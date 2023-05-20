@@ -60,7 +60,7 @@ export class FileAttachmentsType {
       this.addFileAttachment(file, 'audio', audioAttachment, removable);
     } else {
       const anyFileAttachment = FileAttachmentsType.createAnyFileAttachment(file.name);
-      this.addFileAttachment(file, 'file', anyFileAttachment, removable);
+      this.addFileAttachment(file, 'any', anyFileAttachment, removable);
     }
   }
 

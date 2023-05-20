@@ -10,7 +10,11 @@ export class MessageStyleUtils {
     Object.assign(elements.outerContainer.style, styles.outerContainer);
     Object.assign(elements.innerContainer.style, styles.innerContainer);
     Object.assign(elements.bubbleElement.style, styles.bubble);
-    if (isMedia) Object.assign((elements.bubbleElement.children[0] as HTMLElement).style, styles.media);
+    if (isMedia) {
+      const bubbleContent = elements.bubbleElement.children[0] as HTMLElement;
+      const mediaElement = bubbleContent.tagName !== 'a' ? bubbleContent : bubbleContent.children[0];
+      Object.assign((mediaElement as HTMLElement).style, styles.media);
+    }
   }
 
   private static applySideStyles(elements: MessageElements, isAI: boolean, media: boolean, styles?: MessageRoleStyles) {
