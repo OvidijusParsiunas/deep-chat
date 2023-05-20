@@ -1,6 +1,6 @@
 {
   "name": "ai-assistant",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "universal ai chat bot component",
   "main": "./dist/aiAssistant.js",
   "module": "./dist/aiAssistant.js",

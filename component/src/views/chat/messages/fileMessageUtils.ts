@@ -1,4 +1,4 @@
-import {MessageStyles, MessageSideStyles} from '../../../types/messages';
+import {MessageStyles, MessageRoleStyles} from '../../../types/messages';
 import {MessageFile} from '../../../types/messageFile';
 import {MessageElements, Messages} from './messages';
 
@@ -6,7 +6,7 @@ export class FileMessageUtils {
   // prettier-ignore
   public static updateMessages(messages: Messages, elements: MessageElements, data: MessageFile,
       styles: keyof MessageStyles, isAI: boolean, isInitial = false) {
-    messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles] as MessageSideStyles);
+    messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles] as MessageRoleStyles);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
     const messageContent = Messages.createMessageContent(isAI, undefined, data);
     messages.messages.push(messageContent);

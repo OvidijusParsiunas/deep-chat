@@ -1,0 +1,92 @@
+---
+sidebar_position: 4
+---
+
+# Message Styles
+
+Properties related to message styling.
+
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+### `messageStyles` {#messageStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`image?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`file?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`intro?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`error?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  }
+
+Object defining the styling for various message types. <br />
+`default` is applied to all message types. <br />
+`image` is applied to messages that contain an image. <br />
+`audio` is applied to messages that contain an audio player. <br />
+`file` is applied to messages that contain a file attachment icon. <br />
+`intro` is applied to the [`introMessage`](#introMessage). <br />
+`loading` is applied to the loading bubble. <br />
+`error` is applied to error messages. <br />
+
+<LineBreak></LineBreak>
+
+#### `MessageRoleStyles` {#MessageRoleStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`shared?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`user?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`ai?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  }
+
+Object defining the styling for various message roles. <br />
+`shared` is applied to all message roles. <br />
+`user` is applied to messages from the user. <br />
+`ai` is applied to messages returned from the ai service. <br />
+
+<LineBreak></LineBreak>
+
+#### `MessageElementsStyles` {#MessageElementsStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`outerContainer?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`innerContainer?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`bubble?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`media?: CustomStyle`](./sharedTypes/#customStyle) <br />
+  }
+
+Object defining the styling for various elements that encompass a message. <br />
+`outerContainer` contains all elements related to the message. <br />
+`innerContainer` is the first element inside the `outerContainer` and is mostly used to set message side padding. <br />
+`bubble` is the actual element that displays the message contents. <br />
+`media` is applied to `image`, `audio` and `file` type messages which contain an extra child element inside the `bubble`
+to display the file contents. <br />
+
+<LineBreak></LineBreak>
+
+#### Examples
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>

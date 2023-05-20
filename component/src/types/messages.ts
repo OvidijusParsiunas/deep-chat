@@ -9,17 +9,17 @@ export interface MessageElementsStyles {
   media?: CustomStyle;
 }
 
-export interface MessageSideStyles {
+export interface MessageRoleStyles {
   shared?: MessageElementsStyles;
   user?: MessageElementsStyles;
   ai?: MessageElementsStyles;
 }
 
 export interface MessageStyles {
-  default?: MessageSideStyles;
-  image?: MessageSideStyles;
-  audio?: MessageSideStyles;
-  file?: MessageSideStyles;
+  default?: MessageRoleStyles;
+  image?: MessageRoleStyles;
+  audio?: MessageRoleStyles;
+  file?: MessageRoleStyles;
   intro?: MessageElementsStyles;
   loading?: MessageElementsStyles;
   error?: MessageElementsStyles;

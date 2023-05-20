@@ -19,7 +19,7 @@ import {Name} from './name';
 import {
   ErrorMessageOverrides,
   MessageElementsStyles,
-  MessageSideStyles,
+  MessageRoleStyles,
   MessageContent,
   MessageStyles,
   OnNewMessage,
@@ -98,7 +98,7 @@ export class Messages {
 
   // prettier-ignore
   public applyCustomStyles(elements: MessageElements, isAI: boolean, media: boolean,
-      otherStyles?: MessageSideStyles | MessageElementsStyles) {
+      otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (this.messageStyles) {
       MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, isAI, media, otherStyles);
     }

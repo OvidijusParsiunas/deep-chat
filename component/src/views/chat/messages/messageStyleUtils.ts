@@ -1,4 +1,4 @@
-import {MessageElementsStyles, MessageSideStyles, MessageStyles} from '../../../types/messages';
+import {MessageElementsStyles, MessageRoleStyles, MessageStyles} from '../../../types/messages';
 import {OverrideTypes} from '../../../types/utilityTypes';
 import {GenericObject} from '../../../types/object';
 import {CustomStyle} from '../../../types/styles';
@@ -13,7 +13,7 @@ export class MessageStyleUtils {
     if (isMedia) Object.assign((elements.bubbleElement.children[0] as HTMLElement).style, styles.media);
   }
 
-  private static applySideStyles(elements: MessageElements, isAI: boolean, media: boolean, styles?: MessageSideStyles) {
+  private static applySideStyles(elements: MessageElements, isAI: boolean, media: boolean, styles?: MessageRoleStyles) {
     if (!styles) return;
     MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.shared);
     if (isAI) {
@@ -23,17 +23,17 @@ export class MessageStyleUtils {
     }
   }
 
-  private static isMessageSideStyles(styles: MessageSideStyles | MessageElementsStyles): styles is MessageSideStyles {
+  private static isMessageSideStyles(styles: MessageRoleStyles | MessageElementsStyles): styles is MessageRoleStyles {
     return !!(
-      (styles as MessageSideStyles).ai ||
-      (styles as MessageSideStyles).shared ||
-      (styles as MessageSideStyles).user
+      (styles as MessageRoleStyles).ai ||
+      (styles as MessageRoleStyles).shared ||
+      (styles as MessageRoleStyles).user
     );
   }
 
   // prettier-ignore
   public static applyCustomStyles(messageStyles: MessageStyles,
-      elements: MessageElements, isAI: boolean, media: boolean, otherStyles?: MessageSideStyles | MessageElementsStyles) {
+      elements: MessageElements, isAI: boolean, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (otherStyles && messageStyles.default !== otherStyles) {
       if (MessageStyleUtils.isMessageSideStyles(otherStyles)) {
         MessageStyleUtils.applySideStyles(elements, isAI, media, messageStyles.default);
@@ -51,7 +51,7 @@ export class MessageStyleUtils {
 
   // prettier-ignore
   public static extractParticularSharedStyles(specificStyles: (keyof CustomStyle)[],
-      otherStyles?: MessageSideStyles): MessageElementsStyles | undefined {
+      otherStyles?: MessageRoleStyles): MessageElementsStyles | undefined {
     if (!otherStyles?.shared) return undefined;
     const sharedStyles = otherStyles.shared;
     const newElementStyles: Required<OverrideTypes<MessageElementsStyles, GenericObject>> = {

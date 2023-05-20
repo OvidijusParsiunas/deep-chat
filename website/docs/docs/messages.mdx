@@ -4,94 +4,17 @@ sidebar_position: 3
 
 # Messages
 
-Properties related to chat inputs.
-
-### `avatars` {#avatars}
-
-- Type: `true` | {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
-
-Used to configure the placement of avatars beside messages. You can simply enable this by using _true_
-or by setting an object. The `default` property's object does not contain `src` and is used to define
-features that will be applied to both `ai` and `user`.
-
-### `Avatar` {#Avatar}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `styles?: {` <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: CustomStyle`](./sharedTypes/#customStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](./sharedTypes/#customStyle) <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
-  }}
-
-This object is used to set the features of an avatar that is to be displayed beside messages. <br />
-`src` is the path to a custom avatar image file. <br />
-`avatar` is used to configure the avatar element's properties. <br />
-`container` defines the styling of the element that encapsulates the avatar element. <br />
-`position` defines which side of the message the avatar is going to be displayed.
-
-<LineBreak></LineBreak>
-
-### `names` {#names}
-
-- Type: `true` | {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
-
-Used to configure the placement of names beside messages. You can simply enable this by using _true_
-or by setting an object. The `default` property's object does not contain `text` and is used to define
-features that will be applied to both `ai` and `user`.
-
-<LineBreak></LineBreak>
-
-### `Name` {#Name}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `text?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`style?: CustomStyle`](./sharedTypes/#customStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
-  }
-
-This object is used to set the features of the name element that is to be displayed beside messages. <br />
-`text` contains the name string. <br />
-`style` is used to define the style of the name element. <br />
-`position` defines which side of the message the name is going to be displayed.
-
-<LineBreak></LineBreak>
-
-### `errorMessageOverrides` {#ErrorMessageOverrides}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: string` <br />
-  }
-- Default: _{ default: "Error, please try again." }_
-
-AiAssistant displays an error message when something goes wrong. You can overwrite the text of these messages for a variety of scenarios. <br />
-`default` encompases all errors that are displayed in the chat. <br />
-`service` is an error that is displayed when there is a problem with the service communication. <br />
-`speechToTextInput` error is displayed when there is a problem using the [`speechToTextInput`](HERE) functionality. <br />
-
-<LineBreak></LineBreak>
-
-### `displayLoadingBubble` {#displayLoadingBubble}
-
-- Type: `boolean`
-
-Toggle whethere the loading bubble is displayed when waiting for a message response.
-
-<LineBreak></LineBreak>
+Properties related to messages.
 
 ### `initialMessages` {#initialMessages}
 
 - Type: [`MessageContent[]`](#MessageContent)
 
-Messages that are prepopulated when the chat view has loaded up. This is great for retaining message history or continuing a conversation.
+Messages that are prepopulated when the chat view loads up. This is most useful for displaying past messages and continuing a conversation.
 
-#### Example
-
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
 import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -99,9 +22,16 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
+#### Example
+
 <ComponentContainer>
   <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
+    initialMessages={[
+      {text: 'Do you have any updog?', role: 'user'},
+      {text: "What's up dog?", role: 'ai'},
+      {text: 'Not much, how about you?', role: 'user'},
+      {text: 'I do not understand', role: 'ai'},
+    ]}
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
@@ -115,18 +45,182 @@ import Tabs from '@theme/Tabs';
 Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](HERE) as it will not trigger
 the [`onNewMessage`](HERE) event and will not be part of the returned messages when the [`getMessages`](HERE) method is called.
 
+#### Example
+
 <ComponentContainer>
   <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'yellow'}}}}}
-    service={{openAI: {chat: {key: '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'}}}}
+    introMessage={'Hi I am AiAssistant, ask me anything!'}
+    service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
+### `avatars` {#avatars}
+
+- Type: `true` | {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
+
+Used to configure the placement of avatars beside messages. You can simply enable this by using _true_
+or by setting an object. The `default` property's object does not contain `src` and is used to define
+features that will be applied to both `ai` and `user`.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    service={{custom: {demo: true}}}
+    avatars={true}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### `Avatar` {#Avatar}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?: {` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](./sharedTypes/#customStyle) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
+  }}
+
+This object is used to set the features of an avatar that is to be displayed beside messages. <br />
+`src` is the path to a custom avatar image file. <br />
+`avatar` property is used to configure the avatar element's properties. <br />
+`container` is the styling for the element that encapsulates the avatar element. <br />
+`position` defines which side of the message the avatar is going to be displayed.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    avatars={{
+      default: {styles: {avatar: {height: '30px', width: '30px'}, container: {marginTop: '8px'}}},
+      ai: {src: '/img/ai-brain.svg', styles: {avatar: {marginLeft: '-3px'}}},
+    }}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `names` {#names}
+
+- Type: `true` | {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
+
+Used to configure the placement of names beside messages. You can simply enable this by using _true_
+or by setting an object. The `default` property's object does not contain `text` and is used to define
+features that will be applied to both `ai` and `user`. <br />
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    service={{custom: {demo: true}}}
+    names={true}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### `Name` {#Name}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `text?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`style?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
+  }
+
+This object is used to set the features of the name element that will be displayed beside a message. <br />
+`text` contains the name string. <br />
+`style` is used to define the style of the name element. <br />
+`position` defines which side of the message the name is going to be displayed.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    service={{custom: {demo: true}}}
+    names={{default: {style: {fontSize: '18px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `displayLoadingBubble` {#displayLoadingBubble}
+
+- Type: `boolean`
+
+Toggle whether the loading bubble should be displayed when waiting for a message response.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={'Please send a new message to observe a response with no loading bubble.'}
+    displayLoadingBubble={false}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `errorMessageOverrides` {#ErrorMessageOverrides}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: string` <br />
+  }
+- Default: _{ default: "Error, please try again." }_
+
+AiAssistant displays an error message when something goes wrong. You can overwrite the text of these messages for a variety of scenarios. <br />
+`default` is used for every error type in the chat. <br />
+`service` is an error that is displayed when there is a problem with the service communication. <br />
+`speechToTextInput` error is displayed when there is a problem using the [`speechToTextInput`](HERE) functionality. <br />
+
+<LineBreak></LineBreak>
+
 ## Types
 
-Shared object property types related to column types:
+Shared object property types related to messages:
 
 ### `MessageContent` {#MessageContent}
 
@@ -137,11 +231,15 @@ Shared object property types related to column types:
 Format used to encapsulate each message within AiAssistant. It uses EITHER ONE of the object types above where `text`
 or `file` property is defined.
 
+<LineBreak></LineBreak>
+
 ### `MessageRole` {#MessageRole}
 
 - Type: `"ai"` | `"user"`
 
 Entity that has sent the message.
+
+<LineBreak></LineBreak>
 
 ### `MessageFile` {#MessageFile}
 
@@ -152,8 +250,12 @@ Entity that has sent the message.
 
 Format that defines the properties for a single file. It uses EITHER ONE of the object types above where `url`, `base64` or `name` property is used.
 
+<LineBreak></LineBreak>
+
 ### `MessageFileType` {#MessageFileType}
 
 - Type: `"image"` | `"audio"` | `"file"`
 
 Type of a file that was sent out or has been received. `file` is used to define _any_ file type.
+
+<LineBreak></LineBreak>
