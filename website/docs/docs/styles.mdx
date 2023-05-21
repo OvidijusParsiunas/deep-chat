@@ -1,0 +1,76 @@
+---
+sidebar_position: 2
+---
+
+# Styles
+
+Properties related to messages.
+
+### `containerStyle` {#containerStyle}
+
+- Type: [`CustomStyle`](./sharedTypes/#customStyle)
+
+Object containing CSS styling properties for the chat container element. <br />
+
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '15px'}}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `auxiliaryStyle` {#auxiliaryStyle}
+
+- Type: `string`
+
+This string is primarily used to configure [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) which cannot be added through component's style properties. A great
+example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar) pseudo element which affects the style of the component's scrollbar.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{custom: {demo: true}}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+      {text: 'I just feel like sleeping all day...', role: 'user'},
+      {text: 'As long as it makes you happy!', role: 'ai'},
+    ]}
+    auxiliaryStyle="
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #54a7ff;
+        border-radius: 5px;
+      }"
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+:::danger
+[`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) is not standardised across all browsers, make sure to check the [`browser support`](https://caniuse.com/)
+for the property you are using.
+:::
+
+<LineBreak></LineBreak>
