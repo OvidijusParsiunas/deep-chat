@@ -9,11 +9,12 @@
 @import url('./dropup/dropup.css');
 
 #input {
-  width: 80%;
+  width: 100%;
   display: inline-flex;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   position: relative;
+  justify-content: center;
 }

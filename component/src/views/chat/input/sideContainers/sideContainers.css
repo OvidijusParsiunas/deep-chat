@@ -7,13 +7,13 @@
 /* Input element padding will need to be changed accordingly */
 .inside-right {
   position: absolute;
-  right: 0.22em;
+  right: calc(10% + 0.22em);
   bottom: 0.88em;
 }
 
 .inside-left {
   position: absolute;
-  left: 0.22em;
+  left: calc(10% + 0.22em);
   bottom: 0.88em;
 }
 

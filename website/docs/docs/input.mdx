@@ -10,7 +10,7 @@ Properties related to chat inputs.
 
 - Type: [`CustomStyle`](./sharedTypes/#customStyle)
 
-Styling for the chat view's bottom area that is dedicated for text input and file buttons. <br />
+Styling for the chat view's bottom area dedicated for text input and file buttons. <br />
 
 #### Example
 
@@ -25,10 +25,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainer>
-  <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
-    service={{openAI: true}}
-  ></AiAssistantBrowser>
+  <AiAssistantBrowser inputAreaStyle={{backgroundColor: '#eaeaea'}} service={{custom: {demo: true}}}></AiAssistantBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -36,60 +33,60 @@ import Tabs from '@theme/Tabs';
 ### `textInput` {#textInput}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: TextInputStyles`](#TextInputStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `placeholderText?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` {[`text?: CustomStyle`](./sharedTypes/#customStyle), [`container?: CustomStyle`](./sharedTypes/#customStyle)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` {`text?: string`, [`style?: CustomStyle`](./sharedTypes/#customStyle)}, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
   }
 
-Custom details for the chat's text input area. <br />
-`styles` defines the styling properties of the various elements that compose the text area. <br />
-`placeholderText` is the initial text that is displayed on the input before the user makes any actions. <br />
+Custom details for the chat's text input. <br />
+`styles` object defines the styling for the `text` element and its box `container`. <br />
+`placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
+`style` can be used to customize it. <br />
 `characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
-`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling.
+`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling. <br />
 
-#### Example
+#### Generic example
 
 <ComponentContainer>
   <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
-    service={{openAI: true}}
+    textInput={{
+      styles: {text: {fontSize: '16px'}, container: {maxHeight: '50px', backgroundColor: '#dffeff'}},
+      placeholderText: 'Insert text here...',
+      characterLimit: 10,
+    }}
+    service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
-#### `TextInputStyles` {#TextInputStyles}
-
-- Type: {[`text?: CustomStyle`](./sharedTypes/#customStyle), [`container?: CustomStyle`](./sharedTypes/#customStyle)}
-
-Styling for text input elements. <br />
-`text` is the input text. <br />
-`container` is the box that encapsulates `text` and other buttons that have a [`position`](HERE) set to `inside-left` or `inside-right`
-(e.g. default [`Submit`](HERE) button position). <br />
-
-#### Example
+#### Disabled example
 
 <ComponentContainer>
   <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
-    service={{openAI: true}}
+    textInput={{disabled: true, placeholderText: 'Text not allowed...'}}
+    service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
+
+<LineBreak></LineBreak>
 
 ### `dragAndDrop` {#dragAndDrop}
 
 - Type: `boolean` | [`CustomStyle`](./sharedTypes/#customStyle)
 - Default: _false_
 
-Configuration for the drag and drop functionality. If the `service` you are using facilitates file uploads - this is defaulted to _true_.
+Configuration for the drag and drop functionality. If the [`service`](HERE) you are using facilitates file uploads - this is defaulted to _true_. <br />
+Additionally once the user drops a file, it will only be accepted if the [`service`](HERE) is configured to accept it. For example if it only
+allows images through the use of [`camera`](HERE), a dropped _.txt_ file will not be accepted.
 
 #### Example
 
 <ComponentContainer>
   <AiAssistantBrowser
-    messageStyles={{default: {user: {bubble: {backgroundColor: 'red'}}}}}
-    service={{openAI: true}}
+    dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
+    service={{custom: {demo: true, mixedFiles: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 

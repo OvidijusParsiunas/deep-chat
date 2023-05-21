@@ -3,7 +3,7 @@
 #file-attachment-container {
   position: absolute;
   height: 3.6em;
-  width: calc(100% - 4px);
+  width: calc(80% - 4px);
   top: -2.5em;
   border-radius: 5px;
   overflow: auto;

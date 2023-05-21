@@ -7,7 +7,7 @@ export type AddErrorMessage = Messages['addNewErrorMessage'];
 
 export class SpeechToText extends MicrophoneButton {
   private readonly _recognition?: SpeechRecognition;
-  private readonly _inputElement: HTMLElement;
+  private readonly _textInput: TextInputEl;
   private readonly _interimTextSpan: HTMLSpanElement;
   private readonly _finalTextSpan: HTMLSpanElement;
   private _interimTranscript = '';
@@ -15,7 +15,7 @@ export class SpeechToText extends MicrophoneButton {
   private prefixText = '';
   private readonly _addErrorMessage: AddErrorMessage;
 
-  constructor(microphone: Microphone, inputElement: HTMLElement, addErrorMessage: AddErrorMessage) {
+  constructor(microphone: Microphone, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     super(typeof microphone === 'object' ? microphone : {});
     const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!speechRecognition) {
@@ -24,7 +24,7 @@ export class SpeechToText extends MicrophoneButton {
       this._recognition = new speechRecognition();
       this._recognition.continuous = true;
     }
-    this._inputElement = inputElement;
+    this._textInput = textInput;
     this._finalTextSpan = document.createElement('span');
     this._interimTextSpan = document.createElement('span');
     this._interimTextSpan.id = 'interim-text';
@@ -90,16 +90,17 @@ export class SpeechToText extends MicrophoneButton {
   }
 
   private prepareInputText() {
-    TextInputEl.removeTextIfPlaceholder(this._inputElement);
-    TextInputEl.toggleEditability(this._inputElement, false);
-    const lastCharacter = this._inputElement.textContent?.charAt(this._inputElement.textContent.length - 1) || '';
+    this._textInput.removeTextIfPlaceholder();
+    TextInputEl.toggleEditability(this._textInput.inputElementRef, false);
+    const lastCharacter =
+      this._textInput.inputElementRef.textContent?.charAt(this._textInput.inputElementRef.textContent.length - 1) || '';
     this.prefixText = SpeechToText.isCharASpace(lastCharacter) ? '' : ' ';
   }
 
   // spans are removed when input el innertText is set
   private appendSpans() {
-    this._inputElement.appendChild(this._finalTextSpan);
-    this._inputElement.appendChild(this._interimTextSpan);
+    this._textInput.inputElementRef.appendChild(this._finalTextSpan);
+    this._textInput.inputElementRef.appendChild(this._interimTextSpan);
   }
 
   private processText(text: string, isFinal: boolean) {
@@ -124,8 +125,8 @@ export class SpeechToText extends MicrophoneButton {
   }
 
   private finaliseInputText() {
-    this._inputElement.textContent = this._inputElement.textContent as string;
-    TextInputEl.toggleEditability(this._inputElement, true);
+    this._textInput.inputElementRef.textContent = this._textInput.inputElementRef.textContent as string;
+    TextInputEl.toggleEditability(this._textInput.inputElementRef, true);
   }
 
   private resetTranscript() {

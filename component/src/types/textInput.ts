@@ -5,9 +5,14 @@ export interface TextInputStyles {
   container?: CustomStyle;
 }
 
+export interface Placeholder {
+  text?: string;
+  style?: CustomStyle;
+}
+
 export interface TextInput {
   styles?: TextInputStyles;
-  placeholderText?: string;
-  disabled?: boolean;
   characterLimit?: number;
+  placeholder?: Placeholder;
+  disabled?: boolean;
 }

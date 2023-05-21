@@ -1,4 +1,5 @@
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {TextInput} from '../../../../types/textInput';
@@ -10,20 +11,23 @@ export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
   readonly elementRef: HTMLElement;
   readonly inputElementRef: HTMLElement;
+  private readonly _config: TextInput;
   submit?: () => void;
 
   constructor(serviceIO: ServiceIO, textInput?: TextInput) {
-    const processedTextInputStyles = TextInputEl.processStyles(serviceIO, textInput);
-    this.elementRef = TextInputEl.createContainerElement(processedTextInputStyles?.styles?.container);
-    this.inputElementRef = this.createInputElement(processedTextInputStyles);
+    const processedConfig = TextInputEl.processConfig(serviceIO, textInput);
+    this.elementRef = TextInputEl.createContainerElement(processedConfig?.styles?.container);
+    this.inputElementRef = this.createInputElement(processedConfig);
+    this._config = processedConfig;
     this.elementRef.appendChild(this.inputElementRef);
     if (textInput?.characterLimit) InputLimit.add(this.inputElementRef, textInput?.characterLimit);
   }
 
-  private static processStyles(serviceIO: ServiceIO, textInput?: TextInput) {
+  private static processConfig(serviceIO: ServiceIO, textInput?: TextInput) {
     textInput ??= {};
-    textInput.placeholderText ??= serviceIO.textInputPlaceholderText;
     textInput.disabled ??= serviceIO.isTextInputDisabled;
+    textInput.placeholder ??= {};
+    textInput.placeholder.text ??= serviceIO.textInputPlaceholderText;
     return textInput;
   }
 
@@ -49,7 +53,7 @@ export class TextInputEl {
     const inputElement = document.createElement('div');
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-placeholder');
-    inputElement.innerText = textInput?.placeholderText || 'Ask me anything!';
+    inputElement.innerText = textInput?.placeholder?.text || 'Ask me anything!';
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof textInput?.disabled === 'boolean' && textInput.disabled === true) {
       inputElement.contentEditable = 'false';
@@ -60,17 +64,22 @@ export class TextInputEl {
       inputElement.addEventListener('keydown', this.onKeydown.bind(this));
       inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
     }
+    Object.assign(inputElement.style, textInput?.placeholder?.style);
     Object.assign(inputElement.style, textInput?.styles?.text);
     return inputElement;
   }
 
-  public static removeTextIfPlaceholder(inputElement: HTMLElement) {
+  public removeTextIfPlaceholder() {
     if (
-      inputElement.classList.contains('text-input-placeholder') &&
-      !inputElement.classList.contains('text-input-disabled')
+      this.inputElementRef.classList.contains('text-input-placeholder') &&
+      !this.inputElementRef.classList.contains('text-input-disabled')
     ) {
-      TextInputEl.clear(inputElement);
-      inputElement.classList.remove('text-input-placeholder');
+      if (this._config.placeholder?.style) {
+        StyleUtils.unsetStyle(this.inputElementRef, this._config.placeholder?.style);
+        Object.assign(this.inputElementRef.style, this._config?.styles?.text);
+      }
+      TextInputEl.clear(this.inputElementRef);
+      this.inputElementRef.classList.remove('text-input-placeholder');
     }
   }
 
@@ -82,10 +91,10 @@ export class TextInputEl {
     if (Browser.IS_SAFARI) {
       // timeout used for a bug fix where the user clicks on placeholder text but cursor will not be there
       setTimeout(() => {
-        TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
+        this.removeTextIfPlaceholder();
       });
     } else {
-      TextInputEl.removeTextIfPlaceholder(this.inputElementRef);
+      this.removeTextIfPlaceholder();
     }
   }
 
