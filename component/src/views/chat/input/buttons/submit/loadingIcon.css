@@ -40,8 +40,8 @@
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
-  background-color: #848484;
-  color: #848484;
+  background-color: var(--message-dots-color);
+  color: var(--message-dots-color);
   animation: dots-flashing 1s infinite linear alternate;
   animation-delay: 0.5s;
 }
@@ -59,8 +59,8 @@
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
-  background-color: #848484;
-  color: #848484;
+  background-color: var(--message-dots-color);
+  color: var(--message-dots-color);
   animation: dots-flashing 1s infinite alternate;
   animation-delay: 0s;
 }
@@ -70,18 +70,18 @@
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
-  background-color: #848484;
-  color: #848484;
+  background-color: var(--message-dots-color);
+  color: var(--message-dots-color);
   animation: dots-flashing 1s infinite alternate;
   animation-delay: 1s;
 }
 
 @keyframes dots-flashing {
   0% {
-    background-color: #848484;
+    background-color: var(--message-dots-color);
   }
   50%,
   100% {
-    background-color: rgba(85, 85, 85, 0.2);
+    background-color: var(--message-dots-color-fade);
   }
 }

@@ -1,6 +1,7 @@
 import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
+import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
@@ -264,6 +265,7 @@ export class Messages {
     dotsElement.classList.add('dots-flashing');
     bubbleElement.appendChild(dotsElement);
     this.applyCustomStyles(messageElements, true, false, this.messageStyles?.loading);
+    LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }

@@ -1,0 +1,193 @@
+---
+sidebar_position: 4
+---
+
+# Message Styles
+
+Properties related to message styling.
+
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+### `messageStyles` {#messageStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`image?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`file?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`intro?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`error?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  }
+
+Object defining the styling for various message types. <br />
+`default` is applied to all message types. <br />
+`image` is applied to messages that contain an image. <br />
+`audio` is applied to messages that contain an audio player. <br />
+`file` is applied to messages that contain a file attachment icon. <br />
+`intro` is applied to the [`introMessage`](#introMessage). <br />
+`loading` is applied to the loading bubble. <br />
+`error` is applied to error messages. <br />
+
+<LineBreak></LineBreak>
+
+#### `MessageRoleStyles` {#MessageRoleStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`shared?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`user?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`ai?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  }
+
+Object defining the styling for various message roles. <br />
+`shared` is applied to all message roles. <br />
+`user` is applied to messages from the user. <br />
+`ai` is applied to messages returned from the ai service. <br />
+
+<LineBreak></LineBreak>
+
+#### `MessageElementsStyles` {#MessageElementsStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`outerContainer?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`innerContainer?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`bubble?: CustomStyle`](./sharedTypes/#customStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`media?: CustomStyle`](./sharedTypes/#customStyle) <br />
+  }
+
+Object defining the styling for various elements that encompass a message. <br />
+`outerContainer` contains all elements related to the message. <br />
+`innerContainer` is the first element inside the `outerContainer` and is mostly used to set message side padding. <br />
+`bubble` is the actual element that displays the message contents. <br />
+`media` is applied to `image`, `audio` and `file` type messages which contain an extra child element inside the `bubble`
+to display the file contents. <br />
+
+<LineBreak></LineBreak>
+
+## Examples
+
+<h3>Message elements in color</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      default: {
+        shared: {
+          outerContainer: {backgroundColor: 'orange'},
+          innerContainer: {backgroundColor: 'yellow'},
+          bubble: {color: 'black'},
+        },
+        ai: {bubble: {backgroundColor: 'lightgreen'}},
+        user: {bubble: {backgroundColor: 'lightblue'}},
+      },
+    }}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
+    initialMessages={[
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Files</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      image: {
+        shared: {
+          media: {borderRadius: '0px'},
+        },
+      },
+      audio: {
+        shared: {
+          media: {borderRadius: '30px', border: '1px solid #8c8c8c', backgroundColor: 'red'},
+        },
+      },
+      file: {
+        shared: {
+          bubble: {backgroundColor: 'grey'},
+        },
+      },
+    }}
+    initialMessages={[
+      {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
+      {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'ai'},
+      {file: {src: '/text/text.txt', type: 'file'}, role: 'user'},
+    ]}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+:::info
+The _"audio"_ media player is controlled by the browser and and its styling may not be overwritable by the `media` property.
+:::
+
+:::tip
+In the Safari browser, the _"audio"_ media player can be expanded by setting the `width` property in `media` to _200px_ or higher.
+:::
+
+<LineBreak></LineBreak>
+
+<h3>Intro message</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      intro: {
+        bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
+      },
+    }}
+    introMessage={`Hi I'm an AiAssistant, ask me anything!`}
+    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Loading bubble</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      loading: {
+        bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
+      },
+    }}
+    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: {displayLoadingBubble: true}}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+<h3>Error messages</h3>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    messageStyles={{
+      error: {
+        bubble: {backgroundColor: '#f98e00', color: 'white', fontSize: '15px'},
+      },
+    }}
+    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
+    service={{custom: {demo: {displayErrors: {service: true}}}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>

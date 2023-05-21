@@ -107,8 +107,15 @@ pre {
 }
 
 .audio-player-safari {
-  width: fit-content;
   height: fit-content;
+  width: 40px;
+}
+
+.audio-player-safari-left {
+  float: left;
+}
+
+.audio-player-safari-right {
   float: right;
 }
 

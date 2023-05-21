@@ -28,7 +28,7 @@ import Tabs from '@theme/Tabs';
   <AiAssistantBrowser
     initialMessages={[
       {text: 'Beautiful city', role: 'user'},
-      {file: {url: '/img/city.jpeg', type: 'image'}, role: 'ai'},
+      {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
       {text: `What's on your mind?`, role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
@@ -179,7 +179,7 @@ This object is used to set the features of the name element that will be display
       },
     ]}
     service={{custom: {demo: true}}}
-    names={{default: {style: {fontSize: '18px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
+    names={{default: {style: {fontSize: '18px', marginTop: '14px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
@@ -215,7 +215,19 @@ Toggle whether the loading bubble should be displayed when waiting for a message
 AiAssistant displays an error message when something goes wrong. You can overwrite the text of these messages for a variety of scenarios. <br />
 `default` is used for every error type in the chat. <br />
 `service` is an error that is displayed when there is a problem with the service communication. <br />
-`speechToTextInput` error is displayed when there is a problem using the [`speechToTextInput`](HERE) functionality. <br />
+`speechToTextInput` error is displayed when there is a problem using the [`speechToTextInput`](HERE) microphone functionality. <br />
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{custom: {demo: {displayErrors: {service: true, speechToTextInput: true}}}}}
+    errorMessageOverrides={{
+      service: 'Service error!',
+      speechToTextInput: 'Speech to text microphone error!',
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
 
 <LineBreak></LineBreak>
 
@@ -260,9 +272,9 @@ Interactive media bubbles need EITHER `src` (path to the file) or `base64` (bina
 <ComponentContainer>
   <AiAssistantBrowser
     initialMessages={[
-      {file: {url: '/img/city.jpeg', type: 'image'}, role: 'user'},
-      {file: {url: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
-      {file: {url: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
+      {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
+      {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
+      {file: {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
     ]}
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>

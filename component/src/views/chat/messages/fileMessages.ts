@@ -8,9 +8,9 @@ import {Messages} from './messages';
 export class FileMessages {
   private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement) {
     const imageElement = new Image();
-    imageElement.src = (imageData.url || imageData.base64) as string;
-    if (imageData.url) FileMessageUtils.scrollDownWhenMetaDataLoaded(imageData.url, messagesContainerEl);
-    return FileMessageUtils.processContent(imageElement, imageData.url);
+    imageElement.src = (imageData.src || imageData.base64) as string;
+    if (imageData.src) FileMessageUtils.scrollDownWhenMetaDataLoaded(imageData.src, messagesContainerEl);
+    return FileMessageUtils.processContent(imageElement, imageData.src);
   }
 
   public static async addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
@@ -22,18 +22,21 @@ export class FileMessages {
     FileMessageUtils.updateMessages(messages, elements, imageData, 'image', isAI, isInitial);
   }
 
-  private static createAudioElement(audioData: MessageFile) {
-    const data = (audioData.url || audioData.base64) as string;
+  private static createAudioElement(audioData: MessageFile, isAI: boolean) {
+    const data = (audioData.src || audioData.base64) as string;
     const audioElement = document.createElement('audio');
     audioElement.src = data;
     audioElement.classList.add('audio-player');
     audioElement.controls = true;
-    if (Browser.IS_SAFARI) audioElement.classList.add('audio-player-safari');
+    if (Browser.IS_SAFARI) {
+      audioElement.classList.add('audio-player-safari');
+      audioElement.classList.add(isAI ? 'audio-player-safari-left' : 'audio-player-safari-right');
+    }
     return audioElement;
   }
 
   public static addNewAudioMessage(messages: Messages, audioData: MessageFile, isAI: boolean, isInitial = false) {
-    const audioElement = FileMessages.createAudioElement(audioData);
+    const audioElement = FileMessages.createAudioElement(audioData, isAI);
     const elements = messages.createNewMessageElement('', isAI);
     elements.bubbleElement.appendChild(audioElement);
     elements.bubbleElement.classList.add('audio-message');
@@ -54,7 +57,7 @@ export class FileMessages {
     fileNameElement.textContent = imageData.name || FileMessageUtils.DEFAULT_FILE_NAME;
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
-    return FileMessageUtils.processContent(contents, imageData.url);
+    return FileMessageUtils.processContent(contents, imageData.src);
   }
 
   public static addNewAnyFileMessage(messages: Messages, data: MessageFile, isAI: boolean, isInitial = false) {
