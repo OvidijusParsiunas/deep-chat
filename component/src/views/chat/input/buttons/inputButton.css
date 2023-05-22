@@ -7,11 +7,26 @@
 .input-button {
   border-radius: 4px;
   cursor: pointer;
-  width: 1.5em;
-  height: 1.5em;
   bottom: 1em;
   margin-bottom: 0.2em;
   user-select: none;
+}
+
+.input-button-svg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.input-button-enlarged {
+  width: 2em;
+  height: 2em;
+  bottom: 0.65em;
+  margin-left: 0.05em;
+  margin-right: 0.05em;
+}
+
+.input-button-enlarged > svg {
+  width: 1.3em;
 }
 
 .input-button:hover {
@@ -33,4 +48,14 @@
 
 .loading-button:active {
   background-color: white;
+}
+
+.text-button {
+  filter: unset !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 4px;
+  margin-right: 4px;
+  height: 1.6em;
 }

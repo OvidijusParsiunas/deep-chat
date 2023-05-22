@@ -1,10 +1,11 @@
 import {AudioFileAttachmentType} from './fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
+import {InputButtonStyleAdjustments} from './buttons/styleAdjustments/inputButtonStyleAdjustments';
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
+import {InputButtonPositions} from './buttons/styleAdjustments/inputButtonPositions';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
-import {InputButtonPositions} from './buttons/inputButtonPositions';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SideContainers} from './sideContainers/sideContainers';
@@ -86,11 +87,12 @@ export class Input {
   }
 
   // prettier-ignore
-  private static addElements(panel: HTMLElement, textInputEl: HTMLElement, buttons: Buttons, container: HTMLElement,
+  private static addElements(panel: HTMLElement, textInput: HTMLElement, buttons: Buttons, container: HTMLElement,
       dropupStyles?: DropupStyles) {
-    ElementUtils.addElements(panel, textInputEl);
+    ElementUtils.addElements(panel, textInput);
     const sideContainers = SideContainers.create();
-    InputButtonPositions.addButtonsToPositions(panel, sideContainers, buttons, container, dropupStyles);
+    const positions = InputButtonPositions.addButtonsToPositions(panel, sideContainers, buttons, container, dropupStyles);
+    InputButtonStyleAdjustments.set(textInput, positions);
     SideContainers.add(panel, sideContainers);
   }
 }

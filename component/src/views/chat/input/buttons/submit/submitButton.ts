@@ -42,7 +42,7 @@ export class SubmitButton extends InputButton<Styles> {
   // prettier-ignore
   private createInnerElements() {
     const {submit, loading, stop} = CustomButtonInnerElements.create<Styles>(
-      ['submit', 'loading', 'stop'], 'submit-icon', this._customStyles);
+      this.elementRef, ['submit', 'loading', 'stop'], 'submit-icon', this._customStyles);
     return {
       submit: submit || SubmitButton.createSubmitIconElement(),
       loading: loading || SubmitButton.createLoadingIconElement(),

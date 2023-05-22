@@ -23,6 +23,16 @@
   overflow: hidden; */
 }
 
+.text-input-container-left-adjustment {
+  margin-left: -1.8em;
+  margin-right: 0.2em;
+}
+
+.text-input-container-right-adjustment {
+  margin-right: -1.7em;
+  margin-left: 0.1em;
+}
+
 .text-input-disabled {
   pointer-events: none;
   user-select: none;

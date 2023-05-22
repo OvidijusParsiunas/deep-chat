@@ -15,23 +15,24 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   constructor(styles?: MicrophoneStyles) {
     super(MicrophoneButton.createMicrophoneElement(), styles?.position, styles);
-    this._innerElements = MicrophoneButton.createInnerElements(this._customStyles);
+    this._innerElements = this.createInnerElements(this._customStyles);
     this.changeToDefault();
   }
 
-  private static createInnerElements(customStyles?: Styles) {
+  private createInnerElements(customStyles?: Styles) {
     const baseButton = MicrophoneButton.createSVGIconElement();
     return {
-      default: MicrophoneButton.createInnerElement(baseButton, 'default', customStyles),
-      active: MicrophoneButton.createInnerElement(baseButton, 'active', customStyles),
-      unsupported: MicrophoneButton.createInnerElement(baseButton, 'unsupported', customStyles),
+      default: this.createInnerElement(baseButton, 'default', customStyles),
+      active: this.createInnerElement(baseButton, 'active', customStyles),
+      unsupported: this.createInnerElement(baseButton, 'unsupported', customStyles),
     };
   }
 
   // prettier-ignore
-  private static createInnerElement(baseButton: SVGGraphicsElement,
+  private createInnerElement(baseButton: SVGGraphicsElement,
       state: keyof MicrophoneButton['_innerElements'], customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(state, 'microphone-icon', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(
+      this.elementRef, state, 'microphone-icon', customStyles) || baseButton;
   }
 
   private static createMicrophoneElement() {

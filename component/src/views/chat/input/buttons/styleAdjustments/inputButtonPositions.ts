@@ -1,13 +1,13 @@
-import {FileAttachmentsType} from '../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {SideContainers, SideContainersT} from '../sideContainers/sideContainers';
-import {BUTTON_ORDER} from '../../../../utils/buttons/inputButtons';
-import {DropupStyles} from '../../../../types/dropupStyles';
-import {BUTTON_TYPES} from '../../../../types/buttonTypes';
-import {ButtonPosition} from '../../../../types/button';
-import {InputButton} from './inputButton';
-import {Dropup} from '../dropup/dropup';
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import {SideContainers, SideContainersT} from '../../sideContainers/sideContainers';
+import {BUTTON_ORDER} from '../../../../../utils/buttons/inputButtons';
+import {DropupStyles} from '../../../../../types/dropupStyles';
+import {BUTTON_TYPES} from '../../../../../types/buttonTypes';
+import {ButtonPosition} from '../../../../../types/button';
+import {InputButton} from '../inputButton';
+import {Dropup} from '../../dropup/dropup';
 
-type Positions = {[key in ButtonPosition]: ButtonProps[]};
+export type Positions = {[key in ButtonPosition]: ButtonProps[]};
 
 type ButtonProps = {button: InputButton; fileType?: FileAttachmentsType};
 
@@ -106,5 +106,6 @@ export class InputButtonPositions {
       InputButtonPositions.addToDropup(panel, sideContainers, positions, container, dropupStyles);
     }
     InputButtonPositions.addToSideContainer(panel, sideContainers, positions);
+    return positions;
   }
 }

@@ -15,7 +15,7 @@ export class Dropup extends InputButton<Styles> {
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
     super(Dropup.createButtonElement(), undefined, {styles: styles?.button} || {});
-    const innerElements = Dropup.createInnerElements(this._customStyles);
+    const innerElements = this.createInnerElements(this._customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
     this.buttonContainer = document.createElement('div');
@@ -33,14 +33,14 @@ export class Dropup extends InputButton<Styles> {
     return buttonElement;
   }
 
-  private static createInnerElements(customStyles?: Styles) {
+  private createInnerElements(customStyles?: Styles) {
     return {
-      styles: Dropup.createInnerElement(Dropup.createSVGIconElement(), 'styles', customStyles),
+      styles: this.createInnerElement(Dropup.createSVGIconElement(), 'styles', customStyles),
     };
   }
 
-  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
+  private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
   }
 
   private static createSVGIconElement() {

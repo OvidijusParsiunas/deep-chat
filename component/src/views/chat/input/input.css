@@ -2,9 +2,10 @@
 @import url('./fileAttachments/modal/modal.css');
 /* cameraModal needs to be imported after modal */
 @import url('./fileAttachments/modal/cameraModal.css');
-@import url('./buttons/inputButton.css');
 /* sideContainers needs to be imported after modal */
 @import url('./sideContainers/sideContainers.css');
+/* inputButton needs to be after sideContainers */
+@import url('./buttons/inputButton.css');
 @import url('./textInput/textInput.css');
 @import url('./dropup/dropup.css');
 

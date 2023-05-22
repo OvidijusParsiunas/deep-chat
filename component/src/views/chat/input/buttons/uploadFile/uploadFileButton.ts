@@ -19,7 +19,7 @@ export class UploadFileButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
     super(UploadFileButton.createButtonElement(), fileService.button?.position, fileService.button, dropupText);
-    const innerElements = UploadFileButton.createInnerElements(iconId, iconSVGString, this._customStyles);
+    const innerElements = this.createInnerElements(iconId, iconSVGString, this._customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
     this.elementRef.replaceChildren(innerElements.styles);
@@ -28,10 +28,10 @@ export class UploadFileButton extends InputButton<Styles> {
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce;
   }
 
-  private static createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
+  private createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
     const baseButton = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
     return {
-      styles: UploadFileButton.createInnerElement(baseButton, 'styles', customStyles),
+      styles: this.createInnerElement(baseButton, 'styles', customStyles),
     };
   }
 
@@ -54,8 +54,8 @@ export class UploadFileButton extends InputButton<Styles> {
     return inputElement;
   }
 
-  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
+  private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
   }
 
   private static createButtonElement() {

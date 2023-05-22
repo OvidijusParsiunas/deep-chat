@@ -15,7 +15,7 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     super(CameraButton.createButtonElement(), fileService?.button?.position, fileService?.button || {}, 'Photo');
-    const innerElements = CameraButton.createInnerElements(this._customStyles);
+    const innerElements = this.createInnerElements(this._customStyles);
     this.reapplyStateStyle('styles');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
@@ -23,14 +23,14 @@ export class CameraButton extends InputButton<Styles> {
     this.elementRef.appendChild(innerElements.styles);
   }
 
-  private static createInnerElements(customStyles?: Styles) {
+  private createInnerElements(customStyles?: Styles) {
     return {
-      styles: CameraButton.createInnerElement(CameraButton.createSVGIconElement(), 'styles', customStyles),
+      styles: this.createInnerElement(CameraButton.createSVGIconElement(), 'styles', customStyles),
     };
   }
 
-  private static createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(state, '', customStyles) || baseButton;
+  private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
   }
 
   private static createButtonElement() {
