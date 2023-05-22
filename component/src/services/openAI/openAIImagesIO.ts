@@ -19,7 +19,7 @@ export class OpenAIImagesIO extends BaseServideIO {
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 
-  // TO-DO mention in documentation that this can be removed by inserting <div></div> in slot
+  // TO-DO mention in documentation that this can be removed by inserting a <div></div> child
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
     <p><b>Insert text</b> to generate an image.</p>

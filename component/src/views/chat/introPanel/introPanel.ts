@@ -4,9 +4,9 @@ export class IntroPanel {
   readonly _elementRef?: HTMLElement;
   private _isDisplayed = false;
 
-  constructor(isSlotPopulated: boolean, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
-    if (isSlotPopulated) {
-      this._elementRef = this.createSlot(introPanelStyle);
+  constructor(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
+    if (childElement) {
+      this._elementRef = this.createIntroPanelWithChild(childElement, introPanelStyle);
       this._isDisplayed = true;
     } else if (introPanelMarkUp) {
       this._elementRef = this.createInternalIntroPanel(introPanelMarkUp, introPanelStyle);
@@ -14,19 +14,23 @@ export class IntroPanel {
     }
   }
 
-  private createSlot(introPanelStyle?: CustomStyle) {
-    const slot = document.createElement('slot');
-    slot.classList.add('intro-panel');
-    Object.assign(slot.style, introPanelStyle);
-    return slot;
+  private static createIntroPanel(introPanelStyle?: CustomStyle) {
+    const introPanel = document.createElement('div');
+    introPanel.classList.add('intro-panel');
+    Object.assign(introPanel.style, introPanelStyle);
+    return introPanel;
+  }
+
+  private createIntroPanelWithChild(childElement: HTMLElement, introPanelStyle?: CustomStyle) {
+    const introPanel = IntroPanel.createIntroPanel(introPanelStyle);
+    introPanel.appendChild(childElement);
+    return introPanel;
   }
 
   private createInternalIntroPanel(introPanelMarkUp: string, introPanelStyle?: CustomStyle) {
-    const introPanel = document.createElement('div');
+    const introPanel = IntroPanel.createIntroPanel(introPanelStyle);
     introPanel.id = 'internal-intro-panel';
-    introPanel.classList.add('intro-panel');
     introPanel.innerHTML = introPanelMarkUp;
-    Object.assign(introPanel.style, introPanelStyle);
     return introPanel;
   }
 

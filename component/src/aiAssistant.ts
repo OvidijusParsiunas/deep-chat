@@ -103,7 +103,7 @@ export class AiAssistant extends InternalHTML {
   submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
-  _isSlotPopulated = false;
+  _childElement?: HTMLElement;
 
   _hasBeenRendered = false;
 
@@ -116,7 +116,7 @@ export class AiAssistant extends InternalHTML {
   constructor() {
     super();
     GoogleFont.appendStyleSheetToHead();
-    this._isSlotPopulated = !!this.children[0];
+    this._childElement = this.children[0] as HTMLElement | undefined;
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);

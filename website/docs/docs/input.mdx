@@ -51,8 +51,8 @@ Custom details for the chat's text input. <br />
 <ComponentContainer>
   <AiAssistantBrowser
     textInput={{
-      styles: {text: {fontSize: '16px'}, container: {maxHeight: '50px', backgroundColor: '#dffeff'}},
-      placeholderText: 'Insert text here...',
+      styles: {text: {fontSize: '16px', color: 'black'}, container: {maxHeight: '50px', backgroundColor: '#dffeff'}},
+      placeholder: {text: 'Insert text here...', style: {color: '#4f8bff'}},
       characterLimit: 10,
     }}
     service={{custom: {demo: true}}}
@@ -65,7 +65,7 @@ Custom details for the chat's text input. <br />
 
 <ComponentContainer>
   <AiAssistantBrowser
-    textInput={{disabled: true, placeholderText: 'Text not allowed...'}}
+    textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
@@ -85,6 +85,7 @@ allows images through the use of [`camera`](HERE), a dropped _.txt_ file will no
 
 <ComponentContainer>
   <AiAssistantBrowser
+    introMessage={'Drag and drop a file to observe the overlay.'}
     dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
     service={{custom: {demo: true, mixedFiles: true}}}
   ></AiAssistantBrowser>

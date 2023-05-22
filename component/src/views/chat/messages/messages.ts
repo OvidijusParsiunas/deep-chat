@@ -63,7 +63,7 @@ export class Messages {
     this._onNewMessage = aiAssistant.onNewMessage;
     this._displayLoadingMessage = aiAssistant.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
-    this.populateIntroPanel(aiAssistant._isSlotPopulated, introPanelMarkUp, aiAssistant.introPanelStyle);
+    this.populateIntroPanel(aiAssistant._childElement, introPanelMarkUp, aiAssistant.introPanelStyle);
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
     aiAssistant.getMessages = () => this.messages;
@@ -291,9 +291,9 @@ export class Messages {
     this._streamedText = '';
   }
 
-  private populateIntroPanel(isSlotPopulated: boolean, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
-    if (isSlotPopulated || introPanelMarkUp) {
-      this._introPanel = new IntroPanel(isSlotPopulated, introPanelMarkUp, introPanelStyle);
+  private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
+    if (childElement || introPanelMarkUp) {
+      this._introPanel = new IntroPanel(childElement, introPanelMarkUp, introPanelStyle);
       if (this._introPanel._elementRef) this.elementRef.appendChild(this._introPanel._elementRef);
     }
   }

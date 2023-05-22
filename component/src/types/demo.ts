@@ -3,4 +3,6 @@ export type DemoErrors = {
   speechToTextInput?: boolean;
 };
 
-export type Demo = boolean | {displayErrors?: DemoErrors; displayLoadingBubble?: boolean};
+export type Demo =
+  | boolean
+  | {displayErrors?: DemoErrors; displayLoadingBubble?: boolean; displayFileAttachmentContainer?: boolean};

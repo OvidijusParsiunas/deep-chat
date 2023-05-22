@@ -54,7 +54,7 @@ export class Input {
   // prettier-ignore
   private createFileUploadComponents(
       aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
-    const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle);
+    const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle, serviceIO.demo);
     Input.createUploadButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
     if (serviceIO.camera?.files) {
       const cameraType = buttons.images?.fileType || fileAttachments.addType(serviceIO.camera.files, 'images');

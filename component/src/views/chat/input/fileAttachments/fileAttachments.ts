@@ -4,14 +4,16 @@ import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachment
 import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
 import {ServiceFileTypes} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
+import {Demo} from '../../../../types/demo';
 
 export class FileAttachments {
   private readonly _fileAttachmentsTypes: FileAttachmentsType[] = [];
   private readonly _containerElementRef: HTMLElement;
 
-  constructor(inputElementRef: HTMLElement, attachmentContainerStyle?: CustomStyle) {
+  constructor(inputElementRef: HTMLElement, attachmentContainerStyle?: CustomStyle, demo?: Demo) {
     this._containerElementRef = this.createAttachmentContainer();
-    this.toggleContainerDisplay(false);
+    const displayOnStartup = typeof demo === 'object' && !!demo.displayFileAttachmentContainer;
+    this.toggleContainerDisplay(displayOnStartup);
     inputElementRef.appendChild(this._containerElementRef);
     if (attachmentContainerStyle) Object.assign(this._containerElementRef.style, attachmentContainerStyle);
   }

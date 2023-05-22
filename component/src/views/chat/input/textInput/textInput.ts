@@ -64,8 +64,8 @@ export class TextInputEl {
       inputElement.addEventListener('keydown', this.onKeydown.bind(this));
       inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
     }
-    Object.assign(inputElement.style, textInput?.placeholder?.style);
     Object.assign(inputElement.style, textInput?.styles?.text);
+    Object.assign(inputElement.style, textInput?.placeholder?.style);
     return inputElement;
   }
 

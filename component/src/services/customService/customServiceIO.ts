@@ -10,10 +10,11 @@ import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ChatMessageLimits} from '../../types/chatLimits';
+import {Demo as DemoClass} from '../../utils/demo/demo';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
-import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
+import {Demo} from '../../types/demo';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,
@@ -69,7 +70,7 @@ export class CustomServiceIO implements ServiceIO {
     this._raw_body = customService;
     this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
     this.demo = customService.demo;
-    if (this.demo) this.requestSettings.url = Demo.URL;
+    if (this.demo) this.requestSettings.url = DemoClass.URL;
   }
 
   private static canSendMessage(text: string, files?: File[]) {
