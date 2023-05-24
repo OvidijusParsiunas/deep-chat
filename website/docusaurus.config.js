@@ -29,6 +29,7 @@ const config = {
   },
 
   // TO-DO - enrich introduction with a section about the community e.g. twitter/sharing-examples
+  // WORK - change api key to use environment
   presets: [
     [
       'classic',

@@ -5,17 +5,17 @@ import {Messages} from './messages/messages';
 import {Input} from './input/input';
 
 export class ChatView {
-  private static createElements(aiAssistant: AiAssistant, serviceIO: ServiceIO) {
+  private static createElements(aiAssistant: AiAssistant, serviceIO: ServiceIO, panel?: HTMLElement) {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat-view';
-    const messages = new Messages(aiAssistant, serviceIO);
+    const messages = new Messages(aiAssistant, serviceIO, panel);
     const userInput = new Input(aiAssistant, messages, serviceIO, containerElement);
     ElementUtils.addElements(containerElement, messages.elementRef, userInput.elementRef);
     return containerElement;
   }
 
-  public static render(aiAssistant: AiAssistant, containerRef: HTMLElement, serviceIO: ServiceIO) {
-    const containerElement = ChatView.createElements(aiAssistant, serviceIO);
+  public static render(aiAssistant: AiAssistant, containerRef: HTMLElement, serviceIO: ServiceIO, panel?: HTMLElement) {
+    const containerElement = ChatView.createElements(aiAssistant, serviceIO, panel);
     containerRef.replaceChildren(containerElement);
   }
 }

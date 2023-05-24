@@ -103,20 +103,19 @@ export class AiAssistant extends InternalHTML {
   submitUserMessage: (userText: string, files?: File[]) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
-  _childElement?: HTMLElement;
-
   _hasBeenRendered = false;
 
   _auxiliaryStyleApplied = false;
 
   _activeService?: ServiceIO;
 
+  _childElement?: HTMLElement;
+
   // TO-DO - key view style
 
   constructor() {
     super();
     GoogleFont.appendStyleSheetToHead();
-    this._childElement = this.children[0] as HTMLElement | undefined;
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
@@ -146,7 +145,10 @@ export class AiAssistant extends InternalHTML {
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if (this._activeService.key || this.service?.custom) {
-      ChatView.render(this, this._elementRef, this._activeService);
+      // set before container populated, not available in constructor for react,
+      // assigning to variable as it is added to panel and is no longer child
+      this._childElement ??= this.children[0] as HTMLElement | undefined;
+      ChatView.render(this, this._elementRef, this._activeService, this._childElement);
     } else {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first ppear and

@@ -8,13 +8,13 @@
 .inside-right {
   position: absolute;
   right: calc(10% + 0.22em);
-  bottom: 0.88em;
+  bottom: 0.9em;
 }
 
 .inside-left {
   position: absolute;
   left: calc(10% + 0.22em);
-  bottom: 0.88em;
+  bottom: 0.9em;
 }
 
 /* Input container element padding will need to be changed accordingly */

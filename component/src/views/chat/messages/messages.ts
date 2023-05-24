@@ -50,7 +50,7 @@ export class Messages {
   private _streamedText = '';
   messages: MessageContent[] = [];
 
-  constructor(aiAssistant: AiAssistant, serviceIO: ServiceIO) {
+  constructor(aiAssistant: AiAssistant, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
     this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
@@ -63,7 +63,7 @@ export class Messages {
     this._onNewMessage = aiAssistant.onNewMessage;
     this._displayLoadingMessage = aiAssistant.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
-    this.populateIntroPanel(aiAssistant._childElement, introPanelMarkUp, aiAssistant.introPanelStyle);
+    this.populateIntroPanel(panel, introPanelMarkUp, aiAssistant.introPanelStyle);
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
     aiAssistant.getMessages = () => this.messages;

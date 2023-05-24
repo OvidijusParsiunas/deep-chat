@@ -1,5 +1,8 @@
 #microphone-button {
   padding-top: 0.5px;
+}
+
+.side-container > #microphone-button {
   padding-bottom: 1px;
 }
 

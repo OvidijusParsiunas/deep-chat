@@ -40,7 +40,10 @@ export class CustomButtonInnerElements {
   public static create<T>(
       parentEl: HTMLElement, states: (keyof T)[], initId: string, styles?: ButtonStateStyles<T>): ButtonInnerElements<T> {
     const returnObj: ButtonInnerElements<T> = {};
-    if (!styles) return returnObj;
+    if (!styles) {
+      parentEl.classList.add('input-button-svg');
+      return returnObj;
+    }
     // if the user has specified element for any state, it will be reused for next states
     const initialStateEl = CustomButtonInnerElements.createSpecificStateElement<T>(parentEl, states[0], initId, styles);
     returnObj[states[0]] = initialStateEl;

@@ -6,6 +6,8 @@
 @import url('./sideContainers/sideContainers.css');
 /* inputButton needs to be after sideContainers */
 @import url('./buttons/inputButton.css');
+/* inputButtonEnlarged needs to be after inputButton */
+@import url('./buttons/inputButtonEnlarged.css');
 @import url('./textInput/textInput.css');
 @import url('./dropup/dropup.css');
 

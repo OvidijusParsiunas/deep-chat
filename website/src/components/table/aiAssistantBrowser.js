@@ -7,7 +7,7 @@ export default function AiAssistantBrowser(props) {
   return (
     <BrowserOnly>
       {() => {
-        return <AiAssistantReact {...props}></AiAssistantReact>;
+        return <AiAssistantReact {...props}>{props.children}</AiAssistantReact>;
       }}
     </BrowserOnly>
   );

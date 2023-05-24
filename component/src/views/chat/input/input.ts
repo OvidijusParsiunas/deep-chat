@@ -42,7 +42,7 @@ export class Input {
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
     buttons.submit = {button: submitButton};
-    Input.addElements(this.elementRef, textInput.elementRef, buttons, containerElement, aiAssistant.dropupStyles);
+    Input.addElements(this.elementRef, textInput, buttons, containerElement, aiAssistant.dropupStyles);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -87,9 +87,9 @@ export class Input {
   }
 
   // prettier-ignore
-  private static addElements(panel: HTMLElement, textInput: HTMLElement, buttons: Buttons, container: HTMLElement,
+  private static addElements(panel: HTMLElement, textInput: TextInputEl, buttons: Buttons, container: HTMLElement,
       dropupStyles?: DropupStyles) {
-    ElementUtils.addElements(panel, textInput);
+    ElementUtils.addElements(panel, textInput.elementRef);
     const sideContainers = SideContainers.create();
     const positions = InputButtonPositions.addButtonsToPositions(panel, sideContainers, buttons, container, dropupStyles);
     InputButtonStyleAdjustments.set(textInput, positions);

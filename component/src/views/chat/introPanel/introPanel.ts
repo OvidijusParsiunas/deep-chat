@@ -23,6 +23,7 @@ export class IntroPanel {
 
   private createIntroPanelWithChild(childElement: HTMLElement, introPanelStyle?: CustomStyle) {
     const introPanel = IntroPanel.createIntroPanel(introPanelStyle);
+    if (childElement.style.display === 'none') childElement.style.display = 'block';
     introPanel.appendChild(childElement);
     return introPanel;
   }

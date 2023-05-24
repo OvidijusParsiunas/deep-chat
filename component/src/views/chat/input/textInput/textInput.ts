@@ -52,7 +52,7 @@ export class TextInputEl {
   private createInputElement(textInput?: TextInput) {
     const inputElement = document.createElement('div');
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
-    inputElement.classList.add('text-input-placeholder');
+    inputElement.classList.add('text-input-styling', 'text-input-placeholder');
     inputElement.innerText = textInput?.placeholder?.text || 'Ask me anything!';
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof textInput?.disabled === 'boolean' && textInput.disabled === true) {
