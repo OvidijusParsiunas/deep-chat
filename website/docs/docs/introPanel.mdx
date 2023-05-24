@@ -1,0 +1,72 @@
+---
+sidebar_position: 2
+---
+
+# Intro Panel
+
+This is an overlay panel that is displayed in the center of the chat when it loads up.
+
+### How To
+
+All you need to do is insert your desired markup between the element tags and the component will render it inside the intro panel.
+The original style and events will be preserved to allow you to customize it the way you want it.
+
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser service={{custom: {demo: true}}}>
+    <div
+      style={{
+        width: '200px',
+        backgroundColor: '#f3f3f3',
+        borderRadius: '10px',
+        padding: '12px',
+        paddingBottom: '15px',
+        display: 'none',
+      }}
+    >
+      <div>
+        <div style={{textAlign: 'center', marginBottom: '10px', fontSize: '16px'}}>
+          <b>Intro panel</b>
+        </div>
+        <div>Description placed here to help your users understand how to use the component.</div>
+      </div>
+    </div>
+  </AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::tip
+Depending on your framework of choice; the intro panel may briefly be visibile before the component fully loads. To prevent this you can set its `display` style
+property to _"none"_ and it will automatically be set to _"block"_ once it is ready (this property needs to be inlined in [`style`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
+and not in a style [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors)).
+:::
+
+### `introPanelStyle` {#introPanelStyle}
+
+- Type: [`CustomStyle`](./sharedTypes/#customStyle)
+
+Certain [`services`](HERE) have a default intro panel. This object is used to change its style.
+If you are using a custom intro panel (example above), it will be applied to that.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introPanelStyle={{backgroundColor: '#fffeec'}}
+    service={{openAI: {audio: {key: 'placeholder-key'}}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
