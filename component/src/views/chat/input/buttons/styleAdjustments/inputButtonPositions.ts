@@ -1,5 +1,5 @@
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {SideContainers, SideContainersT} from '../../sideContainers/sideContainers';
+import {ButtonContainers, ButtonContainersT} from '../../buttonContainers/buttonContainers';
 import {BUTTON_ORDER} from '../../../../../utils/buttons/inputButtons';
 import {DropupStyles} from '../../../../../types/dropupStyles';
 import {BUTTON_TYPES} from '../../../../../types/buttonTypes';
@@ -17,19 +17,19 @@ type Buttons = {
 
 export class InputButtonPositions {
   // prettier-ignore
-  private static addToDropup(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions,
-      containerElement: HTMLElement, dropupStyles?: DropupStyles) {
+  private static addToDropup(buttonContainers: ButtonContainersT, positions: Positions, containerElement: HTMLElement,
+      dropupStyles?: DropupStyles) {
     const dropup = new Dropup(containerElement, dropupStyles);
     positions['dropup-menu'].forEach((buttonProps) => dropup.addItem(buttonProps.button));
-    SideContainers.addButton(panel, sideContainers, dropup.buttonContainer, 'outside-left');
+    ButtonContainers.addButton(buttonContainers, dropup.buttonContainer, 'outside-left');
   }
 
-  private static addToSideContainer(panel: HTMLElement, sideContainers: SideContainersT, positions: Positions) {
+  private static addToSideContainer(buttonContainers: ButtonContainersT, positions: Positions) {
     const sideContainerPositions = ['inside-left', 'inside-right', 'outside-left', 'outside-right'];
     sideContainerPositions.forEach((sideContainerPosition) => {
       const position = sideContainerPosition as keyof Positions;
       positions[position].forEach((buttonProps) => {
-        SideContainers.addButton(panel, sideContainers, buttonProps.button.elementRef, position);
+        ButtonContainers.addButton(buttonContainers, buttonProps.button.elementRef, position);
       });
     });
   }
@@ -99,13 +99,13 @@ export class InputButtonPositions {
   }
 
   // prettier-ignore
-  public static addButtonsToPositions(panel: HTMLElement, sideContainers: SideContainersT, buttons: Buttons,
-      container: HTMLElement, dropupStyles?: DropupStyles) {
+  public static addButtons(buttonContainers: ButtonContainersT, buttons: Buttons, container: HTMLElement,
+      dropupStyles?: DropupStyles) {
     const positions = InputButtonPositions.generatePositions(buttons);
     if (positions['dropup-menu'].length > 0) {
-      InputButtonPositions.addToDropup(panel, sideContainers, positions, container, dropupStyles);
+      InputButtonPositions.addToDropup(buttonContainers, positions, container, dropupStyles);
     }
-    InputButtonPositions.addToSideContainer(panel, sideContainers, positions);
+    InputButtonPositions.addToSideContainer(buttonContainers, positions);
     return positions;
   }
 }

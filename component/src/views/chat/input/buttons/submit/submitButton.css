@@ -12,3 +12,9 @@
   bottom: 0.3em;
   border-radius: 2px;
 }
+
+.submit-button-enlarged {
+  scale: 1.2;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}

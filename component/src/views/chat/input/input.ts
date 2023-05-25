@@ -6,9 +6,9 @@ import {InputButtonPositions} from './buttons/styleAdjustments/inputButtonPositi
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
+import {ButtonContainers} from './buttonContainers/buttonContainers';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {SideContainers} from './sideContainers/sideContainers';
 import {SpeechToText} from './buttons/microphone/speechToText';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {SubmitButton} from './buttons/submit/submitButton';
@@ -90,9 +90,9 @@ export class Input {
   private static addElements(panel: HTMLElement, textInput: TextInputEl, buttons: Buttons, container: HTMLElement,
       dropupStyles?: DropupStyles) {
     ElementUtils.addElements(panel, textInput.elementRef);
-    const sideContainers = SideContainers.create();
-    const positions = InputButtonPositions.addButtonsToPositions(panel, sideContainers, buttons, container, dropupStyles);
-    InputButtonStyleAdjustments.set(textInput, positions);
-    SideContainers.add(panel, sideContainers);
+    const buttonContainers = ButtonContainers.create();
+    const positions = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
+    InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, positions);
+    ButtonContainers.add(panel, buttonContainers);
   }
 }

@@ -13,11 +13,19 @@
 }
 
 .text-input-container-left-adjustment {
-  margin-left: -1.5em;
+  margin-left: 1.5em;
 }
 
 .text-input-container-right-adjustment {
-  margin-right: -1.5em;
+  margin-right: 1.5em;
+}
+
+.text-input-container-left-small-adjustment {
+  margin-left: 1.1em;
+}
+
+.text-input-container-right-small-adjustment {
+  margin-right: 1.1em;
 }
 
 #text-input {
@@ -37,12 +45,12 @@
 }
 
 .text-input-inner-left-adjustment {
-  width: calc(100% - 2em);
+  width: calc(100% - 2.5em);
   padding-left: 2em;
 }
 
 .text-input-inner-right-adjustment {
-  width: calc(100% - 2em);
+  width: calc(100% - 2.5em);
   padding-right: 2em;
 }
 
