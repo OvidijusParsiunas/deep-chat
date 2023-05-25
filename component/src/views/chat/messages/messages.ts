@@ -273,6 +273,7 @@ export class Messages {
   public addNewStreamedMessage() {
     const {bubbleElement} = this.addNewTextMessage('', true, false);
     bubbleElement.classList.add('streamed-message');
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
     return bubbleElement;
   }
 
