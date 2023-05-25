@@ -1,3 +1,7 @@
+.side-container > .upload-file-button {
+  scale: 1.1;
+}
+
 #upload-images-icon {
   position: absolute;
   pointer-events: none;
@@ -39,6 +43,6 @@
   height: 1.1em;
   left: 0.2em;
   bottom: 0.2em;
-  filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(668%) hue-rotate(85deg) brightness(98%) contrast(93%);
+  filter: brightness(0) saturate(100%) invert(53%) sepia(0%) saturate(36%) hue-rotate(74deg) brightness(98%) contrast(93%);
   transform: scale(0.95, 1);
 }

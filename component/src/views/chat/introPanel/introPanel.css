@@ -5,10 +5,10 @@
   inset: 0px;
   margin: auto;
   height: fit-content;
+  top: -2.5em;
 }
 
 #internal-intro-panel {
-  top: -2.5em;
   width: 250px;
   height: min-content;
   display: block;

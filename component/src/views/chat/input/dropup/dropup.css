@@ -1,13 +1,22 @@
+.side-container > #dropup-container {
+  scale: 1.1;
+}
+
+.side-container > #dropup-container > #dropup-menu {
+  scale: 0.9;
+  left: -0.2em;
+  top: -0.6em;
+}
+
 #dropup-icon {
   position: absolute;
   pointer-events: none;
   width: 1.1em;
   height: 1.1em;
-  left: 0.22em;
+  left: 0.2em;
   bottom: 0.4em;
-  filter: brightness(0) saturate(100%) invert(52%) sepia(0%) saturate(161%) hue-rotate(164deg) brightness(91%)
-    contrast(92%);
-  transform: scale(0.95, 1);
+  filter: brightness(0) saturate(100%) invert(51%) sepia(0%) saturate(5968%) hue-rotate(294deg) brightness(92%)
+    contrast(90%);
 }
 
 #dropup-menu {
@@ -18,7 +27,7 @@
   border-radius: 5px;
   z-index: 1;
   top: -0.49em;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.2) -1px 2px 10px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px;
   cursor: pointer;
   user-select: none;
 }

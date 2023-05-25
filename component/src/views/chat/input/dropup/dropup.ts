@@ -1,9 +1,9 @@
 import {CustomButtonInnerElements} from '../buttons/customButtonInnerElements';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
-import {CAMERA_ICON_STRING} from '../../../../icons/cameraIcon';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
+import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
@@ -18,10 +18,10 @@ export class Dropup extends InputButton<Styles> {
     const innerElements = this.createInnerElements(this._customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
-    this.buttonContainer = document.createElement('div');
+    this.buttonContainer = Dropup.createButtonContainer();
     this.elementRef.appendChild(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
-    this.elementRef.classList.add('dropup-icon');
+    this.elementRef.classList.add('dropup-icon', 'upload-file-button');
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
@@ -40,17 +40,23 @@ export class Dropup extends InputButton<Styles> {
   }
 
   private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(CAMERA_ICON_STRING);
+    const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
     svgIconElement.id = 'dropup-icon';
     return svgIconElement;
   }
 
   private addClickEvent() {
     this.elementRef.onclick = this._menu.toggle.bind(this._menu);
+  }
+
+  private static createButtonContainer() {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'dropup-container';
+    return buttonContainer;
   }
 
   addItem(buttonProps: InputButton) {

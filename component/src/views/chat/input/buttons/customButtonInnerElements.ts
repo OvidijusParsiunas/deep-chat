@@ -20,32 +20,33 @@ export class CustomButtonInnerElements {
     return;
   }
 
+  private static processElement(parentEl: HTMLElement, element?: Element) {
+    if (!element?.classList.contains('text-button')) {
+      parentEl.classList.add('input-button-svg');
+    }
+  }
+
   // publicly used for creating elements that do not change state in a sequence
   // prettier-ignore
   public static createSpecificStateElement<T>(
-      parentEl: HTMLElement, state: keyof T, id: string, customStyles?: ButtonStateStyles<T>) {
-    if (!customStyles) return;
-    const element = CustomButtonInnerElements.createCustomElement(customStyles, state);
-    if (!element?.classList.contains('text-button')) {
-      parentEl.classList.add('input-button-svg');
-      // setting the id to have a base button style
-      // ids are used to primarly set svg style which does not apply to text
-      if (element) element.id = id;
-    }
+      parentEl: HTMLElement, state: keyof T, customStyles?: ButtonStateStyles<T>) {
+    let element: HTMLDivElement | SVGGraphicsElement | undefined;
+    if (customStyles) element = CustomButtonInnerElements.createCustomElement(customStyles, state);
+    CustomButtonInnerElements.processElement(parentEl, element);
     return element;
   }
 
   // used for creating elements that change state in a sequence
   // prettier-ignore
   public static create<T>(
-      parentEl: HTMLElement, states: (keyof T)[], initId: string, styles?: ButtonStateStyles<T>): ButtonInnerElements<T> {
+      parentEl: HTMLElement, states: (keyof T)[], styles?: ButtonStateStyles<T>): ButtonInnerElements<T> {
     const returnObj: ButtonInnerElements<T> = {};
     if (!styles) {
-      parentEl.classList.add('input-button-svg');
+      CustomButtonInnerElements.processElement(parentEl);
       return returnObj;
     }
     // if the user has specified element for any state, it will be reused for next states
-    const initialStateEl = CustomButtonInnerElements.createSpecificStateElement<T>(parentEl, states[0], initId, styles);
+    const initialStateEl = CustomButtonInnerElements.createSpecificStateElement<T>(parentEl, states[0], styles);
     returnObj[states[0]] = initialStateEl;
     let lastStateEl = initialStateEl;
     states.slice(1).forEach((state) => {

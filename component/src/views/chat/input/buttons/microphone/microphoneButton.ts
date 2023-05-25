@@ -31,8 +31,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   // prettier-ignore
   private createInnerElement(baseButton: SVGGraphicsElement,
       state: keyof MicrophoneButton['_innerElements'], customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(
-      this.elementRef, state, 'microphone-icon', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createMicrophoneElement() {

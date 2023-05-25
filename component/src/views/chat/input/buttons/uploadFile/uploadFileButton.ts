@@ -29,9 +29,9 @@ export class UploadFileButton extends InputButton<Styles> {
   }
 
   private createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
-    const baseButton = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
+    const baseIcon = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
     return {
-      styles: this.createInnerElement(baseButton, 'styles', customStyles),
+      styles: this.createInnerElement(baseIcon, 'styles', customStyles),
     };
   }
 
@@ -55,12 +55,12 @@ export class UploadFileButton extends InputButton<Styles> {
   }
 
   private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
-    buttonElement.classList.add('input-button');
+    buttonElement.classList.add('input-button', 'upload-file-button');
     return buttonElement;
   }
 

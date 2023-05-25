@@ -20,6 +20,7 @@ export class CameraButton extends InputButton<Styles> {
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
+    this.elementRef.classList.add('upload-file-button');
     this.elementRef.appendChild(innerElements.styles);
   }
 
@@ -30,7 +31,7 @@ export class CameraButton extends InputButton<Styles> {
   }
 
   private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, '', customStyles) || baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createButtonElement() {
