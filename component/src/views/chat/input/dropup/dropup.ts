@@ -1,5 +1,6 @@
 import {CustomButtonInnerElements} from '../buttons/customButtonInnerElements';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
+import {Positions} from '../buttons/styleAdjustments/inputButtonPositions';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
@@ -14,7 +15,7 @@ export class Dropup extends InputButton<Styles> {
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
-    super(Dropup.createButtonElement(), undefined, {styles: styles?.button} || {});
+    super(Dropup.createButtonElement(), undefined, {styles: styles?.button?.styles} || {});
     const innerElements = this.createInnerElements(this._customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
@@ -67,5 +68,13 @@ export class Dropup extends InputButton<Styles> {
     containerElement.addEventListener('click', (event) => {
       if (!(event.target as HTMLElement).classList.contains('dropup-icon')) this._menu.close();
     });
+  }
+
+  static getPosition(positions: Positions, dropupStyles?: DropupStyles) {
+    if (dropupStyles?.button?.position) {
+      return dropupStyles?.button?.position;
+    }
+    if (positions['outside-left'].length > 0 && positions['outside-right'].length === 0) return 'outside-right';
+    return 'outside-left';
   }
 }

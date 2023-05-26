@@ -37,7 +37,7 @@ export class AiAssistant extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  speechToTextInput?: Microphone = true; // only activated if not used by recording for audio
+  speechToTextInput?: Microphone; // only activated if not used by recording for audio
 
   @Property('boolean')
   speechOutput?: boolean;

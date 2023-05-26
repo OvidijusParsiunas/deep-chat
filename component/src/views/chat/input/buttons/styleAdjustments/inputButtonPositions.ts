@@ -21,7 +21,10 @@ export class InputButtonPositions {
       dropupStyles?: DropupStyles) {
     const dropup = new Dropup(containerElement, dropupStyles);
     positions['dropup-menu'].forEach((buttonProps) => dropup.addItem(buttonProps.button));
-    ButtonContainers.addButton(buttonContainers, dropup.buttonContainer, 'outside-left');
+    const position = Dropup.getPosition(positions, dropupStyles);
+    ButtonContainers.addButton(buttonContainers, dropup.buttonContainer, position);
+     // this is a quick workaround to get dropup recognised for InputButtonStyleAdjustments
+    positions[position].push({} as ButtonProps);
   }
 
   private static addToSideContainer(buttonContainers: ButtonContainersT, positions: Positions) {
@@ -102,10 +105,10 @@ export class InputButtonPositions {
   public static addButtons(buttonContainers: ButtonContainersT, buttons: Buttons, container: HTMLElement,
       dropupStyles?: DropupStyles) {
     const positions = InputButtonPositions.generatePositions(buttons);
+    InputButtonPositions.addToSideContainer(buttonContainers, positions);
     if (positions['dropup-menu'].length > 0) {
       InputButtonPositions.addToDropup(buttonContainers, positions, container, dropupStyles);
     }
-    InputButtonPositions.addToSideContainer(buttonContainers, positions);
     return positions;
   }
 }
