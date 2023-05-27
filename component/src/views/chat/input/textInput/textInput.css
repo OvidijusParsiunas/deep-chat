@@ -48,22 +48,18 @@
 /* the motivation behind using the class is to allow the adjustments to change it */
 /* need to use width to allow the mouse to select element when there is no text and not to have horizontal overflow */
 .text-input-styling {
-  width: calc(100% - 1em);
   padding: 0.4em 0.5em 0.4em 0.5em;
+  /* the combination of these two properties is used to automatically set the text width to the padding */
+  overflow: overlay;
+  width: 100%;
 }
 
 .text-input-inner-left-adjustment {
-  width: calc(100% - 2.7em);
   padding-left: 2.2em;
 }
 
 .text-input-inner-right-adjustment {
-  width: calc(100% - 2.5em);
   padding-right: 2em;
-}
-
-.text-input-inner-left-adjustment.text-input-inner-right-adjustment {
-  width: calc(100% - 4.2em);
 }
 
 .text-input-disabled {

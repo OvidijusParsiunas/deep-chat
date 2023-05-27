@@ -72,6 +72,84 @@ Custom details for the chat's text input. <br />
 
 <LineBreak></LineBreak>
 
+### `submitButtonStyles` {#submitButtonStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`submit?: ButtonElementStyles`](./sharedTypes/#ButtonElementStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: ButtonElementStyles`](./sharedTypes/#ButtonElementStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`stop?: ButtonElementStyles`](./sharedTypes/#ButtonElementStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](./sharedTypes/#ButtonPosition) <br />
+  }
+
+Custom styling for the submit button. <br />
+`submit` is the default button state and `loading` is displayed when waiting for a message response. `stop` is displayed
+when a response message is being [streamed](HERE). <br />
+`position` is used to set the button position within the input area.
+
+#### SVG Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {
+            backgroundColor: '#ddedff',
+          },
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(24%) sepia(81%) saturate(4503%) hue-rotate(242deg) brightness(102%) contrast(100%)',
+            },
+          },
+        },
+      },
+      loading: {},
+      stop: {},
+      position: 'outside-right',
+    }}
+    service={{custom: {demo: true, stream: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+#### Text Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    textInput={{styles: {text: {paddingRight: '70px'}}}}
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {backgroundColor: '#ddedff', width: '60px'},
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
+        text: {
+          content: 'Submit',
+          styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
+        },
+      },
+      loading: {
+        text: {
+          content: 'Loading',
+        },
+      },
+      stop: {
+        text: {
+          content: 'Stop',
+        },
+      },
+    }}
+    service={{custom: {demo: true, stream: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
 ### `dragAndDrop` {#dragAndDrop}
 
 - Type: `boolean` | [`CustomStyle`](./sharedTypes/#customStyle)
@@ -85,7 +163,7 @@ allows images through the use of [`camera`](HERE), a dropped _.txt_ file will no
 
 <ComponentContainer>
   <AiAssistantBrowser
-    introMessage={'Drag and drop a file to observe the overlay.'}
+    introMessage={'Drag and drop a file to observe the effects.'}
     dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
     service={{custom: {demo: true, mixedFiles: true}}}
   ></AiAssistantBrowser>

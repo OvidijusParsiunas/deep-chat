@@ -16,12 +16,12 @@ export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     super(CameraButton.createButtonElement(), fileService?.button?.position, fileService?.button || {}, 'Photo');
     const innerElements = this.createInnerElements(this._customStyles);
-    this.reapplyStateStyle('styles');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
     this.elementRef.classList.add('upload-file-button');
     this.elementRef.appendChild(innerElements.styles);
+    this.reapplyStateStyle('styles');
   }
 
   private createInnerElements(customStyles?: Styles) {
