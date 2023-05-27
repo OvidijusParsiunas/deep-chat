@@ -17,4 +17,10 @@ export class ElementUtils {
     // Check if the current scroll position is at the bottom
     return scrollPosition >= remainingScrollHeight - ElementUtils.CODE_SNIPPET_GENERATION_JUMP;
   }
+
+  public static cloneElement(element: HTMLElement) {
+    const newElement = element.cloneNode(true) as HTMLElement;
+    (element.parentNode as HTMLElement).replaceChild(newElement, element);
+    return newElement;
+  }
 }

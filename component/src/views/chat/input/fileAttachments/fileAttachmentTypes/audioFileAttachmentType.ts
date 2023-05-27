@@ -1,4 +1,5 @@
 import {AttachmentObject, FileAttachmentsType} from './fileAttachmentsType';
+import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {PLAY_ICON_STRING} from '../../../../../icons/playIcon';
@@ -22,7 +23,9 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     return container;
   }
 
-  private static addAudioElements(container: HTMLElement, fileReaderResult: string) {
+  private static addAudioElements(oldContainer: HTMLElement, fileReaderResult: string) {
+    // this is a simple workaround to remove all event listeners from the placeholder element
+    const container = ElementUtils.cloneElement(oldContainer);
     const audio = document.createElement('audio');
     audio.src = fileReaderResult;
     const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
@@ -95,12 +98,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     container.addEventListener('mouseenter', mouseEnter);
     const mouseLeave = () => container.replaceChildren(textContainer);
     container.addEventListener('mouseleave', mouseLeave);
-    const click = () => {
-      this.stopPlaceholderCallback?.();
-      container.removeEventListener('mouseenter', mouseEnter);
-      container.removeEventListener('mouseleave', mouseLeave);
-      container.removeEventListener('click', click);
-    };
+    const click = () => this.stopPlaceholderCallback?.();
     container.addEventListener('click', click);
   }
 

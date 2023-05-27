@@ -7,6 +7,7 @@ import {MicrophoneButton} from './microphoneButton';
 export class RecordAudio extends MicrophoneButton {
   private _mediaRecorder?: MediaRecorder;
   private _mediaStream?: MediaStream;
+  private _waitingForBrowserApproval = false;
   private readonly _audioType: AudioFileAttachmentType;
   private readonly _extension: AudioFormat;
   private readonly _maxDurationSeconds?: number;
@@ -22,11 +23,12 @@ export class RecordAudio extends MicrophoneButton {
   }
 
   private buttonClick() {
+    if (this._waitingForBrowserApproval) return;
     if (this.isActive) {
       this.stop();
     } else {
+      this._waitingForBrowserApproval = true;
       this.record();
-      this.changeToActive();
     }
   }
 
@@ -45,6 +47,7 @@ export class RecordAudio extends MicrophoneButton {
     navigator.mediaDevices
       .getUserMedia({audio: true})
       .then((stream) => {
+        this.changeToActive();
         this._mediaRecorder = new MediaRecorder(stream);
         this._audioType.addPlaceholderAttachment(this.stop.bind(this), this._maxDurationSeconds);
         this._mediaStream = stream;
@@ -57,6 +60,9 @@ export class RecordAudio extends MicrophoneButton {
       .catch((err) => {
         console.error(err);
         this.stop();
+      })
+      .finally(() => {
+        this._waitingForBrowserApproval = false;
       });
   }
 

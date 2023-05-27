@@ -25,7 +25,7 @@
 }
 
 .text-input-container-left-small-adjustment > .outside-left {
-  right: calc(15px - 0.55em);
+  right: calc(14px - 0.55em);
 }
 
 .text-input-container-right-small-adjustment {
