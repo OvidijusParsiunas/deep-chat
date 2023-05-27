@@ -106,6 +106,7 @@
 }
 
 .audio-placeholder-text-3-digits-container {
+  padding-top: 1px;
   cursor: default;
 }
 

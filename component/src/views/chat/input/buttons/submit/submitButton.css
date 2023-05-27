@@ -1,20 +1,21 @@
 #submit-icon {
   height: 100%;
   filter: brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%);
+  width: 1.21em;
 }
 
 #stop-icon {
   background-color: #acacac;
   position: absolute;
-  width: 0.9em;
-  height: 0.9em;
-  left: 0.3em;
-  bottom: 0.3em;
+  width: 0.95em;
+  height: 0.95em;
+  left: 0.35em;
+  bottom: 0.35em;
   border-radius: 2px;
 }
 
 .submit-button-enlarged {
-  scale: 1.2;
+  scale: 1.1;
   margin-right: 0.3em;
   margin-left: 0.3em;
 }

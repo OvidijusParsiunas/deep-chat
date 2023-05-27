@@ -2,16 +2,16 @@
   padding-top: 0.5px;
 }
 
-.input-button-container > #microphone-button {
+.outer-button-container > #microphone-button {
   padding-bottom: 1px;
 }
 
 #microphone-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.1em;
-  height: 1.1em;
-  left: 0.2em;
+  width: 1.21em;
+  height: 1.21em;
+  left: 0.25em;
   bottom: 0.25em;
 }
 

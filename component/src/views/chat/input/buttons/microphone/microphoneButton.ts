@@ -14,6 +14,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: MicrophoneStyles) {
+    if (styles?.position === 'dropup-menu') styles.position = 'outside-right'; // not allowed to be in dropup for UX
     super(MicrophoneButton.createMicrophoneElement(), styles?.position, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
     this.changeToDefault();

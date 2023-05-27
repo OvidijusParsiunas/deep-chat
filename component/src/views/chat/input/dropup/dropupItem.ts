@@ -30,7 +30,7 @@ export class DropupItem {
     const textElement = document.createElement('div');
     Object.assign(textElement.style, textStyle);
     textElement.classList.add('dropup-menu-item-text');
-    textElement.textContent = dropupText || 'text';
+    textElement.textContent = dropupText || 'File';
     return textElement;
   }
 
@@ -42,12 +42,21 @@ export class DropupItem {
     return iconContainer;
   }
 
+  private static populateItem(elementRef: HTMLElement, item: HTMLElement, dropupText?: string, styles?: DropupMenuStyles) {
+    const buttonInnerElement = elementRef.children[0];
+    if (buttonInnerElement.classList.contains('text-button')) {
+      item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.text));
+    } else {
+      item.appendChild(DropupItem.createItemIcon(elementRef, styles?.iconContainer));
+      item.appendChild(DropupItem.createItemText(dropupText, styles?.text));
+    }
+  }
+
   public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
     const {elementRef, dropupText} = inputButton;
     const item = document.createElement('div');
     Object.assign(item.style, styles?.item?.default);
-    item.appendChild(DropupItem.createItemIcon(elementRef, styles?.iconContainer));
-    item.appendChild(DropupItem.createItemText(dropupText, styles?.text));
+    DropupItem.populateItem(elementRef, item, dropupText, styles);
     item.classList.add('dropup-menu-item');
     const eventfulStyles = DropupItem.generateStatefulStyles(styles?.item);
     DropupItem.addItemEvents(menu, item, elementRef, eventfulStyles);

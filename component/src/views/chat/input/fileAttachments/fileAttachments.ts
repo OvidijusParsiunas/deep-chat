@@ -8,20 +8,20 @@ import {Demo} from '../../../../types/demo';
 
 export class FileAttachments {
   private readonly _fileAttachmentsTypes: FileAttachmentsType[] = [];
-  private readonly _containerElementRef: HTMLElement;
+  readonly elementRef: HTMLElement;
 
   constructor(inputElementRef: HTMLElement, attachmentContainerStyle?: CustomStyle, demo?: Demo) {
-    this._containerElementRef = this.createAttachmentContainer();
+    this.elementRef = this.createAttachmentContainer();
     const displayOnStartup = typeof demo === 'object' && !!demo.displayFileAttachmentContainer;
     this.toggleContainerDisplay(displayOnStartup);
-    inputElementRef.appendChild(this._containerElementRef);
-    if (attachmentContainerStyle) Object.assign(this._containerElementRef.style, attachmentContainerStyle);
+    inputElementRef.appendChild(this.elementRef);
+    if (attachmentContainerStyle) Object.assign(this.elementRef.style, attachmentContainerStyle);
   }
 
   // prettier-ignore
   addType(files: FileAttachmentsT, type: keyof ServiceFileTypes) {
     const fileAttachmentsType = FileAttachmentTypeFactory.create(
-      files, this.toggleContainerDisplay.bind(this), this._containerElementRef, type);
+      files, this.toggleContainerDisplay.bind(this), this.elementRef, type);
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }
@@ -34,9 +34,9 @@ export class FileAttachments {
 
   private toggleContainerDisplay(display: boolean) {
     if (display) {
-      this._containerElementRef.style.display = 'block';
-    } else if (this._containerElementRef.children.length === 0) {
-      this._containerElementRef.style.display = 'none';
+      this.elementRef.style.display = 'block';
+    } else if (this.elementRef.children.length === 0) {
+      this.elementRef.style.display = 'none';
     }
   }
 
@@ -72,7 +72,7 @@ export class FileAttachments {
 
   removeAllFiles() {
     this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.removeAllAttachments());
-    this._containerElementRef.replaceChildren();
+    this.elementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }
 

@@ -9,24 +9,24 @@
 .inside-right {
   position: absolute;
   right: calc(10% + 0.35em);
-  bottom: 0.9em;
+  bottom: 0.85em;
 }
 
 .inside-left {
   position: absolute;
   left: calc(10% + 0.35em);
-  bottom: 0.9em;
+  bottom: 0.85em;
 }
 
 /* Input container element padding will need to be changed accordingly */
 .outside-left {
   position: absolute;
-  right: calc(13px - 0.55em);
-  bottom: 0.9em;
+  right: calc(11px - 0.55em);
+  bottom: 0.85em;
 }
 
 .outside-right {
   position: absolute;
-  left: calc(12px - 0.55em);
-  bottom: 0.9em;
+  left: calc(11px - 0.55em);
+  bottom: 0.85em;
 }

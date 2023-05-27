@@ -38,11 +38,11 @@ export class Input {
       buttons.microphone = {button: new SpeechToText(
         aiAssistant.speechToTextInput, textInput, messages.addNewErrorMessage.bind(messages))};
     }
-    const submitButton = new SubmitButton(aiAssistant, textInput.inputElementRef, messages, serviceIO,fileAttachments);
+    const submitButton = new SubmitButton(aiAssistant, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
     aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
     buttons.submit = {button: submitButton};
-    Input.addElements(this.elementRef, textInput, buttons, containerElement, aiAssistant.dropupStyles);
+    Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, aiAssistant.dropupStyles);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -88,11 +88,11 @@ export class Input {
 
   // prettier-ignore
   private static addElements(panel: HTMLElement, textInput: TextInputEl, buttons: Buttons, container: HTMLElement,
-      dropupStyles?: DropupStyles) {
+      fileAttachments: FileAttachments, dropupStyles?: DropupStyles) {
     ElementUtils.addElements(panel, textInput.elementRef);
     const buttonContainers = ButtonContainers.create();
     const positions = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
-    InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, positions);
+    InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, positions);
     ButtonContainers.add(panel, buttonContainers);
   }
 }

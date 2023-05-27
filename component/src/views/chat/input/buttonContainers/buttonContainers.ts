@@ -5,9 +5,11 @@ export type ButtonContainersT = readonly [HTMLDivElement, HTMLDivElement, HTMLDi
 
 export class ButtonContainers {
   public static create() {
-    return Array.from({length: 4}).map(() => {
+    return Array.from({length: 4}).map((_, index: number) => {
       const container = document.createElement('div');
       container.classList.add('input-button-container');
+      if (index === 0 || index === 3) container.classList.add('outer-button-container');
+      if (index === 1 || index === 2) container.classList.add('inner-button-container');
       return container;
     }) as unknown as ButtonContainersT;
   }

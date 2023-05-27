@@ -35,6 +35,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
+    // WORK - document how the loading button can be generated
     if (!this._customStyles?.loading) this.overwriteLoadingStyleIfNoLoadingMessage(aiAssistant);
     this.changeToSubmitIcon();
   }
