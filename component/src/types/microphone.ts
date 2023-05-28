@@ -1,10 +1,10 @@
-import {ButtonElementStyles, ButtonPosition} from './button';
 import {FilesServiceConfig} from './fileServiceConfigs';
+import {ButtonStyles, ButtonPosition} from './button';
 
 export interface MicrophoneStyles {
-  default?: ButtonElementStyles;
-  active?: ButtonElementStyles;
-  unsupported?: ButtonElementStyles;
+  default?: ButtonStyles;
+  active?: ButtonStyles;
+  unsupported?: ButtonStyles;
   position?: ButtonPosition;
 }
 

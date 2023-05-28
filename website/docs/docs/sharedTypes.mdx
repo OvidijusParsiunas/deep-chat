@@ -33,12 +33,47 @@ Object defining styling properties for different mouse states on the element.
 
 <LineBreak></LineBreak>
 
-### `ButtonElementStyles` {#ButtonElementStyles}
+### `Button` {#Button}
+
+- Type: {[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition)}
+
+Styling for a button inside the chat view. <br />
+`container` is used to style the base element of the button for its various mouse states. <br />
+`svg` is used to style an svg icon (the default inner element) inside the button. <br />
+`text` is used to create and style a text icon inside the button.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        images: {
+          button: {
+            styles: {
+              container: {
+                default: {backgroundColor: '#e6f0ff'},
+                hover: {backgroundColor: '#dbe9ff'},
+                click: {backgroundColor: '#c4dbff'},
+              },
+            },
+            position: 'outside-left',
+          },
+        },
+        demo: true,
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `ButtonStyles` {#ButtonStyles}
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`container?: StatefulStyles`](#StatefulStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`svg?: ButtonInnerElementStyles`](#ButtonInnerElementStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`text?: ButtonInnerElementStyles`](#ButtonInnerElementStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`svg?: ButtonInnerStyles`](#ButtonInnerStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`text?: ButtonInnerStyles`](#ButtonInnerStyles) <br />
   }
 
 Styling for a button inside the chat view. <br />
@@ -100,7 +135,7 @@ Styling for a button inside the chat view. <br />
 
 <LineBreak></LineBreak>
 
-### `ButtonInnerElementStyles` {#ButtonInnerElementStyles}
+### `ButtonInnerStyles` {#ButtonInnerStyles}
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](#StatefulStyles), <br />
@@ -109,16 +144,16 @@ Styling for a button inside the chat view. <br />
 
 Styling for an element inside a button container. <br />
 `styles` is used to set the style of the element for its various mouse states. <br />
-`content` is a string that is used to generate the inner element. When it is inside a [`text`](#ButtonElementStyles) property - the string represents the element text.
-When inside an [`svg`](#ButtonElementStyles) property - the string is the full inlined element HTML.
+`content` is a string that is used to generate the inner element. When it is inside a [`text`](#ButtonStyles) property - the string generates the element text.
+When inside an [`svg`](#ButtonStyles) property - the string needs to be a full inlined svg element HTML which will be used to generate the icon.
 
-[Fully editable example for SVGs](HERE)
+[Fully editable example for SVG](HERE)
 
 :::info
-If the `content` string is defined for an [`svg`](#ButtonElementStyles):
+If the `content` string is used for an [`svg`](#ButtonStyles):
 
 - It needs to contain a _xmlns="http://www.w3.org/2000/svg"_ attribute.
-- If it is inside a HTML attribute (full object is inside quotes `"` - see the editable example) or when not using backticks (`` ` ``) - make sure to escape the quotes by changing
+- If it is inside a HTML attribute (the parentmost object is inside quotes `"` - see the editable example) or when not using backticks (`` ` ``) - make sure to escape the quotes by changing
   `"` to `\"` (An easy way to do this is to stringify it using _JSON.stringify()_). Also when inside a HTML attribute, replace the first `<` character with `&lt`.
 
 :::

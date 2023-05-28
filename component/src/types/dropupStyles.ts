@@ -1,5 +1,5 @@
 import {CustomStyle, StatefulStyles} from './styles';
-import {GenericButton} from './button';
+import {Button} from './button';
 
 export interface DropupMenuStyles {
   container?: CustomStyle;
@@ -9,6 +9,6 @@ export interface DropupMenuStyles {
 }
 
 export interface DropupStyles {
-  button?: GenericButton;
+  button?: Button;
   menu?: DropupMenuStyles;
 }

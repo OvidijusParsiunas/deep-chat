@@ -1,19 +1,19 @@
 import {StatefulStyles} from './styles';
 
-interface ButtonInnerElementStyles {
+interface ButtonInnerStyles {
   styles?: StatefulStyles;
   content?: string;
 }
 
-export interface ButtonElementStyles {
+export interface ButtonStyles {
   container?: StatefulStyles;
-  svg?: ButtonInnerElementStyles;
-  text?: ButtonInnerElementStyles;
+  svg?: ButtonInnerStyles;
+  text?: ButtonInnerStyles;
 }
 
 export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right' | 'dropup-menu';
 
-export interface GenericButton {
-  styles?: ButtonElementStyles;
+export interface Button {
+  styles?: ButtonStyles;
   position?: ButtonPosition;
 }

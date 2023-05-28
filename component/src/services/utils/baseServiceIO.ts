@@ -11,15 +11,15 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../types/object';
 import {FILE_TYPES} from '../../types/fileTypes';
-import {GenericButton} from '../../types/button';
 import {CustomStyle} from '../../types/styles';
 import {AiAssistant} from '../../aiAssistant';
+import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';
 import {Key} from '../../types/key';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-type Camera = {camera?: true | {button?: GenericButton; modalContainerStyle?: CustomStyle}};
+type Camera = {camera?: true | {button?: Button; modalContainerStyle?: CustomStyle}};
 
 type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat}};
 

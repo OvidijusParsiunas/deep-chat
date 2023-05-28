@@ -1,5 +1,5 @@
-import {ButtonElementStyles} from './button';
 import {OverrideTypes} from './utilityTypes';
+import {ButtonStyles} from './button';
 
 export type ButtonInnerElement = HTMLElement | SVGGraphicsElement;
 
@@ -8,7 +8,7 @@ export type ButtonInnerElements<T> = {
 };
 
 export type ButtonStateStyles<T> = {
-  [P in keyof T]: ButtonElementStyles;
+  [P in keyof T]: ButtonStyles;
 };
 
 export type DefinedButtonStateStyles<T extends object> = Omit<T, 'position'>;

@@ -1,6 +1,6 @@
 import {ExistingServiceAudioRecordingConfig} from './microphone';
-import {GenericButton} from './button';
 import {CustomStyle} from './styles';
+import {Button} from './button';
 
 export interface CameraDimensions {
   width?: number;
@@ -13,7 +13,7 @@ export type ExistingServiceCameraConfig = ExistingServiceAudioRecordingConfig & 
   camera?:
     | true
     | {
-        button?: GenericButton;
+        button?: Button;
         modalContainerStyle?: CustomStyle;
       };
 };

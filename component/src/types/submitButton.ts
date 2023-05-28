@@ -1,8 +1,8 @@
-import {ButtonElementStyles} from './button';
+import {ButtonStyles} from './button';
 
 export interface SubmitButtonStyles {
-  submit?: ButtonElementStyles;
-  loading?: ButtonElementStyles;
-  stop?: ButtonElementStyles;
+  submit?: ButtonStyles;
+  loading?: ButtonStyles;
+  stop?: ButtonStyles;
   position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
 }

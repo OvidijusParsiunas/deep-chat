@@ -4,21 +4,19 @@ import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
 import {ExistingServiceCameraConfig} from '../../types/camera';
 import {FileAttachments} from '../../types/fileAttachments';
 import {CameraFiles} from '../../types/cameraFiles';
-import {GenericButton} from '../../types/button';
 import {FileServiceIO} from '../serviceIO';
+import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';
 
 type AudioConfig = RecordAudioFilesServiceConfig & {files: AudioRecordingFiles};
 
 export class ConfigProcessingUtils {
-  // prettier-ignore
-  public static processImagesConfig(images: FileServiceIO, remarkable: Remarkable, files?: FileAttachments,
-      button?: GenericButton) {
+  public static processImagesConfig(images: FileServiceIO, remark: Remarkable, files?: FileAttachments, button?: Button) {
     if (files && images.files) {
       if (images.files.infoModal) {
         Object.assign(images.files.infoModal, files.infoModal);
         const markdown = files.infoModal?.textMarkDown;
-        images.infoModalTextMarkUp = remarkable.render(markdown || '');
+        images.infoModalTextMarkUp = remark.render(markdown || '');
       }
       if (files.acceptedFormats) images.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) images.files.maxNumberOfFiles = files.maxNumberOfFiles;
@@ -36,14 +34,12 @@ export class ConfigProcessingUtils {
     return cameraConfig;
   }
 
-  // prettier-ignore
-  public static processAudioConfig(audio: FileServiceIO, remarkable: Remarkable,
-      files?: FileAttachments, button?: GenericButton) {
+  public static processAudioConfig(audio: FileServiceIO, remark: Remarkable, files?: FileAttachments, button?: Button) {
     if (files && audio.files) {
       if (audio.files.infoModal) {
         Object.assign(audio.files.infoModal, files.infoModal);
         const markdown = files.infoModal?.textMarkDown;
-        audio.infoModalTextMarkUp = remarkable.render(markdown || '');
+        audio.infoModalTextMarkUp = remark.render(markdown || '');
       }
       if (files.acceptedFormats) audio.files.acceptedFormats = files.acceptedFormats;
       if (files.maxNumberOfFiles) audio.files.maxNumberOfFiles = files.maxNumberOfFiles;
