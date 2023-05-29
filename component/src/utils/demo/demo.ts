@@ -1,4 +1,6 @@
+import {ResponseInterceptor} from '../../types/interceptors';
 import {Messages} from '../../views/chat/messages/messages';
+import {Result} from '../../types/result';
 
 type Finish = () => void;
 
@@ -7,9 +9,11 @@ export class Demo {
   private static readonly EXAMPLE_AI_MESSAGE = 'Hello I am a helpful assistant!';
   private static readonly EXAMPLE_AI_STREAMED_MESSAGE = 'How are you doing?'.split(' ');
 
-  public static request(messages: Messages, onFinish: Finish) {
+  public static request(messages: Messages, onFinish: Finish, responseInterceptor: ResponseInterceptor) {
     setTimeout(() => {
-      messages.addNewMessage({text: Demo.EXAMPLE_AI_MESSAGE}, true, true);
+      const message = {text: Demo.EXAMPLE_AI_MESSAGE};
+      const preprocessedMessage = JSON.stringify(responseInterceptor(message));
+      messages.addNewMessage(preprocessedMessage as Result, true, true);
       onFinish();
     }, 400);
   }

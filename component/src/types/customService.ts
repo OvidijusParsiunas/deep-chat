@@ -6,13 +6,13 @@ import {Result} from './result';
 import {Demo} from './demo';
 
 export type CustomServiceConfig = {
-  request: RequestSettings;
+  request?: RequestSettings;
   stream?: boolean;
   images?: boolean | FilesServiceConfig;
-  camera?: boolean | CameraFilesServiceConfig;
   audio?: boolean | FilesServiceConfig;
-  microphoneAudio?: boolean | RecordAudioFilesServiceConfig;
   mixedFiles?: boolean | FilesServiceConfig;
+  camera?: boolean | CameraFilesServiceConfig;
+  microphoneAudio?: boolean | RecordAudioFilesServiceConfig;
   requestInterceptor?: RequestInterceptor;
   responseInterceptor?: ResponseInterceptor;
   // automatically display all error messages from the service, all others automatically default

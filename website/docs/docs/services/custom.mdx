@@ -1,0 +1,205 @@
+---
+sidebar_position: 0
+---
+
+# Custom
+
+Properties used to configure AiAssistant to connect to a custom API.
+
+### `custom` {#custom}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`images?: boolean | FilesServiceConfig`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: boolean | FilesServiceConfig`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`mixedFiles?: boolean | FilesServiceConfig`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`camera?: boolean | CameraFilesServiceConfig`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`microphoneAudio?: boolean | RecordAudioFilesServiceConfig`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`stream?: boolean`](#stream), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`displayServiceErrorMessages?: boolean`](#displayServiceErrorMessages), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`demo?: boolean | Demo`](#Demo), <br />
+  } & [`ChatMessageLimits`](HERE)
+
+Configuration requires either `request` or `demo` to be set. Below is an example of demo.
+
+#### Example
+
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`I am connected to your custom service!`}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+## Types
+
+Property types for a custom service:
+
+### `RequestSettings` {#RequestSettings}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}` <br />
+  }
+
+- Default: _{ method: "POST" }_
+
+Custom properties used for the HTTP request.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        request: {
+          url: 'https://customapi.com/message',
+          method: 'POST',
+          headers: {customName: 'customHeaderValue'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `RequestInterceptor` {#RequestInterceptor}
+
+- Type: ([`details: RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails)
+
+// WORK - display the result data below the component
+
+A method that can be used to intercept outgoing HTTP requests and preprocess their data before they are sent. It MUST return a [`RequestDetails`](#RequestDetails) type object.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`Send a message to intercept the request.`}
+    service={{
+      custom: {
+        demo: true,
+        requestInterceptor: (data) => {
+          console.log(JSON.stringify(data));
+          return data;
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### `RequestDetails` {#RequestDetails}
+
+- Type: {`body: any`, `headers?: {[string]: string}`}
+
+Object containing data that is going to be used in the HTTP request to the target server. <br />
+`body` can contain any form of data. <br />
+`headers` is an optional object that contains the headers that are assigned to the request header. It is used as follows: <br /> _{ “Header name”: “Header value” }_
+
+<LineBreak></LineBreak>
+
+### `ResponseInterceptor` {#ResponseInterceptor}
+
+- Type: (`response: any`) => [`Result`](#Result)
+
+A method that can be used to intercept incoming HTTP responses and preprocess them before the component reads them.
+It MUST return a [`Result`](#Result) type object. This cannot be used for [`stream`](#stream) messages.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`Send a message to intercept the response.`}
+    service={{
+      custom: {
+        demo: true,
+        responseInterceptor: (data) => {
+          console.log(JSON.stringify(data));
+          return data;
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### `Result` {#Result}
+
+- Type: {`text?: string`, [`files?: MessageFile[]`](../messages#MessageFile)}
+
+Object containing response data from the target server. It must contain either one of the following properties: <br />
+`text` is a string that represents a textual message response. <br />
+`files` is an array of objects that contain information about response files.
+
+<LineBreak></LineBreak>
+
+### `stream` {#stream}
+
+- Type: `boolean`
+
+If your service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type, you
+can stream your messages into the chat. (Please see [`examples`](https://github.com/OvidijusParsiunas/ai-assistant/tree/main/other-packages/servers) on how to set up a server).
+This is only supported for text messages.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`The response message bubble will be populated gradually with text events.`}
+    service={{custom: {demo: true, stream: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `displayServiceErrorMessages` {#displayServiceErrorMessages}
+
+- Type: `boolean`
+
+This is used to display the returned error messages from the service in the error message bubble.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{custom: {displayServiceErrorMessages: true, demo: {displayErrors: {service: true}}}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `Demo` {#Demo}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayLoadingBubble?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayFileAttachmentContainer?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayErrors?`: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: boolean` <br />
+  }}
+
+Populates chat with elements and simulates message responses by mocking out the API. This is useful for prototyping and showcasing the component's capabilities.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`This is a demo API, I will respond from a set of predefined messages.`}
+    service={{
+      custom: {
+        demo: {
+          displayLoadingBubble: true,
+          displayFileAttachmentContainer: true,
+          displayErrors: {service: true, speechToTextInput: true},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>

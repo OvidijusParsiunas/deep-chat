@@ -66,11 +66,11 @@ export interface ServiceIO {
   // service errors via prefixes
   permittedErrorPrefixes?: CustomErrors;
 
-  // the reason why requestInterceptor and resposeInterceptor are not optional is so that HTTPRequest would not need
+  // the reason why requestInterceptor and responseInterceptor are not optional is so that HTTPRequest would not need
   // to use them as optionals
   requestInterceptor: RequestInterceptor;
 
-  resposeInterceptor: ResponseInterceptor;
+  responseInterceptor: ResponseInterceptor;
 
   canSendMessage: ValidateMessageBeforeSending;
 

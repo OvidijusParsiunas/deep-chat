@@ -35,7 +35,7 @@ export class CustomServiceIO implements ServiceIO {
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
   requestInterceptor: RequestInterceptor = (body) => body;
-  resposeInterceptor: ResponseInterceptor = (result) => result;
+  responseInterceptor: ResponseInterceptor = (result) => result;
   private readonly _isStream: boolean = false;
   private readonly _total_messages_max_char_length?: number;
   private readonly _max_messages?: number;

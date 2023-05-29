@@ -33,7 +33,7 @@ export class BaseServideIO implements ServiceIO {
   canSendMessage: ValidateMessageBeforeSending = BaseServideIO.canSendMessage;
   requestSettings?: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
-  resposeInterceptor: ResponseInterceptor = (result) => result;
+  responseInterceptor: ResponseInterceptor = (result) => result;
   fileTypes?: ServiceFileTypes;
   camera?: CameraFilesServiceConfig;
   recordAudio?: RecordAudioFilesServiceConfig;
@@ -49,7 +49,7 @@ export class BaseServideIO implements ServiceIO {
     // don't bother cleaning the config as we construct _raw_body with individual props
     if (typeof config === 'object') {
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
-      if (config.responseInterceptor) this.resposeInterceptor = config.responseInterceptor;
+      if (config.responseInterceptor) this.responseInterceptor = config.responseInterceptor;
     }
     if (fileType) {
       this.fileTypes = {};

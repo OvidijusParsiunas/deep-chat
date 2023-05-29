@@ -6,10 +6,10 @@ import {OpenAI} from './openAI';
 import {Azure} from './azure';
 
 export interface Service {
+  custom?: CustomServiceConfig;
   openAI?: OpenAI;
   huggingFace?: HuggingFace;
   azure?: Azure;
   cohere?: Cohere;
   assemblyAI?: AssemblyAI;
-  custom?: CustomServiceConfig;
 }
