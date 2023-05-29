@@ -20,9 +20,15 @@ export class DropupItem {
 
   private static generateStatefulStyles(itemStyles?: StatefulStyles): StatefulStyles {
     return {
-      default: itemStyles?.default || {},
-      hover: Object.assign({backgroundColor: '#f3f3f3'}, itemStyles?.hover),
-      click: Object.assign({backgroundColor: '#ebebeb'}, itemStyles?.click),
+      default: itemStyles?.default,
+      hover: Object.assign(
+        JSON.parse(JSON.stringify(itemStyles?.default || {backgroundColor: '#f3f3f3'})),
+        itemStyles?.hover
+      ),
+      click: Object.assign(
+        JSON.parse(JSON.stringify(itemStyles?.hover || {backgroundColor: '#ebebeb'})),
+        itemStyles?.click
+      ),
     };
   }
 

@@ -35,8 +35,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
-    // WORK - document how the loading button can be generated
-    if (!this._customStyles?.loading) this.overwriteLoadingStyleIfNoLoadingMessage(aiAssistant);
+    this.attemptOverwriteLoadingStyle(aiAssistant);
     this.changeToSubmitIcon();
   }
 
@@ -75,7 +74,8 @@ export class SubmitButton extends InputButton<Styles> {
     return stopIconElement;
   }
 
-  private overwriteLoadingStyleIfNoLoadingMessage(aiAssistant: AiAssistant) {
+  private attemptOverwriteLoadingStyle(aiAssistant: AiAssistant) {
+    if (this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
     if (aiAssistant.displayLoadingBubble === undefined || aiAssistant.displayLoadingBubble === true) {
       const styleElement = document.createElement('style');
       styleElement.textContent = `

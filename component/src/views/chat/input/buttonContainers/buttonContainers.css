@@ -22,11 +22,11 @@
 .outside-left {
   position: absolute;
   right: calc(11px - 0.55em);
-  bottom: 0.85em;
+  bottom: 0.88em;
 }
 
 .outside-right {
   position: absolute;
   left: calc(11px - 0.55em);
-  bottom: 0.85em;
+  bottom: 0.88em;
 }

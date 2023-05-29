@@ -108,8 +108,6 @@ when a response message is being [streamed](HERE). <br />
           },
         },
       },
-      loading: {},
-      stop: {},
       position: 'outside-right',
     }}
     service={{custom: {demo: true, stream: true}}}
@@ -147,6 +145,19 @@ when a response message is being [streamed](HERE). <br />
     service={{custom: {demo: true, stream: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::info
+Due to the varying states, the styling is not automatically shared between one another.
+:::
+
+<LineBreak></LineBreak>
+
+:::info
+When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to false and the `loading` property's `content` string for `text` or `svg` is not set,
+the submit button will have a loading animation.
+:::
 
 <LineBreak></LineBreak>
 
@@ -197,10 +208,10 @@ Configuration for the dropup button and its menu element styles. <br />
         },
         item: {
           hover: {
-            backgroundColor: '#f5f5f5',
+            backgroundColor: '#e1f2ff',
           },
           click: {
-            backgroundColor: '#efefef',
+            backgroundColor: '#cfeaff',
           },
         },
         iconContainer: {

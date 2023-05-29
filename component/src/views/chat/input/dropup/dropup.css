@@ -8,14 +8,13 @@
   pointer-events: none;
   width: 1.15em;
   height: 1.15em;
-  left: 0.26em;
+  left: 0.265em;
   bottom: 0.43em;
   filter: brightness(0) saturate(100%) invert(54%) sepia(0%) saturate(724%) hue-rotate(6deg) brightness(92%) contrast(90%);
 }
 
 #dropup-menu {
   background-color: white;
-  border: 1px solid #f6f6f6;
   position: absolute;
   transform: translate(0px, -100%);
   border-radius: 5px;
@@ -42,10 +41,14 @@
 
 .dropup-menu-item:first-child {
   padding-top: 0.49em;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 }
 
 .dropup-menu-item:last-child {
   padding-bottom: 0.45em;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
 }
 
 .dropup-menu-item-icon {
