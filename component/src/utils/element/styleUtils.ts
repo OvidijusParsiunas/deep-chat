@@ -19,4 +19,11 @@ export class StyleUtils {
     StyleUtils.unsetActivityCSSMouseStates(element, statefulStyle);
     if (statefulStyle.default) StyleUtils.unsetStyle(element, statefulStyle.default);
   }
+
+  public static generateStateful(styles: StatefulStyles, defHover: CustomStyle, defClick: CustomStyle): StatefulStyles {
+    const defaultStyle = styles.default || {};
+    const hoverStyle = Object.assign(JSON.parse(JSON.stringify({...defaultStyle, ...defHover})), styles?.hover);
+    const clickStyle = Object.assign(JSON.parse(JSON.stringify({...hoverStyle, ...defClick})), styles?.click);
+    return {default: defaultStyle, hover: hoverStyle, click: clickStyle};
+  }
 }

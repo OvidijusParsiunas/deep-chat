@@ -169,7 +169,7 @@ export class CustomServiceIO implements ServiceIO {
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
     let textMessageIndex = 0;
     messages.forEach((message) => {
-      if (message.text) formData.append(`messages${(textMessageIndex += 1)}`, JSON.stringify(message));
+      if (message.text) formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
     });
     return formData;
   }
@@ -228,6 +228,6 @@ export class CustomServiceIO implements ServiceIO {
       }
       throw result.error;
     }
-    return result.result;
+    return result.result as Result;
   }
 }

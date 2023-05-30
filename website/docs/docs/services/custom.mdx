@@ -4,7 +4,30 @@ sidebar_position: 0
 
 # Custom
 
-Properties used to configure AiAssistant to connect to a custom API.
+This page describes the configuration that is required to communicate with a custom API service.
+
+// WORK - displaying code
+
+## How To
+
+The quickest way to connect to an existing service is to use the [`requestInterceptor`](#RequestInterceptor) and [`responseInterceptor`](#ResponseInterceptor) properties
+which will allow you to modify the outgoing requests for your target API and alter the responses to allow the component to interpret them correctly.
+
+By default, the outgoing request bodies will contain all of the messages within the chat (to allow you to interpret their context as needed). This behaviour can be altered within
+the [`custom`](#custom) object by the use of properties such as [`max_messages`](HERE) and [`total_messages_max_char_length`](HERE).
+The outgoing body can also contain additional properties by adding them to the [`custom`](#custom) object.
+
+- When sending text based messages only, the request body will have the following JSON type: <br />
+  {[`messages: MessageContent[]`](../messages/#MessageContent)} <br />
+
+- When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
+
+The response message body needs to have the following JSON type: <br />
+&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result[]`](#Result), `error?: string`} <br />
+
+Please see [`EXAMPLES`](https://github.com/OvidijusParsiunas/ai-assistant/tree/main/other-packages/servers) for setting up your own server.
+
+<h2>Component setup</h2>
 
 ### `custom` {#custom}
 
@@ -20,9 +43,12 @@ Properties used to configure AiAssistant to connect to a custom API.
   &nbsp;&nbsp;&nbsp;&nbsp; [`stream?: boolean`](#stream), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`displayServiceErrorMessages?: boolean`](#displayServiceErrorMessages), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`demo?: boolean | Demo`](#Demo), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `string?: any` <br />
   } & [`ChatMessageLimits`](HERE)
 
-Configuration requires either `request` or `demo` to be set. Below is an example of demo.
+Object used to configure AiAssistant to communicate with a custom API. <br />
+Whilst the properties are marked as optional, either `request` or `demo` need to be set. The example below is using `demo`.
+This object can additionally be populated with your own key (string) values (any) which will be added to the outgoing messages' request bodies.
 
 #### Example
 
@@ -45,7 +71,7 @@ import Tabs from '@theme/Tabs';
 
 ## Types
 
-Property types for a custom service:
+Property types for the `custom` object:
 
 ### `RequestSettings` {#RequestSettings}
 
@@ -115,7 +141,7 @@ Object containing data that is going to be used in the HTTP request to the targe
 - Type: (`response: any`) => [`Result`](#Result)
 
 A method that can be used to intercept incoming HTTP responses and preprocess them before the component reads them.
-It MUST return a [`Result`](#Result) type object. This cannot be used for [`stream`](#stream) messages.
+It MUST return a [`Result`](#Result) type object. This is not supported for [`stream`](#stream) messages.
 
 <ComponentContainer>
   <AiAssistantBrowser
@@ -134,7 +160,7 @@ It MUST return a [`Result`](#Result) type object. This cannot be used for [`stre
 
 <LineBreak></LineBreak>
 
-#### `Result` {#Result}
+### `Result` {#Result}
 
 - Type: {`text?: string`, [`files?: MessageFile[]`](../messages#MessageFile)}
 

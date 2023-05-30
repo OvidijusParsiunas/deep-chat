@@ -23,6 +23,6 @@ export type CustomServiceConfig = {
 } & ChatMessageLimits; // total_messages_max_char_length only applies when no files
 
 export interface CustomServiceResponse {
-  result: Result;
-  error: string;
+  result?: Result;
+  error?: string;
 }

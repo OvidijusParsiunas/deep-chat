@@ -1,6 +1,7 @@
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {CustomStyle, StatefulStyles} from '../../../../types/styles';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
+import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
@@ -16,20 +17,6 @@ export class DropupItem {
     item.addEventListener('mouseleave', () => {
       menu.highlightedItem = undefined;
     });
-  }
-
-  private static generateStatefulStyles(itemStyles?: StatefulStyles): StatefulStyles {
-    return {
-      default: itemStyles?.default,
-      hover: Object.assign(
-        JSON.parse(JSON.stringify(itemStyles?.default || {backgroundColor: '#f3f3f3'})),
-        itemStyles?.hover
-      ),
-      click: Object.assign(
-        JSON.parse(JSON.stringify(itemStyles?.hover || {backgroundColor: '#ebebeb'})),
-        itemStyles?.click
-      ),
-    };
   }
 
   private static createItemText(dropupText?: string, textStyle?: CustomStyle) {
@@ -58,14 +45,16 @@ export class DropupItem {
     }
   }
 
+  // prettier-ignore
   public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
     const {elementRef, dropupText} = inputButton;
     const item = document.createElement('div');
     Object.assign(item.style, styles?.item?.default);
     DropupItem.populateItem(elementRef, item, dropupText, styles);
     item.classList.add('dropup-menu-item');
-    const eventfulStyles = DropupItem.generateStatefulStyles(styles?.item);
-    DropupItem.addItemEvents(menu, item, elementRef, eventfulStyles);
+    const statefulStyles = StyleUtils.generateStateful(
+      styles?.item || {}, {backgroundColor: '#f3f3f3'}, {backgroundColor: '#ebebeb'});
+    DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
     return item;
   }
 }
