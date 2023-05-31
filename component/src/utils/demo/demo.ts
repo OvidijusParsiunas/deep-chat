@@ -33,7 +33,7 @@ export class Demo {
         messages.updateStreamedMessage(`${word} `, textElement);
         Demo.populateMessages(textElement, messages, onClose, wordIndex + 1);
       } else {
-        messages.finaliseStreamedMessage(textElement.innerText);
+        messages.finaliseStreamedMessage();
         onClose();
       }
     }, 70);

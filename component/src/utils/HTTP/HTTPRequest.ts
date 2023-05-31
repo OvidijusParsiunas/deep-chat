@@ -72,7 +72,7 @@ export class HTTPRequest {
         throw new Error('error'); // need to throw otherwise stream will retry infinitely
       },
       onclose() {
-        messages.finaliseStreamedMessage((textElement as HTMLElement)?.innerText);
+        messages.finaliseStreamedMessage();
         onClose();
       },
       signal: abortStream.signal,

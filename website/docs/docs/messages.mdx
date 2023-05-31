@@ -247,7 +247,30 @@ Shared object property types related to messages:
   &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `file: MessageFile`}
 
 Format used to encapsulate each message within AiAssistant. It uses EITHER ONE of the object types above where `text`
-or `file` property is defined.
+or `file` property is defined. <br />
+The component analyzes the `text` string for [Markdown](https://www.markdownguide.org/basic-syntax/) properties
+and renders the message accordingly. This is useful for displaying code snippets, paragraphs etc. Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    initialMessages={[
+      {
+        text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
+        role: 'ai',
+      },
+    ]}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {maxWidth: '270px'},
+        },
+      },
+    }}
+    service={{custom: {demo: true}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
 
 <LineBreak></LineBreak>
 
@@ -284,6 +307,8 @@ Interactive media bubbles need EITHER `src` (path to the file) or `base64` (bina
     service={{custom: {demo: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
+
+<LineBreak></LineBreak>
 
 :::info
 _"image"_ and _"any"_ file types containing a `src` property will automatically be wrapped inside a hyperlink.

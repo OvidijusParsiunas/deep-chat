@@ -285,10 +285,10 @@ export class Messages {
     if (isScrollbarAtBottomOfElement) this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
-  public finaliseStreamedMessage(text: string) {
-    this.messages[this.messages.length - 1].text = text;
-    this.sendClientUpdate(Messages.createMessageContent(true, text), false);
-    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
+  public finaliseStreamedMessage() {
+    this.messages[this.messages.length - 1].text = this._streamedText;
+    this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
+    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(this._streamedText);
     this._streamedText = '';
   }
 
