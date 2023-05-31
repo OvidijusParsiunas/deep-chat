@@ -1,9 +1,8 @@
 import {CameraFilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFiles, ImagesWithCameraConfig} from '../../types/camera';
 import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
 import {AudioWithMicrophoneConfig} from '../../types/microphone';
 import {FileAttachments} from '../../types/fileAttachments';
-import {ImagesWithCameraConfig} from '../../types/camera';
-import {CameraFiles} from '../../types/cameraFiles';
 import {FileServiceIO} from '../serviceIO';
 import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';

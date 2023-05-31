@@ -9,6 +9,13 @@ export interface CameraDimensions {
 
 export type PhotoFormat = 'png' | 'jpeg';
 
+export interface CameraFiles {
+  maxNumberOfFiles?: number;
+  acceptedFormats?: string; // for drag and drop -> overwritten by image button if available
+  format?: PhotoFormat;
+  dimensions?: CameraDimensions;
+}
+
 export type ImagesWithCameraConfig = FilesConfig & {
   camera?: true | {button?: Button; modalContainerStyle?: CustomStyle; format?: PhotoFormat};
 };

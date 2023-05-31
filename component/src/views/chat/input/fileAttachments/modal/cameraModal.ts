@@ -1,11 +1,10 @@
 import {FileAttachmentsType} from '../fileAttachmentTypes/fileAttachmentsType';
+import {CameraDimensions, CameraFiles} from '../../../../../types/camera';
 import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CLOSE_ICON_STRING} from '../../../../../icons/closeIcon';
 import {TICK_ICON_STRING} from '../../../../../icons/tickIcon';
-import {CameraDimensions} from '../../../../../types/camera';
-import {CameraFiles} from '../../../../../types/cameraFiles';
 import {CustomStyle} from '../../../../../types/styles';
 import {FileAttachments} from '../fileAttachments';
 import {NewFileName} from '../newFileName';

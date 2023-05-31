@@ -5,8 +5,8 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
-import {CameraFiles} from '../../../../../types/cameraFiles';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {CameraFiles} from '../../../../../types/camera';
 import {CustomStyle} from '../../../../../types/styles';
 import {InputButton} from '../inputButton';
 

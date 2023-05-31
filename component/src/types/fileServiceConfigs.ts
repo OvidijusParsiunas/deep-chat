@@ -2,7 +2,7 @@ import {AudioRecordingFiles} from './audioRecordingFiles';
 import {RequestSettings} from './requestSettings';
 import {FileAttachments} from './fileAttachments';
 import {MicrophoneStyles} from './microphone';
-import {CameraFiles} from './cameraFiles';
+import {CameraFiles} from './camera';
 import {CustomStyle} from './styles';
 import {Button} from './button';
 
