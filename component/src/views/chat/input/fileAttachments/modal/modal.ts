@@ -13,9 +13,9 @@ export class Modal {
   extensionCloseCallback?: () => void;
 
   constructor(viewContainerElement: HTMLElement, contentClasses: string[], containerStyle?: CustomStyle) {
-    this._contentRef = Modal.createModalContent(contentClasses);
+    this._contentRef = Modal.createModalContent(contentClasses, containerStyle?.backgroundColor);
+    this._buttonPanel = Modal.createButtonPanel(containerStyle?.backgroundColor);
     this._elementRef = Modal.createContainer(this._contentRef, containerStyle);
-    this._buttonPanel = Modal.createButtonPanel();
     this._elementRef.appendChild(this._buttonPanel);
     viewContainerElement.appendChild(this._elementRef);
     this._backgroundPanelRef = Modal.createDarkBackgroundPanel();
@@ -31,21 +31,24 @@ export class Modal {
     const containerElement = document.createElement('div');
     containerElement.classList.add('modal');
     containerElement.appendChild(content);
+    if (containerStyle) delete containerStyle.backgroundColor;
     Object.assign(containerElement.style, containerStyle);
     return containerElement;
   }
 
-  private static createModalContent(contentClasses: string[]) {
+  private static createModalContent(contentClasses: string[], backgroundColor?: string) {
     const contentElement = document.createElement('div');
     contentElement.classList.add(...contentClasses);
+    if (backgroundColor) contentElement.style.backgroundColor = backgroundColor;
     const contentContainerElement = document.createElement('div');
     contentContainerElement.appendChild(contentElement);
     return contentElement;
   }
 
-  private static createButtonPanel() {
+  private static createButtonPanel(backgroundColor?: string) {
     const buttonPanelElement = document.createElement('div');
     buttonPanelElement.classList.add('modal-button-panel');
+    if (backgroundColor) buttonPanelElement.style.backgroundColor = backgroundColor;
     return buttonPanelElement;
   }
 

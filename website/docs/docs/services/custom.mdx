@@ -6,8 +6,6 @@ sidebar_position: 0
 
 This page describes the configuration that is required to communicate with a custom API service.
 
-// WORK - displaying code
-
 ## How To
 
 The quickest way to connect to an existing service is to use the [`requestInterceptor`](#RequestInterceptor) and [`responseInterceptor`](#ResponseInterceptor) properties
@@ -33,18 +31,18 @@ Please see [`EXAMPLES`](https://github.com/OvidijusParsiunas/ai-assistant/tree/m
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](#ResponseInterceptor), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`images?: boolean | FilesServiceConfig`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: boolean | FilesServiceConfig`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`mixedFiles?: boolean | FilesServiceConfig`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`camera?: boolean | CameraFilesServiceConfig`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`microphoneAudio?: boolean | RecordAudioFilesServiceConfig`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`stream?: boolean`](#stream), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`displayServiceErrorMessages?: boolean`](#displayServiceErrorMessages), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`demo?: boolean | Demo`](#Demo), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `string?: any` <br />
-  } & [`ChatMessageLimits`](HERE)
+  } & [`MessageLimits`](#MessageLimits)
 
 Object used to configure AiAssistant to communicate with a custom API. <br />
 Whilst the properties are marked as optional, either `request` or `demo` need to be set. The example below is using `demo`.
@@ -65,13 +63,133 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <AiAssistantBrowser
     introMessage={`I am connected to your custom service!`}
-    service={{custom: {demo: true}}}
+    service={{custom: {demo: true, images: true, audio: true, mixedFiles: true}}}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
 ## Types
 
 Property types for the `custom` object:
+
+### `ServiceCallConfig` {#ServiceCallConfig}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](#ResponseInterceptor) <br />
+  }
+
+Configuration used to call a service and intercept the data sent between it and the component.
+
+<LineBreak></LineBreak>
+
+### `FilesServiceConfig` {#FilesServiceConfig}
+
+- Type: {[`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button), [`ServiceCallConfig`](#ServiceCallConfig)}
+
+Configuration used for enabling the component to send files and the customization of elements that help facilitate this. <br />
+`files` is used to configure what files can be sent to the target service. <br />
+`button` is used to style the button for uploading/creating the file. <br />
+`ServiceCallConfig` object is used to override the default service request settings. When using a [`custom`](HERE) service, this can be used
+to call a different API for each individual file types. <br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        images: {
+          files: {acceptedFormats: '.jpg,.png'},
+          button: {position: 'outside-left'},
+          request: {url: 'https://customapi.com/image'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::info
+When this property is used, [`dragAndDrop`](HERE) is automatically enabled.
+:::
+
+<LineBreak></LineBreak>
+
+### `FileAttachments` {#FileAttachments}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`infoModal?: InfoModal`](#InfoModal) <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxNumberOfFiles: ∞, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: for images: ".png,.jpg", for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a" <br />
+  }_
+
+Used to control what files the component can accept. <br />
+`maxNumberOfFiles` controls the maximum number of files that can be sent within one message. <br />
+`acceptedFormats` is used to define the accepted file formats. It is a singular string that uses the same syntax
+as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). It is also worth noting that the [`dragAndDrop`](HERE) feature will also
+use this to verify dropped files. <br />
+`infoModal` is used to display noteworthy information when the user clicks the button to search for a file. <br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
+    service={{
+      custom: {
+        demo: true,
+        images: {
+          files: {
+            maxNumberOfFiles: 2,
+            acceptedFormats: '.jpg,.png',
+          },
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `InfoModal` {#InfoModal}
+
+- Type: {`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](./sharedTypes/#CustomStyle)}
+
+- Default: _{openModalOnce: false}_
+
+A modal that is triggered when a user clicks on a button to upload a file. It is useful for scenarios when a user needs some
+clarification of how their data will be handled or they need to be aware of other noteworty information. <br />
+`textMarkDown` is a string that uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to generate the content of the modal. <br />
+`openModalOnce` controls whether the modal is only opened up the first time the user clicks a button or every time. <br />
+`containerStyle` is used to augment the basic styling of the modal element.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`Click the image button to open up the modal.`}
+    service={{
+      custom: {
+        demo: true,
+        images: {
+          files: {
+            infoModal: {
+              textMarkDown:
+                'Please take note of the terms of our service: [link](https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley).',
+              openModalOnce: true,
+              containerStyle: {borderRadius: '5px'},
+            },
+          },
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
 
 ### `RequestSettings` {#RequestSettings}
 
@@ -93,6 +211,38 @@ Custom properties used for the HTTP request.
           url: 'https://customapi.com/message',
           method: 'POST',
           headers: {customName: 'customHeaderValue'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `MessageLimits` {#MessageLimits}
+
+- Type: {`max_messages?: number`, `total_messages_max_char_length?: number`}
+
+// WORK - display the intercepted messages
+
+Used to limit the message content that is going to be sent to the target service (for both user and AI). <br />
+`max_messages` is the maximum number of messages that are going to be sent. <br />
+`total_messages_max_char_length` is the maximum number of text characters that are going to be sent and will inherently limit
+the number of included messages. This is particularly useful if the target service has a token limit. <br />
+If `max_messages` number is hit before `total_messages_max_char_length`, `max_messages` will take presendence. <br />
+These limits do not include the [`introMessage`](HERE).
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    introMessage={`Observe the data that is going to be sent below.`}
+    service={{
+      custom: {
+        demo: true,
+        total_messages_max_char_length: 20,
+        max_messages: 2,
+        requestInterceptor: (data) => {
+          console.log(JSON.stringify(data));
+          return data;
         },
       },
     }}

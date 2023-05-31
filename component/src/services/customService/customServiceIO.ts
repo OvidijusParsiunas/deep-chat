@@ -9,8 +9,8 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {FileAttachments} from '../../types/fileAttachments';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {ChatMessageLimits} from '../../types/chatLimits';
 import {Demo as DemoClass} from '../../utils/demo/demo';
+import {MessageLimits} from '../../types/chatLimits';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -50,6 +50,7 @@ export class CustomServiceIO implements ServiceIO {
     }
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
+    if (customService.responseInterceptor) this.responseInterceptor = customService.responseInterceptor;
     if (customService.images) {
       this.fileTypes.images = CustomServiceIO.parseConfig(customService.images, this.requestSettings, 'image/*');
     }
@@ -145,7 +146,7 @@ export class CustomServiceIO implements ServiceIO {
     }
   }
 
-  private static cleanConfig(config: Partial<CustomServiceConfig> & ChatMessageLimits) {
+  private static cleanConfig(config: Partial<CustomServiceConfig> & MessageLimits) {
     delete config.images;
     delete config.camera;
     delete config.audio;

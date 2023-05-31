@@ -1,7 +1,7 @@
 import {CustomStyle} from './styles';
 
 export interface InfoModal {
-  textMarkDown?: string;
+  textMarkDown: string;
   openModalOnce?: boolean;
   containerStyle?: CustomStyle;
 }

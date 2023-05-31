@@ -1,7 +1,7 @@
 import {ExistingServiceAudioRecordingConfig} from './microphone';
 import {ExistingServiceCameraConfig} from './camera';
 import {ServiceCallConfig} from './requestSettings';
-import {ChatMessageLimits} from './chatLimits';
+import {MessageLimits} from './chatLimits';
 import {Key} from './key';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
@@ -74,7 +74,7 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (Key & HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & ChatMessageLimits);
+  conversation?: true | (Key & HuggingFaceModel & HuggingFaceConversationConfig & ServiceCallConfig & MessageLimits);
   textGeneration?: true | (Key & HuggingFaceModel & HuggingFaceTextGenerationConfig & ServiceCallConfig);
   summarization?: true | (Key & HuggingFaceModel & HuggingFaceSummarizationConfig & ServiceCallConfig);
   translation?: true | (Key & HuggingFaceModel & HuggingFaceTranslationConfig & ServiceCallConfig);

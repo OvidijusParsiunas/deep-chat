@@ -25,7 +25,8 @@ export class UploadFileButton extends InputButton<Styles> {
     this.elementRef.replaceChildren(innerElements.styles);
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
-    this._openModalOnce = fileService.files?.infoModal?.openModalOnce;
+    this._openModalOnce = fileService.files?.infoModal?.openModalOnce === false
+    ? undefined : fileService.files?.infoModal?.openModalOnce;
   }
 
   private createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
@@ -77,9 +78,9 @@ export class UploadFileButton extends InputButton<Styles> {
   }
 
   private click(openModalFunc?: () => void) {
-    if (openModalFunc && this._openModalOnce) {
+    if (openModalFunc && (this._openModalOnce === undefined || this._openModalOnce === true)) {
       openModalFunc();
-      this._openModalOnce = undefined;
+      if (this._openModalOnce === true) this._openModalOnce = false;
     } else {
       this.triggerImportPrompt(this._inputElement);
     }

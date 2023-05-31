@@ -12,7 +12,7 @@ export class Demo {
   public static request(messages: Messages, onFinish: Finish, responseInterceptor: ResponseInterceptor) {
     setTimeout(() => {
       const message = {text: Demo.EXAMPLE_AI_MESSAGE};
-      const preprocessedMessage = JSON.stringify(responseInterceptor(message));
+      const preprocessedMessage = responseInterceptor(message);
       messages.addNewMessage(preprocessedMessage as Result, true, true);
       onFinish();
     }, 400);
