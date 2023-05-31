@@ -88,7 +88,7 @@ export class InputButtonPositions {
     }
     // if there are multiple buttons without a position -> dropdown
     const buttonsWithoutPositions = Object.keys(buttonsObj);
-    if (buttonsWithoutPositions.length > 1) {
+    if (buttonsWithoutPositions.length > 1 || positions['dropup-menu'].length > 0) {
       BUTTON_ORDER.forEach((buttonType) => {
         if (buttonsObj[buttonType]) positions['dropup-menu'].push(buttonsObj[buttonType] as ButtonProps);
       });

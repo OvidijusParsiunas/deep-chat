@@ -48,6 +48,8 @@ export class CustomServiceIO implements ServiceIO {
     if (!customService?.request && !customService?.demo) {
       throw new Error('please define a request property in custom: {request: ...}');
     }
+    this.demo = customService.demo;
+    if (this.demo) this.requestSettings.url = DemoClass.URL;
     if (customService.request) this.requestSettings = customService.request;
     if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
     if (customService.responseInterceptor) this.responseInterceptor = customService.responseInterceptor;
@@ -65,13 +67,11 @@ export class CustomServiceIO implements ServiceIO {
     }
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
-    this._total_messages_max_char_length = customService.total_messages_max_char_length;
-    this._max_messages = customService.max_messages;
+    this._total_messages_max_char_length = customService.totalMessagesMaxCharLength;
+    this._max_messages = customService.maxMessages;
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
     this._raw_body = customService;
     this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
-    this.demo = customService.demo;
-    if (this.demo) this.requestSettings.url = DemoClass.URL;
   }
 
   private static canSendMessage(text: string, files?: File[]) {
@@ -83,7 +83,7 @@ export class CustomServiceIO implements ServiceIO {
       requestSettings: RequestSettings, defAcceptedFormats: string) {
     const fileConfig: FileServiceIO & {files: FileAttachments} = {files: {acceptedFormats: defAcceptedFormats}};
     if (typeof fileType === 'object') {
-      const {files, request, requestInterceptor, responseInterceptor, button} = fileType;
+      const {files, request, button} = fileType;
       if (files) {
         if (files.infoModal) {
           fileConfig.files.infoModal = files.infoModal;
@@ -101,8 +101,6 @@ export class CustomServiceIO implements ServiceIO {
         method: request?.method || requestSettings.method,
         url: request?.url || requestSettings.url,
       };
-      fileConfig.requestInterceptor = requestInterceptor;
-      fileConfig.responseInterceptor = responseInterceptor;
     }
     return fileConfig;
   }
@@ -157,8 +155,8 @@ export class CustomServiceIO implements ServiceIO {
     delete config.requestInterceptor;
     delete config.responseInterceptor;
     delete config.displayServiceErrorMessages;
-    delete config.max_messages;
-    delete config.total_messages_max_char_length;
+    delete config.maxMessages;
+    delete config.totalMessagesMaxCharLength;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -181,8 +179,6 @@ export class CustomServiceIO implements ServiceIO {
     const formData = CustomServiceIO.createFormDataBody(this._raw_body, processedMessages, files);
     const previousRequestSettings = this.requestSettings;
     this.requestSettings = fileIO?.request || this.requestSettings;
-    // this requestInterceptor is for more fine grained monitoring
-    fileIO?.requestInterceptor?.({body: formData, headers: this.requestSettings.headers});
     HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
     this.requestSettings = previousRequestSettings;
   }

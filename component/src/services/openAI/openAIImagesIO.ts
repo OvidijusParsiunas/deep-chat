@@ -1,10 +1,10 @@
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {ExistingServiceCameraConfig} from '../../types/camera';
 import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIImageResult} from '../../types/openAIResult';
+import {ImagesWithCameraConfig} from '../../types/camera';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
 import {BaseServideIO} from '../utils/baseServiceIO';
@@ -58,7 +58,7 @@ export class OpenAIImagesIO extends BaseServideIO {
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static cleanConfig(config: ExistingServiceCameraConfig) {
+  private static cleanConfig(config: ImagesWithCameraConfig) {
     delete config.files;
     delete config.button;
     delete config.camera;

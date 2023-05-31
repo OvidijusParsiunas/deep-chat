@@ -1,6 +1,6 @@
 import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
-import {ExistingServiceAudioRecordingConfig} from '../../types/microphone';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
+import {AudioWithMicrophoneConfig} from '../../types/microphone';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIAudioResult} from '../../types/openAIResult';
@@ -56,7 +56,7 @@ export class OpenAIAudioIO extends BaseServideIO {
     }
   }
 
-  private static cleanConfig(config: OpenAIAudioType & ExistingServiceAudioRecordingConfig) {
+  private static cleanConfig(config: OpenAIAudioType & AudioWithMicrophoneConfig) {
     delete config.files;
     delete config.button;
     delete config.type;

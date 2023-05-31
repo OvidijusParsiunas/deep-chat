@@ -28,6 +28,6 @@ export interface CohereGenerateConfig {
 }
 
 export interface Cohere {
-  textGeneration?: true | (Key & CohereGenerateConfig & ServiceCallConfig);
-  summarization?: true | (Key & CohereSummarizationConfig & ServiceCallConfig);
+  textGeneration?: true | (Key & ServiceCallConfig & CohereGenerateConfig);
+  summarization?: true | (Key & ServiceCallConfig & CohereSummarizationConfig);
 }

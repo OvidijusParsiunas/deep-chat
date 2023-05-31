@@ -20,7 +20,7 @@ export type CustomServiceConfig = {
   displayServiceErrorMessages?: boolean;
   demo?: Demo;
   [key: string]: unknown;
-} & MessageLimits; // total_messages_max_char_length only applies when no files
+} & MessageLimits; // totalMessagesMaxCharLength only applies when no files
 
 export interface CustomServiceResponse {
   result?: Result;

@@ -1,20 +1,24 @@
 import {AudioRecordingFiles} from './audioRecordingFiles';
-import {ServiceCallConfig} from './requestSettings';
+import {RequestSettings} from './requestSettings';
 import {FileAttachments} from './fileAttachments';
 import {MicrophoneStyles} from './microphone';
 import {CameraFiles} from './cameraFiles';
 import {CustomStyle} from './styles';
 import {Button} from './button';
 
-export type FilesServiceConfig = ServiceCallConfig & {files?: FileAttachments; button?: Button};
+export type FilesConfig = {files?: FileAttachments; button?: Button};
 
-export type CameraFilesServiceConfig = ServiceCallConfig & {
+export type FilesServiceConfig = {request?: RequestSettings} & FilesConfig;
+
+export type CameraFilesServiceConfig = {
+  request?: RequestSettings;
   files?: CameraFiles;
   button?: Button;
   modalContainerStyle?: CustomStyle;
 };
 
-export type RecordAudioFilesServiceConfig = ServiceCallConfig & {
+export type RecordAudioFilesServiceConfig = {
+  request?: RequestSettings;
   files?: AudioRecordingFiles;
   button?: MicrophoneStyles;
 };

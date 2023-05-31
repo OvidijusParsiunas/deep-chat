@@ -1,5 +1,5 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceFileTypes, ServiceIO, StreamHandlers} from '../serviceIO';
+import {CameraFilesServiceConfig, FilesConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
@@ -23,7 +23,7 @@ type Camera = {camera?: true | {button?: Button; modalContainerStyle?: CustomSty
 
 type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat}};
 
-type Config = true | (Key & FilesServiceConfig & Camera & Microphone);
+type Config = true | (Key & FilesConfig & ServiceCallConfig & Camera & Microphone);
 
 export class BaseServideIO implements ServiceIO {
   key?: string;

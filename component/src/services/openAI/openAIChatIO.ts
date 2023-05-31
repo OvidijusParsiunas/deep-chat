@@ -28,8 +28,8 @@ export class OpenAIChatIO extends BaseServideIO {
     const config = service?.openAI?.chat; // can be undefined as this is the default service
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     if (typeof config === 'object') {
-      this._total_messages_max_char_length = config.total_messages_max_char_length;
-      this._max_messages = config.max_messages;
+      this._total_messages_max_char_length = config.totalMessagesMaxCharLength;
+      this._max_messages = config.maxMessages;
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
       this.cleanConfig(config);
     }
@@ -41,8 +41,8 @@ export class OpenAIChatIO extends BaseServideIO {
   }
 
   private cleanConfig(config: OpenAICustomChatConfig) {
-    delete config.total_messages_max_char_length;
-    delete config.max_messages;
+    delete config.totalMessagesMaxCharLength;
+    delete config.maxMessages;
     delete config.systemPrompt;
   }
 

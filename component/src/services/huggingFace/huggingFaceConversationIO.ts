@@ -15,10 +15,10 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
     const config = aiAssistant.service?.huggingFace?.conversation;
     super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
     if (typeof config === 'object') {
-      this._total_messages_max_char_length = config.total_messages_max_char_length;
-      if (config.max_messages) {
+      this._total_messages_max_char_length = config.totalMessagesMaxCharLength;
+      if (config.maxMessages) {
         // needs to be an odd number in order to have an array of previous correspondences and the new user message
-        this._max_messages = config.max_messages % 0 ? config.max_messages + 1 : config.max_messages;
+        this._max_messages = config.maxMessages % 0 ? config.maxMessages + 1 : config.maxMessages;
       }
     }
   }

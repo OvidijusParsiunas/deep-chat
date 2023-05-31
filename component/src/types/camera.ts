@@ -1,4 +1,4 @@
-import {ExistingServiceAudioRecordingConfig} from './microphone';
+import {FilesConfig} from './fileServiceConfigs';
 import {CustomStyle} from './styles';
 import {Button} from './button';
 
@@ -9,11 +9,6 @@ export interface CameraDimensions {
 
 export type PhotoFormat = 'png' | 'jpeg';
 
-export type ExistingServiceCameraConfig = ExistingServiceAudioRecordingConfig & {
-  camera?:
-    | true
-    | {
-        button?: Button;
-        modalContainerStyle?: CustomStyle;
-      };
+export type ImagesWithCameraConfig = FilesConfig & {
+  camera?: true | {button?: Button; modalContainerStyle?: CustomStyle; format?: PhotoFormat};
 };

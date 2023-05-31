@@ -1,8 +1,8 @@
 import {CameraFilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
-import {ExistingServiceAudioRecordingConfig} from '../../types/microphone';
 import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
-import {ExistingServiceCameraConfig} from '../../types/camera';
+import {AudioWithMicrophoneConfig} from '../../types/microphone';
 import {FileAttachments} from '../../types/fileAttachments';
+import {ImagesWithCameraConfig} from '../../types/camera';
 import {CameraFiles} from '../../types/cameraFiles';
 import {FileServiceIO} from '../serviceIO';
 import {Button} from '../../types/button';
@@ -24,11 +24,12 @@ export class ConfigProcessingUtils {
     images.button = button;
   }
 
-  public static processCameraConfig(camera: ExistingServiceCameraConfig['camera']) {
+  public static processCameraConfig(camera: ImagesWithCameraConfig['camera']) {
     const cameraConfig: CameraFilesServiceConfig & {files: CameraFiles} = {files: {}};
     if (typeof camera === 'object') {
       cameraConfig.button = camera.button;
       cameraConfig.modalContainerStyle = camera.modalContainerStyle;
+      if (camera.format) cameraConfig.files.format = camera.format;
       // cameraConfig.files.newFilePrefix = camera.newFilePrefix; // can implement in the future
     }
     return cameraConfig;
@@ -48,7 +49,7 @@ export class ConfigProcessingUtils {
   }
 
   // prettier-ignore
-  public static processRecordAudioConfig(microphone: ExistingServiceAudioRecordingConfig['microphone'],
+  public static processRecordAudioConfig(microphone: AudioWithMicrophoneConfig['microphone'],
       config?: AudioConfig) {
     const recordAudioConfig: AudioConfig = config || {files: {format: 'mp3'}};
     if (typeof microphone === 'object') {

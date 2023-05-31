@@ -20,5 +20,5 @@ export interface GCPTextToSpeechConfig {
 }
 
 export interface GCP {
-  textToSpeech?: true | (Key & GCPTextToSpeechConfig & ServiceCallConfig);
+  textToSpeech?: true | (Key & ServiceCallConfig & GCPTextToSpeechConfig);
 }
