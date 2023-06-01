@@ -1,13 +1,12 @@
-import {CameraFilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {AudioRecordingFiles, AudioWithMicrophoneConfig} from '../../types/microphone';
 import {CameraFiles, ImagesWithCameraConfig} from '../../types/camera';
-import {AudioRecordingFiles} from '../../types/audioRecordingFiles';
-import {AudioWithMicrophoneConfig} from '../../types/microphone';
 import {FileAttachments} from '../../types/fileAttachments';
 import {FileServiceIO} from '../serviceIO';
 import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';
 
-type AudioConfig = RecordAudioFilesServiceConfig & {files: AudioRecordingFiles};
+type AudioConfig = MicrophoneFilesServiceConfig & {files: AudioRecordingFiles};
 
 export class ConfigProcessingUtils {
   public static processImagesConfig(images: FileServiceIO, remark: Remarkable, files?: FileAttachments, button?: Button) {

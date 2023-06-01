@@ -15,3 +15,10 @@ export type AudioFormat = 'mp3' | '4a' | 'webm' | 'mp4' | 'mpga' | 'wav' | 'mpeg
 export type AudioWithMicrophoneConfig = FilesConfig & {
   microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat};
 };
+
+export interface AudioRecordingFiles {
+  format?: AudioFormat;
+  acceptedFormats?: string; // for drag and drop -> overwritten by audio button if available
+  maxNumberOfFiles?: number;
+  maxDurationSeconds?: number;
+}

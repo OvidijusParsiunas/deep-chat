@@ -1,7 +1,6 @@
-import {AudioRecordingFiles} from './audioRecordingFiles';
+import {AudioRecordingFiles, MicrophoneStyles} from './microphone';
 import {RequestSettings} from './requestSettings';
 import {FileAttachments} from './fileAttachments';
-import {MicrophoneStyles} from './microphone';
 import {CameraFiles} from './camera';
 import {CustomStyle} from './styles';
 import {Button} from './button';
@@ -17,7 +16,7 @@ export type CameraFilesServiceConfig = {
   modalContainerStyle?: CustomStyle;
 };
 
-export type RecordAudioFilesServiceConfig = {
+export type MicrophoneFilesServiceConfig = {
   request?: RequestSettings;
   files?: AudioRecordingFiles;
   button?: MicrophoneStyles;

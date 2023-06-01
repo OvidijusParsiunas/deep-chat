@@ -1,5 +1,5 @@
 import {AudioFileAttachmentType} from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
-import {RecordAudioFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
+import {MicrophoneFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
 import {NewFileName} from '../../fileAttachments/newFileName';
 import {AudioFormat} from '../../../../../types/microphone';
 import {MicrophoneButton} from './microphoneButton';
@@ -13,7 +13,7 @@ export class RecordAudio extends MicrophoneButton {
   private readonly _maxDurationSeconds?: number;
   private readonly _newFilePrefix?: string;
 
-  constructor(audioType: AudioFileAttachmentType, recordAudioConfig: RecordAudioFilesServiceConfig) {
+  constructor(audioType: AudioFileAttachmentType, recordAudioConfig: MicrophoneFilesServiceConfig) {
     super(recordAudioConfig.button);
     this._audioType = audioType;
     this._extension = recordAudioConfig.files?.format || 'mp3';

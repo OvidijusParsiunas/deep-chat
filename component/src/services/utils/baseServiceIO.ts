@@ -1,5 +1,5 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceFileTypes, ServiceIO, StreamHandlers} from '../serviceIO';
-import {CameraFilesServiceConfig, FilesConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, FilesConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
@@ -36,7 +36,7 @@ export class BaseServideIO implements ServiceIO {
   responseInterceptor: ResponseInterceptor = (result) => result;
   fileTypes?: ServiceFileTypes;
   camera?: CameraFilesServiceConfig;
-  recordAudio?: RecordAudioFilesServiceConfig;
+  recordAudio?: MicrophoneFilesServiceConfig;
   private readonly keyVerificationDetails: KeyVerificationDetails;
   private readonly buildHeadersFunc: BuildHeadersFunc;
 

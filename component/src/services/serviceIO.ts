@@ -1,4 +1,4 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {RequestSettings} from '../types/requestSettings';
@@ -55,7 +55,7 @@ export interface ServiceIO {
 
   camera?: CameraFilesServiceConfig;
 
-  recordAudio?: RecordAudioFilesServiceConfig;
+  recordAudio?: MicrophoneFilesServiceConfig;
 
   requestSettings?: RequestSettings;
 

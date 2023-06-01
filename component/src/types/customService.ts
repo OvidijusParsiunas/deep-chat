@@ -1,4 +1,4 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from './fileServiceConfigs';
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './fileServiceConfigs';
 import {RequestInterceptor, ResponseInterceptor} from './interceptors';
 import {RequestSettings} from './requestSettings';
 import {MessageLimits} from './chatLimits';
@@ -12,7 +12,7 @@ export type CustomServiceConfig = {
   audio?: boolean | FilesServiceConfig;
   mixedFiles?: boolean | FilesServiceConfig;
   camera?: boolean | CameraFilesServiceConfig;
-  microphoneAudio?: boolean | RecordAudioFilesServiceConfig;
+  microphoneAudio?: boolean | MicrophoneFilesServiceConfig;
   requestInterceptor?: RequestInterceptor;
   responseInterceptor?: ResponseInterceptor;
   // automatically display all error messages from the service, all others automatically default

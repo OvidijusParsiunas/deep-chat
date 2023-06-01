@@ -1,4 +1,4 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, RecordAudioFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
@@ -30,7 +30,7 @@ export class CustomServiceIO implements ServiceIO {
   private readonly _raw_body: any;
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
-  recordAudio?: RecordAudioFilesServiceConfig;
+  recordAudio?: MicrophoneFilesServiceConfig;
   canSendMessage: ValidateMessageBeforeSending = CustomServiceIO.canSendMessage;
   requestSettings: RequestSettings = {};
   private readonly displayServiceErrorMessages?: boolean;
