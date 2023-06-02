@@ -9,7 +9,7 @@ export interface OpenAIMessage {
 }
 
 export type OpenAIAudioType = {
-  type?: 'transcriptions' | 'translations';
+  type?: 'transcription' | 'translation';
 };
 
 // https://platform.openai.com/docs/api-reference/audio/create
@@ -17,7 +17,7 @@ export type OpenAIAudio = {
   model?: 'whisper-1';
   temperature?: number;
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
-} & OpenAIAudioType;
+};
 
 export interface OpenAIImages {
   n?: number;
@@ -36,7 +36,6 @@ export interface OpenAIConverse {
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
-  n?: number;
   stream?: boolean;
 }
 
@@ -44,5 +43,5 @@ export interface OpenAI {
   chat?: true | (ServiceCallConfig & OpenAIConverse & OpenAIChat);
   completions?: true | (ServiceCallConfig & OpenAIConverse);
   images?: true | (ServiceCallConfig & OpenAIImages & ImageFiles);
-  audio?: true | (ServiceCallConfig & OpenAIAudio & AudioFiles);
+  audio?: true | (ServiceCallConfig & OpenAIAudio & OpenAIAudioType & AudioFiles);
 }

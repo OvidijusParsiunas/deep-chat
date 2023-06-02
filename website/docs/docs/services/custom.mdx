@@ -68,7 +68,7 @@ import Tabs from '@theme/Tabs';
 
 ## Types
 
-Property types for the `custom` object:
+Property types for the [`custom`](HERE) object:
 
 ### `ServiceCallConfig` {#ServiceCallConfig}
 
@@ -191,7 +191,7 @@ Configuration for recording audio files using a microphone and handling them. <b
 ### `AudioRecordingFiles` {#AudioRecordingFiles}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"mp3"` | `"4a"` | `"webm"` | `"mp4"` | `"mpga"` | `"wav"` | `"mpeg"` | `"m4a"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`format?: AudioFormat`](HERE), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxDurationSeconds?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
@@ -231,6 +231,14 @@ the `acceptedFormats` property, it will override this one.<br />
 :::info
 The use of this object will automatically disable the [`speechToTextInput`](HERE) functionality.
 :::
+
+<LineBreak></LineBreak>
+
+### `AudioFormat` {#AudioFormat}
+
+- Type: `"mp3"` | `"4a"` | `"webm"` | `"mp4"` | `"mpga"` | `"wav"` | `"mpeg"` | `"m4a"`
+
+Allowed audio file formats.
 
 <LineBreak></LineBreak>
 

@@ -50,7 +50,7 @@ export class OpenAIAudioIO extends BaseServideIO {
   }
 
   private processConfig(config?: OpenAIAudio & OpenAIAudioType) {
-    if (config?.type && config.type === 'translations') {
+    if (config?.type && config.type === 'translation') {
       this._service_url = OpenAIAudioIO.AUDIO_TRANSLATIONS_URL;
       delete config.language; // not used for translations
     }
