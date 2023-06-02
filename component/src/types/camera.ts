@@ -1,4 +1,4 @@
-import {FilesConfig} from './fileServiceConfigs';
+import {FilesUploader} from './fileServiceConfigs';
 import {CustomStyle} from './styles';
 import {Button} from './button';
 
@@ -16,6 +16,6 @@ export interface CameraFiles {
   dimensions?: CameraDimensions;
 }
 
-export type ImagesWithCameraConfig = FilesConfig & {
+export type ImageFiles = FilesUploader & {
   camera?: true | {button?: Button; modalContainerStyle?: CustomStyle; format?: PhotoFormat};
 };

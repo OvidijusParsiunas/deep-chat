@@ -1,14 +1,14 @@
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {OpenAI, OpenAIImagesConfig} from '../../types/openAI';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIImageResult} from '../../types/openAIResult';
-import {ImagesWithCameraConfig} from '../../types/camera';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {ImageFiles} from '../../types/camera';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
@@ -31,7 +31,7 @@ export class OpenAIImagesIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid input image');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  private readonly _raw_body: OpenAIImagesConfig = {};
+  private readonly _raw_body: OpenAIImages = {};
 
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput, validateMessageBeforeSending} = aiAssistant;
@@ -58,23 +58,23 @@ export class OpenAIImagesIO extends BaseServideIO {
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static cleanConfig(config: ImagesWithCameraConfig) {
+  private static cleanConfig(config: ImageFiles) {
     delete config.files;
     delete config.button;
     delete config.camera;
   }
 
-  private static createFormDataBody(body: OpenAIImagesConfig, image: File, mask?: File) {
+  private static createFormDataBody(body: OpenAIImages, image: File, mask?: File) {
     const formData = new FormData();
     formData.append('image', image);
     if (mask) formData.append('mask', mask);
     Object.keys(body).forEach((key) => {
-      formData.append(key, String(body[key as keyof OpenAIImagesConfig]));
+      formData.append(key, String(body[key as keyof OpenAIImages]));
     });
     return formData;
   }
 
-  private preprocessBody(body: OpenAIImagesConfig, lastMessage?: string) {
+  private preprocessBody(body: OpenAIImages, lastMessage?: string) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     if (lastMessage && lastMessage !== '') {
       const processedMessage = lastMessage.substring(0, this._maxCharLength);

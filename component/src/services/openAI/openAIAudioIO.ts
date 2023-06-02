@@ -1,12 +1,12 @@
-import {OpenAI, OpenAIAudioConfig, OpenAIAudioType} from '../../types/openAI';
+import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
-import {AudioWithMicrophoneConfig} from '../../types/microphone';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
+import {AudioFiles} from '../../types/microphone';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -27,7 +27,7 @@ export class OpenAIAudioIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  private readonly _raw_body: OpenAIAudioConfig & {response_format?: 'json'} = {};
+  private readonly _raw_body: OpenAIAudio & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(aiAssistant: AiAssistant) {
@@ -49,30 +49,30 @@ export class OpenAIAudioIO extends BaseServideIO {
     return !!files?.[0];
   }
 
-  private processConfig(config?: OpenAIAudioConfig & OpenAIAudioType) {
+  private processConfig(config?: OpenAIAudio & OpenAIAudioType) {
     if (config?.type && config.type === 'translations') {
       this._service_url = OpenAIAudioIO.AUDIO_TRANSLATIONS_URL;
       delete config.language; // not used for translations
     }
   }
 
-  private static cleanConfig(config: OpenAIAudioType & AudioWithMicrophoneConfig) {
+  private static cleanConfig(config: OpenAIAudioType & AudioFiles) {
     delete config.files;
     delete config.button;
     delete config.type;
     delete config.microphone;
   }
 
-  private static createFormDataBody(body: OpenAIAudioConfig, audio: File) {
+  private static createFormDataBody(body: OpenAIAudio, audio: File) {
     const formData = new FormData();
     formData.append('file', audio);
     Object.keys(body).forEach((key) => {
-      formData.append(key, String(body[key as keyof OpenAIAudioConfig]));
+      formData.append(key, String(body[key as keyof OpenAIAudio]));
     });
     return formData;
   }
 
-  private preprocessBody(body: OpenAIAudioConfig, messages: MessageContent[], files: File[]) {
+  private preprocessBody(body: OpenAIAudio, messages: MessageContent[], files: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const lastMessage = messages[messages.length - files.length + 1]?.text?.trim();
     if (lastMessage && lastMessage !== '') {

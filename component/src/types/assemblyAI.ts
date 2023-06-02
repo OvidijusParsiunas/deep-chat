@@ -1,7 +1,6 @@
-import {AudioWithMicrophoneConfig} from './microphone';
 import {ServiceCallConfig} from './requestSettings';
-import {Key} from './key';
+import {AudioFiles} from './microphone';
 
 export interface AssemblyAI {
-  audio?: true | (Key & ServiceCallConfig & AudioWithMicrophoneConfig);
+  audio?: true | (ServiceCallConfig & AudioFiles);
 }

@@ -9,10 +9,10 @@ This page describes the configuration that is required to communicate with a cus
 ## How To
 
 The quickest way to connect to an existing service is to use the [`requestInterceptor`](#RequestInterceptor) and [`responseInterceptor`](#ResponseInterceptor) properties
-which will allow you to modify the outgoing requests for your target API and alter the responses to allow the component to interpret them correctly.
+(in [`ServiceCallConfig`](HERE)) which will allow you to modify the outgoing requests for your target API and alter the responses to allow the component to interpret them correctly.
 
-By default, the outgoing request bodies will contain all of the messages within the chat (to allow you to interpret their context as needed). This behaviour can be altered within
-the [`custom`](#custom) object by the use of properties such as [`max_messages`](HERE) and [`total_messages_max_char_length`](HERE).
+By default, the **outgoing** request bodies will contain all of the messages within the chat (to allow you to interpret their context as needed). This behaviour can be altered within
+the [`custom`](#custom) object by the use of properties such as [`maxMessages`](HERE) and [`totalMessagesMaxCharLength`](HERE).
 The outgoing body can also contain additional properties by adding them to the [`custom`](#custom) object.
 
 - When sending text based messages only, the request body will have the following JSON type: <br />
@@ -20,7 +20,7 @@ The outgoing body can also contain additional properties by adding them to the [
 
 - When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
 
-The response message body needs to have the following JSON type: <br />
+The **response** message body needs to have the following JSON type: <br />
 &nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result[]`](#Result), `error?: string`} <br />
 
 Please see [`EXAMPLES`](https://github.com/OvidijusParsiunas/ai-assistant/tree/main/other-packages/servers) for setting up your own server.
@@ -29,24 +29,21 @@ Please see [`EXAMPLES`](https://github.com/OvidijusParsiunas/ai-assistant/tree/m
 
 ### `custom` {#custom}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](#ResponseInterceptor), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`images?: boolean | FilesServiceConfig`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: boolean | FilesServiceConfig`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`mixedFiles?: boolean | FilesServiceConfig`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`camera?: boolean | CameraFilesServiceConfig`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`microphoneAudio?: boolean | RecordAudioFilesServiceConfig`](HERE), <br />
+- Type: [`ServiceCallConfig`](HERE) & [`MessageLimits`](#MessageLimits) & {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`images?: boolean | FilesServiceConfig`](#FilesServiceConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: boolean | FilesServiceConfig`](#FilesServiceConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`mixedFiles?: boolean | FilesServiceConfig`](#FilesServiceConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`camera?: boolean | CameraFilesServiceConfig`](#CameraFilesServiceConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`microphoneAudio?: boolean | MicrophoneFilesServiceConfig`](#MicrophoneFilesServiceConfig), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`stream?: boolean`](#stream), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`displayServiceErrorMessages?: boolean`](#displayServiceErrorMessages), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`demo?: boolean | Demo`](#Demo), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `string?: any` <br />
-  } & [`MessageLimits`](#MessageLimits)
+  }
 
-Object used to configure AiAssistant to communicate with a custom API. <br />
-Whilst the properties are marked as optional, either `request` or `demo` need to be set. The example below is using `demo`.
-This object can additionally be populated with your own key (string) values (any) which will be added to the outgoing messages' request bodies.
+Object used to configure AiAssistant to communicate with a custom API. It is a combination of the [`ServiceCallConfig`](HERE), [`MessageLimits`](#MessageLimits)
+and other custom properties. <br /> Whilst everything is marked as optional, either a [`request`](HERE) or `demo` property needs to be set. `key` is not required. <br />
+This object can also be populated with your own key (string) values (any) which will be added to the outgoing messages' request bodies. <br />
 
 #### Example
 
@@ -62,8 +59,10 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <AiAssistantBrowser
-    introMessage={`I am connected to your custom service!`}
-    service={{custom: {demo: true, images: true, audio: true, mixedFiles: true}}}
+    introMessage={`Hi, I am your assistant. How may I help you?`}
+    service={{
+      custom: {request: {url: 'https://customapi.com'}, images: {button: {position: 'outside-right'}}},
+    }}
   ></AiAssistantBrowser>
 </ComponentContainer>
 
@@ -74,34 +73,153 @@ Property types for the `custom` object:
 ### `ServiceCallConfig` {#ServiceCallConfig}
 
 - Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `key?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`requestInterceptor?: RequestInterceptor`](#RequestInterceptor), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`responseInterceptor?: ResponseInterceptor`](#ResponseInterceptor) <br />
   }
 
-Configuration used to call a service and intercept the data sent between it and the component.
+Configuration used to call a service and intercept the data transferred between it and the component.
+If you are using one of the preconfigured services - you can add the `key` property to skip the `insert key view`
+and immediately display the chat. If you want this key to be verified, set [`validateKeyProperty`](HERE) to _true_.
 
 <LineBreak></LineBreak>
 
-### `FilesServiceConfig` {#FilesServiceConfig}
+### `CameraFilesServiceConfig` {#CameraFilesServiceConfig}
 
-- Type: {[`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button), [`ServiceCallConfig`](#ServiceCallConfig)}
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](HERE), <br />
+  }
 
-Configuration used for enabling the component to send files and the customization of elements that help facilitate this. <br />
-`files` is used to configure what files can be sent to the target service. <br />
-`button` is used to style the button for uploading/creating the file. <br />
-`ServiceCallConfig` object is used to override the default service request settings. When using a [`custom`](HERE) service, this can be used
-to call a different API for each individual file types. <br />
+Configuration for capturing images using a web camera and handling the resultant files. <br />
+`request` is used to override the default request settings when sending image files. <br />
+`files` is used to configure the files that are captured by the camera. <br />
+`button` is used to customize the button element used for the camera. <br />
+`modalContainerStyle` is used to customize the modal used to display the camera. <br />
 
 <ComponentContainer>
   <AiAssistantBrowser
     service={{
       custom: {
         demo: true,
-        images: {
-          files: {acceptedFormats: '.jpg,.png'},
+        camera: {
+          request: {url: 'https://customapi.com/image-from-camera'},
+          files: {format: 'png'},
           button: {position: 'outside-left'},
-          request: {url: 'https://customapi.com/image'},
+          modalContainerStyle: {borderRadius: '5px'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `CameraFiles` {#CameraFiles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"png"` | `"jpeg"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `dimensions?:` {`width?: number`, `height?: number`} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string`, <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; format: "png", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxNumberOfFiles: ∞, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "image/\*" <br />
+  }_
+
+Configuration for the captured files by the camera. <br />
+`format` is the resultant format of the image file that is produced by capturing a photograph. <br />
+`dimensions` are used to set the pixel area of the photograph. Please note that this is largely controlled by the [`mediaDevice`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
+of the user's browser, so if the dimensions you have provided skew the photograph in a particular way they can be overriden.<br />
+`maxNumberOfFiles` is the limit to the number of images that can be captured for one message. <br />
+`acceptedFormats` is used to limit the allowed files that can be dropped via the [`dragAndDrop`](HERE) functionality as this feature will enable it automatically.
+It uses the same syntax as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). If the configuration in [`images`](HERE) also uses
+the `acceptedFormats` property, it will override this one.<br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        camera: {
+          files: {format: 'png', dimensions: {width: 450, height: 600}, maxNumberOfFiles: 2, acceptedFormats: '.jpg,.png'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `MicrophoneFilesServiceConfig` {#MicrophoneFilesServiceConfig}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`files?: AudioRecordingFiles`](#AudioRecordingFiles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](#MicrophoneStyles) <br />
+  }
+
+Configuration for recording audio files using a microphone and handling them. <br />
+`request` is used to override the default request settings when sending audio files. <br />
+`files` is used to configure the files that are recorded by the microphone. <br />
+`button` is the styling used for the microphone button element. <br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        microphoneAudio: {
+          request: {url: 'https://customapi.com/audio-from-microphone'},
+          files: {format: 'mp3'},
+          button: {position: 'outside-left'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `AudioRecordingFiles` {#AudioRecordingFiles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"mp3"` | `"4a"` | `"webm"` | `"mp4"` | `"mpga"` | `"wav"` | `"mpeg"` | `"m4a"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxDurationSeconds?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; format: "mp3", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxDurationSeconds: 5999, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxNumberOfFiles: ∞, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "audio/\*" <br />
+  }_
+
+Configuration for the captured files by the camera. <br />
+`format` is the resultant format of the audio file. <br />
+`maxDurationSeconds` is the maximum length of time one file can be recorded.<br />
+`maxNumberOfFiles` is the limit to the number of audio files that can be recorded for one message. <br />
+`acceptedFormats` is used to limit the allowed files that can be dropped via the [`dragAndDrop`](HERE) functionality as this feature will enable it automatically.
+It uses the same syntax as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). If the configuration in [`images`](HERE) also uses
+the `acceptedFormats` property, it will override this one.<br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        microphoneAudio: {
+          files: {format: 'mp3', maxDurationSeconds: 10, maxNumberOfFiles: 2, acceptedFormats: '.mp3,.wav'},
         },
       },
     }}
@@ -111,8 +229,132 @@ to call a different API for each individual file types. <br />
 <LineBreak></LineBreak>
 
 :::info
-When this property is used, [`dragAndDrop`](HERE) is automatically enabled.
+The use of this object will automatically disable the [`speechToTextInput`](HERE) functionality.
 :::
+
+<LineBreak></LineBreak>
+
+### `MicrophoneStyles` {#MicrophoneStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`active?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`unsupported?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](HERE), <br />
+  }
+
+Custom styling for the microphone button. <br />
+`default` is used for the default button state. <br />
+`active` is used when the microphone is active. <br />
+`unsupported` is used when recording is not supported on the user's browser. <br />
+`position` is the button position within the input area.
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        microphoneAudio: {
+          button: {
+            default: {
+              container: {
+                hover: {
+                  backgroundColor: '#7fbded69',
+                },
+                click: {
+                  backgroundColor: '#4babf669',
+                },
+              },
+              svg: {
+                styles: {
+                  default: {
+                    filter:
+                      'brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)',
+                  },
+                  hover: {
+                    filter:
+                      'brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)',
+                  },
+                },
+              },
+            },
+            active: {
+              container: {
+                hover: {
+                  backgroundColor: '#ffd07c70',
+                },
+                click: {
+                  backgroundColor: '#ecb85c70',
+                },
+              },
+              svg: {
+                styles: {
+                  default: {
+                    filter:
+                      'brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `FilesServiceConfig` {#FilesServiceConfig}
+
+- Type: {[`request?: RequestSettings`](HERE), [`FilesUploader`](HERE)}
+
+Object used to configure the ability for the component to send files. <br />
+`request` object is used to override the default service request settings when sending a file. <br />
+`FilesUploader` is used to configure what files can be sent to the target service and change the styling of elements that facilitate this. <br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        images: {
+          request: {url: 'https://customapi.com/image'},
+          files: {acceptedFormats: '.jpg,.png'},
+          button: {position: 'outside-left'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::info
+When this property is used, [`dragAndDrop`](HERE) is enabled automatically.
+:::
+
+<LineBreak></LineBreak>
+
+### `FilesUploader` {#FilesUploader}
+
+- Type: {[`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button)}
+
+Configuration to control what files can be uploaded and the customization of the button that helps facilitate this. <br />
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    service={{
+      custom: {
+        demo: true,
+        audio: {
+          files: {acceptedFormats: '.mp3,.wav'},
+          button: {position: 'outside-left'},
+        },
+      },
+    }}
+  ></AiAssistantBrowser>
+</ComponentContainer>
 
 <LineBreak></LineBreak>
 
@@ -125,7 +367,7 @@ When this property is used, [`dragAndDrop`](HERE) is automatically enabled.
   }
 
 - Default: _{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; maxNumberOfFiles: ∞, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxNumberOfFiles: for [`custom`](HERE): ∞, for existing services: varies, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: for images: ".png,.jpg", for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a" <br />
   }_
 
@@ -134,7 +376,7 @@ Used to control what files the component can accept. <br />
 `acceptedFormats` is used to define the accepted file formats. It is a singular string that uses the same syntax
 as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
 in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). It is also worth noting that the [`dragAndDrop`](HERE) feature will also
-use this to verify dropped files. <br />
+use this to verify the dropped files. <br />
 `infoModal` is used to display noteworthy information when the user clicks the button to search for a file. <br />
 
 <ComponentContainer>
@@ -164,7 +406,8 @@ use this to verify dropped files. <br />
 
 A modal that is triggered when a user clicks on a button to upload a file. It is useful for scenarios when a user needs some
 clarification of how their data will be handled or they need to be aware of other noteworty information. <br />
-`textMarkDown` is a string that uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to generate the content of the modal. <br />
+`textMarkDown` is a string that uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to generate the content of the modal.
+Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to customize your content accordingly. <br />
 `openModalOnce` controls whether the modal is only opened up the first time the user clicks a button or every time. <br />
 `containerStyle` is used to augment the basic styling of the modal element.
 
@@ -221,15 +464,15 @@ Custom properties used for the HTTP request.
 
 ### `MessageLimits` {#MessageLimits}
 
-- Type: {`max_messages?: number`, `total_messages_max_char_length?: number`}
+- Type: {`maxMessages?: number`, `totalMessagesMaxCharLength?: number`}
 
 // WORK - display the intercepted messages
 
 Used to limit the message content that is going to be sent to the target service (for both user and AI). <br />
-`max_messages` is the maximum number of messages that are going to be sent. <br />
-`total_messages_max_char_length` is the maximum number of text characters that are going to be sent and will inherently limit
+`maxMessages` is the maximum number of messages that are going to be sent. <br />
+`totalMessagesMaxCharLength` is the maximum number of text characters that are going to be sent and will inherently limit
 the number of included messages. This is particularly useful if the target service has a token limit. <br />
-If `max_messages` number is hit before `total_messages_max_char_length`, `max_messages` will take presendence. <br />
+If `maxMessages` number is hit before `totalMessagesMaxCharLength`, `maxMessages` will take presendence. <br />
 These limits do not include the [`introMessage`](HERE).
 
 <ComponentContainer>
@@ -238,8 +481,8 @@ These limits do not include the [`introMessage`](HERE).
     service={{
       custom: {
         demo: true,
-        total_messages_max_char_length: 20,
-        max_messages: 2,
+        totalMessagesMaxCharLength: 20,
+        maxMessages: 2,
         requestInterceptor: (data) => {
           console.log(JSON.stringify(data));
           return data;
@@ -315,7 +558,8 @@ It MUST return a [`Result`](#Result) type object. This is not supported for [`st
 - Type: {`text?: string`, [`files?: MessageFile[]`](../messages#MessageFile)}
 
 Object containing response data from the target server. It must contain either one of the following properties: <br />
-`text` is a string that represents a textual message response. <br />
+`text` is a string that represents a textual message response. The component analyzes the string for [Markdown](https://www.markdownguide.org/basic-syntax/) properties
+and renders the message accordingly. This is useful for displaying code snippets, paragraphs etc. Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
 `files` is an array of objects that contain information about response files.
 
 <LineBreak></LineBreak>

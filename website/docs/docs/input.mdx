@@ -182,6 +182,26 @@ allows images through the use of [`camera`](HERE), a dropped _.txt_ file will no
 
 <LineBreak></LineBreak>
 
+### `validateKeyProperty` {#validateKeyProperty}
+
+- Type: `boolean`
+- Default: _false_
+
+This property is used to verify the `key` inside the [`ServiceCallConfig`](HERE) object. Please note that this will display an initial loading
+screen whilst verification is taking place.
+
+#### Example
+
+<ComponentContainer>
+  <AiAssistantBrowser
+    validateKeyProperty={true}
+    introMessage={'Drag and drop a file to observe the effects.'}
+    service={{openAI: {chat: {key: 'incorrect key', request: {url: 'https://customAPI.com'}}}}}
+  ></AiAssistantBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
 ### `dropupStyles` {#dropupStyles}
 
 - Type: {<br />

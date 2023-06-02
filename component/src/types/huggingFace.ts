@@ -1,8 +1,7 @@
-import {AudioWithMicrophoneConfig} from './microphone';
 import {ServiceCallConfig} from './requestSettings';
-import {ImagesWithCameraConfig} from './camera';
 import {MessageLimits} from './chatLimits';
-import {Key} from './key';
+import {AudioFiles} from './microphone';
+import {ImageFiles} from './camera';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
@@ -74,13 +73,13 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (Key & ServiceCallConfig & HuggingFaceModel & HuggingFaceConversationConfig & MessageLimits);
-  textGeneration?: true | (Key & ServiceCallConfig & HuggingFaceModel & HuggingFaceTextGenerationConfig);
-  summarization?: true | (Key & ServiceCallConfig & HuggingFaceModel & HuggingFaceSummarizationConfig);
-  translation?: true | (Key & ServiceCallConfig & HuggingFaceModel & HuggingFaceTranslationConfig);
-  fillMask?: true | (Key & ServiceCallConfig & HuggingFaceModel & HuggingFaceFillMaskConfig);
-  questionAnswer?: Key & ServiceCallConfig & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
-  audioSpeechRecognition?: true | (Key & ServiceCallConfig & HuggingFaceModel & AudioWithMicrophoneConfig);
-  audioClassification?: true | (Key & ServiceCallConfig & HuggingFaceModel & AudioWithMicrophoneConfig);
-  imageClassification?: true | (Key & ServiceCallConfig & HuggingFaceModel & ImagesWithCameraConfig);
+  conversation?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceConversationConfig & MessageLimits);
+  textGeneration?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceTextGenerationConfig);
+  summarization?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceSummarizationConfig);
+  translation?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceTranslationConfig);
+  fillMask?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceFillMaskConfig);
+  questionAnswer?: ServiceCallConfig & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
+  audioSpeechRecognition?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
+  audioClassification?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
+  imageClassification?: true | (ServiceCallConfig & HuggingFaceModel & ImageFiles);
 }

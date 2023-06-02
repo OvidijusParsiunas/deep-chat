@@ -1,5 +1,5 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceFileTypes, ServiceIO, StreamHandlers} from '../serviceIO';
-import {CameraFilesServiceConfig, FilesConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, FilesUploader, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
@@ -15,7 +15,6 @@ import {CustomStyle} from '../../types/styles';
 import {AiAssistant} from '../../aiAssistant';
 import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';
-import {Key} from '../../types/key';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
@@ -23,7 +22,7 @@ type Camera = {camera?: true | {button?: Button; modalContainerStyle?: CustomSty
 
 type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat}};
 
-type Config = true | (Key & FilesConfig & ServiceCallConfig & Camera & Microphone);
+type Config = true | (FilesUploader & ServiceCallConfig & Camera & Microphone);
 
 export class BaseServideIO implements ServiceIO {
   key?: string;
@@ -90,7 +89,7 @@ export class BaseServideIO implements ServiceIO {
     return requestSettingsObj;
   }
 
-  private cleanServiceConfig(config: Key & ServiceCallConfig) {
+  private cleanServiceConfig(config: ServiceCallConfig) {
     delete config.key;
     delete config.request;
     delete config.requestInterceptor;

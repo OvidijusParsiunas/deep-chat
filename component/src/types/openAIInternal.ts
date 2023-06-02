@@ -1,11 +1,11 @@
-import {OpenAIConverseConfig, OpenAIMessage} from './openAI';
+import {OpenAIConverse, OpenAIMessage} from './openAI';
 
 export interface SystemMessageInternal {
   role: 'system';
   content: string;
 }
 
-export type OpenAIConverseBodyInternal = OpenAIConverseConfig & {
+export type OpenAIConverseBodyInternal = OpenAIConverse & {
   model: string;
   messages?: OpenAIMessage[]; // only for chat
 };

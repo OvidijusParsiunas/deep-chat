@@ -5,10 +5,9 @@ import {MessageContent} from '../../types/messages';
 import {GenericObject} from '../../types/object';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
-import {Key} from '../../types/key';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = Key & GenericObject<string> & ServiceCallConfig;
+type CohereServiceConfig = GenericObject<string> & ServiceCallConfig;
 
 export class CohereSummarizationIO extends CohereIO {
   constructor(aiAssistant: AiAssistant) {

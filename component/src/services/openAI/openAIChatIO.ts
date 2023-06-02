@@ -4,11 +4,11 @@ import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
-import {OpenAICustomChatConfig} from '../../types/openAI';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {OpenAIChat} from '../../types/openAI';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
@@ -40,7 +40,7 @@ export class OpenAIChatIO extends BaseServideIO {
     return {role: 'system', content: systemPrompt};
   }
 
-  private cleanConfig(config: OpenAICustomChatConfig) {
+  private cleanConfig(config: OpenAIChat) {
     delete config.totalMessagesMaxCharLength;
     delete config.maxMessages;
     delete config.systemPrompt;

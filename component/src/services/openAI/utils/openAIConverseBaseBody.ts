@@ -1,7 +1,7 @@
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
-import {OpenAIConverseConfig} from '../../../types/openAI';
+import {OpenAIConverse} from '../../../types/openAI';
 
-type ClientConfig = true | OpenAIConverseConfig;
+type ClientConfig = true | OpenAIConverse;
 type ModelName =
   | typeof OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL
   | typeof OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;

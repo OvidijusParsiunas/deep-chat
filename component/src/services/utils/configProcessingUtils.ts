@@ -1,7 +1,7 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
-import {AudioRecordingFiles, AudioWithMicrophoneConfig} from '../../types/microphone';
-import {CameraFiles, ImagesWithCameraConfig} from '../../types/camera';
+import {AudioRecordingFiles, AudioFiles} from '../../types/microphone';
 import {FileAttachments} from '../../types/fileAttachments';
+import {CameraFiles, ImageFiles} from '../../types/camera';
 import {FileServiceIO} from '../serviceIO';
 import {Button} from '../../types/button';
 import {Remarkable} from 'remarkable';
@@ -22,7 +22,7 @@ export class ConfigProcessingUtils {
     images.button = button;
   }
 
-  public static processCameraConfig(camera: ImagesWithCameraConfig['camera']) {
+  public static processCameraConfig(camera: ImageFiles['camera']) {
     const cameraConfig: CameraFilesServiceConfig & {files: CameraFiles} = {files: {}};
     if (typeof camera === 'object') {
       cameraConfig.button = camera.button;
@@ -47,7 +47,7 @@ export class ConfigProcessingUtils {
   }
 
   // prettier-ignore
-  public static processRecordAudioConfig(microphone: AudioWithMicrophoneConfig['microphone'],
+  public static processRecordAudioConfig(microphone: AudioFiles['microphone'],
       config?: AudioConfig) {
     const recordAudioConfig: AudioConfig = config || {files: {format: 'mp3'}};
     if (typeof microphone === 'object') {

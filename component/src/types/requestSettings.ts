@@ -8,6 +8,7 @@ export interface RequestSettings {
 }
 
 export interface ServiceCallConfig {
+  key?: string;
   request?: RequestSettings;
   requestInterceptor?: RequestInterceptor;
   responseInterceptor?: ResponseInterceptor;
