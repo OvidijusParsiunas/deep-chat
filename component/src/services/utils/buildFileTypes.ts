@@ -34,24 +34,48 @@ export class BuildFileTypes {
     return fileConfig;
   }
 
-  private static processAudioConfig(serviceIO: ServiceIO, aiAssistant: AiAssistant, fileIO?: FileServiceIO) {
+  private static processMixedFiles(serviceIO: ServiceIO, mixedFiles: AiAssistant['mixedFiles']) {
+    if (mixedFiles) {
+      const defFormats = {acceptedFormats: ''};
+      serviceIO.fileTypes.mixedFiles = BuildFileTypes.parseConfig(serviceIO.requestSettings, defFormats, mixedFiles);
+    }
+  }
+
+  // needs to be set after audio to overwrite maxNumberOfFiles
+  // prettier-ignore
+  private static processMicrophone(
+    serviceIO: ServiceIO, microphone: AiAssistant['microphoneAudio'], audio: AiAssistant['audio']) {
+  const files = serviceIO.fileTypes.audio?.files || {};
+  const defaultFormats = {acceptedFormats: 'audio/*', ...files};
+  if (!microphone) return;
+  if (navigator.mediaDevices.getUserMedia !== undefined) {
+    serviceIO.recordAudio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
+    // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
+    if (typeof microphone === 'object') {
+      if (microphone.files) {
+        serviceIO.recordAudio.files ??= {}; // for typescript
+        serviceIO.recordAudio.files.format = microphone.files?.format;
+        // this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
+        serviceIO.recordAudio.files.maxDurationSeconds = microphone.files?.maxDurationSeconds;
+        if (serviceIO.fileTypes.audio?.files) {
+          serviceIO.fileTypes.audio.files.maxNumberOfFiles ??= microphone.files.maxNumberOfFiles;
+        }
+      }
+    }
+    // if microphone is not available - fallback to normal audio upload
+  } else if (!audio) {
+    serviceIO.fileTypes.audio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
+  }
+}
+
+  private static processAudioConfig(serviceIO: ServiceIO, audio: AiAssistant['audio'], fileIO?: FileServiceIO) {
+    if (!audio && !fileIO) return;
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'audio/*', ...files};
-    const audio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, aiAssistant.audio);
     // make sure to set these in the right services
     // audio.files.acceptedFormats ??= fileIO?.files?.acceptedFormats || '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a';
     // audio.files.maxNumberOfFiles ??= fileIO?.files?.maxNumberOfFiles || 1;
-    serviceIO.fileTypes.audio = audio;
-  }
-
-  private static processImagesConfig(serviceIO: ServiceIO, aiAssistant: AiAssistant, fileIO?: FileServiceIO) {
-    const files = fileIO?.files || {};
-    const defaultFormats = {acceptedFormats: 'image/*', ...files};
-    const images = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, aiAssistant.images);
-    // make sure to set these in the right services
-    // images.files.acceptedFormats ??= fileIO?.files?.acceptedFormats || '.png,.jpg';
-    // images.files.maxNumberOfFiles ??= fileIO?.files?.maxNumberOfFiles || 1;
-    serviceIO.fileTypes.images = images;
+    serviceIO.fileTypes.audio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, audio);
   }
 
   // needs to be set after images to overwrite maxNumberOfFiles
@@ -78,47 +102,21 @@ export class BuildFileTypes {
     }
   }
 
-  // needs to be set after audio to overwrite maxNumberOfFiles
-  // prettier-ignore
-  private static processMicrophone(
-      serviceIO: ServiceIO, microphone: AiAssistant['microphoneAudio'], audio: AiAssistant['audio']) {
-    const files = serviceIO.fileTypes.audio?.files || {};
-    const defaultFormats = {acceptedFormats: 'audio/*', ...files};
-    if (!microphone) return;
-    if (navigator.mediaDevices.getUserMedia !== undefined) {
-      serviceIO.recordAudio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
-      // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
-      if (typeof microphone === 'object') {
-        if (microphone.files) {
-          serviceIO.recordAudio.files ??= {}; // for typescript
-          serviceIO.recordAudio.files.format = microphone.files?.format;
-          // this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
-          serviceIO.recordAudio.files.maxDurationSeconds = microphone.files?.maxDurationSeconds;
-          if (serviceIO.fileTypes.audio?.files) {
-            serviceIO.fileTypes.audio.files.maxNumberOfFiles ??= microphone.files.maxNumberOfFiles;
-          }
-        }
-      }
-      // if microphone is not available - fallback to normal audio upload
-    } else if (!audio) {
-      serviceIO.fileTypes.audio = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
-    }
-  }
-
-  private static processMixedFiles(serviceIO: ServiceIO, mixedFiles: boolean | FilesServiceConfig) {
-    if (mixedFiles) {
-      const defFormats = {acceptedFormats: ''};
-      serviceIO.fileTypes.mixedFiles = BuildFileTypes.parseConfig(serviceIO.requestSettings, defFormats, mixedFiles);
-    }
+  private static processImagesConfig(serviceIO: ServiceIO, images: AiAssistant['images'], fileIO?: FileServiceIO) {
+    if (!images && !fileIO) return;
+    const files = fileIO?.files || {};
+    const defaultFormats = {acceptedFormats: 'image/*', ...files};
+    // make sure to set these in the right services
+    // images.files.acceptedFormats ??= fileIO?.files?.acceptedFormats || '.png,.jpg';
+    // images.files.maxNumberOfFiles ??= fileIO?.files?.maxNumberOfFiles || 1;
+    serviceIO.fileTypes.images = BuildFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, images);
   }
 
   public static build(aiAssistant: AiAssistant, serviceIO: ServiceIO, defaultFileTypes?: ServiceFileTypes) {
-    if (defaultFileTypes?.images || aiAssistant.images)
-      BuildFileTypes.processImagesConfig(serviceIO, aiAssistant, defaultFileTypes?.images);
+    BuildFileTypes.processImagesConfig(serviceIO, aiAssistant.images, defaultFileTypes?.images);
     BuildFileTypes.processCamera(serviceIO, aiAssistant.camera, aiAssistant.images);
-    if (defaultFileTypes?.audio || aiAssistant.audio)
-      BuildFileTypes.processAudioConfig(serviceIO, aiAssistant, defaultFileTypes?.audio);
+    BuildFileTypes.processAudioConfig(serviceIO, aiAssistant.audio, defaultFileTypes?.audio);
     BuildFileTypes.processMicrophone(serviceIO, aiAssistant.microphoneAudio, aiAssistant.audio);
-    if (aiAssistant.mixedFiles) BuildFileTypes.processMixedFiles(serviceIO, aiAssistant.mixedFiles);
+    BuildFileTypes.processMixedFiles(serviceIO, aiAssistant.mixedFiles);
   }
 }
