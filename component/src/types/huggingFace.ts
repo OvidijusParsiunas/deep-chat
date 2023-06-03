@@ -1,7 +1,6 @@
 import {ServiceCallConfig} from './requestSettings';
 import {MessageLimits} from './chatLimits';
 import {AudioFiles} from './microphone';
-import {ImageFiles} from './camera';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
@@ -81,5 +80,5 @@ export interface HuggingFace {
   questionAnswer?: ServiceCallConfig & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
   audioSpeechRecognition?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
   audioClassification?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
-  imageClassification?: true | (ServiceCallConfig & HuggingFaceModel & ImageFiles);
+  imageClassification?: true | (ServiceCallConfig & HuggingFaceModel);
 }

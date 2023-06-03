@@ -1,3 +1,4 @@
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
 import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
@@ -71,6 +72,21 @@ export class AiAssistant extends InternalHTML {
 
   @Property('string')
   introMessage?: string;
+
+  @Property('object')
+  images?: boolean | FilesServiceConfig;
+
+  @Property('object')
+  audio?: boolean | FilesServiceConfig;
+
+  @Property('object')
+  mixedFiles?: boolean | FilesServiceConfig;
+
+  @Property('object')
+  camera?: boolean | CameraFilesServiceConfig;
+
+  @Property('object')
+  microphoneAudio?: boolean | MicrophoneFilesServiceConfig;
 
   @Property('object')
   introPanelStyle?: CustomStyle;

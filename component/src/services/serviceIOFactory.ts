@@ -101,6 +101,7 @@ export class ServiceIOFactory {
     try {
       return ServiceIOFactory.createService(aiAssistant);
     } catch (e) {
+      console.error(e);
       // TO-DO - default to service selection view
       if (e instanceof Error) ErrorView.render(containerElement, e.message);
       return undefined;

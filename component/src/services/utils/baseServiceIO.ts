@@ -1,39 +1,31 @@
 import {CompletionsHandlers, KeyVerificationHandlers, ServiceFileTypes, ServiceIO, StreamHandlers} from '../serviceIO';
 import {CameraFilesServiceConfig, FilesUploader, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
-import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {AudioFormat, MicrophoneStyles} from '../../types/microphone';
-import {ConfigProcessingUtils} from './configProcessingUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../types/object';
 import {FILE_TYPES} from '../../types/fileTypes';
-import {CustomStyle} from '../../types/styles';
+import {BuildFileTypes} from './buildFileTypes';
 import {AiAssistant} from '../../aiAssistant';
-import {Button} from '../../types/button';
-import {Remarkable} from 'remarkable';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-type Camera = {camera?: true | {button?: Button; modalContainerStyle?: CustomStyle}};
+type Config = true | (FilesUploader & ServiceCallConfig);
 
-type Microphone = {microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat}};
-
-type Config = true | (FilesUploader & ServiceCallConfig & Camera & Microphone);
-
+// used for existing services - WORK - maybe rename to ExistingServiceIO
 export class BaseServideIO implements ServiceIO {
   key?: string;
   validateConfigKey = false;
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';
   canSendMessage: ValidateMessageBeforeSending = BaseServideIO.canSendMessage;
-  requestSettings?: RequestSettings;
+  requestSettings: RequestSettings = this.buildRequestSettings('');
   requestInterceptor: RequestInterceptor = (details) => details;
   responseInterceptor: ResponseInterceptor = (result) => result;
-  fileTypes?: ServiceFileTypes;
+  fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
   recordAudio?: MicrophoneFilesServiceConfig;
   private readonly keyVerificationDetails: KeyVerificationDetails;
@@ -41,51 +33,28 @@ export class BaseServideIO implements ServiceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, config?: Config, fileType?: FILE_TYPES) {
+      buildHeadersFunc: BuildHeadersFunc, config?: Config, fileType?: FILE_TYPES, defaultFileTypes?: ServiceFileTypes) {
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
+    if (typeof config === 'object' && config.key) {
+      this.requestSettings = this.buildRequestSettings(config.key || '', config.request);
+      this.key = config.key;
+    } 
     const {validateMessageBeforeSending} = aiAssistant;
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
     // don't bother cleaning the config as we construct _raw_body with individual props
     if (typeof config === 'object') {
       if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
       if (config.responseInterceptor) this.responseInterceptor = config.responseInterceptor;
     }
-    if (fileType) {
-      this.fileTypes = {};
-      const remarkable = RemarkableConfig.createNew();
-      if (fileType === 'audio') this.processAudioConfig(remarkable, config);
-      if (fileType === 'images') this.processImagesConfig(remarkable, config);
-    }
-    if (typeof config === 'object' && config.key) {
-      this.requestSettings = this.buildRequestSettings(config.key, config.request);
-      this.key = config.key;
-    }
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    BuildFileTypes.build(aiAssistant, this, defaultFileTypes);
     if (typeof config === 'object') this.cleanServiceConfig(config);
     if (aiAssistant.validateKeyProperty) this.validateConfigKey = aiAssistant.validateKeyProperty;
   }
 
-  private processAudioConfig(remarkable: Remarkable, config?: Config) {
-    if (!this.fileTypes) return;
-    this.fileTypes.audio = {files: {acceptedFormats: '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a', maxNumberOfFiles: 1}};
-    if (typeof config === 'object') {
-      ConfigProcessingUtils.processAudioConfig(this.fileTypes.audio, remarkable, config.files, config.button);
-      if (config?.microphone) this.recordAudio = ConfigProcessingUtils.processRecordAudioConfig(config?.microphone);
-    }
-  }
-
-  private processImagesConfig(remarkable: Remarkable, config?: Config) {
-    if (!this.fileTypes) return;
-    this.fileTypes.images = {files: {acceptedFormats: '.png,.jpg', maxNumberOfFiles: 1}};
-    if (typeof config === 'object') {
-      ConfigProcessingUtils.processImagesConfig(this.fileTypes.images, remarkable, config.files, config.button);
-      if (config.camera) this.camera = ConfigProcessingUtils.processCameraConfig(config.camera);
-    }
-  }
-
   private buildRequestSettings(key: string, requestSettings?: RequestSettings) {
     const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers ??= this.buildHeadersFunc(key);
+    requestSettingsObj.headers = this.buildHeadersFunc(key);
     return requestSettingsObj;
   }
 

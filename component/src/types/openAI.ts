@@ -1,7 +1,6 @@
 import {ServiceCallConfig} from './requestSettings';
 import {MessageLimits} from './chatLimits';
 import {AudioFiles} from './microphone';
-import {ImageFiles} from './camera';
 
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'ai';
@@ -42,6 +41,6 @@ export interface OpenAIConverse {
 export interface OpenAI {
   chat?: true | (ServiceCallConfig & OpenAIConverse & OpenAIChat);
   completions?: true | (ServiceCallConfig & OpenAIConverse);
-  images?: true | (ServiceCallConfig & OpenAIImages & ImageFiles);
+  images?: true | (ServiceCallConfig & OpenAIImages);
   audio?: true | (ServiceCallConfig & OpenAIAudio & OpenAIAudioType & AudioFiles);
 }

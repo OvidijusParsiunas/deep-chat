@@ -51,13 +51,13 @@ export interface ServiceIO {
   // overwrites textInput placeholderText property if not provided
   textInputPlaceholderText?: string;
 
-  fileTypes?: ServiceFileTypes;
+  fileTypes: ServiceFileTypes;
 
   camera?: CameraFilesServiceConfig;
 
   recordAudio?: MicrophoneFilesServiceConfig;
 
-  requestSettings?: RequestSettings;
+  requestSettings: RequestSettings;
 
   introPanelMarkUp?: string;
 

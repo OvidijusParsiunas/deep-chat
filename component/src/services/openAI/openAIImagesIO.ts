@@ -8,7 +8,6 @@ import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {ImageFiles} from '../../types/camera';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
@@ -36,32 +35,19 @@ export class OpenAIImagesIO extends BaseServideIO {
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput, validateMessageBeforeSending} = aiAssistant;
     const config = service?.openAI?.images as NonNullable<OpenAI['images']>;
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, 'images');
+    const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, 'images', defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    const files = this.fileTypes?.images?.files;
-    if (files) {
-      if (typeof config === 'boolean' || !config.files?.maxNumberOfFiles) files.maxNumberOfFiles = 2;
-      if (typeof config === 'boolean' || !config.files?.acceptedFormats) files.acceptedFormats = 'png';
-    }
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};
     }
-    if (typeof config === 'object') {
-      OpenAIImagesIO.cleanConfig(config);
-      this._raw_body = config;
-    }
+    if (typeof config === 'object') this._raw_body = config;
     this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
   }
 
   private static canFileSendMessage(text: string, files?: File[]) {
     return !!files?.[0] || text.trim() !== '';
-  }
-
-  private static cleanConfig(config: ImageFiles) {
-    delete config.files;
-    delete config.button;
-    delete config.camera;
   }
 
   private static createFormDataBody(body: OpenAIImages, image: File, mask?: File) {
@@ -116,7 +102,7 @@ export class OpenAIImagesIO extends BaseServideIO {
   async extractResultData(result: OpenAIImageResult): Promise<Result> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return {url: imageData.url, type: 'image'};
+      if (imageData.url) return {src: imageData.url, type: 'image'};
       return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
     }) as MessageFiles;
     return {files};
