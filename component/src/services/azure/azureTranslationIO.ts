@@ -33,9 +33,9 @@ export class AzureTranslationIO extends BaseServideIO {
     return [{Text: mostRecentMessageText}];
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(messages.messages);
+    const body = this.preprocessBody(pMessages);
     HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish);
   }
 

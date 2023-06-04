@@ -1,4 +1,3 @@
-import {MessageLimits} from './chatLimits';
 import {Result} from './result';
 import {Demo} from './demo';
 
@@ -8,7 +7,7 @@ export type CustomServiceConfig = {
   // to the normal error structure -> type of message -> default -> 'Error, please try again.'
   displayServiceErrorMessages?: boolean;
   demo?: Demo;
-} & MessageLimits; // totalMessagesMaxCharLength only applies when no files
+};
 
 export interface CustomServiceResponse {
   result?: Result;

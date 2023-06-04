@@ -18,13 +18,13 @@ export class CohereIO extends BaseServideIO {
   override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
   textInputPlaceholderText: string;
   url: string;
-  private readonly _raw_body: Body = {};
+  override readonly raw_body: Body = {};
 
   constructor(aiAssistant: AiAssistant, url: string, inputPlaceholder: string, config?: CohereServiceConfig) {
     super(aiAssistant, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config);
     this.url = url;
     this.textInputPlaceholderText = inputPlaceholder;
-    if (config && typeof config === 'object') Object.assign(this._raw_body, config);
+    if (config && typeof config === 'object') Object.assign(this.raw_body, config);
   }
 
   preprocessBody(body: Body, messages: MessageContent[]) {
@@ -34,9 +34,9 @@ export class CohereIO extends BaseServideIO {
     return {prompt: mostRecentMessageText, ...bodyCopy};
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const body = this.preprocessBody(this.raw_body, pMessages);
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 }

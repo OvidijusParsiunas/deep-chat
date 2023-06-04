@@ -8,6 +8,7 @@ import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
+import {RequestBodyMessageLimits} from './types/chatLimits';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {RequestSettings} from './types/requestSettings';
@@ -28,6 +29,10 @@ import {Names} from './types/names';
 export class AiAssistant extends InternalHTML {
   @Property('object')
   request?: RequestSettings;
+
+  // WORK - totalMessagesMaxCharLength only applied to files
+  @Property('object')
+  requestBodyMessageLimits?: RequestBodyMessageLimits = {lastMessageOnly: true};
 
   @Property('object')
   service?: Service;

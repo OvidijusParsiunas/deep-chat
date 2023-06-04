@@ -21,7 +21,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     </p>`;
 
   url = '';
-  private readonly _raw_body: AzureTextToSpeechConfig = {};
+  override readonly raw_body: AzureTextToSpeechConfig = {};
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
@@ -31,10 +31,10 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     super(aiAssistant,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config, defaultFile);
-    Object.assign(this._raw_body, config);
-    this._raw_body.lang ??= 'en-US';
-    this._raw_body.gender ??= 'Female';
-    this._raw_body.name ??= 'en-US-JennyNeural';
+    Object.assign(this.raw_body, config);
+    this.raw_body.lang ??= 'en-US';
+    this.raw_body.gender ??= 'Female';
+    this.raw_body.name ??= 'en-US-JennyNeural';
     this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
   }
 
@@ -48,9 +48,9 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     </speak>`;
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const body = this.preprocessBody(this.raw_body, pMessages);
     HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish, false);
   }
 

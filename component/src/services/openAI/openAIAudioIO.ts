@@ -26,7 +26,7 @@ export class OpenAIAudioIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  private readonly _raw_body: OpenAIAudio & {response_format?: 'json'} = {};
+  override readonly raw_body: OpenAIAudio & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(aiAssistant: AiAssistant) {
@@ -38,10 +38,10 @@ export class OpenAIAudioIO extends BaseServideIO {
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
-      this._raw_body = config;
+      this.raw_body = config;
     }
-    this._raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
-    this._raw_body.response_format = 'json';
+    this.raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
+    this.raw_body.response_format = 'json';
     this.canSendMessage = validateMessageBeforeSending || OpenAIAudioIO.canSendFileMessage;
   }
 
@@ -80,11 +80,12 @@ export class OpenAIAudioIO extends BaseServideIO {
   }
 
   // prettier-ignore
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers,
+      _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;
-    const body = this.preprocessBody(this._raw_body, messages.messages, files);
+    const body = this.preprocessBody(this.raw_body, pMessages, files);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,

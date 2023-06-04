@@ -20,7 +20,7 @@ export class OpenAICompletionsIO extends BaseServideIO {
   private readonly full_transaction_max_tokens = 4000;
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
-  private readonly _raw_body: OpenAIConverseBodyInternal;
+  override readonly raw_body: OpenAIConverseBodyInternal;
 
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput} = aiAssistant;
@@ -29,7 +29,7 @@ export class OpenAICompletionsIO extends BaseServideIO {
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    this._raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    this.raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
   }
 
   // prettier-ignore
@@ -45,9 +45,10 @@ export class OpenAICompletionsIO extends BaseServideIO {
   }
 
   // prettier-ignore
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
+      completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const body = this.preprocessBody(this.raw_body, pMessages);
     if (body.stream) {
       HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);

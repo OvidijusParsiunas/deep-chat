@@ -1,4 +1,3 @@
-import {MessageLimits} from './chatLimits';
 import {APIKey} from './APIKey';
 
 export interface OpenAIMessage {
@@ -25,7 +24,7 @@ export interface OpenAIImages {
 }
 
 // totalMessagesMaxCharLength must include systemPrompt length
-export type OpenAIChat = {systemPrompt?: string} & MessageLimits;
+export type OpenAIChat = {systemPrompt?: string};
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions

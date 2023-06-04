@@ -22,7 +22,7 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
 
   url: string;
   textInputPlaceholderText: string;
-  private readonly _raw_body: T = {} as T;
+  override readonly raw_body: T = {} as T;
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, textInputPlaceholderText: string, defaultModel: string,
@@ -31,11 +31,11 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
       HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, defaultFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
-    // don't bother cleaning the config as we construct _raw_body with individual props
+    // don't bother cleaning the config as we construct raw_body with individual props
     if (typeof config === 'object') {
       if (config.model) this.url = `${HuggingFaceIO.URL_PREFIX}${config.model}`;
-      if (config.options) this._raw_body.options = config.options;
-      if (config.parameters) this._raw_body.parameters = config.parameters;
+      if (config.options) this.raw_body.options = config.options;
+      if (config.parameters) this.raw_body.parameters = config.parameters;
     }
   }
 
@@ -50,9 +50,11 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
     return {inputs: mostRecentMessageText, ...bodyCopy};
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  // prettier-ignore
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
+      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages, files) as object;
+    const body = this.preprocessBody(this.raw_body, pMessages, files) as object;
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 }

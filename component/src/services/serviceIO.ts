@@ -77,7 +77,7 @@ export interface ServiceIO {
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
   // prettier-ignore
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
+  callAPI(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
     files?: File[]): void;
 
   extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;

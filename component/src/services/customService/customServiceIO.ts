@@ -3,12 +3,12 @@ import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSen
 import {CustomServiceConfig, CustomServiceResponse} from '../../types/customService';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {PermittedErrorMessage} from '../../types/permittedErrorMessage';
+import {RequestBodyMessageLimits} from '../../types/chatLimits';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {Demo as DemoClass} from '../../utils/demo/demo';
-import {MessageLimits} from '../../types/chatLimits';
 import {MessageContent} from '../../types/messages';
 import {SetFileTypes} from '../utils/setFileTypes';
 import {AiAssistant} from '../../aiAssistant';
@@ -27,7 +27,7 @@ import {
 // GCP should be included here
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class CustomServiceIO implements ServiceIO {
-  private readonly _raw_body: any;
+  readonly raw_body: any;
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
   recordAudio?: MicrophoneFilesServiceConfig;
@@ -37,8 +37,8 @@ export class CustomServiceIO implements ServiceIO {
   requestInterceptor: RequestInterceptor = (body) => body;
   responseInterceptor: ResponseInterceptor = (result) => result;
   private readonly _isStream: boolean = false;
-  private readonly _total_messages_max_char_length?: number;
-  private readonly _max_messages?: number;
+  private readonly totalMessagesMaxCharLength?: number;
+  private readonly maxMessages?: number;
   private readonly _isTextOnly?: boolean;
   demo?: Demo;
   validateConfigKey = false;
@@ -56,10 +56,10 @@ export class CustomServiceIO implements ServiceIO {
     SetFileTypes.set(aiAssistant, this);
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
-    this._total_messages_max_char_length = customService.totalMessagesMaxCharLength;
-    this._max_messages = customService.maxMessages;
+    this.totalMessagesMaxCharLength = aiAssistant?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
+    this.maxMessages = aiAssistant?.requestBodyMessageLimits?.maxMessages;
     if (customService) CustomServiceIO.cleanConfig(customService as Partial<CustomServiceConfig>);
-    this._raw_body = customService;
+    this.raw_body = customService;
     this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
   }
 
@@ -67,7 +67,7 @@ export class CustomServiceIO implements ServiceIO {
     return !!files?.[0] || text.trim() !== '';
   }
 
-  private static cleanConfig(config: Partial<CustomServiceConfig> & MessageLimits) {
+  private static cleanConfig(config: Partial<CustomServiceConfig> & RequestBodyMessageLimits) {
     delete config.stream;
     delete config.displayServiceErrorMessages;
     delete config.maxMessages;
@@ -77,7 +77,7 @@ export class CustomServiceIO implements ServiceIO {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   verifyKey(_key: string, _keyVerificationHandlers: KeyVerificationHandlers) {}
 
-  private static createFormDataBody(body: any, messages: MessageContent[], files: File[]) {
+  private static createFormDataBodya(body: any, messages: MessageContent[], files: File[]) {
     const formData = new FormData();
     files.forEach((file, index) => formData.append(`file${index + 1}`, file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
@@ -90,8 +90,8 @@ export class CustomServiceIO implements ServiceIO {
 
   // prettier-ignore
   private callApiWithFiles(messages: Messages, completionsHandlers: CompletionsHandlers,
-      processedMessages: MessageContent[], files: File[], fileIO?: FileServiceIO) {
-    const formData = CustomServiceIO.createFormDataBody(this._raw_body, processedMessages, files);
+      pMessages: MessageContent[], files: File[], fileIO?: FileServiceIO) {
+    const formData = CustomServiceIO.createFormDataBodya(this.raw_body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     this.requestSettings = fileIO?.request || this.requestSettings;
     HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
@@ -99,16 +99,16 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   // prettier-ignore
-  callApi(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
+  callAPI(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
       files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
-      messages.messages, 0, this._max_messages, this._isTextOnly ? this._total_messages_max_char_length : undefined);
+      messages.messages, 0, this.maxMessages, this._isTextOnly ? this.totalMessagesMaxCharLength : undefined);
     if (files) {
       const fileIO = this.getServiceIOByType(files[0]);
       this.callApiWithFiles(messages, completionsHandlers, processedMessages, files, fileIO);
     } else {
-      const body = {messages: processedMessages, ...this._raw_body};
+      const body = {messages: processedMessages, ...this.raw_body};
       if (this._isStream) {
         HTTPRequest.requestStream(this, body, messages,
           streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);

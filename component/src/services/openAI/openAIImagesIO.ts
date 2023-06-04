@@ -7,6 +7,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {BaseServideIO} from '../utils/baseServiceIO';
+import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -30,7 +31,7 @@ export class OpenAIImagesIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid input image');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  private readonly _raw_body: OpenAIImages = {};
+  override readonly raw_body: OpenAIImages = {};
 
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput, validateMessageBeforeSending} = aiAssistant;
@@ -42,7 +43,7 @@ export class OpenAIImagesIO extends BaseServideIO {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};
     }
-    if (typeof config === 'object') this._raw_body = config;
+    if (typeof config === 'object') this.raw_body = config;
     this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
   }
 
@@ -70,31 +71,34 @@ export class OpenAIImagesIO extends BaseServideIO {
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, completionsHandlers: CompletionsHandlers, files: File[]) {
+  private callApiWithImage(messages: Messages, pMessages: MessageContent[],
+      completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;
-    const lastMessage = messages.messages[messages.messages.length - files.length + 1]?.text?.trim();
+    const lastMessage = pMessages[pMessages.length - files.length + 1]?.text?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_EDIT_URL;
-      const body = this.preprocessBody(this._raw_body, lastMessage);
+      const body = this.preprocessBody(this.raw_body, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
       this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
-      formData = OpenAIImagesIO.createFormDataBody(this._raw_body, files[0]);
+      formData = OpenAIImagesIO.createFormDataBody(this.raw_body, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  // prettier-ignore
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
+      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
-      this.callApiWithImage(messages, completionsHandlers, files);
+      this.callApiWithImage(messages, pMessages, completionsHandlers, files);
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this._raw_body, messages.messages[messages.messages.length - 1].text);
+      const body = this.preprocessBody(this.raw_body, pMessages[pMessages.length - 1].text);
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }

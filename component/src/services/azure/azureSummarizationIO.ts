@@ -16,13 +16,13 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   textInputPlaceholderText = 'Insert text to summarize';
   private messages?: Messages;
   private completionsHandlers?: CompletionsHandlers;
-  private readonly _raw_body: RawBody = {language: 'en'};
+  override readonly raw_body: RawBody = {language: 'en'};
 
   constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.summarization as NonNullable<Azure['summarization']>;
     super(aiAssistant, AzureUtils.buildSummarizationHeader, config);
-    Object.assign(this._raw_body, config);
+    Object.assign(this.raw_body, config);
     this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
   }
 
@@ -47,9 +47,9 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     };
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this._raw_body, messages.messages);
+    const body = this.preprocessBody(this.raw_body, pMessages);
     HTTPRequest.request(this, body as object, messages, completionsHandlers.onFinish);
     this.messages = messages;
     this.completionsHandlers = completionsHandlers;

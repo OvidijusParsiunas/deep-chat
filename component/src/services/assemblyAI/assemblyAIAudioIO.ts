@@ -4,6 +4,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {BaseServideIO} from '../utils/baseServiceIO';
+import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
@@ -35,7 +36,9 @@ export class AssemblyAIAudioIO extends BaseServideIO {
     return !!files?.[0];
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  // prettier-ignore
+  override callServiceAPI(messages: Messages, _: MessageContent[],
+      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);

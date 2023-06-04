@@ -1,34 +1,25 @@
 import {HuggingFaceQuestionAnswerConfig, HuggingFaceConversationConfig} from '../../types/huggingFace';
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversationConfig> {
-  private readonly _total_messages_max_char_length?: number;
-  private readonly _max_messages?: number;
-
   constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default method
     const config = aiAssistant.service?.huggingFace?.conversation;
     super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
-    if (typeof config === 'object') {
-      this._total_messages_max_char_length = config.totalMessagesMaxCharLength;
-      if (config.maxMessages) {
-        // needs to be an odd number in order to have an array of previous correspondences and the new user message
-        this._max_messages = config.maxMessages % 0 ? config.maxMessages + 1 : config.maxMessages;
-      }
+    if (this.maxMessages) {
+      // needs to be an odd number in order to have an array of previous correspondences and the new user message
+      this.maxMessages = this.maxMessages % 0 ? this.maxMessages + 1 : this.maxMessages;
     }
   }
 
   // prettier-ignore
   private processMessages(messages: MessageContent[]) {
-    const processedMessages = MessageLimitUtils.processMessages(
-      messages, 0, this._max_messages, this._total_messages_max_char_length);
-    const mostRecentMessageText = processedMessages[processedMessages.length - 1].text;
-    const previousMessages = processedMessages.slice(0, processedMessages.length - 1);
+    const mostRecentMessageText = messages[messages.length - 1].text;
+    const previousMessages = messages.slice(0, messages.length - 1);
     if (!mostRecentMessageText) return;
     const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
     const generated_responses = previousMessages

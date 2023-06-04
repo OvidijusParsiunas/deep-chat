@@ -115,7 +115,7 @@ export class SubmitButton extends InputButton<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callApi(this._messages, completionsHandlers, streamHandlers, fileData);
+    this._serviceIO.callAPI(this._messages, completionsHandlers, streamHandlers, fileData);
     this._fileAttachments?.removeAllFiles();
   }
 

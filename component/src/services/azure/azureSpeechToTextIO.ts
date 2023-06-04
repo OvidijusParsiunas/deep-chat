@@ -2,6 +2,7 @@ import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
@@ -42,7 +43,9 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     return !!files?.[0];
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  // prettier-ignore
+  override callServiceAPI(messages: Messages, _: MessageContent[],
+      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     if (this.requestSettings?.headers) {

@@ -1,4 +1,3 @@
-import {MessageLimits} from './chatLimits';
 import {APIKey} from './APIKey';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
@@ -71,7 +70,7 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (APIKey & HuggingFaceModel & HuggingFaceConversationConfig & MessageLimits);
+  conversation?: true | (APIKey & HuggingFaceModel & HuggingFaceConversationConfig);
   textGeneration?: true | (APIKey & HuggingFaceModel & HuggingFaceTextGenerationConfig);
   summarization?: true | (APIKey & HuggingFaceModel & HuggingFaceSummarizationConfig);
   translation?: true | (APIKey & HuggingFaceModel & HuggingFaceTranslationConfig);

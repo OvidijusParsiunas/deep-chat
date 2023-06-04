@@ -24,7 +24,9 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
     return files[0] as unknown as {inputs: string};
   }
 
-  override callApi(messages: Messages, completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  // prettier-ignore
+  override callServiceAPI(messages: Messages, _: MessageContent[],
+      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     HTTPRequest.poll(this, files[0], messages, completionsHandlers.onFinish, false);
