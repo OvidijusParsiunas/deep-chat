@@ -1,5 +1,4 @@
 import {CohereGenerateConfig, CohereSummarizationConfig} from '../../types/cohere';
-import {ServiceCallConfig} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {InterfacesUnion} from '../../types/utilityTypes';
@@ -12,7 +11,7 @@ import {AiAssistant} from '../../aiAssistant';
 
 type Body = InterfacesUnion<CohereGenerateConfig | CohereSummarizationConfig>;
 
-type CohereServiceConfig = true | (GenericObject<string> & ServiceCallConfig);
+type CohereServiceConfig = true | GenericObject<string>;
 
 export class CohereIO extends BaseServideIO {
   override insertKeyPlaceholderText = 'Cohere API Key';
@@ -21,10 +20,11 @@ export class CohereIO extends BaseServideIO {
   url: string;
   private readonly _raw_body: Body = {};
 
-  constructor(aiAssistant: AiAssistant, url: string, inptPlaceholder: string, config?: CohereServiceConfig) {
+  constructor(aiAssistant: AiAssistant, url: string, inputPlaceholder: string, config?: CohereServiceConfig) {
     super(aiAssistant, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config);
     this.url = url;
-    this.textInputPlaceholderText = inptPlaceholder;
+    this.textInputPlaceholderText = inputPlaceholder;
+    if (config && typeof config === 'object') Object.assign(this._raw_body, config);
   }
 
   preprocessBody(body: Body, messages: MessageContent[]) {

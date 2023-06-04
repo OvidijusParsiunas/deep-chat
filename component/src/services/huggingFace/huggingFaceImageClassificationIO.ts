@@ -9,7 +9,8 @@ export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
     const config = aiAssistant.service?.huggingFace?.imageClassification as NonNullable<
       HuggingFace['imageClassification']
     >;
-    super(aiAssistant, 'Attach an image file', 'google/vit-base-patch16-224', config, 'images');
+    const defaultFile = {images: {}};
+    super(aiAssistant, 'Attach an image file', 'google/vit-base-patch16-224', config, defaultFile);
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

@@ -182,7 +182,7 @@ allows images through the use of [`camera`](HERE), a dropped _.txt_ file will no
 
 <LineBreak></LineBreak>
 
-### `validateKeyProperty` {#validateKeyProperty}
+### `validateApiKeyProperty` {#validateApiKeyProperty}
 
 - Type: `boolean`
 - Default: _false_
@@ -194,7 +194,7 @@ screen whilst verification is taking place.
 
 <ComponentContainer>
   <AiAssistantBrowser
-    validateKeyProperty={true}
+    validateApiKeyProperty={true}
     introMessage={'Drag and drop a file to observe the effects.'}
     service={{openAI: {chat: {key: 'incorrect key', request: {url: 'https://customAPI.com'}}}}}
   ></AiAssistantBrowser>

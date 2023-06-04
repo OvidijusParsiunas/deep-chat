@@ -1,19 +1,26 @@
-import {CompletionsHandlers, KeyVerificationHandlers, ServiceFileTypes, ServiceIO, StreamHandlers} from '../serviceIO';
-import {CameraFilesServiceConfig, FilesUploader, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
-import {RequestSettings, ServiceCallConfig} from '../../types/requestSettings';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {RequestSettings} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../types/object';
-import {FILE_TYPES} from '../../types/fileTypes';
-import {BuildFileTypes} from './buildFileTypes';
 import {AiAssistant} from '../../aiAssistant';
+import {SetFileTypes} from './setFileTypes';
+import {APIKey} from '../../types/APIKey';
+import {
+  KeyVerificationHandlers,
+  CompletionsHandlers,
+  ServiceFileTypes,
+  StreamHandlers,
+  FileServiceIO,
+  ServiceIO,
+} from '../serviceIO';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-type Config = true | (FilesUploader & ServiceCallConfig);
+type Config = true | APIKey;
 
 // used for existing services - WORK - maybe rename to ExistingServiceIO
 export class BaseServideIO implements ServiceIO {
@@ -22,7 +29,7 @@ export class BaseServideIO implements ServiceIO {
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';
   canSendMessage: ValidateMessageBeforeSending = BaseServideIO.canSendMessage;
-  requestSettings: RequestSettings = this.buildRequestSettings('');
+  requestSettings: RequestSettings;
   requestInterceptor: RequestInterceptor = (details) => details;
   responseInterceptor: ResponseInterceptor = (result) => result;
   fileTypes: ServiceFileTypes = {};
@@ -33,23 +40,23 @@ export class BaseServideIO implements ServiceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, config?: Config, fileType?: FILE_TYPES, defaultFileTypes?: ServiceFileTypes) {
+      buildHeadersFunc: BuildHeadersFunc, config?: Config, defaultFileTypes?: ServiceFileTypes) {
+    // WORK - this needs to accept files if original IO does not
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
-    if (typeof config === 'object' && config.key) {
-      this.requestSettings = this.buildRequestSettings(config.key || '', config.request);
-      this.key = config.key;
-    } 
-    const {validateMessageBeforeSending} = aiAssistant;
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
-    // don't bother cleaning the config as we construct _raw_body with individual props
+    const {request,
+      validateMessageBeforeSending, requestInterceptor, responseInterceptor} = aiAssistant;
     if (typeof config === 'object') {
-      if (config.requestInterceptor) this.requestInterceptor = config.requestInterceptor;
-      if (config.responseInterceptor) this.responseInterceptor = config.responseInterceptor;
+      this.key = config.key;
+      if (config.validateKeyProperty) this.validateConfigKey = config.validateKeyProperty;
     }
-    BuildFileTypes.build(aiAssistant, this, defaultFileTypes);
-    if (typeof config === 'object') this.cleanServiceConfig(config);
-    if (aiAssistant.validateKeyProperty) this.validateConfigKey = aiAssistant.validateKeyProperty;
+    this.requestSettings = this.buildRequestSettings(this.key || '', request);
+    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
+    BaseServideIO.populateDefaultFileIO(defaultFileTypes?.audio, '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a');
+    BaseServideIO.populateDefaultFileIO(defaultFileTypes?.images, '.png,.jpg');
+    SetFileTypes.set(aiAssistant, this, defaultFileTypes);
+    if (requestInterceptor) this.requestInterceptor = requestInterceptor;
+    if (responseInterceptor) this.responseInterceptor = responseInterceptor;
   }
 
   private buildRequestSettings(key: string, requestSettings?: RequestSettings) {
@@ -58,11 +65,12 @@ export class BaseServideIO implements ServiceIO {
     return requestSettingsObj;
   }
 
-  private cleanServiceConfig(config: ServiceCallConfig) {
-    delete config.key;
-    delete config.request;
-    delete config.requestInterceptor;
-    delete config.responseInterceptor;
+  private static populateDefaultFileIO(fileIO: FileServiceIO | undefined, acceptedFormats: string) {
+    if (fileIO) {
+      fileIO.files ??= {};
+      fileIO.files.acceptedFormats ??= acceptedFormats;
+      fileIO.files.maxNumberOfFiles ??= 1;
+    }
   }
 
   private static canSendMessage(text: string) {

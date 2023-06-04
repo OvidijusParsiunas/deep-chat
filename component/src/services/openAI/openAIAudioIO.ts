@@ -6,7 +6,6 @@ import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
-import {AudioFiles} from '../../types/microphone';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
@@ -31,11 +30,12 @@ export class OpenAIAudioIO extends BaseServideIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(aiAssistant: AiAssistant) {
+    const defaultFile = {audio: {}};
     const {service, validateMessageBeforeSending, textInput} = aiAssistant;
     const config = service?.openAI?.audio as NonNullable<OpenAI['audio']>;
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, 'audio');
+    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    if (typeof config !== 'boolean') {
+    if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
       this._raw_body = config;
@@ -56,11 +56,8 @@ export class OpenAIAudioIO extends BaseServideIO {
     }
   }
 
-  private static cleanConfig(config: OpenAIAudioType & AudioFiles) {
-    delete config.files;
-    delete config.button;
+  private static cleanConfig(config: OpenAIAudioType) {
     delete config.type;
-    delete config.microphone;
   }
 
   private static createFormDataBody(body: OpenAIAudio, audio: File) {

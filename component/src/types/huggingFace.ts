@@ -1,6 +1,5 @@
-import {ServiceCallConfig} from './requestSettings';
 import {MessageLimits} from './chatLimits';
-import {AudioFiles} from './microphone';
+import {APIKey} from './APIKey';
 
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
@@ -72,13 +71,13 @@ export interface HuggingFaceModel {
 }
 
 export interface HuggingFace {
-  conversation?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceConversationConfig & MessageLimits);
-  textGeneration?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceTextGenerationConfig);
-  summarization?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceSummarizationConfig);
-  translation?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceTranslationConfig);
-  fillMask?: true | (ServiceCallConfig & HuggingFaceModel & HuggingFaceFillMaskConfig);
-  questionAnswer?: ServiceCallConfig & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
-  audioSpeechRecognition?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
-  audioClassification?: true | (ServiceCallConfig & HuggingFaceModel & AudioFiles);
-  imageClassification?: true | (ServiceCallConfig & HuggingFaceModel);
+  conversation?: true | (APIKey & HuggingFaceModel & HuggingFaceConversationConfig & MessageLimits);
+  textGeneration?: true | (APIKey & HuggingFaceModel & HuggingFaceTextGenerationConfig);
+  summarization?: true | (APIKey & HuggingFaceModel & HuggingFaceSummarizationConfig);
+  translation?: true | (APIKey & HuggingFaceModel & HuggingFaceTranslationConfig);
+  fillMask?: true | (APIKey & HuggingFaceModel & HuggingFaceFillMaskConfig);
+  questionAnswer?: APIKey & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
+  audioSpeechRecognition?: true | (APIKey & HuggingFaceModel);
+  audioClassification?: true | (APIKey & HuggingFaceModel);
+  imageClassification?: true | (APIKey & HuggingFaceModel);
 }

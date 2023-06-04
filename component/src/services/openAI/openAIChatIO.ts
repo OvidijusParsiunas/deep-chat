@@ -24,8 +24,7 @@ export class OpenAIChatIO extends BaseServideIO {
   private readonly _max_messages?: number;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service} = aiAssistant;
-    const config = service?.openAI?.chat; // can be undefined as this is the default service
+    const config = aiAssistant.service?.openAI?.chat; // can be undefined as this is the default service
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     if (typeof config === 'object') {
       this._total_messages_max_char_length = config.totalMessagesMaxCharLength;

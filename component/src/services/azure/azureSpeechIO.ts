@@ -1,14 +1,12 @@
-import {ServiceCallConfig} from '../../types/requestSettings';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {GenericObject} from '../../types/object';
-import {FILE_TYPES} from '../../types/fileTypes';
+import {ServiceFileTypes} from '../serviceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureRegion} from '../../types/azure';
+import {APIKey} from '../../types/APIKey';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
-
-type AzureServiceConfig = AzureRegion & ServiceCallConfig;
 
 export class AzureSpeechIO extends BaseServideIO {
   override insertKeyPlaceholderText = 'Azure Speech Subscription Key';
@@ -17,8 +15,9 @@ export class AzureSpeechIO extends BaseServideIO {
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: AzureServiceConfig,
-     fileType?: FILE_TYPES) {
-    super(aiAssistant, AzureUtils.buildSpeechKeyVerificationDetails(config.region), buildHeadersFunc, config, fileType);
+  constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: APIKey & AzureRegion,
+      defaultFileTypes?: ServiceFileTypes) {
+    super(aiAssistant,
+      AzureUtils.buildSpeechKeyVerificationDetails(config.region), buildHeadersFunc, config, defaultFileTypes);
   }
 }

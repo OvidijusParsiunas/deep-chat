@@ -27,8 +27,10 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
+    const defaultFile = {audio: {}};
     super(aiAssistant,
-      AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'), config);
+      AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
+      config, defaultFile);
     Object.assign(this._raw_body, config);
     this._raw_body.lang ??= 'en-US';
     this._raw_body.gender ??= 'Female';

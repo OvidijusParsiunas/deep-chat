@@ -9,7 +9,8 @@ export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
     const config = aiAssistant.service?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
-    super(aiAssistant, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, 'audio');
+    const defaultFile = {audio: {}};
+    super(aiAssistant, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, defaultFile);
   }
 
   async extractPollResultData(result: HuggingFaceAudioRecognitionResult): PollResult {

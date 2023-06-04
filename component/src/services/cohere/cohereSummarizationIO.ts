@@ -1,5 +1,4 @@
 import {CohereSummarizationResult} from '../../types/cohereResult';
-import {ServiceCallConfig} from '../../types/requestSettings';
 import {CohereSummarizationConfig} from '../../types/cohere';
 import {MessageContent} from '../../types/messages';
 import {GenericObject} from '../../types/object';
@@ -7,11 +6,11 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = GenericObject<string> & ServiceCallConfig;
+type CohereServiceConfig = GenericObject<string>;
 
 export class CohereSummarizationIO extends CohereIO {
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.cohere?.summarization as CohereServiceConfig;
+    const config = aiAssistant.service?.cohere?.summarization as CohereServiceConfig | undefined;
     super(aiAssistant, 'https://api.cohere.ai/v1/summarize', 'Insert text to summarize', config);
   }
 

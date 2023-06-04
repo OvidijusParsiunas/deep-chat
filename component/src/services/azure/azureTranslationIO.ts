@@ -23,8 +23,7 @@ export class AzureTranslationIO extends BaseServideIO {
     super(
       aiAssistant,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),
-      AzureUtils.buildTranslationHeaders.bind({}, config?.region),
-      config);
+      AzureUtils.buildTranslationHeaders.bind({}, config?.region), config);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }
 

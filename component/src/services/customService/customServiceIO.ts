@@ -8,9 +8,9 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {Demo as DemoClass} from '../../utils/demo/demo';
-import {BuildFileTypes} from '../utils/buildFileTypes';
 import {MessageLimits} from '../../types/chatLimits';
 import {MessageContent} from '../../types/messages';
+import {SetFileTypes} from '../utils/setFileTypes';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {Demo} from '../../types/demo';
@@ -23,6 +23,7 @@ import {
   ServiceIO,
 } from '../serviceIO';
 
+// WORK - this should be defaulted to when no pre-existing service is defined
 // GCP should be included here
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class CustomServiceIO implements ServiceIO {
@@ -43,16 +44,16 @@ export class CustomServiceIO implements ServiceIO {
   validateConfigKey = false;
 
   constructor(aiAssistant: AiAssistant) {
-    const customService = aiAssistant.service?.custom;
-    if (!customService?.request && !customService?.demo) {
+    const customService = aiAssistant.service?.custom as CustomServiceConfig;
+    if (!aiAssistant?.request && !customService?.demo) {
       throw new Error('please define a request property in custom: {request: ...}');
     }
     this.demo = customService.demo;
     if (this.demo) this.requestSettings.url = DemoClass.URL;
-    if (customService.request) this.requestSettings = customService.request;
-    if (customService.requestInterceptor) this.requestInterceptor = customService.requestInterceptor;
-    if (customService.responseInterceptor) this.responseInterceptor = customService.responseInterceptor;
-    BuildFileTypes.build(aiAssistant, this);
+    if (aiAssistant.request) this.requestSettings = aiAssistant.request;
+    if (aiAssistant.requestInterceptor) this.requestInterceptor = aiAssistant.requestInterceptor;
+    if (aiAssistant.responseInterceptor) this.responseInterceptor = aiAssistant.responseInterceptor;
+    SetFileTypes.set(aiAssistant, this);
     this.displayServiceErrorMessages = customService?.displayServiceErrorMessages;
     this._isStream = !!customService?.stream;
     this._total_messages_max_char_length = customService.totalMessagesMaxCharLength;
@@ -67,10 +68,7 @@ export class CustomServiceIO implements ServiceIO {
   }
 
   private static cleanConfig(config: Partial<CustomServiceConfig> & MessageLimits) {
-    delete config.request;
     delete config.stream;
-    delete config.requestInterceptor;
-    delete config.responseInterceptor;
     delete config.displayServiceErrorMessages;
     delete config.maxMessages;
     delete config.totalMessagesMaxCharLength;

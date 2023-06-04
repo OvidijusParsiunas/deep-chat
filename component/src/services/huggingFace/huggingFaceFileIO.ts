@@ -1,10 +1,8 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {ServiceCallConfig} from '../../types/requestSettings';
+import {CompletionsHandlers, ServiceFileTypes, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
-import {FILE_TYPES} from '../../types/fileTypes';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 
@@ -13,8 +11,8 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, placeholderText: string, defaultModel: string,
-      config: true | (HuggingFaceModel & ServiceCallConfig), fileType: FILE_TYPES) {
-    super(aiAssistant, placeholderText, defaultModel, config, fileType);
+      config: true | (HuggingFaceModel), defaultFileTypes?: ServiceFileTypes) {
+    super(aiAssistant, placeholderText, defaultModel, config, defaultFileTypes);
     this.canSendMessage = aiAssistant.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
   }
 

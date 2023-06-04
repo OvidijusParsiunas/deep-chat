@@ -3,12 +3,14 @@ import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
+import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
+import {RequestSettings} from './types/requestSettings';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {ChatView} from './views/chat/chatView';
@@ -24,9 +26,8 @@ import {Names} from './types/names';
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
-  // can only be used if serviceKey has been set via the key property
-  @Property('boolean')
-  validateKeyProperty?: boolean;
+  @Property('object')
+  request?: RequestSettings;
 
   @Property('object')
   service?: Service;
@@ -99,6 +100,12 @@ export class AiAssistant extends InternalHTML {
 
   @Property('string')
   auxiliaryStyle?: string;
+
+  @Property('function')
+  requestInterceptor?: RequestInterceptor;
+
+  @Property('function')
+  responseInterceptor?: ResponseInterceptor;
 
   @Property('function')
   onNewMessage?: OnNewMessage;

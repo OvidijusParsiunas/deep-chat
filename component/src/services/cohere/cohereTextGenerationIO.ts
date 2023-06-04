@@ -1,5 +1,4 @@
 import {CohereCompletionsResult} from '../../types/cohereResult';
-import {ServiceCallConfig} from '../../types/requestSettings';
 import {CohereGenerateConfig} from '../../types/cohere';
 import {MessageContent} from '../../types/messages';
 import {GenericObject} from '../../types/object';
@@ -7,7 +6,7 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = GenericObject<string> & ServiceCallConfig;
+type CohereServiceConfig = GenericObject<string>;
 
 export class CohereTextGenerationIO extends CohereIO {
   constructor(aiAssistant: AiAssistant) {

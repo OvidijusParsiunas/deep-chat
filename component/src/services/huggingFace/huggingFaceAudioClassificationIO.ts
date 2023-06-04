@@ -10,8 +10,9 @@ export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
     const config = aiAssistant.service?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
+    const defaultFile = {audio: {}};
     super(aiAssistant,
-      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, 'audio');
+      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, defaultFile);
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

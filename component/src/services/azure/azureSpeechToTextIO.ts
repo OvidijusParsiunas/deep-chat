@@ -26,7 +26,8 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   constructor(aiAssistant: AiAssistant) {
     const {service, validateMessageBeforeSending} = aiAssistant;
     const config = service?.azure?.speechToText as NonNullable<Azure['speechToText']>;
-    super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, 'audio');
+    const defaultFile = {audio: {}};
+    super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, defaultFile);
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
     const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len

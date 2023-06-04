@@ -1,5 +1,4 @@
 import {ButtonStyles, ButtonPosition} from './button';
-import {FilesUploader} from './fileServiceConfigs';
 
 export interface MicrophoneStyles {
   default?: ButtonStyles;
@@ -11,10 +10,6 @@ export interface MicrophoneStyles {
 export type Microphone = true | MicrophoneStyles;
 
 export type AudioFormat = 'mp3' | '4a' | 'webm' | 'mp4' | 'mpga' | 'wav' | 'mpeg' | 'm4a';
-
-export type AudioFiles = FilesUploader & {
-  microphone?: true | {styles?: MicrophoneStyles; maxDurationSeconds?: number; format?: AudioFormat};
-};
 
 export interface AudioRecordingFiles {
   format?: AudioFormat;

@@ -1,17 +1,16 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {ServiceCallConfig} from '../../types/requestSettings';
+import {CompletionsHandlers, ServiceFileTypes, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
-import {FILE_TYPES} from '../../types/fileTypes';
 import {AiAssistant} from '../../aiAssistant';
+import {APIKey} from '../../types/APIKey';
 
 type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; context?: string};
 
-type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj & ServiceCallConfig);
+type HuggingFaceServiceConfig = true | (APIKey & HuggingFaceModel & HuggingFaceServiceConfigObj);
 
 export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends BaseServideIO {
   override insertKeyPlaceholderText = 'Hugging Face Access Token';
@@ -27,9 +26,9 @@ export class HuggingFaceIO<T extends HuggingFaceServiceConfigObj = {}> extends B
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant, textInputPlaceholderText: string, defaultModel: string,
-      config?: HuggingFaceServiceConfig, fileType?: FILE_TYPES) {
-    super(
-      aiAssistant, HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, fileType);
+      config?: HuggingFaceServiceConfig, defaultFileTypes?: ServiceFileTypes) {
+    super(aiAssistant,
+      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, defaultFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct _raw_body with individual props

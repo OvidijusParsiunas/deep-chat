@@ -4,7 +4,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {BaseServideIO} from '../utils/baseServiceIO';
-import {AssemblyAI} from '../../types/assemblyAI';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
@@ -23,10 +22,12 @@ export class AssemblyAIAudioIO extends BaseServideIO {
   textInputPlaceholderText = 'Upload an audio file';
   permittedErrorPrefixes = new Set('Invalid');
 
+  // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
-    const {service, validateMessageBeforeSending} = aiAssistant;
-    const config = service?.assemblyAI?.audio as NonNullable<AssemblyAI['audio']>; // used as default assemblyAI
-    super(aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, config, 'audio');
+    const defaultFile = {audio: {}};
+    super(
+      aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, undefined, defaultFile);
+    const {validateMessageBeforeSending} = aiAssistant;
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }
 

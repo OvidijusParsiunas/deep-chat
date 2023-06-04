@@ -1,5 +1,5 @@
-import {ServiceCallConfig} from './requestSettings';
 import {GenericObject} from './object';
+import {APIKey} from './APIKey';
 
 // https://docs.cohere.com/reference/summarize-2
 export interface CohereSummarizationConfig {
@@ -27,6 +27,6 @@ export interface CohereGenerateConfig {
 }
 
 export interface Cohere {
-  textGeneration?: true | (ServiceCallConfig & CohereGenerateConfig);
-  summarization?: true | (ServiceCallConfig & CohereSummarizationConfig);
+  textGeneration?: true | (APIKey & CohereGenerateConfig);
+  summarization?: true | (APIKey & CohereSummarizationConfig);
 }
