@@ -53,8 +53,6 @@ export class HTTPRequest {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
-        messages.addNewErrorMessage('service');
-        onClose();
         throw new Error('error');
       },
       onmessage(message: EventSourceMessage) {

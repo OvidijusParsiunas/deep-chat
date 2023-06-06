@@ -35,13 +35,11 @@ export class AiAssistant extends InternalHTML {
   @Property('object')
   request?: RequestSettings;
 
-  // WORK - if error occurs, double error is thrown
   @Property('boolean')
   stream?: boolean;
 
-  // WORK - totalMessagesMaxCharLength only applied to files
   @Property('object')
-  requestBodyMessageLimits?: RequestBodyMessageLimits = {lastMessageOnly: true};
+  requestBodyMessageLimits?: RequestBodyMessageLimits;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -167,6 +165,7 @@ export class AiAssistant extends InternalHTML {
     this.onRender();
   }
 
+  // prettier-ignore
   override onRender() {
     // TO-DO - this will be moved to service selection view
     this._activeService ??= ServiceIOFactory.create(this);
@@ -178,7 +177,8 @@ export class AiAssistant extends InternalHTML {
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else if ((this._activeService instanceof IExistingServiceIO && this._activeService.key) || this.request?.url) {
+    } else if ((this._activeService instanceof IExistingServiceIO && this._activeService.key)
+        || this.request?.url || this.existingService?.demo) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;

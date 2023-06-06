@@ -9,8 +9,8 @@ import {MessageLimitUtils} from './messageLimitUtils';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {SetFileTypes} from './setFileTypes';
+import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
-import {Demo} from '../../types/demo';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,
@@ -34,7 +34,6 @@ export class BaseServiceIO implements ServiceIO {
   readonly _isStream: boolean = false;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
-  readonly _isTextOnly?: boolean;
   private readonly _serviceRequireFiles: boolean;
   demo?: Demo;
 
@@ -50,11 +49,10 @@ export class BaseServiceIO implements ServiceIO {
     BaseServiceIO.populateDefaultFileIO(defaultFileTypes?.images, '.png,.jpg');
     SetFileTypes.set(aiAssistant, this, defaultFileTypes);
     if (request) this.requestSettings = request;
+    if (this.demo) this.requestSettings.url ??= Demo.URL;
     if (requestInterceptor) this.requestInterceptor = requestInterceptor;
     if (responseInterceptor) this.responseInterceptor = responseInterceptor;
     this._serviceRequireFiles = !!defaultFileTypes && Object.keys(defaultFileTypes).length > 0;
-    // WORK - this will not be required
-    this._isTextOnly = !this.camera && !this.recordAudio && Object.keys(this.fileTypes).length === 0;
   }
 
   private static populateDefaultFileIO(fileIO: FileServiceIO | undefined, acceptedFormats: string) {
@@ -123,7 +121,7 @@ export class BaseServiceIO implements ServiceIO {
   callAPI(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
-      messages.messages, 0, this.maxMessages, this._isTextOnly ? this.totalMessagesMaxCharLength : undefined);
+      messages.messages, 0, this.maxMessages, this.totalMessagesMaxCharLength);
     if (files && !this._serviceRequireFiles) {
       this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, files);
     } else {
