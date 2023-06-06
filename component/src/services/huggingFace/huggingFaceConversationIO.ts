@@ -1,11 +1,11 @@
-import {HuggingFaceQuestionAnswerConfig, HuggingFaceConversationConfig} from '../../types/huggingFace';
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
+import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversationConfig> {
+export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default method
     const config = aiAssistant.service?.huggingFace?.conversation;
@@ -47,7 +47,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO<HuggingFaceConversa
     } as unknown as {inputs: string};
   }
 
-  async extractResultData(result: HuggingFaceConversationResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceConversationResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result.generated_text || ''};
   }

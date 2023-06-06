@@ -1,4 +1,4 @@
-import {BaseServideIO} from '../utils/baseServiceIO';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {GenericObject} from '../../types/object';
 import {AzureEndpoint} from '../../types/azure';
 import {AiAssistant} from '../../aiAssistant';
@@ -8,7 +8,7 @@ import {APIKey} from '../../types/APIKey';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-export class AzureLanguageIO extends BaseServideIO {
+export class AzureLanguageIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'Azure Language Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len

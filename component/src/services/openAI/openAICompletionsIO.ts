@@ -2,16 +2,16 @@ import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
 
-export class OpenAICompletionsIO extends BaseServideIO {
+export class OpenAICompletionsIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/completions';
@@ -20,7 +20,6 @@ export class OpenAICompletionsIO extends BaseServideIO {
   private readonly full_transaction_max_tokens = 4000;
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
-  override readonly raw_body: OpenAIConverseBodyInternal;
 
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput} = aiAssistant;
@@ -29,7 +28,8 @@ export class OpenAICompletionsIO extends BaseServideIO {
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    this.raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL, config);
+    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    this.rawBody.model ??= OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL;
   }
 
   // prettier-ignore
@@ -48,8 +48,9 @@ export class OpenAICompletionsIO extends BaseServideIO {
   override callServiceAPI(messages: Messages, pMessages: MessageContent[],
       completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this.raw_body, pMessages);
-    if (body.stream) {
+    const body = this.preprocessBody(this.rawBody, pMessages);
+    if (this._isStream || body.stream) {
+      body.stream = true;
       HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
@@ -57,7 +58,7 @@ export class OpenAICompletionsIO extends BaseServideIO {
     }
   }
 
-  async extractResultData(result: OpenAIConverseResult): Promise<Result> {
+  override async extractResultData(result: OpenAIConverseResult): Promise<Result> {
     if (result.error) throw result.error.message;
     return {text: result.choices[0]?.text || ''};
   }

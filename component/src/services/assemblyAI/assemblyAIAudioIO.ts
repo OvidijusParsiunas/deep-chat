@@ -1,14 +1,14 @@
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class AssemblyAIAudioIO extends BaseServideIO {
+export class AssemblyAIAudioIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'AssemblyAI API Key';
   override getKeyLink = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `
@@ -44,7 +44,7 @@ export class AssemblyAIAudioIO extends BaseServideIO {
     HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);
   }
 
-  async extractResultData(result: AssemblyAIResult): Promise<Result> {
+  override async extractResultData(result: AssemblyAIResult): Promise<Result> {
     const key = this.requestSettings?.headers?.['Authorization'] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
     return {text: pollingResult.text};

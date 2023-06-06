@@ -21,7 +21,6 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     </p>`;
 
   url = '';
-  override readonly raw_body: AzureTextToSpeechConfig = {};
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
@@ -31,10 +30,10 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     super(aiAssistant,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config, defaultFile);
-    Object.assign(this.raw_body, config);
-    this.raw_body.lang ??= 'en-US';
-    this.raw_body.gender ??= 'Female';
-    this.raw_body.name ??= 'en-US-JennyNeural';
+    Object.assign(this.rawBody, config);
+    this.rawBody.lang ??= 'en-US';
+    this.rawBody.gender ??= 'Female';
+    this.rawBody.name ??= 'en-US-JennyNeural';
     this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
   }
 
@@ -50,11 +49,11 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
 
   override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this.raw_body, pMessages);
+    const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish, false);
   }
 
-  async extractResultData(result: AzureTextToSpeechResult): Promise<Result> {
+  override async extractResultData(result: AzureTextToSpeechResult): Promise<Result> {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.readAsDataURL(result);

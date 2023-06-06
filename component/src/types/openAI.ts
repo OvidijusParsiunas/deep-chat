@@ -33,7 +33,6 @@ export interface OpenAIConverse {
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
-  stream?: boolean;
 }
 
 export interface OpenAI {

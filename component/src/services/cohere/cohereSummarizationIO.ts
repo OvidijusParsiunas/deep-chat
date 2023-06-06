@@ -21,7 +21,7 @@ export class CohereSummarizationIO extends CohereIO {
     return {text: mostRecentMessageText, ...bodyCopy};
   }
 
-  async extractResultData(result: CohereSummarizationResult): Promise<Result> {
+  override async extractResultData(result: CohereSummarizationResult): Promise<Result> {
     if (result.message) throw result.message;
     return {text: result.summary || ''};
   }

@@ -1,7 +1,7 @@
 import {AzureTranslationResult} from '../../types/azureResult';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
 import {AiAssistant} from '../../aiAssistant';
@@ -9,7 +9,7 @@ import {AzureUtils} from './utils/azureUtils';
 import {Result} from '../../types/result';
 import {Azure} from '../../types/azure';
 
-export class AzureTranslationIO extends BaseServideIO {
+export class AzureTranslationIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len
@@ -39,7 +39,7 @@ export class AzureTranslationIO extends BaseServideIO {
     HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish);
   }
 
-  async extractResultData(result: AzureTranslationResult): Promise<Result> {
+  override async extractResultData(result: AzureTranslationResult): Promise<Result> {
     if (Array.isArray(result)) {
       return {text: result[0].translations?.[0].text || ''};
     }

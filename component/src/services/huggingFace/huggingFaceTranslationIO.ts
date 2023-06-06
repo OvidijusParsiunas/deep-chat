@@ -1,16 +1,16 @@
-import {HuggingFace, HuggingFaceTranslationConfig} from '../../types/huggingFace';
 import {HuggingFaceTranslationResult} from '../../types/huggingFaceResult';
+import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class HuggingFaceTranslationIO extends HuggingFaceIO<HuggingFaceTranslationConfig> {
+export class HuggingFaceTranslationIO extends HuggingFaceIO {
   constructor(aiAssistant: AiAssistant) {
     const config = aiAssistant.service?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
     super(aiAssistant, 'Insert text to translate', 't5-base', config);
   }
 
-  async extractResultData(result: HuggingFaceTranslationResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceTranslationResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result[0].translation_text || ''};
   }

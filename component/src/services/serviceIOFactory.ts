@@ -12,25 +12,21 @@ import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
 import {AzureSummarizationIO} from './azure/azureSummarizationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
-import {CustomServiceIO} from './customService/customServiceIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
+import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
-import {ErrorView} from '../views/error/errorView';
 import {AiAssistant} from '../aiAssistant';
 import {ServiceIO} from './serviceIO';
 
 // exercise caution when defining default returns for services as their configs can be undefined
 export class ServiceIOFactory {
-  private static createService(aiAssistant: AiAssistant): ServiceIO | undefined {
+  public static create(aiAssistant: AiAssistant): ServiceIO {
     const {service: services} = aiAssistant;
     if (services) {
-      if (services.custom) {
-        return new CustomServiceIO(aiAssistant);
-      }
       if (services.openAI) {
         if (services.openAI.images) {
           return new OpenAIImagesIO(aiAssistant);
@@ -93,18 +89,10 @@ export class ServiceIOFactory {
           return new AzureTranslationIO(aiAssistant);
         }
       }
+      if (services.demo) {
+        return new BaseServiceIO(aiAssistant, undefined, services.demo);
+      }
     }
-    throw new Error("Please define a service in the 'service' property");
-  }
-
-  public static create(aiAssistant: AiAssistant, containerElement: HTMLElement): ServiceIO | undefined {
-    try {
-      return ServiceIOFactory.createService(aiAssistant);
-    } catch (e) {
-      console.error(e);
-      // TO-DO - default to service selection view
-      if (e instanceof Error) ErrorView.render(containerElement, e.message);
-      return undefined;
-    }
+    return new BaseServiceIO(aiAssistant);
   }
 }

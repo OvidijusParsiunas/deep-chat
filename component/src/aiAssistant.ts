@@ -1,9 +1,10 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageStyles, ErrorMessageOverrides, MessageContent, OnNewMessage} from './types/messages';
+import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
+import {ExistingServiceIO} from './services/utils/existingServiceIO';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
@@ -14,6 +15,7 @@ import {SubmitButtonStyles} from './types/submitButton';
 import {RequestSettings} from './types/requestSettings';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
+import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Microphone} from './types/microphone';
@@ -29,6 +31,10 @@ import {Names} from './types/names';
 export class AiAssistant extends InternalHTML {
   @Property('object')
   request?: RequestSettings;
+
+  // WORK - if error occurs, double error is thrown
+  @Property('boolean')
+  stream?: boolean;
 
   // WORK - totalMessagesMaxCharLength only applied to files
   @Property('object')
@@ -98,7 +104,7 @@ export class AiAssistant extends InternalHTML {
   introPanelStyle?: CustomStyle;
 
   @Property('object')
-  errorMessageOverrides?: ErrorMessageOverrides;
+  errorMessages?: ErrorMessages;
 
   @Property('boolean')
   displayLoadingBubble?: boolean;
@@ -163,7 +169,7 @@ export class AiAssistant extends InternalHTML {
 
   override onRender() {
     // TO-DO - this will be moved to service selection view
-    this._activeService ??= ServiceIOFactory.create(this, this._elementRef);
+    this._activeService ??= ServiceIOFactory.create(this);
     if (!this._activeService) return;
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
@@ -172,16 +178,18 @@ export class AiAssistant extends InternalHTML {
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else if (this._activeService.key || this.service?.custom) {
+    } else if ((this._activeService instanceof ExistingServiceIO && this._activeService.key) || this.request?.url) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;
       ChatView.render(this, this._elementRef, this._activeService, this._childElement);
-    } else {
+    } else if (this._activeService instanceof ExistingServiceIO) {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first ppear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
+    } else {
+      ErrorView.render(this._elementRef, 'Please define "request" with a "url"');
     }
     this._hasBeenRendered = true;
     this.onComponentRender?.();

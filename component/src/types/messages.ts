@@ -3,6 +3,7 @@ import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
 export interface MessageElementsStyles {
+  // WORK - not sure if this is needed
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
@@ -35,4 +36,11 @@ export interface ErrorMessageOverrides {
   default?: string;
   service?: string;
   speechToTextInput?: string;
+}
+
+export interface ErrorMessages {
+  // automatically display all error messages from the service, all others automatically default
+  // to the normal error structure -> type of message -> default -> 'Error, please try again.'
+  displayServiceErrorMessages?: boolean;
+  overrides: ErrorMessageOverrides;
 }

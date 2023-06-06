@@ -56,7 +56,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);
   }
 
-  async extractResultData(result: AzureSpeechToTextResult): Promise<Result> {
+  override async extractResultData(result: AzureSpeechToTextResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result.DisplayText || ''};
   }

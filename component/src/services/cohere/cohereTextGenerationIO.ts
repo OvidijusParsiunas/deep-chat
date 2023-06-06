@@ -22,7 +22,7 @@ export class CohereTextGenerationIO extends CohereIO {
     return {prompt: mostRecentMessageText, ...bodyCopy};
   }
 
-  async extractResultData(result: CohereCompletionsResult): Promise<Result> {
+  override async extractResultData(result: CohereCompletionsResult): Promise<Result> {
     if (result.message) throw result.message;
     return {text: result.generations?.[0].text || ''};
   }

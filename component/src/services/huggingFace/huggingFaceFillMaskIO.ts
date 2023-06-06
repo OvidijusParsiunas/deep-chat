@@ -1,10 +1,10 @@
-import {HuggingFace, HuggingFaceFillMaskConfig} from '../../types/huggingFace';
 import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
+import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class HuggingFaceFillMaskIO extends HuggingFaceIO<HuggingFaceFillMaskConfig> {
+export class HuggingFaceFillMaskIO extends HuggingFaceIO {
   override introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
     <p>Insert a sentence with the word [MASK] and the model will try to fill it for you. E.g. I want [MASK].</p>
@@ -17,7 +17,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO<HuggingFaceFillMaskConf
     super(aiAssistant, 'The goal of life is [MASK].', 'bert-base-uncased', config);
   }
 
-  async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result[0].sequence || ''};
   }

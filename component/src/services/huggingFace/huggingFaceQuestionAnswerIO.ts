@@ -5,7 +5,7 @@ import {HuggingFaceIO} from './huggingFaceIO';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO<HuggingFaceQuestionAnswerConfig> {
+export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
   permittedErrorPrefixes = new Set('Error in');
 
   private readonly context: string;
@@ -24,7 +24,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO<HuggingFaceQuesti
     } as unknown as {inputs: string};
   }
 
-  async extractResultData(result: HuggingFaceQuestionAnswerResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceQuestionAnswerResult): Promise<Result> {
     if (result.error) throw result.error;
     return {text: result.answer || ''};
   }

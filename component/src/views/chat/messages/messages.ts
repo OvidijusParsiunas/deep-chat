@@ -1,4 +1,3 @@
-import {PermittedErrorMessage} from '../../../types/permittedErrorMessage';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
@@ -46,6 +45,7 @@ export class Messages {
   private readonly _displayLoadingMessage?: boolean;
   private readonly _remarkable: Remarkable;
   private readonly _permittedErrorPrefixes?: CustomErrors;
+  private readonly displayServiceErrorMessages?: boolean;
   private _introPanel?: IntroPanel;
   private _streamedText = '';
   messages: MessageContent[] = [];
@@ -57,7 +57,7 @@ export class Messages {
     this.messageStyles = aiAssistant.messageStyles;
     this._avatars = aiAssistant.avatars;
     this._names = aiAssistant.names;
-    this._errorMessageOverrides = aiAssistant.errorMessageOverrides;
+    this._errorMessageOverrides = aiAssistant.errorMessages?.overrides;
     this._speechOutput = aiAssistant.speechOutput;
     this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
     this._onNewMessage = aiAssistant.onNewMessage;
@@ -66,6 +66,7 @@ export class Messages {
     this.populateIntroPanel(panel, introPanelMarkUp, aiAssistant.introPanelStyle);
     if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
     if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
+    this.displayServiceErrorMessages = aiAssistant.errorMessages?.displayServiceErrorMessages;
     aiAssistant.getMessages = () => this.messages;
     if (demo) this.prepareDemo(demo);
   }
@@ -214,7 +215,7 @@ export class Messages {
   }
 
   // prettier-ignore
-  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: string | PermittedErrorMessage) {
+  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: string) {
     this.removeMessageOnError();
     const messageElements = Messages.createBaseElements();
     const {outerContainer, bubbleElement} = messageElements;
@@ -238,8 +239,10 @@ export class Messages {
     }
     return undefined;
   }
-  private getPermittedMessage(message?: string | PermittedErrorMessage) {
+
+  private getPermittedMessage(message?: string) {
     if (message) {
+      if (this.displayServiceErrorMessages) return message;
       if (typeof message === 'string' && this._permittedErrorPrefixes) {
         const result = Messages.checkPermittedErrorPrefixes(Array.from(this._permittedErrorPrefixes), message);
         if (result) return result;
@@ -249,8 +252,6 @@ export class Messages {
           const result = Messages.checkPermittedErrorPrefixes(errorPrefixes, message[i]);
           if (result) return result;
         }
-      } else if (typeof message === 'object' && message.permittedErrorMessage) {
-        return message.permittedErrorMessage;
       }
     }
     return undefined;

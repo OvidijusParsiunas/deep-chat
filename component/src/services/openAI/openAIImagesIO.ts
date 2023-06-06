@@ -1,18 +1,18 @@
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class OpenAIImagesIO extends BaseServideIO {
+export class OpenAIImagesIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -31,7 +31,6 @@ export class OpenAIImagesIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid input image');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  override readonly raw_body: OpenAIImages = {};
 
   constructor(aiAssistant: AiAssistant) {
     const {service, textInput, validateMessageBeforeSending} = aiAssistant;
@@ -43,7 +42,7 @@ export class OpenAIImagesIO extends BaseServideIO {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};
     }
-    if (typeof config === 'object') this.raw_body = config;
+    if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
   }
 
@@ -78,11 +77,11 @@ export class OpenAIImagesIO extends BaseServideIO {
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_EDIT_URL;
-      const body = this.preprocessBody(this.raw_body, lastMessage);
+      const body = this.preprocessBody(this.rawBody, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
       this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
-      formData = OpenAIImagesIO.createFormDataBody(this.raw_body, files[0]);
+      formData = OpenAIImagesIO.createFormDataBody(this.rawBody, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
@@ -98,12 +97,12 @@ export class OpenAIImagesIO extends BaseServideIO {
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this.raw_body, pMessages[pMessages.length - 1].text);
+      const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
   }
 
-  async extractResultData(result: OpenAIImageResult): Promise<Result> {
+  override async extractResultData(result: OpenAIImageResult): Promise<Result> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
       if (imageData.url) return {src: imageData.url, type: 'image'};

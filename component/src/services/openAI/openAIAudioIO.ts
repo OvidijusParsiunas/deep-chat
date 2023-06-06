@@ -1,16 +1,16 @@
 import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class OpenAIAudioIO extends BaseServideIO {
+export class OpenAIAudioIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
@@ -26,7 +26,6 @@ export class OpenAIAudioIO extends BaseServideIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = new Set('Invalid');
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
-  override readonly raw_body: OpenAIAudio & {response_format?: 'json'} = {};
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(aiAssistant: AiAssistant) {
@@ -38,10 +37,10 @@ export class OpenAIAudioIO extends BaseServideIO {
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);
-      this.raw_body = config;
+      Object.assign(this.rawBody, config);
     }
-    this.raw_body.model ??= OpenAIAudioIO.DEFAULT_MODEL;
-    this.raw_body.response_format = 'json';
+    this.rawBody.model ??= OpenAIAudioIO.DEFAULT_MODEL;
+    this.rawBody.response_format = 'json';
     this.canSendMessage = validateMessageBeforeSending || OpenAIAudioIO.canSendFileMessage;
   }
 
@@ -85,14 +84,14 @@ export class OpenAIAudioIO extends BaseServideIO {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;
-    const body = this.preprocessBody(this.raw_body, pMessages, files);
+    const body = this.preprocessBody(this.rawBody, pMessages, files);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
-  async extractResultData(result: OpenAIAudioResult): Promise<Result> {
+  override async extractResultData(result: OpenAIAudioResult): Promise<Result> {
     if (result.error) throw result.error.message;
     return {text: result.text};
   }

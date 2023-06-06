@@ -16,13 +16,14 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   textInputPlaceholderText = 'Insert text to summarize';
   private messages?: Messages;
   private completionsHandlers?: CompletionsHandlers;
-  override readonly raw_body: RawBody = {language: 'en'};
 
   constructor(aiAssistant: AiAssistant) {
     const {service} = aiAssistant;
     const config = service?.azure?.summarization as NonNullable<Azure['summarization']>;
     super(aiAssistant, AzureUtils.buildSummarizationHeader, config);
-    Object.assign(this.raw_body, config);
+    this.rawBody.language ??= 'en';
+    Object.assign(this.rawBody, config);
+
     this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
   }
 
@@ -49,13 +50,13 @@ export class AzureSummarizationIO extends AzureLanguageIO {
 
   override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this.raw_body, pMessages);
+    const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as object, messages, completionsHandlers.onFinish);
     this.messages = messages;
     this.completionsHandlers = completionsHandlers;
   }
 
-  async extractResultData(result: Response): Promise<{pollingInAnotherRequest: true}> {
+  override async extractResultData(result: Response): Promise<{pollingInAnotherRequest: true}> {
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
       const requestInit = {method: 'GET', headers: this.requestSettings?.headers as GenericObject<string>};

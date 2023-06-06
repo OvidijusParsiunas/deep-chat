@@ -3,9 +3,9 @@ import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {BaseServideIO} from '../utils/baseServiceIO';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {OpenAIChat} from '../../types/openAI';
@@ -13,11 +13,10 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 // chat is a form of completions
-export class OpenAIChatIO extends BaseServideIO {
+export class OpenAIChatIO extends ExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
-  override readonly raw_body: OpenAIConverseBodyInternal;
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
@@ -27,8 +26,9 @@ export class OpenAIChatIO extends BaseServideIO {
     if (typeof config === 'object') {
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
       this.cleanConfig(config);
+      Object.assign(this.rawBody, config);
     }
-    this.raw_body = OpenAIConverseBaseBody.build(OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL, config);
+    this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
   }
 
   public static generateSystemMessage(systemPrompt: string): SystemMessageInternal {
@@ -44,8 +44,8 @@ export class OpenAIChatIO extends BaseServideIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
     const processedMessages = MessageLimitUtils.processMessages(messages, this._systemMessage.content.length,
-      this.maxMessages, totalMessagesMaxCharLength
-      ).map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
+        this.maxMessages, totalMessagesMaxCharLength)
+      .map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
   }
@@ -54,8 +54,9 @@ export class OpenAIChatIO extends BaseServideIO {
   override callServiceAPI(messages: Messages, _: MessageContent[],
       completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this.raw_body, messages.messages);
-    if (body.stream) {
+    const body = this.preprocessBody(this.rawBody, messages.messages);
+    if (this._isStream || body.stream) {
+      body.stream = true;
       HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
@@ -63,7 +64,7 @@ export class OpenAIChatIO extends BaseServideIO {
     }
   }
 
-  async extractResultData(result: OpenAIConverseResult): Promise<Result> {
+  override async extractResultData(result: OpenAIConverseResult): Promise<Result> {
     if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
       return {text: result.choices[0].delta.content || ''};
