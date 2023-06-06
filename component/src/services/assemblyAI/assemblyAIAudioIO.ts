@@ -21,7 +21,7 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
   url = 'https://api.assemblyai.com/v2/upload';
   isTextInputDisabled = true;
   textInputPlaceholderText = 'Upload an audio file';
-  permittedErrorPrefixes = new Set('Invalid');
+  permittedErrorPrefixes = ['Invalid'];
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {

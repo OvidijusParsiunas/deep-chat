@@ -44,6 +44,8 @@ export class FileAttachmentsType {
         if (file.name.endsWith(extension)) {
           return true;
         }
+      } else if (file.name.endsWith(validType)) {
+        return true;
       } else if (validType.endsWith('/*') && file.type.startsWith(validType.slice(0, -2))) {
         return true;
       }

@@ -29,7 +29,7 @@ export class OpenAIImagesIO extends IExistingServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  permittedErrorPrefixes = new Set('Invalid input image');
+  permittedErrorPrefixes = ['Invalid input image'];
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(aiAssistant: AiAssistant) {

@@ -16,7 +16,7 @@
   overflow: auto;
   border: 1px solid rgb(203, 203, 203);
   padding: 10px;
-  max-height: calc(100% - 100px);
+  max-height: calc(100% - 6.8em);
 }
 
 #internal-intro-panel > p {

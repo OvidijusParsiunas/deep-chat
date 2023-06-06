@@ -4,11 +4,11 @@ import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {FileAttachments} from '../../types/fileAttachments';
 import {RequestSettings} from '../../types/requestSettings';
 import {AiAssistant} from '../../aiAssistant';
+import {Remarkable} from 'remarkable';
 
-// WORK - watch the remarkable initializations
 export class SetFileTypes {
   // prettier-ignore
-  private static parseConfig(requestSettings: RequestSettings, defFiles: FileAttachments,
+  private static parseConfig(requestSettings: RequestSettings, defFiles: FileAttachments, remark: Remarkable,
       fileType?: boolean | FilesServiceConfig) {
     const fileConfig: FileServiceIO & {files: FileAttachments} = {files: defFiles};
     if (typeof fileType === 'object') {
@@ -17,8 +17,7 @@ export class SetFileTypes {
         if (files.infoModal) {
           fileConfig.files.infoModal = files.infoModal;
           if (files.infoModal?.textMarkDown) {
-            const remarkable = RemarkableConfig.createNew();
-            fileConfig.infoModalTextMarkUp = remarkable.render(files.infoModal.textMarkDown);
+            fileConfig.infoModalTextMarkUp = remark.render(files.infoModal.textMarkDown);
           }
         }
         if (files.acceptedFormats) fileConfig.files.acceptedFormats = files.acceptedFormats;
@@ -34,22 +33,22 @@ export class SetFileTypes {
     return fileConfig;
   }
 
-  private static processMixedFiles(serviceIO: ServiceIO, mixedFiles: AiAssistant['mixedFiles']) {
+  private static processMixedFiles(serviceIO: ServiceIO, remark: Remarkable, mixedFiles: AiAssistant['mixedFiles']) {
     if (mixedFiles) {
       const defFormats = {acceptedFormats: ''};
-      serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.requestSettings, defFormats, mixedFiles);
+      serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.requestSettings, defFormats, remark, mixedFiles);
     }
   }
 
   // needs to be set after audio to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processMicrophone(
-    serviceIO: ServiceIO, microphone: AiAssistant['microphoneAudio'], audio: AiAssistant['audio']) {
+    serviceIO: ServiceIO, remark: Remarkable, microphone: AiAssistant['microphoneAudio'], audio: AiAssistant['audio']) {
   const files = serviceIO.fileTypes.audio?.files || {};
   const defaultFormats = {acceptedFormats: 'audio/*', ...files};
   if (!microphone) return;
   if (navigator.mediaDevices.getUserMedia !== undefined) {
-    serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
+    serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, microphone);
     // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
     if (typeof microphone === 'object') {
       if (microphone.files) {
@@ -64,26 +63,30 @@ export class SetFileTypes {
     }
     // if microphone is not available - fallback to normal audio upload
   } else if (!audio) {
-    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, microphone);
+    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, microphone);
   }
 }
 
-  private static processAudioConfig(serviceIO: ServiceIO, audio: AiAssistant['audio'], fileIO?: FileServiceIO) {
+  // prettier-ignore
+  private static processAudioConfig(
+      serviceIO: ServiceIO, remark: Remarkable, audio: AiAssistant['audio'], fileIO?: FileServiceIO) {
     if (!audio && !fileIO) return;
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'audio/*', ...files};
     // make sure to set these in the right services
-    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, audio);
+    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, audio);
   }
 
   // needs to be set after images to overwrite maxNumberOfFiles
-  private static processCamera(serviceIO: ServiceIO, camera: AiAssistant['camera'], images?: AiAssistant['images']) {
+  // prettier-ignore
+  private static processCamera(
+      serviceIO: ServiceIO, remark: Remarkable, camera: AiAssistant['camera'], images?: AiAssistant['images']) {
     const files = serviceIO.fileTypes.images?.files || {};
     const defaultFormats = {acceptedFormats: 'image/*', ...files};
     if (!camera) return;
     if (navigator.mediaDevices.getUserMedia !== undefined) {
       // check how maxNumberOfFiles is set here - if user has set in images - should use that instead
-      serviceIO.camera = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, camera);
+      serviceIO.camera = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, camera);
       if (typeof camera === 'object') {
         serviceIO.camera.modalContainerStyle = camera.modalContainerStyle;
         // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
@@ -96,23 +99,26 @@ export class SetFileTypes {
       }
       // if camera is not available - fallback to normal image upload
     } else if (!images) {
-      serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, camera);
+      serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, camera);
     }
   }
 
-  private static processImagesConfig(serviceIO: ServiceIO, images: AiAssistant['images'], fileIO?: FileServiceIO) {
+  // prettier-ignore
+  private static processImagesConfig(
+      serviceIO: ServiceIO, remark: Remarkable, images: AiAssistant['images'], fileIO?: FileServiceIO) {
     if (!images && !fileIO) return;
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'image/*', ...files};
     // make sure to set these in the right services
-    serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, images);
+    serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, images);
   }
 
   public static set(aiAssistant: AiAssistant, serviceIO: ServiceIO, defaultFileTypes?: ServiceFileTypes) {
-    SetFileTypes.processImagesConfig(serviceIO, aiAssistant.images, defaultFileTypes?.images);
-    SetFileTypes.processCamera(serviceIO, aiAssistant.camera, aiAssistant.images);
-    SetFileTypes.processAudioConfig(serviceIO, aiAssistant.audio, defaultFileTypes?.audio);
-    SetFileTypes.processMicrophone(serviceIO, aiAssistant.microphoneAudio, aiAssistant.audio);
-    SetFileTypes.processMixedFiles(serviceIO, aiAssistant.mixedFiles);
+    const remarkable = RemarkableConfig.createNew();
+    SetFileTypes.processImagesConfig(serviceIO, remarkable, aiAssistant.images, defaultFileTypes?.images);
+    SetFileTypes.processCamera(serviceIO, remarkable, aiAssistant.camera, aiAssistant.images);
+    SetFileTypes.processAudioConfig(serviceIO, remarkable, aiAssistant.audio, defaultFileTypes?.audio);
+    SetFileTypes.processMicrophone(serviceIO, remarkable, aiAssistant.microphoneAudio, aiAssistant.audio);
+    SetFileTypes.processMixedFiles(serviceIO, remarkable, aiAssistant.mixedFiles);
   }
 }

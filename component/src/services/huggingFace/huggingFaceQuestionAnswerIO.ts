@@ -6,7 +6,7 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
-  permittedErrorPrefixes = new Set('Error in');
+  permittedErrorPrefixes = ['Error in'];
 
   private readonly context: string;
 

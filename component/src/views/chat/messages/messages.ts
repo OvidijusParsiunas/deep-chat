@@ -244,12 +244,11 @@ export class Messages {
     if (message) {
       if (this.displayServiceErrorMessages) return message;
       if (typeof message === 'string' && this._permittedErrorPrefixes) {
-        const result = Messages.checkPermittedErrorPrefixes(Array.from(this._permittedErrorPrefixes), message);
+        const result = Messages.checkPermittedErrorPrefixes(this._permittedErrorPrefixes, message);
         if (result) return result;
       } else if (Array.isArray(message) && this._permittedErrorPrefixes) {
-        const errorPrefixes = Array.from(this._permittedErrorPrefixes);
         for (let i = 0; i < message.length; i += 1) {
-          const result = Messages.checkPermittedErrorPrefixes(errorPrefixes, message[i]);
+          const result = Messages.checkPermittedErrorPrefixes(this._permittedErrorPrefixes, message[i]);
           if (result) return result;
         }
       }

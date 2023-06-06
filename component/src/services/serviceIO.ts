@@ -28,7 +28,7 @@ export interface KeyVerificationHandlers {
 
 export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string};
 
-export type CustomErrors = Set<string>;
+export type CustomErrors = string[];
 
 export type ServiceFileTypes = {
   [key in FILE_TYPES]?: FileServiceIO;

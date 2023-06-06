@@ -24,7 +24,7 @@ export class OpenAIAudioIO extends IExistingServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  permittedErrorPrefixes = new Set('Invalid');
+  permittedErrorPrefixes = ['Invalid'];
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
