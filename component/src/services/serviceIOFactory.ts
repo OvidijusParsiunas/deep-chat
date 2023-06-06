@@ -22,75 +22,75 @@ import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {AiAssistant} from '../aiAssistant';
 import {ServiceIO} from './serviceIO';
 
-// exercise caution when defining default returns for services as their configs can be undefined
+// exercise caution when defining default returns for existingService as their configs can be undefined
 export class ServiceIOFactory {
   public static create(aiAssistant: AiAssistant): ServiceIO {
-    const {service: services} = aiAssistant;
-    if (services) {
-      if (services.openAI) {
-        if (services.openAI.images) {
+    const {existingService} = aiAssistant;
+    if (existingService) {
+      if (existingService.openAI) {
+        if (existingService.openAI.images) {
           return new OpenAIImagesIO(aiAssistant);
         }
-        if (services.openAI.audio) {
+        if (existingService.openAI.audio) {
           return new OpenAIAudioIO(aiAssistant);
         }
-        if (services.openAI.completions) {
+        if (existingService.openAI.completions) {
           return new OpenAICompletionsIO(aiAssistant);
         }
         return new OpenAIChatIO(aiAssistant);
       }
-      if (services.assemblyAI) {
+      if (existingService.assemblyAI) {
         return new AssemblyAIAudioIO(aiAssistant);
       }
-      if (services.cohere) {
-        if (services.cohere.summarization) {
+      if (existingService.cohere) {
+        if (existingService.cohere.summarization) {
           return new CohereSummarizationIO(aiAssistant);
         }
         return new CohereTextGenerationIO(aiAssistant);
       }
-      if (services.huggingFace) {
-        if (services.huggingFace.textGeneration) {
+      if (existingService.huggingFace) {
+        if (existingService.huggingFace.textGeneration) {
           return new HuggingFaceTextGenerationIO(aiAssistant);
         }
-        if (services.huggingFace.summarization) {
+        if (existingService.huggingFace.summarization) {
           return new HuggingFaceSummarizationIO(aiAssistant);
         }
-        if (services.huggingFace.translation) {
+        if (existingService.huggingFace.translation) {
           return new HuggingFaceTranslationIO(aiAssistant);
         }
-        if (services.huggingFace.fillMask) {
+        if (existingService.huggingFace.fillMask) {
           return new HuggingFaceFillMaskIO(aiAssistant);
         }
-        if (services.huggingFace.questionAnswer) {
+        if (existingService.huggingFace.questionAnswer) {
           return new HuggingFaceQuestionAnswerIO(aiAssistant);
         }
-        if (services.huggingFace.audioSpeechRecognition) {
+        if (existingService.huggingFace.audioSpeechRecognition) {
           return new HuggingFaceAudioRecognitionIO(aiAssistant);
         }
-        if (services.huggingFace.audioClassification) {
+        if (existingService.huggingFace.audioClassification) {
           return new HuggingFaceAudioClassificationIO(aiAssistant);
         }
-        if (services.huggingFace.imageClassification) {
+        if (existingService.huggingFace.imageClassification) {
           return new HuggingFaceImageClassificationIO(aiAssistant);
         }
         return new HuggingFaceConversationIO(aiAssistant);
       }
-      if (services.azure) {
-        if (services.azure?.speechToText) {
+      if (existingService.azure) {
+        if (existingService.azure?.speechToText) {
           return new AzureSpeechToTextIO(aiAssistant);
         }
-        if (services.azure?.textToSpeech) {
+        if (existingService.azure?.textToSpeech) {
           return new AzureTextToSpeechIO(aiAssistant);
         }
-        if (services.azure?.summarization) {
+        if (existingService.azure?.summarization) {
           return new AzureSummarizationIO(aiAssistant);
         }
-        if (services.azure?.translation) {
+        if (existingService.azure?.translation) {
           return new AzureTranslationIO(aiAssistant);
         }
       }
-      if (services.demo) {
-        return new BaseServiceIO(aiAssistant, undefined, services.demo);
+      if (existingService.demo) {
+        return new BaseServiceIO(aiAssistant, undefined, existingService.demo);
       }
     }
     return new BaseServiceIO(aiAssistant);

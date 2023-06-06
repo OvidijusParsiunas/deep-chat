@@ -40,7 +40,7 @@ export class BaseServiceIO implements ServiceIO {
 
   constructor(aiAssistant: AiAssistant, defaultFileTypes?: ServiceFileTypes, demo?: Demo) {
     this.demo = demo;
-    Object.assign(this.rawBody, aiAssistant.request?.additionalBodyProperties);
+    Object.assign(this.rawBody, aiAssistant.request?.body);
     const {request, validateMessageBeforeSending, requestInterceptor, responseInterceptor} = aiAssistant;
     this._isStream = !!aiAssistant.stream;
     this.totalMessagesMaxCharLength = aiAssistant?.requestBodyMessageLimits?.totalMessagesMaxCharLength;

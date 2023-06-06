@@ -6,7 +6,7 @@ import {PollResult} from '../serviceIO';
 
 export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.huggingFace?.imageClassification as NonNullable<
+    const config = aiAssistant.existingService?.huggingFace?.imageClassification as NonNullable<
       HuggingFace['imageClassification']
     >;
     const defaultFile = {images: {}};

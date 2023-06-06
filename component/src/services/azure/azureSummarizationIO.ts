@@ -18,8 +18,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   private completionsHandlers?: CompletionsHandlers;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service} = aiAssistant;
-    const config = service?.azure?.summarization as NonNullable<Azure['summarization']>;
+    const config = aiAssistant.existingService?.azure?.summarization as NonNullable<Azure['summarization']>;
     super(aiAssistant, AzureUtils.buildSummarizationHeader, config);
     this.rawBody.language ??= 'en';
     Object.assign(this.rawBody, config);

@@ -25,8 +25,8 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   textInputPlaceholderText = 'Upload an audio file';
 
   constructor(aiAssistant: AiAssistant) {
-    const {service, validateMessageBeforeSending} = aiAssistant;
-    const config = service?.azure?.speechToText as NonNullable<Azure['speechToText']>;
+    const {existingService, validateMessageBeforeSending} = aiAssistant;
+    const config = existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
     const defaultFile = {audio: {}};
     super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, defaultFile);
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;

@@ -1,6 +1,6 @@
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
@@ -8,7 +8,7 @@ import {MessageContent} from '../../types/messages';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class AssemblyAIAudioIO extends ExistingServiceIO {
+export class AssemblyAIAudioIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'AssemblyAI API Key';
   override getKeyLink = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `

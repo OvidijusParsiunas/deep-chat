@@ -8,7 +8,7 @@ import {Result} from '../../types/result';
 export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default method
-    const config = aiAssistant.service?.huggingFace?.conversation;
+    const config = aiAssistant.existingService?.huggingFace?.conversation;
     super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
     if (this.maxMessages) {
       // needs to be an odd number in order to have an array of previous correspondences and the new user message

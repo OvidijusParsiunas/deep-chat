@@ -24,8 +24,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
-    const {service} = aiAssistant;
-    const config = service?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
+    const config = aiAssistant.existingService?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
     const defaultFile = {audio: {}};
     super(aiAssistant,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),

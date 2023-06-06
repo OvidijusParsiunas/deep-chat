@@ -2,8 +2,8 @@ import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/ope
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -13,7 +13,7 @@ import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
 // chat is a form of completions
-export class OpenAIChatIO extends ExistingServiceIO {
+export class OpenAIChatIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
@@ -21,7 +21,7 @@ export class OpenAIChatIO extends ExistingServiceIO {
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.openAI?.chat; // can be undefined as this is the default service
+    const config = aiAssistant.existingService?.openAI?.chat; // can be undefined as this is the default service
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);

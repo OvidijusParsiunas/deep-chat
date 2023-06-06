@@ -11,7 +11,8 @@ type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
 type Config = true | APIKey;
 
-export class ExistingServiceIO extends BaseServiceIO {
+// using I in the front so that users don't mistake this for ExistingService
+export class IExistingServiceIO extends BaseServiceIO {
   key?: string;
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';
@@ -22,7 +23,7 @@ export class ExistingServiceIO extends BaseServiceIO {
   constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
       buildHeadersFunc: BuildHeadersFunc, config?: Config, defaultFileTypes?: ServiceFileTypes) {
     super(aiAssistant, defaultFileTypes);
-    Object.assign(this.rawBody, aiAssistant.request?.additionalBodyProperties);
+    Object.assign(this.rawBody, aiAssistant.request?.body);
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
     const {request} = aiAssistant;

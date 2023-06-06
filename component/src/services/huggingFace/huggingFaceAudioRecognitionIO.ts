@@ -6,7 +6,7 @@ import {PollResult} from '../serviceIO';
 
 export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.huggingFace?.audioSpeechRecognition as NonNullable<
+    const config = aiAssistant.existingService?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
     const defaultFile = {audio: {}};

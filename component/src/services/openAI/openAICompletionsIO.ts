@@ -2,7 +2,7 @@ import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -11,7 +11,7 @@ import {AiAssistant} from '../../aiAssistant';
 import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
 
-export class OpenAICompletionsIO extends ExistingServiceIO {
+export class OpenAICompletionsIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/completions';
@@ -22,8 +22,8 @@ export class OpenAICompletionsIO extends ExistingServiceIO {
   private readonly numberOfCharsPerToken = 3.5;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service, textInput} = aiAssistant;
-    const config = service?.openAI?.completions as NonNullable<OpenAI['completions']>;
+    const {existingService, textInput} = aiAssistant;
+    const config = existingService?.openAI?.completions as NonNullable<OpenAI['completions']>;
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.

@@ -11,7 +11,7 @@ type CohereServiceConfig = GenericObject<string>;
 export class CohereTextGenerationIO extends CohereIO {
   constructor(aiAssistant: AiAssistant) {
     // config can be undefined as this is the default service
-    const config = aiAssistant.service?.cohere?.textGeneration as CohereServiceConfig | undefined;
+    const config = aiAssistant.existingService?.cohere?.textGeneration as CohereServiceConfig | undefined;
     super(aiAssistant, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config);
   }
 

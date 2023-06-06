@@ -7,7 +7,7 @@ import {PollResult} from '../serviceIO';
 export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.huggingFace?.audioClassification as NonNullable<
+    const config = aiAssistant.existingService?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
     const defaultFile = {audio: {}};

@@ -1,7 +1,7 @@
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -12,7 +12,7 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class OpenAIImagesIO extends ExistingServiceIO {
+export class OpenAIImagesIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -33,8 +33,8 @@ export class OpenAIImagesIO extends ExistingServiceIO {
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(aiAssistant: AiAssistant) {
-    const {service, textInput, validateMessageBeforeSending} = aiAssistant;
-    const config = service?.openAI?.images as NonNullable<OpenAI['images']>;
+    const {existingService, textInput, validateMessageBeforeSending} = aiAssistant;
+    const config = existingService?.openAI?.images as NonNullable<OpenAI['images']>;
     const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;

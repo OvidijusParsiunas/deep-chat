@@ -6,7 +6,7 @@ import {Result} from '../../types/result';
 
 export class HuggingFaceSummarizationIO extends HuggingFaceIO {
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.huggingFace?.summarization as NonNullable<HuggingFace['summarization']>;
+    const config = aiAssistant.existingService?.huggingFace?.summarization as NonNullable<HuggingFace['summarization']>;
     super(aiAssistant, 'Insert text to summarize', 'facebook/bart-large-cnn', config);
   }
 

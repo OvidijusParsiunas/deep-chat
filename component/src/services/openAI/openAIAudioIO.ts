@@ -1,7 +1,7 @@
 import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -10,7 +10,7 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
 
-export class OpenAIAudioIO extends ExistingServiceIO {
+export class OpenAIAudioIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
@@ -30,8 +30,8 @@ export class OpenAIAudioIO extends ExistingServiceIO {
 
   constructor(aiAssistant: AiAssistant) {
     const defaultFile = {audio: {}};
-    const {service, validateMessageBeforeSending, textInput} = aiAssistant;
-    const config = service?.openAI?.audio as NonNullable<OpenAI['audio']>;
+    const {existingService, validateMessageBeforeSending, textInput} = aiAssistant;
+    const config = existingService?.openAI?.audio as NonNullable<OpenAI['audio']>;
     super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     if (typeof config === 'object') {

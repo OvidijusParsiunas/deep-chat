@@ -4,7 +4,7 @@ import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPr
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
-import {ExistingServiceIO} from './services/utils/existingServiceIO';
+import {IExistingServiceIO} from './services/utils/existingServiceIO';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
@@ -13,6 +13,7 @@ import {RequestBodyMessageLimits} from './types/chatLimits';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {RequestSettings} from './types/requestSettings';
+import {ExistingService} from './types/existingService';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
 import {ErrorView} from './views/error/errorView';
@@ -22,13 +23,15 @@ import {Microphone} from './types/microphone';
 import style from './AiAssistant.css?inline';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
-import {Service} from './types/service';
 import {Avatars} from './types/avatars';
 import {Names} from './types/names';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class AiAssistant extends InternalHTML {
+  @Property('object')
+  existingService?: ExistingService;
+
   @Property('object')
   request?: RequestSettings;
 
@@ -39,9 +42,6 @@ export class AiAssistant extends InternalHTML {
   // WORK - totalMessagesMaxCharLength only applied to files
   @Property('object')
   requestBodyMessageLimits?: RequestBodyMessageLimits = {lastMessageOnly: true};
-
-  @Property('object')
-  service?: Service;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -178,12 +178,12 @@ export class AiAssistant extends InternalHTML {
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else if ((this._activeService instanceof ExistingServiceIO && this._activeService.key) || this.request?.url) {
+    } else if ((this._activeService instanceof IExistingServiceIO && this._activeService.key) || this.request?.url) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;
       ChatView.render(this, this._elementRef, this._activeService, this._childElement);
-    } else if (this._activeService instanceof ExistingServiceIO) {
+    } else if (this._activeService instanceof IExistingServiceIO) {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first ppear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX

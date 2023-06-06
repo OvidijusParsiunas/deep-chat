@@ -1,4 +1,4 @@
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {GenericObject} from '../../types/object';
 import {ServiceFileTypes} from '../serviceIO';
 import {AiAssistant} from '../../aiAssistant';
@@ -8,7 +8,7 @@ import {APIKey} from '../../types/APIKey';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-export class AzureSpeechIO extends ExistingServiceIO {
+export class AzureSpeechIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'Azure Speech Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len

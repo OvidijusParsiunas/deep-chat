@@ -1,5 +1,5 @@
 import {CohereGenerateConfig, CohereSummarizationConfig} from '../../types/cohere';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {InterfacesUnion} from '../../types/utilityTypes';
@@ -11,7 +11,7 @@ import {AiAssistant} from '../../aiAssistant';
 
 type CohereServiceConfig = true | GenericObject<string>;
 
-export class CohereIO extends ExistingServiceIO {
+export class CohereIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'Cohere API Key';
   override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
   textInputPlaceholderText: string;

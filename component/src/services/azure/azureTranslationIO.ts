@@ -1,5 +1,5 @@
 import {AzureTranslationResult} from '../../types/azureResult';
-import {ExistingServiceIO} from '../utils/existingServiceIO';
+import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -9,7 +9,7 @@ import {AzureUtils} from './utils/azureUtils';
 import {Result} from '../../types/result';
 import {Azure} from '../../types/azure';
 
-export class AzureTranslationIO extends ExistingServiceIO {
+export class AzureTranslationIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len
@@ -18,8 +18,7 @@ export class AzureTranslationIO extends ExistingServiceIO {
 
   // prettier-ignore
   constructor(aiAssistant: AiAssistant) {
-    const {service} = aiAssistant;
-    const config = service?.azure?.translation as NonNullable<Azure['translation']>;
+    const config = aiAssistant.existingService?.azure?.translation as NonNullable<Azure['translation']>;
     super(
       aiAssistant,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),

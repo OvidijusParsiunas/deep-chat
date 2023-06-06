@@ -6,7 +6,7 @@ import {Result} from '../../types/result';
 
 export class HuggingFaceTranslationIO extends HuggingFaceIO {
   constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.service?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
+    const config = aiAssistant.existingService?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
     super(aiAssistant, 'Insert text to translate', 't5-base', config);
   }
 

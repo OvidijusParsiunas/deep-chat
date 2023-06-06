@@ -5,7 +5,7 @@ import {OpenAI} from './openAI';
 import {Azure} from './azure';
 import {Demo} from './demo';
 
-export interface Service {
+export interface ExistingService {
   openAI?: OpenAI;
   huggingFace?: HuggingFace;
   azure?: Azure;
