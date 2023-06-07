@@ -12,7 +12,8 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.huggingFace?.questionAnswer as NonNullable<HuggingFace['questionAnswer']>;
-    super(deepChat, 'Ask a question', 'bert-large-uncased-whole-word-masking-finetuned-squad', config);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'Ask a question', 'bert-large-uncased-whole-word-masking-finetuned-squad', config, apiKey);
     this.context = config.context;
   }
 

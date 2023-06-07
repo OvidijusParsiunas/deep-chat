@@ -1,5 +1,4 @@
 import {GenericObject} from './object';
-import {APIKey} from './APIKey';
 
 // https://docs.cohere.com/reference/summarize-2
 export interface CohereSummarizationConfig {
@@ -27,6 +26,6 @@ export interface CohereGenerateConfig {
 }
 
 export interface Cohere {
-  textGeneration?: true | (APIKey & CohereGenerateConfig);
-  summarization?: true | (APIKey & CohereSummarizationConfig);
+  textGeneration?: true | CohereGenerateConfig;
+  summarization?: true | CohereSummarizationConfig;
 }

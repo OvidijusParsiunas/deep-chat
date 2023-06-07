@@ -34,10 +34,11 @@ export class OpenAIImagesIO extends IExistingServiceIO {
 
   constructor(deepChat: DeepChat) {
     const {existingService, textInput, validateMessageBeforeSending} = deepChat;
-    const config = existingService?.openAI?.images as NonNullable<OpenAI['images']>;
+    const apiKey = existingService?.openAI;
     const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
+    const config = existingService?.openAI?.images as NonNullable<OpenAI['images']>;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};

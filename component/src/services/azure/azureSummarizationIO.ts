@@ -19,7 +19,8 @@ export class AzureSummarizationIO extends AzureLanguageIO {
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.azure?.summarization as NonNullable<Azure['summarization']>;
-    super(deepChat, AzureUtils.buildSummarizationHeader, config);
+    const apiKey = deepChat.existingService?.azure;
+    super(deepChat, AzureUtils.buildSummarizationHeader, config.endpoint, apiKey);
     this.rawBody.language ??= 'en';
     Object.assign(this.rawBody, config);
 

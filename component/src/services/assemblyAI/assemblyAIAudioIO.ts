@@ -24,8 +24,8 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
   permittedErrorPrefixes = ['Invalid'];
 
   constructor(deepChat: DeepChat) {
-    const defaultFile = {audio: {}};
-    super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, undefined, defaultFile);
+    const apiKey = deepChat.existingService?.assemblyAI;
+    super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, apiKey, {audio: {}});
     const {validateMessageBeforeSending} = deepChat;
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }

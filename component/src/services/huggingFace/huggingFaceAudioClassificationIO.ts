@@ -10,9 +10,9 @@ export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
     const config = deepChat.existingService?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
-    const defaultFile = {audio: {}};
+    const apiKey = deepChat.existingService?.huggingFace;
     super(deepChat,
-      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, defaultFile);
+      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, apiKey, {audio: {}});
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

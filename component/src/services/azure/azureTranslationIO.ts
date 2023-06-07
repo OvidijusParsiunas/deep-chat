@@ -19,10 +19,11 @@ export class AzureTranslationIO extends IExistingServiceIO {
   // prettier-ignore
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.azure?.translation as NonNullable<Azure['translation']>;
+    const apiKey = deepChat.existingService?.azure;
     super(
       deepChat,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),
-      AzureUtils.buildTranslationHeaders.bind({}, config?.region), config);
+      AzureUtils.buildTranslationHeaders.bind({}, config?.region), apiKey);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }
 

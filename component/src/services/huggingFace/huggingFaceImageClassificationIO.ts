@@ -9,8 +9,8 @@ export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
     const config = deepChat.existingService?.huggingFace?.imageClassification as NonNullable<
       HuggingFace['imageClassification']
     >;
-    const defaultFile = {images: {}};
-    super(deepChat, 'Attach an image file', 'google/vit-base-patch16-224', config, defaultFile);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'Attach an image file', 'google/vit-base-patch16-224', config, apiKey, {images: {}});
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

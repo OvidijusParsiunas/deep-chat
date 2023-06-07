@@ -7,7 +7,8 @@ import {DeepChat} from '../../deepChat';
 export class HuggingFaceTextGenerationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.huggingFace?.textGeneration as NonNullable<HuggingFace['textGeneration']>;
-    super(deepChat, 'Once upon a time', 'gpt2', config);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'Once upon a time', 'gpt2', config, apiKey);
   }
 
   override async extractResultData(result: HuggingFaceTextGenerationResult): Promise<Result> {

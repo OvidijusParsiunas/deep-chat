@@ -14,7 +14,8 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
-    super(deepChat, 'The goal of life is [MASK].', 'bert-base-uncased', config);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'The goal of life is [MASK].', 'bert-base-uncased', config, apiKey);
   }
 
   override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {

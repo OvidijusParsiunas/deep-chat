@@ -1,6 +1,5 @@
 import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {GenericObject} from '../../types/object';
-import {AzureEndpoint} from '../../types/azure';
 import {AzureUtils} from './utils/azureUtils';
 import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
@@ -15,9 +14,9 @@ export class AzureLanguageIO extends IExistingServiceIO {
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
 
   // prettier-ignore
-  constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, config: APIKey & AzureEndpoint,
+  constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, endpoint: string, apiKey?: APIKey,
       existingFileTypes?: ServiceFileTypes) {
     super(deepChat,
-      AzureUtils.buildLanguageKeyVerificationDetails(config.endpoint), buildHeadersFunc, config, existingFileTypes);
+      AzureUtils.buildLanguageKeyVerificationDetails(endpoint), buildHeadersFunc, apiKey, existingFileTypes);
   }
 }

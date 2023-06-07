@@ -1,5 +1,3 @@
-import {APIKey} from './APIKey';
-
 // https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
 export interface HuggingFaceConversationConfig {
   parameters?: {
@@ -69,14 +67,14 @@ export interface HuggingFaceModel {
   model?: string;
 }
 
-export interface HuggingFace {
-  conversation?: true | (APIKey & HuggingFaceModel & HuggingFaceConversationConfig);
-  textGeneration?: true | (APIKey & HuggingFaceModel & HuggingFaceTextGenerationConfig);
-  summarization?: true | (APIKey & HuggingFaceModel & HuggingFaceSummarizationConfig);
-  translation?: true | (APIKey & HuggingFaceModel & HuggingFaceTranslationConfig);
-  fillMask?: true | (APIKey & HuggingFaceModel & HuggingFaceFillMaskConfig);
-  questionAnswer?: APIKey & HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
-  audioSpeechRecognition?: true | (APIKey & HuggingFaceModel);
-  audioClassification?: true | (APIKey & HuggingFaceModel);
-  imageClassification?: true | (APIKey & HuggingFaceModel);
-}
+export type HuggingFace = {
+  conversation?: true | (HuggingFaceModel & HuggingFaceConversationConfig);
+  textGeneration?: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig);
+  summarization?: true | (HuggingFaceModel & HuggingFaceSummarizationConfig);
+  translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig);
+  fillMask?: true | (HuggingFaceModel & HuggingFaceFillMaskConfig);
+  questionAnswer?: HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
+  audioSpeechRecognition?: true | HuggingFaceModel;
+  audioClassification?: true | HuggingFaceModel;
+  imageClassification?: true | HuggingFaceModel;
+};

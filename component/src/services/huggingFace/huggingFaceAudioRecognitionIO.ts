@@ -9,8 +9,8 @@ export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
     const config = deepChat.existingService?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
-    const defaultFile = {audio: {}};
-    super(deepChat, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, defaultFile);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, apiKey, {audio: {}});
   }
 
   async extractPollResultData(result: HuggingFaceAudioRecognitionResult): PollResult {

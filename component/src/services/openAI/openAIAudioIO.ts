@@ -29,11 +29,11 @@ export class OpenAIAudioIO extends IExistingServiceIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const defaultFile = {audio: {}};
     const {existingService, validateMessageBeforeSending, textInput} = deepChat;
-    const config = existingService?.openAI?.audio as NonNullable<OpenAI['audio']>;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
+    const apiKey = existingService?.openAI;
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
+    const config = existingService?.openAI?.audio as NonNullable<OpenAI['audio']>;
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);

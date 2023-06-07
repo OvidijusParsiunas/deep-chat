@@ -11,7 +11,8 @@ type CohereServiceConfig = GenericObject<string>;
 export class CohereSummarizationIO extends CohereIO {
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.cohere?.summarization as CohereServiceConfig | undefined;
-    super(deepChat, 'https://api.cohere.ai/v1/summarize', 'Insert text to summarize', config);
+    const apiKey = deepChat.existingService?.cohere;
+    super(deepChat, 'https://api.cohere.ai/v1/summarize', 'Insert text to summarize', config, apiKey);
   }
 
   override preprocessBody(body: CohereSummarizationConfig, messages: MessageContent[]) {

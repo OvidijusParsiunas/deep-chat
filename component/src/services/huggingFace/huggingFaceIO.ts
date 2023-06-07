@@ -10,10 +10,10 @@ import {DeepChat} from '../../deepChat';
 
 type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; context?: string};
 
-type HuggingFaceServiceConfig = true | (APIKey & HuggingFaceModel & HuggingFaceServiceConfigObj);
+type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj);
 
 export class HuggingFaceIO extends IExistingServiceIO {
-  override insertKeyPlaceholderText = 'Hugging Face Access Token';
+  override insertKeyPlaceholderText = 'Hugging Face Token';
   override getKeyLink = 'https://huggingface.co/settings/tokens';
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
   introPanelMarkUp = `
@@ -25,9 +25,9 @@ export class HuggingFaceIO extends IExistingServiceIO {
 
   // prettier-ignore
   constructor(deepChat: DeepChat, textInputPlaceholderText: string, defaultModel: string,
-      config?: HuggingFaceServiceConfig, existingFileTypes?: ServiceFileTypes) {
+      config?: HuggingFaceServiceConfig, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat,
-      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, existingFileTypes);
+      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, apiKey, existingFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct rawBody with individual props
@@ -54,6 +54,7 @@ export class HuggingFaceIO extends IExistingServiceIO {
       completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
+    console.log(body);
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 }

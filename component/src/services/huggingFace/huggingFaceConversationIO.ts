@@ -9,7 +9,8 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default method
     const config = deepChat.existingService?.huggingFace?.conversation;
-    super(deepChat, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
+    const apiKey = deepChat.existingService?.huggingFace;
+    super(deepChat, 'Ask me anything!', 'facebook/blenderbot-400M-distill', config, apiKey);
     if (this.maxMessages) {
       // needs to be an odd number in order to have an array of previous correspondences and the new user message
       this.maxMessages = this.maxMessages % 0 ? this.maxMessages + 1 : this.maxMessages;

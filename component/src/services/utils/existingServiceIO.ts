@@ -9,8 +9,6 @@ import {DeepChat} from '../../deepChat';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-type Config = true | APIKey;
-
 // using I in the front so that users don't mistake this for ExistingService
 export class IExistingServiceIO extends BaseServiceIO {
   key?: string;
@@ -21,24 +19,18 @@ export class IExistingServiceIO extends BaseServiceIO {
 
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, config?: Config, existingFileTypes?: ServiceFileTypes) {
+      buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, existingFileTypes);
     Object.assign(this.rawBody, deepChat.request?.body);
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
-    if (typeof config === 'object') {
-      this.key = config.key;
-      if (config.validateKeyProperty) this.validateConfigKey = config.validateKeyProperty;
-    }
+    if (apiKey) this.setApiKeyProperties(apiKey);
     this.requestSettings = this.buildRequestSettings(this.key || '', deepChat.request);
-    this.cleanServiceConfig(config);
   }
 
-  private cleanServiceConfig(config?: Config) {
-    if (typeof config === 'object') {
-      delete config.key;
-      delete config.validateKeyProperty;
-    }
+  private setApiKeyProperties(apiKey: APIKey) {
+    this.key = apiKey.key;
+    if (apiKey.validateKeyProperty) this.validateConfigKey = apiKey.validateKeyProperty;
   }
 
   private buildRequestSettings(key: string, requestSettings?: RequestSettings) {

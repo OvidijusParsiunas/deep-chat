@@ -27,8 +27,8 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   constructor(deepChat: DeepChat) {
     const {existingService, validateMessageBeforeSending} = deepChat;
     const config = existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
-    const defaultFile = {audio: {}};
-    super(deepChat, AzureUtils.buildSpeechToTextHeaders, config, defaultFile);
+    const apiKey = existingService?.azure;
+    super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, {audio: {}});
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
     const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len

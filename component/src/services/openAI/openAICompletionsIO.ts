@@ -23,8 +23,9 @@ export class OpenAICompletionsIO extends IExistingServiceIO {
 
   constructor(deepChat: DeepChat) {
     const {existingService, textInput} = deepChat;
+    const apiKey = existingService?.openAI;
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = existingService?.openAI?.completions as NonNullable<OpenAI['completions']>;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;

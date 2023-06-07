@@ -4,6 +4,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceFileIO extends HuggingFaceIO {
@@ -11,8 +12,8 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
 
   // prettier-ignore
   constructor(deepChat: DeepChat, placeholderText: string, defaultModel: string,
-      config: true | (HuggingFaceModel), existingFileTypes?: ServiceFileTypes) {
-    super(deepChat, placeholderText, defaultModel, config, existingFileTypes);
+      config: true | (HuggingFaceModel), apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
+    super(deepChat, placeholderText, defaultModel, config, apiKey, existingFileTypes);
     this.canSendMessage = deepChat.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
   }
 

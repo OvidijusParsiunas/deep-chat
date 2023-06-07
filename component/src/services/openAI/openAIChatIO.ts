@@ -21,8 +21,9 @@ export class OpenAIChatIO extends IExistingServiceIO {
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
   constructor(deepChat: DeepChat) {
+    const apiKey = deepChat.existingService?.openAI;
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = deepChat.existingService?.openAI?.chat; // can be undefined as this is the default service
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
       this.cleanConfig(config);

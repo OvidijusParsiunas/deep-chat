@@ -1,5 +1,3 @@
-import {APIKey} from './APIKey';
-
 export interface OpenAIMessage {
   role: 'user' | 'system' | 'ai';
   content: string;
@@ -36,8 +34,8 @@ export interface OpenAIConverse {
 }
 
 export interface OpenAI {
-  chat?: true | (APIKey & OpenAIConverse & OpenAIChat);
-  completions?: true | (APIKey & OpenAIConverse);
-  images?: true | (APIKey & OpenAIImages);
-  audio?: true | (APIKey & OpenAIAudio & OpenAIAudioType);
+  chat?: true | (OpenAIConverse & OpenAIChat);
+  completions?: true | OpenAIConverse;
+  images?: true | OpenAIImages;
+  audio?: true | (OpenAIAudio & OpenAIAudioType);
 }
