@@ -4,9 +4,9 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
 export class AzureTranslationIO extends IExistingServiceIO {
@@ -17,10 +17,10 @@ export class AzureTranslationIO extends IExistingServiceIO {
   url = '';
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.azure?.translation as NonNullable<Azure['translation']>;
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.azure?.translation as NonNullable<Azure['translation']>;
     super(
-      aiAssistant,
+      deepChat,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),
       AzureUtils.buildTranslationHeaders.bind({}, config?.region), config);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;

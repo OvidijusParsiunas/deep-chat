@@ -1,4 +1,4 @@
-# AI Assistant Node-Express server example
+# Deep Chat Node-Express server example
 
 ## Setup
 

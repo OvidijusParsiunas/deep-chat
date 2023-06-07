@@ -20,15 +20,15 @@ import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Microphone} from './types/microphone';
-import style from './AiAssistant.css?inline';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
+import style from './deepChat.css?inline';
 import {Avatars} from './types/avatars';
 import {Names} from './types/names';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
-export class AiAssistant extends InternalHTML {
+export class DeepChat extends InternalHTML {
   @Property('object')
   existingService?: ExistingService;
 
@@ -196,11 +196,11 @@ export class AiAssistant extends InternalHTML {
   }
 }
 
-customElements.define('ai-assistant', AiAssistant);
+customElements.define('deep-chat', DeepChat);
 
 // The following type makes it easier for other projects to use this component with TypeScript
 declare global {
   interface HTMLElementTagNameMap {
-    'ai-assistant': AiAssistant;
+    'deep-chat': DeepChat;
   }
 }

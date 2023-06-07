@@ -1,13 +1,13 @@
-import {AzureSummarizationResult} from '../../types/azureResult';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
+import {AzureSummarizationResult} from '../../types/azureResult';
 import {CompletionsHandlers, PollResult} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
-import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
+import {DeepChat} from '../../deepChat';
 
 type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
@@ -17,9 +17,9 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   private messages?: Messages;
   private completionsHandlers?: CompletionsHandlers;
 
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.azure?.summarization as NonNullable<Azure['summarization']>;
-    super(aiAssistant, AzureUtils.buildSummarizationHeader, config);
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.azure?.summarization as NonNullable<Azure['summarization']>;
+    super(deepChat, AzureUtils.buildSummarizationHeader, config);
     this.rawBody.language ??= 'en';
     Object.assign(this.rawBody, config);
 

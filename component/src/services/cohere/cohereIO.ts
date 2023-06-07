@@ -7,7 +7,7 @@ import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
 import {GenericObject} from '../../types/object';
 import {CohereUtils} from './utils/cohereUtils';
-import {AiAssistant} from '../../aiAssistant';
+import {DeepChat} from '../../deepChat';
 
 type CohereServiceConfig = true | GenericObject<string>;
 
@@ -17,8 +17,8 @@ export class CohereIO extends IExistingServiceIO {
   textInputPlaceholderText: string;
   url: string;
 
-  constructor(aiAssistant: AiAssistant, url: string, inputPlaceholder: string, config?: CohereServiceConfig) {
-    super(aiAssistant, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config);
+  constructor(deepChat: DeepChat, url: string, inputPlaceholder: string, config?: CohereServiceConfig) {
+    super(deepChat, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config);
     this.url = url;
     this.textInputPlaceholderText = inputPlaceholder;
     if (config && typeof config === 'object') Object.assign(this.rawBody, config);

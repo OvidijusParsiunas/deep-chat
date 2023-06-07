@@ -5,7 +5,7 @@ import {Result} from '../../types/result';
 type Finish = () => void;
 
 export class Demo {
-  public static readonly URL = 'ai-assistant-demo';
+  public static readonly URL = 'deep-chat-demo';
   private static readonly EXAMPLE_AI_MESSAGE = 'Hello I am a helpful assistant!';
   private static readonly EXAMPLE_AI_STREAMED_MESSAGE = 'How are you doing?'.split(' ');
 

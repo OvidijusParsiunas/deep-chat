@@ -1,10 +1,10 @@
 import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {GenericObject} from '../../types/object';
 import {AzureEndpoint} from '../../types/azure';
-import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
@@ -15,9 +15,9 @@ export class AzureLanguageIO extends IExistingServiceIO {
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, buildHeadersFunc: BuildHeadersFunc, config: APIKey & AzureEndpoint,
-      defaultFileTypes?: ServiceFileTypes) {
-    super(aiAssistant,
-      AzureUtils.buildLanguageKeyVerificationDetails(config.endpoint), buildHeadersFunc, config, defaultFileTypes);
+  constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, config: APIKey & AzureEndpoint,
+      existingFileTypes?: ServiceFileTypes) {
+    super(deepChat,
+      AzureUtils.buildLanguageKeyVerificationDetails(config.endpoint), buildHeadersFunc, config, existingFileTypes);
   }
 }

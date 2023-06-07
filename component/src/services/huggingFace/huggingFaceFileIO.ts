@@ -4,16 +4,16 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {AiAssistant} from '../../aiAssistant';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceFileIO extends HuggingFaceIO {
   isTextInputDisabled = true;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, placeholderText: string, defaultModel: string,
-      config: true | (HuggingFaceModel), defaultFileTypes?: ServiceFileTypes) {
-    super(aiAssistant, placeholderText, defaultModel, config, defaultFileTypes);
-    this.canSendMessage = aiAssistant.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
+  constructor(deepChat: DeepChat, placeholderText: string, defaultModel: string,
+      config: true | (HuggingFaceModel), existingFileTypes?: ServiceFileTypes) {
+    super(deepChat, placeholderText, defaultModel, config, existingFileTypes);
+    this.canSendMessage = deepChat.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
   }
 
   private static canSendFile(_: string, files?: File[]) {

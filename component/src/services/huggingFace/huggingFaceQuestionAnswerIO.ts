@@ -2,17 +2,17 @@ import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingF
 import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
   permittedErrorPrefixes = ['Error in'];
 
   private readonly context: string;
 
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.huggingFace?.questionAnswer as NonNullable<HuggingFace['questionAnswer']>;
-    super(aiAssistant, 'Ask a question', 'bert-large-uncased-whole-word-masking-finetuned-squad', config);
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.huggingFace?.questionAnswer as NonNullable<HuggingFace['questionAnswer']>;
+    super(deepChat, 'Ask a question', 'bert-large-uncased-whole-word-masking-finetuned-squad', config);
     this.context = config.context;
   }
 

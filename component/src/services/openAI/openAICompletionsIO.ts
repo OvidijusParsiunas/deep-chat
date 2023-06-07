@@ -7,9 +7,9 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {AiAssistant} from '../../aiAssistant';
 import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class OpenAICompletionsIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -21,10 +21,10 @@ export class OpenAICompletionsIO extends IExistingServiceIO {
   // it is recommended to consider that just under 4 chars are in a token - https://platform.openai.com/tokenizer
   private readonly numberOfCharsPerToken = 3.5;
 
-  constructor(aiAssistant: AiAssistant) {
-    const {existingService, textInput} = aiAssistant;
+  constructor(deepChat: DeepChat) {
+    const {existingService, textInput} = deepChat;
     const config = existingService?.openAI?.completions as NonNullable<OpenAI['completions']>;
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;

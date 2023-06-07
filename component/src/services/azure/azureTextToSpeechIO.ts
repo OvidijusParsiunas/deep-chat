@@ -4,10 +4,10 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class AzureTextToSpeechIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
@@ -23,10 +23,10 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   url = '';
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
     const defaultFile = {audio: {}};
-    super(aiAssistant,
+    super(deepChat,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config, defaultFile);
     Object.assign(this.rawBody, config);

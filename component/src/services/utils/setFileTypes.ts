@@ -3,7 +3,7 @@ import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../serviceIO';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {FileAttachments} from '../../types/fileAttachments';
 import {RequestSettings} from '../../types/requestSettings';
-import {AiAssistant} from '../../aiAssistant';
+import {DeepChat} from '../../deepChat';
 import {Remarkable} from 'remarkable';
 
 export class SetFileTypes {
@@ -33,7 +33,7 @@ export class SetFileTypes {
     return fileConfig;
   }
 
-  private static processMixedFiles(serviceIO: ServiceIO, remark: Remarkable, mixedFiles: AiAssistant['mixedFiles']) {
+  private static processMixedFiles(serviceIO: ServiceIO, remark: Remarkable, mixedFiles: DeepChat['mixedFiles']) {
     if (mixedFiles) {
       const defFormats = {acceptedFormats: ''};
       serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.requestSettings, defFormats, remark, mixedFiles);
@@ -43,7 +43,7 @@ export class SetFileTypes {
   // needs to be set after audio to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processMicrophone(
-    serviceIO: ServiceIO, remark: Remarkable, microphone: AiAssistant['microphoneAudio'], audio: AiAssistant['audio']) {
+    serviceIO: ServiceIO, remark: Remarkable, microphone: DeepChat['microphoneAudio'], audio: DeepChat['audio']) {
   const files = serviceIO.fileTypes.audio?.files || {};
   const defaultFormats = {acceptedFormats: 'audio/*', ...files};
   if (!microphone) return;
@@ -69,7 +69,7 @@ export class SetFileTypes {
 
   // prettier-ignore
   private static processAudioConfig(
-      serviceIO: ServiceIO, remark: Remarkable, audio: AiAssistant['audio'], fileIO?: FileServiceIO) {
+      serviceIO: ServiceIO, remark: Remarkable, audio: DeepChat['audio'], fileIO?: FileServiceIO) {
     if (!audio && !fileIO) return;
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'audio/*', ...files};
@@ -80,7 +80,7 @@ export class SetFileTypes {
   // needs to be set after images to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processCamera(
-      serviceIO: ServiceIO, remark: Remarkable, camera: AiAssistant['camera'], images?: AiAssistant['images']) {
+      serviceIO: ServiceIO, remark: Remarkable, camera: DeepChat['camera'], images?: DeepChat['images']) {
     const files = serviceIO.fileTypes.images?.files || {};
     const defaultFormats = {acceptedFormats: 'image/*', ...files};
     if (!camera) return;
@@ -105,7 +105,7 @@ export class SetFileTypes {
 
   // prettier-ignore
   private static processImagesConfig(
-      serviceIO: ServiceIO, remark: Remarkable, images: AiAssistant['images'], fileIO?: FileServiceIO) {
+      serviceIO: ServiceIO, remark: Remarkable, images: DeepChat['images'], fileIO?: FileServiceIO) {
     if (!images && !fileIO) return;
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'image/*', ...files};
@@ -113,12 +113,23 @@ export class SetFileTypes {
     serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, images);
   }
 
-  public static set(aiAssistant: AiAssistant, serviceIO: ServiceIO, defaultFileTypes?: ServiceFileTypes) {
+  // default for existing service
+  private static populateDefaultFileIO(fileIO: FileServiceIO | undefined, acceptedFormats: string) {
+    if (fileIO) {
+      fileIO.files ??= {};
+      fileIO.files.acceptedFormats ??= acceptedFormats;
+      fileIO.files.maxNumberOfFiles ??= 1;
+    }
+  }
+
+  public static set(deepChat: DeepChat, serviceIO: ServiceIO, existingFileTypes?: ServiceFileTypes) {
+    SetFileTypes.populateDefaultFileIO(existingFileTypes?.audio, '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a');
+    SetFileTypes.populateDefaultFileIO(existingFileTypes?.images, '.png,.jpg');
     const remarkable = RemarkableConfig.createNew();
-    SetFileTypes.processImagesConfig(serviceIO, remarkable, aiAssistant.images, defaultFileTypes?.images);
-    SetFileTypes.processCamera(serviceIO, remarkable, aiAssistant.camera, aiAssistant.images);
-    SetFileTypes.processAudioConfig(serviceIO, remarkable, aiAssistant.audio, defaultFileTypes?.audio);
-    SetFileTypes.processMicrophone(serviceIO, remarkable, aiAssistant.microphoneAudio, aiAssistant.audio);
-    SetFileTypes.processMixedFiles(serviceIO, remarkable, aiAssistant.mixedFiles);
+    SetFileTypes.processImagesConfig(serviceIO, remarkable, deepChat.images, existingFileTypes?.images);
+    SetFileTypes.processCamera(serviceIO, remarkable, deepChat.camera, deepChat.images);
+    SetFileTypes.processAudioConfig(serviceIO, remarkable, deepChat.audio, existingFileTypes?.audio);
+    SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphoneAudio, deepChat.audio);
+    SetFileTypes.processMixedFiles(serviceIO, remarkable, deepChat.mixedFiles);
   }
 }

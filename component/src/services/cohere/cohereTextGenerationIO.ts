@@ -2,17 +2,17 @@ import {CohereCompletionsResult} from '../../types/cohereResult';
 import {CohereGenerateConfig} from '../../types/cohere';
 import {MessageContent} from '../../types/messages';
 import {GenericObject} from '../../types/object';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
 type CohereServiceConfig = GenericObject<string>;
 
 export class CohereTextGenerationIO extends CohereIO {
-  constructor(aiAssistant: AiAssistant) {
+  constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default service
-    const config = aiAssistant.existingService?.cohere?.textGeneration as CohereServiceConfig | undefined;
-    super(aiAssistant, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config);
+    const config = deepChat.existingService?.cohere?.textGeneration as CohereServiceConfig | undefined;
+    super(deepChat, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config);
   }
 
   override preprocessBody(body: CohereGenerateConfig, messages: MessageContent[]) {

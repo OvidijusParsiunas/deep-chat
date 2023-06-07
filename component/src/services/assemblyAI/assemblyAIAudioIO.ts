@@ -5,8 +5,8 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {MessageContent} from '../../types/messages';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class AssemblyAIAudioIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'AssemblyAI API Key';
@@ -23,12 +23,10 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
   textInputPlaceholderText = 'Upload an audio file';
   permittedErrorPrefixes = ['Invalid'];
 
-  // prettier-ignore
-  constructor(aiAssistant: AiAssistant) {
+  constructor(deepChat: DeepChat) {
     const defaultFile = {audio: {}};
-    super(
-      aiAssistant, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, undefined, defaultFile);
-    const {validateMessageBeforeSending} = aiAssistant;
+    super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, undefined, defaultFile);
+    const {validateMessageBeforeSending} = deepChat;
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }
 

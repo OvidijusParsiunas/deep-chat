@@ -6,9 +6,9 @@ import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {AiAssistant} from '../../../../../aiAssistant';
 import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
+import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
@@ -25,17 +25,16 @@ export class SubmitButton extends InputButton<Styles> {
   private _isSVGLoadingIconOverriden = false;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
+  constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments) {
-    const {submitButtonStyles} = aiAssistant;
-    super(SubmitButton.createButtonContainerElement(), aiAssistant.submitButtonStyles?.position, submitButtonStyles);
+    super(SubmitButton.createButtonContainerElement(), deepChat.submitButtonStyles?.position, deepChat.submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
     this._serviceIO = serviceIO;
-    this.attemptOverwriteLoadingStyle(aiAssistant);
+    this.attemptOverwriteLoadingStyle(deepChat);
     this.changeToSubmitIcon();
   }
 
@@ -74,16 +73,16 @@ export class SubmitButton extends InputButton<Styles> {
     return stopIconElement;
   }
 
-  private attemptOverwriteLoadingStyle(aiAssistant: AiAssistant) {
+  private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
     if (this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
-    if (aiAssistant.displayLoadingBubble === undefined || aiAssistant.displayLoadingBubble === true) {
+    if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       const styleElement = document.createElement('style');
       styleElement.textContent = `
         .loading-button > * {
           filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%)
             contrast(96%) !important;
         }`;
-      aiAssistant.shadowRoot?.appendChild(styleElement);
+      deepChat.shadowRoot?.appendChild(styleElement);
       this._isSVGLoadingIconOverriden = true;
     }
   }

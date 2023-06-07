@@ -9,8 +9,8 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {OpenAIChat} from '../../types/openAI';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 // chat is a form of completions
 export class OpenAIChatIO extends IExistingServiceIO {
@@ -20,9 +20,9 @@ export class OpenAIChatIO extends IExistingServiceIO {
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.openAI?.chat; // can be undefined as this is the default service
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.openAI?.chat; // can be undefined as this is the default service
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
       this.cleanConfig(config);

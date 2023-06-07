@@ -3,10 +3,10 @@ import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {AiAssistant} from '../../aiAssistant';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
 export class AzureSpeechToTextIO extends AzureSpeechIO {
@@ -24,11 +24,11 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   isTextInputDisabled = true;
   textInputPlaceholderText = 'Upload an audio file';
 
-  constructor(aiAssistant: AiAssistant) {
-    const {existingService, validateMessageBeforeSending} = aiAssistant;
+  constructor(deepChat: DeepChat) {
+    const {existingService, validateMessageBeforeSending} = deepChat;
     const config = existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
     const defaultFile = {audio: {}};
-    super(aiAssistant, AzureUtils.buildSpeechToTextHeaders, config, defaultFile);
+    super(deepChat, AzureUtils.buildSpeechToTextHeaders, config, defaultFile);
     this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
     const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len

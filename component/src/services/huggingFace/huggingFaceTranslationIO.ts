@@ -1,13 +1,13 @@
 import {HuggingFaceTranslationResult} from '../../types/huggingFaceResult';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceTranslationIO extends HuggingFaceIO {
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
-    super(aiAssistant, 'Insert text to translate', 't5-base', config);
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
+    super(deepChat, 'Insert text to translate', 't5-base', config);
   }
 
   override async extractResultData(result: HuggingFaceTranslationResult): Promise<Result> {

@@ -4,9 +4,9 @@ import summary from 'rollup-plugin-summary';
 import {terser} from 'rollup-plugin-terser';
 
 export default {
-  input: 'dist/aiAssistant.js',
+  input: 'dist/deepChat.js',
   output: {
-    file: 'dist/aiAssistant.bundle.js',
+    file: 'dist/deepChat.bundle.js',
     format: 'esm',
   },
   onwarn(warning) {

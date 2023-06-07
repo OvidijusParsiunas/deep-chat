@@ -9,8 +9,8 @@ import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class OpenAIImagesIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -32,11 +32,11 @@ export class OpenAIImagesIO extends IExistingServiceIO {
   permittedErrorPrefixes = ['Invalid input image'];
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
-  constructor(aiAssistant: AiAssistant) {
-    const {existingService, textInput, validateMessageBeforeSending} = aiAssistant;
+  constructor(deepChat: DeepChat) {
+    const {existingService, textInput, validateMessageBeforeSending} = deepChat;
     const config = existingService?.openAI?.images as NonNullable<OpenAI['images']>;
     const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;

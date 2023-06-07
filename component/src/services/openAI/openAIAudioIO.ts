@@ -7,8 +7,8 @@ import {OpenAIAudioResult} from '../../types/openAIResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class OpenAIAudioIO extends IExistingServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -28,11 +28,11 @@ export class OpenAIAudioIO extends IExistingServiceIO {
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
-  constructor(aiAssistant: AiAssistant) {
+  constructor(deepChat: DeepChat) {
     const defaultFile = {audio: {}};
-    const {existingService, validateMessageBeforeSending, textInput} = aiAssistant;
+    const {existingService, validateMessageBeforeSending, textInput} = deepChat;
     const config = existingService?.openAI?.audio as NonNullable<OpenAI['audio']>;
-    super(aiAssistant, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, config, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     if (typeof config === 'object') {
       this.processConfig(config);

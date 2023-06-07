@@ -1,16 +1,16 @@
 import {HuggingFaceAudioRecognitionResult} from '../../types/huggingFaceResult';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
-import {AiAssistant} from '../../aiAssistant';
 import {PollResult} from '../serviceIO';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.huggingFace?.audioSpeechRecognition as NonNullable<
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
     const defaultFile = {audio: {}};
-    super(aiAssistant, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, defaultFile);
+    super(deepChat, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, defaultFile);
   }
 
   async extractPollResultData(result: HuggingFaceAudioRecognitionResult): PollResult {

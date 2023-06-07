@@ -1,17 +1,17 @@
 import {HuggingFaceClassificationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
-import {AiAssistant} from '../../aiAssistant';
 import {PollResult} from '../serviceIO';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.huggingFace?.audioClassification as NonNullable<
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
     const defaultFile = {audio: {}};
-    super(aiAssistant,
+    super(deepChat,
       'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, defaultFile);
   }
 

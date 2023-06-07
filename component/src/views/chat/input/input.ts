@@ -18,8 +18,8 @@ import {BUTTON_TYPES} from '../../../types/buttonTypes';
 import {InputButton} from './buttons/inputButton';
 import {CustomStyle} from '../../../types/styles';
 import {TextInputEl} from './textInput/textInput';
-import {AiAssistant} from '../../../aiAssistant';
 import {Messages} from '../messages/messages';
+import {DeepChat} from '../../../deepChat';
 
 type Buttons = {
   [key in BUTTON_TYPES]?: {button: InputButton; fileType?: FileAttachmentsType};
@@ -29,20 +29,20 @@ export class Input {
   readonly elementRef: HTMLElement;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
-    this.elementRef = Input.createPanelElement(aiAssistant.inputAreaStyle);
-    const textInput = new TextInputEl(serviceIO, aiAssistant.textInput);
+  constructor(deepChat: DeepChat, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
+    this.elementRef = Input.createPanelElement(deepChat.inputAreaStyle);
+    const textInput = new TextInputEl(serviceIO, deepChat.textInput);
     const buttons: Buttons = {};
-    const fileAttachments = this.createFileUploadComponents(aiAssistant, serviceIO, containerElement, buttons);
-    if (aiAssistant.speechToTextInput && !buttons.microphone) {
+    const fileAttachments = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
+    if (deepChat.speechToTextInput && !buttons.microphone) {
       buttons.microphone = {button: new SpeechToText(
-        aiAssistant.speechToTextInput, textInput, messages.addNewErrorMessage.bind(messages))};
+        deepChat.speechToTextInput, textInput, messages.addNewErrorMessage.bind(messages))};
     }
-    const submitButton = new SubmitButton(aiAssistant, textInput.inputElementRef, messages, serviceIO, fileAttachments);
+    const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
-    aiAssistant.submitUserMessage = submitButton.submit.bind(submitButton);
+    deepChat.submitUserMessage = submitButton.submit.bind(submitButton);
     buttons.submit = {button: submitButton};
-    Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, aiAssistant.dropupStyles);
+    Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, deepChat.dropupStyles);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -54,8 +54,8 @@ export class Input {
 
   // prettier-ignore
   private createFileUploadComponents(
-      aiAssistant: AiAssistant, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
-    const fileAttachments = new FileAttachments(this.elementRef, aiAssistant.attachmentContainerStyle, serviceIO.demo);
+      deepChat: DeepChat, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
+    const fileAttachments = new FileAttachments(this.elementRef, deepChat.attachmentContainerStyle, serviceIO.demo);
     Input.createUploadButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
     if (serviceIO.camera?.files) {
       const cameraType = buttons.images?.fileType || fileAttachments.addType(serviceIO.camera.files, 'images');
@@ -65,8 +65,8 @@ export class Input {
       const audioType = buttons.audio?.fileType || fileAttachments.addType(serviceIO.recordAudio.files, 'audio');
       buttons.microphone = {button: new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio)};
     }
-    if (DragAndDrop.isEnabled(fileAttachments, aiAssistant.dragAndDrop)) {
-      DragAndDrop.create(containerElement, fileAttachments, aiAssistant.dragAndDrop);
+    if (DragAndDrop.isEnabled(fileAttachments, deepChat.dragAndDrop)) {
+      DragAndDrop.create(containerElement, fileAttachments, deepChat.dragAndDrop);
     }
     return fileAttachments;
   }

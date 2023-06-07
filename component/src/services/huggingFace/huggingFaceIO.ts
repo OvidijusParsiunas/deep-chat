@@ -5,8 +5,8 @@ import {HuggingFaceUtils} from './utils/huggingFaceUtils';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {AiAssistant} from '../../aiAssistant';
 import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; context?: string};
 
@@ -24,10 +24,10 @@ export class HuggingFaceIO extends IExistingServiceIO {
   textInputPlaceholderText: string;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, textInputPlaceholderText: string, defaultModel: string,
-      config?: HuggingFaceServiceConfig, defaultFileTypes?: ServiceFileTypes) {
-    super(aiAssistant,
-      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, defaultFileTypes);
+  constructor(deepChat: DeepChat, textInputPlaceholderText: string, defaultModel: string,
+      config?: HuggingFaceServiceConfig, existingFileTypes?: ServiceFileTypes) {
+    super(deepChat,
+      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, config, existingFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct rawBody with individual props

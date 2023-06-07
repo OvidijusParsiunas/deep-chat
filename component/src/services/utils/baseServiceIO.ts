@@ -1,3 +1,4 @@
+import {KeyVerificationHandlers, CompletionsHandlers, ServiceFileTypes, StreamHandlers, ServiceIO} from '../serviceIO';
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
@@ -7,18 +8,10 @@ import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {MessageContent} from '../../types/messages';
-import {AiAssistant} from '../../aiAssistant';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
-import {
-  KeyVerificationHandlers,
-  CompletionsHandlers,
-  ServiceFileTypes,
-  StreamHandlers,
-  FileServiceIO,
-  ServiceIO,
-} from '../serviceIO';
+import {DeepChat} from '../../deepChat';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class BaseServiceIO implements ServiceIO {
@@ -34,33 +27,23 @@ export class BaseServiceIO implements ServiceIO {
   readonly _isStream: boolean = false;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
-  private readonly _serviceRequireFiles: boolean;
+  private readonly _existingServiceRequiresFiles: boolean;
   demo?: Demo;
 
-  constructor(aiAssistant: AiAssistant, defaultFileTypes?: ServiceFileTypes, demo?: Demo) {
+  constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
     this.demo = demo;
-    Object.assign(this.rawBody, aiAssistant.request?.body);
-    const {request, validateMessageBeforeSending, requestInterceptor, responseInterceptor} = aiAssistant;
-    this._isStream = !!aiAssistant.stream;
-    this.totalMessagesMaxCharLength = aiAssistant?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
-    this.maxMessages = aiAssistant?.requestBodyMessageLimits?.maxMessages;
+    Object.assign(this.rawBody, deepChat.request?.body);
+    const {request, validateMessageBeforeSending, requestInterceptor, responseInterceptor} = deepChat;
+    this._isStream = !!deepChat.stream;
+    this.totalMessagesMaxCharLength = deepChat?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
+    this.maxMessages = deepChat?.requestBodyMessageLimits?.maxMessages;
     if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
-    BaseServiceIO.populateDefaultFileIO(defaultFileTypes?.audio, '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a');
-    BaseServiceIO.populateDefaultFileIO(defaultFileTypes?.images, '.png,.jpg');
-    SetFileTypes.set(aiAssistant, this, defaultFileTypes);
+    SetFileTypes.set(deepChat, this, existingFileTypes);
     if (request) this.requestSettings = request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
     if (requestInterceptor) this.requestInterceptor = requestInterceptor;
     if (responseInterceptor) this.responseInterceptor = responseInterceptor;
-    this._serviceRequireFiles = !!defaultFileTypes && Object.keys(defaultFileTypes).length > 0;
-  }
-
-  private static populateDefaultFileIO(fileIO: FileServiceIO | undefined, acceptedFormats: string) {
-    if (fileIO) {
-      fileIO.files ??= {};
-      fileIO.files.acceptedFormats ??= acceptedFormats;
-      fileIO.files.maxNumberOfFiles ??= 1;
-    }
+    this._existingServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
   }
 
   private static canSendMessage(text: string) {
@@ -122,7 +105,7 @@ export class BaseServiceIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       messages.messages, 0, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (files && !this._serviceRequireFiles) {
+    if (files && !this._existingServiceRequiresFiles) {
       this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, files);
     } else {
       this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, files);

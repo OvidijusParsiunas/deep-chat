@@ -3,9 +3,9 @@ import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
 import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../types/object';
-import {AiAssistant} from '../../aiAssistant';
 import {BaseServiceIO} from './baseServiceIO';
 import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
@@ -20,18 +20,17 @@ export class IExistingServiceIO extends BaseServiceIO {
   private readonly buildHeadersFunc: BuildHeadersFunc;
 
   // prettier-ignore
-  constructor(aiAssistant: AiAssistant, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, config?: Config, defaultFileTypes?: ServiceFileTypes) {
-    super(aiAssistant, defaultFileTypes);
-    Object.assign(this.rawBody, aiAssistant.request?.body);
+  constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
+      buildHeadersFunc: BuildHeadersFunc, config?: Config, existingFileTypes?: ServiceFileTypes) {
+    super(deepChat, existingFileTypes);
+    Object.assign(this.rawBody, deepChat.request?.body);
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
-    const {request} = aiAssistant;
     if (typeof config === 'object') {
       this.key = config.key;
       if (config.validateKeyProperty) this.validateConfigKey = config.validateKeyProperty;
     }
-    this.requestSettings = this.buildRequestSettings(this.key || '', request);
+    this.requestSettings = this.buildRequestSettings(this.key || '', deepChat.request);
     this.cleanServiceConfig(config);
   }
 

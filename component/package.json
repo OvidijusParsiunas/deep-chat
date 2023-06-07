@@ -1,9 +1,9 @@
 {
-  "name": "ai-assistant",
+  "name": "deep-chat",
   "version": "0.0.69",
   "description": "universal ai chat bot component",
-  "main": "./dist/aiAssistant.js",
-  "module": "./dist/aiAssistant.js",
+  "main": "./dist/deepChat.js",
+  "module": "./dist/deepChat.js",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OvidijusParsiunas/ai-assistant.git"
+    "url": "git+https://github.com/OvidijusParsiunas/deep-chat.git"
   },
   "author": "OvidijusParsiunas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OvidijusParsiunas/ai-assistant/issues"
+    "url": "https://github.com/OvidijusParsiunas/deep-chat/issues"
   },
-  "homepage": "https://github.com/OvidijusParsiunas/ai-assistant#readme",
+  "homepage": "https://github.com/OvidijusParsiunas/deep-chat#readme",
   "keywords": [
     "ai",
     "chat",

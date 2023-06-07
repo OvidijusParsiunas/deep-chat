@@ -9,9 +9,9 @@ import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {CustomStyle} from '../../../types/styles';
-import {AiAssistant} from '../../../aiAssistant';
 import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
+import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {Demo} from '../../../types/demo';
 import {Remarkable} from 'remarkable';
@@ -50,24 +50,24 @@ export class Messages {
   private _streamedText = '';
   messages: MessageContent[] = [];
 
-  constructor(aiAssistant: AiAssistant, serviceIO: ServiceIO, panel?: HTMLElement) {
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
     this._remarkable = RemarkableConfig.createNew();
     this.elementRef = Messages.createContainerElement();
-    this.messageStyles = aiAssistant.messageStyles;
-    this._avatars = aiAssistant.avatars;
-    this._names = aiAssistant.names;
-    this._errorMessageOverrides = aiAssistant.errorMessages?.overrides;
-    this._speechOutput = aiAssistant.speechOutput;
-    this._dispatchEvent = aiAssistant.dispatchEvent.bind(aiAssistant);
-    this._onNewMessage = aiAssistant.onNewMessage;
-    this._displayLoadingMessage = aiAssistant.displayLoadingBubble ?? true;
+    this.messageStyles = deepChat.messageStyles;
+    this._avatars = deepChat.avatars;
+    this._names = deepChat.names;
+    this._errorMessageOverrides = deepChat.errorMessages?.overrides;
+    this._speechOutput = deepChat.speechOutput;
+    this._dispatchEvent = deepChat.dispatchEvent.bind(deepChat);
+    this._onNewMessage = deepChat.onNewMessage;
+    this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
-    this.populateIntroPanel(panel, introPanelMarkUp, aiAssistant.introPanelStyle);
-    if (aiAssistant.introMessage) this.addIntroductoryMessage(aiAssistant.introMessage);
-    if (aiAssistant.initialMessages) this.populateInitialMessages(aiAssistant.initialMessages);
-    this.displayServiceErrorMessages = aiAssistant.errorMessages?.displayServiceErrorMessages;
-    aiAssistant.getMessages = () => this.messages;
+    this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
+    if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
+    if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
+    this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
+    deepChat.getMessages = () => this.messages;
     if (demo) this.prepareDemo(demo);
   }
 

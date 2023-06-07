@@ -5,9 +5,9 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/aiAssistant.ts',
+      entry: 'src/deepChat.ts',
       formats: ['es'],
-      fileName: 'aiAssistant',
+      fileName: 'deepChat',
     },
   },
   plugins: [

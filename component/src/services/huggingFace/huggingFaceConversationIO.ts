@@ -2,14 +2,14 @@ import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceConversationIO extends HuggingFaceIO {
-  constructor(aiAssistant: AiAssistant) {
+  constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default method
-    const config = aiAssistant.existingService?.huggingFace?.conversation;
-    super(aiAssistant, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
+    const config = deepChat.existingService?.huggingFace?.conversation;
+    super(deepChat, 'Ask me anything!', 'microsoft/DialoGPT-large', config);
     if (this.maxMessages) {
       // needs to be an odd number in order to have an array of previous correspondences and the new user message
       this.maxMessages = this.maxMessages % 0 ? this.maxMessages + 1 : this.maxMessages;

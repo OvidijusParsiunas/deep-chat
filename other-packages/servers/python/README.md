@@ -1,4 +1,4 @@
-# AI Assistant Python-Flask server example
+# Deep Chat Python-Flask server example
 
 ## Setup
 

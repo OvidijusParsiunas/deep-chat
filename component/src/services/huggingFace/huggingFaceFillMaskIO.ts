@@ -1,8 +1,8 @@
 import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {AiAssistant} from '../../aiAssistant';
 import {Result} from '../../types/result';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceFillMaskIO extends HuggingFaceIO {
   override introPanelMarkUp = `
@@ -12,9 +12,9 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
 
   permittedErrorPrefixes = ['No mask_token'];
 
-  constructor(aiAssistant: AiAssistant) {
-    const config = aiAssistant.existingService?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
-    super(aiAssistant, 'The goal of life is [MASK].', 'bert-base-uncased', config);
+  constructor(deepChat: DeepChat) {
+    const config = deepChat.existingService?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
+    super(deepChat, 'The goal of life is [MASK].', 'bert-base-uncased', config);
   }
 
   override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {

@@ -3,8 +3,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>&lt;Ai Assistant> Demo</title>
-    <script type="module" src="src/aiAssistant.ts"></script>
+    <title>&lt;DeepChat> Demo</title>
+    <script type="module" src="src/deepChat.ts"></script>
     <style>
       html,
       body {
@@ -14,13 +14,10 @@
     </style>
   </head>
   <body>
-    <ai-assistant id="chat-element" style="float: left"></ai-assistant>
-    <!-- <ai-assistant id="chat-element-2"></ai-assistant> -->
+    <deep-chat id="chat-element" style="float: left"></deep-chat>
+    <deep-chat id="chat-element-2"></deep-chat>
     <script type="module">
       const chatElement = document.getElementById('chat-element');
-      // chatElement.onNewMessage = (result) => {
-      //   console.log(result);
-      // };
       // chatElement.initialMessages = [
       //   {role: 'user', content: 'Hey'},
       //   {role: 'ai', content: 'how are you today'},
@@ -108,14 +105,6 @@
       //   },
       // };
       // chatElement.dragAndDrop = true;
-      // const chatElement2 = document.getElementById('chat-element-2');
-      // chatElement2.customService = {
-      //   camera: true,
-      //   audio: true,
-      //   microphoneAudio: true,
-      //   images: true,
-      //   mixedFiles: true,
-      // };
       // chatElement2.dragAndDrop = true;
       // chatElement.requestSettings = {
       //   url: 'http://127.0.0.1:3000/v1/chat/completions',

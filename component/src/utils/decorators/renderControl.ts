@@ -1,23 +1,23 @@
 import {InternalHTML} from '../webComponent/internalHTML';
 
 export class RenderControl {
-  public static waitForPropertiesToBeUpdatedBeforeRender(aiAssistant: InternalHTML) {
-    aiAssistant._propUpdated_ = false;
+  public static waitForPropertiesToBeUpdatedBeforeRender(deepChat: InternalHTML) {
+    deepChat._propUpdated_ = false;
     setTimeout(() => {
-      if (!aiAssistant._propUpdated_) {
-        aiAssistant._waitingToRender_ = false;
-        aiAssistant.onRender();
+      if (!deepChat._propUpdated_) {
+        deepChat._waitingToRender_ = false;
+        deepChat.onRender();
       } else {
-        RenderControl.waitForPropertiesToBeUpdatedBeforeRender(aiAssistant);
+        RenderControl.waitForPropertiesToBeUpdatedBeforeRender(deepChat);
       }
     });
   }
 
-  public static attemptRender(aiAssistant: InternalHTML) {
-    aiAssistant._propUpdated_ = true;
-    if (!aiAssistant._waitingToRender_) {
-      aiAssistant._waitingToRender_ = true;
-      RenderControl.waitForPropertiesToBeUpdatedBeforeRender(aiAssistant);
+  public static attemptRender(deepChat: InternalHTML) {
+    deepChat._propUpdated_ = true;
+    if (!deepChat._waitingToRender_) {
+      deepChat._waitingToRender_ = true;
+      RenderControl.waitForPropertiesToBeUpdatedBeforeRender(deepChat);
     }
   }
 }
