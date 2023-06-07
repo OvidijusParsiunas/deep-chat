@@ -12,9 +12,8 @@ Properties related to messages.
 
 Object containing CSS styling properties for the chat container element. <br />
 
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -25,10 +24,10 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '15px'}}
-    service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -42,10 +41,10 @@ Object containing CSS styling properties for the element that is used to display
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     attachmentContainerStyle={{backgroundColor: '#76fffc57'}}
-    service={{custom: {demo: {displayFileAttachmentContainer: true}}}}
-  ></AiAssistantBrowser>
+    existingService={{demo: {displayFileAttachmentContainer: true}}}
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -60,7 +59,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{custom: {demo: true}}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
@@ -82,7 +81,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
         background-color: #54a7ff;
         border-radius: 5px;
       }"
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 :::danger

@@ -6,9 +6,8 @@ sidebar_position: 12
 
 Object types that are shared by top level properties.
 
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -45,7 +44,7 @@ Styling for a button inside the chat view. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         images: {
@@ -63,7 +62,7 @@ Styling for a button inside the chat view. <br />
         demo: true,
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -84,7 +83,7 @@ Styling for a button inside the chat view. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     textInput={{styles: {text: {paddingRight: '64px'}}}}
     submitButtonStyles={{
       submit: {
@@ -130,7 +129,7 @@ Styling for a button inside the chat view. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -169,7 +168,7 @@ Position for a button either _inside_ the [text input container](./input#textInp
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -179,7 +178,7 @@ Position for a button either _inside_ the [text input container](./input#textInp
         microphoneAudio: {button: {position: 'outside-right'}},
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

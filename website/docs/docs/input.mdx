@@ -14,9 +14,8 @@ Styling for the chat view's bottom area dedicated for text input and file button
 
 #### Example
 
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -25,7 +24,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainer>
-  <AiAssistantBrowser inputAreaStyle={{backgroundColor: '#eaeaea'}} service={{custom: {demo: true}}}></AiAssistantBrowser>
+  <DeepChatBrowser inputAreaStyle={{backgroundColor: '#eaeaea'}} service={{custom: {demo: true}}}></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -49,14 +48,14 @@ Custom details for the chat's text input. <br />
 #### Generic example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     textInput={{
       styles: {text: {fontSize: '16px', color: 'black'}, container: {maxHeight: '50px', backgroundColor: '#dffeff'}},
       placeholder: {text: 'Insert text here...', style: {color: '#4f8bff'}},
       characterLimit: 10,
     }}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -64,10 +63,10 @@ Custom details for the chat's text input. <br />
 #### Disabled example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -89,7 +88,7 @@ when a response message is being [streamed](HERE). <br />
 #### SVG Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     submitButtonStyles={{
       submit: {
         container: {
@@ -111,13 +110,13 @@ when a response message is being [streamed](HERE). <br />
       position: 'outside-right',
     }}
     service={{custom: {demo: true, stream: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 #### Text Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     textInput={{styles: {text: {paddingRight: '70px'}}}}
     submitButtonStyles={{
       submit: {
@@ -143,7 +142,7 @@ when a response message is being [streamed](HERE). <br />
       },
     }}
     service={{custom: {demo: true, stream: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -173,11 +172,11 @@ allows images through the use of [`camera`](HERE), a dropped _.txt_ file will no
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={'Drag and drop a file to observe the effects.'}
     dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
     service={{custom: {demo: true, mixedFiles: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -193,11 +192,11 @@ screen whilst verification is taking place.
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     validateKeyProperty={true}
     introMessage={'Drag and drop a file to observe the effects.'}
     service={{openAI: {chat: {key: 'incorrect key', request: {url: 'https://customAPI.com'}}}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -218,7 +217,7 @@ Configuration for the dropup button and its menu element styles. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={'Open the dropup by clicking the + button on bottom left of the input.'}
     dropupStyles={{
       button: {styles: {container: {default: {backgroundColor: '#f2f2f2'}}}},
@@ -245,7 +244,7 @@ Configuration for the dropup button and its menu element styles. <br />
     service={{
       custom: {demo: true, audio: {button: {position: 'dropup-menu'}}, images: {button: {position: 'dropup-menu'}}},
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

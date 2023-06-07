@@ -1,7 +1,7 @@
 {
-  "name": "ai-assistant-server-node",
+  "name": "deep-chat-server-node",
   "version": "0.0.1",
-  "description": "Example server for the ai-assistant component",
+  "description": "Example server for the deep-chat component",
   "main": "app.js",
   "scripts": {
     "start": "npx nodemon"

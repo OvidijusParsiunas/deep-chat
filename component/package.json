@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "0.0.69",
+  "version": "0.1.0",
   "description": "universal ai chat bot component",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",

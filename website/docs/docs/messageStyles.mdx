@@ -6,9 +6,8 @@ sidebar_position: 4
 
 Properties related to message styling.
 
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -77,7 +76,7 @@ to display the file contents. <br />
 <h3>Message elements in color</h3>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     messageStyles={{
       default: {
         shared: {
@@ -98,7 +97,7 @@ to display the file contents. <br />
       },
     ]}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -106,7 +105,7 @@ to display the file contents. <br />
 <h3>Files</h3>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     messageStyles={{
       image: {
         shared: {
@@ -130,7 +129,7 @@ to display the file contents. <br />
       {file: {src: '/text/text.txt', type: 'file'}, role: 'user'},
     ]}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 :::info
@@ -146,7 +145,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 <h3>Intro message</h3>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     messageStyles={{
       intro: {
         bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
@@ -155,7 +154,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     introMessage={`Hi I'm an AiAssistant, ask me anything!`}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -163,7 +162,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 <h3>Loading bubble</h3>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     messageStyles={{
       loading: {
         bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
@@ -171,7 +170,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     }}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     service={{custom: {demo: {displayLoadingBubble: true}}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -179,7 +178,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 <h3>Error messages</h3>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     messageStyles={{
       error: {
         bubble: {backgroundColor: '#f98e00', color: 'white', fontSize: '15px'},
@@ -187,7 +186,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     }}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     service={{custom: {demo: {displayErrors: {service: true}}}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

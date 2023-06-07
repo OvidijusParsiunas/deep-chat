@@ -28,6 +28,6 @@
       }
     ]
   },
-  "include": ["src/aiAssistant.ts"],
+  "include": ["src/deepChat.ts"],
   "exclude": []
 }

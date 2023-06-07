@@ -12,9 +12,8 @@ Properties related to messages.
 
 Messages that are prepopulated when the chat view loads up. This is most useful for displaying past messages and continuing a conversation.
 
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -25,7 +24,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {text: 'Beautiful city', role: 'user'},
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
@@ -34,7 +33,7 @@ import Tabs from '@theme/Tabs';
     ]}
     containerStyle={{height: '370px'}}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -49,10 +48,10 @@ the [`onNewMessage`](HERE) event and will not be part of the returned messages w
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Hi I'm an AiAssistant, ask me anything!`}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -68,7 +67,7 @@ features that will be applied to both `ai` and `user`.
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -80,7 +79,7 @@ features that will be applied to both `ai` and `user`.
     ]}
     service={{custom: {demo: true}}}
     avatars={true}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -104,7 +103,7 @@ This object is used to set the features of an avatar that is to be displayed bes
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -119,7 +118,7 @@ This object is used to set the features of an avatar that is to be displayed bes
       ai: {src: '/img/ai-brain.svg', styles: {avatar: {marginLeft: '-3px'}}},
     }}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -135,7 +134,7 @@ features that will be applied to both `ai` and `user`. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -147,7 +146,7 @@ features that will be applied to both `ai` and `user`. <br />
     ]}
     service={{custom: {demo: true}}}
     names={true}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -168,7 +167,7 @@ This object is used to set the features of the name element that will be display
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -180,7 +179,7 @@ This object is used to set the features of the name element that will be display
     ]}
     service={{custom: {demo: true}}}
     names={{default: {style: {fontSize: '18px', marginTop: '14px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -194,11 +193,11 @@ Toggle whether the loading bubble should be displayed when waiting for a message
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={'Please send a new message to observe a response with no loading bubble.'}
     displayLoadingBubble={false}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -225,13 +224,13 @@ AiAssistant displays an error message when something goes wrong. You can overwri
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{custom: {demo: {displayErrors: {service: true, speechToTextInput: true}}}}}
     errorMessageOverrides={{
       service: 'Service error!',
       speechToTextInput: 'Speech to text microphone error!',
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -254,7 +253,7 @@ and renders the message accordingly. This is useful for displaying code snippets
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
@@ -269,7 +268,7 @@ and renders the message accordingly. This is useful for displaying code snippets
       },
     }}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -298,14 +297,14 @@ Interactive media bubbles need EITHER `src` (path to the file) or `base64` (bina
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     initialMessages={[
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
       {file: {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
     ]}
     service={{custom: {demo: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

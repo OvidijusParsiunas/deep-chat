@@ -11,9 +11,8 @@ Properties used to connect to OpenAI API.
 - Type: {[`chat?: Chat`](HERE), [`completions?: Completions`](HERE), [`images?: Images`](HERE), [`audio?: Audio`](HERE)}
 - Default: _{chat: true}_
 
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -40,13 +39,13 @@ if you want to limit the usage of your key. <br />
 // WORK - toggle to select service and insert key - default using fake key
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         chat: {key: 'placeholder key', stream: true, max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -63,13 +62,13 @@ Connect to Open AI's [`completions`](https://platform.openai.com/docs/api-refere
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         completions: {key: 'placeholder key', stream: true, max_tokens: 2000},
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -99,13 +98,13 @@ You can automatically call any of the following three APIs by adding the followi
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         images: {key: 'placeholder key', size: '1024x1024', camera: true},
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -125,13 +124,13 @@ Note that [_translation_](https://platform.openai.com/docs/api-reference/audio/c
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         audio: {key: 'placeholder key', microphone: true},
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -160,7 +159,7 @@ Object that is sent to Open AI's [`Chat`](https://platform.openai.com/docs/api-r
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         chat: {
@@ -173,7 +172,7 @@ Object that is sent to Open AI's [`Chat`](https://platform.openai.com/docs/api-r
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -203,7 +202,7 @@ Object that is sent to Open AI's [`Image Generation`](https://platform.openai.co
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         images: {
@@ -214,7 +213,7 @@ Object that is sent to Open AI's [`Image Generation`](https://platform.openai.co
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -235,7 +234,7 @@ to set the camera's output file format. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         images: {
@@ -246,7 +245,7 @@ to set the camera's output file format. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -263,7 +262,7 @@ Object that is sent to Open AI's [`Audio`](https://platform.openai.com/docs/api-
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         audio: {
@@ -275,7 +274,7 @@ Object that is sent to Open AI's [`Audio`](https://platform.openai.com/docs/api-
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -296,7 +295,7 @@ to set the microphone's output file format. <br />
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       openAI: {
         audio: {
@@ -307,7 +306,7 @@ to set the microphone's output file format. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

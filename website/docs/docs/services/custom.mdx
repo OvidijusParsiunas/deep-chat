@@ -47,9 +47,8 @@ This object can also be populated with your own key (string) values (any) which 
 
 #### Example
 
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -58,12 +57,12 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Hi, I am your assistant. How may I help you?`}
     service={{
       custom: {request: {url: 'https://customapi.com'}, images: {button: {position: 'outside-right'}}},
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 ## Types
@@ -101,7 +100,7 @@ Configuration for capturing images using a web camera and handling the resultant
 `modalContainerStyle` is used to customize the modal used to display the camera. <br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -113,7 +112,7 @@ Configuration for capturing images using a web camera and handling the resultant
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -144,7 +143,7 @@ in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/in
 the `acceptedFormats` property, it will override this one.<br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -153,7 +152,7 @@ the `acceptedFormats` property, it will override this one.<br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -172,7 +171,7 @@ Configuration for recording audio files using a microphone and handling them. <b
 `button` is the styling used for the microphone button element. <br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -183,7 +182,7 @@ Configuration for recording audio files using a microphone and handling them. <b
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -214,7 +213,7 @@ in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/in
 the `acceptedFormats` property, it will override this one.<br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -223,7 +222,7 @@ the `acceptedFormats` property, it will override this one.<br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -258,7 +257,7 @@ Custom styling for the microphone button. <br />
 `position` is the button position within the input area.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -308,7 +307,7 @@ Custom styling for the microphone button. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -322,7 +321,7 @@ Object used to configure the ability for the component to send files. <br />
 `FilesUploader` is used to configure what files can be sent to the target service and change the styling of elements that facilitate this. <br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -333,7 +332,7 @@ Object used to configure the ability for the component to send files. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -351,7 +350,7 @@ When this property is used, [`dragAndDrop`](HERE) is enabled automatically.
 Configuration to control what files can be uploaded and the customization of the button that helps facilitate this. <br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         demo: true,
@@ -361,7 +360,7 @@ Configuration to control what files can be uploaded and the customization of the
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -388,7 +387,7 @@ use this to verify the dropped files. <br />
 `infoModal` is used to display noteworthy information when the user clicks the button to search for a file. <br />
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
     service={{
       custom: {
@@ -401,7 +400,7 @@ use this to verify the dropped files. <br />
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -420,7 +419,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to custo
 `containerStyle` is used to augment the basic styling of the modal element.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Click the image button to open up the modal.`}
     service={{
       custom: {
@@ -437,7 +436,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to custo
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -455,7 +454,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to custo
 Custom properties used for the HTTP request.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{
       custom: {
         request: {
@@ -465,7 +464,7 @@ Custom properties used for the HTTP request.
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -484,7 +483,7 @@ If `maxMessages` number is hit before `totalMessagesMaxCharLength`, `maxMessages
 These limits do not include the [`introMessage`](HERE).
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Observe the data that is going to be sent below.`}
     service={{
       custom: {
@@ -497,7 +496,7 @@ These limits do not include the [`introMessage`](HERE).
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -511,7 +510,7 @@ These limits do not include the [`introMessage`](HERE).
 A method that can be used to intercept outgoing HTTP requests and preprocess their data before they are sent. It MUST return a [`RequestDetails`](#RequestDetails) type object.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Send a message to intercept the request.`}
     service={{
       custom: {
@@ -522,7 +521,7 @@ A method that can be used to intercept outgoing HTTP requests and preprocess the
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -545,7 +544,7 @@ A method that can be used to intercept incoming HTTP responses and preprocess th
 It MUST return a [`Result`](#Result) type object. This is not supported for [`stream`](#stream) messages.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`Send a message to intercept the response.`}
     service={{
       custom: {
@@ -556,7 +555,7 @@ It MUST return a [`Result`](#Result) type object. This is not supported for [`st
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -581,10 +580,10 @@ can stream your messages into the chat. (Please see [`examples`](https://github.
 This is only supported for text messages.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`The response message bubble will be populated gradually with text events.`}
     service={{custom: {demo: true, stream: true}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -596,9 +595,9 @@ This is only supported for text messages.
 This is used to display the returned error messages from the service in the error message bubble.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     service={{custom: {displayServiceErrorMessages: true, demo: {displayErrors: {service: true}}}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -616,7 +615,7 @@ This is used to display the returned error messages from the service in the erro
 Populates chat with elements and simulates message responses by mocking out the API. This is useful for prototyping and showcasing the component's capabilities.
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introMessage={`This is a demo API, I will respond from a set of predefined messages.`}
     service={{
       custom: {
@@ -627,7 +626,7 @@ Populates chat with elements and simulates message responses by mocking out the 
         },
       },
     }}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>

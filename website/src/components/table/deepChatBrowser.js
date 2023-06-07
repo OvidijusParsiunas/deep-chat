@@ -1,13 +1,13 @@
-import {AiAssistantReact} from './aiAssistantReact';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import {DeepChatReact} from './deepChatReact';
 import React from 'react';
 
 // Used to allow client side rendering
-export default function AiAssistantBrowser(props) {
+export default function DeepChatBrowser(props) {
   return (
     <BrowserOnly>
       {() => {
-        return <AiAssistantReact {...props}>{props.children}</AiAssistantReact>;
+        return <DeepChatReact {...props}>{props.children}</DeepChatReact>;
       }}
     </BrowserOnly>
   );

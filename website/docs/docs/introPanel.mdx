@@ -11,9 +11,8 @@ This is an overlay panel that is displayed in the center of the chat when it loa
 All you need to do is insert your desired markup between the element tags and the component will render it inside the intro panel.
 The original style and events will be preserved to allow you to customize it the way you want it.
 
-import AiAssistantBrowser from '@site/src/components/table/aiAssistantBrowser';
 import ComponentContainer from '@site/src/components/table/componentContainer';
-import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
@@ -24,7 +23,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser service={{custom: {demo: true}}}>
+  <DeepChatBrowser service={{custom: {demo: true}}}>
     <div
       style={{
         width: '200px',
@@ -44,7 +43,7 @@ import Tabs from '@theme/Tabs';
         </div>
       </div>
     </div>
-  </AiAssistantBrowser>
+  </DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -65,10 +64,10 @@ If you are using a custom intro panel (example above), it will be applied to tha
 #### Example
 
 <ComponentContainer>
-  <AiAssistantBrowser
+  <DeepChatBrowser
     introPanelStyle={{backgroundColor: '#fffeec'}}
     service={{openAI: {audio: {key: 'placeholder-key'}}}}
-  ></AiAssistantBrowser>
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
