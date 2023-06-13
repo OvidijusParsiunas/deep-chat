@@ -1,0 +1,41 @@
+---
+sidebar_position: 1
+---
+
+# Service
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+AiAssistant can be configured to connect to an existing service or a custom API.
+
+### `request` {#request}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}` <br />
+  }
+
+- Default: _{ method: "POST" }_
+
+Custom properties used for the HTTP request.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    existingService={{demo: true}}
+    request={{
+      url: 'https://customapi.com/message',
+      method: 'POST',
+      headers: {customName: 'customHeaderValue'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
