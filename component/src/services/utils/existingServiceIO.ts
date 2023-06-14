@@ -1,9 +1,9 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
-import {RequestSettings} from '../../types/requestSettings';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {GenericObject} from '../../types/object';
 import {BaseServiceIO} from './baseServiceIO';
+import {Request} from '../../types/request';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -33,7 +33,7 @@ export class IExistingServiceIO extends BaseServiceIO {
     if (apiKey.validateKeyProperty) this.validateConfigKey = apiKey.validateKeyProperty;
   }
 
-  private buildRequestSettings(key: string, requestSettings?: RequestSettings) {
+  private buildRequestSettings(key: string, requestSettings?: Request) {
     const requestSettingsObj = requestSettings ?? {};
     requestSettingsObj.headers = this.buildHeadersFunc(key);
     return requestSettingsObj;

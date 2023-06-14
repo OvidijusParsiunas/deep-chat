@@ -1,10 +1,10 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
-import {RequestSettings} from '../types/requestSettings';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
+import {Request} from '../types/request';
 import {Result} from '../types/result';
 import {Demo} from '../types/demo';
 
@@ -57,7 +57,7 @@ export interface ServiceIO {
 
   recordAudio?: MicrophoneFilesServiceConfig;
 
-  requestSettings: RequestSettings;
+  requestSettings: Request;
 
   introPanelMarkUp?: string;
 

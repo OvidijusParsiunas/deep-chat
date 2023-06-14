@@ -1,23 +1,23 @@
 import {AudioRecordingFiles, MicrophoneStyles} from './microphone';
-import {RequestSettings} from './requestSettings';
 import {FileAttachments} from './fileAttachments';
 import {CameraFiles} from './camera';
 import {CustomStyle} from './styles';
+import {Request} from './request';
 import {Button} from './button';
 
 export type FilesUploader = {files?: FileAttachments; button?: Button};
 
-export type FilesServiceConfig = {request?: RequestSettings} & FilesUploader;
+export type FilesServiceConfig = {request?: Request} & FilesUploader;
 
 export type CameraFilesServiceConfig = {
-  request?: RequestSettings;
+  request?: Request;
   files?: CameraFiles;
   button?: Button;
   modalContainerStyle?: CustomStyle;
 };
 
 export type MicrophoneFilesServiceConfig = {
-  request?: RequestSettings;
+  request?: Request;
   files?: AudioRecordingFiles;
   button?: MicrophoneStyles;
 };

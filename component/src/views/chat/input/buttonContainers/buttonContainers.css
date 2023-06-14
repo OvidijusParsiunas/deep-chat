@@ -9,6 +9,7 @@
 .inside-right {
   position: absolute;
   right: calc(10% + 0.35em);
+  /* WORK - perhaps this should be 0.82 */
   bottom: 0.85em;
 }
 

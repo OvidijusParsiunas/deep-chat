@@ -12,7 +12,6 @@ import {ServiceIOFactory} from './services/serviceIOFactory';
 import {RequestBodyMessageLimits} from './types/chatLimits';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
-import {RequestSettings} from './types/requestSettings';
 import {ExistingService} from './types/existingService';
 import {Property} from './utils/decorators/property';
 import {DropupStyles} from './types/dropupStyles';
@@ -23,6 +22,7 @@ import {Microphone} from './types/microphone';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
+import {Request} from './types/request';
 import {Avatars} from './types/avatars';
 import {Names} from './types/names';
 
@@ -33,7 +33,7 @@ export class DeepChat extends InternalHTML {
   existingService?: ExistingService;
 
   @Property('object')
-  request?: RequestSettings;
+  request?: Request;
 
   @Property('boolean')
   stream?: boolean;

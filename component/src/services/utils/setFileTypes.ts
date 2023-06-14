@@ -2,13 +2,13 @@ import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableC
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../serviceIO';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {FileAttachments} from '../../types/fileAttachments';
-import {RequestSettings} from '../../types/requestSettings';
+import {Request} from '../../types/request';
 import {DeepChat} from '../../deepChat';
 import {Remarkable} from 'remarkable';
 
 export class SetFileTypes {
   // prettier-ignore
-  private static parseConfig(requestSettings: RequestSettings, defFiles: FileAttachments, remark: Remarkable,
+  private static parseConfig(requestSettings: Request, defFiles: FileAttachments, remark: Remarkable,
       fileType?: boolean | FilesServiceConfig) {
     const fileConfig: FileServiceIO & {files: FileAttachments} = {files: defFiles};
     if (typeof fileType === 'object') {

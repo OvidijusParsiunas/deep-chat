@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {GenericObject} from './object';
 
-export interface RequestSettings {
+export interface Request {
   url?: string;
   method?: string;
   headers?: GenericObject<string>;

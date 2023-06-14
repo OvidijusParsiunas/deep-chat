@@ -3,11 +3,11 @@ import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../type
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {CustomServiceResponse} from '../../types/customService';
-import {RequestSettings} from '../../types/requestSettings';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {MessageContent} from '../../types/messages';
+import {Request} from '../../types/request';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
@@ -18,7 +18,7 @@ export class BaseServiceIO implements ServiceIO {
   readonly rawBody: any = {};
   validateConfigKey = false;
   canSendMessage: ValidateMessageBeforeSending = BaseServiceIO.canSendMessage;
-  requestSettings: RequestSettings = {};
+  requestSettings: Request = {};
   requestInterceptor: RequestInterceptor = (details) => details;
   responseInterceptor: ResponseInterceptor = (result) => result;
   fileTypes: ServiceFileTypes = {};

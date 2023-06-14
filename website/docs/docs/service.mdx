@@ -4,6 +4,27 @@ sidebar_position: 1
 
 # Service
 
+This page describes the configuration required to communicate with a custom API service.
+
+<h2>How To</h2>
+
+Define the target api endpoint and other required configuration to connect inside the [`request`](#request) property.
+
+By default, the **outgoing** request bodies will contain all of the messages within the chat (to allow the target service to interpret their context as needed).
+This behaviour can be altered by using the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property to send only what is required.
+
+- When sending text based messages only, the request body will have the following JSON type: <br />
+  {[`messages: MessageContent[]`](messages/#MessageContent)} <br />
+
+- When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
+
+The **response** message body needs to have the following JSON type: <br />
+&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result[]`](HERE), `error?: string`} <br />
+
+Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to set up your own server.
+
+<h2>Component properties</h2>
+
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -13,27 +34,91 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-AiAssistant can be configured to connect to an existing service or a custom API.
-
 ### `request` {#request}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}` <br />
-  }
+- Type: [`Request`](#Request)
 
-- Default: _{ method: "POST" }_
-
-Custom properties used for the HTTP request.
+Configuration for the outgoing message HTTP requests.
 
 <ComponentContainer>
   <DeepChatBrowser
-    existingService={{demo: true}}
     request={{
       url: 'https://customapi.com/message',
       method: 'POST',
       headers: {customName: 'customHeaderValue'},
+      body: {field: 'value'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `stream` {#stream}
+
+- Type: `boolean`
+
+If the target service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type, you
+can stream the response messages into the chat. This is only supported for text messages. Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to set this up for your own server.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    existingService={{demo: true}}
+    introMessage={`The response message bubble will be populated gradually with text events.`}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `requestBodyMessageLimits` {#requestBodyMessageLimits}
+
+- Type: {`maxMessages?: number`, `totalMessagesMaxCharLength?: number`}
+
+// WORK - display the intercepted messages
+
+Used to limit the message content that is going to be included in the outgoing requests. <br />
+`maxMessages` is the maximum number of messages counting from the most recent one. <br />
+`totalMessagesMaxCharLength` is the total maximum number of text characters that can be included counting from the most recent message. <br />
+These limits do not include the [`introMessage`](HERE).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Observe the data that is going to be sent below.`}
+    requestBodyMessageLimits={{
+      totalMessagesMaxCharLength: 20,
+      maxMessages: 2,
+    }}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+## Types
+
+Types shared with other component properties:
+
+### `Request` {#Request}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `body?: {[string]: any}` <br />
+  }
+
+- Default: _{ method: "POST" }_
+
+Object used to configure the outgoing messages' HTTP request settings. <br />
+`body` is used to add additional key value properties to the outgoing message body.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    request={{
+      url: 'https://customapi.com/message',
+      method: 'POST',
+      headers: {customName: 'customHeaderValue'},
+      body: {customBodyField: 'customBodyValue'},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
