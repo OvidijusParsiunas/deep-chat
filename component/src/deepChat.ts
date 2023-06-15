@@ -14,11 +14,11 @@ import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {ExistingService} from './types/existingService';
 import {Property} from './utils/decorators/property';
+import {MicrophoneStyles} from './types/microphone';
 import {DropupStyles} from './types/dropupStyles';
 import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
-import {Microphone} from './types/microphone';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
@@ -48,7 +48,7 @@ export class DeepChat extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  speechToTextInput?: Microphone; // only activated if not used by recording for audio
+  speechToTextInput?: true | MicrophoneStyles; // only activated if not used by recording for audio
 
   @Property('boolean')
   speechOutput?: boolean;
@@ -96,7 +96,7 @@ export class DeepChat extends InternalHTML {
   camera?: boolean | CameraFilesServiceConfig;
 
   @Property('object')
-  microphoneAudio?: boolean | MicrophoneFilesServiceConfig;
+  microphone?: boolean | MicrophoneFilesServiceConfig;
 
   @Property('object')
   introPanelStyle?: CustomStyle;

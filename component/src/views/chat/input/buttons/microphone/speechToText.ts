@@ -1,4 +1,4 @@
-import {Microphone} from '../../../../../types/microphone';
+import {MicrophoneStyles} from '../../../../../types/microphone';
 import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {MicrophoneButton} from './microphoneButton';
@@ -15,7 +15,7 @@ export class SpeechToText extends MicrophoneButton {
   private prefixText = '';
   private readonly _addErrorMessage: AddErrorMessage;
 
-  constructor(microphone: Microphone, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
+  constructor(microphone: true | MicrophoneStyles, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     super(typeof microphone === 'object' ? microphone : {});
     const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!speechRecognition) {

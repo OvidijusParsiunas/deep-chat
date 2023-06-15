@@ -7,8 +7,6 @@ export interface MicrophoneStyles {
   position?: ButtonPosition;
 }
 
-export type Microphone = true | MicrophoneStyles;
-
 export type AudioFormat = 'mp3' | '4a' | 'webm' | 'mp4' | 'mpga' | 'wav' | 'mpeg' | 'm4a';
 
 export interface AudioRecordingFiles {

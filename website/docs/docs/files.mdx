@@ -1,0 +1,465 @@
+---
+sidebar_position: 2
+---
+
+# Files
+
+Properties used for sending files.
+
+:::info
+When any of these properties are used, [`dragAndDrop`](HERE) is enabled automatically.
+:::
+
+<LineBreak></LineBreak>
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+### `images` {#images}
+
+- Type: `true` | [`FilesServiceConfig`](HERE)
+
+Creates a button that allows the user to upload images. <br />
+This property can be set with a boolean _true_ or configured with a [`FilesServiceConfig`](HERE) object.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    images={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `camera` {#camera}
+
+- Type: `true` | [`CameraFilesServiceConfig`](HERE)
+
+Creates a button that allows the user to capture images using a web camera. <br />
+This property can be set with a boolean _true_ or configured with a [`CameraFilesServiceConfig`](HERE) object.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    existingService={{demo: true}}
+    camera={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `audio` {#audio}
+
+- Type: `true` | [`FilesServiceConfig`](HERE)
+
+Creates a button that allows the user to upload audio files. <br />
+This property can be set with a boolean _true_ or configured with a [`FilesServiceConfig`](HERE) object.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    audio={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `microphone` {#microphone}
+
+- Type: `true` | [`MicrophoneFilesServiceConfig`](HERE)
+
+Creates a button that allows the user to record audio files using the microphone. <br />
+This property can be set with a boolean _true_ or configured with a [`MicrophoneFilesServiceConfig`](HERE) object.
+
+// WORK
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the microphone button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    microphoneAudio={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `mixedFiles` {#mixedFiles}
+
+- Type: `true` | [`FilesServiceConfig`](HERE)
+
+Creates a button that allows the user to upload any kind of files. <br />
+This property can be set with a boolean _true_ or configured with a [`FilesServiceConfig`](HERE) object.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the file button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    mixedFiles={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `dragAndDrop` {#dragAndDrop}
+
+- Type: `boolean` | [`CustomStyle`](./sharedTypes/#CustomStyle)
+- Default: _false_
+
+Configuration for the drag and drop functionality. If any of the above properties are defined or you have defined an [`existingService`](HERE) that allows file uploads -
+this will automatically be defaulted to _true_. Once the user drops a file, it will only be accepted if any of the above properties allow it via their default or custom [`acceptedFormats`](HERE) property's value. For example if
+_".png,.jpg"_ in [`images`](HERE) are the only file types allowed, a dropped _.txt_ file will not be accepted.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={'Drag and drop a file to observe the result.'}
+    dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
+    mixedFiles={true}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+## Types
+
+Types shared by files properties:
+
+### `FilesServiceConfig` {#FilesServiceConfig}
+
+- Type: {[`request?: Request`](HERE), [`FilesUploader`](HERE)}
+
+Object used to configure the ability for the component to send files. <br />
+`request` object is used to override the default service request settings when sending a file. <br />
+`FilesUploader` is used to configure what files can be sent to the target service and change the styling of the button that facilitates this. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    images={{
+      request: {url: 'https://customapi.com/image'},
+      files: {acceptedFormats: '.jpg,.png'},
+      button: {position: 'outside-left'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `FilesUploader` {#FilesUploader}
+
+- Type: {[`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button)}
+
+Control what files can be uploaded and the customization of the button that enables this. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    audio={{
+      files: {acceptedFormats: '.mp3,.wav'},
+      button: {position: 'outside-left'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `FileAttachments` {#FileAttachments}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`infoModal?: InfoModal`](HERE) <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: for images: ".png,.jpg", for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a" <br />
+  }_
+
+Used to configure what files the component can accept. <br />
+`maxNumberOfFiles` controls the maximum number of files that can be sent within one message. <br />
+`acceptedFormats` is used to define the accepted file formats. This is a string that uses the same syntax
+as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). The [`dragAndDrop`](HERE) feature will also
+use this value to verify the dropped files. <br />
+`infoModal` is used to display noteworthy information when the user clicks the button to browse for a file. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
+    existingService={{demo: true}}
+    images={{
+      files: {
+        maxNumberOfFiles: 2,
+        acceptedFormats: '.jpg,.png',
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `InfoModal` {#InfoModal}
+
+- Type: {`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](./sharedTypes/#CustomStyle)}
+- Default: _{openModalOnce: false}_
+
+A modal that is triggered when a user clicks on a button to upload a file. It is useful for scenarios when a user needs some
+clarification of how their data will be handled or other noteworty information. <br />
+`textMarkDown` is a string that uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to generate the modal content.
+Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help customize your content. <br />
+`openModalOnce` controls whether the modal is opened when the user clicks a button once or every time. <br />
+`containerStyle` is used to augment the basic styling of the modal element.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Click the image button to open up the modal.`}
+    existingService={{demo: true}}
+    images={{
+      files: {
+        infoModal: {
+          textMarkDown:
+            'Please note our terms of service for sending files: [link](https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley).',
+          openModalOnce: true,
+          containerStyle: {borderRadius: '5px'},
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `CameraFilesServiceConfig` {#CameraFilesServiceConfig}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#RequestSettings), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](HERE) <br />
+  }
+
+Configuration for capturing images using a web camera and handling the resultant files. <br />
+`request` is used to override the default request settings when sending image files. <br />
+`files` is used to configure the files that are captured by the camera. <br />
+`button` is used to customize the button element used for the camera. <br />
+`modalContainerStyle` is used to customize the modal used to display the camera. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    existingService={{demo: true}}
+    camera={{
+      request: {url: 'https://customapi.com/image-from-camera'},
+      files: {format: 'png'},
+      button: {position: 'outside-left'},
+      modalContainerStyle: {borderRadius: '5px'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `CameraFiles` {#CameraFiles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"png"` | `"jpeg"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `dimensions?:` {`width?: number`, `height?: number`} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; format: "png", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "image/\*" <br />
+  }_
+
+Configuration for the captured files by the camera. <br />
+`format` is the resultant format of the image file that is produced by capturing a photograph. <br />
+`dimensions` are used to set the pixel area of the photograph. Please note that this is largely controlled by the [`mediaDevice`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
+of the user's browser, so if the dimensions you have provided skew the photograph in a particular way they may be overriden.<br />
+`maxNumberOfFiles` is the limit to the number of images that can be captured for one message. <br />
+`acceptedFormats` is used to limit the allowed files that can be dropped via the [`dragAndDrop`](HERE) functionality as this feature will enable it automatically.
+It uses the same syntax as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). If the configuration in [`images`](HERE) also uses
+the `acceptedFormats` property, it will override this one.<br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    existingService={{demo: true}}
+    camera={{
+      files: {
+        format: 'png',
+        dimensions: {width: 450, height: 600},
+        maxNumberOfFiles: 2,
+        acceptedFormats: '.jpg,.png',
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `MicrophoneFilesServiceConfig` {#MicrophoneFilesServiceConfig}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: RequestSettings`](#HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`files?: AudioRecordingFiles`](#AudioRecordingFiles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](#MicrophoneStyles) <br />
+  }
+
+Configuration for recording audio using a microphone and handling the resultant files. <br />
+`request` is used to override the default request settings when sending audio files. <br />
+`files` is used to configure the resultant files that are recorded by the microphone. <br />
+`button` is the styling used for the microphone button element. <br />
+
+// WORK
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the microphone button to record audio.`}
+    existingService={{demo: true}}
+    microphoneAudio={{
+      request: {url: 'https://customapi.com/audio-from-microphone'},
+      files: {format: 'mp3'},
+      button: {position: 'outside-left'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `AudioRecordingFiles` {#AudioRecordingFiles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`format?: AudioFormat`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxDurationSeconds?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
+  }
+
+- Default: _{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; format: "mp3", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; maxDurationSeconds: 5999, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "audio/\*" <br />
+  }_
+
+Configuration for the recorded microphone files. <br />
+`format` is the resultant audio file format. <br />
+`maxDurationSeconds` is the maximum length of time one audio file can be recorded.<br />
+`maxNumberOfFiles` is the limit to the number of files that can be recorded for one message. <br />
+`acceptedFormats` is used to limit the allowed files that can be dropped via the [`dragAndDrop`](HERE) functionality as this feature will enable it automatically.
+It uses the same syntax as the [accept](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept) attributes
+in [input elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file). If the configuration in [`audio`](HERE) also uses
+the `acceptedFormats` property, it will override this one.<br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the microphone button to record audio.`}
+    existingService={{demo: true}}
+    microphoneAudio={{
+      files: {
+        format: 'mp3',
+        maxDurationSeconds: 10,
+        maxNumberOfFiles: 2,
+        acceptedFormats: '.mp3,.wav',
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::info
+The use of this object will automatically disable the [`speechToTextInput`](HERE) functionality.
+:::
+
+<LineBreak></LineBreak>
+
+### `AudioFormat` {#AudioFormat}
+
+- Type: `"mp3"` | `"4a"` | `"webm"` | `"mp4"` | `"mpga"` | `"wav"` | `"mpeg"` | `"m4a"`
+
+Allowed audio file formats.
+
+<LineBreak></LineBreak>
+
+### `MicrophoneStyles` {#MicrophoneStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`active?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`unsupported?: ButtonStyles`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](HERE) <br />
+  }
+
+Custom styling for the microphone button. <br />
+`default` is used for the default button state. <br />
+`active` is used when the microphone is active. <br />
+`unsupported` is used when recording is not supported on the user's browser. <br />
+`position` is the button position within the input area.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the microphone button to record audio.`}
+    existingService={{demo: true}}
+    microphoneAudio={{
+      button: {
+        default: {
+          container: {
+            hover: {
+              backgroundColor: '#7fbded69',
+            },
+            click: {
+              backgroundColor: '#4babf669',
+            },
+          },
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)',
+              },
+              hover: {
+                filter:
+                  'brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)',
+              },
+            },
+          },
+        },
+        active: {
+          container: {
+            hover: {
+              backgroundColor: '#ffd07c70',
+            },
+            click: {
+              backgroundColor: '#ecb85c70',
+            },
+          },
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)',
+              },
+            },
+          },
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>

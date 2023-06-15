@@ -7,7 +7,7 @@ export interface InfoModal {
 }
 
 export interface FileAttachments {
-  acceptedFormats?: string;
   maxNumberOfFiles?: number;
+  acceptedFormats?: string;
   infoModal?: InfoModal;
 }

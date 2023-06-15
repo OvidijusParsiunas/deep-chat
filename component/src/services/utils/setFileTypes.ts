@@ -43,7 +43,7 @@ export class SetFileTypes {
   // needs to be set after audio to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processMicrophone(
-    serviceIO: ServiceIO, remark: Remarkable, microphone: DeepChat['microphoneAudio'], audio: DeepChat['audio']) {
+    serviceIO: ServiceIO, remark: Remarkable, microphone: DeepChat['microphone'], audio: DeepChat['audio']) {
   const files = serviceIO.fileTypes.audio?.files || {};
   const defaultFormats = {acceptedFormats: 'audio/*', ...files};
   if (!microphone) return;
@@ -54,7 +54,7 @@ export class SetFileTypes {
       if (microphone.files) {
         serviceIO.recordAudio.files ??= {}; // for typescript
         serviceIO.recordAudio.files.format = microphone.files?.format;
-        // this.recordAudio.files.newFilePrefix = customService.microphoneAudio.files?.newFilePrefix;
+        // this.recordAudio.files.newFilePrefix = customService.microphone.files?.newFilePrefix;
         serviceIO.recordAudio.files.maxDurationSeconds = microphone.files?.maxDurationSeconds;
         if (serviceIO.fileTypes.audio?.files) {
           serviceIO.fileTypes.audio.files.maxNumberOfFiles ??= microphone.files.maxNumberOfFiles;
@@ -129,7 +129,7 @@ export class SetFileTypes {
     SetFileTypes.processImagesConfig(serviceIO, remarkable, deepChat.images, existingFileTypes?.images);
     SetFileTypes.processCamera(serviceIO, remarkable, deepChat.camera, deepChat.images);
     SetFileTypes.processAudioConfig(serviceIO, remarkable, deepChat.audio, existingFileTypes?.audio);
-    SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphoneAudio, deepChat.audio);
+    SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphone, deepChat.audio);
     SetFileTypes.processMixedFiles(serviceIO, remarkable, deepChat.mixedFiles);
   }
 }
