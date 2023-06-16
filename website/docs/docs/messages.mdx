@@ -10,7 +10,7 @@ Properties related to messages.
 
 - Type: [`MessageContent[]`](#MessageContent)
 
-Messages that are prepopulated when the chat view loads up. This is most useful for displaying past messages and continuing a conversation.
+Messages that are pre-populated when the chat loads up. This is useful for displaying previous messages and continuing a conversation.
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -25,6 +25,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <DeepChatBrowser
+    existingService={{demo: true}}
     initialMessages={[
       {text: 'Beautiful city', role: 'user'},
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
@@ -43,26 +44,29 @@ import Tabs from '@theme/Tabs';
 - Type: `string`
 
 Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](HERE) as it will not trigger
-the [`onNewMessage`](HERE) event and will not be part of the returned messages when the [`getMessages`](HERE) method is called.
+the [`onNewMessage`](HERE) listener, will not be part of the returned messages when the [`getMessages`](HERE) method is called and
+is not taken into consideration when calculating [`requestBodyMessageLimits`](HERE).
 
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
-    introMessage={`Hi I'm an AiAssistant, ask me anything!`}
-    service={{custom: {demo: true}}}
+    introMessage={`Hi I am your assistant, ask me anything!`}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
+// WORK - default should allow src image to be displayed
+
 ### `avatars` {#avatars}
 
 - Type: `true` | {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
 
-Used to configure the placement of avatars beside messages. You can simply enable this by using _true_
-or by setting an object. The `default` property's object does not contain `src` and is used to define
-features that will be applied to both `ai` and `user`.
+Add avatars beside messages. You can enable this by setting the value to _true_
+or by defining an object with [`Avatar`](HERE) properties. The `default` property does not contain `src` and is applied
+to both `ai` and `user`.
 
 #### Example
 
@@ -77,7 +81,7 @@ features that will be applied to both `ai` and `user`.
         role: 'ai',
       },
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
     avatars={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -94,10 +98,10 @@ features that will be applied to both `ai` and `user`.
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
   }}
 
-This object is used to set the features of an avatar that is to be displayed beside messages. <br />
-`src` is the path to a custom avatar image file. <br />
-`avatar` property is used to configure the avatar element's properties. <br />
-`container` is the styling for the element that encapsulates the avatar element. <br />
+This object is used to configure avatars that are displayed beside messages. <br />
+`src` is the path to an avatar image file. <br />
+`avatar` property is used to configure the avatar element's styling. <br />
+`container` is used to style the element that encapsulates the avatar element. <br />
 `position` defines which side of the message the avatar is going to be displayed.
 
 #### Example
@@ -117,19 +121,21 @@ This object is used to set the features of an avatar that is to be displayed bes
       default: {styles: {avatar: {height: '30px', width: '30px'}, container: {marginTop: '8px'}}},
       ai: {src: '/img/ai-brain.svg', styles: {avatar: {marginLeft: '-3px'}}},
     }}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
+// WORK - default should allow text
+
 ### `names` {#names}
 
 - Type: `true` | {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
 
-Used to configure the placement of names beside messages. You can simply enable this by using _true_
-or by setting an object. The `default` property's object does not contain `text` and is used to define
-features that will be applied to both `ai` and `user`. <br />
+Add names beside messages. You can enable this by setting the value to _true_
+or by defining an object with [`Name`](HERE) properties. The `default` property's object does
+not contain `text` and is applied to both `ai` and `user`. <br />
 
 #### Example
 
@@ -144,7 +150,7 @@ features that will be applied to both `ai` and `user`. <br />
         role: 'ai',
       },
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
     names={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -159,8 +165,8 @@ features that will be applied to both `ai` and `user`. <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
   }
 
-This object is used to set the features of the name element that will be displayed beside a message. <br />
-`text` contains the name string. <br />
+This object is used to configure names that are displayed beside messages. <br />
+`text` is the string used for the name. <br />
 `style` is used to define the style of the name element. <br />
 `position` defines which side of the message the name is going to be displayed.
 
@@ -177,7 +183,7 @@ This object is used to set the features of the name element that will be display
         role: 'ai',
       },
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
     names={{default: {style: {fontSize: '18px', marginTop: '14px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -188,7 +194,8 @@ This object is used to set the features of the name element that will be display
 
 - Type: `boolean`
 
-Toggle whether the loading bubble should be displayed when waiting for a message response.
+Toggle whether the loading bubble should be displayed when waiting for a message response. If set to _false_ - the [submit button](./input/#submitButtonStyles)
+will automatically have a loading animation.
 
 #### Example
 
@@ -196,41 +203,45 @@ Toggle whether the loading bubble should be displayed when waiting for a message
   <DeepChatBrowser
     introMessage={'Please send a new message to observe a response with no loading bubble.'}
     displayLoadingBubble={false}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
-:::info
-When this is set to _false_ and [submit button's](./input/#submitButtonStyles) `loading` property's `content` string for `text` or `svg` is not set,
-the submit button will have a loading animation.
-:::
-
-### `errorMessageOverrides` {#ErrorMessageOverrides}
+### `errorMessages` {#errorMessages}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: string` <br />
-  }
-- Default: _{ default: "Error, please try again." }_
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayServiceErrorMessages?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `overrides:` { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: string` <br />
+  }}
 
-AiAssistant displays an error message when something goes wrong. You can overwrite the text of these messages for a variety of scenarios. <br />
-`default` is used for every error type in the chat. <br />
-`service` is an error that is displayed when there is a problem with the service communication. <br />
-`speechToTextInput` error is displayed when there is a problem using the [`speechToTextInput`](HERE) microphone functionality. <br />
+- Default: _{ displayServiceErrorMessages: false, overrides: {default: "Error, please try again." }}_
+
+DeepChat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
+`displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
+`overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
+is for communication with the target service and `speechToTextInput` is when there is a problem using the [`speechToTextInput`](HERE)
+functionality. <br />
+
+// WORK - add speech to text microphone here
 
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
-    service={{custom: {demo: {displayErrors: {service: true, speechToTextInput: true}}}}}
-    errorMessageOverrides={{
-      service: 'Service error!',
-      speechToTextInput: 'Speech to text microphone error!',
+    existingService={{demo: {displayErrors: {service: true, speechToTextInput: true}}}}
+    errorMessages={{
+      overrides: {
+        service: 'Service error!',
+        speechToTextInput: 'Speech to text microphone error!',
+      }
     }}
-  ></DeepChatBrowser>
+> </DeepChatBrowser>
+
 </ComponentContainer>
 
 <LineBreak></LineBreak>
@@ -243,12 +254,12 @@ Shared object property types related to messages:
 
 - Type: <br />
   &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `text: string`} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `file: MessageFile`}
+  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), [`file: MessageFile`](#MessageFile)}
 
-Format used to encapsulate each message within AiAssistant. It uses EITHER ONE of the object types above where `text`
+Object format used to encapsulate each message within the chat. It uses EITHER ONE of the object types above where `text`
 or `file` property is defined. <br />
-The component analyzes the `text` string for [Markdown](https://www.markdownguide.org/basic-syntax/) properties
-and renders the message accordingly. This is useful for displaying code snippets, paragraphs etc. Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
+The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly.
+This is useful for displaying code snippets, paragraphs etc. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
 
 #### Example
 
@@ -267,7 +278,7 @@ and renders the message accordingly. This is useful for displaying code snippets
         },
       },
     }}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -277,22 +288,22 @@ and renders the message accordingly. This is useful for displaying code snippets
 
 - Type: `"ai"` | `"user"`
 
-Entity that has sent the message.
+Entity that the message is from.
 
 <LineBreak></LineBreak>
 
 ### `MessageFile` {#MessageFile}
 
-- Type: {`name?: string`, [`type?: MessageFileType`](#MessageFileType)} & <br />
-  &nbsp | {`src: string`} <br />
-  &nbsp | {`base64: string`} <br />
+- Type: <br />
+  &nbsp | {`name?: string`, [`type?: MessageFileType`](#MessageFileType), `src: string`} <br />
+  &nbsp | {`name?: string`, [`type?: MessageFileType`](#MessageFileType), `base64: string`} <br />
 
-- Default: _{type: "any", name: "file"}_
+- Default: _{name: "file", type: "any"}_
 
-Format that defines the properties for a single file. <br />
+Object format that defines the details for a single file. <br />
 The `name` property displays the file name inside the message bubble when `type` is not defined or is set to _"any"_. <br />
-You can optionally define its `type` to help AiAssistant render it inside an interative media bubble. <br />
-Interactive media bubbles need EITHER `src` (path to the file) or `base64` (binary encoding).
+You can optionally define its `type` to help the component to render it inside an interative media bubble. <br />
+Interactive media bubbles also need EITHER `src` (path to the file) or `base64` (binary encoding).
 
 #### Example
 
@@ -303,14 +314,14 @@ Interactive media bubbles need EITHER `src` (path to the file) or `base64` (bina
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
       {file: {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
 
 :::info
-_"image"_ and _"any"_ file types containing a `src` property will automatically be wrapped inside a hyperlink.
+Files with _"image"_ or _"any"_ types that contain a `src` property will have their bubble set as a hyperlink.
 :::
 
 <LineBreak></LineBreak>

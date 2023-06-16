@@ -38,7 +38,11 @@ Object defining the styling for various message types. <br />
 
 <LineBreak></LineBreak>
 
-#### `MessageRoleStyles` {#MessageRoleStyles}
+## Types
+
+Shared property types for the [`messageStyles`](#messageStyles) object:
+
+### `MessageRoleStyles` {#MessageRoleStyles}
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`shared?: MessageElementsStyles`](#MessageElementsStyles), <br />
@@ -51,9 +55,30 @@ Object defining the styling for various message roles. <br />
 `user` is applied to messages from the user. <br />
 `ai` is applied to messages returned from the ai service. <br />
 
+<ComponentContainer>
+  <DeepChatBrowser
+    messageStyles={{
+      default: {
+        shared: {bubble: {color: 'white'}},
+        ai: {bubble: {backgroundColor: '#3cbe3c'}},
+        user: {bubble: {backgroundColor: '#6767ff'}},
+      },
+    }}
+    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
+    initialMessages={[
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+    ]}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
 <LineBreak></LineBreak>
 
-#### `MessageElementsStyles` {#MessageElementsStyles}
+### `MessageElementsStyles` {#MessageElementsStyles}
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`outerContainer?: CustomStyle`](./sharedTypes/#CustomStyle), <br />
@@ -64,16 +89,10 @@ Object defining the styling for various message roles. <br />
 
 Object defining the styling for various elements that encompass a message. <br />
 `outerContainer` contains all elements related to the message. <br />
-`innerContainer` is the first element inside the `outerContainer` and is mostly used to set message side padding. <br />
-`bubble` is the actual element that displays the message contents. <br />
+`innerContainer` is an element inside the `outerContainer` that is mostly used to set message side padding. <br />
+`bubble` is the element that displays the actual message contents. <br />
 `media` is applied to `image`, `audio` and `file` type messages which contain an extra child element inside the `bubble`
 to display the file contents. <br />
-
-<LineBreak></LineBreak>
-
-## Examples
-
-<h3>Message elements in color</h3>
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -96,11 +115,13 @@ to display the file contents. <br />
         role: 'ai',
       },
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
+
+## More Examples
 
 <h3>Files</h3>
 
@@ -128,7 +149,7 @@ to display the file contents. <br />
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'ai'},
       {file: {src: '/text/text.txt', type: 'file'}, role: 'user'},
     ]}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -153,7 +174,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     }}
     introMessage={`Hi I'm an AiAssistant, ask me anything!`}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -169,7 +190,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       },
     }}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
-    service={{custom: {demo: {displayLoadingBubble: true}}}}
+    existingService={{demo: {displayLoadingBubble: true}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -185,7 +206,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       },
     }}
     containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
-    service={{custom: {demo: {displayErrors: {service: true}}}}}
+    existingService={{demo: {displayErrors: {service: true}}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
