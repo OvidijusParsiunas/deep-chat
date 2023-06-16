@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Intro Panel
 
-This is an overlay panel that is displayed in the center of the chat when it loads up.
+This is an overlay panel that is displayed in the center of the chat.
 
 ### How To
 
@@ -23,7 +23,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser service={{custom: {demo: true}}}>
+  <DeepChatBrowser existingService={{demo: true}}>
     <div
       style={{
         width: '200px',
@@ -51,23 +51,27 @@ import Tabs from '@theme/Tabs';
 :::tip
 Depending on your framework of choice - the intro panel may briefly be visibile before the component fully loads. To prevent this, you can set its `display` style
 to _"none"_ and it will automatically be set to _"block"_ once it is ready (this property needs to be set in a [`style`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
-property and not in a style [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors)).
+attribute/property and not in a [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors)).
 :::
 
 ### `introPanelStyle` {#introPanelStyle}
 
 - Type: [`CustomStyle`](./sharedTypes/#CustomStyle)
 
-Certain [`services`](HERE) have a default intro panel. This object is used to change its style.
-If you are using a custom intro panel (example above), it will be applied to that.
+Certain [`existingServices`](HERE) have a default intro panel. This object is used to change its style.
+If you are using a custom intro panel (example above), it will instead be applied to that.
 
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
     introPanelStyle={{backgroundColor: '#fffeec'}}
-    service={{openAI: {audio: {key: 'placeholder-key'}}}}
+    existingService={{openAI: {audio: true, key: 'placeholder-key'}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
 <LineBreak></LineBreak>
+
+:::tip
+To remove a default panel - add empty markup tags: `<deep-chat><div></div></deep-chat>` .
+:::
