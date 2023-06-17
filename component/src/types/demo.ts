@@ -1,7 +1,6 @@
-export type DemoErrors = {
-  service?: boolean;
-  speechToTextInput?: boolean;
-};
+import {ErrorMessageOverrides} from './messages';
+
+export type DemoErrors = {[key in keyof ErrorMessageOverrides]?: boolean};
 
 export type Demo =
   | boolean

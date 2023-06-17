@@ -74,6 +74,7 @@ export class Messages {
   private prepareDemo(demo: Demo) {
     if (typeof demo === 'object') {
       if (demo.displayErrors) {
+        if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
         if (demo.displayErrors.speechToTextInput) this.addNewErrorMessage('speechToTextInput', '');
       }
