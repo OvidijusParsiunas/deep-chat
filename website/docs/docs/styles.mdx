@@ -36,7 +36,7 @@ import Tabs from '@theme/Tabs';
 
 - Type: [`CustomStyle`](./sharedTypes/#CustomStyle)
 
-Object containing CSS styling properties for the element that is used to display files that are ready to be sent. <br />
+Object containing CSS styling properties for the element containing files attachments ready to be sent with the message. <br />
 
 #### Example
 
@@ -46,6 +46,207 @@ Object containing CSS styling properties for the element that is used to display
     existingService={{demo: {displayFileAttachmentContainer: true}}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `dropupStyles` {#dropupStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](./sharedTypes/#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `menu?:` { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](./sharedTypes/#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`item?: StatefulStyles`](./sharedTypes/#StatefulStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`iconContainer?: CustomStyle`](./sharedTypes/#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`text?: CustomStyle`](./sharedTypes/#CustomStyle) <br />
+  }}
+
+Configuration for the dropup button and its menu element styles. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={'Open the dropup by clicking the + button on bottom left of the input.'}
+    dropupStyles={{
+      button: {
+        styles: {
+          container: {
+            default: {backgroundColor: '#eff8ff'},
+            hover: {backgroundColor: '#e4f3ff'},
+            click: {backgroundColor: '#d7edff'},
+          },
+        },
+      },
+      menu: {
+        container: {
+          boxShadow: '#e2e2e2 0px 1px 3px 2px',
+        },
+        item: {
+          hover: {
+            backgroundColor: '#e1f2ff',
+          },
+          click: {
+            backgroundColor: '#cfeaff',
+          },
+        },
+        iconContainer: {
+          width: '1.8em',
+        },
+        text: {
+          fontSize: '1.05em',
+        },
+      },
+    }}
+    existingService={{demo: true}}
+    audio={{button: {position: 'dropup-menu'}}}
+    images={{button: {position: 'dropup-menu'}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `inputAreaStyle` {#inputAreaStyle}
+
+- Type: [`CustomStyle`](./sharedTypes/#CustomStyle)
+
+Styling for the chat view's bottom area dedicated for text input and file buttons. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser inputAreaStyle={{backgroundColor: '#cce5ff'}} existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `textInput` {#textInput}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` {[`text?: CustomStyle`](./sharedTypes/#CustomStyle), [`container?: CustomStyle`](./sharedTypes/#CustomStyle)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` {`text?: string`, [`style?: CustomStyle`](./sharedTypes/#CustomStyle)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
+  }
+
+Custom details for the chat's text input. <br />
+`styles` object defines the styling for the `text` element and its box `container`. <br />
+`placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
+`style` can be used to customize it. <br />
+`characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
+`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling. <br />
+
+#### Generic example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    textInput={{
+      styles: {text: {fontSize: '16px', color: 'black'}, container: {maxHeight: '50px', backgroundColor: '#e0edff'}},
+      placeholder: {text: 'Insert text here...', style: {color: '#4f8bff'}},
+      characterLimit: 10,
+    }}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+#### Disabled example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `submitButtonStyles` {#submitButtonStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`submit?: ButtonStyles`](./sharedTypes/#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: ButtonStyles`](./sharedTypes/#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`stop?: ButtonStyles`](./sharedTypes/#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](./sharedTypes/#ButtonPosition) <br />
+  }
+
+Custom styling for the submit button. <br />
+`submit` is the default button state and `loading` is displayed when waiting for a message response. `stop` is displayed
+when a response message is being [streamed](HERE). <br />
+`position` is used to set the button position within the input area.
+
+#### SVG Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {
+            backgroundColor: '#e3f0ff',
+          },
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(58%) sepia(53%) saturate(6828%) hue-rotate(214deg) brightness(100%) contrast(100%)',
+            },
+          },
+        },
+      },
+      position: 'outside-right',
+    }}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+#### Text Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    textInput={{styles: {text: {paddingRight: '70px'}}}}
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {backgroundColor: '#e3f0ff', width: '60px'},
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
+        text: {
+          content: 'Submit',
+          styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
+        },
+      },
+      loading: {
+        text: {
+          content: 'Loading',
+        },
+      },
+      stop: {
+        text: {
+          content: 'Stop',
+        },
+      },
+    }}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+:::info
+Due to the varying states, the styling is not automatically shared between one another.
+:::
+
+<LineBreak></LineBreak>
+
+:::info
+When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to false and the `loading` property's `content` string for `text` or `svg` is not set,
+the submit button will have a loading animation.
+:::
 
 <LineBreak></LineBreak>
 
@@ -60,7 +261,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 
 <ComponentContainer>
   <DeepChatBrowser
-    service={{custom: {demo: true}}}
+    existingService={{demo: true}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
