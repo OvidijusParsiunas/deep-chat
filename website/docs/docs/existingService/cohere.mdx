@@ -1,0 +1,132 @@
+---
+sidebar_position: 2
+---
+
+# Cohere
+
+Properties used to connect to [Cohere](https://docs.cohere.com/docs).
+
+### `cohere` {#cohere}
+
+- Type: {[`textGeneration?: TextGeneration`](HERE), [`summarization?: Summarization`](HERE)}
+- Default: _{textGeneration: true}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `TextGeneration` {#TextGeneration}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?:` `"command"` | `"base"` | `"base-light"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `k?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `end_sequences?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop_sequences?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `logit_bias?: {[string]: number}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `truncate?:` `"NONE"` | `"START"` | `"END"` <br />
+  }
+
+- Default: _{model: "command", max_tokens: 1000}_
+
+Connect to Cohere's [`text generation`](https://docs.cohere.com/docs/intro-text-generation) API. <br />
+You can either set this property to _true_ or use an object to augment the [`request body`](https://docs.cohere.com/reference/generate): <br />
+`model` is the name of the model used to generate text. <br />
+`max_tokens` denotes the number of tokens to predict per generation. <br />
+`temperature` is a non-negative float that tunes the degree of randomness in generation. Lower temperatures mean less random generations. <br />
+`k` ensures only the top k most likely tokens are considered for generation at each step. The maximum value is 500. <br />
+`p` is the probability (between 0.0 and 1.0) which ensures that only the most likely tokens - with total probability mass of p are considered for generation at each step. If both `k` and `p` are set, `p` acts after `k`. <br />
+`frequency_penalty` (between 0.0 and 1.0) can be used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation. <br />
+`presence_penalty` (between 0.0 and 1.0) can be used to reduce repetitiveness of generated tokens. Similar to frequency*penalty, except that this penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies. <br />
+`end_sequences` is used to cut the generated text at the beginning of the earliest occurence of an end sequence of strings. <br />
+`stop_sequences` is used to cut the generated text at the end of the earliest occurence of stop sequence strings. <br />
+`logit_bias` is used to prevent the model from generating unwanted tokens or to incentivize it to include desired ibes. The format is {token_id: bias} where bias is a float between -10 and 10. Tokens can be obtained from text using [Tokenize](https://docs.cohere.com/reference/tokenize). E.g. if the value *{"11": -10}_ is provided, the model will be very unlikely to include the token \_11_ ("\n", the newline character) anywhere in the generated text. In contrast _{"11": 10}_ will result in generations that nearly only contain that token. <br />
+`truncate` is used to specify how the API will handle inputs longer than the maximum token length. Passing _"START"_ will discard the start of the input. _"END"_ will discard the end of the input. _"NONE"_ will throw an error when the input exceeds the maximum input token length. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        cohere: {
+          key: 'placeholder key',
+          textGeneration: {model: 'command'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        cohere: {
+          textGeneration: {model: 'command'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<LineBreak></LineBreak>
+
+### `Summarization` {#Summarization}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?:` `"summarize-xlarge"` | `"summarize-medium"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `length?`: `"auto"` | `"short"` | `"medium"` | `"long"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"auto"` | `"paragraph"` | `"bullets"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `extractiveness?:` `"auto"` | `"low"` | `"medium"` | `"high"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `additional_command?: string` <br />
+  }
+
+- Default: _{model: "summarize-xlarge"}_
+
+Connect to Cohere's [`summarize`](https://docs.cohere.com/docs/summarize) API. <br />
+You can either set this property to _true_ or use an object to augment the [`request body`](https://docs.cohere.com/reference/summarize-2): <br />
+`model` is the name of the model used to generate a summary. <br />
+`length` indicates the approximate length of the summary. _"auto"_ chooses the best option based on the input text. <br />
+`format` indicates the style in which the summary will be delivered - in a free form paragraph or in bullet points. <br />
+`extractiveness` controls how close to the original text the summary is. _"high"_ extractiveness summaries will lean towards reusing sentences verbatim, while _"low"_ extractiveness summaries will tend to paraphrase more. <br />
+`temperature` (from 0 to 5) controls the randomness of the output. Lower values tend to generate more predictable outputs, while higher values tend to generate more creative outputs. The sweet spot is typically between _0_ and _1_. <br />
+`additional_command` is a free-form instruction for modifying how the summaries get generated. Should start with _"Generate a summary \_"_. and end with Eg. _"focusing on the next steps"_ or _"written by Yoda"_. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        cohere: {
+          key: 'placeholder key',
+          summarization: {model: 'summarize-xlarge'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        cohere: {
+          summarization: {model: 'summarize-xlarge'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>

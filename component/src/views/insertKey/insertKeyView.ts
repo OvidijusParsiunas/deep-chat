@@ -3,9 +3,16 @@ import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
 import {VisibilityIcon} from './visibilityIcon';
 
 export class InsertKeyView {
+  private static createCautionText() {
+    const cautionElement = document.createElement('a');
+    cautionElement.classList.add('insert-key-input-help-text');
+    cautionElement.innerText = 'Please exercise CAUTION when inserting your API key outside of deepchat.ai or localhost!!';
+    return cautionElement;
+  }
+
   private static createHelpLink(link: string) {
     const helpElement = document.createElement('a');
-    helpElement.id = 'insert-key-input-help-link';
+    helpElement.classList.add('insert-key-input-help-text');
     helpElement.href = link;
     helpElement.innerText = 'Find more info here';
     helpElement.target = '_blank';
@@ -30,6 +37,8 @@ export class InsertKeyView {
       const helpLinkElement = InsertKeyView.createHelpLink(link);
       helpTextContentsElement.appendChild(helpLinkElement);
     }
+    const cautionTextElement = InsertKeyView.createCautionText();
+    helpTextContentsElement.appendChild(cautionTextElement);
     helpTextContainerElement.appendChild(helpTextContentsElement);
     return {helpTextContainerElement, failTextElement};
   }

@@ -4,13 +4,14 @@ sidebar_position: 1
 
 # OpenAI
 
-Properties used to connect to OpenAI API.
+Properties used to connect to [OpenAI](https://openai.com/blog/openai-api).
 
 ### `openAI` {#openAI}
 
-- Type: {[`chat?: Chat`](HERE), [`completions?: Completions`](HERE), [`images?: Images`](HERE), [`audio?: Audio`](HERE)}
+- Type: {[`completions?: Completions`](HERE), [`images?: Images`](HERE), [`audio?: Audio`](HERE)}
 - Default: _{chat: true}_
 
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -24,52 +25,72 @@ import Tabs from '@theme/Tabs';
 
 ### `Chat` {#Chat}
 
-- Type: `true` | {[`ServiceCallConfig`](HERE), [`OpenAIConverse`](HERE), [`MessageLimits`](HERE), `systemPrompt?: string`}
+- Type: `true` | {[`OpenAIConverse`](HERE), `systemPrompt?: string`}
 - Default: _{model: "gpt-3.5-turbo", systemPrompt: "You are a helpful assistant."}_
 
 Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-reference/chat/create) API. <br />
-`ServiceCallConfig` is used to preset the API `key` and optionally configure the request settings. <br />
 `OpenAIConverse` object can be used to augment the [`request body`](https://platform.openai.com/docs/api-reference/chat/create). <br />
-`MessageLimits` can be used to set limits on the number of messages that will be included in one request or even the maximum amount of characters. This is particularly useful
-if you want to limit the usage of your key. <br />
 `systemPrompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
 
 #### Example
 
-// WORK - toggle to select service and insert key - default using fake key
-
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        chat: {key: 'placeholder key', stream: true, max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          chat: {max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          chat: {max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+      chat={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <LineBreak></LineBreak>
 
 ### `Completions` {#Completions}
 
-- Type: `true` | {[`ServiceCallConfig`](HERE), [`OpenAIConverse`](HERE)}
+- Type: `true` | [`OpenAIConverse`](HERE)
 - Default: _{model: "text-davinci-003"}_
 
 Connect to Open AI's [`completions`](https://platform.openai.com/docs/api-reference/completions/create) API. <br />
-`ServiceCallConfig` is used to preset the API `key` and optionally configure the request settings. <br />
-`OpenAIConverse` object can be used to augment the [`request body`](https://platform.openai.com/docs/api-reference/chat/create). <br />
+You can either set this property to _true_ or use an `OpenAIConverse` object to augment the [`request body`](https://platform.openai.com/docs/api-reference/chat/create). <br />
 
 #### Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        completions: {key: 'placeholder key', stream: true, max_tokens: 2000},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          completions: {max_tokens: 2000},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          completions: {max_tokens: 2000},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <LineBreak></LineBreak>
 
@@ -81,15 +102,22 @@ If chat responses are inaccurate, try setting the "max_tokens" to a higher numbe
 
 ### `Images` {#Images}
 
-- Type: `true` | {[`ServiceCallConfig`](HERE), [`OpenAIImages`](HERE), [`ImageFiles`](HERE)}
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"256x256"` | `"512x512"` | `"1024x1024"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `user?: number` <br />
+  }
 - Default: _{size: "1024x1024"}_
 
 Connect to Open AI's [`Image Generation`](https://platform.openai.com/docs/guides/images) API to access DALL·E models. <br />
-`ServiceCallConfig` is used to preset the API `key` and optionally configure the request settings. <br />
-`OpenAIImages` object can be used to augment the [`request body`](https://platform.openai.com/docs/api-reference/images/create). <br />
-`ImageFiles` can be used to configure what files can be uploaded and the use of a webcam for capturing images. <br />
+You can either set this property to _true_ or use an object to augment the [`request body`](https://platform.openai.com/docs/api-reference/images/create): <br />
+`n` is the number of images to generate. Must be between 1 and 10. <br />
+`size` is the pixel dimensions of the generated images. <br />
+`response_format` is the format in which the generated images are returned. <br />
+`user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
 
-You can automatically call any of the following three APIs by adding the following inputs accordingly:
+You can automatically call any of the following three APIs by combining different inputs:
 
 - [Create Image](https://platform.openai.com/docs/api-reference/images/create) - Send text.
 - [Create Image Variation](https://platform.openai.com/docs/api-reference/images/create-variation) - Upload and send an image with no text.
@@ -97,45 +125,75 @@ You can automatically call any of the following three APIs by adding the followi
 
 #### Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        images: {key: 'placeholder key', size: '1024x1024', camera: true},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          images: {n: 2, size: '1024x1024', response_format: 'url'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          images: {n: 2, size: '1024x1024', response_format: 'url'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <LineBreak></LineBreak>
 
 ### `Audio` {#Audio}
 
-- Type: `true` | {[`ServiceCallConfig`](HERE), [`OpenAIAudio`](HERE), [`AudioFiles`](HERE), `type?:` `"transcription"` | `"translation"`}
+- Type: `true` | { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: "whisper-1"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `language?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type?:` `"transcription" | "translation"` <br />
+  }
 - Default: _{model: "whisper-1", type: "transcription"}_
 
 Connect to Open AI's [`Audio`](https://platform.openai.com/docs/api-reference/audio) API. <br />
-`ServiceCallConfig` is used to preset the API `key` and optionally configure the request settings. <br />
-`OpenAIAudio` object can be used to augment the [`request body`](https://platform.openai.com/docs/api-reference/audio/create). <br />
-`AudioFiles` can be used to configure what files can be uploaded and the use of a microphone for recording audio.
+You can either set this property to _true_ or use an object to augment the [`request body`](https://platform.openai.com/docs/api-reference/audio/create): <br />
+`model` is the name of the model to use. _"whisper-1"_ is currently the only one available. <br />
+`temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
+`language` is the language used the input audio. Supplying the input language in [_ISO-639-1_](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency. (Only used for [_transcription_](HERE) based API). <br />
 `type` is used to toggle between the [_transcription_](https://platform.openai.com/docs/api-reference/audio/create) and the [_translation_](https://platform.openai.com/docs/api-reference/audio/create) APIs.
 Note that [_translation_](https://platform.openai.com/docs/api-reference/audio/create) can only attempt to translate audio into _English_.
 
 #### Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        audio: {key: 'placeholder key', microphone: true},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          audio: {model: 'whisper-1', temperature: 0.3, language: 'en', type: 'transcription'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          audio: {model: 'whisper-1', temperature: 0.3, language: 'en', type: 'transcription'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <LineBreak></LineBreak>
 
-## Other Types
+## Shared Types
 
 Types used in [`openAI`](HERE) properties:
 
@@ -145,168 +203,47 @@ Types used in [`openAI`](HERE) properties:
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `stream?: boolean` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number` <br />
   }
 
 Object that is sent to Open AI's [`Chat`](https://platform.openai.com/docs/api-reference/chat/create) and [`Completions`](https://platform.openai.com/docs/api-reference/completions/create) API. <br />
 `model` is name of the model to be used by the API. Check out the model [endpoint compatibility table](https://platform.openai.com/docs/models/model-endpoint-compatibility). <br />
 `max_tokens` the maximum number of tokens to generate in the chat. See here for more [`info`](https://platform.openai.com/tokenizer). <br />
 `temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
-`top_p` is an alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.. <br />
-`stream` causes the message bubble to be gradually be populated.
+`top_p` is an alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. <br />
 
 #### Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        chat: {
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
           key: 'placeholder key',
-          model: 'gpt-4',
-          stream: true,
-          max_tokens: 2000,
-          temperature: 1,
-          top_p: 1,
+          chat: {
+            model: 'gpt-4',
+            max_tokens: 2000,
+            temperature: 1,
+            top_p: 1,
+          },
         },
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<LineBreak></LineBreak>
-
-:::tip
-To limit the number of characters that can be sent to the API, we recommend using the [`MessageLimits`](HERE) object for [`Chat`](HERE)
-and [`characterLimit`](HERE) for [`Completions`](HERE).
-:::
-
-<LineBreak></LineBreak>
-
-### `OpenAIImages` {#OpenAIImages}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"256x256"` | `"512x512"` | `"1024x1024"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `user?: number`, <br />
-  }
-
-Object that is sent to Open AI's [`Image Generation`](https://platform.openai.com/docs/guides/images) API. <br />
-`n` is the number of images to generate. Must be between 1 and 10. <br />
-`size` is the pixel dimensions of the generated images. <br />
-`response_format` is the format in which the generated images are returned. <br />
-`user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        images: {
-          key: 'placeholder key',
-          n: 2,
-          size: '512x512',
-          response_format: 'url',
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          chat: {
+            model: 'gpt-4',
+            max_tokens: 2000,
+            temperature: 1,
+            top_p: 1,
+          },
         },
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<LineBreak></LineBreak>
-
-### `ImageFiles` {#ImageFiles}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`FilesUploader`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; camera?: `true` | {[`button?: Button`](HERE), [`modalContainerStyle?: CustomStyle`](HERE), `format?:` `"png"` | `"jpeg"`} <br />
-  }
-
-Configuration for image files that can be sent to an existing service API. <br />
-`FilesUploader` is used to configure what files can be sent to the service and customize the styling of elements that help facilitate this. <br />
-`camera` toggles the ability to use a web camera to capture the image files and it can be set as an object to define further details; `button` is used to
-change the styling of the camera button in the inputs area, `modalContainerStyle` is used to style the modal which the camera appears in and `format` is used
-to set the camera's output file format. <br />
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        images: {
-          key: 'placeholder key',
-          files: {acceptedFormats: '.png,.jpeg'},
-          button: {position: 'outside-right'},
-          camera: {button: {position: 'outside-left'}, modalContainerStyle: {borderRadius: '5px'}, format: 'png'},
-        },
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<LineBreak></LineBreak>
-
-### `OpenAIAudio` {#OpenAIAudio}
-
-- Type: {`model?: "whisper-1"`, `temperature?: number`, `language?: string`}
-
-Object that is sent to Open AI's [`Audio`](https://platform.openai.com/docs/api-reference/audio) API. <br />
-`model` is the name of the model to use. _"whisper-1"_ is currently the only one available. <br />
-`temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
-`language` is the language used the input audio. Supplying the input language in [_ISO-639-1_](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency. (Only used for [_transcription_](HERE) based API).
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        audio: {
-          key: 'placeholder key',
-          model: 'whisper-1',
-          temperature: 0.3,
-          language: 'en',
-          type: 'translation',
-        },
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<LineBreak></LineBreak>
-
-### `AudioFiles` {#AudioFiles}
-
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`FilesUploader`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `microphone?:` `true` | {[`styles?: MicrophoneStyles`](HERE), `maxDurationSeconds?: number`, [`format?: AudioFormat`](HERE)} <br />
-  }
-
-Configuration for audio files that can be sent to an existing service API. <br />
-`FilesUploader` is used to configure what files can be sent to the service and customize the styling of elements that help facilitate this. <br />
-`microphone` toggles the ability to use a microphone to record audio files and it can be set as an object to define further details; `styles` is used to
-change the styling of the microphone button, `maxDurationSeconds` is the maximum number of seconds for each recording and `format` is used
-to set the microphone's output file format. <br />
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    service={{
-      openAI: {
-        audio: {
-          key: 'placeholder key',
-          files: {acceptedFormats: '.mp3,.wav'},
-          button: {position: 'outside-right'},
-          microphone: {button: {position: 'outside-left'}, maxDurationSeconds: 10, format: 'mp3'},
-        },
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <LineBreak></LineBreak>

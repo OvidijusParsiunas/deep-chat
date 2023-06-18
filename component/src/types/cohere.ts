@@ -2,7 +2,7 @@ import {GenericObject} from './object';
 
 // https://docs.cohere.com/reference/summarize-2
 export interface CohereSummarizationConfig {
-  model?: 'summarize-medium' | 'summarize-xlarge';
+  model?: 'summarize-xlarge' | 'summarize-medium';
   length?: 'auto' | 'short' | 'medium' | 'long';
   format?: 'auto' | 'paragraph' | 'bullets';
   extractiveness?: 'auto' | 'low' | 'medium' | 'high';
@@ -12,7 +12,7 @@ export interface CohereSummarizationConfig {
 
 // https://docs.cohere.com/reference/generate
 export interface CohereGenerateConfig {
-  model?: 'base-light' | 'base';
+  model?: 'command' | 'base' | 'base-light';
   max_tokens?: number; // we default it to 1000
   temperature?: number;
   k?: number;

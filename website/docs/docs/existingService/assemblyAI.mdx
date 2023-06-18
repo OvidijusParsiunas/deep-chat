@@ -1,0 +1,49 @@
+---
+sidebar_position: 3
+---
+
+# AssemblyAI
+
+Properties used to connect to [AssemblyAI](https://www.assemblyai.com/).
+
+### `assemblyAI` {#assemblyAI}
+
+- Type: `true` | {`audio?: true`}
+- Default: _{audio: true}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/Models/speech_recognition) API to transcribe your audio.
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        assemblyAI: {
+          key: 'placeholder key',
+          audio: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        assemblyAI: {
+          audio: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+<LineBreak></LineBreak>

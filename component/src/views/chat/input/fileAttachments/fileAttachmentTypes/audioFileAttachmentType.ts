@@ -25,7 +25,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
 
   private static addAudioElements(oldContainer: HTMLElement, fileReaderResult: string) {
     // this is a simple workaround to remove all event listeners from the placeholder element
-    const container = ElementUtils.cloneElement(oldContainer);
+    const container = oldContainer.parentElement ? ElementUtils.cloneElement(oldContainer) : oldContainer;
     const audio = document.createElement('audio');
     audio.src = fileReaderResult;
     const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);

@@ -4,15 +4,77 @@ sidebar_position: 2
 
 # Existing Service
 
-Deep Chat can be configured to connect to an existing service.
+Deep Chat can be configured to connect to an existing API service. The component's configuration
+(such as file upload buttons / message limits) is automatically changed to suit the target API.
+Nevertheless everything can be overwritten manually. <br />
+
+:::caution
+The component allows the user to type their API key directly into the component or for the developer to embed it as an attribute via [`APIKey`](HERE). This is
+intended for **prototyping purposes ONLY** and when going live you should instead use the [`request`](HERE) property to direct the calls through your own service.
+Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
+:::
 
 ### `existingService` {#existingService}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`openAI?: OpenAI`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`huggingFace?: HuggingFace`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`azure?: Azure`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`cohere?: Cohere`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`assemblyAI?: AssemblyAI`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`demo?: Demo`](HERE) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; openAI?: {[`OpenAI`](HERE), [`APIKey`](HERE)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; huggingFace?: {[`HuggingFace`](HERE), [`APIKey`](HERE)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; azure?: {[`Azure`](HERE), [`APIKey`](HERE)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; cohere?: {[`Cohere`](HERE), [`APIKey`](HERE)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; assemblyAI?: {[`AssemblyAI`](HERE), [`APIKey`](HERE)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; demo?: [`Demo`](HERE) <br />
   }
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Types
+
+Shared types for the `existingService` property.
+
+### `APIKey` {#APIKey}
+
+- Type: {`key?: string`, `validateKeyProperty?: boolean`}
+
+These object properties are used to load up the chat view without the user having to insert the API key. <br />
+`key` is the target service's API key required for authentication. <br />
+`validateKeyProperty` is used to validate the value that is set for the `key` property. This will render a loading circle before the chat view
+is loaded up during the validation period.
+
+:::caution
+This object is intended to be used for **prototyping purposes ONLY** and should not be deployed to an environment as users with malicious intent will be able to access it in the browser.
+Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to build your own service that uses an existing service API.
+:::
+
+#### Key Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    existingService={{
+      openAI: {
+        key: 'placeholder key',
+        chat: {systemPrompt: 'Assist me with anything you can'},
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+#### Validation Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    existingService={{
+      openAI: {
+        key: 'incorrect key',
+        validateKeyProperty: true,
+        chat: {systemPrompt: 'Assist me with anything you can'},
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
