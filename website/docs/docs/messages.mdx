@@ -58,15 +58,12 @@ is not taken into consideration when calculating [`requestBodyMessageLimits`](HE
 
 <LineBreak></LineBreak>
 
-// WORK - default should allow src image to be displayed
-
 ### `avatars` {#avatars}
 
-- Type: `true` | {[`default?: Avatar*`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
+- Type: `true` | {[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
 
 Add avatars beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Avatar`](HERE) properties. The `default` property does not contain `src` and is applied
-to both `ai` and `user`.
+or by defining an object with [`Avatar`](HERE) properties. The `default` property is applied to both roles.
 
 #### Example
 
@@ -127,15 +124,12 @@ This object is used to configure avatars that are displayed beside messages. <br
 
 <LineBreak></LineBreak>
 
-// WORK - default should allow text
-
 ### `names` {#names}
 
-- Type: `true` | {[`default?: Name*`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
+- Type: `true` | {[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
 
 Add names beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Name`](HERE) properties. The `default` property's object does
-not contain `text` and is applied to both `ai` and `user`. <br />
+or by defining an object with [`Name`](HERE) properties. The `default` property is applied to both roles. <br />
 
 #### Example
 
@@ -221,22 +215,21 @@ will automatically have a loading animation.
 
 - Default: _{ displayServiceErrorMessages: false, overrides: {default: "Error, please try again." }}_
 
-DeepChat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
+Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
 is for communication with the target service and `speechToTextInput` is when there is a problem using the [`speechToTextInput`](HERE)
 functionality. <br />
 
-// WORK - add speech to text microphone here
-
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
-    existingService={{demo: {displayErrors: {service: true, speechToTextInput: true}}}}
+    existingService={{demo: {displayErrors: {default: true, service: true, speechToTextInput: true}}}}
     errorMessages={{
       overrides: {
-        service: 'Service error!',
+        default: 'Default error :(',
+        service: 'Target service error!',
         speechToTextInput: 'Speech to text microphone error!',
       }
     }}

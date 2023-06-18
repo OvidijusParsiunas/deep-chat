@@ -22,9 +22,9 @@ export class AvatarEl {
   private static createAvatar(isAI: boolean, avatars?: CustomAvatars) {
     const avatar = document.createElement('img');
     if (isAI) {
-      avatar.src = avatars?.ai?.src || aiLogoUrl;
+      avatar.src = avatars?.ai?.src || avatars?.default?.src || aiLogoUrl;
     } else {
-      avatar.src = avatars?.user?.src || avatarUrl;
+      avatar.src = avatars?.user?.src || avatars?.default?.src || avatarUrl;
     }
     avatar.classList.add('avatar');
     const avatarContainer = document.createElement('div');

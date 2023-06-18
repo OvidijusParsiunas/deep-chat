@@ -79,13 +79,11 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 Creates a button that allows the user to record audio files using the microphone. <br />
 This property can be set with a boolean _true_ or configured with a [`MicrophoneFilesServiceConfig`](HERE) object.
 
-// WORK
-
 <ComponentContainer>
   <DeepChatBrowser
     introMessage={`Use the microphone button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
-    microphoneAudio={true}
+    microphone={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -325,13 +323,11 @@ Configuration for recording audio using a microphone and handling the resultant 
 `files` is used to configure the resultant files that are recorded by the microphone. <br />
 `button` is the styling used for the microphone button element. <br />
 
-// WORK
-
 <ComponentContainer>
   <DeepChatBrowser
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
-    microphoneAudio={{
+    microphone={{
       request: {url: 'https://customapi.com/audio-from-microphone'},
       files: {format: 'mp3'},
       button: {position: 'outside-left'},

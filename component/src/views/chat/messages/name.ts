@@ -14,9 +14,9 @@ export class Name {
 
   private static getNameText(isAI: boolean, names: CustomNames) {
     if (isAI) {
-      return names.ai?.text || 'AI';
+      return names.ai?.text || names.default?.text || 'AI';
     }
-    return names.user?.text || 'User';
+    return names.user?.text || names.default?.text || 'User';
   }
 
   private static createName(isAI: boolean, names: CustomNames) {

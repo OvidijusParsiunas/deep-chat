@@ -12,7 +12,7 @@ export interface Avatar {
 }
 
 export interface CustomAvatars {
-  default?: Omit<Avatar, 'src'>;
+  default?: Avatar;
   user?: Avatar;
   ai?: Avatar;
 }

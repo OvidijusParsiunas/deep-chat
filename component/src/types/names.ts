@@ -7,7 +7,7 @@ export interface Name {
 }
 
 export interface CustomNames {
-  default?: Omit<Name, 'text'>;
+  default?: Name;
   ai?: Name;
   user?: Name;
 }
