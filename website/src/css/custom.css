@@ -166,6 +166,27 @@ code {
   justify-content: center;
 }
 
+.documentation-button {
+  padding: 10px;
+  font-size: 15px;
+  background-color: #3b8ddf;
+  border: unset;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.1s;
+  user-select: none;
+}
+
+.documentation-button:hover {
+  background-color: #4b99e7;
+}
+
+.documentation-button:active {
+  background-color: #3f90e0;
+}
+
 .component-key-toggle-button-container {
   display: flex;
   justify-content: center;
@@ -174,42 +195,7 @@ code {
 
 .component-key-toggle-button {
   padding: 9px;
-  background-color: #3b8ddf;
-  border: unset;
-  border-radius: 5px;
-  color: white;
   font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: 0.1s;
-}
-
-.component-key-toggle-button:hover {
-  background-color: #4b99e7;
-}
-
-.component-key-toggle-button:active {
-  background-color: #3f90e0;
-}
-
-.documentation-method-button {
-  padding: 10px;
-  background-color: #3b8ddf;
-  border: unset;
-  border-radius: 5px;
-  color: white;
-  font-size: 15px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: 0.1s;
-}
-
-.documentation-method-button:hover {
-  background-color: #4b99e7;
-}
-
-.documentation-method-button:active {
-  background-color: #3f90e0;
 }
 
 .prism-code {

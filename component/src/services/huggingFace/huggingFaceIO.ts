@@ -54,7 +54,6 @@ export class HuggingFaceIO extends IExistingServiceIO {
       completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
-    console.log(body);
     HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 }

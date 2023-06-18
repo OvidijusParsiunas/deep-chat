@@ -1,18 +1,3 @@
-// https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
-export interface HuggingFaceConversationConfig {
-  parameters?: {
-    min_length?: number;
-    max_length?: number;
-    top_k?: number;
-    top_p?: number;
-    temperature?: number;
-    repetition_penalty?: number;
-  };
-  options?: {
-    use_cache?: boolean;
-  };
-}
-
 // https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task
 export interface HuggingFaceQuestionAnswerConfig {
   context: string;
@@ -55,8 +40,22 @@ export interface HuggingFaceTextGenerationConfig {
     temperature?: number;
     repetition_penalty?: number;
     max_new_tokens?: number;
-    return_full_text?: boolean;
     do_sample?: boolean;
+  };
+  options?: {
+    use_cache?: boolean;
+  };
+}
+
+// https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task
+export interface HuggingFaceConversationConfig {
+  parameters?: {
+    min_length?: number;
+    max_length?: number;
+    top_k?: number;
+    top_p?: number;
+    temperature?: number;
+    repetition_penalty?: number;
   };
   options?: {
     use_cache?: boolean;
@@ -73,7 +72,7 @@ export type HuggingFace = {
   summarization?: true | (HuggingFaceModel & HuggingFaceSummarizationConfig);
   translation?: true | (HuggingFaceModel & HuggingFaceTranslationConfig);
   fillMask?: true | (HuggingFaceModel & HuggingFaceFillMaskConfig);
-  questionAnswer?: HuggingFaceQuestionAnswerConfig & HuggingFaceModel;
+  questionAnswer?: HuggingFaceModel & HuggingFaceQuestionAnswerConfig;
   audioSpeechRecognition?: true | HuggingFaceModel;
   audioClassification?: true | HuggingFaceModel;
   imageClassification?: true | HuggingFaceModel;

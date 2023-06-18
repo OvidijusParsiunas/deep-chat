@@ -8,7 +8,10 @@ export default function ContainersKeyToggle({children}) {
       {displayFirst && <ComponentContainer>{children[0]}</ComponentContainer>}
       {!displayFirst && <ComponentContainer>{children[1]}</ComponentContainer>}
       <div className="component-key-toggle-button-container">
-        <button className="component-key-toggle-button" onClick={() => setDisplayFirst(!displayFirst)}>
+        <button
+          className={'documentation-button component-key-toggle-button'}
+          onClick={() => setDisplayFirst(!displayFirst)}
+        >
           {displayFirst && 'Insert test key'}
           {!displayFirst && 'Use placeholder key'}
         </button>

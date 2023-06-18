@@ -8,7 +8,7 @@ export class HuggingFaceTranslationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
     const config = deepChat.existingService?.huggingFace?.translation as NonNullable<HuggingFace['translation']>;
     const apiKey = deepChat.existingService?.huggingFace;
-    super(deepChat, 'Insert text to translate', 't5-base', config, apiKey);
+    super(deepChat, 'Insert text to translate', 'Helsinki-NLP/opus-tatoeba-en-ja', config, apiKey);
   }
 
   override async extractResultData(result: HuggingFaceTranslationResult): Promise<Result> {
