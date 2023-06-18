@@ -1,0 +1,167 @@
+---
+sidebar_position: 3
+---
+
+# Azure
+
+Properties used to connect to [Azure Cognitive Services](https://learn.microsoft.com/en-gb/azure/cognitive-services/).
+
+### `azure` {#azure}
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`summarization?: Summarization`](HERE), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](HERE)<br />
+  }
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `TextToSpeech` {#TextToSpeech}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `region: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `name?: string` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `gender?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `outputFormat?: string` <br />
+  }
+
+- Default: _{lang: "en-US", name: "en-US-JennyNeural", gender: "Female", outputFormat: "audio-16khz-128kbitrate-mono-mp3"}_
+
+Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/rest-text-to-speech?tabs=streaming#convert-text-to-speech) API. <br />
+`region` is a required string property to denote the region of your speech service, e.g. _"eastus"_. <br />
+`lang` is the locale (BCP-47) string code for the language of the audio output. See [here](https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/language-support?tabs=tts) for available options. <br />
+`name` is the name of the voice used for the audio output. See [here](https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/language-support?tabs=tts) for available options. <br />
+`gender` is the gender of the audio output voice. E.g. _"Female"_ or _"Male"_. <br />
+`outputFormat` is the output audio format. See [here](https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/rest-text-to-speech?tabs=streaming#audio-outputs) for available options. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          key: 'placeholder key',
+          textToSpeech: {region: 'eastus'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          textToSpeech: {region: 'eastus'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<LineBreak></LineBreak>
+
+### `SpeechToText` {#SpeechToText}
+
+- Type: {`region: string`, `lang?: string`}
+- Default: _{lang: "en-US"}_
+
+Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/cognitive-services/speech-service/rest-speech-to-text) API. <br />
+`region` is a required string property to denote the region of your speech service, e.g. _"eastus"_. <br />
+`lang` is the locale (BCP-47) string code for the language of the input output. See [here](https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=stt) for available options. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          key: 'placeholder key',
+          speechToText: {region: 'eastus'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          speechToText: {region: 'eastus'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<LineBreak></LineBreak>
+
+### `Summarization` {#Summarization}
+
+- Type: {`endpoint: string`, `language?: string`}
+- Default: _{language: "en"}_
+
+Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/overview?tabs=document-summarization) API. Please read [here](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/quickstart?tabs=document-summarization%2Cwindows&pivots=rest-api) how to generate a language service. <br />
+`endpoint` is a full endpoint for your generated language service. <br />
+`language` is the [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.) for the language of your text. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    existingService={{
+      azure: {
+        key: 'placeholder name',
+        summarization: {endpoint: 'https://placeholderresource.cognitiveservices.azure.com'},
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `Translation` {#Translation}
+
+- Type: {`region?: string`, `language?: string`}
+- Default: _{language: "es"}_
+
+Connect to Azure's [`tranlsation`](https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference) API.
+`region` is the region of your translator resource. Thi is optional if your resource is global. <br />
+`language` is the [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.) for the language you are translating to from English. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          key: 'placeholder key',
+          translation: {region: 'eastus', language: 'ja'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        azure: {
+          translation: {region: 'eastus', language: 'ja'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<LineBreak></LineBreak>

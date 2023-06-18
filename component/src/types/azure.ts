@@ -1,5 +1,3 @@
-import {FilesUploader} from './fileServiceConfigs';
-
 // https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
 export interface AzureTranslationConfig {
   language?: string;
@@ -19,15 +17,14 @@ export interface AzureSpeechToTextConfig {
   lang?: string;
 }
 
-// eslint-disable-next-line max-len
 // https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/language-support?tabs=tts
 // https://speech.microsoft.com/portal/voicegallery
 // https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/rest-text-to-speech?tabs=streaming
 export interface AzureTextToSpeechConfig {
-  outputFormat?: string;
   lang?: string;
-  gender?: string;
   name?: string;
+  gender?: string;
+  outputFormat?: string;
 }
 
 export interface AzureRegion {
@@ -36,7 +33,7 @@ export interface AzureRegion {
 
 export interface Azure {
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig;
-  speechToText?: AzureRegion & AzureSpeechToTextConfig & FilesUploader;
+  speechToText?: AzureRegion & AzureSpeechToTextConfig;
   summarization?: AzureEndpoint & AzureSummarizationConfig;
   translation?: Partial<AzureRegion> & AzureTranslationConfig;
 }

@@ -5,9 +5,7 @@ import {CustomStyle} from './styles';
 import {Request} from './request';
 import {Button} from './button';
 
-export type FilesUploader = {files?: FileAttachments; button?: Button};
-
-export type FilesServiceConfig = {request?: Request} & FilesUploader;
+export type FilesServiceConfig = {request?: Request; files?: FileAttachments; button?: Button};
 
 export type CameraFilesServiceConfig = {
   request?: Request;

@@ -134,11 +134,12 @@ Types shared by files properties:
 
 ### `FilesServiceConfig` {#FilesServiceConfig}
 
-- Type: {[`request?: Request`](HERE), [`FilesUploader`](HERE)}
+- Type: {[`request?: Request`](HERE), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button)}
 
 Object used to configure the ability for the component to send files. <br />
 `request` object is used to override the default service request settings when sending a file. <br />
-`FilesUploader` is used to configure what files can be sent to the target service and change the styling of the button that facilitates this. <br />
+`files` controls what files can be uploaded to the component. <br />
+`button` is used to customize the the button element that enables the files to be uploaded. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -147,25 +148,6 @@ Object used to configure the ability for the component to send files. <br />
     images={{
       request: {url: 'https://customapi.com/image'},
       files: {acceptedFormats: '.jpg,.png'},
-      button: {position: 'outside-left'},
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<LineBreak></LineBreak>
-
-### `FilesUploader` {#FilesUploader}
-
-- Type: {[`files?: FileAttachments`](#FileAttachments), [`button?: Button`](../sharedTypes#Button)}
-
-Control what files can be uploaded and the customization of the button that enables this. <br />
-
-<ComponentContainer>
-  <DeepChatBrowser
-    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
-    existingService={{demo: true}}
-    audio={{
-      files: {acceptedFormats: '.mp3,.wav'},
       button: {position: 'outside-left'},
     }}
   ></DeepChatBrowser>

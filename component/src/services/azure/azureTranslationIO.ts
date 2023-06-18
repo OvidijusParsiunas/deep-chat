@@ -22,7 +22,7 @@ export class AzureTranslationIO extends IExistingServiceIO {
     const apiKey = deepChat.existingService?.azure;
     super(
       deepChat,
-      AzureUtils.buildTranslationKeyVerificationDetails(config.region as string),
+      AzureUtils.buildTranslationKeyVerificationDetails(config.region),
       AzureUtils.buildTranslationHeaders.bind({}, config?.region), apiKey);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }

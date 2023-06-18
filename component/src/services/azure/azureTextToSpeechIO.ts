@@ -28,11 +28,11 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     const apiKey = deepChat.existingService?.azure;
     super(deepChat,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
-      config.region, apiKey, {audio: {}});
+      config.region, apiKey);
     Object.assign(this.rawBody, config);
     this.rawBody.lang ??= 'en-US';
-    this.rawBody.gender ??= 'Female';
     this.rawBody.name ??= 'en-US-JennyNeural';
+    this.rawBody.gender ??= 'Female';
     this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
   }
 
