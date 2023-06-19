@@ -1,0 +1,83 @@
+---
+sidebar_position: 13
+---
+
+# Interceptors
+
+Message transaction functionality can be intercepted to change its behaviour by assigning a function to a property.
+
+### `requestInterceptor` {#requestInterceptor}
+
+- Type: ([`RequestDetails`](HERE)) => [`RequestDetails`](HERE)
+
+Triggered before a message is sent and can be used to observe/alter the outgoing details. The method MUST return a [`RequestDetails`](HERE) object.
+
+#### Example
+
+import ComponentContainerInterceptors from '@site/src/components/table/componentContainerInterceptors';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import ActiveTable from '@site/src/components/table/activeTableBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<ComponentContainerInterceptors propertyName={'requestInterceptor'}>
+  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainerInterceptors>
+
+<LineBreak></LineBreak>
+
+:::info
+Remember that by default - a request will contain all chat messages in order to allow the target service to interpret the chat context as needed.
+:::
+
+<LineBreak></LineBreak>
+
+#### `RequestDetails` {#RequestDetails}
+
+- Type: {`body: any`, `headers: {[key: string]: string}`}
+
+`body` is the outgoing requests's message contents. <br />
+`headers` is the outgoing requests's header contents. <br />
+
+<LineBreak></LineBreak>
+
+### `responseInterceptor` {#responseInterceptor}
+
+- Type: (`response: any`) => [`Result`](HERE)
+
+Triggered when a message has been retrieved from the target service and can be used to observe/alter the incoming details. The `response` argument can contain any type,
+however this method MUST return a [`Result`](HERE) type object (or an object structure returned by a selected [`existingService`](HERE)).
+
+#### Example
+
+<ComponentContainerInterceptors propertyName={'responseInterceptor'}>
+  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainerInterceptors>
+
+<LineBreak></LineBreak>
+
+### `validateMessageBeforeSending` {#validateMessageBeforeSending}
+
+- Type: (`text?: string`, `files?: File[]`) => `boolean`
+
+Triggered before a message is sent out in order to validate if it should be sent out to the target service. <br />
+`text` argument is the text content of the message and `files` is an array that contains any files that are to be sent out along with the message. <br />
+The method must return a boolean value with either _true_ or _false_ for whether the message should be sent.
+
+#### Example
+
+<ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'}>
+  <DeepChatBrowser existingService={{demo: true}} mixedFiles={true}></DeepChatBrowser>
+</ComponentContainerInterceptors>
+
+<LineBreak></LineBreak>
+
+:::info
+Please note that because files objects are not serializable, their details are not fully displayed in this example.
+:::
+
+<LineBreak></LineBreak>

@@ -19,7 +19,7 @@ This behaviour can be altered by using the [`requestBodyMessageLimits`](#request
 - When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
 
 The **response** message body needs to have the following JSON type: <br />
-&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result[]`](HERE), `error?: string`} <br />
+&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result`](HERE), `error?: string`} <br />
 
 Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to set up your own server.
 
@@ -122,5 +122,15 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<LineBreak></LineBreak>
+
+### `Result` {#Result}
+
+- Type: {`text?: string`, [`files?: MessageFile[]`](HERE)}
+
+Object containing result information retrieved from the target service. <br />
+`text` is the message text content. <br />
+`files` is an array of details about response files.
 
 <LineBreak></LineBreak>

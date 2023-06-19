@@ -30,7 +30,7 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
     this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
   }
 
-  private static canFileSendMessage(_: string, files?: File[]) {
+  private static canFileSendMessage(_?: string, files?: File[]) {
     return !!files?.[0];
   }
 

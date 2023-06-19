@@ -6,7 +6,7 @@ type Finish = () => void;
 
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
-  private static readonly EXAMPLE_AI_MESSAGE = 'Hello I am a helpful assistant!';
+  private static readonly EXAMPLE_AI_MESSAGE = 'Hello! I am a helpful AI assistant!';
   private static readonly EXAMPLE_AI_STREAMED_MESSAGE = 'How are you doing?'.split(' ');
 
   public static request(messages: Messages, onFinish: Finish, responseInterceptor: ResponseInterceptor) {

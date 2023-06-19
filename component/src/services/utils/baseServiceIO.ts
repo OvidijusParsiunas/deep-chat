@@ -46,8 +46,8 @@ export class BaseServiceIO implements ServiceIO {
     this._existingServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
   }
 
-  private static canSendMessage(text: string, files?: File[]) {
-    return text.trim() !== '' || !!(files && files.length > 0);
+  private static canSendMessage(text?: string, files?: File[]) {
+    return !!(text && text.trim() !== '') || !!(files && files.length > 0);
   }
 
   verifyKey(_key: string, _keyVerificationHandlers: KeyVerificationHandlers) {}

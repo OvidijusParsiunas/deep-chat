@@ -46,8 +46,8 @@ export class OpenAIImagesIO extends IExistingServiceIO {
     this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
   }
 
-  private static canFileSendMessage(text: string, files?: File[]) {
-    return !!files?.[0] || text.trim() !== '';
+  private static canFileSendMessage(text?: string, files?: File[]) {
+    return !!files?.[0] || !!(text && text.trim() !== '');
   }
 
   private static createFormDataBody(body: OpenAIImages, image: File, mask?: File) {

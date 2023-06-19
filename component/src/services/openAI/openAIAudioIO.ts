@@ -44,7 +44,7 @@ export class OpenAIAudioIO extends IExistingServiceIO {
     this.canSendMessage = validateMessageBeforeSending || OpenAIAudioIO.canSendFileMessage;
   }
 
-  private static canSendFileMessage(_: string, files?: File[]) {
+  private static canSendFileMessage(_?: string, files?: File[]) {
     return !!files?.[0];
   }
 

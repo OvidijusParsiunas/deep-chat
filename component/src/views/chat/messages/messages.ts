@@ -40,7 +40,6 @@ export class Messages {
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
-  private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _remarkable: Remarkable;
@@ -59,7 +58,6 @@ export class Messages {
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._speechOutput = deepChat.speechOutput;
-    this._dispatchEvent = deepChat.dispatchEvent.bind(deepChat);
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;

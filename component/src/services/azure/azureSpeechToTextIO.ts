@@ -37,7 +37,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     this.recordAudio = undefined; // recorded audio files do not seem to work - investigate in the future
   }
 
-  private static canFileSendMessage(_: string, files?: File[]) {
+  private static canFileSendMessage(_?: string, files?: File[]) {
     return !!files?.[0];
   }
 
