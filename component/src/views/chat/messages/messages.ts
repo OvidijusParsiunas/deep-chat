@@ -67,7 +67,7 @@ export class Messages {
     if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
-    deepChat.getMessages = () => this.messages;
+    deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     if (demo) this.prepareDemo(demo);
   }
 

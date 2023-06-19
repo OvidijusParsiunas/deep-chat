@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function extractChildTableElement(containerElement) {
+export function extractChildChatElement(containerElement) {
   return containerElement?.children[0]?.children[0];
 }
 

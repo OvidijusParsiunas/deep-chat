@@ -1,5 +1,5 @@
-import ComponentContainer, {extractChildTableElement} from '@site/src/components/table/componentContainer';
-import LiveTableData from './liveTableData';
+import ComponentContainer, {extractChildChatElement} from '@site/src/components/table/componentContainer';
+import LiveData from './liveData';
 import React from 'react';
 
 // using child to prevent table re-render
@@ -19,12 +19,12 @@ const EventText = React.forwardRef((_, ref) => {
   return (
     <div>
       Latest events:
-      <LiveTableData data={eventsText}></LiveTableData>
+      <LiveData data={eventsText}></LiveData>
     </div>
   );
 });
 
-export default function TableContainerEvents({children, propertyname}) {
+export default function TableContainerEvents({children, propertyName}) {
   const tableContainerRef = React.useRef(null);
   const eventTextRef = React.useRef(null);
 
@@ -32,11 +32,11 @@ export default function TableContainerEvents({children, propertyname}) {
     const syncReference = tableContainerRef.current;
     setTimeout(() => {
       if (tableContainerRef.current && eventTextRef.current) {
-        const activeTableReference = extractChildTableElement(tableContainerRef.current.children[0]);
-        activeTableReference[propertyname] = eventTextRef.current?.updateText;
+        const activeTableReference = extractChildChatElement(tableContainerRef.current.children[0]);
+        activeTableReference[propertyName] = eventTextRef.current?.updateText;
       } else {
-        const activeTableReference = extractChildTableElement(syncReference.children[0]);
-        activeTableReference[propertyname] = () => {};
+        const activeTableReference = extractChildChatElement(syncReference.children[0]);
+        activeTableReference[propertyName] = () => {};
       }
     });
   }

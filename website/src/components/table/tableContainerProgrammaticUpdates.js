@@ -1,4 +1,4 @@
-import ComponentContainer, {extractChildTableElement} from '@site/src/components/table/componentContainer';
+import ComponentContainer, {extractChildChatElement} from '@site/src/components/table/componentContainer';
 import React from 'react';
 
 // WARNING:
@@ -54,7 +54,7 @@ export default function TableContainerProgrammaticUpdates({children, isStock, mi
     if (programmaticUpdateTableContainer.current) {
       const updateFunc = isStock ? updateStockCell : updateComputerCell;
       setTimeout(() => {
-        const activeTableReference = extractChildTableElement(programmaticUpdateTableContainer.current?.children[0]);
+        const activeTableReference = extractChildChatElement(programmaticUpdateTableContainer.current?.children[0]);
         updateFunc(activeTableReference);
       });
     }

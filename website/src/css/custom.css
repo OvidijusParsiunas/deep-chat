@@ -102,7 +102,7 @@ img + h2 {
 }
 
 .menu__list {
-  width: 200px !important;
+  width: 210px !important;
 }
 
 .navbar__link--active {
@@ -164,6 +164,11 @@ code {
   border: unset;
   display: flex;
   justify-content: center;
+}
+
+.method-example-container {
+  justify-content: left;
+  display: block;
 }
 
 .documentation-button {

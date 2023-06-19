@@ -1,0 +1,63 @@
+---
+sidebar_position: 11
+---
+
+# Methods
+
+Method properties that can be called directly on the Deep Chat element.
+
+:::info
+Make sure the Deep Chat component has been fully rendered on the DOM before using these.
+:::
+
+### `getMessages` {#getMessages}
+
+- Type: [`() => MessageContent[]`](HERE)
+
+Returns details of messages inside the chat.
+
+#### Example
+
+import ComponentContainerMethods from '@site/src/components/table/componentContainerMethods';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<ComponentContainerMethods propertyName={'getMessages'}>
+  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<LineBreak></LineBreak>
+
+### `submitUserMessage` {#submitUserMessage}
+
+- Type: (`userText: string`, [`files?: File[]`](HERE)) => `void`
+
+Send a user message programmatically.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={'User message'}>
+  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<LineBreak></LineBreak>
+
+### `focusInput` {#focusInput}
+
+- Type: `() => void`
+
+Focuses the cursor on the text input.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'focusInput'} displayResults={false}>
+  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<LineBreak></LineBreak>
