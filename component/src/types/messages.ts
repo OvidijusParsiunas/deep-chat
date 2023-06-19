@@ -30,7 +30,7 @@ export type MessageRole = 'user' | 'ai';
 
 export type MessageContent = InterfacesUnion<{role: MessageRole; text: string} | {role: MessageRole; file: MessageFile}>;
 
-export type OnNewMessage = (message: MessageContent, isInitial: boolean) => void;
+export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boolean}) => void;
 
 export interface ErrorMessageOverrides {
   default?: string;

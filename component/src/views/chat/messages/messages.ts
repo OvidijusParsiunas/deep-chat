@@ -4,6 +4,7 @@ import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
+import {FireEvents} from '../../../utils/events/fireEvents';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
@@ -23,7 +24,6 @@ import {
   MessageRoleStyles,
   MessageContent,
   MessageStyles,
-  OnNewMessage,
 } from '../../../types/messages';
 
 export interface MessageElements {
@@ -39,7 +39,7 @@ export class Messages {
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
-  private readonly _onNewMessage?: OnNewMessage;
+  private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
   private readonly _dispatchEvent: (event: Event) => void;
   private readonly _speechOutput?: boolean;
   private readonly _displayLoadingMessage?: boolean;
@@ -60,7 +60,7 @@ export class Messages {
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._speechOutput = deepChat.speechOutput;
     this._dispatchEvent = deepChat.dispatchEvent.bind(deepChat);
-    this._onNewMessage = deepChat.onNewMessage;
+    this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
@@ -202,7 +202,6 @@ export class Messages {
 
   public sendClientUpdate(message: MessageContent, isInitial = false) {
     this._onNewMessage?.(message, isInitial);
-    this._dispatchEvent(new CustomEvent('new-message', {detail: {message, isInitial}}));
   }
 
   // prettier-ignore

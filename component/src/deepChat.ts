@@ -14,6 +14,7 @@ import {GoogleFont} from './utils/webComponent/googleFont';
 import {SubmitButtonStyles} from './types/submitButton';
 import {ExistingService} from './types/existingService';
 import {Property} from './utils/decorators/property';
+import {FireEvents} from './utils/events/fireEvents';
 import {MicrophoneStyles} from './types/microphone';
 import {DropupStyles} from './types/dropupStyles';
 import {ErrorView} from './views/error/errorView';
@@ -117,10 +118,10 @@ export class DeepChat extends InternalHTML {
   responseInterceptor?: ResponseInterceptor;
 
   @Property('function')
-  onNewMessage?: OnNewMessage;
+  onNewMessage: OnNewMessage = () => {};
 
   @Property('function')
-  onComponentRender?: () => void = () => {};
+  onComponentRender: () => void = () => {};
 
   @Property('function')
   validateMessageBeforeSending?: ValidateMessageBeforeSending;
@@ -192,7 +193,7 @@ export class DeepChat extends InternalHTML {
       ErrorView.render(this._elementRef, 'Please define "request" with a "url"');
     }
     this._hasBeenRendered = true;
-    this.onComponentRender?.();
+    FireEvents.onRender(this);
   }
 }
 

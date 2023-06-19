@@ -12,8 +12,8 @@ function ResultText(props) {
 }
 
 function click(table, resultText, setResultText, propertyName, displayResults, argument) {
-  const activeTableReference = extractChildChatElement(table);
-  const content = activeTableReference[propertyName](argument);
+  const deepChatReference = extractChildChatElement(table);
+  const content = deepChatReference[propertyName](argument);
   if (displayResults ?? true) {
     let newResultTextArr = [...resultText];
     if (newResultTextArr.length === 1 && newResultTextArr[0] === '') newResultTextArr = [];
