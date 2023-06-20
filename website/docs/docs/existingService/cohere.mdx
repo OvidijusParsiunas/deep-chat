@@ -79,6 +79,25 @@ You can either set this property to _true_ or use an object to augment the [`req
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "cohere": {
+      "key": "placeholder key",
+      "textGeneration": {"model": "command"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `Summarization` {#Summarization}
@@ -126,3 +145,24 @@ You can either set this property to _true_ or use an object to augment the [`req
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "cohere": {
+      "key": "placeholder key",
+      "summarization": {"model": "summarize-xlarge"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

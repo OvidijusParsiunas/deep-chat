@@ -51,6 +51,39 @@ Configuration for the outgoing message HTTP requests.
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  request='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "body": {"field": "value"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  request='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "body": {"field": "value"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `stream` {#stream}
@@ -68,13 +101,34 @@ can stream the response messages into the chat. This is only supported for text 
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat stream="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  stream="true"
+  existingService='{"demo": true}'
+  introMessage="The response message bubble will be populated gradually with text events."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `requestBodyMessageLimits` {#requestBodyMessageLimits}
 
 - Type: {`maxMessages?: number`, `totalMessagesMaxCharLength?: number`}
-
-// WORK - display the intercepted messages
 
 Used to limit the message content that is going to be included in the outgoing requests. <br />
 `maxMessages` is the maximum number of messages counting from the most recent one. <br />
@@ -91,6 +145,37 @@ These limits do not include the [`introMessage`](HERE).
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  requestBodyMessageLimits='{
+    "totalMessagesMaxCharLength": 20,
+    "maxMessages": 2
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  requestBodyMessageLimits='{
+    "totalMessagesMaxCharLength": 20,
+    "maxMessages": 2
+  }'
+  existingService='{"demo": true}'
+  introMessage="Observe the data that is going to be sent below."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -122,6 +207,39 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  request='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "body": {"customBodyField": "customBodyValue"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  request='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "body": {"customBodyField": "customBodyValue"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

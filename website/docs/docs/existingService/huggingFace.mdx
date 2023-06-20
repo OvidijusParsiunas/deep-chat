@@ -84,6 +84,25 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "conversation": {"model": "facebook/blenderbot-400M-distill", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `TextGeneration` {#TextGeneration}
@@ -135,6 +154,25 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "textGeneration": {"model": "gpt2", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -188,6 +226,25 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "summarization": {"model": "facebook/bart-large-cnn", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `Translation` {#Translation}
@@ -226,6 +283,25 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "translation": {"model": "Helsinki-NLP/opus-tatoeba-en-ja"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -266,11 +342,30 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "fillMask": {"model": "bert-base-uncased"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `QuestionAnswer` {#QuestionAnswer}
 
-- Type: `true` | {`context: string`, model?: string`}
+- Type: `true` | {`context: string`, `model?: string`}
 - Default: _{model: "bert-large-uncased-whole-word-masking-finetuned-squad"}_
 
 Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task) API. <br />
@@ -286,6 +381,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
         huggingFace: {
           key: 'placeholder key',
           questionAnswer: {
+            model: 'bert-large-uncased-whole-word-masking-finetuned-squad',
             context:
               'Labrador retrievers are easily recognized by their broad head, drop ears and large, expressive eyes. Two trademarks of the Lab are the thick but fairly short double coat, which is very water repellent, and the well known otter tail. The tail is thick and sturdy and comes off the topline almost straight.',
           },
@@ -298,6 +394,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
       existingService={{
         huggingFace: {
           questionAnswer: {
+            model: 'bert-large-uncased-whole-word-masking-finetuned-squad',
             context:
               'Labrador retrievers are easily recognized by their broad head, drop ears and large, expressive eyes. Two trademarks of the Lab are the thick but fairly short double coat, which is very water repellent, and the well known otter tail. The tail is thick and sturdy and comes off the topline almost straight.',
           },
@@ -307,11 +404,33 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "questionAnswer": {
+        "model": "bert-large-uncased-whole-word-masking-finetuned-squad",
+        "context": "Labrador retrievers are easily recognized by their broad head, drop ears and large, expressive eyes. Two trademarks of the Lab are the thick but fairly short double coat, which is very water repellent, and the well known otter tail. The tail is thick and sturdy and comes off the topline almost straight."
+        }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `AudioSpeechRecognition` {#AudioSpeechRecognition}
 
-- Type: `true` | {model?: string`}
+- Type: `true` | {`model?: string`}
 - Default: _{model: "facebook/wav2vec2-large-960h-lv60-self"}_
 
 Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task) API. <br />
@@ -341,11 +460,30 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "huggingFace": {"model": "facebook/wav2vec2-large-960h-lv60-self"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `AudioClassification` {#AudioClassification}
 
-- Type: `true` | {model?: string`}
+- Type: `true` | {`model?: string`}
 - Default: _{model: "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"}_
 
 Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api-inference/detailed_parameters#audio-classification-task) API. <br />
@@ -375,11 +513,30 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "audioSpeechRecognition": {"model": "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `ImageClassification` {#ImageClassification}
 
-- Type: `true` | {model?: string`}
+- Type: `true` | {`model?: string`}
 - Default: _{model: "google/vit-base-patch16-224"}_
 
 Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api-inference/detailed_parameters#image-classification-task) API. <br />
@@ -408,5 +565,24 @@ Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "imageClassification": {"model": "google/vit-base-patch16-224"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

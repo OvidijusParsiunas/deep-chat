@@ -1,7 +1,7 @@
 import {InternalHTML} from '../webComponent/internalHTML';
 
 export class RenderControl {
-  public static waitForPropertiesToBeUpdatedBeforeRender(deepChat: InternalHTML) {
+  private static waitForPropertiesToBeUpdatedBeforeRender(deepChat: InternalHTML) {
     deepChat._propUpdated_ = false;
     setTimeout(() => {
       if (!deepChat._propUpdated_) {

@@ -46,6 +46,65 @@ import Tabs from '@theme/Tabs';
   </DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat>
+  <div
+    style="
+      width: 200px;
+      background-color: #f3f3f3;
+      border-radius: 10px;
+      padding: 12px;
+      padding-bottom: 15px;
+      display: none;
+    "
+  >
+    <div>
+      <div style="text-align: center; margin-bottom: 8px; font-size: 16px">
+        <b>Intro panel</b>
+      </div>
+      <div style="font-size: 15px; line-height: 20px">
+        Insert a description to help your users understand how to use the component.
+      </div>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat existingService='{"demo": true}'>
+  <div
+    style="
+      width: 200px;
+      background-color: #f3f3f3;
+      border-radius: 10px;
+      padding: 12px;
+      padding-bottom: 15px;
+      display: none;
+    "
+  >
+    <div>
+      <div style="text-align: center; margin-bottom: 8px; font-size: 16px">
+        <b>Intro panel</b>
+      </div>
+      <div style="font-size: 15px; line-height: 20px">
+        Insert a description to help your users understand how to use the component.
+      </div>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 :::tip
@@ -69,6 +128,31 @@ If you are using a custom intro panel (example above), it will instead be applie
     existingService={{openAI: {audio: true, key: 'placeholder-key'}}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  introPanelStyle='{"backgroundColor": "#fffeec"}'
+  existingService='{"openAI": {"audio": true, "key": "placeholder-key"}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  introPanelStyle='{"backgroundColor": "#fffeec"}'
+  existingService='{"openAI": {"audio": true, "key": "placeholder-key"}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

@@ -32,6 +32,16 @@ import Tabs from '@theme/Tabs';
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerMethods>
 
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.getMessages();
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `submitUserMessage` {#submitUserMessage}
@@ -46,6 +56,16 @@ Send a user message programmatically.
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerMethods>
 
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.submitUserMessage("User message");
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `focusInput` {#focusInput}
@@ -59,5 +79,15 @@ Focuses the cursor on the text input.
 <ComponentContainerMethods propertyName={'focusInput'} displayResults={false}>
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.focusInput();
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

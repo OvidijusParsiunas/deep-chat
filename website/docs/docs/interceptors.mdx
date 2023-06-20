@@ -28,6 +28,16 @@ import Tabs from '@theme/Tabs';
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.requestInterceptor = (request) => { console.log(request); return request; };
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 :::info
@@ -58,6 +68,16 @@ however this method MUST return a [`Result`](HERE) type object (or an object str
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.responseInterceptor = (response) => { console.log(response); return response; };
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `validateMessageBeforeSending` {#validateMessageBeforeSending}
@@ -73,6 +93,16 @@ The method must return a boolean value with either _true_ or _false_ for whether
 <ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'}>
   <DeepChatBrowser existingService={{demo: true}} mixedFiles={true}></DeepChatBrowser>
 </ComponentContainerInterceptors>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.validateMessageBeforeSending = (text, files) => { return text ? true : false };
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

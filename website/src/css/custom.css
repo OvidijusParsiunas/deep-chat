@@ -195,7 +195,7 @@ code {
 .component-key-toggle-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 5px;
+  margin-bottom: 30px;
 }
 
 .component-key-toggle-button {

@@ -29,12 +29,47 @@ import Tabs from '@theme/Tabs';
     initialMessages={[
       {text: 'Beautiful city', role: 'user'},
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
-      {text: `What's on your mind?`, role: 'user'},
+      {text: `Whats on your mind?`, role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
     containerStyle={{height: '370px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  initialMessages='[
+    {"text": "Beautiful city", "role": "user"},
+    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "ai"},
+    {"text": "Whats on your mind?", "role": "user"},
+    {"text": "Peace and tranquility", "role": "ai"}
+  ]'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  initialMessages='[
+    {"text": "Beautiful city", "role": "user"},
+    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "ai"},
+    {"text": "Whats on your mind?", "role": "user"},
+    {"text": "Peace and tranquility", "role": "ai"}
+  ]'
+  containerStyle='{"height": "370px"}'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -54,6 +89,25 @@ is not taken into consideration when calculating [`requestBodyMessageLimits`](HE
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat introMessage="Hi I am your assistant, ask me anything!"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat introMessage="Hi I am your assistant, ask me anything!" existingService='{"demo": true}'></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -81,6 +135,37 @@ or by defining an object with [`Avatar`](HERE) properties. The `default` propert
     avatars={true}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat avatars="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  avatars="true"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -121,6 +206,45 @@ This object is used to configure avatars that are displayed beside messages. <br
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  avatars='{
+    "default": {"styles": {"avatar": {"height": "30px", "width": "30px"}, "container": {"marginTop": "8px"}}},
+    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  avatars='{
+    "default": {"styles": {"avatar": {"height": "30px", "width": "30px"}, "container": {"marginTop": "8px"}}},
+    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}}
+  }'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `names` {#names}
@@ -147,6 +271,37 @@ or by defining an object with [`Name`](HERE) properties. The `default` property 
     names={true}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat names="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  names="true"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -181,6 +336,45 @@ This object is used to configure names that are displayed beside messages. <br /
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  names='{
+    "default": {"style": {"fontSize": "18px", "marginTop": "14px"}},
+    "ai": {"text": "You"},
+    "user": {"text": "Me"}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  names='{
+    "default": {"style": {"fontSize": "18px", "marginTop": "14px"}},
+    "ai": {"text": "You"},
+    "user": {"text": "Me"}}'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `displayLoadingBubble` {#displayLoadingBubble}
@@ -199,6 +393,29 @@ will automatically have a loading animation.
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat displayLoadingBubble="false"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  displayLoadingBubble="false"
+  introMessage="Please send a new message to observe a response with no loading bubble."
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -230,11 +447,46 @@ functionality. <br />
         default: 'Default error :(',
         service: 'Target service error!',
         speechToTextInput: 'Speech to text microphone error!',
-      }
+      },
     }}
-> </DeepChatBrowser>
-
+  ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  errorMessages='{
+    "overrides": {
+      "default": "Default error :(",
+      "service": "Target service error!",
+      "speechToTextInput": "Speech to text microphone error!"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  errorMessages='{
+    "overrides": {
+      "default": "Default error :(",
+      "service": "Target service error!",
+      "speechToTextInput": "Speech to text microphone error!"
+    }
+  }'
+  existingService='{"demo": {"displayErrors": {"default": true, "service": true, "speechToTextInput": true}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -274,6 +526,47 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+````html
+<deep-chat
+  initialMessages='[
+    {
+      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
+      "role": "ai"
+    }
+  ]'
+></deep-chat>
+````
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+````html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {
+        "bubble": {"maxWidth": "270px"}
+      }
+    }
+  }'
+  initialMessages='[
+    {
+      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+````
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `MessageRole` {#MessageRole}
@@ -309,6 +602,38 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  initialMessages='[
+    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
+    {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
+    {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
+  ]'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  initialMessages='[
+    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
+    {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
+    {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

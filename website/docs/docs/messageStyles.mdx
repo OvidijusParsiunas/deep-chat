@@ -64,7 +64,6 @@ Object defining the styling for various message roles. <br />
         user: {bubble: {backgroundColor: '#6767ff'}},
       },
     }}
-    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
     initialMessages={[
       {text: 'What is the meaning of life?', role: 'user'},
       {
@@ -75,6 +74,49 @@ Object defining the styling for various message roles. <br />
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {"bubble": {"color": "white"}},
+      "ai": {"bubble": {"backgroundColor": "#3cbe3c"}},
+      "user": {"bubble": {"backgroundColor": "#6767ff"}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {"bubble": {"color": "white"}},
+      "ai": {"bubble": {"backgroundColor": "#3cbe3c"}},
+      "user": {"bubble": {"backgroundColor": "#6767ff"}}
+    }
+  }'
+  initialMessages='[
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -107,7 +149,6 @@ to display the file contents. <br />
         user: {bubble: {backgroundColor: 'lightblue'}},
       },
     }}
-    containerStyle={{height: '240px', borderRadius: '5px', overflow: 'hidden'}}
     initialMessages={[
       {text: 'What is the meaning of life?', role: 'user'},
       {
@@ -118,6 +159,57 @@ to display the file contents. <br />
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {
+        "outerContainer": {"backgroundColor": "orange"},
+        "innerContainer": {"backgroundColor": "yellow"},
+        "bubble": {"color": "black"}
+      },
+      "ai": {"bubble": {"backgroundColor": "lightgreen"}},
+      "user": {"bubble": {"backgroundColor": "lightblue"}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {
+        "outerContainer": {"backgroundColor": "orange"},
+        "innerContainer": {"backgroundColor": "yellow"},
+        "bubble": {"color": "black"}
+      },
+      "ai": {"bubble": {"backgroundColor": "lightgreen"}},
+      "user": {"bubble": {"backgroundColor": "lightblue"}}
+    }
+  }'
+  initialMessages='[
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    }
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -153,6 +245,67 @@ to display the file contents. <br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "image": {
+      "shared": {
+        "media": {"borderRadius": "0px"}
+      }
+    },
+    "audio": {
+      "shared": {
+        "media": {"borderRadius": "30px", "border": "1px solid #8c8c8c", "backgroundColor": "red"}
+      }
+    },
+    "file": {
+      "shared": {
+        "bubble": {"backgroundColor": "grey"}
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "image": {
+      "shared": {
+        "media": {"borderRadius": "0px"}
+      }
+    },
+    "audio": {
+      "shared": {
+        "media": {"borderRadius": "30px", "border": "1px solid #8c8c8c", "backgroundColor": "red"}
+      }
+    },
+    "file": {
+      "shared": {
+        "bubble": {"backgroundColor": "grey"}
+      }
+    }
+  }'
+  initialMessages='[
+    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
+    {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "ai"},
+    {"file": {"src": "path-to-file.txt", "type": "file"}, "role": "user"}
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 :::info
 The _"audio"_ media player is controlled by the browser and and its styling may not be overwritable by the `media` property.
 :::
@@ -173,10 +326,40 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       },
     }}
     introMessage={`Hi I'm an AiAssistant, ask me anything!`}
-    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "intro": {"bubble": {"backgroundColor": "#475cc7", "color": "white", "fontSize": "16px"}}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "intro": {
+      "bubble": {"backgroundColor": "#475cc7", "color": "white", "fontSize": "16px"}
+    }
+  }'
+  introMessage="Hi I'm an AiAssistant, ask me anything!"
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -189,10 +372,41 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
         bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
       },
     }}
-    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     existingService={{demo: {displayLoadingBubble: true}}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "bubble": {"backgroundColor": "#3793ff", "fontSize": "20px", "color": "white"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "bubble": {"backgroundColor": "#3793ff", "fontSize": "20px", "color": "white"}
+    }
+  }'
+  existingService='{"demo": {"displayLoadingBubble": true}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -205,9 +419,40 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
         bubble: {backgroundColor: '#f98e00', color: 'white', fontSize: '15px'},
       },
     }}
-    containerStyle={{height: '140px', borderRadius: '5px', overflow: 'hidden'}}
     existingService={{demo: {displayErrors: {service: true}}}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "error": {
+      "bubble": {"backgroundColor": "#f98e00", "color": "white", "fontSize": "15px"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "error": {
+      "bubble": {"backgroundColor": "#f98e00", "color": "white", "fontSize": "15px"}
+    }
+  }'
+  existingService='{"demo": {"displayErrors": {"service": true}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

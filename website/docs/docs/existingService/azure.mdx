@@ -70,6 +70,25 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "azure": {
+      "key": "placeholder key",
+      "textToSpeech": {"region": "eastus"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `SpeechToText` {#SpeechToText}
@@ -105,6 +124,25 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
   </ComponentContainer>
 </ContainersKeyToggle>
 
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "azure": {
+      "key": "placeholder key",
+      "speechToText": {"region": "eastus"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `Summarization` {#Summarization}
@@ -128,6 +166,25 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "azure": {
+      "key": "placeholder key",
+      "summarization": {"endpoint": "https://placeholderresource.cognitiveservices.azure.com"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -163,5 +220,24 @@ Connect to Azure's [`tranlsation`](https://learn.microsoft.com/en-gb/azure/cogni
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "azure": {
+      "key": "placeholder key",
+      "translation": {"region": "eastus", "language": "ja"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

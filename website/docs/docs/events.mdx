@@ -32,6 +32,25 @@ import Tabs from '@theme/Tabs';
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerEvents>
 
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+chatElementRef.onNewMessage = (message) => { console.log(message); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+chatElementRef.addEventListener('new-message', (message) => { console.log(message.detail); });
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `onComponentRender` {#onComponentRender}
@@ -46,5 +65,24 @@ Triggered when the component has finished rendering on the browser's window.
 <ComponentContainerEvents propertyName={'onComponentRender'}>
   <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+chatElementRef.onComponentRender = () => { console.log("Finished rendering"); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+chatElementRef.addEventListener('render', () => { console.log("Finished rendering"); });
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

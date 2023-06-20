@@ -30,6 +30,28 @@ import Tabs from '@theme/Tabs';
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `attachmentContainerStyle` {#attachmentContainerStyle}
@@ -46,6 +68,28 @@ Object containing CSS styling properties for the element containing files attach
     existingService={{demo: {displayFileAttachmentContainer: true}}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  attachmentContainerStyle='{"backgroundColor": "#76fffc57"}'
+  existingService='{"demo": {"displayFileAttachmentContainer": true}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -103,6 +147,91 @@ Configuration for the dropup button and its menu element styles. <br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  dropupStyles='{
+    "button": {
+      "styles": {
+        "container": {
+          "default": {"backgroundColor": "#eff8ff"},
+          "hover": {"backgroundColor": "#e4f3ff"},
+          "click": {"backgroundColor": "#d7edff"}
+        }
+      }
+    },
+    "menu": {
+      "container": {
+        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
+      },
+      "item": {
+        "hover": {
+          "backgroundColor": "#e1f2ff"
+        },
+        "click": {
+          "backgroundColor": "#cfeaff"
+        }
+      },
+      "iconContainer": {
+        "width": "1.8em"
+      },
+      "text": {
+        "fontSize": "1.05em"
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  dropupStyles='{
+    "button": {
+      "styles": {
+        "container": {
+          "default": {"backgroundColor": "#eff8ff"},
+          "hover": {"backgroundColor": "#e4f3ff"},
+          "click": {"backgroundColor": "#d7edff"}
+        }
+      }
+    },
+    "menu": {
+      "container": {
+        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
+      },
+      "item": {
+        "hover": {
+          "backgroundColor": "#e1f2ff"
+        },
+        "click": {
+          "backgroundColor": "#cfeaff"
+        }
+      },
+      "iconContainer": {
+        "width": "1.8em"
+      },
+      "text": {
+        "fontSize": "1.05em"
+      }
+    }
+  }'
+  existingService='{"demo": true}'
+  audio='{"button": {"position": "dropup-menu"}}'
+  images='{"button": {"position": "dropup-menu"}}'
+  introMessage="Open the dropup by clicking the + button on bottom left of the input."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `inputAreaStyle` {#inputAreaStyle}
@@ -116,6 +245,25 @@ Styling for the chat view's bottom area dedicated for text input and file button
 <ComponentContainer>
   <DeepChatBrowser inputAreaStyle={{backgroundColor: '#ebf5ff'}} existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}' existingService='{"demo": true}'></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -148,6 +296,38 @@ Custom details for the chat's text input. <br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  textInput='{
+    "styles": {"text": {"fontSize": "16px", "color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#e0edff"}},
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4f8bff"}},
+    "characterLimit": 10
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textInput='{
+    "styles": {"text": {"fontSize": "16px", "color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#e0edff"}},
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4f8bff"}},
+    "characterLimit": 10
+  }'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 #### Disabled example
@@ -158,6 +338,38 @@ Custom details for the chat's text input. <br />
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  textInput='{
+    "disabled": true,
+    "placeholder": {
+      "text": "Text not allowed..."
+  }}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textInput='{
+    "disabled": true,
+    "placeholder": {
+      "text": "Text not allowed..."
+  }}'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -203,6 +415,70 @@ when a response message is being [streamed](HERE). <br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {
+          "backgroundColor": "#e3f0ff"
+        },
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter":
+              "brightness(0) saturate(100%) invert(58%) sepia(53%) saturate(6828%) hue-rotate(214deg) brightness(100%) contrast(100%)"
+          }
+        }
+      }
+    },
+    "position": "outside-right"
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {
+          "backgroundColor": "#e3f0ff"
+        },
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter":
+              "brightness(0) saturate(100%) invert(58%) sepia(53%) saturate(6828%) hue-rotate(214deg) brightness(100%) contrast(100%)"
+          }
+        }
+      }
+    },
+    "position": "outside-right"
+  }'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 #### Text Example
 
 <ComponentContainer>
@@ -234,6 +510,75 @@ when a response message is being [streamed](HERE). <br />
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {"backgroundColor": "#e3f0ff", "width": "60px"},
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {
+        "content": "Submit",
+        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
+      }
+    },
+    "loading": {
+      "text": {
+        "content": "Loading"
+      }
+    },
+    "stop": {
+      "text": {
+        "content": "Stop"
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textInput='{"styles": {"text": {"paddingRight": "70px"}}}'
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {"backgroundColor": "#e3f0ff", "width": "60px"},
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {
+        "content": "Submit",
+        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
+      }
+    },
+    "loading": {
+      "text": {
+        "content": "Loading"
+      }
+    },
+    "stop": {
+      "text": {
+        "content": "Stop"
+      }
+    }
+  }'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -284,6 +629,57 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
       }"
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    },
+    {"text": "I just feel like sleeping all day...", "role": "user"},
+    {"text": "As long as it makes you happy!", "role": "ai"}
+  ]'
+  existingService='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 :::danger
 [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) is not standardised across all browsers, make sure to check the [`browser support`](https://caniuse.com/)

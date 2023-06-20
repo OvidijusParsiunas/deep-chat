@@ -25,6 +25,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
   &nbsp;&nbsp;&nbsp;&nbsp; `demo?:` [`Demo`](HERE) <br />
   }
 
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -52,29 +53,97 @@ This object is intended to be used for **prototyping purposes ONLY** and should 
 Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to direct the requests through your own service.
 :::
 
+<LineBreak></LineBreak>
+
 #### Key Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    existingService={{
-      openAI: {
-        key: 'placeholder key',
-        chat: {systemPrompt: 'Assist me with anything you can'},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          chat: {systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          chat: {systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "openAI": {
+      "key": "placeholder key",
+      "chat": {"systemPrompt": "Assist me with anything you can"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
 
 #### Validation Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    existingService={{
-      openAI: {
-        key: 'incorrect key',
-        validateKeyProperty: true,
-        chat: {systemPrompt: 'Assist me with anything you can'},
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          key: 'placeholder key',
+          validateKeyProperty: true,
+          chat: {systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      existingService={{
+        openAI: {
+          validateKeyProperty: true,
+          chat: {systemPrompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="py" label="Code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  existingService='{
+    "openAI": {
+      "key": "placeholder key",
+      "validateKeyProperty": true,
+      "chat": {"systemPrompt": "Assist me with anything you can"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

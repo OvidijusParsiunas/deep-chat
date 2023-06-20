@@ -36,6 +36,29 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat images="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  images="true"
+  existingService='{"demo": true}'
+  introMessage="Use the image button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `camera` {#camera}
@@ -52,6 +75,29 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
     camera={true}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat camera="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  camera="true"
+  existingService='{"demo": true}'
+  introMessage="Use the camera button to open up a modal for capturing photos."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -70,6 +116,29 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat audio="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  audio="true"
+  existingService='{"demo": true}'
+  introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `microphone` {#microphone}
@@ -87,6 +156,29 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat microphone="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  microphone="true"
+  existingService='{"demo": true}'
+  introMessage="Use the microphone button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `mixedFiles` {#mixedFiles}
@@ -103,6 +195,29 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
     mixedFiles={true}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat mixedFiles="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  mixedFiles="true"
+  existingService='{"demo": true}'
+  introMessage="Use the file button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -126,6 +241,30 @@ _".png,.jpg"_ in [`images`](HERE) are the only file types allowed, a dropped _.t
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat dragAndDrop='{"backgroundColor": "#80ff704d", "border": "5px dashed #52c360"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  dragAndDrop='{"backgroundColor": "#80ff704d", "border": "5px dashed #52c360"}'
+  mixedFiles="true"
+  existingService='{"demo": true}'
+  introMessage="Drag and drop a file to observe the result."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ## Types
@@ -145,13 +284,46 @@ Object used to configure the ability for the component to send files. <br />
   <DeepChatBrowser
     introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
-    images={{
-      request: {url: 'https://customapi.com/image'},
-      files: {acceptedFormats: '.jpg,.png'},
+    audio={{
+      request: {url: 'https://customapi.com/audio'},
+      files: {acceptedFormats: '.mp3,.wav'},
       button: {position: 'outside-left'},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  audio='{
+    "request": {"url": "https://customapi.com/audio"},
+    "files": {"acceptedFormats": ".mp3,.wav"},
+    "button": {"position": "outside-left"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  audio='{
+    "request": {"url": "https://customapi.com/audio"},
+    "files": {"acceptedFormats": ".mp3,.wav"},
+    "button": {"position": "outside-left"}
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -188,6 +360,29 @@ use this value to verify the dropped files. <br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat images='{"files": {"maxNumberOfFiles": 2, "acceptedFormats": ".jpg,.png"}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  images='{"files": {"maxNumberOfFiles": 2, "acceptedFormats": ".jpg,.png"}}'
+  existingService='{"demo": true}'
+  introMessage="Use the image button or drop a file to attach it to the next outgoing message."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `InfoModal` {#InfoModal}
@@ -219,6 +414,49 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  images='{
+    "files": {
+      "infoModal": {
+        "textMarkDown":
+          "Please note our terms of service for sending files: [link](https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley).",
+        "openModalOnce": true,
+        "containerStyle": {"borderRadius": "5px"}
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  images='{
+    "files": {
+      "infoModal": {
+        "textMarkDown":
+          "Please note our terms of service for sending files: [link](https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley).",
+        "openModalOnce": true,
+        "containerStyle": {"borderRadius": "5px"}
+      }
+    }
+  }'
+  existingService='{"demo": true}'
+  introMessage="Click the image button to open up the modal."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `CameraFilesServiceConfig` {#CameraFilesServiceConfig}
@@ -248,6 +486,41 @@ Configuration for capturing images using a web camera and handling the resultant
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  camera='{
+    "request": {"url": "https://customapi.com/image-from-camera"},
+    "files": {"format": "png"},
+    "button": {"position": "outside-left"},
+    "modalContainerStyle": {"borderRadius": "5px"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  camera='{
+    "request": {"url": "https://customapi.com/image-from-camera"},
+    "files": {"format": "png"},
+    "button": {"position": "outside-left"},
+    "modalContainerStyle": {"borderRadius": "5px"}
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the camera button to open up a modal for capturing photos."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -290,6 +563,45 @@ the `acceptedFormats` property, it will override this one.<br />
   ></DeepChatBrowser>
 </ComponentContainer>
 
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  camera='{
+    "files": {
+      "format": "png",
+      "dimensions": {"width": 450, "height": 600},
+      "maxNumberOfFiles": 2,
+      "acceptedFormats": ".jpg,.png"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  camera='{
+    "files": {
+      "format": "png",
+      "dimensions": {"width": 450, "height": 600},
+      "maxNumberOfFiles": 2,
+      "acceptedFormats": ".jpg,.png"
+    }
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the camera button to open up a modal for capturing photos."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
 <LineBreak></LineBreak>
 
 ### `MicrophoneFilesServiceConfig` {#MicrophoneFilesServiceConfig}
@@ -316,6 +628,39 @@ Configuration for recording audio using a microphone and handling the resultant 
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  microphone='{
+    "request": {"url": "https://customapi.com/audio-from-microphone"},
+    "files": {"format": "mp3"},
+    "button": {"position": "outside-left"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  microphone='{
+    "request": {"url": "https://customapi.com/audio-from-microphone"},
+    "files": {"format": "mp3"},
+    "button": {"position": "outside-left"}
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the microphone button to record audio."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -347,7 +692,7 @@ the `acceptedFormats` property, it will override this one.<br />
   <DeepChatBrowser
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
-    microphoneAudio={{
+    microphone={{
       files: {
         format: 'mp3',
         maxDurationSeconds: 10,
@@ -357,6 +702,45 @@ the `acceptedFormats` property, it will override this one.<br />
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  microphone='{
+    "files": {
+      "format": "mp3",
+      "maxDurationSeconds": 10,
+      "maxNumberOfFiles": 2,
+      "acceptedFormats": ".mp3,.wav"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  microphone='{
+    "files": {
+      "format": "mp3",
+      "maxDurationSeconds": 10,
+      "maxNumberOfFiles": 2,
+      "acceptedFormats": ".mp3,.wav"
+    }
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the microphone button to record audio."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -393,7 +777,7 @@ Custom styling for the microphone button. <br />
   <DeepChatBrowser
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
-    microphoneAudio={{
+    microphone={{
       button: {
         default: {
           container: {
@@ -439,5 +823,116 @@ Custom styling for the microphone button. <br />
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  microphone='{
+    "button": {
+      "default": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#7fbded69"
+          },
+          "click": {
+            "backgroundColor": "#4babf669"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)"
+            },
+            "hover": {
+              "filter":
+                "brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)"
+            }
+          }
+        }
+      },
+      "active": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#ffd07c70"
+          },
+          "click": {
+            "backgroundColor": "#ecb85c70"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)"
+            }
+          }
+        }
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  microphone='{
+    "button": {
+      "default": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#7fbded69"
+          },
+          "click": {
+            "backgroundColor": "#4babf669"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)"
+            },
+            "hover": {
+              "filter":
+                "brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)"
+            }
+          }
+        }
+      },
+      "active": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#ffd07c70"
+          },
+          "click": {
+            "backgroundColor": "#ecb85c70"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)"
+            }
+          }
+        }
+      }
+    }
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the microphone button to record audio."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
