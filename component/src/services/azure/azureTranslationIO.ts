@@ -43,7 +43,6 @@ export class AzureTranslationIO extends IExistingServiceIO {
     if (Array.isArray(result)) {
       return {text: result[0].translations?.[0].text || ''};
     }
-    if (result.error) throw result.error;
-    return {text: ''};
+    throw result.error;
   }
 }
