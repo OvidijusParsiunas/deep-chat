@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
 ---
 
 # Styles
@@ -384,7 +384,7 @@ Custom details for the chat's text input. <br />
 
 Custom styling for the submit button. <br />
 `submit` is the default button state and `loading` is displayed when waiting for a message response. `stop` is displayed
-when a response message is being [streamed](HERE). <br />
+when a response message is being [`streamed`](./service#stream). <br />
 `position` is used to set the button position within the input area.
 
 #### SVG Example
@@ -685,5 +685,188 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) is not standardised across all browsers, make sure to check the [`browser support`](https://caniuse.com/)
 for the property you are using.
 :::
+
+<LineBreak></LineBreak>
+
+## Types
+
+Types shared by styles properties:
+
+### `MicrophoneStyles` {#MicrophoneStyles}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: ButtonStyles`](./sharedTypes#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`active?: ButtonStyles`](./sharedTypes#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`unsupported?: ButtonStyles`](./sharedTypes#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](./sharedTypes#ButtonPosition) <br />
+  }
+
+Custom styling for the microphone button. <br />
+`default` is used for the default button state. <br />
+`active` is used when the microphone is active. <br />
+`unsupported` is used when recording is not supported on the user's browser. <br />
+`position` is the button position within the input area.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    introMessage={`Use the microphone button to record audio.`}
+    existingService={{demo: true}}
+    microphone={{
+      button: {
+        default: {
+          container: {
+            hover: {
+              backgroundColor: '#7fbded69',
+            },
+            click: {
+              backgroundColor: '#4babf669',
+            },
+          },
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)',
+              },
+              hover: {
+                filter:
+                  'brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)',
+              },
+            },
+          },
+        },
+        active: {
+          container: {
+            hover: {
+              backgroundColor: '#ffd07c70',
+            },
+            click: {
+              backgroundColor: '#ecb85c70',
+            },
+          },
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)',
+              },
+            },
+          },
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  microphone='{
+    "button": {
+      "default": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#7fbded69"
+          },
+          "click": {
+            "backgroundColor": "#4babf669"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)"
+            },
+            "hover": {
+              "filter":
+                "brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)"
+            }
+          }
+        }
+      },
+      "active": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#ffd07c70"
+          },
+          "click": {
+            "backgroundColor": "#ecb85c70"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)"
+            }
+          }
+        }
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  microphone='{
+    "button": {
+      "default": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#7fbded69"
+          },
+          "click": {
+            "backgroundColor": "#4babf669"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(53%) saturate(6895%) hue-rotate(200deg) brightness(101%) contrast(101%)"
+            },
+            "hover": {
+              "filter":
+                "brightness(0) saturate(100%) invert(27%) sepia(59%) saturate(5655%) hue-rotate(203deg) brightness(101%) contrast(84%)"
+            }
+          }
+        }
+      },
+      "active": {
+        "container": {
+          "hover": {
+            "backgroundColor": "#ffd07c70"
+          },
+          "click": {
+            "backgroundColor": "#ecb85c70"
+          }
+        },
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(49%) sepia(99%) saturate(477%) hue-rotate(343deg) brightness(100%) contrast(101%)"
+            }
+          }
+        }
+      }
+    }
+  }'
+  existingService='{"demo": true}'
+  introMessage="Use the microphone button to record audio."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 9
 ---
 
 # Methods
@@ -12,7 +12,7 @@ Make sure the Deep Chat component has been fully rendered on the DOM before usin
 
 ### `getMessages` {#getMessages}
 
-- Type: [`() => MessageContent[]`](HERE)
+- Type: [`() => MessageContent[]`](./messages#MessageContent)
 
 Returns details of messages inside the chat.
 
@@ -46,7 +46,7 @@ tableElementRef.getMessages();
 
 ### `submitUserMessage` {#submitUserMessage}
 
-- Type: (`userText: string`, [`files?: File[]`](HERE)) => `void`
+- Type: (`userText: string`, `files?: File[]`) => `void`
 
 Send a user message programmatically.
 

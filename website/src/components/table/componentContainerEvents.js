@@ -4,7 +4,7 @@ import React from 'react';
 
 // using child to prevent component re-render
 const EventText = React.forwardRef(({propertyName}, ref) => {
-  const [eventsText, setEventsText] = React.useState([propertyName === 'onComponentRender' ? 'finished rendering' : '']);
+  const [eventsText, setEventsText] = React.useState([propertyName === 'onComponentRender' ? 'Finished rendering' : '']);
   React.useImperativeHandle(ref, () => {
     const closureEventsText = [];
     return {

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Existing Services
@@ -9,20 +9,20 @@ Deep Chat can be configured to connect to an existing API service. The component
 However everything can be overwritten manually. <br />
 
 :::caution
-The component allows the user to type their API key directly into the component or for the developer to embed it as an attribute via [`APIKey`](HERE). This is
-intended for **prototyping purposes ONLY** and when going live use the [`request`](HERE) property to instead direct the calls through your own service.
+The component allows the user to type their API key directly into the component or for the developer to embed it as an attribute via [`APIKey`](#APIKey). This is
+intended for **prototyping purposes ONLY** and when going live use the [`request`](../service#request) property to instead direct the calls through your own service.
 Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
 :::
 
 ### `existingService` {#existingService}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `openAI?:` {[`OpenAI`](HERE), [`APIKey`](HERE)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `huggingFace?:` {[`HuggingFace`](HERE), [`APIKey`](HERE)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `azure?:` {[`Azure`](HERE), [`APIKey`](HERE)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `cohere?:` {[`Cohere`](HERE), [`APIKey`](HERE)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `assemblyAI?:` {[`AssemblyAI`](HERE), [`APIKey`](HERE)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `demo?:` [`Demo`](HERE) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `openAI?:` {[`OpenAI`](openAI#openAI), [`APIKey`](#APIKey)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `huggingFace?:` {[`HuggingFace`](huggingFace#huggingFace), [`APIKey`](#APIKey)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `azure?:` {[`Azure`](azure#azure), [`APIKey`](#APIKey)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `cohere?:` {[`Cohere`](cohere#cohere), [`APIKey`](#APIKey)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `assemblyAI?:` {[`AssemblyAI`](assemblyAI#assemblyAI), [`APIKey`](#APIKey)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `demo?:` [`Demo`](demo#demo) <br />
   }
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 # Messages
@@ -77,9 +77,9 @@ import Tabs from '@theme/Tabs';
 
 - Type: `string`
 
-Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](HERE) as it will not trigger
-the [`onNewMessage`](HERE) listener, will not be part of the returned messages when the [`getMessages`](HERE) method is called and
-is not taken into consideration when calculating [`requestBodyMessageLimits`](HERE).
+Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](#initialMessages) as it will not trigger
+the [`onNewMessage`](./events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](./methods#getMessages) method is called and
+is not taken into consideration when calculating [`requestBodyMessageLimits`](./service#requestBodyMessageLimits).
 
 #### Example
 
@@ -116,7 +116,7 @@ is not taken into consideration when calculating [`requestBodyMessageLimits`](HE
 - Type: `true` | {[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
 
 Add avatars beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Avatar`](HERE) properties. The `default` property is applied to both roles.
+or by defining an object with [`Avatar`](#Avatar) properties. The `default` property is applied to both roles.
 
 #### Example
 
@@ -252,7 +252,7 @@ This object is used to configure avatars that are displayed beside messages. <br
 - Type: `true` | {[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
 
 Add names beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Name`](HERE) properties. The `default` property is applied to both roles. <br />
+or by defining an object with [`Name`](#Name) properties. The `default` property is applied to both roles. <br />
 
 #### Example
 
@@ -434,7 +434,7 @@ will automatically have a loading animation.
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
-is for communication with the target service and `speechToTextInput` is when there is a problem using the [`speechToTextInput`](HERE)
+is for communication with the target service and `speechToTextInput` is when there is a problem using the [`speechToTextInput`](WORK)
 functionality. <br />
 
 #### Example

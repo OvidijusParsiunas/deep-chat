@@ -9,10 +9,10 @@ Properties used to connect to [Azure Cognitive Services](https://learn.microsoft
 ### `azure` {#azure}
 
 - Type: { <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`summarization?: Summarization`](HERE), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](HERE)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](#TextToSpeech), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](#SpeechToText), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`summarization?: Summarization`](#Summarization), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](#Translation)<br />
   }
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -193,7 +193,7 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
 - Type: {`region?: string`, `language?: string`}
 - Default: _{language: "es"}_
 
-Connect to Azure's [`tranlsation`](https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference) API.
+Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference) API.
 `region` is the region of your translator resource. Thi is optional if your resource is global. <br />
 `language` is the [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.) for the language you are translating to from English. <br />
 

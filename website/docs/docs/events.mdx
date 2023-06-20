@@ -1,5 +1,5 @@
 ---
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 # Events
@@ -10,11 +10,11 @@ Events can be observed in two ways, either by assigning a function to a property
 
 - Function: (`newMessage: Body`) => `void`
 - Event: `new-message`
-- Body: {[`message: MessageContent`](HERE), `isInitial: boolean`}
+- Body: {[`message: MessageContent`](./messages#MessageContent), `isInitial: boolean`}
 
 Triggered when a message is sent from the user and recieved from the target service. <br />
 `message` encompasses all of the message contents. <br />
-`isInitial` is used to determine whether if the message is from the prepopulated [`initialMessages`](HERE) property.
+`isInitial` is used to determine whether if the message is from the prepopulated [`initialMessages`](./messages#initialMessages) property.
 
 #### Example
 

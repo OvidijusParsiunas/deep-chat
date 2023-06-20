@@ -100,7 +100,8 @@ export class SubmitButton extends InputButton<Styles> {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData.file);
-    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(userText, fileData)) return;
+    const validationText = userText === '' ? undefined : userText;
+    if (this._isRequestInProgress || !this._serviceIO.canSendMessage(validationText, fileData)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);

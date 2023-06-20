@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Service
@@ -14,12 +14,12 @@ By default, the **outgoing** request bodies will contain all of the messages wit
 This behaviour can be altered by using the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property to send only what is required.
 
 - When sending text based messages only, the request body will have the following JSON type: <br />
-  {[`messages: MessageContent[]`](messages/#MessageContent)} <br />
+  {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
 
 - When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
 
 The **response** message body needs to have the following JSON type: <br />
-&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result`](HERE), `error?: string`} <br />
+&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result`](#Result), `error?: string`} <br />
 
 Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to set up your own server.
 
@@ -133,7 +133,7 @@ can stream the response messages into the chat. This is only supported for text 
 Used to limit the message content that is going to be included in the outgoing requests. <br />
 `maxMessages` is the maximum number of messages counting from the most recent one. <br />
 `totalMessagesMaxCharLength` is the total maximum number of text characters that can be included counting from the most recent message. <br />
-These limits do not include the [`introMessage`](HERE).
+These limits do not include the [`introMessage`](./messages#introMessage).
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -245,7 +245,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 ### `Result` {#Result}
 
-- Type: {`text?: string`, [`files?: MessageFile[]`](HERE)}
+- Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile)}
 
 Object containing result information retrieved from the target service. <br />
 `text` is the message text content. <br />

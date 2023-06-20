@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 11
 ---
 
 # Interceptors
@@ -8,9 +8,9 @@ Message transaction functionality can be intercepted to change its behaviour by 
 
 ### `requestInterceptor` {#requestInterceptor}
 
-- Type: ([`RequestDetails`](HERE)) => [`RequestDetails`](HERE)
+- Type: ([`RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails)
 
-Triggered before a message is sent and can be used to observe/alter the outgoing details. The method MUST return a [`RequestDetails`](HERE) object.
+Triggered before a message is sent and can be used to observe/alter the outgoing details. The method MUST return a [`RequestDetails`](#RequestDetails) object.
 
 #### Example
 
@@ -57,10 +57,10 @@ Remember that by default - a request will contain all chat messages in order to 
 
 ### `responseInterceptor` {#responseInterceptor}
 
-- Type: (`response: any`) => [`Result`](HERE)
+- Type: (`response: any`) => [`Result`](./service#Result)
 
 Triggered when a message has been retrieved from the target service and can be used to observe/alter the incoming details. The `response` argument can contain any type,
-however this method MUST return a [`Result`](HERE) type object (or an object structure returned by a selected [`existingService`](HERE)).
+however this method MUST return a [`Result`](./service#Result) type object (or an object structure returned by a selected [`existingService`](./existingServices)).
 
 #### Example
 

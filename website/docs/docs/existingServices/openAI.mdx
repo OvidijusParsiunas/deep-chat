@@ -8,7 +8,7 @@ Properties used to connect to [OpenAI](https://openai.com/blog/openai-api).
 
 ### `openAI` {#openAI}
 
-- Type: {[`completions?: Completions`](HERE), [`images?: Images`](HERE), [`audio?: Audio`](HERE)}
+- Type: {[`completions?: Completions`](#Completions), [`images?: Images`](#Images), [`audio?: Audio`](#Audio)}
 - Default: _{chat: true}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -25,7 +25,7 @@ import Tabs from '@theme/Tabs';
 
 ### `Chat` {#Chat}
 
-- Type: `true` | {[`OpenAIConverse`](HERE), `systemPrompt?: string`}
+- Type: `true` | {[`OpenAIConverse`](#OpenAIConverse), `systemPrompt?: string`}
 - Default: _{model: "gpt-3.5-turbo", systemPrompt: "You are a helpful assistant."}_
 
 Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-reference/chat/create) API. <br />
@@ -79,7 +79,7 @@ Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-r
 
 ### `Completions` {#Completions}
 
-- Type: `true` | [`OpenAIConverse`](HERE)
+- Type: `true` | [`OpenAIConverse`](#OpenAIConverse)
 - Default: _{model: "text-davinci-003"}_
 
 Connect to Open AI's [`completions`](https://platform.openai.com/docs/api-reference/completions/create) API. <br />
@@ -218,7 +218,7 @@ Connect to Open AI's [`Audio`](https://platform.openai.com/docs/api-reference/au
 You can either set this property to _true_ or use an object to augment the [`request body`](https://platform.openai.com/docs/api-reference/audio/create): <br />
 `model` is the name of the model to use. _"whisper-1"_ is currently the only one available. <br />
 `temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
-`language` is the language used the input audio. Supplying the input language in [_ISO-639-1_](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency. (Only used for [_transcription_](HERE) based API). <br />
+`language` is the language used the input audio. Supplying the input language in [_ISO-639-1_](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency. (Only used for [_transcription_](https://platform.openai.com/docs/api-reference/audio/create) based API). <br />
 `type` is used to toggle between the [_transcription_](https://platform.openai.com/docs/api-reference/audio/create) and the [_translation_](https://platform.openai.com/docs/api-reference/audio/create) APIs.
 Note that [_translation_](https://platform.openai.com/docs/api-reference/audio/create) can only attempt to translate audio into _English_.
 
@@ -269,7 +269,7 @@ Note that [_translation_](https://platform.openai.com/docs/api-reference/audio/c
 
 ## Shared Types
 
-Types used in [`openAI`](HERE) properties:
+Types used in [`openAI`](#openAI) properties:
 
 ### `OpenAIConverse` {#OpenAIConverse}
 

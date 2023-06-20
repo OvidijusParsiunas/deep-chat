@@ -6,7 +6,7 @@ export function extractChildChatElement(containerElement) {
 
 export default function ComponentContainer({children, minHeight}) {
   return (
-    <div className="documentation-example-container" style={{minHeight: `${minHeight || 343}px`}}>
+    <div className="documentation-example-container" style={{minHeight: `${minHeight || 360}px`}}>
       <div>{children}</div>
     </div>
   );
