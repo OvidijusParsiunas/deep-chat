@@ -40,6 +40,8 @@
   text-align: left;
   outline: none;
   word-wrap: break-word;
+  /* test in Safari using following text - seduijasiudj iasojd iasdjas oijdioa joisaj doij */
+  line-break: auto;
   /* Use these properties to inline all of the text  */
   /* white-space: nowrap;
   overflow: hidden; */

@@ -6,8 +6,8 @@
 :host {
   /* this property prevents outside styles from affecting this component */
   all: initial;
-  /* keeps child absolute elements in place */
-  display: inline-block;
+  /* keeps child absolute elements in place and wraps component dimensions on it */
+  display: table-cell;
 }
 
 #container {

@@ -1,4 +1,4 @@
-export type AvailableTypes = 'string' | 'number' | 'boolean' | 'object' | 'function';
+export type AvailableTypes = 'string' | 'number' | 'boolean' | 'object' | 'array' | 'function';
 
 export type AttributeTypeConverter = (value: string) => unknown;
 

@@ -78,7 +78,7 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   names?: Names;
 
-  @Property('object')
+  @Property('array')
   initialMessages?: MessageContent[];
 
   @Property('string')

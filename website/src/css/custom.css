@@ -160,7 +160,7 @@ code {
 
 .documentation-example-container {
   width: 100%;
-  padding: 18px 18px 18px;
+  padding: 18px 18px 35px;
   border: unset;
   display: flex;
   justify-content: center;
@@ -195,7 +195,7 @@ code {
 .component-key-toggle-button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
 }
 
 .component-key-toggle-button {

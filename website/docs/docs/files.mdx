@@ -223,7 +223,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 
 ### `dragAndDrop` {#dragAndDrop}
 
-- Type: `boolean` | [`CustomStyle`](./sharedTypes/#CustomStyle)
+- Type: `boolean` | [`CustomStyle`](./styles#CustomStyle)
 - Default: _false_
 
 Configuration for the drag and drop functionality. If any of the above properties are defined or you have defined an [`existingService`](./existingServices) that allows file uploads -
@@ -273,7 +273,7 @@ Types shared by files properties:
 
 ### `FilesServiceConfig` {#FilesServiceConfig}
 
-- Type: {[`request?: Request`](./service#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](./sharedTypes#Button)}
+- Type: {[`request?: Request`](./service#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](./styles#Button)}
 
 Object used to configure the ability for the component to send files. <br />
 `request` object is used to override the default service request settings when sending a file. <br />
@@ -387,7 +387,7 @@ use this value to verify the dropped files. <br />
 
 ### `InfoModal` {#InfoModal}
 
-- Type: {`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](./sharedTypes/#CustomStyle)}
+- Type: {`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](./styles#CustomStyle)}
 - Default: _{openModalOnce: false}_
 
 A modal that is triggered when a user clicks on a button to upload a file. It is useful for scenarios when a user needs some
@@ -464,8 +464,8 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](./service#Request), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](./sharedTypes#Button), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](./sharedTypes#CustomStyle) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](./styles#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](./styles#CustomStyle) <br />
   }
 
 Configuration for capturing images using a web camera and handling the resultant files. <br />

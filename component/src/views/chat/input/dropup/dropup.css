@@ -6,8 +6,8 @@
 #dropup-icon {
   position: absolute;
   pointer-events: none;
-  width: 1.15em;
-  height: 1.15em;
+  width: 1.16em;
+  height: 1.2em;
   left: 0.265em;
   bottom: 0.43em;
   filter: brightness(0) saturate(100%) invert(54%) sepia(0%) saturate(724%) hue-rotate(6deg) brightness(92%) contrast(90%);

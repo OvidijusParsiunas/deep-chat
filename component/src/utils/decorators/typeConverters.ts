@@ -6,6 +6,7 @@ export class TypeConverters {
     number: (value: string) => parseFloat(value),
     boolean: (value: string) => value === 'true',
     object: (value: string) => JSON.parse(value),
+    array: (value: string) => JSON.parse(value),
     function: (value: string) => eval(value),
   };
 }
