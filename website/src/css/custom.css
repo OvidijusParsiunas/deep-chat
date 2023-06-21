@@ -277,6 +277,11 @@ html[data-theme='dark'] .header-github-link:before {
   color: var(--code-punctuation-color) !important;
 }
 
+/* The following class is used when docusaurus automatically creates a header - we hide it to display another header with a logo beside it */
+.theme-doc-markdown header {
+  display: none;
+}
+
 /* This is used to reduce the space between the Introduction title and its subtitle  */
 h1 + h2 {
   margin-top: 35px !important;
