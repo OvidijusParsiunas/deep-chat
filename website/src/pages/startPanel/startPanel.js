@@ -9,7 +9,7 @@ import './startPanel.css';
 
 function RightPanel() {
   return (
-    <div id="start-panel-right" style={{position: 'relative', height: '400px', marginTop: '260px'}}>
+    <div id="start-panel-right" style={{position: 'relative', height: '400px'}}>
       <div id="start-panel-right-table" style={{display: 'flex'}}>
         <div style={{position: 'absolute', width: '100px', zIndex: 2}}>
           <DeepChatBrowser
@@ -27,22 +27,7 @@ function RightPanel() {
               borderRadius: '10px',
               boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
               borderColor: '#ededed',
-              left: '20px',
             }}
-            // messageStyles={{
-            //   default: {
-            //     user: {
-            //       bubble: {
-            //         boxShadow: '0 0.5rem 1rem 0 rgb(34 69 181 / 32%)',
-            //       },
-            //     },
-            //     ai: {
-            //       bubble: {
-            //         boxShadow: '0px 0.5rem 1rem 0px rgb(75 77 84 / 32%) ',
-            //       },
-            //     },
-            //   },
-            // }}
           ></DeepChatBrowser>
         </div>
         <div style={{position: 'absolute', left: '510px', paddingTop: '10px', zIndex: 1}}>
@@ -93,7 +78,7 @@ export function LeftPanel() {
       {/* <h1 id="start-sub-header">One chatbot to rule them all</h1> */}
       {/* <h1 id="start-sub-header">Framework agnostic chat component to power AI services of tomorrow</h1> */}
       {/* <h1 id="start-sub-header">Powering AI services of tomorrow</h1> */}
-      <h1 id="start-sub-header">Built to power AI services</h1>
+      <h1 id="start-sub-header">Built to power AI services of tomorrow</h1>
       <div id="start-buttons">
         <a className="homepage-button start-button" href="docs/installation">
           Installation
@@ -106,27 +91,11 @@ export function LeftPanel() {
   );
 }
 
-export function TopPanel() {
-  return (
-    <div style={{position: 'absolute', top: '70px', left: '160px'}}>
-      <div id="start-panel-top" style={{width: '900px', textAlign: 'center'}}>
-        <h1 id="start-colored-header" className="header-font" style={{color: '#003064'}}>
-          Deep Chat
-        </h1>
-        <h1 id="start-sub-header" style={{marginTop: '-5px', fontWeight: 600}}>
-          Built to power AI services of tomorrow
-        </h1>
-      </div>
-    </div>
-  );
-}
-
 export default function StartPanel() {
   return (
     <div id="start-panel">
       <div id="start-panel-content">
-        {/* <LeftPanel></LeftPanel> */}
-        <TopPanel></TopPanel>
+        <LeftPanel></LeftPanel>
         <RightPanel></RightPanel>
       </div>
     </div>
