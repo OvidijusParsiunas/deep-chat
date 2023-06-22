@@ -1,23 +1,19 @@
-import ProgrammaticUpdates from './programmaticUpdates/programmaticUpdates';
-import ResponsiveDesign from './responsiveDesign/responsiveDesign';
-import LayoutManagement from './layoutManagement/layoutManagement';
-import Customization from './customization/customization';
-import ColumnTypes from './columnTypes/columnTypes';
+import CaptureFiles from './captureFiles/captureFiles';
+import Customize from './customize/customization';
+import Content from './content/content';
+import Connect from './connect/connect';
+import Speech from './speech/speech';
 import React from 'react';
 import './features.css';
 
-// In the future - move this section to examples and replace it with reviews-statistics-comments etc.
 export default function Features() {
   return (
     <div id="features-container">
-      <div id="features-header" className="header-font">
-        Main Features
-      </div>
-      <ColumnTypes></ColumnTypes>
-      <ProgrammaticUpdates></ProgrammaticUpdates>
-      <ResponsiveDesign></ResponsiveDesign>
-      <LayoutManagement></LayoutManagement>
-      <Customization></Customization>
+      <Connect></Connect>
+      <Customize></Customize>
+      <CaptureFiles></CaptureFiles>
+      <Content></Content>
+      <Speech></Speech>
     </div>
   );
 }

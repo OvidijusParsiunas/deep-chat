@@ -1,0 +1,26 @@
+#column-types {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+#content-left {
+  float: left;
+  width: 50%;
+  justify-content: center;
+  display: flex;
+}
+
+#content-right {
+  float: right;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.column-types-text {
+  text-align: center;
+  font-size: 20px;
+  width: 80%;
+  margin-top: 100px;
+}

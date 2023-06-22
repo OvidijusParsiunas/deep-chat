@@ -26,18 +26,57 @@
   padding-top: 5px;
 }
 
+#start-panel-top {
+  width: 100%;
+  padding-top: 5px;
+}
+
+#message-bubble {
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  position: absolute;
+  top: 193px;
+  left: 330px;
+  animation: move 4s infinite;
+}
+
+@keyframes move {
+  40% {
+    left: 330px;
+    background-color: #e0e0e0;
+  }
+  70% {
+    left: 510px;
+    background-color: #e0e0e0;
+  }
+  71% {
+    left: 510px;
+    background-color: #0084ff;
+  }
+  100% {
+    left: 330px;
+    background-color: #0084ff;
+  }
+}
+
+.logo-box {
+  background-color: white;
+  border-radius: 10px;
+  width: 54px;
+  height: 55px;
+  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
+  margin-bottom: 15px;
+}
+
 #start-colored-header {
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -1.2px;
   font-size: 3.7rem;
   /* this is a fix for safari where it draws a blue line above/below the colored title */
   border-top: 1px solid var(--start-header-border-color);
   border-bottom: 1px solid var(--start-header-border-color);
-  background-image: linear-gradient(to right, rgb(104, 159, 214), rgb(44, 97, 150), rgb(56, 114, 172), rgb(104, 159, 214));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: color-change 700s linear infinite;
 }
 
 @keyframes color-change {

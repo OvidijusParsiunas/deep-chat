@@ -18,9 +18,9 @@
 
 .feature-sub-header {
   text-align: center;
-  font-size: 25px;
+  font-size: 35px;
   font-weight: 700;
-  color: var(--feature-title);
+  color: rgb(0, 48, 100);
 }
 
 .feature-text {

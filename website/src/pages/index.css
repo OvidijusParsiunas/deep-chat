@@ -19,6 +19,10 @@
     'Noto Color Emoji';
 }
 
+body {
+  background-color: snow;
+}
+
 @media (max-width: 1250px) {
   #start-sub-header {
     font-size: 2.3rem !important;
@@ -50,7 +54,6 @@
   }
 
   #start-panel-left {
-    width: 90% !important;
     margin-left: auto;
     margin-right: auto;
     float: none !important;

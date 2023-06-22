@@ -28,7 +28,7 @@
   --code-attr-name-color: #008af2;
   --code-attr-value-color: #053466;
   --start-button-color: #343434;
-  --start-button-border: 1px solid black;
+  --start-button-border: 1px solid rgb(181, 181, 181);
   --start-button-background-color: white;
   --start-button-background-hover-color: #f7f7f7;
   --start-button-background-click-color: #ebebeb;

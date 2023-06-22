@@ -133,7 +133,7 @@ export class DeepChat extends InternalHTML {
   getMessages: () => MessageContent[] = () => [];
 
   // will need to add an example for this
-  submitUserMessage: (userText: string, files?: File[]) => void = () =>
+  submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
   _hasBeenRendered = false;
