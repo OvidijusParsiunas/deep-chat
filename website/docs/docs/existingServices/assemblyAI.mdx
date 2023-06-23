@@ -32,6 +32,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         assemblyAI: {
           key: 'placeholder key',
@@ -42,6 +43,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         assemblyAI: {
           audio: true,
@@ -52,7 +54,21 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "assemblyAI": {
+      "key": "placeholder key",
+      "audio": true
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -64,6 +80,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
       "audio": true
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 

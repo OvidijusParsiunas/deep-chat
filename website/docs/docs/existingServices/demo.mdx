@@ -35,6 +35,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     existingService={{
       demo: {
         displayLoadingBubble: true,
@@ -46,7 +47,22 @@ import Tabs from '@theme/Tabs';
 </ComponentContainer>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "demo": {
+      "displayLoadingBubble": true,
+      "displayFileAttachmentContainer": true,
+      "displayErrors": {"default": true, "service": true, "speechToTextInput": true}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -59,6 +75,7 @@ import Tabs from '@theme/Tabs';
       "displayErrors": {"default": true, "service": true, "speechToTextInput": true}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 

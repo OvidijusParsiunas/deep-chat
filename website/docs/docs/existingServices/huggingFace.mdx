@@ -69,6 +69,7 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -79,6 +80,7 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           conversation: {model: 'facebook/blenderbot-400M-distill', parameters: {temperature: 1}},
@@ -89,7 +91,21 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "conversation": {"model": "facebook/blenderbot-400M-distill", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -101,6 +117,7 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
       "conversation": {"model": "facebook/blenderbot-400M-distill", "parameters": {"temperature": 1}}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -140,6 +157,7 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -150,6 +168,7 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           textGeneration: {model: 'gpt2', parameters: {temperature: 1}},
@@ -160,7 +179,21 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "textGeneration": {"model": "gpt2", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -172,6 +205,7 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
       "textGeneration": {"model": "gpt2", "parameters": {"temperature": 1}}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -211,6 +245,7 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -221,6 +256,7 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           summarization: {model: 'facebook/bart-large-cnn', parameters: {temperature: 1}},
@@ -231,7 +267,21 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "summarization": {"model": "facebook/bart-large-cnn", "parameters": {"temperature": 1}}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -243,6 +293,7 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
       "summarization": {"model": "facebook/bart-large-cnn", "parameters": {"temperature": 1}}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -269,6 +320,7 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -279,6 +331,7 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           translation: {model: 'Helsinki-NLP/opus-tatoeba-en-ja'},
@@ -289,7 +342,21 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "translation": {"model": "Helsinki-NLP/opus-tatoeba-en-ja"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -301,6 +368,7 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
       "translation": {"model": "Helsinki-NLP/opus-tatoeba-en-ja"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -327,6 +395,7 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -337,6 +406,7 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           fillMask: {model: 'bert-base-uncased'},
@@ -347,7 +417,21 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "fillMask": {"model": "bert-base-uncased"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -359,6 +443,7 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
       "fillMask": {"model": "bert-base-uncased"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -381,6 +466,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -395,6 +481,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           questionAnswer: {
@@ -409,7 +496,24 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "questionAnswer": {
+        "model": "bert-large-uncased-whole-word-masking-finetuned-squad",
+        "context": "Labrador retrievers are easily recognized by their broad head, drop ears and large, expressive eyes. Two trademarks of the Lab are the thick but fairly short double coat, which is very water repellent, and the well known otter tail. The tail is thick and sturdy and comes off the topline almost straight."
+        }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -424,6 +528,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
         }
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -445,6 +550,7 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -455,6 +561,7 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           audioSpeechRecognition: {model: 'facebook/wav2vec2-large-960h-lv60-self'},
@@ -465,7 +572,21 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "huggingFace": {"model": "facebook/wav2vec2-large-960h-lv60-self"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -477,6 +598,7 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
       "huggingFace": {"model": "facebook/wav2vec2-large-960h-lv60-self"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -498,6 +620,7 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -508,6 +631,7 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           audioSpeechRecognition: {model: 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition'},
@@ -518,7 +642,21 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "audioSpeechRecognition": {"model": "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -530,6 +668,7 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
       "audioSpeechRecognition": {"model": "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -551,6 +690,7 @@ Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           key: 'placeholder key',
@@ -561,6 +701,7 @@ Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         huggingFace: {
           imageClassification: {model: 'google/vit-base-patch16-224'},
@@ -571,7 +712,21 @@ Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "huggingFace": {
+      "key": "placeholder key",
+      "imageClassification": {"model": "google/vit-base-patch16-224"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -583,6 +738,7 @@ Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api
       "imageClassification": {"model": "google/vit-base-patch16-224"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 

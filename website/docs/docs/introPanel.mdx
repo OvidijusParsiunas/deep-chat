@@ -23,12 +23,12 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser existingService={{demo: true}}>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}>
     <div
       style={{
         width: '200px',
         backgroundColor: '#f3f3f3',
-        borderRadius: '10px',
+        borderRadius: '8px',
         padding: '12px',
         paddingBottom: '15px',
         display: 'none',
@@ -79,7 +79,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat existingService='{"demo": true}'>
+<deep-chat existingService='{"demo": true}' containerStyle='{"borderRadius": "8px"}'>
   <div
     style="
       width: 200px;
@@ -124,6 +124,7 @@ If you are using a custom intro panel (example above), it will instead be applie
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introPanelStyle={{backgroundColor: '#fffeec'}}
     existingService={{openAI: {audio: true, key: 'placeholder-key'}}}
   ></DeepChatBrowser>
@@ -147,6 +148,7 @@ If you are using a custom intro panel (example above), it will instead be applie
 
 <deep-chat
   introPanelStyle='{"backgroundColor": "#fffeec"}'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"openAI": {"audio": true, "key": "placeholder-key"}}'
 ></deep-chat>
 ```

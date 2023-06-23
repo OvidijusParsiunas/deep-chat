@@ -32,7 +32,7 @@ import Tabs from '@theme/Tabs';
       {text: `Whats on your mind?`, role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
-    containerStyle={{height: '370px'}}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -63,7 +63,7 @@ import Tabs from '@theme/Tabs';
     {"text": "Whats on your mind?", "role": "user"},
     {"text": "Peace and tranquility", "role": "ai"}
   ]'
-  containerStyle='{"height": "370px"}'
+  containerStyle='{"height": "370px", "borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -85,6 +85,7 @@ is not taken into consideration when calculating [`requestBodyMessageLimits`](./
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Hi I am your assistant, ask me anything!`}
     existingService={{demo: true}}
   ></DeepChatBrowser>
@@ -103,7 +104,11 @@ is not taken into consideration when calculating [`requestBodyMessageLimits`](./
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat introMessage="Hi I am your assistant, ask me anything!" existingService='{"demo": true}'></deep-chat>
+<deep-chat
+  introMessage="Hi I am your assistant, ask me anything!"
+  existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
 ```
 
 </TabItem>
@@ -122,6 +127,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -160,6 +166,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -189,6 +196,7 @@ This object is used to configure avatars that are displayed beside messages. <br
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -238,6 +246,7 @@ This object is used to configure avatars that are displayed beside messages. <br
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -258,6 +267,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -296,6 +306,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -322,6 +333,7 @@ This object is used to configure names that are displayed beside messages. <br /
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -368,6 +380,7 @@ This object is used to configure names that are displayed beside messages. <br /
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -388,6 +401,7 @@ will automatically have a loading animation.
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={'Please send a new message to observe a response with no loading bubble.'}
     displayLoadingBubble={false}
     existingService={{demo: true}}
@@ -410,6 +424,7 @@ will automatically have a loading animation.
 <deep-chat
   displayLoadingBubble="false"
   introMessage="Please send a new message to observe a response with no loading bubble."
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -441,6 +456,7 @@ functionality. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     existingService={{demo: {displayErrors: {default: true, service: true, speechToTextInput: true}}}}
     errorMessages={{
       overrides: {
@@ -481,6 +497,7 @@ functionality. <br />
       "speechToTextInput": "Speech to text microphone error!"
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": {"displayErrors": {"default": true, "service": true, "speechToTextInput": true}}}'
 ></deep-chat>
 ```
@@ -509,6 +526,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
@@ -560,6 +578,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ````
@@ -594,6 +613,7 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     initialMessages={[
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
@@ -628,6 +648,7 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
     {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
     {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```

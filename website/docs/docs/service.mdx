@@ -42,6 +42,7 @@ Configuration for the outgoing message HTTP requests.
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     request={{
       url: 'https://customapi.com/message',
       method: 'POST',
@@ -78,6 +79,7 @@ Configuration for the outgoing message HTTP requests.
     "headers": {"customName": "customHeaderValue"},
     "body": {"field": "value"}
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -95,6 +97,7 @@ can stream the response messages into the chat. This is only supported for text 
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     stream={true}
     existingService={{demo: true}}
     introMessage={`The response message bubble will be populated gradually with text events.`}
@@ -117,6 +120,7 @@ can stream the response messages into the chat. This is only supported for text 
 <deep-chat
   stream="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="The response message bubble will be populated gradually with text events."
 ></deep-chat>
 ```
@@ -137,6 +141,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Observe the data that is going to be sent below.`}
     requestBodyMessageLimits={{
       totalMessagesMaxCharLength: 20,
@@ -169,6 +174,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
     "totalMessagesMaxCharLength": 20,
     "maxMessages": 2
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
   introMessage="Observe the data that is going to be sent below."
 ></deep-chat>
@@ -199,6 +205,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     request={{
       url: 'https://customapi.com/message',
       method: 'POST',
@@ -235,6 +242,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
     "headers": {"customName": "customHeaderValue"},
     "body": {"customBodyField": "customBodyValue"}
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 

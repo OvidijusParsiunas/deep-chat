@@ -60,6 +60,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         openAI: {
           key: 'placeholder key',
@@ -70,6 +71,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         openAI: {
           chat: {systemPrompt: 'Assist me with anything you can'},
@@ -80,7 +82,21 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "openAI": {
+      "key": "placeholder key",
+      "chat": {"systemPrompt": "Assist me with anything you can"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -92,6 +108,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
       "chat": {"systemPrompt": "Assist me with anything you can"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -105,6 +122,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         openAI: {
           key: 'placeholder key',
@@ -116,6 +134,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
       existingService={{
         openAI: {
           validateKeyProperty: true,
@@ -127,7 +146,22 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
 </ContainersKeyToggle>
 
 <Tabs>
-<TabItem value="py" label="Code">
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  existingService='{
+    "openAI": {
+      "key": "placeholder key",
+      "validateKeyProperty": true,
+      "chat": {"systemPrompt": "Assist me with anything you can"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
@@ -140,6 +174,7 @@ Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/o
       "chat": {"systemPrompt": "Assist me with anything you can"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 

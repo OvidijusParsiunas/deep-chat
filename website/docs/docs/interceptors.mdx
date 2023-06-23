@@ -25,7 +25,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerInterceptors propertyName={'requestInterceptor'}>
-  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -65,7 +65,7 @@ however this method MUST return a [`Result`](./service#Result) type object (or a
 #### Example
 
 <ComponentContainerInterceptors propertyName={'responseInterceptor'}>
-  <DeepChatBrowser existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -91,7 +91,11 @@ The method must return a boolean value with either _true_ or _false_ for whether
 #### Example
 
 <ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'}>
-  <DeepChatBrowser existingService={{demo: true}} mixedFiles={true}></DeepChatBrowser>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    existingService={{demo: true}}
+    mixedFiles={true}
+  ></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>

@@ -30,6 +30,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     images={true}
@@ -52,6 +53,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <deep-chat
   images="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the image button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -70,6 +72,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the camera button to open up a modal for capturing photos.`}
     existingService={{demo: true}}
     camera={true}
@@ -92,6 +95,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
 <deep-chat
   camera="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the camera button to open up a modal for capturing photos."
 ></deep-chat>
 ```
@@ -110,6 +114,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     audio={true}
@@ -132,6 +137,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <deep-chat
   audio="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -150,6 +156,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the microphone button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     microphone={true}
@@ -172,6 +179,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
 <deep-chat
   microphone="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the microphone button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -190,6 +198,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the file button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     mixedFiles={true}
@@ -212,6 +221,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <deep-chat
   mixedFiles="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the file button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -234,6 +244,7 @@ _".png,.jpg"_ in [`images`](./files#images) are the only file types allowed, a d
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={'Drag and drop a file to observe the result.'}
     dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
     mixedFiles={true}
@@ -258,6 +269,7 @@ _".png,.jpg"_ in [`images`](./files#images) are the only file types allowed, a d
   dragAndDrop='{"backgroundColor": "#80ff704d", "border": "5px dashed #52c360"}'
   mixedFiles="true"
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Drag and drop a file to observe the result."
 ></deep-chat>
 ```
@@ -282,6 +294,7 @@ Object used to configure the ability for the component to send files. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     audio={{
@@ -318,6 +331,7 @@ Object used to configure the ability for the component to send files. <br />
     "button": {"position": "outside-left"}
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -349,6 +363,7 @@ use this value to verify the dropped files. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
     existingService={{demo: true}}
     images={{
@@ -376,6 +391,7 @@ use this value to verify the dropped files. <br />
 <deep-chat
   images='{"files": {"maxNumberOfFiles": 2, "acceptedFormats": ".jpg,.png"}}'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the image button or drop a file to attach it to the next outgoing message."
 ></deep-chat>
 ```
@@ -399,6 +415,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Click the image button to open up the modal.`}
     existingService={{demo: true}}
     images={{
@@ -450,6 +467,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
     }
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Click the image button to open up the modal."
 ></deep-chat>
 ```
@@ -476,6 +494,7 @@ Configuration for capturing images using a web camera and handling the resultant
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the camera button to open up a modal for capturing photos.`}
     existingService={{demo: true}}
     camera={{
@@ -515,6 +534,7 @@ Configuration for capturing images using a web camera and handling the resultant
     "modalContainerStyle": {"borderRadius": "5px"}
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the camera button to open up a modal for capturing photos."
 ></deep-chat>
 ```
@@ -550,6 +570,7 @@ the `acceptedFormats` property, it will override this one.<br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the camera button to open up a modal for capturing photos.`}
     existingService={{demo: true}}
     camera={{
@@ -595,6 +616,7 @@ the `acceptedFormats` property, it will override this one.<br />
     }
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the camera button to open up a modal for capturing photos."
 ></deep-chat>
 ```
@@ -619,6 +641,7 @@ Configuration for recording audio using a microphone and handling the resultant 
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
     microphone={{
@@ -655,6 +678,7 @@ Configuration for recording audio using a microphone and handling the resultant 
     "button": {"position": "outside-left"}
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the microphone button to record audio."
 ></deep-chat>
 ```
@@ -690,6 +714,7 @@ the `acceptedFormats` property, it will override this one.<br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
     microphone={{
@@ -735,6 +760,7 @@ the `acceptedFormats` property, it will override this one.<br />
     }
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the microphone button to record audio."
 ></deep-chat>
 ```

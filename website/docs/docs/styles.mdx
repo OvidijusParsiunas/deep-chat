@@ -25,7 +25,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '15px'}}
+    containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '8px'}}
     existingService={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -34,7 +34,7 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'></deep-chat>
+<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}'></deep-chat>
 ```
 
 </TabItem>
@@ -44,7 +44,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'
+  containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -66,6 +66,7 @@ Object containing CSS styling properties for the element containing files attach
   <DeepChatBrowser
     attachmentContainerStyle={{backgroundColor: '#76fffc57'}}
     existingService={{demo: {displayFileAttachmentContainer: true}}}
+    containerStyle={{borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -73,7 +74,7 @@ Object containing CSS styling properties for the element containing files attach
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "15px"}'></deep-chat>
+<deep-chat attachmentContainerStyle='{"backgroundColor": "#76fffc57"}'></deep-chat>
 ```
 
 </TabItem>
@@ -85,6 +86,7 @@ Object containing CSS styling properties for the element containing files attach
 <deep-chat
   attachmentContainerStyle='{"backgroundColor": "#76fffc57"}'
   existingService='{"demo": {"displayFileAttachmentContainer": true}}'
+  containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
 
@@ -110,6 +112,7 @@ Configuration for the dropup button and its menu element styles. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={'Open the dropup by clicking the + button on bottom left of the input.'}
     dropupStyles={{
       button: {
@@ -223,6 +226,7 @@ Configuration for the dropup button and its menu element styles. <br />
     }
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   audio='{"button": {"position": "dropup-menu"}}'
   images='{"button": {"position": "dropup-menu"}}'
   introMessage="Open the dropup by clicking the + button on bottom left of the input."
@@ -243,7 +247,11 @@ Styling for the chat view's bottom area dedicated for text input and file button
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser inputAreaStyle={{backgroundColor: '#ebf5ff'}} existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    inputAreaStyle={{backgroundColor: '#ebf5ff'}}
+    existingService={{demo: true}}
+  ></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
@@ -259,7 +267,11 @@ Styling for the chat view's bottom area dedicated for text input and file button
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}' existingService='{"demo": true}'></deep-chat>
+<deep-chat
+  inputAreaStyle='{"backgroundColor": "#ebf5ff"}'
+  containerStyle='{"borderRadius": "8px"}'
+  existingService='{"demo": true}'
+></deep-chat>
 ```
 
 </TabItem>
@@ -287,6 +299,7 @@ Custom details for the chat's text input. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     textInput={{
       styles: {text: {fontSize: '16px', color: 'black'}, container: {maxHeight: '50px', backgroundColor: '#e0edff'}},
       placeholder: {text: 'Insert text here...', style: {color: '#4f8bff'}},
@@ -321,6 +334,7 @@ Custom details for the chat's text input. <br />
     "placeholder": {"text": "Insert text here...", "style": {"color": "#4f8bff"}},
     "characterLimit": 10
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -334,6 +348,7 @@ Custom details for the chat's text input. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
     existingService={{demo: true}}
   ></DeepChatBrowser>
@@ -364,6 +379,7 @@ Custom details for the chat's text input. <br />
     "placeholder": {
       "text": "Text not allowed..."
   }}'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -391,6 +407,7 @@ when a response message is being [`streamed`](./service#stream). <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     submitButtonStyles={{
       submit: {
         container: {
@@ -470,6 +487,7 @@ when a response message is being [`streamed`](./service#stream). <br />
     },
     "position": "outside-right"
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -483,6 +501,7 @@ when a response message is being [`streamed`](./service#stream). <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     textInput={{styles: {text: {paddingRight: '70px'}}}}
     submitButtonStyles={{
       submit: {
@@ -573,6 +592,7 @@ when a response message is being [`streamed`](./service#stream). <br />
       }
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -606,6 +626,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     existingService={{demo: true}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
@@ -674,6 +695,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
     {"text": "I just feel like sleeping all day...", "role": "user"},
     {"text": "As long as it makes you happy!", "role": "ai"}
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -722,6 +744,7 @@ Styling for a button inside the chat view. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     existingService={{demo: true}}
     images={{
       button: {
@@ -777,6 +800,7 @@ Styling for a button inside the chat view. <br />
       "position": "outside-left"
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -803,6 +827,7 @@ Styling for a button inside the chat view. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     textInput={{styles: {text: {paddingRight: '64px'}}}}
     submitButtonStyles={{
       submit: {
@@ -904,6 +929,7 @@ Styling for a button inside the chat view. <br />
 
 <deep-chat
   textInput='{"styles": {"text": {"paddingRight": "64px"}}}'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
   submitButtonStyles='{
     "submit": {
@@ -985,6 +1011,7 @@ Position for a button either _inside_ the [text input container](./input#textInp
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     existingService={{demo: true}}
     audio={{button: {position: 'dropup-menu'}}}
     camera={{button: {position: 'dropup-menu'}}}
@@ -1013,6 +1040,7 @@ Position for a button either _inside_ the [text input container](./input#textInp
 
 <deep-chat
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   audio='{"button": {"position": "dropup-menu"}}'
   camera='{"button": {"position": "dropup-menu"}}'
   mixedFiles='{"button": {"position": "inside-left"}}'
@@ -1042,6 +1070,7 @@ Custom styling for the microphone button. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the microphone button to record audio.`}
     existingService={{demo: true}}
     microphone={{
@@ -1195,6 +1224,7 @@ Custom styling for the microphone button. <br />
     }
   }'
   existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the microphone button to record audio."
 ></deep-chat>
 ```

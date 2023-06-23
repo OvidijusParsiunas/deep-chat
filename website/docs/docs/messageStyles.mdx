@@ -57,6 +57,7 @@ Object defining the styling for various message roles. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       default: {
         shared: {bubble: {color: 'white'}},
@@ -111,6 +112,7 @@ Object defining the styling for various message roles. <br />
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -138,6 +140,7 @@ to display the file contents. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       default: {
         shared: {
@@ -204,6 +207,7 @@ to display the file contents. <br />
       "role": "ai"
     }
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -219,6 +223,7 @@ to display the file contents. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       image: {
         shared: {
@@ -299,6 +304,7 @@ to display the file contents. <br />
     {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "ai"},
     {"file": {"src": "path-to-file.txt", "type": "file"}, "role": "user"}
   ]'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -320,6 +326,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       intro: {
         bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
@@ -354,6 +361,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     }
   }'
   introMessage="Hi I'm an AiAssistant, ask me anything!"
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'
 ></deep-chat>
 ```
@@ -367,6 +375,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       loading: {
         bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
@@ -401,6 +410,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       "bubble": {"backgroundColor": "#3793ff", "fontSize": "20px", "color": "white"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": {"displayLoadingBubble": true}}'
 ></deep-chat>
 ```
@@ -414,6 +424,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <ComponentContainer>
   <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
     messageStyles={{
       error: {
         bubble: {backgroundColor: '#f98e00', color: 'white', fontSize: '15px'},
@@ -448,6 +459,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       "bubble": {"backgroundColor": "#f98e00", "color": "white", "fontSize": "15px"}
     }
   }'
+  containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": {"displayErrors": {"service": true}}}'
 ></deep-chat>
 ```
