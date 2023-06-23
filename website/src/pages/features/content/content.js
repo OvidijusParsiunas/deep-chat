@@ -32,8 +32,8 @@ function LeftPanel() {
   return (
     <div id="content-left">
       <div className="column-types-text">
-        Send image, audio, gif, spreadsheet and any other files types to and from the target service. Message text is also
-        supported by <b>Mark Down</b> to allow transcription of code and other style configuration.
+        Send images, audio, gifs, spreadsheets and any other files to and from the target service. Text messages support{' '}
+        <b>MarkDown</b> to help control text layout and render code.
       </div>
     </div>
   );
@@ -43,7 +43,7 @@ export default function Content() {
   return (
     <div id="customization">
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
-        Send and Receive any Content
+        Media and MarkDown
       </div>
       <div id="column-types">
         <LeftPanel></LeftPanel>

@@ -40,7 +40,7 @@ export default function Speech() {
   return (
     <div id="customization">
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
-        Enhance your experience with Speech
+        Enrich chat with Speech
       </div>
       <div id="column-types">
         <LeftPanel></LeftPanel>

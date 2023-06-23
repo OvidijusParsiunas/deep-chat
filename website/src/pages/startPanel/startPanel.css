@@ -1,4 +1,5 @@
 #start-panel {
+  background-color: snow;
   position: relative;
   width: 100%;
   height: 600px;
@@ -8,6 +9,8 @@
   margin-right: auto;
   padding-top: 1%;
   margin-top: 40px;
+  border-bottom-left-radius: 100% 15%;
+  border-bottom-right-radius: 100% 15%;
 }
 
 #start-panel-content {
@@ -15,7 +18,7 @@
   margin-top: 0px;
   margin-bottom: 0px;
   top: 50%;
-  margin-left: 55px;
+  margin-left: 120px;
   margin-right: 55px;
   transform: translateY(-60%);
 }
@@ -179,7 +182,7 @@
 
 @media (max-height: 800px) {
   #start-panel {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 20px);
     margin-top: 0px;
   }
 }

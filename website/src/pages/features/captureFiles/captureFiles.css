@@ -9,11 +9,13 @@
   width: 50%;
   justify-content: center;
   display: flex;
+  padding-left: 40px;
 }
 
 #column-types-right {
   float: right;
   width: 50%;
+  padding-right: 23px;
 }
 
 .column-types-text {

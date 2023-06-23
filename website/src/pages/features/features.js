@@ -10,10 +10,10 @@ export default function Features() {
   return (
     <div id="features-container">
       <Connect></Connect>
-      <Customize></Customize>
-      <CaptureFiles></CaptureFiles>
       <Content></Content>
+      <CaptureFiles></CaptureFiles>
       <Speech></Speech>
+      <Customize></Customize>
     </div>
   );
 }

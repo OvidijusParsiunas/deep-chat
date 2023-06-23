@@ -6,8 +6,8 @@ function RightPanel() {
   return (
     <div id="column-types-right">
       <div className="column-types-text">
-        Deep Chat can connect to any API. You can use the default options for any of the existing services or configure
-        your own setup to connect to your own service.
+        Deep Chat can connect to any API. You can use the default settings to connect to any of the available services or
+        configure the setup to connect to your own service.
       </div>
     </div>
   );
@@ -33,6 +33,15 @@ function LeftPanel() {
           borderColor: '#ededed',
           marginLeft: '30px',
           marginRight: '30px',
+        }}
+        messageStyles={{
+          default: {
+            user: {
+              bubble: {
+                backgroundColor: '#32c132',
+              },
+            },
+          },
         }}
       ></DeepChatBrowser>
     </div>
