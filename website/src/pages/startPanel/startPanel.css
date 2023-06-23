@@ -15,12 +15,11 @@
 
 #start-panel-content {
   position: absolute;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  top: 50%;
-  margin-left: 120px;
-  margin-right: 55px;
-  transform: translateY(-60%);
+  transform: translateY(-50%);
+  top: 42%;
+  left: 10%;
+  width: 80%;
+  text-align: center;
 }
 
 #start-panel-left {
@@ -40,14 +39,44 @@
   border-radius: 15px;
   background-color: #e0e0e0;
   position: absolute;
-  top: 193px;
-  left: 330px;
+  top: 174px;
+  left: 325px;
+  z-index: -3;
+}
+
+.message-animation {
   animation: move 4s infinite;
+}
+
+.not-displayed {
+  display: none;
+}
+
+.displayed {
+  display: block;
+}
+
+#message-line {
+  position: absolute;
+  top: 180px;
+  left: 330px;
+  z-index: -4;
+  height: 2px;
+  background-color: #dbdbdb;
+  transition: width 1s;
+}
+
+.message-line-short {
+  width: 0px;
+}
+
+.message-line-long {
+  width: 220px;
 }
 
 @keyframes move {
   40% {
-    left: 330px;
+    left: 325px;
     background-color: #e0e0e0;
   }
   70% {
@@ -64,28 +93,64 @@
   }
 }
 
+#start-panel-logos {
+  position: absolute;
+  z-index: -2;
+  display: flex;
+  flex-direction: column;
+  transition: all 1s;
+}
+
+.center-position {
+  top: 153px;
+}
+
+.top-position {
+  top: 15px;
+}
+
+.collapsed-layout .logo-box {
+  margin-bottom: -55px;
+}
+
+.regular-layout .logo-box {
+  margin-bottom: 15px;
+}
+
+.start-panel-logos-position {
+  left: 380px;
+}
+
+.start-panel-logos-right-position {
+  left: 505px;
+}
+
 .logo-box {
   background-color: white;
   border-radius: 10px;
   width: 54px;
   height: 55px;
   box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
-  margin-bottom: 15px;
+  display: inline-block;
+  transition: margin-bottom 1s;
+}
+
+.start-panel-component {
+  transition: margin-left 1s;
+}
+
+.component-center-position {
+  margin-left: 140px;
+}
+
+.component-left-position {
+  margin-left: 25px;
 }
 
 #start-colored-header {
   font-weight: 700;
   letter-spacing: -1.2px;
   font-size: 3.7rem;
-  /* this is a fix for safari where it draws a blue line above/below the colored title */
-  border-top: 1px solid var(--start-header-border-color);
-  border-bottom: 1px solid var(--start-header-border-color);
-}
-
-@keyframes color-change {
-  to {
-    background-position: 4500vh;
-  }
 }
 
 /* #start-colored-header {
@@ -139,20 +204,6 @@
 
 .start-button:active {
   background-color: var(--start-button-background-click-color) !important;
-}
-
-#start-panel-right {
-  float: right;
-  padding-left: 5px;
-  padding-top: 20px;
-  text-align: center;
-  width: 50%;
-}
-
-#start-panel-right-table {
-  width: 580px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* REF-39 - fade in */
