@@ -18,14 +18,10 @@ function LeftPanel() {
     <div id="column-types-left">
       <DeepChatBrowser
         existingService={{demo: true}}
+        introMessage={`Click the camera or the microphone button.`}
         initialMessages={[
-          {text: 'Hey, how are you?', role: 'user'},
-          {text: 'I am doing great, how about you?', role: 'ai'},
-          {text: 'What is the meaning of life?', role: 'user'},
-          {
-            text: 'This depends on the person.',
-            role: 'ai',
-          },
+          {file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'},
+          {file: {src: '/audio/jeff.mp3', type: 'audio'}, role: 'ai'},
         ]}
         containerStyle={{
           borderRadius: '10px',
@@ -33,6 +29,15 @@ function LeftPanel() {
           borderColor: '#ededed',
           marginLeft: '30px',
           marginRight: '30px',
+        }}
+        camera={{button: {styles: {container: {default: {marginRight: '2px'}}}}}}
+        microphone={{button: {styles: {container: {default: {marginLeft: '4px'}}}}}}
+        textInput={{
+          styles: {
+            container: {
+              width: '75%',
+            },
+          },
         }}
       ></DeepChatBrowser>
     </div>

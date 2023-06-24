@@ -31,6 +31,7 @@ function LeftPanel() {
           marginLeft: '30px',
           marginRight: '30px',
         }}
+        microphone={true}
       ></DeepChatBrowser>
     </div>
   );

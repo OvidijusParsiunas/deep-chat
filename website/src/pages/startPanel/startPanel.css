@@ -1,5 +1,5 @@
 #start-panel {
-  background-color: snow;
+  background-color: #fff5f5;
   position: relative;
   width: 100%;
   height: 600px;
@@ -39,7 +39,7 @@
   border-radius: 15px;
   background-color: #e0e0e0;
   position: absolute;
-  top: 174px;
+  top: 173px;
   left: 325px;
   z-index: -3;
 }
@@ -59,7 +59,7 @@
 #message-line {
   position: absolute;
   top: 180px;
-  left: 330px;
+  left: 345px;
   z-index: -4;
   height: 2px;
   background-color: #dbdbdb;
@@ -71,7 +71,7 @@
 }
 
 .message-line-long {
-  width: 220px;
+  width: 175px;
 }
 
 @keyframes move {
@@ -95,7 +95,7 @@
 
 #start-panel-logos {
   position: absolute;
-  z-index: -2;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   transition: all 1s;
@@ -118,11 +118,11 @@
 }
 
 .start-panel-logos-position {
-  left: 380px;
+  left: 395px;
 }
 
 .start-panel-logos-right-position {
-  left: 505px;
+  left: 495px;
 }
 
 .logo-box {
@@ -133,6 +133,11 @@
   box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
   display: inline-block;
   transition: margin-bottom 1s;
+  cursor: pointer;
+}
+
+.logo-box:hover {
+  background-color: rgb(233, 233, 233);
 }
 
 .start-panel-component {
@@ -140,11 +145,11 @@
 }
 
 .component-center-position {
-  margin-left: 140px;
+  margin-left: 155px;
 }
 
 .component-left-position {
-  margin-left: 25px;
+  margin-left: 40px;
 }
 
 #start-colored-header {

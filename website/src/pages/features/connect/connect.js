@@ -19,13 +19,10 @@ function LeftPanel() {
       <DeepChatBrowser
         existingService={{demo: true}}
         initialMessages={[
-          {text: 'Hey, how are you?', role: 'user'},
-          {text: 'I am doing great, how about you?', role: 'ai'},
-          {text: 'What is the meaning of life?', role: 'user'},
-          {
-            text: 'This depends on the person.',
-            role: 'ai',
-          },
+          {text: 'Where do I start?', role: 'user'},
+          {text: 'See how to install with live examples in Docs.', role: 'ai'},
+          {text: 'Can you connect to a custom API?', role: 'user'},
+          {text: 'I sure can! Check the Service section in Docs.', role: 'ai'},
         ]}
         containerStyle={{
           borderRadius: '10px',
@@ -43,6 +40,7 @@ function LeftPanel() {
             },
           },
         }}
+        stream={true}
       ></DeepChatBrowser>
     </div>
   );

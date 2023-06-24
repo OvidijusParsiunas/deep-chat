@@ -7,21 +7,59 @@ function RightPanel() {
     <div id="content-right">
       <DeepChatBrowser
         existingService={{demo: true}}
-        initialMessages={[
-          {text: 'Hey, how are you?', role: 'user'},
-          {text: 'I am doing great, how about you?', role: 'ai'},
-          {text: 'What is the meaning of life?', role: 'user'},
-          {
-            text: 'This depends on the person.',
-            role: 'ai',
-          },
-        ]}
         containerStyle={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
           marginLeft: '30px',
           marginRight: '30px',
+          height: '400px',
+        }}
+        messageStyles={{
+          default: {
+            user: {
+              bubble: {
+                maxWidth: '90%',
+                backgroundColor: '#e4e6eb',
+                marginRight: '10px',
+              },
+            },
+            ai: {
+              bubble: {
+                maxWidth: '90%',
+                marginLeft: '10px',
+              },
+            },
+          },
+          audio: {
+            user: {
+              bubble: {
+                width: '70%',
+                backgroundColor: 'white',
+              },
+            },
+          },
+          image: {
+            user: {
+              bubble: {
+                maxWidth: '70%',
+                marginTop: '14px',
+              },
+            },
+          },
+        }}
+        initialMessages={[
+          {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
+          {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
+          {text: '```java\nconsole.log("hello world");\n```', role: 'ai'},
+        ]}
+        images={true}
+        audio={true}
+        mixedFiles={true}
+        dropupStyles={{
+          button: {
+            position: 'outside-right',
+          },
         }}
       ></DeepChatBrowser>
     </div>
@@ -41,7 +79,7 @@ function LeftPanel() {
 
 export default function Content() {
   return (
-    <div id="customization">
+    <div id="customization" style={{height: '350px'}}>
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
         Media and MarkDown
       </div>
