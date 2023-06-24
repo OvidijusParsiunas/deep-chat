@@ -244,7 +244,7 @@ to display the file contents. <br />
     initialMessages={[
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'ai'},
-      {file: {src: '/text/text.txt', type: 'file'}, role: 'user'},
+      {file: {src: '/text/text.txt', type: 'file', name: 'text-file.txt'}, role: 'user'},
     ]}
     existingService={{demo: true}}
   ></DeepChatBrowser>
@@ -302,7 +302,7 @@ to display the file contents. <br />
   initialMessages='[
     {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
     {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "ai"},
-    {"file": {"src": "path-to-file.txt", "type": "file"}, "role": "user"}
+    {"file": {"src": "path-to-file.txt", name: "text-file.txt", "type": "file"}, "role": "user"}
   ]'
   containerStyle='{"borderRadius": "8px"}'
   existingService='{"demo": true}'

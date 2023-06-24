@@ -8,7 +8,7 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Active Table',
+  title: 'Deep Chat',
   tagline: 'Fully customisable editable table component',
   url: 'https://active-table.io',
   baseUrl: '/',
@@ -18,7 +18,7 @@ const config = {
 
   // GitHub pages deployment config
   organizationName: 'OvidijusParsiunas', // GitHub org/user name
-  projectName: 'active-table', // repo name
+  projectName: 'deep-chat', // repo name
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -77,7 +77,7 @@ const config = {
         {name: 'twitter:description', content: 'Framework agnostic table component for editable data experience'},
       ],
       navbar: {
-        title: 'Active Table',
+        title: 'Deep Chat',
         items: [
           {
             type: 'docSidebar',

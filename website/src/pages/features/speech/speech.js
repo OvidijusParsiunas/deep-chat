@@ -41,7 +41,7 @@ export default function Speech() {
   return (
     <div id="customization">
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
-        Enrich chat with Speech
+        Enhance chat with Speech
       </div>
       <div id="column-types">
         <LeftPanel></LeftPanel>
