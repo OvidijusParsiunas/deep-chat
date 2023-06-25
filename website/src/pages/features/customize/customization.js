@@ -197,7 +197,7 @@ export default function Customize() {
                 backgroundColor: '#fffcfc',
               },
             },
-            placeholder: {text: `Insert your question here`},
+            placeholder: {text: `Insert your question here...`},
           }}
           stream={true}
         ></DeepChatBrowser>

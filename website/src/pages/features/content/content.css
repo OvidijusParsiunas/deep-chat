@@ -1,21 +1,27 @@
-#column-types {
+#content {
   display: flex;
   justify-content: center;
-  margin-top: 60px;
 }
 
 #content-left {
-  float: left;
   width: 50%;
-  justify-content: center;
+  justify-content: right;
   display: flex;
 }
 
 #content-right {
-  float: right;
-  width: 50%;
   display: flex;
-  justify-content: center;
+  width: 50%;
+  padding-left: 140px;
+}
+
+.content-top {
+  transition: all 1s;
+  margin-top: 50px;
+}
+
+.content-bottom {
+  margin-top: 250px;
 }
 
 .column-types-text {

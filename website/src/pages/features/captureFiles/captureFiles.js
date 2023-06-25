@@ -48,7 +48,7 @@ export default function CaptureFiles() {
   return (
     <div id="customization">
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
-        Camera and Microphone
+        Use Camera and Microphone
       </div>
       <div id="column-types">
         <LeftPanel></LeftPanel>

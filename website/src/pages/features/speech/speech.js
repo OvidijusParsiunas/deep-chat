@@ -5,17 +5,6 @@ import React from 'react';
 function RightPanel() {
   return (
     <div id="column-types-right">
-      <div className="column-types-text">
-        Input your text using real time speech to text transcription and have the response messages automatically read out
-        using text to speech synthesis.
-      </div>
-    </div>
-  );
-}
-
-function LeftPanel() {
-  return (
-    <div id="column-types-left">
       <DeepChatBrowser
         existingService={{demo: true}}
         initialMessages={[
@@ -33,6 +22,17 @@ function LeftPanel() {
         }}
         microphone={true}
       ></DeepChatBrowser>
+    </div>
+  );
+}
+
+function LeftPanel() {
+  return (
+    <div id="column-types-left">
+      <div className="column-types-text">
+        Input your text using real time speech to text transcription and have the response messages automatically read out
+        using text to speech synthesis.
+      </div>
     </div>
   );
 }

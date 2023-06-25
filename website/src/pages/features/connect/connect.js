@@ -2,10 +2,31 @@ import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import React from 'react';
 import './connect.css';
 
+function TriggerOnVisibile(props) {
+  const domRef = React.useRef();
+  const [isVisible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => setVisible(true), 100);
+        observer.unobserve(domRef.current);
+      }
+    });
+    observer.observe(domRef.current);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={domRef} className={isVisible ? 'animation-class' : 'not-animation-class'}>
+      {props.children}
+    </div>
+  );
+}
+
 function RightPanel() {
   return (
-    <div id="column-types-right">
-      <div className="column-types-text">
+    <div id="connect-right-panel">
+      <div className="connect-right-panel-text">
         Deep Chat can connect to any API. You can use the default settings to connect to any of the available services or
         configure the setup to connect to your own service.
       </div>
@@ -15,14 +36,14 @@ function RightPanel() {
 
 function LeftPanel() {
   return (
-    <div id="column-types-left">
+    <div id="connect-left-panel">
       <DeepChatBrowser
         existingService={{demo: true}}
         initialMessages={[
           {text: 'Where do I start?', role: 'user'},
-          {text: 'See how to install with live examples in Docs.', role: 'ai'},
-          {text: 'Can you connect to a custom API?', role: 'user'},
-          {text: 'I sure can! Check the Service section in Docs.', role: 'ai'},
+          {text: 'Check Docs on how to install this component.', role: 'ai'},
+          {text: 'Can it connect to my custom API?', role: 'user'},
+          {text: 'It sure can! Check the Service section in Docs.', role: 'ai'},
         ]}
         containerStyle={{
           borderRadius: '10px',
@@ -52,10 +73,12 @@ export default function Connect() {
       <div className="feature-sub-header" style={{marginTop: '150px'}}>
         Connect to any service
       </div>
-      <div id="column-types">
-        <LeftPanel></LeftPanel>
-        <RightPanel></RightPanel>
-      </div>
+      <TriggerOnVisibile>
+        <div id="column-types">
+          <LeftPanel></LeftPanel>
+          <RightPanel></RightPanel>
+        </div>
+      </TriggerOnVisibile>
     </div>
   );
 }
