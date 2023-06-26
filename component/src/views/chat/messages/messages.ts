@@ -190,7 +190,7 @@ export class Messages {
         // extra checks are used for 'any'
         if (fileData.type === 'audio' || fileData.base64?.startsWith('data:audio')) {
           FileMessages.addNewAudioMessage(this, fileData, isAI, isInitial);
-        } else if (fileData.type === 'image' || fileData.base64?.startsWith('data:image')) {
+        } else if (fileData.type === 'image' || fileData.type === 'gif' || fileData.base64?.startsWith('data:image')) {
           FileMessages.addNewImageMessage(this, fileData, isAI, isInitial);
         } else {
           FileMessages.addNewAnyFileMessage(this, fileData, isAI, isInitial);

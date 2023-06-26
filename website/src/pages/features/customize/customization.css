@@ -2,10 +2,6 @@
   margin-top: 80px;
 }
 
-#customization {
-  margin-top: 80px;
-}
-
 #customization-top {
   display: flex;
   margin-top: 30px;
@@ -21,7 +17,11 @@
   margin-right: auto;
 }
 
-#customization-bottom {
-  display: flex;
+.customize-content-top {
+  transition: all 1s;
   margin-top: 50px;
+}
+
+.customize-content-bottom {
+  margin-top: 250px;
 }

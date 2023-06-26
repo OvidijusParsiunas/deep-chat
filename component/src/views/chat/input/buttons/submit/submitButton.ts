@@ -73,8 +73,10 @@ export class SubmitButton extends InputButton<Styles> {
     return stopIconElement;
   }
 
+  // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
-    if (this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
+    if (this._customStyles?.submit?.svg
+        || this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       const styleElement = document.createElement('style');
       styleElement.textContent = `
@@ -89,24 +91,28 @@ export class SubmitButton extends InputButton<Styles> {
 
   public submitFromInput() {
     if (this._inputElementRef.classList.contains('text-input-placeholder')) {
-      this.submit('');
+      this.submit(false, '');
     } else {
       const inputText = this._inputElementRef.textContent?.trim() as string;
-      this.submit(inputText);
+      this.submit(false, inputText);
     }
   }
 
-  public async submit(userText: string) {
-    await this._fileAttachments.completePlaceholders();
-    const uploadedFilesData = this._fileAttachments.getAllFileData();
-    const fileData = uploadedFilesData?.map((fileData) => fileData.file);
+  public async submit(programmatic: boolean, userText: string) {
+    let uploadedFilesData;
+    let fileData;
+    if (!programmatic) {
+      await this._fileAttachments.completePlaceholders();
+      uploadedFilesData = this._fileAttachments.getAllFileData();
+      fileData = uploadedFilesData?.map((fileData) => fileData.file);
+    }
     const validationText = userText === '' ? undefined : userText;
     if (this._isRequestInProgress || !this._serviceIO.canSendMessage(validationText, fileData)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
-    TextInputEl.clear(this._inputElementRef);
+    if (!programmatic) TextInputEl.clear(this._inputElementRef);
     const completionsHandlers = {
       onFinish: this.changeToSubmitIcon.bind(this),
     };
@@ -116,7 +122,7 @@ export class SubmitButton extends InputButton<Styles> {
       abortStream: this._abortStream,
     };
     this._serviceIO.callAPI(this._messages, completionsHandlers, streamHandlers, fileData);
-    this._fileAttachments?.removeAllFiles();
+    if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 
   // This will not stop the stream on the server side

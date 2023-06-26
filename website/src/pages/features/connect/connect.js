@@ -9,7 +9,7 @@ function TriggerOnVisibile(props) {
   React.useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        setTimeout(() => setVisible(true), 100);
+        setVisible(true);
         observer.unobserve(domRef.current);
       }
     });

@@ -88,6 +88,9 @@ export class DeepChat extends InternalHTML {
   images?: boolean | FilesServiceConfig;
 
   @Property('object')
+  gifs?: boolean | FilesServiceConfig;
+
+  @Property('object')
   audio?: boolean | FilesServiceConfig;
 
   @Property('object')

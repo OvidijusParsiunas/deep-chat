@@ -1,6 +1,6 @@
 import {InterfacesUnion} from './utilityTypes';
 
-export type MessageFileType = 'image' | 'audio' | 'any';
+export type MessageFileType = 'image' | 'gif' | 'audio' | 'any';
 
 export type MessageFileMarker = InterfacesUnion<{src: string} | {base64: string}>;
 

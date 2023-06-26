@@ -2,6 +2,27 @@ import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import './captureFiles.css';
 import React from 'react';
 
+function TriggerOnVisibile(props) {
+  const domRef = React.useRef();
+  const [isVisible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => setVisible(true));
+        observer.unobserve(domRef.current);
+      }
+    });
+    observer.observe(domRef.current);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={domRef} className={isVisible ? 'content-top' : 'content-bottom'}>
+      {props.children}
+    </div>
+  );
+}
+
 function RightPanel() {
   return (
     <div id="column-types-right">
@@ -47,12 +68,14 @@ function LeftPanel() {
 export default function CaptureFiles() {
   return (
     <div id="customization">
-      <div className="feature-sub-header" style={{marginTop: '150px'}}>
+      <div className="feature-sub-header" style={{marginTop: '350px'}}>
         Use Camera and Microphone
       </div>
-      <div id="column-types">
-        <LeftPanel></LeftPanel>
-        <RightPanel></RightPanel>
+      <div id="capture-files-content">
+        <TriggerOnVisibile>
+          <LeftPanel></LeftPanel>
+          <RightPanel></RightPanel>
+        </TriggerOnVisibile>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@
 }
 
 .content-bottom {
-  margin-top: 250px;
+  margin-top: 200px;
 }
 
 .column-types-text {
@@ -29,4 +29,8 @@
   font-size: 20px;
   width: 80%;
   margin-top: 100px;
+}
+
+#content-diagonal {
+  transform: skewY(5deg);
 }

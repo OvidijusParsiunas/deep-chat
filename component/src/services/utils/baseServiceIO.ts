@@ -68,11 +68,9 @@ export class BaseServiceIO implements ServiceIO {
       return this.fileTypes.audio;
     }
     if (file.type.startsWith('image')) {
-      if (this.fileTypes.images) {
-        return this.fileTypes.images;
-      } else if (this.camera) {
-        return this.camera;
-      }
+      if (this.fileTypes.gifs && file.type.endsWith('/gif')) return this.fileTypes.gifs;
+      if (this.fileTypes.images) return this.fileTypes.images;
+      if (this.camera) return this.camera;
     }
     return this.fileTypes.mixedFiles;
   }

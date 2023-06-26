@@ -77,6 +77,16 @@ export class SetFileTypes {
     serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, audio);
   }
 
+  // prettier-ignore
+  private static processGifConfig(
+      serviceIO: ServiceIO, remark: Remarkable, gifs: DeepChat['gifs'], fileIO?: FileServiceIO) {
+    if (!gifs && !fileIO) return;
+    const files = fileIO?.files || {};
+    const defaultFormats = {acceptedFormats: 'image/gif', ...files};
+    // make sure to set these in the right services
+    serviceIO.fileTypes.gifs = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, gifs);
+  }
+
   // needs to be set after images to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processCamera(
@@ -128,6 +138,7 @@ export class SetFileTypes {
     const remarkable = RemarkableConfig.createNew();
     SetFileTypes.processImagesConfig(serviceIO, remarkable, deepChat.images, existingFileTypes?.images);
     SetFileTypes.processCamera(serviceIO, remarkable, deepChat.camera, deepChat.images);
+    SetFileTypes.processGifConfig(serviceIO, remarkable, deepChat.gifs, existingFileTypes?.gifs);
     SetFileTypes.processAudioConfig(serviceIO, remarkable, deepChat.audio, existingFileTypes?.audio);
     SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphone, deepChat.audio);
     SetFileTypes.processMixedFiles(serviceIO, remarkable, deepChat.mixedFiles);

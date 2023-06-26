@@ -40,7 +40,7 @@ export class Input {
     }
     const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
-    deepChat.submitUserMessage = submitButton.submit.bind(submitButton);
+    deepChat.submitUserMessage = submitButton.submit.bind(submitButton, true);
     buttons.submit = {button: submitButton};
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, deepChat.dropupStyles);
   }
