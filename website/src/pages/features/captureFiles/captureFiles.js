@@ -17,7 +17,7 @@ function TriggerOnVisibile(props) {
     return () => observer.disconnect();
   }, []);
   return (
-    <div ref={domRef} className={isVisible ? 'content-top' : 'content-bottom'}>
+    <div ref={domRef} className={isVisible ? 'capture-content-close' : 'capture-content-separated'}>
       {props.children}
     </div>
   );
@@ -25,8 +25,8 @@ function TriggerOnVisibile(props) {
 
 function RightPanel() {
   return (
-    <div id="column-types-right">
-      <div className="column-types-text">
+    <div id="capture-files-right">
+      <div className="capture-files-text">
         As well as uploading files into the chat, you can use it to create them! Click the camera button to capture photos
         or use the microphone button to record audio.
       </div>
@@ -36,7 +36,7 @@ function RightPanel() {
 
 function LeftPanel() {
   return (
-    <div id="column-types-left">
+    <div id="capture-files-left">
       <DeepChatBrowser
         existingService={{demo: true}}
         introMessage={`Click the camera or the microphone button.`}
@@ -68,7 +68,7 @@ function LeftPanel() {
 export default function CaptureFiles() {
   return (
     <div id="customization">
-      <div className="feature-sub-header" style={{marginTop: '350px'}}>
+      <div className="feature-sub-header" style={{marginTop: '350px', marginBottom: '60px'}}>
         Use Camera and Microphone
       </div>
       <div id="capture-files-content">

@@ -1,24 +1,43 @@
-#column-types {
-  display: flex;
-  justify-content: center;
-  margin-top: 60px;
+#speech {
+  margin-top: 120px;
 }
 
-#column-types-left {
-  float: left;
+#speech-content {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding-bottom: 40px;
+}
+
+#speech-panel-left {
   width: 50%;
   justify-content: center;
   display: flex;
 }
 
-#column-types-right {
-  float: right;
+#speech-panel-right {
   width: 50%;
+  display: flex;
 }
 
-.column-types-text {
+.speech-text {
   text-align: center;
   font-size: 20px;
-  width: 80%;
+  width: 75%;
+  margin-left: 160px;
   margin-top: 100px;
+}
+
+#speech-panel-right deep-chat {
+  margin-left: 150px;
+}
+
+.speech-content-hidden {
+  opacity: 0;
+  transition: all 2s;
+}
+
+.speech-content-visible {
+  opacity: 1;
+  transition: all 2s;
 }

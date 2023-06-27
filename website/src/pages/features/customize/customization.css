@@ -1,5 +1,5 @@
 #customization {
-  margin-top: 80px;
+  /* margin-top: 140px; */
 }
 
 #customization-top {
@@ -18,10 +18,10 @@
 }
 
 .customize-content-top {
-  transition: all 1s;
+  transition: all 2s;
   margin-top: 50px;
 }
 
 .customize-content-bottom {
-  margin-top: 250px;
+  margin-top: 350px;
 }

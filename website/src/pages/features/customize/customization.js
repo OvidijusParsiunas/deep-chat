@@ -9,7 +9,7 @@ function TriggerOnVisibile(props) {
   React.useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        setTimeout(() => setVisible(true));
+        setTimeout(() => setVisible(true), 50);
         observer.unobserve(domRef.current);
       }
     });
@@ -72,11 +72,11 @@ function IntroPanel() {
 
 export default function Customize() {
   return (
-    <div id="customization">
-      <div className="feature-sub-header" style={{marginBottom: '60px'}}>
-        Customize with no limits
-      </div>
+    <div id="customization" style={{marginBottom: '200px'}}>
       <TriggerOnVisibile>
+        <div className="feature-sub-header" style={{marginBottom: '80px'}}>
+          Customize with no limits
+        </div>
         <div style={{display: 'flex', justifyContent: 'center'}}>
           <DeepChatBrowser
             existingService={{demo: true}}
