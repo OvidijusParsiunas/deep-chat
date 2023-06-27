@@ -69,16 +69,7 @@ function RightPanel() {
             },
           }}
           initialMessages={[
-            {
-              file: {
-                // src: '/img/suri5949958__fb5e795c-acae-4157-b8cb-8820a95a28eb.jpeg',
-                src: '/img/suri5949958__41254f7e-01bf-4b77-a481-2f1cc30a1a9b.jpeg',
-                // src: '/img/Gal_by_Giovanni_Segantini_and_Franco_Fontana_and_Fan_Ho_bd0ceaea-c9b7-4485-af3d-6fca6e9eb763.png',
-                // src: '/img/Edubra_9a493f58-02d7-4586-97a9-69e085d449db.png',
-                type: 'image',
-              },
-              role: 'user',
-            },
+            {file: {src: '/img/bird.jpeg', type: 'image'}, role: 'user'},
             {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
             {text: '```java\nconsole.log("hello world");\n```', role: 'ai'},
           ]}

@@ -72,18 +72,11 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 Creates a button that allows the user to upload GIFs. <br />
 This property can be set with a boolean _true_ or configured with a [`FilesServiceConfig`](#FilesServiceConfig) object.
 
-    initialMessages={[{file: {src: '/img/demon-slayer-kimetsu-no-yaiba.gif', type: 'image'}, role: 'user'}]}
-
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the GIF button or drop a file to attach it to the next outgoing message.`}
-    initialMessages={[
-      {
-        file: {src: '/img/hiii-everyone-i-made-a-local-deforum-stable-diffusion-ver-v0-xn1e7x9k9mn91.gif', type: 'image'},
-        role: 'user',
-      },
-    ]}
+    initialMessages={[{file: {src: '/img/example-gif.gif', type: 'image'}, role: 'user'}]}
     existingService={{demo: true}}
     gifs={true}
   ></DeepChatBrowser>
