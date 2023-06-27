@@ -15,7 +15,8 @@
   height: 1.48em;
   left: 0.07em;
   bottom: 0.08em;
-  filter: brightness(0) saturate(100%) invert(43%) sepia(0%) saturate(740%) hue-rotate(77deg) brightness(99%) contrast(92%);
+  filter: brightness(0) saturate(100%) invert(49%) sepia(0%) saturate(2586%) hue-rotate(12deg) brightness(93%)
+    contrast(90%);
 }
 
 #upload-audio-icon {

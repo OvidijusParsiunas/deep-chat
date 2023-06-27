@@ -83,6 +83,7 @@ function RightPanel() {
             {text: '```java\nconsole.log("hello world");\n```', role: 'ai'},
           ]}
           images={true}
+          gifs={true}
           audio={true}
           mixedFiles={true}
           dropupStyles={{

@@ -65,6 +65,57 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 
 <LineBreak></LineBreak>
 
+### `gifs` {#gifs}
+
+- Type: `true` | [`FilesServiceConfig`](#FilesServiceConfig)
+
+Creates a button that allows the user to upload GIFs. <br />
+This property can be set with a boolean _true_ or configured with a [`FilesServiceConfig`](#FilesServiceConfig) object.
+
+    initialMessages={[{file: {src: '/img/demon-slayer-kimetsu-no-yaiba.gif', type: 'image'}, role: 'user'}]}
+
+<ComponentContainer>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    introMessage={`Use the GIF button or drop a file to attach it to the next outgoing message.`}
+    initialMessages={[
+      {
+        file: {src: '/img/hiii-everyone-i-made-a-local-deforum-stable-diffusion-ver-v0-xn1e7x9k9mn91.gif', type: 'image'},
+        role: 'user',
+      },
+    ]}
+    existingService={{demo: true}}
+    gifs={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat gifs="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  gifs="true"
+  existingService='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
+  introMessage="Use the GIF button or drop a file to attach it to the next outgoing message."
+  initialMessages='[{"file": {"src": "path-to-file.gif", "type": "image"}, "role": "user"}]'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `camera` {#camera}
 
 - Type: `true` | [`CameraFilesServiceConfig`](#CameraFilesServiceConfig)
@@ -360,7 +411,10 @@ Object used to configure the ability for the component to send files. <br />
   }
 
 - Default: _{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: for images: ".png,.jpg", for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a" <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for images: ".png,.jpg", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a", <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for gifs: ".gif" <br />
   }_
 
 Used to configure what files the component can accept. <br />

@@ -9,7 +9,7 @@ import {Dropup} from '../../dropup/dropup';
 
 export type Positions = {[key in ButtonPosition]: ButtonProps[]};
 
-type ButtonProps = {button: InputButton; fileType?: FileAttachmentsType};
+type ButtonProps = {button: InputButton; buttonType?: BUTTON_TYPES; fileType?: FileAttachmentsType};
 
 type Buttons = {
   [key in BUTTON_TYPES]?: ButtonProps;
@@ -20,7 +20,14 @@ export class InputButtonPositions {
   private static addToDropup(buttonContainers: ButtonContainersT, positions: Positions, containerElement: HTMLElement,
       dropupStyles?: DropupStyles) {
     const dropup = new Dropup(containerElement, dropupStyles);
-    positions['dropup-menu'].forEach((buttonProps) => dropup.addItem(buttonProps.button));
+    BUTTON_ORDER.forEach((buttonType) => {
+      const index = positions['dropup-menu'].findIndex((props) => props.buttonType === buttonType);
+      const buttonProps = positions['dropup-menu'][index];
+      if (buttonProps) {
+        dropup.addItem(buttonProps.button);
+        positions['dropup-menu'].splice(index, 1);
+      }
+    });
     const position = Dropup.getPosition(positions, dropupStyles);
     ButtonContainers.addButton(buttonContainers, dropup.buttonContainer, position);
      // this is a quick workaround to get dropup recognised for InputButtonStyleAdjustments
@@ -37,10 +44,10 @@ export class InputButtonPositions {
     });
   }
 
-  private static setPosition(buttonsObj: Buttons, buttonName: keyof Buttons, positionButtons: ButtonProps[]) {
-    const buttonProps = buttonsObj[buttonName] as ButtonProps;
+  private static setPosition(buttonsObj: Buttons, buttonType: keyof Buttons, positionButtons: ButtonProps[]) {
+    const buttonProps = {...buttonsObj[buttonType], buttonType} as ButtonProps;
     positionButtons.push(buttonProps);
-    delete buttonsObj[buttonName];
+    delete buttonsObj[buttonType];
   }
 
   private static createPositionsObj(): Positions {
@@ -90,7 +97,7 @@ export class InputButtonPositions {
     const buttonsWithoutPositions = Object.keys(buttonsObj);
     if (buttonsWithoutPositions.length > 1 || positions['dropup-menu'].length > 0) {
       BUTTON_ORDER.forEach((buttonType) => {
-        if (buttonsObj[buttonType]) positions['dropup-menu'].push(buttonsObj[buttonType] as ButtonProps);
+        if (buttonsObj[buttonType]) positions['dropup-menu'].push({...buttonsObj[buttonType], buttonType} as ButtonProps);
       });
       // if there is one button without a position
     } else if (buttonsWithoutPositions.length === 1) {
