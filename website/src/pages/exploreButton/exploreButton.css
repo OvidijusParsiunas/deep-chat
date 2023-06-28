@@ -26,3 +26,12 @@
 #explore-button:active {
   background-color: #223558 !important;
 }
+
+.explore-button-collapsed {
+  opacity: 0;
+}
+
+.explore-button-expanded {
+  transition: all 1.2s;
+  opacity: 1;
+}

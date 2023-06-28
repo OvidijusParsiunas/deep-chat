@@ -34,10 +34,9 @@
 
 .speech-content-hidden {
   opacity: 0;
-  transition: all 2s;
 }
 
 .speech-content-visible {
   opacity: 1;
-  transition: all 2s;
+  transition: all 1.5s;
 }

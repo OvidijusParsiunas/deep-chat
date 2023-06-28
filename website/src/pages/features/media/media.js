@@ -1,6 +1,6 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import React from 'react';
-import './content.css';
+import './media.css';
 
 function TriggerOnVisibile(props) {
   const domRef = React.useRef();
@@ -99,7 +99,7 @@ function LeftPanel() {
   );
 }
 
-export default function Content() {
+export default function Media() {
   return (
     <div>
       <div

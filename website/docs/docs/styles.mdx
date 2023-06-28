@@ -64,7 +64,7 @@ Object containing CSS styling properties for the element containing files attach
 
 <ComponentContainer>
   <DeepChatBrowser
-    attachmentContainerStyle={{backgroundColor: '#76fffc57'}}
+    attachmentContainerStyle={{backgroundColor: '#b2e1ff57'}}
     existingService={{demo: {displayFileAttachmentContainer: true}}}
     containerStyle={{borderRadius: '8px'}}
   ></DeepChatBrowser>
@@ -74,7 +74,7 @@ Object containing CSS styling properties for the element containing files attach
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat attachmentContainerStyle='{"backgroundColor": "#76fffc57"}'></deep-chat>
+<deep-chat attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'></deep-chat>
 ```
 
 </TabItem>
@@ -84,7 +84,7 @@ Object containing CSS styling properties for the element containing files attach
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  attachmentContainerStyle='{"backgroundColor": "#76fffc57"}'
+  attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'
   existingService='{"demo": {"displayFileAttachmentContainer": true}}'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
@@ -301,8 +301,11 @@ Custom details for the chat's text input. <br />
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     textInput={{
-      styles: {text: {fontSize: '16px', color: 'black'}, container: {maxHeight: '50px', backgroundColor: '#e0edff'}},
-      placeholder: {text: 'Insert text here...', style: {color: '#4f8bff'}},
+      styles: {
+        text: {color: 'black'},
+        container: {maxHeight: '50px', backgroundColor: '#f5f9ff', border: '1px solid #a2a2ff'},
+      },
+      placeholder: {text: 'Insert text here...', style: {color: '#4459a4'}},
       characterLimit: 10,
     }}
     existingService={{demo: true}}
@@ -315,8 +318,8 @@ Custom details for the chat's text input. <br />
 ```html
 <deep-chat
   textInput='{
-    "styles": {"text": {"fontSize": "16px", "color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#e0edff"}},
-    "placeholder": {"text": "Insert text here...", "style": {"color": "#4f8bff"}},
+    "styles": {"text": {"color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff", "border": "1px solid #a2a2ff"}},
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
     "characterLimit": 10
   }'
 ></deep-chat>
@@ -330,8 +333,8 @@ Custom details for the chat's text input. <br />
 
 <deep-chat
   textInput='{
-    "styles": {"text": {"fontSize": "16px", "color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#e0edff"}},
-    "placeholder": {"text": "Insert text here...", "style": {"color": "#4f8bff"}},
+    "styles": {"text": {"color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff", "border": "1px solid #a2a2ff"}},
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
     "characterLimit": 10
   }'
   containerStyle='{"borderRadius": "8px"}'

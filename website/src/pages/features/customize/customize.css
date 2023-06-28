@@ -18,8 +18,8 @@
 }
 
 .customize-content-top {
-  transition: all 2s;
-  margin-top: 50px;
+  transition: all 2s ease-out;
+  margin-top: 0px;
 }
 
 .customize-content-bottom {

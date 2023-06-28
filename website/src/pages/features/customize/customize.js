@@ -1,6 +1,6 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
-import './customization.css';
 import React from 'react';
+import './customize.css';
 
 function TriggerOnVisibile(props) {
   const domRef = React.useRef();
