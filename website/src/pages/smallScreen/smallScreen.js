@@ -1,5 +1,5 @@
 import ActiveTableBrowser from '../../components/table/activeTableBrowser';
-import {LeftPanel} from '../startPanel/startPanel';
+import {HeaderPanel} from '../startPanel/startPanel';
 import FadeInContent from '../utils/fadeInContent';
 import './smallScreen.css';
 import React from 'react';
@@ -9,7 +9,7 @@ export default function SmallScreen() {
   return (
     <div ref={contentRef} id="small-screen">
       <FadeInContent contentRef={contentRef}></FadeInContent>
-      <LeftPanel></LeftPanel>
+      <HeaderPanel></HeaderPanel>
       <div id="small-screen-table">
         <ActiveTableBrowser
           tableStyle={{borderRadius: '5px', width: '100%'}}

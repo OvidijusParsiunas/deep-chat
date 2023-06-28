@@ -1,33 +1,13 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
+import OnVisibleAnimation from '../../utils/onVisibleAnimation';
 import React from 'react';
 import './connect.css';
 
-function TriggerOnVisibile(props) {
-  const domRef = React.useRef();
-  const [isVisible, setVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setVisible(true);
-        observer.unobserve(domRef.current);
-      }
-    });
-    observer.observe(domRef.current);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div ref={domRef} className={isVisible ? 'animation-class' : 'not-animation-class'}>
-      {props.children}
-    </div>
-  );
-}
-
 function RightPanel() {
   return (
-    <div id="connect-right-panel">
-      <div className="connect-right-panel-text">
-        Deep Chat can connect to any API. You can use the default settings to connect to any of the available services or
+    <div id="connect-right-panel" className="feature-panel">
+      <div id="connect-right-panel-text">
+        Deep Chat can connect to any API. You can use the default settings to connect to any of the predefined services or
         configure the setup to connect to your own service.
       </div>
     </div>
@@ -36,7 +16,7 @@ function RightPanel() {
 
 function LeftPanel() {
   return (
-    <div id="connect-left-panel">
+    <div id="connect-left-panel" className="feature-panel">
       <DeepChatBrowser
         existingService={{demo: true}}
         initialMessages={[
@@ -69,16 +49,14 @@ function LeftPanel() {
 
 export default function Connect() {
   return (
-    <div id="customization">
-      <div className="feature-sub-header" style={{marginTop: '150px'}}>
-        Connect to any service
-      </div>
-      <TriggerOnVisibile>
-        <div id="column-types">
+    <div id="connect">
+      <div className="feature-sub-header">Connect to any service</div>
+      <OnVisibleAnimation beforeClass={''} afterClass={'connect-panels-close'}>
+        <div id="connect-panels">
           <LeftPanel></LeftPanel>
           <RightPanel></RightPanel>
         </div>
-      </TriggerOnVisibile>
+      </OnVisibleAnimation>
     </div>
   );
 }

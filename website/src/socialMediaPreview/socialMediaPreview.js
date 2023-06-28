@@ -80,8 +80,8 @@ function RightPanel() {
 export function LeftPanel() {
   return (
     <div id="start-panel-left">
-      <h1 id="start-colored-header">Active Table</h1>
-      <h1 id="start-sub-header">Framework agnostic table component for editable data experience</h1>
+      <h1 id="start-panel-header">Active Table</h1>
+      <h1 id="start-panel-sub-header">Framework agnostic table component for editable data experience</h1>
       <div id="start-buttons">
         <a className="homepage-button start-button" href="docs/installation">
           Installation

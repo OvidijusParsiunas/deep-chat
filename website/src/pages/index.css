@@ -1,3 +1,11 @@
+.not-displayed {
+  display: none;
+}
+
+.displayed {
+  display: block;
+}
+
 /* need to use !important as it is on an anchor (a) element  */
 .homepage-button {
   border: unset;
@@ -13,8 +21,33 @@
     'Noto Color Emoji';
 }
 
+/* REF-39 - fade in */
+
+/* use class instead of a selector when we the required element reference is available from the very start */
+.invisible-component {
+  opacity: 0;
+}
+
+/* using selector for homepage as the navbar needs to have opacity: 0 from the very start and not when the element is found */
+.plugin-pages > body > #__docusaurus > nav {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1.8s !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 1250px) {
-  #start-sub-header {
+  #start-panel-sub-header {
     font-size: 2.3rem !important;
   }
 
@@ -22,7 +55,7 @@
     width: 100% !important;
   }
 
-  #start-sub-header {
+  #start-panel-sub-header {
     width: 90% !important;
   }
 }

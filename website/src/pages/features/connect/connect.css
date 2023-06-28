@@ -1,11 +1,11 @@
-#column-types {
+#connect {
+  margin-top: 150px;
+}
+
+#connect-panels {
   display: flex;
   justify-content: center;
   margin-top: 60px;
-}
-
-#connect-left-panel {
-  width: 50%;
 }
 
 #connect-left-panel deep-chat {
@@ -15,17 +15,13 @@
   transition: all 1.5s;
 }
 
-.animation-class #column-types #connect-left-panel deep-chat {
+.connect-panels-close #connect-panels #connect-left-panel deep-chat {
   margin-left: auto;
   margin-right: 120px;
   display: table;
 }
 
-#connect-right-panel {
-  width: 50%;
-}
-
-.connect-right-panel-text {
+#connect-right-panel-text {
   text-align: center;
   font-size: 20px;
   width: 80%;
@@ -34,6 +30,6 @@
   transition: all 1.5s;
 }
 
-.animation-class #column-types #connect-right-panel .connect-right-panel-text {
+.connect-panels-close #connect-panels #connect-right-panel #connect-right-panel-text {
   margin-left: 0px;
 }

@@ -1,32 +1,12 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
+import OnVisibleAnimation from '../../utils/onVisibleAnimation';
 import React from 'react';
 import './media.css';
 
-function TriggerOnVisibile(props) {
-  const domRef = React.useRef();
-  const [isVisible, setVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => setVisible(true));
-        observer.unobserve(domRef.current);
-      }
-    });
-    observer.observe(domRef.current);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div ref={domRef} className={isVisible ? 'content-top' : 'content-bottom'}>
-      {props.children}
-    </div>
-  );
-}
-
 function RightPanel() {
   return (
-    <div id="content-right">
-      <TriggerOnVisibile>
+    <div id="media-panel-right" className="feature-panel">
+      <OnVisibleAnimation beforeClass={'media-bottom'} afterClass={'media-top'} timeoutMS={0}>
         <DeepChatBrowser
           existingService={{demo: true}}
           containerStyle={{
@@ -83,17 +63,17 @@ function RightPanel() {
             },
           }}
         ></DeepChatBrowser>
-      </TriggerOnVisibile>
+      </OnVisibleAnimation>
     </div>
   );
 }
 
 function LeftPanel() {
   return (
-    <div id="content-left">
-      <div className="column-types-text">
-        Send images, audio, gifs, spreadsheets and any other files to and from the target service. Text messages support{' '}
-        <b>MarkDown</b> to help control text layout and render code.
+    <div id="media-panel-left" className="feature-panel">
+      <div id="media-text">
+        Send images, audio, gifs, spreadsheets and any other files types to and from the target service. Text messages
+        support <b>MarkDown</b> to help control text layout and render code.
       </div>
     </div>
   );
@@ -102,22 +82,10 @@ function LeftPanel() {
 export default function Media() {
   return (
     <div>
-      <div
-        id="content-diagonal"
-        style={{height: '382px', backgroundColor: '#ffefef', paddingTop: '30px', marginTop: '200px'}}
-      ></div>
-      <div
-        id="customization"
-        style={{
-          height: '382px',
-          backgroundColor: '#ffefef',
-          marginTop: '-300px',
-          paddingTop: '30px',
-          position: 'absolute',
-        }}
-      >
+      <div id="media-diagonal-padding"></div>
+      <div id="media">
         <div className="feature-sub-header">Transfer Media and MarkDown</div>
-        <div id="content">
+        <div id="media-panels">
           <LeftPanel></LeftPanel>
           <RightPanel></RightPanel>
         </div>

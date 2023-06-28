@@ -22,6 +22,10 @@
   color: rgb(0, 48, 100);
 }
 
+.feature-panel {
+  width: 50%;
+}
+
 .feature-text {
   text-align: center;
   padding: 10%;
