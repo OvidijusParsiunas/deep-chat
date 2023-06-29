@@ -9,7 +9,7 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Deep Chat',
-  tagline: 'Fully customisable editable table component',
+  tagline: 'Framework agnostic chat component for AI and more',
   url: 'https://active-table.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -78,6 +78,12 @@ const config = {
       ],
       navbar: {
         title: 'Deep Chat',
+        logo: {
+          alt: 'Deep Chat img',
+          src: 'img/deep-chat-title.svg',
+          width: 31,
+          height: 31,
+        },
         items: [
           {
             type: 'docSidebar',

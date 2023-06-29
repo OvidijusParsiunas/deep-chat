@@ -27,8 +27,8 @@ function RightPanel() {
   return (
     <div id="capture-files-right">
       <div className="capture-files-text">
-        As well as uploading files into the chat, you can use it to create them! Click the camera button to capture photos
-        or use the microphone button to record audio.
+        Deep Chat can be used to create new files within the component! Click the camera button to capture photos or use
+        the microphone button to record audio.
       </div>
     </div>
   );

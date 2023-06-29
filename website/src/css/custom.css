@@ -210,17 +210,18 @@ code {
 }
 
 .navbar__title {
-  background: -webkit-linear-gradient(0deg, rgb(86, 155, 224), #2e60bd);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #003064;
   margin-top: -1.2px;
   font-size: 19.5px;
   letter-spacing: -0.2px;
   /* same font as in .header-font */
-  font-family: 'inter_webfont', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.navbar__logo {
+  width: 23px;
+  margin-top: 0.5px;
 }
 
 .navbar--fixed-top {
