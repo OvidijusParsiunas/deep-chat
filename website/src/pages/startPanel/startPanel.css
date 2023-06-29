@@ -73,7 +73,6 @@
   z-index: 5;
   display: flex;
   flex-direction: column;
-  transition: all 1s;
 }
 
 .start-panel-logos-middle {

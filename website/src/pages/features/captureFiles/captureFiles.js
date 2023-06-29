@@ -1,31 +1,11 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
+import OnVisibleAnimation from '../../utils/onVisibleAnimation';
 import './captureFiles.css';
 import React from 'react';
 
-function TriggerOnVisibile(props) {
-  const domRef = React.useRef();
-  const [isVisible, setVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => setVisible(true));
-        observer.unobserve(domRef.current);
-      }
-    });
-    observer.observe(domRef.current);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div ref={domRef} className={isVisible ? 'capture-content-close' : 'capture-content-separated'}>
-      {props.children}
-    </div>
-  );
-}
-
 function RightPanel() {
   return (
-    <div id="capture-files-right">
+    <div id="capture-files-right-panel" className="feature-panel">
       <div className="capture-files-text">
         Deep Chat can be used to create new files within the component! Click the camera button to capture photos or use
         the microphone button to record audio.
@@ -36,7 +16,7 @@ function RightPanel() {
 
 function LeftPanel() {
   return (
-    <div id="capture-files-left">
+    <div id="capture-files-left-panel" className="feature-panel">
       <DeepChatBrowser
         existingService={{demo: true}}
         introMessage={`Click the camera or the microphone button.`}
@@ -53,13 +33,7 @@ function LeftPanel() {
         }}
         camera={{button: {styles: {container: {default: {marginRight: '2px'}}}}}}
         microphone={{button: {styles: {container: {default: {marginLeft: '4px'}}}}}}
-        textInput={{
-          styles: {
-            container: {
-              width: '75%',
-            },
-          },
-        }}
+        textInput={{styles: {container: {width: '75%'}}}}
       ></DeepChatBrowser>
     </div>
   );
@@ -67,15 +41,17 @@ function LeftPanel() {
 
 export default function CaptureFiles() {
   return (
-    <div id="customization">
-      <div className="feature-sub-header" style={{marginTop: '350px', marginBottom: '60px'}}>
+    <div>
+      <div id="capture-files-sub-header" className="feature-sub-header">
         Use Camera and Microphone
       </div>
-      <div id="capture-files-content">
-        <TriggerOnVisibile>
-          <LeftPanel></LeftPanel>
-          <RightPanel></RightPanel>
-        </TriggerOnVisibile>
+      <div id="capture-files-panels">
+        <OnVisibleAnimation beforeClass={'capture-panels-distributed'} afterClass={'capture-panels-close'} timeoutMS={0}>
+          <OnVisibleAnimation>
+            <LeftPanel></LeftPanel>
+            <RightPanel></RightPanel>
+          </OnVisibleAnimation>
+        </OnVisibleAnimation>
       </div>
     </div>
   );

@@ -1,27 +1,21 @@
-#customization {
-  /* margin-top: 140px; */
+#customize {
+  margin-bottom: 200px;
 }
 
-#customization-top {
+#customize-sub-header {
+  margin-bottom: 80px;
+}
+
+#customize-content {
   display: flex;
-  margin-top: 30px;
+  justify-content: center;
 }
 
-.customization-panel {
-  width: 50%;
-}
-
-.customization-panel-table {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+.customize-content-bottom {
+  margin-top: 350px;
 }
 
 .customize-content-top {
   transition: all 2s ease-out;
   margin-top: 0px;
-}
-
-.customize-content-bottom {
-  margin-top: 350px;
 }

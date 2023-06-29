@@ -1,20 +1,23 @@
-#capture-files-content {
+#capture-files-sub-header {
+  margin-top: 350px;
+  margin-bottom: 60px;
+}
+
+#capture-files-panels {
   margin-top: 10px;
   display: flex;
   justify-content: center;
 }
 
-#capture-files-left {
+#capture-files-left-panel {
   float: left;
-  width: 50%;
   justify-content: center;
   display: flex;
   padding-left: 40px;
 }
 
-#capture-files-right {
+#capture-files-right-panel {
   float: right;
-  width: 50%;
   padding-right: 23px;
 }
 
@@ -25,20 +28,20 @@
   margin-top: 100px;
 }
 
-.capture-content-separated #capture-files-left deep-chat {
+.capture-panels-distributed #capture-files-left-panel deep-chat {
   margin-left: -165px;
 }
 
-.capture-content-separated #capture-files-right .capture-files-text {
+.capture-panels-distributed #capture-files-right-panel .capture-files-text {
   margin-left: 165px;
 }
 
-.capture-content-close #capture-files-left deep-chat {
+.capture-panels-close #capture-files-left-panel deep-chat {
   margin-left: 60px;
   transition: all 1s;
 }
 
-.capture-content-close #capture-files-right .capture-files-text {
+.capture-panels-close #capture-files-right-panel .capture-files-text {
   margin-left: -20px;
   transition: all 1s;
 }

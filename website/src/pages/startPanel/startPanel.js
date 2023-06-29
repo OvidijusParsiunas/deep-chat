@@ -11,6 +11,7 @@ const Logos = React.forwardRef((_, ref) => {
   return (
     <div
       id="start-panel-logos"
+      style={{opacity: '0'}}
       className={'start-panel-logos-left start-panel-logos-collapsed start-panel-logos-middle'}
       ref={ref}
     >
@@ -57,11 +58,20 @@ function animate(component, logos, messageLine, messageBubble) {
   }, 1000);
 }
 
+// this is to prevent a bug where upon opening up the homepage and the component takes a while to load - the logos would appear under it
+function displayLogos(logos) {
+  setTimeout(() => {
+    logos.style.opacity = '1';
+    logos.style.transition = 'all 1s';
+  }, 20);
+}
+
 function ComponentPanel() {
   const logos = React.useRef(null);
   const component = React.useRef(null);
   const messageBubble = React.useRef(null);
   const messageLine = React.useRef(null);
+  setTimeout(() => displayLogos(logos.current));
   setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1500);
   return (
     <div id="start-panel-animation-content-container">

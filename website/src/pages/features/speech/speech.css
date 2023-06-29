@@ -1,5 +1,11 @@
 #speech {
   margin-top: 120px;
+  margin-bottom: 150px;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 1) 0%, rgba(255, 224, 224, 1) 100%);
+}
+
+#speech-sub-header {
+  padding-top: 40px;
 }
 
 #speech-content {
@@ -9,14 +15,8 @@
   padding-bottom: 40px;
 }
 
-#speech-panel-left {
-  width: 50%;
+#speech-left-panel {
   justify-content: center;
-  display: flex;
-}
-
-#speech-panel-right {
-  width: 50%;
   display: flex;
 }
 
@@ -28,15 +28,15 @@
   margin-top: 100px;
 }
 
-#speech-panel-right deep-chat {
-  margin-left: 150px;
+#speech-right-panel {
+  display: flex;
 }
 
-.speech-content-hidden {
+.speech-panels-hidden {
   opacity: 0;
 }
 
-.speech-content-visible {
+.speech-panels-visible {
   opacity: 1;
   transition: all 1.5s;
 }
