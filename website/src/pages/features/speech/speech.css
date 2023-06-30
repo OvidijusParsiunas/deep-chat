@@ -20,12 +20,19 @@
   display: flex;
 }
 
-.speech-text {
+#speech-right-panel deep-chat {
+  margin-left: 150px;
+}
+
+#speech-text {
   text-align: center;
   font-size: 20px;
   width: 75%;
-  margin-left: 160px;
+  max-width: 570px;
+  min-width: 433px;
   margin-top: 100px;
+  margin-right: 14px;
+  margin-left: auto;
 }
 
 #speech-right-panel {
@@ -39,4 +46,31 @@
 .speech-panels-visible {
   opacity: 1;
   transition: all 1.5s;
+}
+
+@media (max-width: 1160px) {
+  #speech-text {
+    margin-right: 14px;
+  }
+  #speech-right-panel deep-chat {
+    margin-left: 110px;
+  }
+}
+
+@media (max-width: 1100px) {
+  #speech-text {
+    margin-right: 10px;
+  }
+  #speech-right-panel deep-chat {
+    margin-left: 100px;
+  }
+}
+
+@media (max-width: 1050px) {
+  #speech-text {
+    margin-right: -20px;
+  }
+  #speech-right-panel deep-chat {
+    margin-left: 70px;
+  }
 }

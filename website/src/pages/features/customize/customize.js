@@ -68,8 +68,6 @@ function Components() {
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
-          marginLeft: '30px',
-          marginRight: '30px',
         }}
         messageStyles={{
           default: {
@@ -145,8 +143,6 @@ function Components() {
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
-          marginLeft: '30px',
-          marginRight: '30px',
         }}
         names={true}
         submitButtonStyles={{
@@ -210,8 +206,6 @@ function Components() {
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
-          marginLeft: '30px',
-          marginRight: '30px',
         }}
         messageStyles={{default: {user: {bubble: {backgroundColor: '#ff2020'}}}}}
         submitButtonStyles={{

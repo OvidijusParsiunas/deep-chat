@@ -2,13 +2,12 @@
   background-color: #fff5f5;
   position: relative;
   width: 100%;
-  height: 600px;
+  height: calc(100vh - 20px);
   /* prevents panels below from moving to the side if the user adds new rows to the table */
   display: table;
   margin-left: auto;
   margin-right: auto;
   padding-top: 1%;
-  margin-top: 40px;
   border-bottom-left-radius: 100% 15%;
   border-bottom-right-radius: 100% 15%;
 }
@@ -16,7 +15,7 @@
 #start-panel-content {
   position: absolute;
   transform: translateY(-50%);
-  top: 42%;
+  top: 40%;
   left: 10%;
   width: 80%;
   text-align: center;
@@ -51,7 +50,7 @@
 #start-panel-animation-content-container {
   position: relative;
   width: 650px;
-  margin-top: 60px;
+  margin-top: 65px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -166,45 +165,17 @@
   }
 }
 
-@media (max-height: 800px) {
-  #start-panel {
-    height: calc(100vh - 20px);
-    margin-top: 0px;
-  }
-}
-
-@media (max-height: 620px) {
+@media (max-height: 830px) {
   #start-panel-content {
-    transform: translateY(-55%) !important;
+    top: 43%;
+  }
+  #start-panel-animation-content-container {
+    margin-top: 60px;
   }
 }
 
-@media (max-height: 500px) {
+@media (max-height: 770px) {
   #start-panel-content {
-    transform: translateY(-50%) !important;
-  }
-}
-
-@media (max-height: 410px) {
-  #start-panel {
-    height: calc(100vh + 10px) !important;
-  }
-}
-
-@media (max-height: 340px) {
-  #start-panel {
-    height: calc(100vh + 40px) !important;
-  }
-}
-
-@media (max-height: 294px) {
-  #start-panel {
-    height: calc(100vh + 55px) !important;
-  }
-}
-
-@media (max-height: 280px) {
-  #start-panel {
-    height: calc(100vh + 120px) !important;
+    top: 45%;
   }
 }

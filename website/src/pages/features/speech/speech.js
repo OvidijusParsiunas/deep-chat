@@ -18,7 +18,6 @@ function RightPanel() {
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
-          marginLeft: '150px',
         }}
         microphone={true}
       ></DeepChatBrowser>
@@ -29,7 +28,7 @@ function RightPanel() {
 function LeftPanel() {
   return (
     <div id="speech-left-panel" className="feature-panel">
-      <div className="speech-text">
+      <div id="speech-text">
         Input your text using real time speech to text transcription and have the responses read out to you automatically
         using text to speech synthesis.
       </div>

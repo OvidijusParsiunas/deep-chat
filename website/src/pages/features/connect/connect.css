@@ -16,20 +16,92 @@
 }
 
 .connect-panels-close #connect-panels #connect-left-panel deep-chat {
-  margin-left: auto;
   margin-right: 120px;
-  display: table;
 }
 
-#connect-right-panel-text {
+#connect-text {
   text-align: center;
   font-size: 20px;
   width: 80%;
+  max-width: 648px;
   margin-top: 100px;
   margin-left: 120px;
   transition: all 1.5s;
 }
 
-.connect-panels-close #connect-panels #connect-right-panel #connect-right-panel-text {
+.connect-panels-close #connect-panels #connect-right-panel #connect-text {
   margin-left: 0px;
+}
+
+@media (max-width: 1478px) {
+  #connect-left-panel deep-chat {
+    margin-right: 260px;
+  }
+  #connect-text {
+    margin-left: 80px;
+  }
+}
+
+@media (max-width: 1320px) {
+  #connect-left-panel deep-chat {
+    margin-right: 230px;
+  }
+  #connect-text {
+    margin-left: 50px;
+  }
+
+  .connect-panels-close #connect-panels #connect-left-panel deep-chat {
+    margin-right: 110px;
+  }
+  .connect-panels-close #connect-panels #connect-right-panel #connect-text {
+    margin-left: -10px;
+  }
+}
+
+@media (max-width: 1160px) {
+  #connect-left-panel deep-chat {
+    margin-right: 170px;
+  }
+  #connect-text {
+    margin-left: 10px;
+  }
+
+  .connect-panels-close #connect-panels #connect-left-panel deep-chat {
+    margin-right: 90px;
+  }
+  .connect-panels-close #connect-panels #connect-right-panel #connect-text {
+    margin-left: -20px;
+  }
+}
+
+@media (max-width: 1100px) {
+  #connect-left-panel deep-chat {
+    margin-right: 140px;
+  }
+  #connect-text {
+    margin-left: 20px;
+  }
+
+  .connect-panels-close #connect-panels #connect-left-panel deep-chat {
+    margin-right: 70px;
+  }
+  .connect-panels-close #connect-panels #connect-right-panel #connect-text {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 1050px) {
+  #connect-left-panel deep-chat {
+    margin-right: 90px;
+  }
+  #connect-text {
+    margin-left: 40px;
+  }
+
+  .connect-panels-close #connect-panels #connect-left-panel deep-chat {
+    margin-right: 30px;
+  }
+  .connect-panels-close #connect-panels #connect-right-panel #connect-text {
+    margin-left: 10px;
+  }
 }

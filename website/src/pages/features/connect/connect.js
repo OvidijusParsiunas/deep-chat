@@ -6,7 +6,7 @@ import './connect.css';
 function RightPanel() {
   return (
     <div id="connect-right-panel" className="feature-panel">
-      <div id="connect-right-panel-text">
+      <div id="connect-text">
         Deep Chat can connect to any API. You can use the default settings to connect to any of the predefined services or
         configure the setup to connect to your own service.
       </div>

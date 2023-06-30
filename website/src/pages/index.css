@@ -54,10 +54,6 @@
   #start-panel-right-table {
     width: 100% !important;
   }
-
-  #start-panel-sub-header {
-    width: 90% !important;
-  }
 }
 
 @media (max-width: 945px) {
