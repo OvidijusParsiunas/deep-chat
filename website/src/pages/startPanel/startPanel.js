@@ -1,3 +1,4 @@
+import {SmallScreenPanel, DeepChatLogo} from '../smallScreen/smallScreen';
 import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
@@ -120,6 +121,8 @@ export default function StartPanel() {
       <div id="start-panel-content">
         <HeaderPanel></HeaderPanel>
         <ComponentPanel></ComponentPanel>
+        <SmallScreenPanel></SmallScreenPanel>
+        <DeepChatLogo></DeepChatLogo>
       </div>
     </div>
   );

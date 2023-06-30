@@ -1,7 +1,13 @@
 #footer {
-  max-width: 1300px;
   padding-top: 10px;
   padding-bottom: 5px;
   font-size: 14px;
+  margin-left: 60px;
   color: var(--footer-text-color);
+}
+
+@media (max-width: 1425px) {
+  #footer {
+    margin-left: 0px;
+  }
 }

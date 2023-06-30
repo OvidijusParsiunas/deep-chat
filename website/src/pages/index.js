@@ -1,5 +1,4 @@
 import ExploreButton from './exploreButton/exploreButton';
-import SmallScreen from './smallScreen/smallScreen';
 import FadeInContent from './utils/fadeInContent';
 import StartPanel from './startPanel/startPanel';
 import Features from './features/features';
@@ -18,7 +17,6 @@ export default function Home() {
         <div id="homepage-content" ref={homepageContentRef} className="invisible-component">
           <StartPanel></StartPanel>
           <Features></Features>
-          <SmallScreen></SmallScreen>
           <ExploreButton></ExploreButton>
           <Footer></Footer>
           <FadeInContent contentRef={homepageContentRef}></FadeInContent>

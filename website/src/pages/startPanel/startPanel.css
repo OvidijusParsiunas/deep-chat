@@ -3,6 +3,7 @@
   position: relative;
   width: 100%;
   height: calc(100vh - 20px);
+  min-height: 567px;
   /* prevents panels below from moving to the side if the user adds new rows to the table */
   display: table;
   margin-left: auto;
@@ -177,5 +178,147 @@
 @media (max-height: 770px) {
   #start-panel-content {
     top: 45%;
+  }
+}
+
+@media (max-height: 705px) {
+  #start-panel-animation-content-container {
+    margin-top: 40px;
+  }
+}
+
+@media (max-height: 670px) {
+  #start-panel-animation-content-container {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 1250px) {
+  #start-panel-sub-header {
+    font-size: 2.3rem;
+  }
+  #start-panel-animation-content-container {
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 880px) {
+  #start-panel-header {
+    font-size: 3.3rem;
+  }
+  #start-panel-sub-header {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 945px) and (max-height: 9000px) {
+  #start-panel-content {
+    top: 48%;
+  }
+}
+
+@media (max-width: 720px) {
+  #start-panel-animation-content-container {
+    width: 500px;
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+}
+
+@media (max-width: 694px) {
+  #start-panel-animation-content-container {
+    margin-left: -20px;
+  }
+}
+
+@media (max-width: 650px) {
+  #start-panel-animation-content-container {
+    margin-left: -30px;
+  }
+}
+
+@media (max-width: 630px) {
+  #start-panel-animation-content-container {
+    margin-left: -35px;
+  }
+}
+
+@media (max-width: 620px) {
+  #start-panel-animation-content-container {
+    margin-left: -45px;
+  }
+}
+
+@media (max-width: 594px) {
+  #start-panel-animation-content-container {
+    margin-left: -50px;
+  }
+}
+
+@media (max-width: 580px) {
+  #start-panel-animation-content-container {
+    margin-left: -57px;
+  }
+}
+
+@media (max-width: 573px) {
+  #start-panel-animation-content-container {
+    margin-left: -63px;
+  }
+}
+
+@media (max-width: 562px) {
+  #start-panel-animation-content-container {
+    margin-left: -67px;
+  }
+}
+
+@media (max-width: 557px) {
+  #start-panel-animation-content-container {
+    display: none;
+  }
+  #small-screen-component {
+    margin-top: 30px;
+    display: flex;
+  }
+  #start-panel-header {
+    font-size: 2.9rem;
+  }
+  #start-panel-sub-header {
+    font-size: 1.6rem;
+    width: 92%;
+    margin-left: 4%;
+  }
+  #start-panel-content {
+    width: 100%;
+    left: 0px;
+  }
+}
+
+@media (max-width: 348px) {
+  #start-panel {
+    min-height: 500px;
+  }
+  #start-panel-sub-header {
+    margin-bottom: 0px;
+  }
+  #small-screen-component {
+    margin-top: 0px;
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 332px) {
+  #start-panel {
+    height: calc(100vh - 121px);
+  }
+}
+
+@media (max-width: 260px) {
+  #small-screen-component {
+    display: none;
+  }
+  #small-screen-deep-chat-logo {
+    display: block;
   }
 }

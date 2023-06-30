@@ -1,61 +1,30 @@
-import ActiveTableBrowser from '../../components/table/activeTableBrowser';
-import {HeaderPanel} from '../startPanel/startPanel';
-import FadeInContent from '../utils/fadeInContent';
+import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import './smallScreen.css';
 import React from 'react';
 
-export default function SmallScreen() {
-  const contentRef = React.useRef(null);
+export function DeepChatLogo() {
+  return <img id="small-screen-deep-chat-logo" src="img/deep-chat-small-screen-logo.svg" />;
+}
+
+export function SmallScreenPanel() {
   return (
-    <div ref={contentRef} id="small-screen">
-      <FadeInContent contentRef={contentRef}></FadeInContent>
-      <HeaderPanel></HeaderPanel>
-      <div id="small-screen-table">
-        <ActiveTableBrowser
-          tableStyle={{borderRadius: '5px', width: '100%'}}
-          customColumnsSettings={[
-            {
-              headerName: 'Name',
-              defaultColumnTypeName: 'Name',
-              customColumnTypes: [
-                {
-                  name: 'Name',
-                  label: {
-                    options: [
-                      {text: 'Peter', backgroundColor: '#cdfef7'},
-                      {text: 'John', backgroundColor: '#d6ffbd'},
-                      {text: 'Gregg', backgroundColor: '#fdd1e1'},
-                      {text: 'Jeff', backgroundColor: '#fff2c2'},
-                    ],
-                  },
-                },
-              ],
-            },
-            {headerName: 'Date of Birth', defaultColumnTypeName: 'Date d-m-y'},
-            {
-              headerName: 'Hobby',
-              defaultColumnTypeName: 'Hobbies',
-              customColumnTypes: [
-                {
-                  name: 'Hobbies',
-                  iconSettings: {reusableIconName: 'Select'},
-                  select: {options: ['Fishing', 'Soccer', 'Reading']},
-                },
-              ],
-            },
-            {headerName: 'Verified', defaultColumnTypeName: 'Checkbox'},
-          ]}
-          displayIndexColumn={false}
-          displayAddNewColumn={false}
-          content={[
-            ['Name', 'Date of Birth', 'Hobby', 'Verified'],
-            ['Peter', '12-08-1992', 'Fishing', 'true'],
-            ['John', '14-10-2012', 'Soccer', 'false'],
-            ['Gregg', '05-02-1975', 'Reading', 'true'],
-            ['Jeff', '24-04-2015', 'Soccer', 'false'],
-          ]}
-        ></ActiveTableBrowser>
-      </div>
+    <div id="small-screen-component">
+      <DeepChatBrowser
+        existingService={{demo: true}}
+        initialMessages={[
+          {text: 'What is Deep Chat?', role: 'user'},
+          {text: 'A framework agnostic chat component.', role: 'ai'},
+          {text: 'What exactly can it be used for?', role: 'user'},
+          {text: 'It can provide a rich chat experience for any API.', role: 'ai'},
+        ]}
+        containerStyle={{
+          borderRadius: '10px',
+          boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
+          borderColor: '#ededed',
+          zIndex: 10,
+        }}
+        stream="true"
+      ></DeepChatBrowser>
     </div>
   );
 }
