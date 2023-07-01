@@ -5,13 +5,14 @@ sidebar_position: 3
 # Existing Services
 
 Deep Chat can be configured to connect to an existing API service. The component's configuration
-(such as file upload buttons / message limits) is automatically changed to suit the target API.
-However everything can be overwritten manually. <br />
+(such as file upload buttons / message limits) will automatically be changed to suit the target API.
+This can be overwitten manually. <br />
 
 :::caution
-The component allows the user to type their API key directly into the component or for the developer to embed it as an attribute via [`APIKey`](#APIKey). This is
-intended for **prototyping purposes ONLY** and when going live use the [`request`](../service#request) property to instead direct the calls through your own service.
-Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
+By default, the use of [`existingService`](#existingService) and [`APIKey`](#APIKey) will have the API key exposed on the browser. This is
+intended for **prototyping purposes ONLY** and before deploying this component to an environment - add the [`request`](../service#request) property to
+instead direct all requests through your own service to use the key there.
+Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
 :::
 
 ### `existingService` {#existingService}
@@ -50,7 +51,7 @@ is loaded up during the validation period.
 
 :::caution
 This object is intended to be used for **prototyping purposes ONLY** and should not be deployed to an environment as users with malicious intent will be able to access your key in the browser.
-Check examples [here](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to direct the requests through your own service.
+Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to direct all requests through your own service.
 :::
 
 <LineBreak></LineBreak>

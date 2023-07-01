@@ -1,15 +1,13 @@
 #small-screen-component {
   display: none;
-}
-
-#small-screen-component {
   justify-content: center;
+  transform: scale(0.9);
 }
 
 #small-screen-deep-chat-logo {
   margin-left: auto;
   margin-right: auto;
   width: 200px;
-  margin-top: 42px;
+  margin-top: 12px;
   display: none;
 }

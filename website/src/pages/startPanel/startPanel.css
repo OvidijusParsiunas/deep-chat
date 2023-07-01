@@ -64,10 +64,6 @@
   margin-left: 155px;
 }
 
-.start-panel-component-left {
-  margin-left: 40px;
-}
-
 #start-panel-logos {
   position: absolute;
   z-index: 5;
@@ -93,10 +89,6 @@
 
 .start-panel-logos-left {
   left: 395px;
-}
-
-.start-panel-logos-right {
-  left: 495px;
 }
 
 .start-panel-logo {
@@ -202,18 +194,42 @@
   }
 }
 
+@media (max-width: 945px) {
+  #start-panel-content {
+    top: 48%;
+  }
+}
+
 @media (max-width: 880px) {
+  #start-panel-animation-content-container {
+    width: 590px;
+  }
   #start-panel-header {
     font-size: 3.3rem;
   }
   #start-panel-sub-header {
     font-size: 2rem;
   }
+  .start-panel-component-center {
+    margin-left: 120px;
+  }
+  .start-panel-logos-left {
+    left: 345px;
+  }
 }
 
-@media (max-width: 945px) and (max-height: 9000px) {
-  #start-panel-content {
-    top: 48%;
+@media (max-width: 753px) {
+  #start-panel {
+    min-height: 512px;
+  }
+  #start-panel-header {
+    font-size: 2.9rem;
+    margin-top: 10px;
+  }
+  #start-panel-sub-header {
+    font-size: 1.6rem;
+    width: 92%;
+    margin-left: 4%;
   }
 }
 
@@ -222,6 +238,9 @@
     width: 500px;
     margin-left: 0px;
     padding-left: 0px;
+  }
+  .start-panel-component-center {
+    margin-left: 110px;
   }
 }
 
@@ -237,6 +256,13 @@
   }
 }
 
+@media (max-width: 641px) {
+  #start-panel-sub-header {
+    width: 100%;
+    margin-left: 0%;
+  }
+}
+
 @media (max-width: 630px) {
   #start-panel-animation-content-container {
     margin-left: -35px;
@@ -246,6 +272,13 @@
 @media (max-width: 620px) {
   #start-panel-animation-content-container {
     margin-left: -45px;
+  }
+}
+
+@media (max-width: 605px) {
+  #start-panel-sub-header {
+    width: 109%;
+    margin-left: -5%;
   }
 }
 
@@ -278,47 +311,119 @@
     display: none;
   }
   #small-screen-component {
-    margin-top: 30px;
+    margin-top: 5px;
     display: flex;
-  }
-  #start-panel-header {
-    font-size: 2.9rem;
-  }
-  #start-panel-sub-header {
-    font-size: 1.6rem;
-    width: 92%;
-    margin-left: 4%;
   }
   #start-panel-content {
     width: 100%;
     left: 0px;
   }
+  #start-panel {
+    min-height: 483px;
+  }
+  #start-panel-header {
+    margin-bottom: 10px;
+  }
+  #start-panel-sub-header {
+    width: 92%;
+    margin-left: 4%;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 513px) {
+  #small-screen-component {
+    margin-top: 10px;
+  }
+  #start-panel {
+    min-height: 479px;
+  }
+  #start-panel-content {
+    top: 50%;
+  }
+  #footer {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+@media (max-width: 415px) {
+  #small-screen-component {
+    margin-top: -5px;
+  }
+  #start-panel {
+    height: calc(100vh - 121px) !important;
+    min-height: 472px;
+  }
 }
 
 @media (max-width: 348px) {
   #start-panel {
-    min-height: 500px;
+    min-height: 461px;
+  }
+  #start-panel-content {
+    top: 52%;
   }
   #start-panel-sub-header {
     margin-bottom: 0px;
   }
   #small-screen-component {
-    margin-top: 0px;
+    margin-top: -10px;
     transform: scale(0.8);
   }
 }
 
-@media (max-width: 332px) {
-  #start-panel {
-    height: calc(100vh - 121px);
+@media (max-width: 286px) {
+  #small-screen-component {
+    margin-top: -25px;
   }
 }
 
 @media (max-width: 260px) {
+  #start-panel {
+    min-height: 400px;
+  }
+  #start-panel-content {
+    top: 46%;
+  }
+  #start-panel-sub-header {
+    margin-top: 5px;
+  }
   #small-screen-component {
     display: none;
   }
   #small-screen-deep-chat-logo {
     display: block;
   }
+}
+
+@media (max-width: 232px) {
+  #start-panel {
+    height: calc(100vh - 144px) !important;
+  }
+}
+
+@media (max-width: 286px) and (max-height: 380px) {
+  #small-screen-component {
+    display: none;
+  }
+  #small-screen-deep-chat-logo {
+    display: block;
+  }
+  #start-panel {
+    min-height: 358px;
+  }
+  #small-screen-deep-chat-logo {
+    margin-top: 5px;
+  }
+}
+
+/* needs to be here for start-panel-component-center to take effect for different screen sizes */
+.start-panel-component-left {
+  margin-left: 40px;
+}
+
+/* needs to be here for start-panel-logos-left to take effect for different screen sizes */
+.start-panel-logos-right {
+  left: 495px;
 }
