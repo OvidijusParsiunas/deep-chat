@@ -35,7 +35,7 @@ const config = {
       ({
         docs: {
           // Used for the "edit this page" links.
-          editUrl: 'https://github.com/OvidijusParsiunas/active-table/tree/main/website',
+          editUrl: 'https://github.com/OvidijusParsiunas/deep-chat/tree/main/website',
           sidebarPath: 'sidebars.js',
           routeBasePath: '/',
         },
@@ -98,7 +98,7 @@ const config = {
             sidebarId: 'examples',
           },
           {
-            href: 'https://github.com/OvidijusParsiunas/active-table',
+            href: 'https://github.com/OvidijusParsiunas/deep-chat',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',

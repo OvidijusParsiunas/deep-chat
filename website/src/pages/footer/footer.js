@@ -9,7 +9,7 @@ export default function Footer() {
         Ovidijus Parsiunas
       </a>
       . Source code is available on{' '}
-      <a href="https://github.com/OvidijusParsiunas/active-table" target="_blank">
+      <a href="https://github.com/OvidijusParsiunas/deep-chat" target="_blank">
         GitHub
       </a>
       .

@@ -16,7 +16,6 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --feature-title: #3f3f3f;
   --text-code-background-color: #f0f0f0;
   --text-code-border-color: rgb(240, 240, 240);
   --code-background: #fbfbfb;
@@ -27,12 +26,18 @@
   --code-punctuation-color: #393a34;
   --code-attr-name-color: #0076d0;
   --code-attr-value-color: #053466;
-  --start-button-color: #343434;
-  --start-button-border: 1px solid rgb(181, 181, 181);
-  --start-button-background-color: white;
-  --start-button-background-hover-color: #f7f7f7;
-  --start-button-background-click-color: #ebebeb;
-  --start-header-border-color: white;
+  --navbar-title-color: #003064;
+  --menu-link-active-color: #00448d;
+  --navbar-link-active-color: #034184;
+  --tabs-item-color: #004c9c;
+  --tabs-item-bottom-color: #005ca3;
+  --table-of-contents-color: #0058b7;
+  --breadcrumbs-item-active-color: #004a98;
+  --homepage-background-standout-color: #fff5f5;
+  --homepage-header-color: #003064;
+  --speech-gradient-start-color: rgba(255, 255, 255, 1);
+  --speech-gradient-end-color: rgba(255, 224, 224, 1);
+  --openai-logo-filter: unset;
 }
 
 [data-theme='dark'] {
@@ -40,7 +45,7 @@
   --ifm-table-container-border-top: 1px solid #282a36;
   --ifm-table-container-border: unset;
   --ifm-color-primary: #5da9f6;
-  --ifm-link-color: #c8e6ff;
+  --ifm-link-color: #4aabff;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
   --ifm-color-primary-darkest: #1a8870;
@@ -48,7 +53,6 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --feature-title: white;
   --text-code-border-color: #282a36;
   --text-code-background-color: #3c3c3c;
   --code-background: #282a36;
@@ -59,12 +63,19 @@
   --code-punctuation-color: white;
   --code-attr-name-color: white;
   --code-attr-value-color: white;
-  --start-button-color: white;
-  --start-button-border: unset;
-  --start-button-background-color: #555555;
-  --start-button-background-hover-color: #3e3e3e;
-  --start-button-background-click-color: #343434;
-  --start-header-border-color: #1b1b1d;
+  --navbar-title-color: white;
+  --menu-link-active-color: #0980ff;
+  --navbar-link-active-color: #2487d3;
+  --tabs-item-color: #53a1f4;
+  --tabs-item-bottom-color: #108be9;
+  --table-of-contents-color: #157ae5;
+  --breadcrumbs-item-active-color: #1888ff;
+  --homepage-background-standout-color: #232323;
+  --homepage-header-color: white;
+  --speech-gradient-start-color: rgba(57, 57, 57, 0);
+  --speech-gradient-end-color: #2d2d2d;
+  --openai-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)
+    brightness(108%) contrast(108%);
 }
 
 .markdown > h1 {
@@ -93,31 +104,31 @@ img + h2 {
   letter-spacing: 0.4px;
 }
 
+.menu__list {
+  width: 210px !important;
+}
+
 .menu__link:hover {
   background-color: #6161610d;
 }
 
 .menu__link--active {
   background-color: #6161610d !important;
-  color: #00448d !important;
-}
-
-.menu__list {
-  width: 210px !important;
+  color: var(--menu-link-active-color) !important;
 }
 
 .navbar__link--active {
-  color: #034184 !important;
+  color: var(--navbar-link-active-color) !important;
 }
 
 .tabs__item--active {
-  color: #004c9c !important;
-  border-bottom-color: #005ca3 !important;
+  color: var(--tabs-item-color) !important;
+  border-bottom-color: var(--tabs-item-bottom-color) !important;
 }
 
 .table-of-contents__link--active,
 .table-of-contents__link--active code {
-  color: #0058b7 !important;
+  color: var(--table-of-contents-color) !important;
 }
 
 .table-of-contents__link:hover,
@@ -127,7 +138,7 @@ img + h2 {
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  color: #004a98 !important;
+  color: var(--breadcrumbs-item-active-color) !important;
 }
 
 .navbar__link--active:hover {
@@ -231,7 +242,7 @@ code {
 }
 
 .navbar__title {
-  color: #003064;
+  color: var(--navbar-title-color);
   margin-top: -1.2px;
   font-size: 19.5px;
   letter-spacing: -0.2px;
@@ -309,6 +320,10 @@ h1 + h2 {
   margin-top: 35px !important;
 }
 
+#openai-logo {
+  filter: var(--openai-logo-filter);
+}
+
 @media (max-width: 575px) {
   .documentation-example-container {
     display: none;
@@ -327,7 +342,7 @@ h1 + h2 {
   }
 }
 
-/* algolia fix to not remove the scrollbar when opened as it would move the tables */
+/* algolia fix to not remove the scrollbar when opened as it would move the components */
 body.DocSearch--active {
   overflow: auto !important;
 }

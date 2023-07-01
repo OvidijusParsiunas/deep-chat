@@ -19,7 +19,7 @@
   text-align: center;
   font-size: 35px;
   font-weight: 700;
-  color: rgb(0, 48, 100);
+  color: var(--homepage-header-color);
 }
 
 .feature-panel {

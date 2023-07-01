@@ -1,7 +1,7 @@
 #speech {
   margin-top: 120px;
   margin-bottom: 150px;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 1) 0%, rgba(255, 224, 224, 1) 100%);
+  background: linear-gradient(120deg, var(--speech-gradient-start-color) 0%, var(--speech-gradient-end-color) 100%);
 }
 
 #speech-sub-header {

@@ -1,5 +1,5 @@
 #start-panel {
-  background-color: #fff5f5;
+  background-color: var(--homepage-background-standout-color);
   position: relative;
   width: 100%;
   height: calc(100vh - 20px);
@@ -26,7 +26,7 @@
   font-weight: 700;
   letter-spacing: -1.2px;
   font-size: 3.7rem;
-  color: #003064;
+  color: var(--homepage-header-color);
 }
 
 #start-panel-sub-header {

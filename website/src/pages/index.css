@@ -64,7 +64,7 @@
   }
 
   #footer {
-    background-color: #fff5f5;
+    background-color: var(--homepage-background-standout-color);
     text-align: center;
   }
 
