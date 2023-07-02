@@ -2,11 +2,7 @@ import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import './smallScreen.css';
 import React from 'react';
 
-export function DeepChatLogo() {
-  return <img id="small-screen-deep-chat-logo" src="img/deep-chat-small-screen-logo.svg" />;
-}
-
-export function SmallScreenPanel() {
+export default function SmallScreenPanel() {
   return (
     <div id="small-screen-component">
       <DeepChatBrowser

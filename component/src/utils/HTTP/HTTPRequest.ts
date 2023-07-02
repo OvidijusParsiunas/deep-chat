@@ -14,8 +14,9 @@ type Finish = () => void;
 export class HTTPRequest {
   public static request(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} = io.requestInterceptor(requestDetails);
-    if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.responseInterceptor);
+    const {body: interceptedBody, headers: interceptedHeaders} =
+      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -24,7 +25,7 @@ export class HTTPRequest {
       .then((response) => HTTPRequest.processResponseByType(response))
       .then(async (result: object) => {
         if (!io.extractResultData) return;
-        const resultData = await io.extractResultData(io.responseInterceptor(result));
+        const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
         if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
@@ -40,7 +41,8 @@ export class HTTPRequest {
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} = io.requestInterceptor(requestDetails);
+    const {body: interceptedBody, headers: interceptedHeaders} =
+      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, onOpen, onClose);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
@@ -85,7 +87,7 @@ export class HTTPRequest {
       .then((response) => response.json())
       .then(async (result: object) => {
         if (!io.extractPollResultData) return;
-        const resultData = await io.extractPollResultData(io.responseInterceptor(result));
+        const resultData = await io.extractPollResultData(io.deepChat.responseInterceptor?.(result) || result);
         if (resultData.timeoutMS) {
           setTimeout(() => {
             HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);            
@@ -106,7 +108,7 @@ export class HTTPRequest {
 
   public static poll(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers} = io.requestInterceptor(requestDetails);
+    const {body: interceptedBody, headers} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;

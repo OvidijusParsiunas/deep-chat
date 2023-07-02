@@ -49,11 +49,11 @@ export class Demo {
     return 'Wow, very cool files!';
   }
 
-  public static request(messages: Messages, onFinish: Finish, responseInterceptor: ResponseInterceptor) {
+  public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
     const responseText = Demo.generateResponse(messages);
     setTimeout(() => {
       const message = {text: responseText};
-      const preprocessedMessage = responseInterceptor(message);
+      const preprocessedMessage = responseInterceptor?.(message) || message;
       messages.addNewMessage(preprocessedMessage as Result, true, true);
       onFinish();
     }, 400);

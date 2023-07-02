@@ -1,7 +1,6 @@
 import {KeyVerificationHandlers, CompletionsHandlers, ServiceFileTypes, StreamHandlers, ServiceIO} from '../serviceIO';
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {RequestInterceptor, ResponseInterceptor} from '../../types/interceptors';
 import {CustomServiceResponse} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -16,11 +15,10 @@ import {DeepChat} from '../../deepChat';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class BaseServiceIO implements ServiceIO {
   readonly rawBody: any = {};
+  deepChat: DeepChat;
   validateConfigKey = false;
   canSendMessage: ValidateMessageBeforeSending = BaseServiceIO.canSendMessage;
   requestSettings: Request = {};
-  requestInterceptor: RequestInterceptor = (details) => details;
-  responseInterceptor: ResponseInterceptor = (result) => result;
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
   recordAudio?: MicrophoneFilesServiceConfig;
@@ -31,18 +29,15 @@ export class BaseServiceIO implements ServiceIO {
   demo?: Demo;
 
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
+    this.deepChat = deepChat;
     this.demo = demo;
     Object.assign(this.rawBody, deepChat.request?.body);
-    const {request, validateMessageBeforeSending, requestInterceptor, responseInterceptor} = deepChat;
     this._isStream = !!deepChat.stream;
     this.totalMessagesMaxCharLength = deepChat?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
     this.maxMessages = deepChat?.requestBodyMessageLimits?.maxMessages;
-    if (validateMessageBeforeSending) this.canSendMessage = validateMessageBeforeSending;
     SetFileTypes.set(deepChat, this, existingFileTypes);
-    if (request) this.requestSettings = request;
+    if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
-    if (requestInterceptor) this.requestInterceptor = requestInterceptor;
-    if (responseInterceptor) this.responseInterceptor = responseInterceptor;
     this._existingServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
   }
 

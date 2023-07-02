@@ -1,11 +1,11 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
-import {RequestInterceptor, ResponseInterceptor} from '../types/interceptors';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Request} from '../types/request';
 import {Result} from '../types/result';
+import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
 export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
@@ -66,12 +66,6 @@ export interface ServiceIO {
   // service errors via prefixes
   permittedErrorPrefixes?: CustomErrors;
 
-  // the reason why requestInterceptor and responseInterceptor are not optional is so that HTTPRequest would not need
-  // to use them as optionals
-  requestInterceptor: RequestInterceptor;
-
-  responseInterceptor: ResponseInterceptor;
-
   canSendMessage: ValidateMessageBeforeSending;
 
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
@@ -85,4 +79,6 @@ export interface ServiceIO {
   extractPollResultData?(result: object): PollResult;
 
   demo?: Demo;
+
+  deepChat: DeepChat; // this is used for interceptors as the user may pass them much later after component is initiated
 }

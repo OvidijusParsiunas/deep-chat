@@ -29,7 +29,7 @@ export class OpenAIAudioIO extends IExistingServiceIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const {existingService, validateMessageBeforeSending, textInput} = deepChat;
+    const {existingService, textInput} = deepChat;
     const apiKey = existingService?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
@@ -41,7 +41,7 @@ export class OpenAIAudioIO extends IExistingServiceIO {
     }
     this.rawBody.model ??= OpenAIAudioIO.DEFAULT_MODEL;
     this.rawBody.response_format = 'json';
-    this.canSendMessage = validateMessageBeforeSending || OpenAIAudioIO.canSendFileMessage;
+    this.canSendMessage = OpenAIAudioIO.canSendFileMessage;
   }
 
   private static canSendFileMessage(_?: string, files?: File[]) {

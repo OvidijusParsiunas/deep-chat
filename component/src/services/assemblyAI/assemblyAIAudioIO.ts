@@ -26,8 +26,7 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
   constructor(deepChat: DeepChat) {
     const apiKey = deepChat.existingService?.assemblyAI;
     super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, apiKey, {audio: {}});
-    const {validateMessageBeforeSending} = deepChat;
-    this.canSendMessage = validateMessageBeforeSending || AssemblyAIAudioIO.canFileSendMessage;
+    this.canSendMessage = AssemblyAIAudioIO.canFileSendMessage;
   }
 
   private static canFileSendMessage(_?: string, files?: File[]) {

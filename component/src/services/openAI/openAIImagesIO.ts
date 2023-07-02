@@ -32,7 +32,7 @@ export class OpenAIImagesIO extends IExistingServiceIO {
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(deepChat: DeepChat) {
-    const {existingService, textInput, validateMessageBeforeSending} = deepChat;
+    const {existingService, textInput} = deepChat;
     const apiKey = existingService?.openAI;
     const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
@@ -43,7 +43,7 @@ export class OpenAIImagesIO extends IExistingServiceIO {
       this.camera.files = {dimensions: {width: dimension, height: dimension}};
     }
     if (typeof config === 'object') Object.assign(this.rawBody, config);
-    this.canSendMessage = validateMessageBeforeSending || OpenAIImagesIO.canFileSendMessage;
+    this.canSendMessage = OpenAIImagesIO.canFileSendMessage;
   }
 
   private static canFileSendMessage(text?: string, files?: File[]) {

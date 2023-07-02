@@ -25,12 +25,11 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   textInputPlaceholderText = 'Upload an audio file';
 
   constructor(deepChat: DeepChat) {
-    const {existingService, validateMessageBeforeSending} = deepChat;
-    const config = existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
-    const apiKey = existingService?.azure;
+    const config = deepChat.existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
+    const apiKey = deepChat.existingService?.azure;
     const defaultFile = {audio: {files: {acceptedFormats: '.wav,.ogg'}}};
     super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, defaultFile);
-    this.canSendMessage = validateMessageBeforeSending || AzureSpeechToTextIO.canFileSendMessage;
+    this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;
     const lang = config.lang || 'en-US';
     // eslint-disable-next-line max-len
     this.url = `https://${config.region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`;

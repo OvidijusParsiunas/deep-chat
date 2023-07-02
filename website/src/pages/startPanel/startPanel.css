@@ -71,6 +71,15 @@
   flex-direction: column;
 }
 
+.start-panel-not-visible {
+  opacity: 0;
+}
+
+.start-panel-visible {
+  opacity: 1;
+  transition: all 1s;
+}
+
 .start-panel-logos-middle {
   top: 153px;
 }
@@ -419,11 +428,13 @@
 }
 
 /* needs to be here for start-panel-component-center to take effect for different screen sizes */
+/* need !important for build/serve website */
 .start-panel-component-left {
-  margin-left: 40px;
+  margin-left: 40px !important;
 }
 
 /* needs to be here for start-panel-logos-left to take effect for different screen sizes */
+/* need !important for build/serve website */
 .start-panel-logos-right {
-  left: 495px;
+  left: 495px !important;
 }

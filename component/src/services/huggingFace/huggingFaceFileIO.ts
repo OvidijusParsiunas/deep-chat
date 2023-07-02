@@ -14,7 +14,7 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat, placeholderText: string, defaultModel: string,
       config: true | (HuggingFaceModel), apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, placeholderText, defaultModel, config, apiKey, existingFileTypes);
-    this.canSendMessage = deepChat.validateMessageBeforeSending || HuggingFaceFileIO.canSendFile;
+    this.canSendMessage = HuggingFaceFileIO.canSendFile;
   }
 
   private static canSendFile(_?: string, files?: File[]) {

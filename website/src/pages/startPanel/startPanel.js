@@ -1,5 +1,6 @@
-import {SmallScreenPanel, DeepChatLogo} from '../smallScreen/smallScreen';
 import DeepChatBrowser from '../../components/table/deepChatBrowser';
+import SmallScreenPanel from '../smallScreen/smallScreen';
+import DeepChatLogo from '../smallScreen/deepChatLogo';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
@@ -12,8 +13,7 @@ const Logos = React.forwardRef((_, ref) => {
   return (
     <div
       id="start-panel-logos"
-      style={{opacity: '0'}}
-      className={'start-panel-logos-left start-panel-logos-collapsed start-panel-logos-middle'}
+      className={'start-panel-not-visible start-panel-logos-left start-panel-logos-collapsed start-panel-logos-middle'}
       ref={ref}
     >
       <div className="start-panel-logo">
@@ -62,8 +62,7 @@ function animate(component, logos, messageLine, messageBubble) {
 // this is to prevent a bug where upon opening up the homepage and the component takes a while to load - the logos would appear under it
 function displayLogos(logos) {
   setTimeout(() => {
-    logos.style.opacity = '1';
-    logos.style.transition = 'all 1s';
+    logos.classList.add('start-panel-visible');
   }, 20);
 }
 
@@ -72,7 +71,7 @@ function ComponentPanel() {
   const component = React.useRef(null);
   const messageBubble = React.useRef(null);
   const messageLine = React.useRef(null);
-  setTimeout(() => displayLogos(logos.current));
+  setTimeout(() => displayLogos(logos.current), 700);
   setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1500);
   return (
     <div id="start-panel-animation-content-container">
