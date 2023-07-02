@@ -1,4 +1,4 @@
-#code-toggle {
+.code-toggle {
   background-color: white;
   border: 1px solid #3584d3;
   border-radius: 5px;
@@ -8,6 +8,7 @@
   user-select: none;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 5px;
   margin-bottom: 20px;
   width: 100px;
   text-align: center;
@@ -15,10 +16,10 @@
   padding-bottom: 5px;
 }
 
-#code-toggle:hover {
+.code-toggle:hover {
   background-color: rgb(251, 251, 251);
 }
 
-#code-toggle:active {
+.code-toggle:active {
   background-color: rgb(246, 246, 246);
 }

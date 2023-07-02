@@ -9,7 +9,7 @@ export default function CodeToggle({children}) {
   const [isDisplayed, setIsDisplayed] = React.useState(false);
   return (
     <div>
-      <div id="code-toggle" onClick={() => setIsDisplayed(!isDisplayed)}>
+      <div className="code-toggle" onClick={() => setIsDisplayed(!isDisplayed)}>
         {isDisplayed ? 'Hide' : 'View'} Code
       </div>
       <Code isDisplayed={isDisplayed}>{children}</Code>

@@ -171,7 +171,6 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
-    // TO-DO - this will be moved to service selection view
     this._activeService ??= ServiceIOFactory.create(this);
     if (!this._activeService) return;
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {

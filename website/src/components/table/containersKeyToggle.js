@@ -1,4 +1,3 @@
-import ComponentContainer from '@site/src/components/table/componentContainer';
 import React from 'react';
 
 export default function ContainersKeyToggle({children}) {

@@ -6,8 +6,6 @@ export default function FadeInContent({contentRef}) {
     <BrowserOnly>
       {() => {
         // REF-39 - code synchronous
-        require('active-table-react');
-        require('ai-assistant-react');
         // in a timeout as moving back to the homepage from a different tab has the page ref 'current' as null
         setTimeout(() => {
           if (contentRef?.current) contentRef.current.className = 'fade-in';
