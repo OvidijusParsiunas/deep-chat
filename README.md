@@ -2,7 +2,7 @@
 
 ![alt text](./assets/readme/title.png)
 
-<b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages an already existing API such as ChatGPT or you want to connect to your own custom service, this component can be configured to do it all! Explore [deepchat.live](https://activetable.io/) to view all of the available features, how to use them, examples and more!
+<b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages an already existing API such as ChatGPT or you want to connect to your own custom service, this component can be configured to do it all! Explore [deepchat.dev](https://activetable.io/) to view all of the available features, how to use them, examples and more!
 
 ### :rocket: Main Features
 
@@ -35,7 +35,7 @@ npm install deep-chat-react
 To test the component - simply add the following to your markup:
 
 ```
-<deep-chat existingService='{"demo":true}'/>
+<deep-chat directConnection='{"demo":true}'/>
 ```
 
 The exact syntax for the above example will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
@@ -49,13 +49,13 @@ The exact syntax for the above example will vary depending on the framework of y
 To connect to an existing API checkout the [Existing Service](HERE) section in the documentation to view the available preset configurations. As an example, if you want to the connect to OpenAI chat API, you can use the following:
 
 ```
-<deep-chat existingService='{"openAI":true}'/>
+<deep-chat directConnection='{"openAI":true}'/>
 ```
 
 You can additionally preload it with your own key:
 
 ```
-<deep-chat existingService='{"openAI":{"key": "key-here"}}'/>
+<deep-chat directConnection='{"openAI":{"key": "key-here"}}'/>
 ```
 
 The exact syntax for the above examples will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
@@ -75,7 +75,7 @@ The core property that supports this feature is [`request`](HERE). For example, 
 To use an existing API's configuration, such as OpenAI chat, you can use the following configuration:
 
 ```
-<deep-chat existingService='{"openAI":true}' request='{"url": "https://customdomain.com"}'/>
+<deep-chat directConnection='{"openAI":true}' request='{"url": "https://customdomain.com"}'/>
 ```
 
 The exact syntax for the above examples will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
