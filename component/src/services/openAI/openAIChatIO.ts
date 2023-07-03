@@ -2,9 +2,9 @@ import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/ope
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -13,7 +13,7 @@ import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
 // chat is a form of completions
-export class OpenAIChatIO extends IExistingServiceIO {
+export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
@@ -21,9 +21,9 @@ export class OpenAIChatIO extends IExistingServiceIO {
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
   constructor(deepChat: DeepChat) {
-    const apiKey = deepChat.existingService?.openAI;
+    const apiKey = deepChat.directConnection?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    const config = deepChat.existingService?.openAI?.chat; // can be undefined as this is the default service
+    const config = deepChat.directConnection?.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
       this.cleanConfig(config);

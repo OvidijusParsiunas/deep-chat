@@ -6,7 +6,7 @@ import {OpenAI} from './openAI';
 import {Azure} from './azure';
 import {Demo} from './demo';
 
-export interface ExistingService {
+export interface DirectConnection {
   openAI?: OpenAI & APIKey;
   huggingFace?: HuggingFace & APIKey;
   azure?: Azure & APIKey;

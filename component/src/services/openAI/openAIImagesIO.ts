@@ -1,9 +1,9 @@
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIImageResult} from '../../types/openAIResult';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
@@ -12,7 +12,7 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
-export class OpenAIImagesIO extends IExistingServiceIO {
+export class OpenAIImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
@@ -32,12 +32,12 @@ export class OpenAIImagesIO extends IExistingServiceIO {
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(deepChat: DeepChat) {
-    const {existingService, textInput} = deepChat;
-    const apiKey = existingService?.openAI;
+    const {directConnection, textInput} = deepChat;
+    const apiKey = directConnection?.openAI;
     const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    const config = existingService?.openAI?.images as NonNullable<OpenAI['images']>;
+    const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};

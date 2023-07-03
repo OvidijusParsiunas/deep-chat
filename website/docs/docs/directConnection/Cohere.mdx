@@ -65,7 +65,7 @@ You can either set this property to _true_ or use an object to augment the [`req
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         cohere: {
           key: 'placeholder key',
           textGeneration: {model: 'command'},
@@ -76,7 +76,7 @@ You can either set this property to _true_ or use an object to augment the [`req
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         cohere: {
           textGeneration: {model: 'command'},
         },
@@ -90,7 +90,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "cohere": {
       "key": "placeholder key",
       "textGeneration": {"model": "command"}
@@ -106,7 +106,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "cohere": {
       "key": "placeholder key",
       "textGeneration": {"model": "command"}
@@ -149,7 +149,7 @@ You can either set this property to _true_ or use an object to augment the [`req
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         cohere: {
           key: 'placeholder key',
           summarization: {model: 'summarize-xlarge'},
@@ -160,7 +160,7 @@ You can either set this property to _true_ or use an object to augment the [`req
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         cohere: {
           summarization: {model: 'summarize-xlarge'},
         },
@@ -174,7 +174,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "cohere": {
       "key": "placeholder key",
       "summarization": {"model": "summarize-xlarge"}
@@ -190,7 +190,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "cohere": {
       "key": "placeholder key",
       "summarization": {"model": "summarize-xlarge"}

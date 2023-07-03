@@ -8,8 +8,8 @@ import {DeepChat} from '../../deepChat';
 export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default method
-    const config = deepChat.existingService?.huggingFace?.conversation;
-    const apiKey = deepChat.existingService?.huggingFace;
+    const config = deepChat.directConnection?.huggingFace?.conversation;
+    const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'Ask me anything!', 'facebook/blenderbot-400M-distill', config, apiKey);
   }
 

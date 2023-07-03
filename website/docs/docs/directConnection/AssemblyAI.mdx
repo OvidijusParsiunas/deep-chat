@@ -33,7 +33,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         assemblyAI: {
           key: 'placeholder key',
           audio: true,
@@ -44,7 +44,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         assemblyAI: {
           audio: true,
         },
@@ -58,7 +58,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "assemblyAI": {
       "key": "placeholder key",
       "audio": true
@@ -74,7 +74,7 @@ Connect to Assembly AI's [`speech recognition`](https://www.assemblyai.com/docs/
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "assemblyAI": {
       "key": "placeholder key",
       "audio": true

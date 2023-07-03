@@ -17,27 +17,27 @@ const Logos = React.forwardRef((_, ref) => {
       ref={ref}
     >
       <div className="start-panel-logo">
-        <a href="docs/existingServices/HuggingFace" target="_blank">
+        <a href="docs/directConnection/HuggingFace" target="_blank">
           <img src={huggingFaceLogo} width="60" />
         </a>
       </div>
       <div className="start-panel-logo">
-        <a href="docs/existingServices/OpenAI" target="_blank">
+        <a href="docs/directConnection/OpenAI" target="_blank">
           <img src={openAILogo} width="40" style={{marginTop: '7px'}} />
         </a>
       </div>
       <div className="start-panel-logo">
-        <a href="docs/existingServices/Cohere" target="_blank">
+        <a href="docs/directConnection/Cohere" target="_blank">
           <img src={cohereLogo} width="60" style={{marginTop: '1xpx'}} />
         </a>
       </div>
       <div className="start-panel-logo">
-        <a href="docs/existingServices/Azure" target="_blank">
+        <a href="docs/directConnection/Azure" target="_blank">
           <img src={azureLogo} width="42" style={{marginTop: '7px'}} />
         </a>
       </div>
       <div className="start-panel-logo">
-        <a href="docs/existingServices/AssemblyAI" target="_blank">
+        <a href="docs/directConnection/AssemblyAI" target="_blank">
           <img src={assemblyAILogo} width="35" style={{marginTop: '8px'}} />
         </a>
       </div>
@@ -77,7 +77,7 @@ function ComponentPanel() {
     <div id="start-panel-animation-content-container">
       <div id="start-panel-component" ref={component} className={'start-panel-component-center'}>
         <DeepChatBrowser
-          existingService={{demo: true}}
+          directConnection={{demo: true}}
           initialMessages={[
             {text: 'What is Deep Chat?', role: 'user'},
             {text: 'A framework agnostic chat component.', role: 'ai'},

@@ -25,8 +25,8 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   textInputPlaceholderText = 'Upload an audio file';
 
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.azure?.speechToText as NonNullable<Azure['speechToText']>;
-    const apiKey = deepChat.existingService?.azure;
+    const config = deepChat.directConnection?.azure?.speechToText as NonNullable<Azure['speechToText']>;
+    const apiKey = deepChat.directConnection?.azure;
     const defaultFile = {audio: {files: {acceptedFormats: '.wav,.ogg'}}};
     super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, defaultFile);
     this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;

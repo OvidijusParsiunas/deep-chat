@@ -6,10 +6,10 @@ import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.huggingFace?.imageClassification as NonNullable<
+    const config = deepChat.directConnection?.huggingFace?.imageClassification as NonNullable<
       HuggingFace['imageClassification']
     >;
-    const apiKey = deepChat.existingService?.huggingFace;
+    const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'Attach an image file', 'google/vit-base-patch16-224', config, apiKey, {images: {}});
   }
 

@@ -54,7 +54,7 @@ function Components() {
   return (
     <div id="customize-content">
       <DeepChatBrowser
-        existingService={{demo: true}}
+        directConnection={{demo: true}}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -137,7 +137,7 @@ function Components() {
         textInput={{placeholder: {text: `What's on your mind?`}}}
       ></DeepChatBrowser>
       <DeepChatBrowser
-        existingService={{demo: true}}
+        directConnection={{demo: true}}
         stream={true}
         containerStyle={{
           borderRadius: '10px',
@@ -192,7 +192,7 @@ function Components() {
         <IntroPanel></IntroPanel>
       </DeepChatBrowser>
       <DeepChatBrowser
-        existingService={{demo: true}}
+        directConnection={{demo: true}}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},

@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Service
+# Connect
 
 <h2>How to connect to a Custom API</h2>
 
@@ -98,7 +98,7 @@ Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     stream={true}
-    existingService={{demo: true}}
+    directConnection={{demo: true}}
     introMessage={`The response message bubble will be populated gradually with text events.`}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -118,7 +118,7 @@ Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main
 
 <deep-chat
   stream="true"
-  existingService='{"demo": true}'
+  directConnection='{"demo": true}'
   containerStyle='{"borderRadius": "8px"}'
   introMessage="The response message bubble will be populated gradually with text events."
 ></deep-chat>
@@ -146,7 +146,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
       totalMessagesMaxCharLength: 20,
       maxMessages: 2,
     }}
-    existingService={{demo: true}}
+    directConnection={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -174,7 +174,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
     "maxMessages": 2
   }'
   containerStyle='{"borderRadius": "8px"}'
-  existingService='{"demo": true}'
+  directConnection='{"demo": true}'
   introMessage="Observe the data that is going to be sent below."
 ></deep-chat>
 ```

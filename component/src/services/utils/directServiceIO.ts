@@ -9,8 +9,7 @@ import {DeepChat} from '../../deepChat';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-// using I in the front so that users don't mistake this for ExistingService
-export class IExistingServiceIO extends BaseServiceIO {
+export class DirectServiceIO extends BaseServiceIO {
   key?: string;
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';

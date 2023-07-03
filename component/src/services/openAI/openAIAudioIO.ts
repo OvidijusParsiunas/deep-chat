@@ -1,16 +1,16 @@
 import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
 import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {OpenAIAudioResult} from '../../types/openAIResult';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
-export class OpenAIAudioIO extends IExistingServiceIO {
+export class OpenAIAudioIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
@@ -29,11 +29,11 @@ export class OpenAIAudioIO extends IExistingServiceIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const {existingService, textInput} = deepChat;
-    const apiKey = existingService?.openAI;
+    const {directConnection, textInput} = deepChat;
+    const apiKey = directConnection?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    const config = existingService?.openAI?.audio as NonNullable<OpenAI['audio']>;
+    const config = directConnection?.openAI?.audio as NonNullable<OpenAI['audio']>;
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);

@@ -25,7 +25,7 @@ export class BaseServiceIO implements ServiceIO {
   readonly _isStream: boolean = false;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
-  private readonly _existingServiceRequiresFiles: boolean;
+  private readonly _directServiceRequiresFiles: boolean;
   demo?: Demo;
 
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
@@ -38,7 +38,7 @@ export class BaseServiceIO implements ServiceIO {
     SetFileTypes.set(deepChat, this, existingFileTypes);
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
-    this._existingServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
+    this._directServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
   }
 
   private static canSendMessage(text?: string, files?: File[]) {
@@ -98,7 +98,7 @@ export class BaseServiceIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       messages.messages, 0, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (files && !this._existingServiceRequiresFiles) {
+    if (files && !this._directServiceRequiresFiles) {
       this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, files);
     } else {
       this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, files);

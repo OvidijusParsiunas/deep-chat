@@ -1,14 +1,14 @@
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {MessageContent} from '../../types/messages';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
-export class AssemblyAIAudioIO extends IExistingServiceIO {
+export class AssemblyAIAudioIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'AssemblyAI API Key';
   override getKeyLink = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `
@@ -24,7 +24,7 @@ export class AssemblyAIAudioIO extends IExistingServiceIO {
   permittedErrorPrefixes = ['Invalid'];
 
   constructor(deepChat: DeepChat) {
-    const apiKey = deepChat.existingService?.assemblyAI;
+    const apiKey = deepChat.directConnection?.assemblyAI;
     super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, apiKey, {audio: {}});
     this.canSendMessage = AssemblyAIAudioIO.canFileSendMessage;
   }

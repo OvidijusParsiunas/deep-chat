@@ -123,7 +123,7 @@ export class SetFileTypes {
     serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, images);
   }
 
-  // default for existing service
+  // default for direct service
   private static populateDefaultFileIO(fileIO: FileServiceIO | undefined, acceptedFormats: string) {
     if (fileIO) {
       fileIO.files ??= {};

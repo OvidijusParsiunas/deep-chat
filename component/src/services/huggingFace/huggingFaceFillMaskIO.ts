@@ -13,8 +13,8 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
   permittedErrorPrefixes = ['No mask_token'];
 
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
-    const apiKey = deepChat.existingService?.huggingFace;
+    const config = deepChat.directConnection?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;
+    const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'The goal of life is [MASK].', 'bert-base-uncased', config, apiKey);
   }
 

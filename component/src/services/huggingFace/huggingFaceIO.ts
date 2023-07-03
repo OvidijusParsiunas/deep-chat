@@ -1,7 +1,7 @@
 import {CompletionsHandlers, ServiceFileTypes, StreamHandlers} from '../serviceIO';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
@@ -12,7 +12,7 @@ type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; conte
 
 type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj);
 
-export class HuggingFaceIO extends IExistingServiceIO {
+export class HuggingFaceIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Hugging Face Token';
   override getKeyLink = 'https://huggingface.co/settings/tokens';
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';

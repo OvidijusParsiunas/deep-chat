@@ -24,8 +24,8 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
 
   // prettier-ignore
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
-    const apiKey = deepChat.existingService?.azure;
+    const config = deepChat.directConnection?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
+    const apiKey = deepChat.directConnection?.azure;
     super(deepChat,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config.region, apiKey);

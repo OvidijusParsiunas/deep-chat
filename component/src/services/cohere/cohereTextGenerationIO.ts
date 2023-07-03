@@ -11,8 +11,8 @@ type CohereServiceConfig = GenericObject<string>;
 export class CohereTextGenerationIO extends CohereIO {
   constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default service
-    const config = deepChat.existingService?.cohere?.textGeneration as CohereServiceConfig | undefined;
-    const apiKey = deepChat.existingService?.cohere;
+    const config = deepChat.directConnection?.cohere?.textGeneration as CohereServiceConfig | undefined;
+    const apiKey = deepChat.directConnection?.cohere;
     super(deepChat, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config, apiKey);
   }
 

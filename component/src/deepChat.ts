@@ -4,15 +4,15 @@ import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPr
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
-import {IExistingServiceIO} from './services/utils/existingServiceIO';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
+import {DirectServiceIO} from './services/utils/directServiceIO';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {RequestBodyMessageLimits} from './types/chatLimits';
 import {GoogleFont} from './utils/webComponent/googleFont';
+import {DirectConnection} from './types/directConnection';
 import {SubmitButtonStyles} from './types/submitButton';
-import {ExistingService} from './types/existingService';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {MicrophoneStyles} from './types/microphone';
@@ -31,7 +31,7 @@ import {Names} from './types/names';
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class DeepChat extends InternalHTML {
   @Property('object')
-  existingService?: ExistingService;
+  directConnection?: DirectConnection;
 
   @Property('object')
   request?: Request;
@@ -180,13 +180,13 @@ export class DeepChat extends InternalHTML {
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else if ((this._activeService instanceof IExistingServiceIO && this._activeService.key)
-        || this.request?.url || this.existingService?.demo) {
+    } else if ((this._activeService instanceof DirectServiceIO && this._activeService.key)
+        || this.request?.url || this.directConnection?.demo) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;
       ChatView.render(this, this._elementRef, this._activeService, this._childElement);
-    } else if (this._activeService instanceof IExistingServiceIO) {
+    } else if (this._activeService instanceof DirectServiceIO) {
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first ppear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX

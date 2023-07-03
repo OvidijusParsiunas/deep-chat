@@ -7,7 +7,7 @@ function RightPanel() {
   return (
     <div id="speech-right-panel" className="feature-panel">
       <DeepChatBrowser
-        existingService={{demo: true}}
+        directConnection={{demo: true}}
         initialMessages={[
           {text: 'What is speech to text?', role: 'user'},
           {text: 'Transcribe your voice via the microphone button.', role: 'ai'},

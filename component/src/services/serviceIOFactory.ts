@@ -22,75 +22,75 @@ import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
-// exercise caution when defining default returns for existingService as their configs can be undefined
+// exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
   public static create(deepChat: DeepChat): ServiceIO {
-    const {existingService} = deepChat;
-    if (existingService) {
-      if (existingService.openAI) {
-        if (existingService.openAI.images) {
+    const {directConnection} = deepChat;
+    if (directConnection) {
+      if (directConnection.openAI) {
+        if (directConnection.openAI.images) {
           return new OpenAIImagesIO(deepChat);
         }
-        if (existingService.openAI.audio) {
+        if (directConnection.openAI.audio) {
           return new OpenAIAudioIO(deepChat);
         }
-        if (existingService.openAI.completions) {
+        if (directConnection.openAI.completions) {
           return new OpenAICompletionsIO(deepChat);
         }
         return new OpenAIChatIO(deepChat);
       }
-      if (existingService.assemblyAI) {
+      if (directConnection.assemblyAI) {
         return new AssemblyAIAudioIO(deepChat);
       }
-      if (existingService.cohere) {
-        if (existingService.cohere.summarization) {
+      if (directConnection.cohere) {
+        if (directConnection.cohere.summarization) {
           return new CohereSummarizationIO(deepChat);
         }
         return new CohereTextGenerationIO(deepChat);
       }
-      if (existingService.huggingFace) {
-        if (existingService.huggingFace.textGeneration) {
+      if (directConnection.huggingFace) {
+        if (directConnection.huggingFace.textGeneration) {
           return new HuggingFaceTextGenerationIO(deepChat);
         }
-        if (existingService.huggingFace.summarization) {
+        if (directConnection.huggingFace.summarization) {
           return new HuggingFaceSummarizationIO(deepChat);
         }
-        if (existingService.huggingFace.translation) {
+        if (directConnection.huggingFace.translation) {
           return new HuggingFaceTranslationIO(deepChat);
         }
-        if (existingService.huggingFace.fillMask) {
+        if (directConnection.huggingFace.fillMask) {
           return new HuggingFaceFillMaskIO(deepChat);
         }
-        if (existingService.huggingFace.questionAnswer) {
+        if (directConnection.huggingFace.questionAnswer) {
           return new HuggingFaceQuestionAnswerIO(deepChat);
         }
-        if (existingService.huggingFace.audioSpeechRecognition) {
+        if (directConnection.huggingFace.audioSpeechRecognition) {
           return new HuggingFaceAudioRecognitionIO(deepChat);
         }
-        if (existingService.huggingFace.audioClassification) {
+        if (directConnection.huggingFace.audioClassification) {
           return new HuggingFaceAudioClassificationIO(deepChat);
         }
-        if (existingService.huggingFace.imageClassification) {
+        if (directConnection.huggingFace.imageClassification) {
           return new HuggingFaceImageClassificationIO(deepChat);
         }
         return new HuggingFaceConversationIO(deepChat);
       }
-      if (existingService.azure) {
-        if (existingService.azure?.speechToText) {
+      if (directConnection.azure) {
+        if (directConnection.azure?.speechToText) {
           return new AzureSpeechToTextIO(deepChat);
         }
-        if (existingService.azure?.textToSpeech) {
+        if (directConnection.azure?.textToSpeech) {
           return new AzureTextToSpeechIO(deepChat);
         }
-        if (existingService.azure?.summarization) {
+        if (directConnection.azure?.summarization) {
           return new AzureSummarizationIO(deepChat);
         }
-        if (existingService.azure?.translation) {
+        if (directConnection.azure?.translation) {
           return new AzureTranslationIO(deepChat);
         }
       }
-      if (existingService.demo) {
-        return new BaseServiceIO(deepChat, undefined, existingService.demo);
+      if (directConnection.demo) {
+        return new BaseServiceIO(deepChat, undefined, directConnection.demo);
       }
     }
     return new BaseServiceIO(deepChat);

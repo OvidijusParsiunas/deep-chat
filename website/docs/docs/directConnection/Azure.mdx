@@ -56,7 +56,7 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           key: 'placeholder key',
           textToSpeech: {region: 'eastus'},
@@ -67,7 +67,7 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           textToSpeech: {region: 'eastus'},
         },
@@ -81,7 +81,7 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "textToSpeech": {"region": "eastus"}
@@ -97,7 +97,7 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "textToSpeech": {"region": "eastus"}
@@ -127,7 +127,7 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           key: 'placeholder key',
           speechToText: {region: 'eastus'},
@@ -138,7 +138,7 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           speechToText: {region: 'eastus'},
         },
@@ -152,7 +152,7 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "speechToText": {"region": "eastus"}
@@ -168,7 +168,7 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "speechToText": {"region": "eastus"}
@@ -197,7 +197,7 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    existingService={{
+    directConnection={{
       azure: {
         key: 'placeholder name',
         summarization: {endpoint: 'https://placeholderresource.cognitiveservices.azure.com'},
@@ -211,7 +211,7 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "summarization": {"endpoint": "https://placeholderresource.cognitiveservices.azure.com"}
@@ -227,7 +227,7 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "summarization": {"endpoint": "https://placeholderresource.cognitiveservices.azure.com"}
@@ -257,7 +257,7 @@ Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cogni
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           key: 'placeholder key',
           translation: {region: 'eastus', language: 'ja'},
@@ -268,7 +268,7 @@ Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cogni
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         azure: {
           translation: {region: 'eastus', language: 'ja'},
         },
@@ -282,7 +282,7 @@ Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cogni
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "translation": {"region": "eastus", "language": "ja"}
@@ -298,7 +298,7 @@ Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cogni
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "azure": {
       "key": "placeholder key",
       "translation": {"region": "eastus", "language": "ja"}

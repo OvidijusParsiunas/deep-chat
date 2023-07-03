@@ -1,4 +1,4 @@
-import {IExistingServiceIO} from '../utils/existingServiceIO';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {GenericObject} from '../../types/object';
 import {AzureUtils} from './utils/azureUtils';
 import {ServiceFileTypes} from '../serviceIO';
@@ -7,7 +7,7 @@ import {DeepChat} from '../../deepChat';
 
 type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
-export class AzureLanguageIO extends IExistingServiceIO {
+export class AzureLanguageIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Language Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len

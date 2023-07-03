@@ -2,8 +2,8 @@ import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -11,7 +11,7 @@ import {OpenAI} from '../../types/openAI';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
-export class OpenAICompletionsIO extends IExistingServiceIO {
+export class OpenAICompletionsIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/completions';
@@ -22,10 +22,10 @@ export class OpenAICompletionsIO extends IExistingServiceIO {
   private readonly numberOfCharsPerToken = 3.5;
 
   constructor(deepChat: DeepChat) {
-    const {existingService, textInput} = deepChat;
-    const apiKey = existingService?.openAI;
+    const {directConnection, textInput} = deepChat;
+    const apiKey = directConnection?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    const config = existingService?.openAI?.completions as NonNullable<OpenAI['completions']>;
+    const config = directConnection?.openAI?.completions as NonNullable<OpenAI['completions']>;
     // Completions with no max_tokens behave weirdly and do not give full responses
     // Client should specify their own max_tokens.
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;

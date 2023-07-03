@@ -2,20 +2,20 @@
 sidebar_position: 3
 ---
 
-# Existing Services
+# Direct Connection
 
 Deep Chat can be configured to connect to an existing API service. The component's configuration
 (such as file upload buttons / message limits) will automatically be changed to suit the target API.
 This can be overwitten manually. <br />
 
 :::caution
-By default, the use of [`existingService`](#existingService) and [`APIKey`](#APIKey) will have the API key exposed on the browser. This is
+By default, the use of [`directConnection`](#directConnection) and [`APIKey`](#APIKey) will have the API key exposed on the browser. This is
 intended for **prototyping purposes ONLY** and before deploying this component to an environment - add the [`request`](../service#request) property to
 instead direct all requests through your own service to use the key there.
 Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
 :::
 
-### `existingService` {#existingService}
+### `directConnection` {#directConnection}
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `openAI?:` {[`OpenAI`](openAI#openAI), [`APIKey`](#APIKey)}, <br />
@@ -38,7 +38,7 @@ import Tabs from '@theme/Tabs';
 
 ## Types
 
-Shared types for the `existingService` property.
+Shared types for the `directConnection` property.
 
 ### `APIKey` {#APIKey}
 
@@ -62,7 +62,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         openAI: {
           key: 'placeholder key',
           chat: {systemPrompt: 'Assist me with anything you can'},
@@ -73,7 +73,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         openAI: {
           chat: {systemPrompt: 'Assist me with anything you can'},
         },
@@ -87,7 +87,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "openAI": {
       "key": "placeholder key",
       "chat": {"systemPrompt": "Assist me with anything you can"}
@@ -103,7 +103,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "openAI": {
       "key": "placeholder key",
       "chat": {"systemPrompt": "Assist me with anything you can"}
@@ -124,7 +124,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         openAI: {
           key: 'placeholder key',
           validateKeyProperty: true,
@@ -136,7 +136,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
   <ComponentContainer>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
-      existingService={{
+      directConnection={{
         openAI: {
           validateKeyProperty: true,
           chat: {systemPrompt: 'Assist me with anything you can'},
@@ -151,7 +151,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
 
 ```html
 <deep-chat
-  existingService='{
+  directConnection='{
     "openAI": {
       "key": "placeholder key",
       "validateKeyProperty": true,
@@ -168,7 +168,7 @@ Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  existingService='{
+  directConnection='{
     "openAI": {
       "key": "placeholder key",
       "validateKeyProperty": true,

@@ -1,6 +1,6 @@
 import {CohereGenerateConfig, CohereSummarizationConfig} from '../../types/cohere';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {InterfacesUnion} from '../../types/utilityTypes';
 import {MessageContent} from '../../types/messages';
@@ -12,7 +12,7 @@ import {DeepChat} from '../../deepChat';
 
 type CohereServiceConfig = true | GenericObject<string>;
 
-export class CohereIO extends IExistingServiceIO {
+export class CohereIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Cohere API Key';
   override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
   textInputPlaceholderText: string;

@@ -6,10 +6,10 @@ import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.huggingFace?.audioSpeechRecognition as NonNullable<
+    const config = deepChat.directConnection?.huggingFace?.audioSpeechRecognition as NonNullable<
       HuggingFace['audioSpeechRecognition']
     >;
-    const apiKey = deepChat.existingService?.huggingFace;
+    const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'Attach an audio file', 'facebook/wav2vec2-large-960h-lv60-self', config, apiKey, {audio: {}});
   }
 

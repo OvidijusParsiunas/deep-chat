@@ -6,8 +6,8 @@ import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceSummarizationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.huggingFace?.summarization as NonNullable<HuggingFace['summarization']>;
-    const apiKey = deepChat.existingService?.huggingFace;
+    const config = deepChat.directConnection?.huggingFace?.summarization as NonNullable<HuggingFace['summarization']>;
+    const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'Insert text to summarize', 'facebook/bart-large-cnn', config, apiKey);
   }
 

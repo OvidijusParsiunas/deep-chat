@@ -1,6 +1,6 @@
 import {AzureTranslationResult} from '../../types/azureResult';
-import {IExistingServiceIO} from '../utils/existingServiceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {CompletionsHandlers} from '../serviceIO';
@@ -9,7 +9,7 @@ import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
-export class AzureTranslationIO extends IExistingServiceIO {
+export class AzureTranslationIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
   override getKeyLink =
     // eslint-disable-next-line max-len
@@ -18,8 +18,8 @@ export class AzureTranslationIO extends IExistingServiceIO {
 
   // prettier-ignore
   constructor(deepChat: DeepChat) {
-    const config = deepChat.existingService?.azure?.translation as NonNullable<Azure['translation']>;
-    const apiKey = deepChat.existingService?.azure;
+    const config = deepChat.directConnection?.azure?.translation as NonNullable<Azure['translation']>;
+    const apiKey = deepChat.directConnection?.azure;
     super(
       deepChat,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region),

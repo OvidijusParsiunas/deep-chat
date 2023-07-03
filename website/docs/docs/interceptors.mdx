@@ -24,7 +24,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerInterceptors propertyName={'requestInterceptor'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -59,12 +59,12 @@ Remember that by default - a request will contain all chat messages in order to 
 - Type: (`response: any`) => [`Result`](./service#Result)
 
 Triggered when a message has been retrieved from the target service and can be used to observe/alter the incoming details. The `response` argument can contain any type,
-however this method MUST return a [`Result`](./service#Result) type object (or an object structure returned by a selected [`existingService`](./existingServices)).
+however this method MUST return a [`Result`](./service#Result) type object (or an object structure returned by a selected service in the [`directConnection`](./directConnection) property).
 
 #### Example
 
 <ComponentContainerInterceptors propertyName={'responseInterceptor'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -92,7 +92,7 @@ The method must return a boolean value with either _true_ or _false_ for whether
 <ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'}>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    existingService={{demo: true}}
+    directConnection={{demo: true}}
     mixedFiles={true}
   ></DeepChatBrowser>
 </ComponentContainerInterceptors>

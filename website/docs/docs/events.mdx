@@ -28,7 +28,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerEvents propertyName={'onNewMessage'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerEvents>
 
 <Tabs>
@@ -62,7 +62,7 @@ Triggered when the component has finished rendering on the browser's window.
 #### Example
 
 <ComponentContainerEvents propertyName={'onComponentRender'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerEvents>
 
 <Tabs>

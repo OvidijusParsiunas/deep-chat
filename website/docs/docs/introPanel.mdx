@@ -23,7 +23,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} existingService={{demo: true}}>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}>
     <div
       style={{
         width: '200px',
@@ -79,7 +79,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat existingService='{"demo": true}' containerStyle='{"borderRadius": "8px"}'>
+<deep-chat directConnection='{"demo": true}' containerStyle='{"borderRadius": "8px"}'>
   <div
     style="
       width: 200px;
@@ -117,7 +117,7 @@ attribute/property and not in a [`class`](https://developer.mozilla.org/en-US/do
 
 - Type: [`CustomStyle`](./styles#CustomStyle)
 
-Certain [`existingServices`](./existingServices) have a default intro panel. This object is used to change its style.
+Some presets for the services available in [`directConnection`](./directConnection) use an intro panel. This object is used to change its style.
 If you are using a custom intro panel (example above), it will instead be applied to that.
 
 #### Example
@@ -126,7 +126,7 @@ If you are using a custom intro panel (example above), it will instead be applie
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     introPanelStyle={{backgroundColor: '#fffeec'}}
-    existingService={{openAI: {audio: true, key: 'placeholder-key'}}}
+    directConnection={{openAI: {audio: true, key: 'placeholder-key'}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -136,7 +136,7 @@ If you are using a custom intro panel (example above), it will instead be applie
 ```html
 <deep-chat
   introPanelStyle='{"backgroundColor": "#fffeec"}'
-  existingService='{"openAI": {"audio": true, "key": "placeholder-key"}}'
+  directConnection='{"openAI": {"audio": true, "key": "placeholder-key"}}'
 ></deep-chat>
 ```
 
@@ -149,7 +149,7 @@ If you are using a custom intro panel (example above), it will instead be applie
 <deep-chat
   introPanelStyle='{"backgroundColor": "#fffeec"}'
   containerStyle='{"borderRadius": "8px"}'
-  existingService='{"openAI": {"audio": true, "key": "placeholder-key"}}'
+  directConnection='{"openAI": {"audio": true, "key": "placeholder-key"}}'
 ></deep-chat>
 ```
 
