@@ -9,7 +9,7 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
     const closureEventsText = [];
     return {
       updateText: (argument) => {
-        if (!ref.current) return;
+        if (!ref.current || argument === undefined) return;
         if (closureEventsText.length > 3) closureEventsText.pop();
         closureEventsText.unshift(JSON.parse(JSON.stringify(argument)));
         setEventsText([...closureEventsText]);

@@ -217,6 +217,10 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
       },
       placeholder: {text: `Insert your question here...`},
     }}
+    auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: red;
+    }"
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -249,6 +253,280 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
     },
     "placeholder": {"text": "Insert your question here..."}
   }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: red;
+    }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  existingService='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Gradient chat {#violetGradient}
+
+A vibrant blue to violet gradient chat theme.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    existingService={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      border: 'unset',
+      background: 'linear-gradient(90deg, rgb(53 183 255) 0%, rgb(196 20 255) 100%)',
+    }}
+    messageStyles={{
+      default: {
+        user: {bubble: {backgroundColor: '#90ffae', color: '#141414'}},
+        ai: {bubble: {backgroundColor: '#8afbff', color: '#141414'}},
+      },
+    }}
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {
+            bottom: '0.7rem',
+          },
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)',
+            },
+          },
+        },
+      },
+      loading: {
+        container: {
+          default: {
+            backgroundColor: 'unset',
+          },
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)',
+            },
+          },
+        },
+      },
+    }}
+    textInput={{
+      styles: {
+        container: {
+          background: 'linear-gradient(15deg, rgb(73 73 159 / 74%) 0%, rgb(32 34 168 / 82%) 100%)',
+          border: 'unset',
+          color: '#e8e8e8',
+        },
+      },
+      placeholder: {text: `Insert your question here...`, style: {color: '#9c9c9c'}},
+    }}
+    auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }
+    "
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "border": "unset",
+    "background": "linear-gradient(90deg, rgb(53 183 255) 0%, rgb(196 20 255) 100%)"
+  }'
+  messageStyles='{
+    "default": {
+      "user": {"bubble": {"backgroundColor": "#90ffae", "color": "#141414"}},
+      "ai": {"bubble": {"backgroundColor": "#8afbff", "color": "#141414"}}
+    }
+  }'
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {
+          "bottom": "0.7rem"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {
+          "backgroundColor": "unset"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)"
+          }
+        }
+      }
+    }
+  }'
+  textInput='{
+    "styles": {
+      "container": {
+        "background": "linear-gradient(15deg, rgb(73 73 159 / 74%) 0%, rgb(32 34 168 / 82%) 100%)",
+        "border": "unset",
+        "color": "#e8e8e8"
+      }
+    },
+    "placeholder": {"text": "Insert your question here...", "style": {"color": "#9c9c9c"}}
+  }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  existingService='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Gradient bubbles {#gradientBubbles}
+
+A blue to violet gradient theme that spans the message bubbles.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    existingService={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+    }}
+    messageStyles={{
+      default: {
+        user: {
+          bubble: {
+            background: 'linear-gradient(90deg, rgb(225 37 255) 0%, rgb(161, 99, 233) 100%)',
+            color: 'white',
+          },
+        },
+        ai: {
+          bubble: {background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)', color: 'white'},
+        },
+      },
+    }}
+    auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }
+    "
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{"borderRadius": "10px"}'
+  messageStyles='{
+    "default": {
+      "user": {
+        "bubble": {
+          "background": "linear-gradient(90deg, rgb(225 37 255) 0%, rgb(161, 99, 233) 100%)",
+          "color": "white"
+        }
+      },
+      "ai": {
+        "bubble": {"background": "linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)", "color": "white"}
+      }
+    }
+  }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }"
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},

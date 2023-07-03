@@ -277,7 +277,10 @@ export class Messages {
 
   public updateStreamedMessage(text: string, bubbleElement: HTMLElement) {
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
-    if (text.trim().length !== 0) bubbleElement.style.color = '';
+    if (text.trim().length !== 0) {
+      const defaultColor = this.messageStyles?.default;
+      bubbleElement.style.color = defaultColor?.ai?.bubble?.color || defaultColor?.shared?.bubble?.color || '';
+    }
     this._streamedText += text;
     bubbleElement.innerHTML = this._remarkable.render(this._streamedText);
     if (isScrollbarAtBottomOfElement) this.elementRef.scrollTop = this.elementRef.scrollHeight;
