@@ -6,7 +6,8 @@ export class InsertKeyView {
   private static createCautionText() {
     const cautionElement = document.createElement('a');
     cautionElement.classList.add('insert-key-input-help-text');
-    cautionElement.innerText = 'Please exercise CAUTION when inserting your API key outside of deepchat.ai or localhost!!';
+    cautionElement.innerText =
+      'Please exercise CAUTION when inserting your API key outside of deepchat.dev or localhost!!';
     return cautionElement;
   }
 
