@@ -1,0 +1,25 @@
+name: push to issue branch and check if the build is successful
+on:
+  push:
+    branches:
+      - issue/*
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: development
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Install and Build Component 🔧
+        run: |
+          cd component
+          npm install
+          npm run build
+          npm run lint
+      - name: Install and Build Wesbite 🔧
+        run: |
+          cd website
+          npm install
+          npm run build

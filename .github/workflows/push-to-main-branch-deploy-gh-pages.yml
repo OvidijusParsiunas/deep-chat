@@ -1,0 +1,31 @@
+name: push to main branch and deploy to the gh-pages branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: development
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Install and Build Component 🔧
+        run: |
+          cd component
+          npm install
+          npm run build
+          npm run lint
+      - name: Install and Build Wesbite 🔧
+        run: |
+          cd website
+          npm install
+          npm run build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: website/build # The folder the action should deploy from (source branch).
