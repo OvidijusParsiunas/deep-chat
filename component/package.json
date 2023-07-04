@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "build": "vite build",
     "build:watch": "vite build --watch",
     "build:bundle": "npm run lint && tsc && vite build && npm run analyze && rollup -c",
     "analyze": "cem analyze --globs \"src/**/*.ts\"",
