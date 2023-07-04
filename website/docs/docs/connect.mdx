@@ -4,22 +4,36 @@ sidebar_position: 2
 
 # Connect
 
-<h2>How to connect to a Custom API</h2>
+<h2>How to connect to an API</h2>
 
-Begin by defining the target api endpoint and other configuration inside the [`request`](#request) property.
+This is achieved by simply defining the request details inside the [`request`](#request) property.
 
-By default, the **outgoing** request bodies will contain all of the messages within the chat (to allow the target service to interpret their context as needed).
-This behaviour can be altered by using the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property to send only what is required.
+<h3>Request message</h3>
 
-- When sending text based messages only, the request body will have the following JSON type: <br />
+Outgoing request body contains all of the messages from the chat (to allow the target service to interpret its context as needed) and is encapsulated in one of the following formats:
+
+- When sending **text** based messages only, the request body will have the following JSON type: <br />
   {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
 
-- When sending messages that contains files, the request body is going to be encapsulated inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
+// WORK - all messages should use the format above
 
-The **response** message body needs to have the following JSON type: <br />
+- When sending messages that contains **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
+
+:::tip
+To limit the number of messages included in the request - use the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property.
+:::
+
+<h3>Response message</h3>
+
+The response message body needs to use the following JSON type: <br />
 &nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result`](#Result), `error?: string`} <br />
 
 Please see full code EXAMPLES on how to set up your own server [`HERE`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
+
+:::tip
+If you don't want / can't change the target service to adhere to the required formats listed above, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
+and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming and outgoing message bodies into the format you need.
+:::
 
 <h2>Component properties</h2>
 

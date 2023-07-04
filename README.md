@@ -2,7 +2,7 @@
 
 ![alt text](./assets/readme/title.png)
 
-<b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages an already existing API such as ChatGPT or you want to connect to your own custom service, this component can be configured to do it all! Explore [deepchat.dev](https://activetable.io/) to view all of the available features, how to use them, examples and more!
+<b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
 ### :rocket: Main Features
 
@@ -17,7 +17,7 @@
 - Support for MarkDown to structure text and render code
 - Introduction panel to help describe the chat to your users
 - Modals triggered via buttons to help inform their functionality
-- Preconfigured options to connect to APIs from OpenAI, HuggingFace, Azure and more
+- Connect to popoular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
 - Everything is customizable!
 
 ### :computer: Getting started
@@ -44,43 +44,31 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ![alt text](./assets/readme/title.png)
 
-#### Existing APIs
+Connecting to a service is as simple as it gets. All you need to do is define the target API details using the `request` property:
 
-To connect to an existing API checkout the [Existing Service](HERE) section in the documentation to view the available preset configurations. As an example, if you want to the connect to OpenAI chat API, you can use the following:
+```
+<deep-chat request='{"url":"https://www.targetdomain.com"}'/>
+```
+
+The target service will need to be able handle a preset request format and send an appropriate response for a successful roundtrip. Please read about this in the [Connect](Connect) section of the documentation and check the [code examples](HERE).
+
+As a quick workaround, you can use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing message bodies into the format that suits the target service.
+
+### :electric_plug: Direct connection
+
+If you want to access one of the popular AI APIs directly from the browser without the use of an intermediary service, you can use the `directConnection` property:
 
 ```
 <deep-chat directConnection='{"openAI":true}'/>
 ```
 
-You can additionally preload it with your own key:
+You can additionally preload the component with your own key:
 
 ```
 <deep-chat directConnection='{"openAI":{"key": "key-here"}}'/>
 ```
 
-The exact syntax for the above examples will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
-
-Please note that the examples above should be used for prototyping purposes and not in a live environment as they will expose your API key in the browser. Before going live, please use the [`request`](HERE) property to instead direct all network requests to your trusted server. (See below)
-
-#### Custom APIs
-
-To connect to a custom API such as your own check out the [Service](HERE) section in the documentation and view full project examples [here](HERE).
-
-The core property that supports this feature is [`request`](HERE). For example, you can use it like this:
-
-```
-<deep-chat request='{"url": "https://customdomain.com"}'/>
-```
-
-To use an existing API's configuration, such as OpenAI chat, you can use the following configuration:
-
-```
-<deep-chat directConnection='{"openAI":true}' request='{"url": "https://customdomain.com"}'/>
-```
-
-The exact syntax for the above examples will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
-
-<!-- Please note that depending on the configuration used, your service will need to support the incoming body and response formats for successful transactions. (A quick workaround alternative for this is to use the [`requestInterceptor`](HERE) and [`responseInterceptor`](HERE) properties which allow the augmentation of incoming and outgoing messages). This is explained in more detail in the [Service](HERE) documentation. -->
+Please note that this exposes the API key to the browser and should ONLY be used for prototyping/demo purposes. When ready to go live, please use the `request` property described above with a combination of an [intermediary proxy service](HERE).
 
 ### :camera: :microphone: Camera and Microphone
 
@@ -93,8 +81,6 @@ You can enable this via the use of the [_camera_](HERE) and [_microphone_](HERE)
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
 ```
-
-The exact syntax for this examples will vary depending on the framework of your choice ([see here](https://activetable.io/examples/frameworks)).
 
 ### :microphone: :sound: Speech
 

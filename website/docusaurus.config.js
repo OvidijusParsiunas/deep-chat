@@ -7,8 +7,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Deep Chat',
-  tagline: 'Framework agnostic chat component for AI and more',
-  url: 'https://active-table.io',
+  tagline: 'Fully customizable chat component that can connect to any service',
+  url: 'https://deepchat.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -106,11 +106,6 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-      },
-      algolia: {
-        appId: 'CQP32TX5E8',
-        apiKey: 'd77116a11a6f89f37f0fc41ef92ad295',
-        indexName: 'activetable',
       },
     }),
 };

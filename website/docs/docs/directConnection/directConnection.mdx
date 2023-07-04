@@ -4,15 +4,13 @@ sidebar_position: 3
 
 # Direct Connection
 
-Deep Chat can be configured to connect to an existing API service. The component's configuration
-(such as file upload buttons / message limits) will automatically be changed to suit the target API.
-This can be overwitten manually. <br />
+Deep Chat can be configured to bypass the use of an intermediary service and connect to a popular AI service API directly from the UI. The component's configuration
+(such as file upload buttons / message limits) will automatically be changed to suit the target API. This can nevertheless be overwitten manually. <br />
 
 :::caution
-By default, the use of [`directConnection`](#directConnection) and [`APIKey`](#APIKey) will have the API key exposed on the browser. This is
-intended for **prototyping purposes ONLY** and before deploying this component to an environment - add the [`request`](../service#request) property to
-instead direct all requests through your own service to use the key there.
-Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
+The use of [`directConnection`](#directConnection) and [`APIKey`](#APIKey) properties will expose the API key on your browser. This is
+intended for **prototyping / demo purposes ONLY**. Before deploying this component, you should instead use the [`request`](../service#request) property to direct
+all the requests to your own service. Read more about this in [`Connect`](../connect) and check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
 :::
 
 ### `directConnection` {#directConnection}
@@ -50,8 +48,9 @@ These object properties are used to load up the chat view without the user havin
 is loaded up during the validation period.
 
 :::caution
-This object is intended to be used for **prototyping purposes ONLY** and should not be deployed to an environment as users with malicious intent will be able to access your key in the browser.
-Check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to direct all requests through your own service.
+This object is intended to be used for **prototyping purposes ONLY** and should not be deployed to an environment as it can be accessed in the browser.
+Before going live, use the [`request`](../service#request) property in combination with your own service to safely access your key there.
+Read more about this in [`Connect`](../connect) and check [examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
 :::
 
 <LineBreak></LineBreak>
