@@ -56,10 +56,10 @@ Remember that by default - a request will contain all chat messages in order to 
 
 ### `responseInterceptor` {#responseInterceptor}
 
-- Type: (`response: any`) => [`Result`](./service#Result)
+- Type: (`response: any`) => [`Result`](./connect#Result)
 
 Triggered when a message has been retrieved from the target service and can be used to observe/alter the incoming details. The `response` argument can contain any type,
-however this method MUST return a [`Result`](./service#Result) type object (or an object structure returned by a selected service in the [`directConnection`](./directConnection) property).
+however this method MUST return a [`Result`](./connect#Result) type object (or an object structure returned by a selected service in the [`directConnection`](./directConnection) property).
 
 #### Example
 

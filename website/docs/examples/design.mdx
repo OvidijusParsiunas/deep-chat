@@ -8,7 +8,7 @@ Examples to help you get started in styling your Deep Chat component.
 
 ### ChatGPT {#chatGPT}
 
-This example simulates the styling used in [ChatGPT UI](https://chat.openai.com/).
+This example simulates the styling used in [ChatGPT](https://chat.openai.com/).
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -47,7 +47,18 @@ import Tabs from '@theme/Tabs';
       },
     }}
     stream={true}
-    avatars={{default: {styles: {position: 'left'}}}}
+    avatars={{
+      default: {styles: {position: 'left'}},
+      ai: {
+        src: '/img/openAIGreyLogo.svg',
+        styles: {
+          avatar: {
+            filter:
+              'brightness(0) saturate(100%) invert(39%) sepia(0%) saturate(893%) hue-rotate(65deg) brightness(99%) contrast(89%)',
+          },
+        },
+      },
+    }}
     submitButtonStyles={{
       submit: {
         container: {
@@ -63,7 +74,7 @@ import Tabs from '@theme/Tabs';
         },
         svg: {
           content:
-            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="send" class="icon glyph"> <path d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z"> </path> </svg>',
+            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z"> </path> </svg>',
           styles: {
             default: {
               width: '1.3em',
@@ -97,6 +108,9 @@ import Tabs from '@theme/Tabs';
           },
         },
       },
+    }}
+    textInput={{
+      placeholder: {text: `Send a message`},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -133,7 +147,7 @@ import Tabs from '@theme/Tabs';
         "click": {"backgroundColor": "#068e56"}
       },
       "svg": {
-        "content": "<?xml version=\"1.0\" ?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"> <g id=\"layer1\"> <path d=\"M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z\"> </path> </g> </svg>",
+        "content": "<?xml version=\"1.0\" ?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"> <g> <path d=\"M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z\"> </path> </g> </svg>",
         "styles": {
           "default": {
             "width": "1.3em",
@@ -159,6 +173,7 @@ import Tabs from '@theme/Tabs';
       }
     }
   }'
+  textInput='{"placeholder": {"text": "Send a message"}}'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
@@ -580,6 +595,7 @@ A simple text input area that covers the full width of the component.
           border: 'unset',
           borderTop: '1px solid #d5d5d5',
           borderRadius: '0px',
+          boxShadow: 'unset',
         },
         text: {
           fontSize: '1.05em',
@@ -597,7 +613,7 @@ A simple text input area that covers the full width of the component.
           default: {
             transform: 'scale(1.21)',
             marginBottom: '-3px',
-            marginRight: '0.2em',
+            marginRight: '0.4em',
           },
         },
       },
@@ -620,7 +636,8 @@ A simple text input area that covers the full width of the component.
         "margin": "0",
         "border": "unset",
         "borderTop": "1px solid #d5d5d5",
-        "borderRadius": "0px"
+        "borderRadius": "0px",
+        "boxShadow": "unset"
       },
       "text": {
         "fontSize": "1.05em",
@@ -638,7 +655,7 @@ A simple text input area that covers the full width of the component.
         "default": {
           "transform": "scale(1.21)",
           "marginBottom": "-3px",
-          "marginRight": "0.2em"
+          "marginRight": "0.4em"
         }
       }
     }
@@ -836,6 +853,396 @@ Component styling suitable for dark screen mode.
     ::-webkit-scrollbar-track {
       background-color: unset;
     }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+// WORK - Change microphone button to speech to text.
+
+### Bard {#bard}
+
+Simulation of the styling used in [Google Bard](https://bard.google.com/).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      borderColor: '#dcdcdc',
+      backgroundColor: '#f3f6fc',
+    }}
+    textInput={{
+      styles: {
+        container: {
+          borderRadius: '20px',
+          border: '1px solid #969696',
+          boxShadow: 'unset',
+          width: '78%',
+          marginLeft: '-15px',
+        },
+        text: {padding: '10px', paddingLeft: '15px', paddingRight: '34px'},
+      },
+      placeholder: {text: 'Enter a prompt here', style: {color: '#bcbcbc'}},
+    }}
+    messageStyles={{
+      default: {
+        shared: {bubble: {maxWidth: '100%', backgroundColor: 'unset', marginTop: '10px', marginBottom: '10px'}},
+        user: {bubble: {marginLeft: '0px', color: 'black'}},
+        ai: {innerContainer: {borderRadius: '15px', backgroundColor: 'white'}},
+      },
+    }}
+    avatars={{
+      default: {styles: {position: 'left', container: {marginLeft: '12px', marginRight: '5px'}}},
+      ai: {src: '/img/googleBardLogo.png', styles: {position: 'left', avatar: {paddingTop: '6px'}}},
+    }}
+    microphone={{
+      button: {
+        default: {
+          container: {default: {bottom: '1em', right: '0.6em', borderRadius: '20px', width: '1.9em', height: '1.9em'}},
+          svg: {styles: {default: {bottom: '0.4em', left: '0.3em'}}},
+        },
+        position: 'inside-right',
+      },
+    }}
+    submitButtonStyles={{
+      position: 'outside-right',
+      submit: {
+        container: {
+          default: {bottom: '0.75em', borderRadius: '25px', padding: '5px', backgroundColor: '#f3f6fc'},
+          hover: {backgroundColor: '#b0deff4f'},
+          click: {backgroundColor: '#b0deffb5'},
+        },
+        svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z"/></svg>',
+          styles: {
+            default: {
+              width: '1.5em',
+              filter:
+                'brightness(0) saturate(100%) invert(10%) sepia(86%) saturate(6044%) hue-rotate(205deg) brightness(100%) contrast(100%)',
+            },
+          },
+        },
+      },
+      loading: {
+        container: {
+          default: {backgroundColor: '#f3f6fc'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
+            },
+          },
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{"borderRadius": "10px", "borderColor": "#dcdcdc", "backgroundColor": "#f3f6fc"}'
+  textInput='{
+    "styles": {
+      "container": {"borderRadius": "20px", "border": "1px solid #969696", "boxShadow": "unset", "width": "78%", "marginLeft": "-15px"},
+      "text": {"padding": "10px", "paddingLeft": "15px", "paddingRight": "34px"}
+    },
+    "placeholder": {"text": "Enter a prompt here", "style": {"color": "#bcbcbc"}}
+  }'
+  messageStyles='{
+    "default": {
+      "shared": {"bubble": {"maxWidth": "100%", "backgroundColor": "unset", "marginTop": "10px", "marginBottom": "10px"}},
+      "user": {"bubble": {"marginLeft": "0px", "color": "black"}},
+      "ai": {"innerContainer": {"borderRadius": "15px", "backgroundColor": "white"}}
+    }
+  }'
+  avatars='{
+    "default": {
+      "styles": {"position": "left", "container": {"marginLeft": "12px", "marginRight": "5px"}}
+    },
+    "ai": {"src": "path-to-file.png", "styles": {"position": "left", "avatar": {"paddingTop": "6px"}}}
+  }'
+  microphone='{
+    "button": {
+      "default": {
+        "container": {"default": {"bottom": "1em", "right": "0.6em", "borderRadius": "20px", "width": "1.9em", "height": "1.9em"}},
+        "svg": {"styles": {"default": {"bottom": "0.4em", "left": "0.3em"}}}
+      },
+      "position": "inside-right"
+    }
+  }'
+  submitButtonStyles='{
+    "position": "outside-right",
+    "submit": {
+      "container": {
+        "default": {"bottom": "0.75em", "borderRadius": "25px", "padding": "5px", "backgroundColor": "#f3f6fc"},
+        "hover": {"backgroundColor": "#b0deff4f"},
+        "click": {"backgroundColor": "#b0deffb5"}
+      },
+      "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z\"/></svg>",
+        "styles": {
+          "default": {
+            "width": "1.5em",
+            "filter": "brightness(0) saturate(100%) invert(10%) sepia(86%) saturate(6044%) hue-rotate(205deg) brightness(100%) contrast(100%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {"backgroundColor": "#f3f6fc"}
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"
+          }
+        }
+      }
+    }
+  }'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Bing {#bing}
+
+Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      borderColor: '#e4e4e4',
+      background:
+        'linear-gradient(90deg, rgb(239, 242, 247) 0%, 7.60286%, rgb(237, 240, 249) 15.2057%, 20.7513%, rgb(235, 239, 248) 26.297%, 27.6386%, rgb(235, 239, 248) 28.9803%, 38.2826%, rgb(231, 237, 249) 47.585%, 48.1216%, rgb(230, 236, 250) 48.6583%, 53.1306%, rgb(228, 236, 249) 57.6029%, 61.5385%, rgb(227, 234, 250) 65.4741%, 68.7835%, rgb(222, 234, 250) 72.093%, 75.7603%, rgb(219, 230, 248) 79.4275%, 82.8265%, rgb(216, 229, 248) 86.2254%, 87.8354%, rgb(213, 228, 249) 89.4454%, 91.8605%, rgb(210, 226, 249) 94.2755%, 95.4383%, rgb(209, 225, 248) 96.6011%, 98.3005%, rgb(208, 224, 247) 100%)',
+    }}
+    textInput={{
+      styles: {
+        container: {
+          borderRadius: '20px',
+          border: 'unset',
+          width: '78%',
+          marginLeft: '-15px',
+          boxShadow: '0px 0.3px 0.9px rgba(0, 0, 0, 0.12), 0px 1.6px 3.6px rgba(0, 0, 0, 0.16)',
+        },
+        text: {padding: '10px', paddingLeft: '15px', paddingRight: '34px'},
+      },
+      placeholder: {text: 'Ask me anything...', style: {color: '#606060'}},
+    }}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {
+            backgroundColor: 'unset',
+            marginTop: '10px',
+            marginBottom: '10px',
+            boxShadow: '0px 0.3px 0.9px rgba(0, 0, 0, 0.12), 0px 1.6px 3.6px rgba(0, 0, 0, 0.16)',
+          },
+        },
+        user: {
+          bubble: {
+            background: 'linear-gradient(130deg, #2870EA 20%, #1B4AEF 77.5%)',
+          },
+        },
+        ai: {bubble: {background: 'rgba(255,255,255,0.7)'}},
+      },
+    }}
+    microphone={{
+      button: {
+        default: {
+          container: {default: {bottom: '1em', right: '0.6em', borderRadius: '20px', width: '1.9em', height: '1.9em'}},
+          svg: {styles: {default: {bottom: '0.4em', left: '0.3em'}}},
+        },
+        position: 'inside-right',
+      },
+    }}
+    submitButtonStyles={{
+      position: 'outside-right',
+      submit: {
+        container: {
+          default: {bottom: '0.75em', borderRadius: '25px', padding: '5px', backgroundColor: 'unset'},
+          hover: {backgroundColor: '#b0deff4f'},
+          click: {backgroundColor: '#b0deffb5'},
+        },
+        svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z"/></svg>',
+          styles: {
+            default: {
+              width: '1.5em',
+              filter:
+                'brightness(0) saturate(100%) invert(10%) sepia(86%) saturate(6044%) hue-rotate(205deg) brightness(100%) contrast(100%)',
+            },
+          },
+        },
+      },
+      loading: {
+        container: {
+          default: {backgroundColor: 'unset'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
+            },
+          },
+        },
+      },
+      stop: {
+        container: {
+          default: {backgroundColor: 'unset'},
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "borderColor": "#e4e4e4",
+    "background":
+      "linear-gradient(90deg, rgb(239, 242, 247) 0%, 7.60286%, rgb(237, 240, 249) 15.2057%, 20.7513%, rgb(235, 239, 248) 26.297%, 27.6386%, rgb(235, 239, 248) 28.9803%, 38.2826%, rgb(231, 237, 249) 47.585%, 48.1216%, rgb(230, 236, 250) 48.6583%, 53.1306%, rgb(228, 236, 249) 57.6029%, 61.5385%, rgb(227, 234, 250) 65.4741%, 68.7835%, rgb(222, 234, 250) 72.093%, 75.7603%, rgb(219, 230, 248) 79.4275%, 82.8265%, rgb(216, 229, 248) 86.2254%, 87.8354%, rgb(213, 228, 249) 89.4454%, 91.8605%, rgb(210, 226, 249) 94.2755%, 95.4383%, rgb(209, 225, 248) 96.6011%, 98.3005%, rgb(208, 224, 247) 100%)"
+  }'
+  textInput='{
+    "styles": {
+      "container": {
+        "borderRadius": "20px",
+        "border": "unset",
+        "width": "78%",
+        "marginLeft": "-15px",
+        "boxShadow": "0px 0.3px 0.9px rgba(0, 0, 0, 0.12), 0px 1.6px 3.6px rgba(0, 0, 0, 0.16)"
+      },
+      "text": {"padding": "10px", "paddingLeft": "15px", "paddingRight": "34px"}
+    },
+    "placeholder": {"text": "Ask me anything...", "style": {"color": "#606060"}}
+  }'
+  messageStyles='{
+    "default": {
+      "shared": {
+        "bubble": {
+          "backgroundColor": "unset",
+          "marginTop": "10px",
+          "marginBottom": "10px",
+          "boxShadow": "0px 0.3px 0.9px rgba(0, 0, 0, 0.12), 0px 1.6px 3.6px rgba(0, 0, 0, 0.16)"
+        }
+      },
+      "user": {
+        "bubble": {
+          "background": "linear-gradient(130deg, #2870EA 20%, #1B4AEF 77.5%)"
+        }
+      },
+      "ai": {"bubble": {"background": "rgba(255,255,255,0.7)"}}
+    }
+  }'
+  microphone='{
+    "button": {
+      "default": {
+        "container": {"default": {"bottom": "1em", "right": "0.6em", "borderRadius": "20px", "width": "1.9em", "height": "1.9em"}},
+        "svg": {"styles": {"default": {"bottom": "0.4em", "left": "0.3em"}}}
+      },
+      "position": "inside-right"
+    }
+  }'
+  submitButtonStyles='{
+    "position": "outside-right",
+    "submit": {
+      "container": {
+        "default": {"bottom": "0.75em", "borderRadius": "25px", "padding": "5px", "backgroundColor": "unset"},
+        "hover": {"backgroundColor": "#b0deff4f"},
+        "click": {"backgroundColor": "#b0deffb5"}
+      },
+      "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z\"/></svg>",
+        "styles": {
+          "default": {
+            "width": "1.5em",
+            "filter":
+              "brightness(0) saturate(100%) invert(10%) sepia(86%) saturate(6044%) hue-rotate(205deg) brightness(100%) contrast(100%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {"backgroundColor": "unset"}
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter":
+              "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"
+          }
+        }
+      }
+    },
+    "stop": {
+      "container": {
+        "default": {"backgroundColor": "unset"}
+      }
+    }
+  }'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},

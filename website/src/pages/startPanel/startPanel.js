@@ -3,6 +3,7 @@ import SmallScreenPanel from '../smallScreen/smallScreen';
 import DeepChatLogo from '../smallScreen/deepChatLogo';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
@@ -28,17 +29,17 @@ const Logos = React.forwardRef((_, ref) => {
       </div>
       <div className="start-panel-logo">
         <a href="docs/directConnection/Cohere" target="_blank">
-          <img src={cohereLogo} width="60" style={{marginTop: '1xpx'}} />
+          <img src={cohereLogo} width="60" style={{marginTop: '1px'}} />
         </a>
       </div>
       <div className="start-panel-logo">
         <a href="docs/directConnection/Azure" target="_blank">
-          <img src={azureLogo} width="42" style={{marginTop: '7px'}} />
+          <img src={azureLogo} width="42" style={{marginTop: '8px'}} />
         </a>
       </div>
       <div className="start-panel-logo">
         <a href="docs/directConnection/AssemblyAI" target="_blank">
-          <img src={assemblyAILogo} width="35" style={{marginTop: '8px'}} />
+          <img src={assemblyAILogo} width="35" style={{marginTop: '9px'}} />
         </a>
       </div>
     </div>
@@ -46,6 +47,7 @@ const Logos = React.forwardRef((_, ref) => {
 });
 
 function animate(component, logos, messageLine, messageBubble) {
+  if (!component) return;
   component.classList.add('start-panel-component-left');
   logos.classList.add('start-panel-logos-right');
   messageLine.classList.add('message-line-long');
@@ -61,6 +63,7 @@ function animate(component, logos, messageLine, messageBubble) {
 
 // this is to prevent a bug where upon opening up the homepage and the component takes a while to load - the logos would appear under it
 function displayLogos(logos) {
+  if (!logos) return;
   setTimeout(() => {
     logos.classList.add('start-panel-visible');
   }, 20);
@@ -71,7 +74,7 @@ function ComponentPanel() {
   const component = React.useRef(null);
   const messageBubble = React.useRef(null);
   const messageLine = React.useRef(null);
-  setTimeout(() => displayLogos(logos.current), 700);
+  setTimeout(() => displayLogos(logos.current), 400);
   setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1500);
   return (
     <div id="start-panel-animation-content-container">
@@ -119,7 +122,7 @@ export default function StartPanel() {
     <div id="start-panel">
       <div id="start-panel-content">
         <HeaderPanel></HeaderPanel>
-        <ComponentPanel></ComponentPanel>
+        <BrowserOnly>{() => <ComponentPanel></ComponentPanel>}</BrowserOnly>
         <SmallScreenPanel></SmallScreenPanel>
         <DeepChatLogo></DeepChatLogo>
       </div>

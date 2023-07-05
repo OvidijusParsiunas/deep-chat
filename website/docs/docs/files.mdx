@@ -339,7 +339,7 @@ Types shared by files properties:
 
 ### `FilesServiceConfig` {#FilesServiceConfig}
 
-- Type: {[`request?: Request`](./service#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](./styles#Button)}
+- Type: {[`request?: Request`](./connect#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](./styles#Button)}
 
 Object used to configure the ability for the component to send files. <br />
 `request` object is used to override the default service request settings when sending a file. <br />
@@ -537,7 +537,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 ### `CameraFilesServiceConfig` {#CameraFilesServiceConfig}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](./service#Request), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](./connect#Request), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](./styles#Button), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](./styles#CustomStyle) <br />
@@ -686,7 +686,7 @@ the `acceptedFormats` property, it will override this one.<br />
 ### `MicrophoneFilesServiceConfig` {#MicrophoneFilesServiceConfig}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](./service#Request), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](./connect#Request), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: AudioRecordingFiles`](#AudioRecordingFiles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](./styles#MicrophoneStyles) <br />
   }

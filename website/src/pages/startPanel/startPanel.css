@@ -240,12 +240,15 @@
     width: 92%;
     margin-left: 4%;
   }
+  #start-panel-animation-content-container {
+    margin-left: -5px;
+  }
 }
 
 @media (max-width: 720px) {
   #start-panel-animation-content-container {
     width: 500px;
-    margin-left: 0px;
+    margin-left: -10px;
     padding-left: 0px;
   }
   .start-panel-component-center {
@@ -430,7 +433,7 @@
 /* needs to be here for start-panel-component-center to take effect for different screen sizes */
 /* need !important for build/serve website */
 .start-panel-component-left {
-  margin-left: 40px !important;
+  margin-left: 45px !important;
 }
 
 /* needs to be here for start-panel-logos-left to take effect for different screen sizes */
