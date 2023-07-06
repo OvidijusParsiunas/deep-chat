@@ -70,9 +70,9 @@
   --speech-gradient-start-color: rgb(255, 255, 255);
   --speech-gradient-end-color: rgb(220, 238, 255);
   --openai-logo-filter: unset;
-  --explore-background-color-default: #3966af;
-  --explore-background-color-hover: #305a9e;
-  --explore-background-color-click: #284e8d;
+  --explore-background-color-default: #3e79c0;
+  --explore-background-color-hover: #336baf;
+  --explore-background-color-click: #295e9f;
 }
 
 [data-theme='dark'] {

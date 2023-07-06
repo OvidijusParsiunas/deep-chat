@@ -57,7 +57,7 @@ export class Messages {
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
-    this._speechOutput = deepChat.speechOutput;
+    this._speechOutput = deepChat.textToSpeech;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
@@ -74,7 +74,7 @@ export class Messages {
       if (demo.displayErrors) {
         if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
-        if (demo.displayErrors.speechToTextInput) this.addNewErrorMessage('speechToTextInput', '');
+        if (demo.displayErrors.speechToText) this.addNewErrorMessage('speechToText', '');
       }
       if (demo.displayLoadingBubble) {
         this.addLoadingMessage();
@@ -134,6 +134,7 @@ export class Messages {
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
+    outerContainer.classList.add('outer-message-container');
     const bubbleElement = document.createElement('div');
     bubbleElement.classList.add('message-bubble');
     innerContainer.appendChild(bubbleElement);

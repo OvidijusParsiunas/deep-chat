@@ -441,7 +441,7 @@ will automatically have a loading animation.
   &nbsp;&nbsp;&nbsp;&nbsp; `overrides:` { <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToTextInput?: string` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: string` <br />
   }}
 
 - Default: _{ displayServiceErrorMessages: false, overrides: {default: "Error, please try again." }}_
@@ -449,22 +449,22 @@ will automatically have a loading animation.
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
-is for communication with the target service and `speechToTextInput` is when there is a problem using the `speechToTextInput`.
+is for communication with the target service and `speechToText` is when there is a problem using the `speechToText`.
 functionality. <br />
 
-// WORK - speechToTextInput link
+// WORK - speechToText link
 
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{demo: {displayErrors: {default: true, service: true, speechToTextInput: true}}}}
+    directConnection={{demo: {displayErrors: {default: true, service: true, speechToText: true}}}}
     errorMessages={{
       overrides: {
         default: 'Default error :(',
         service: 'Target service error!',
-        speechToTextInput: 'Speech to text microphone error!',
+        speechToText: 'Speech to text microphone error!',
       },
     }}
   ></DeepChatBrowser>
@@ -479,7 +479,7 @@ functionality. <br />
     "overrides": {
       "default": "Default error :(",
       "service": "Target service error!",
-      "speechToTextInput": "Speech to text microphone error!"
+      "speechToText": "Speech to text microphone error!"
     }
   }'
 ></deep-chat>
@@ -496,11 +496,11 @@ functionality. <br />
     "overrides": {
       "default": "Default error :(",
       "service": "Target service error!",
-      "speechToTextInput": "Speech to text microphone error!"
+      "speechToText": "Speech to text microphone error!"
     }
   }'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": {"displayErrors": {"default": true, "service": true, "speechToTextInput": true}}}'
+  directConnection='{"demo": {"displayErrors": {"default": true, "service": true, "speechToText": true}}}'
 ></deep-chat>
 ```
 

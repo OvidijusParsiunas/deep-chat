@@ -34,9 +34,9 @@ export class Input {
     const textInput = new TextInputEl(serviceIO, deepChat.textInput);
     const buttons: Buttons = {};
     const fileAttachments = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
-    if (deepChat.speechToTextInput && !buttons.microphone) {
+    if (deepChat.speechToText && !buttons.microphone) {
       buttons.microphone = {button: new SpeechToText(
-        deepChat.speechToTextInput, textInput, messages.addNewErrorMessage.bind(messages))};
+        deepChat.speechToText, textInput, messages.addNewErrorMessage.bind(messages))};
     }
     const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);

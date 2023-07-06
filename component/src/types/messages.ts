@@ -33,7 +33,7 @@ export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boo
 export interface ErrorMessageOverrides {
   default?: string;
   service?: string;
-  speechToTextInput?: string;
+  speechToText?: string;
 }
 
 export interface ErrorMessages {

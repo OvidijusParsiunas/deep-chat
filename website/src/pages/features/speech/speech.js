@@ -20,6 +20,7 @@ function RightPanel() {
           borderColor: '#ededed',
         }}
         microphone={true}
+        stream={true}
       ></DeepChatBrowser>
     </div>
   );

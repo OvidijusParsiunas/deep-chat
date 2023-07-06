@@ -49,10 +49,10 @@ export class DeepChat extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  speechToTextInput?: true | MicrophoneStyles; // only activated if not used by recording for audio
+  speechToText?: true | MicrophoneStyles; // only activated if not used by recording for audio
 
   @Property('boolean')
-  speechOutput?: boolean;
+  textToSpeech?: boolean;
 
   @Property('object')
   containerStyle?: CustomStyle;

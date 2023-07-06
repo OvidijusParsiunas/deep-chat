@@ -4,6 +4,10 @@
   overflow: auto;
 }
 
+.outer-message-container:last-child {
+  margin-bottom: 5px;
+}
+
 .inner-message-container {
   display: flex;
   width: 90%;

@@ -1,6 +1,6 @@
 <br />
 
-![alt text](./assets/readme/screenshot-14.png)
+![alt text](./assets/readme/screenshot-19.png)
 
 <b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
@@ -15,8 +15,7 @@
 - Speech To Text for message input
 - Text To Speech to hear message responses
 - Support for MarkDown to structure text and render code
-- Introduction panel to help describe the chat to your users
-- Modals triggered via buttons to help inform their functionality
+- Introduction panel and dynamic modals to help describe chat functionality for your users
 - Connect to popoular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
 - Everything is customizable!
 
@@ -42,41 +41,42 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/title.png)
+![alt text](./assets/readme/connect-3.png)
 
-Connecting to a service is as simple as it gets. All you need to do is define the target API details using the `request` property:
+Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
 ```
-<deep-chat request='{"url":"https://www.targetdomain.com"}'/>
+<deep-chat request='{"url":"https://targetservice.com/message"}'/>
 ```
 
-The target service will need to be able handle a preset request format and send an appropriate response for a successful roundtrip. Please read about this in the [Connect](Connect) section of the documentation and check the [code examples](HERE).
+The service will need to be able to handle appropriate request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
 
-As a quick workaround, you can use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing message bodies into the format that suits the target service.
+To quickly connect without configuring the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing messages into the desired format.
 
 ### :electric_plug: Direct connection
+
+![alt text](./assets/readme/direct-connect-4.png)
 
 If you want to access one of the popular AI APIs directly from the browser without the use of an intermediary service, you can use the `directConnection` property:
 
 ```
 <deep-chat directConnection='{"openAI":true}'/>
+
+<deep-chat directConnection='{"openAI":{"key": "optional-key-here"}}'/>
 ```
 
-You can additionally preload the component with your own key:
+Please note that this approach should ONLY be used for local/prototyping/demo purposes as it exposes the API Key to the browser. When ready to go live, please switch to using the `request` property described above with a combination of an [intermediary proxy service](HERE).
 
-```
-<deep-chat directConnection='{"openAI":{"key": "key-here"}}'/>
-```
-
-Please note that this exposes the API key to the browser and should ONLY be used for prototyping/demo purposes. When ready to go live, please use the `request` property described above with a combination of an [intermediary proxy service](HERE).
+Supported services:
+[OpenAI](HERE), [HuggingFace](HERE), [Cohere](HERE), [Azure](HERE), [AssembleAI](HERE)
 
 ### :camera: :microphone: Camera and Microphone
 
-Deep Chat can be used to create new files from within the component. You can use the camera modal to capture photos via the webcam or record audio via the microphone.
+Deep Chat can be used to create new files. Use the camera modal to capture photos from your webcam or record audio via the microphone.
 
-![alt text](./assets/readme/title.png)
+![alt text](./assets/readme/capture-2.png)
 
-You can enable this via the use of the [_camera_](HERE) and [_microphone_](HERE) properties. E.g:
+You can enable this via the use of the [`camera`](HERE) and [`microphone`](HERE) properties. Read more [here](HERE).
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
@@ -84,13 +84,17 @@ You can enable this via the use of the [_camera_](HERE) and [_microphone_](HERE)
 
 ### :microphone: :sound: Speech
 
-You can use Speech To Text to construct your messages via voice. This has been integrated into the component via the use of the [speech to element] library that facilitates the use of [Web Speech](HERE) (default) and [Azure](JERE) APIs.
-
-You can also use Text To Speech to read out the text response messages via [Web Speech](HERE).
-
-Please read how to enable this functionality [here](HERE).
+Input your text using real time Speech To Text transcription and have the responses read out to you automatically using Text To Speech synthesis.
 
 ![alt text](./assets/readme/title.png)
+
+Speech To Text has been integrated via the use of the [speech to element](HERE) library which supports [Web Speech](HERE) and [Azure](HERE) APIs. Text To Speech is facilitated via [Web Speech](HERE).
+
+You can enable this via the use of the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
+
+```
+<deep-chat speechToText="true" microphone="textToSpeech" ...other properties />
+```
 
 ## :heart: Contributions
 
