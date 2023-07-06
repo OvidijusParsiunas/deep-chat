@@ -1,5 +1,5 @@
 #start-panel {
-  background-color: var(--homepage-background-standout-color);
+  background: var(--homepage-background);
   position: relative;
   width: 100%;
   height: calc(100vh - 20px);
@@ -9,8 +9,8 @@
   margin-left: auto;
   margin-right: auto;
   padding-top: 1%;
-  border-bottom-left-radius: 100% 15%;
-  border-bottom-right-radius: 100% 15%;
+  border-bottom-left-radius: 100% 9%;
+  border-bottom-right-radius: 100% 9%;
 }
 
 #start-panel-content {
@@ -120,8 +120,8 @@
   top: 180px;
   left: 345px;
   z-index: -4;
-  height: 2px;
-  background-color: #dbdbdb;
+  height: 1.5px;
+  background-color: #c5c5c5;
   transition: width 1s;
 }
 
@@ -137,7 +137,7 @@
   height: 15px;
   width: 15px;
   border-radius: 15px;
-  background-color: #e0e0e0;
+  background-color: #d1d1d1;
   position: absolute;
   top: 173px;
   left: 325px;
@@ -151,11 +151,11 @@
 @keyframes message-bubble-animation {
   40% {
     left: 325px;
-    background-color: #e0e0e0;
+    background-color: #d1d1d1;
   }
   70% {
     left: 510px;
-    background-color: #e0e0e0;
+    background-color: #d1d1d1;
   }
   71% {
     left: 510px;

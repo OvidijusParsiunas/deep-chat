@@ -1,7 +1,6 @@
 #explore-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 120px;
   margin-bottom: 120px;
 }
 
@@ -10,7 +9,7 @@
   padding-right: 28px !important;
   padding-left: 28px !important;
   padding-bottom: 10px !important;
-  background-color: #1c2d4b !important;
+  background-color: var(--explore-background-color-default);
   margin-right: unset !important;
   height: 50px !important;
   font-size: 20px !important;
@@ -20,11 +19,11 @@
 }
 
 #explore-button:hover {
-  background-color: #2b4169 !important;
+  background-color: var(--explore-background-color-hover);
 }
 
 #explore-button:active {
-  background-color: #223558 !important;
+  background-color: var(--explore-background-color-click);
 }
 
 .explore-button-collapsed {

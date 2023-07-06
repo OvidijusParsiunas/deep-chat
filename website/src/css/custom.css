@@ -33,11 +33,46 @@
   --tabs-item-bottom-color: #005ca3;
   --table-of-contents-color: #0058b7;
   --breadcrumbs-item-active-color: #004a98;
-  --homepage-background-standout-color: #fff5f5;
+  --homepage-background: linear-gradient(
+    90deg,
+    rgb(239, 242, 247) 0%,
+    7.60286%,
+    rgb(237, 240, 249) 15.2057%,
+    20.7513%,
+    rgb(235, 239, 248) 26.297%,
+    27.6386%,
+    rgb(235, 239, 248) 28.9803%,
+    38.2826%,
+    rgb(231, 237, 249) 47.585%,
+    48.1216%,
+    rgb(230, 236, 250) 48.6583%,
+    53.1306%,
+    rgb(228, 236, 249) 57.6029%,
+    61.5385%,
+    rgb(227, 234, 250) 65.4741%,
+    68.7835%,
+    rgb(222, 234, 250) 72.093%,
+    75.7603%,
+    rgb(219, 230, 248) 79.4275%,
+    82.8265%,
+    rgb(216, 229, 248) 86.2254%,
+    87.8354%,
+    rgb(213, 228, 249) 89.4454%,
+    91.8605%,
+    rgb(210, 226, 249) 94.2755%,
+    95.4383%,
+    rgb(209, 225, 248) 96.6011%,
+    98.3005%,
+    rgb(208, 224, 247) 100%
+  );
+  --medoa-background-color: rgb(239, 246, 255);
   --homepage-header-color: #003064;
-  --speech-gradient-start-color: rgba(255, 255, 255, 1);
-  --speech-gradient-end-color: rgba(255, 224, 224, 1);
+  --speech-gradient-start-color: rgb(255, 255, 255);
+  --speech-gradient-end-color: rgb(220, 238, 255);
   --openai-logo-filter: unset;
+  --explore-background-color-default: #3966af;
+  --explore-background-color-hover: #305a9e;
+  --explore-background-color-click: #284e8d;
 }
 
 [data-theme='dark'] {
@@ -70,12 +105,16 @@
   --tabs-item-bottom-color: #108be9;
   --table-of-contents-color: #298bf4;
   --breadcrumbs-item-active-color: #1888ff;
-  --homepage-background-standout-color: #232323;
+  --medoa-background-color: #232323;
+  --homepage-background: #232323;
   --homepage-header-color: white;
   --speech-gradient-start-color: rgba(57, 57, 57, 0);
   --speech-gradient-end-color: #2d2d2d;
   --openai-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)
     brightness(108%) contrast(108%);
+  --explore-background-color-default: #5d5d5d;
+  --explore-background-color-hover: #525252;
+  --explore-background-color-click: #4a4a4a;
 }
 
 .markdown > h1 {

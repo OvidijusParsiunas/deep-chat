@@ -36,7 +36,7 @@ function LeftPanel() {
           default: {
             user: {
               bubble: {
-                backgroundColor: '#32c132',
+                backgroundColor: '#397cd8',
               },
             },
           },

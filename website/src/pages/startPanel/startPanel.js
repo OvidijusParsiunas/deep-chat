@@ -1,5 +1,6 @@
 import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import SmallScreenPanel from '../smallScreen/smallScreen';
+import StartPanelParticles from './startPanelParticles';
 import DeepChatLogo from '../smallScreen/deepChatLogo';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
@@ -74,8 +75,8 @@ function ComponentPanel() {
   const component = React.useRef(null);
   const messageBubble = React.useRef(null);
   const messageLine = React.useRef(null);
-  setTimeout(() => displayLogos(logos.current), 400);
-  setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1500);
+  setTimeout(() => displayLogos(logos.current), 600);
+  setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1700);
   return (
     <div id="start-panel-animation-content-container">
       <div id="start-panel-component" ref={component} className={'start-panel-component-center'}>
@@ -90,7 +91,7 @@ function ComponentPanel() {
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-            borderColor: '#ededed',
+            borderColor: 'white',
             zIndex: 10,
           }}
           stream="true"
@@ -120,6 +121,7 @@ export function HeaderPanel() {
 export default function StartPanel() {
   return (
     <div id="start-panel">
+      <StartPanelParticles></StartPanelParticles>
       <div id="start-panel-content">
         <HeaderPanel></HeaderPanel>
         <BrowserOnly>{() => <ComponentPanel></ComponentPanel>}</BrowserOnly>

@@ -1,14 +1,14 @@
 #media-diagonal-padding {
   transform: skewY(4deg);
   height: 382px;
-  background-color: var(--homepage-background-standout-color);
+  background-color: var(--medoa-background-color);
   padding-top: 30px;
   margin-top: 200px;
 }
 
 #media {
   height: 382px;
-  background-color: var(--homepage-background-standout-color);
+  background-color: var(--medoa-background-color);
   margin-top: -300px;
   padding-top: 30px;
   width: 100%;

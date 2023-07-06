@@ -288,9 +288,9 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
 
 <LineBreak></LineBreak>
 
-### Gradient chat {#violetGradient}
+### Gradient bubbles {#gradientBubbles}
 
-A vibrant blue to violet gradient chat theme.
+A blue to violet gradient theme that spans the message bubbles.
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -308,26 +308,43 @@ A vibrant blue to violet gradient chat theme.
     containerStyle={{
       borderRadius: '10px',
       border: 'unset',
-      background: 'linear-gradient(90deg, rgb(53 183 255) 0%, rgb(196 20 255) 100%)',
+      backgroundImage: "url('/img/lofi-background.webp')",
+      backgroundSize: '320px 500px',
     }}
     messageStyles={{
       default: {
-        user: {bubble: {backgroundColor: '#90ffae', color: '#141414'}},
-        ai: {bubble: {backgroundColor: '#8afbff', color: '#141414'}},
+        user: {
+          bubble: {
+            background: 'linear-gradient(90deg, rgb(225 37 255) 0%, rgb(161, 99, 233) 100%)',
+            color: 'white',
+          },
+        },
+        ai: {
+          bubble: {background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)', color: 'white'},
+        },
+      },
+      loading: {
+        bubble: {
+          background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)',
+          color: 'white',
+        },
+      },
+    }}
+    textInput={{
+      styles: {
+        container: {
+          backgroundColor: 'rgb(239 245 255)',
+          color: '#0d008d',
+        },
       },
     }}
     submitButtonStyles={{
       submit: {
-        container: {
-          default: {
-            bottom: '0.7rem',
-          },
-        },
         svg: {
           styles: {
             default: {
               filter:
-                'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)',
+                'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
             },
           },
         },
@@ -342,21 +359,26 @@ A vibrant blue to violet gradient chat theme.
           styles: {
             default: {
               filter:
-                'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)',
+                'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
             },
           },
         },
       },
-    }}
-    textInput={{
-      styles: {
+      stop: {
         container: {
-          background: 'linear-gradient(15deg, rgb(73 73 159 / 74%) 0%, rgb(32 34 168 / 82%) 100%)',
-          border: 'unset',
-          color: '#e8e8e8',
+          default: {
+            backgroundColor: 'unset',
+          },
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
+            },
+          },
         },
       },
-      placeholder: {text: `Insert your question here...`, style: {color: '#9c9c9c'}},
     }}
     auxiliaryStyle="
     ::-webkit-scrollbar {
@@ -384,145 +406,8 @@ A vibrant blue to violet gradient chat theme.
   containerStyle='{
     "borderRadius": "10px",
     "border": "unset",
-    "background": "linear-gradient(90deg, rgb(53 183 255) 0%, rgb(196 20 255) 100%)"
+    "backgroundImage": "url(\"path-to-image.jpg\")"
   }'
-  messageStyles='{
-    "default": {
-      "user": {"bubble": {"backgroundColor": "#90ffae", "color": "#141414"}},
-      "ai": {"bubble": {"backgroundColor": "#8afbff", "color": "#141414"}}
-    }
-  }'
-  submitButtonStyles='{
-    "submit": {
-      "container": {
-        "default": {
-          "bottom": "0.7rem"
-        }
-      },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)"
-          }
-        }
-      }
-    },
-    "loading": {
-      "container": {
-        "default": {
-          "backgroundColor": "unset"
-        }
-      },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(234deg) brightness(100%) contrast(103%)"
-          }
-        }
-      }
-    }
-  }'
-  textInput='{
-    "styles": {
-      "container": {
-        "background": "linear-gradient(15deg, rgb(73 73 159 / 74%) 0%, rgb(32 34 168 / 82%) 100%)",
-        "border": "unset",
-        "color": "#e8e8e8"
-      }
-    },
-    "placeholder": {"text": "Insert your question here...", "style": {"color": "#9c9c9c"}}
-  }'
-  auxiliaryStyle="
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: #54a7ff;
-      border-radius: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background-color: unset;
-    }"
-  initialMessages='[
-    {"text": "Hey, how are you?", "role": "user"},
-    {"text": "I am doing great, how about you?", "role": "ai"},
-    {"text": "What is the meaning of life?", "role": "user"},
-    {"text": "This completely depends on the person.", "role": "ai"}
-  ]'
-  directConnection='{"demo": true}'
-  stream="true"
-></deep-chat>
-```
-
-</TabItem>
-</CodeToggle>
-
-<LineBreak></LineBreak>
-
-### Gradient bubbles {#gradientBubbles}
-
-A blue to violet gradient theme that spans the message bubbles.
-
-<ComponentContainer>
-  <DeepChatBrowser
-    stream={true}
-    directConnection={{demo: true}}
-    initialMessages={[
-      {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
-      {text: 'What is the meaning of life?', role: 'user'},
-      {
-        text: 'This completely depends on the person.',
-        role: 'ai',
-      },
-    ]}
-    containerStyle={{
-      borderRadius: '10px',
-    }}
-    messageStyles={{
-      default: {
-        user: {
-          bubble: {
-            background: 'linear-gradient(90deg, rgb(225 37 255) 0%, rgb(161, 99, 233) 100%)',
-            color: 'white',
-          },
-        },
-        ai: {
-          bubble: {background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)', color: 'white'},
-        },
-      },
-      loading: {
-        bubble: {
-          background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)',
-          color: 'white',
-        },
-      },
-    }}
-    auxiliaryStyle="
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: #54a7ff;
-      border-radius: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background-color: unset;
-    }
-    "
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<CodeToggle>
-<TabItem value="js" label="Show code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
-
-<deep-chat
-  containerStyle='{"borderRadius": "10px"}'
   messageStyles='{
     "default": {
       "user": {
@@ -536,7 +421,57 @@ A blue to violet gradient theme that spans the message bubbles.
       }
     },
     "loading": {
-      "bubble": {"background": "linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)", "color": "white"}
+      "bubble": {
+        "background": "linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)",
+        "color": "white"
+      }
+    }
+  }'
+  textInput='{
+    "styles": {
+      "container": {
+        "backgroundColor": "rgb(239 245 255)",
+        "color": "#0d008d"
+      }
+    }
+  }'
+  submitButtonStyles='{
+    "submit": {
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {
+          "backgroundColor": "unset"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)"
+          }
+        }
+      }
+    },
+    "stop": {
+      "container": {
+        "default": {
+          "backgroundColor": "unset"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)"
+          }
+        }
+      }
     }
   }'
   auxiliaryStyle="
@@ -836,6 +771,220 @@ Component styling suitable for dark screen mode.
         "styles": {
           "default": {
             "filter": "brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)"
+          }
+        }
+      }
+    }
+  }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: grey;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Dark Orange {#darkOrange}
+
+Component styling suitable for dark screen mode.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      border: 'unset',
+      backgroundColor: '#292929',
+    }}
+    messageStyles={{
+      default: {
+        ai: {
+          bubble: {backgroundColor: '#4a4e59', color: 'white'},
+        },
+        user: {
+          bubble: {
+            background: 'linear-gradient(180deg, rgba(255,166,0,1) 0%, rgba(225,71,71,1) 100%)',
+            color: 'white',
+          },
+        },
+      },
+      loading: {
+        bubble: {backgroundColor: '#4a4e59', color: 'white'},
+      },
+    }}
+    textInput={{
+      styles: {
+        container: {
+          backgroundColor: '#666666',
+          border: 'unset',
+          color: '#e8e8e8',
+        },
+      },
+      placeholder: {text: 'Insert your question here...', style: {color: '#bcbcbc'}},
+    }}
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {
+            bottom: '0.7rem',
+          },
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)',
+            },
+          },
+        },
+      },
+      loading: {
+        container: {
+          default: {
+            backgroundColor: 'unset',
+          },
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)',
+            },
+          },
+        },
+      },
+      stop: {
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)',
+            },
+          },
+        },
+      },
+    }}
+    auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: grey;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }
+    "
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "border": "unset",
+    "backgroundColor": "#292929"
+  }'
+  messageStyles='{
+    "default": {
+      "ai": {
+        "bubble": {
+          "backgroundColor": "#4a4e59",
+          "color": "white"
+        }
+      },
+      "user": {
+        "bubble": {
+          "background": "linear-gradient(180deg, rgba(255,166,0,1) 0%, rgba(225,71,71,1) 100%)",
+          "color": "white"
+        }
+      }
+    },
+    "loading": {
+      "bubble": {"backgroundColor": "#4a4e59", "color": "white"}
+    }
+  }'
+  textInput='{
+    "styles": {
+      "container": {
+        "backgroundColor": "#666666",
+        "border": "unset",
+        "color": "#e8e8e8"
+      }
+    },
+    "placeholder": {"text": "Insert your question here...", "style": {"color": "#bcbcbc"}}
+  }'
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {
+          "bottom": "0.7rem"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {
+          "backgroundColor": "unset"
+        }
+      },
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)"
+          }
+        }
+      }
+    },
+    "stop": {
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)"
           }
         }
       }
@@ -1243,6 +1392,291 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
       }
     }
   }'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Violet {#violet}
+
+A violet color theme that uses a squared border styling approach.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{borderRadius: '10px'}}
+    messageStyles={{default: {shared: {bubble: {borderRadius: '0px'}}, user: {bubble: {backgroundColor: '#6c00ff'}}}}}
+    submitButtonStyles={{
+      position: 'outside-right',
+      submit: {
+        container: {
+          default: {
+            backgroundColor: '#5900ff',
+            marginBottom: '0.1em',
+            marginLeft: '10px',
+            borderRadius: '0px',
+          },
+          hover: {backgroundColor: '#4d00dc'},
+          click: {backgroundColor: '#3b00a8'},
+        },
+        text: {
+          content: 'Send',
+          styles: {default: {color: 'white', height: '1.78em', width: '3em', fontSize: '0.95em'}},
+        },
+      },
+      loading: {
+        container: {
+          default: {backgroundColor: '#afafaf'},
+          hover: {backgroundColor: '#afafaf'},
+          click: {backgroundColor: '#afafaf'},
+        },
+      },
+      stop: {
+        container: {
+          default: {backgroundColor: '#afafaf'},
+          hover: {backgroundColor: '#afafaf'},
+          click: {backgroundColor: '#afafaf'},
+        },
+      },
+    }}
+    avatars={true}
+    textInput={{
+      styles: {
+        container: {
+          backgroundColor: 'white',
+          borderRadius: '0px',
+          boxShadow: 'unset',
+          width: '70%',
+          marginLeft: '-40px',
+        },
+      },
+    }}
+    inputAreaStyle={{backgroundColor: '#eeeeee'}}
+    auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: #5900ff;
+    }"
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{"borderRadius": "10px"}'
+  messageStyles='{
+    "default": {
+      "shared": {"bubble": {"borderRadius": "0px"}},
+      "user": {"bubble": {"backgroundColor": "#6c00ff"}}
+  }}'
+  avatars="true"
+  inputAreaStyle='{"backgroundColor": "#eeeeee"}'
+  textInput='{
+    "styles": {
+      "container": {
+        "backgroundColor": "white",
+        "borderRadius": "0px",
+        "boxShadow": "unset",
+        "width": "70%",
+        "marginLeft": "-40px"
+      }
+    }
+  }'
+  submitButtonStyles='{
+    "position": "outside-right",
+    "submit": {
+      "container": {
+        "default": {
+          "backgroundColor": "#5900ff",
+          "marginBottom": "0.1em",
+          "marginLeft": "10px",
+          "borderRadius": "0px"
+        },
+        "hover": {"backgroundColor": "#4d00dc"},
+        "click": {"backgroundColor": "#3b00a8"}
+      },
+      "text": {
+        "content": "Send",
+        "styles": {"default": {"color": "white", "height": "1.78em", "width": "3em", "fontSize": "0.95em"}}
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {"backgroundColor": "#afafaf"},
+        "hover": {"backgroundColor": "#afafaf"},
+        "click": {"backgroundColor": "#afafaf"}
+      }
+    },
+    "stop": {
+      "container": {
+        "default": {"backgroundColor": "#afafaf"},
+        "hover": {"backgroundColor": "#afafaf"},
+        "click": {"backgroundColor": "#afafaf"}
+      }
+    }
+  }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: #5900ff;
+  }"
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Background {#background}
+
+A violet color theme that uses a squared border styling approach.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    stream={true}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      border: 'unset',
+      backgroundImage: "url('/img/blue-background.jpg')",
+      backgroundSize: '320px 500px',
+    }}
+    messageStyles={{
+      default: {user: {bubble: {backgroundColor: '#2670ff'}}, ai: {bubble: {backgroundColor: '#004f97', color: 'white'}}},
+    }}
+    submitButtonStyles={{
+      submit: {
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(60%) sepia(79%) saturate(643%) hue-rotate(185deg) brightness(102%) contrast(100%)',
+            },
+          },
+        },
+      },
+      loading: {
+        container: {
+          default: {
+            backgroundColor: 'unset',
+          },
+        },
+      },
+    }}
+    textInput={{
+      styles: {
+        container: {
+          backgroundColor: '#004f97',
+          color: 'white',
+          boxShadow: 'unset',
+        },
+      },
+      placeholder: {style: {color: '#d1d1d1'}},
+    }}
+    auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: #0174db;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }"
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "border": "unset",
+    "backgroundImage": "url(\"path-to-image.jpg\")"
+  }'
+  messageStyles='{
+    "default": {
+      "user": {
+        "bubble": {"backgroundColor": "#2670ff"}},
+        "ai": {"bubble": {"backgroundColor": "#004f97", "color": "white"}}
+  }}'
+  submitButtonStyles='{
+    "submit": {
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(60%) sepia(79%) saturate(643%) hue-rotate(185deg) brightness(102%) contrast(100%)"
+          }
+        }
+      }
+    },
+    "loading": {
+      "container": {
+        "default": {
+          "backgroundColor": "unset"
+        }
+      }
+    }
+  }'
+  textInput='{
+    "styles": {
+      "container": {
+        "backgroundColor": "#004f97",
+        "color": "white",
+        "boxShadow": "unset"
+      }
+    },
+    "placeholder": {"style": {"color": "#d1d1d1"}}
+  }'
+  auxiliaryStyle="
+    ::-webkit-scrollbar-thumb {
+      background-color: #0174db;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: unset;
+    }"
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},

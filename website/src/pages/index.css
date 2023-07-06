@@ -3,7 +3,7 @@
 }
 
 .displayed {
-  display: block;
+  display: block !important;
 }
 
 /* need to use !important as it is on an anchor (a) element  */
@@ -64,7 +64,7 @@
   }
 
   #footer {
-    background-color: var(--homepage-background-standout-color);
+    background-color: var(--homepage-background);
     text-align: center;
   }
 
