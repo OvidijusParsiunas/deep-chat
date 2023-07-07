@@ -120,14 +120,20 @@ export function HeaderPanel() {
 
 export default function StartPanel() {
   return (
-    <div id="start-panel">
-      <StartPanelParticles></StartPanelParticles>
-      <div id="start-panel-content">
-        <HeaderPanel></HeaderPanel>
-        <BrowserOnly>{() => <ComponentPanel></ComponentPanel>}</BrowserOnly>
-        <SmallScreenPanel></SmallScreenPanel>
-        <DeepChatLogo></DeepChatLogo>
-      </div>
-    </div>
+    <BrowserOnly>
+      {() => {
+        return (
+          <div id="start-panel">
+            <StartPanelParticles></StartPanelParticles>
+            <div id="start-panel-content">
+              <HeaderPanel></HeaderPanel>
+              <ComponentPanel></ComponentPanel>
+              <SmallScreenPanel></SmallScreenPanel>
+              <DeepChatLogo></DeepChatLogo>
+            </div>
+          </div>
+        );
+      }}
+    </BrowserOnly>
   );
 }

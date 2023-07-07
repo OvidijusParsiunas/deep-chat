@@ -109,7 +109,7 @@
   --homepage-background: #232323;
   --homepage-header-color: white;
   --speech-gradient-start-color: rgba(57, 57, 57, 0);
-  --speech-gradient-end-color: #2d2d2d;
+  --speech-gradient-end-color: #272727;
   --openai-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)
     brightness(108%) contrast(108%);
   --explore-background-color-default: #5d5d5d;

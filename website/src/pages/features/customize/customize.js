@@ -1,7 +1,268 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import OnVisibleAnimation from '../../utils/onVisibleAnimation';
+import {useColorMode} from '@docusaurus/theme-common';
 import React from 'react';
 import './customize.css';
+
+function ComponentsDark() {
+  return (
+    <div id="customize-content">
+      <DeepChatBrowser
+        stream={true}
+        directConnection={{demo: true}}
+        initialMessages={[
+          {text: 'Hey, how are you?', role: 'user'},
+          {text: 'I am doing great, how about you?', role: 'ai'},
+          {text: 'What is the meaning of life?', role: 'user'},
+          {
+            text: 'This completely depends on the person.',
+            role: 'ai',
+          },
+        ]}
+        containerStyle={{
+          borderRadius: '10px',
+          border: 'unset',
+          backgroundColor: '#292929',
+        }}
+        messageStyles={{
+          default: {
+            ai: {
+              bubble: {backgroundColor: '#545454', color: 'white'},
+            },
+          },
+          loading: {
+            bubble: {backgroundColor: '#545454', color: 'white'},
+          },
+        }}
+        textInput={{
+          styles: {
+            container: {
+              backgroundColor: '#666666',
+              border: 'unset',
+              color: '#e8e8e8',
+            },
+          },
+          placeholder: {text: 'Insert your question here...', style: {color: '#bcbcbc'}},
+        }}
+        submitButtonStyles={{
+          submit: {
+            container: {
+              default: {
+                bottom: '0.7rem',
+              },
+            },
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
+                },
+              },
+            },
+          },
+          loading: {
+            container: {
+              default: {
+                backgroundColor: 'unset',
+              },
+            },
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
+                },
+              },
+            },
+          },
+          stop: {
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
+                },
+              },
+            },
+          },
+        }}
+        auxiliaryStyle="
+          ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+          }
+          ::-webkit-scrollbar-thumb {
+            background-color: grey;
+            border-radius: 5px;
+          }
+          ::-webkit-scrollbar-track {
+            background-color: unset;
+          }"
+      ></DeepChatBrowser>
+      <DeepChatBrowser
+        stream={true}
+        directConnection={{demo: true}}
+        initialMessages={[
+          {text: 'Hey, how are you?', role: 'user'},
+          {text: 'I am doing great, how about you?', role: 'ai'},
+          {text: 'What is the meaning of life?', role: 'user'},
+          {
+            text: 'This completely depends on the person.',
+            role: 'ai',
+          },
+        ]}
+        containerStyle={{
+          borderRadius: '10px',
+          border: 'unset',
+          backgroundImage: "url('/img/lofi-background.webp')",
+          backgroundSize: '320px 500px',
+        }}
+        messageStyles={{
+          default: {
+            user: {
+              bubble: {
+                background: 'linear-gradient(90deg, rgb(225 37 255) 0%, rgb(161, 99, 233) 100%)',
+                color: 'white',
+              },
+            },
+            ai: {
+              bubble: {background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)', color: 'white'},
+            },
+          },
+          loading: {
+            bubble: {
+              background: 'linear-gradient(90deg, rgb(0, 162, 255) 30%, rgb(197 119 255) 100%)',
+              color: 'white',
+            },
+          },
+        }}
+        textInput={{
+          styles: {
+            container: {
+              backgroundColor: 'rgb(239 245 255)',
+              color: '#0d008d',
+            },
+          },
+        }}
+        submitButtonStyles={{
+          submit: {
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
+                },
+              },
+            },
+          },
+          loading: {
+            container: {
+              default: {
+                backgroundColor: 'unset',
+              },
+            },
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
+                },
+              },
+            },
+          },
+          stop: {
+            container: {
+              default: {
+                backgroundColor: 'unset',
+              },
+            },
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
+                },
+              },
+            },
+          },
+        }}
+        auxiliaryStyle="
+          ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+          }
+          ::-webkit-scrollbar-thumb {
+            background-color: #54a7ff;
+            border-radius: 5px;
+          }
+          ::-webkit-scrollbar-track {
+            background-color: unset;
+          }"
+      ></DeepChatBrowser>
+      <DeepChatBrowser
+        stream={true}
+        directConnection={{demo: true}}
+        initialMessages={[
+          {text: 'Hey, how are you?', role: 'user'},
+          {text: 'I am doing great, how about you?', role: 'ai'},
+          {text: 'What is the meaning of life?', role: 'user'},
+          {
+            text: 'This completely depends on the person.',
+            role: 'ai',
+          },
+        ]}
+        containerStyle={{
+          borderRadius: '10px',
+          border: 'unset',
+          backgroundImage: "url('/img/blue-background.jpg')",
+          backgroundSize: '320px 500px',
+        }}
+        messageStyles={{
+          default: {
+            user: {bubble: {backgroundColor: '#2670ff'}},
+            ai: {bubble: {backgroundColor: '#004f97', color: 'white'}},
+          },
+        }}
+        submitButtonStyles={{
+          submit: {
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(60%) sepia(79%) saturate(643%) hue-rotate(185deg) brightness(102%) contrast(100%)',
+                },
+              },
+            },
+          },
+          loading: {
+            container: {
+              default: {
+                backgroundColor: 'unset',
+              },
+            },
+          },
+        }}
+        textInput={{
+          styles: {
+            container: {
+              backgroundColor: '#004f97',
+              color: 'white',
+              boxShadow: 'unset',
+            },
+          },
+          placeholder: {style: {color: '#d1d1d1'}},
+        }}
+        auxiliaryStyle="
+          ::-webkit-scrollbar-thumb {
+            background-color: #0174db;
+          }
+          ::-webkit-scrollbar-track {
+            background-color: unset;
+          }"
+      ></DeepChatBrowser>
+    </div>
+  );
+}
 
 function IntroPanel() {
   return (
@@ -50,7 +311,7 @@ function IntroPanel() {
   );
 }
 
-function Components() {
+function ComponentsLight() {
   return (
     <div id="customize-content">
       <DeepChatBrowser
@@ -284,6 +545,11 @@ function Components() {
       ></DeepChatBrowser>
     </div>
   );
+}
+
+function Components() {
+  const {colorMode} = useColorMode();
+  return colorMode === 'dark' ? <ComponentsDark></ComponentsDark> : <ComponentsLight></ComponentsLight>;
 }
 
 export default function Customize() {

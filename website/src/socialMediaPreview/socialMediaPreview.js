@@ -7,13 +7,15 @@ import azureLogo from '/img/azureLogo.png';
 import React from 'react';
 
 // used on the startPanel.js file
+// may need to zoom out for a photo
 const Logos = React.forwardRef((_, ref) => {
   return (
     <div
       id="start-panel-logos"
       ref={ref}
-      style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: '100px'}}
+      style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: '110px'}}
     >
+      <div style={{position: 'absolute', width: '1060px', height: '2px', backgroundColor: '#e5e5e5', top: '-55px'}}></div>
       <div
         className="start-panel-logo"
         style={{
@@ -50,7 +52,7 @@ const Logos = React.forwardRef((_, ref) => {
         }}
       >
         <a href="docs/directConnection/Cohere" target="_blank">
-          <img src={cohereLogo} width="60" style={{marginTop: '1xpx'}} />
+          <img src={cohereLogo} width="60" style={{marginTop: '1px'}} />
         </a>
       </div>
       <div
@@ -63,7 +65,7 @@ const Logos = React.forwardRef((_, ref) => {
         }}
       >
         <a href="docs/directConnection/Azure" target="_blank">
-          <img src={azureLogo} width="42" style={{marginTop: '7px'}} />
+          <img src={azureLogo} width="42" style={{marginTop: '8px'}} />
         </a>
       </div>
       <div
@@ -76,7 +78,7 @@ const Logos = React.forwardRef((_, ref) => {
         }}
       >
         <a href="docs/directConnection/AssemblyAI" target="_blank">
-          <img src={assemblyAILogo} width="35" style={{marginTop: '8px'}} />
+          <img src={assemblyAILogo} width="35" style={{marginTop: '9px'}} />
         </a>
       </div>
     </div>
@@ -182,7 +184,7 @@ function Components() {
           },
         }}
         stream={true}
-        avatars={{default: {styles: {position: 'left'}}, ai: {src: '/img/openAILogo.png'}}}
+        avatars={{default: {styles: {position: 'left'}}}}
         submitButtonStyles={{
           submit: {
             container: {
@@ -311,6 +313,8 @@ function Components() {
               bubble: {
                 maxWidth: '90%',
                 marginLeft: '10px',
+                paddingTop: '2px',
+                paddingBottom: '2px',
               },
             },
           },
@@ -321,13 +325,19 @@ function Components() {
                 backgroundColor: 'white',
               },
             },
+            ai: {
+              bubble: {
+                padding: '0px',
+              },
+            },
           },
           image: {
             shared: {
               bubble: {
                 maxWidth: '70%',
-                width: '160px',
+                width: '165px',
                 marginTop: '14px',
+                padding: '0px',
               },
             },
           },
@@ -365,12 +375,19 @@ export default function SocialMediaPreview() {
         style={{
           marginBottom: '40px',
           marginTop: '40px',
-          fontSize: '70px',
+          fontSize: '80px',
         }}
       >
-        <img style={{width: '62px', marginRight: '15px', marginBottom: '-10px'}} src="img/deep-chat-title.svg"></img>
+        <img
+          style={{width: '70px', marginRight: '15px', marginLeft: '-50px', marginBottom: '-10px'}}
+          src="img/deep-chat-title.svg"
+        ></img>
         Deep Chat
       </div>
+      {/* <div
+        id="media-diagonal-padding"
+        style={{transform: 'skewY(-3deg)', marginTop: '90px', height: '182px', position: 'absolute', width: '100%'}}
+      ></div> */}
       <Components></Components>
       <Logos></Logos>
     </div>

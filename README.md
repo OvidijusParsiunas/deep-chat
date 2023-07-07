@@ -1,6 +1,6 @@
 <br />
 
-![alt text](./assets/readme/screenshot-19.png)
+![alt text](./assets/readme/screenshot-23.png)
 
 <b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 

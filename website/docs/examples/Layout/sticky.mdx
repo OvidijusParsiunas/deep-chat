@@ -1,0 +1,67 @@
+---
+sidebar_position: 1
+---
+
+# Sticky
+
+Example to help you stick the component to any side of the screen - furthering a chat-like experience to your users. The core method to achieve this is to
+set the [`containerStyle`](../../docs/styles#containerStyle) property with _position: "fixed"_ and defining the side you want to component to sit on e.g. _right: "7%"_.
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import CodeToggle from '@site/src/components/toggle/codeToggle';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+<h3>Example code</h3>
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "position": "fixed",
+    "bottom": "0px",
+    "right": "7%",
+    "zIndex": "1"
+  }'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+<LineBreak></LineBreak>
+
+<ComponentContainer minHeight={1}>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    stream={true}
+    containerStyle={{
+      borderRadius: '10px',
+      position: 'fixed',
+      bottom: '0px',
+      right: '7%',
+      zIndex: 1,
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>

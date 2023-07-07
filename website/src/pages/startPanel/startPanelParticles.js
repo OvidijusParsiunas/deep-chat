@@ -13,7 +13,7 @@ export default function StartPanelParticles() {
           await loadFull(engine);
         }, []);
         const particlesLoaded = useCallback(async () => {}, []);
-        const {isDarkTheme} = useColorMode();
+        const {colorMode} = useColorMode();
         return (
           <div id="start-panel-particles-container">
             <Particles
@@ -30,7 +30,7 @@ export default function StartPanelParticles() {
                     },
                   },
                   color: {
-                    value: [isDarkTheme ? '#656565' : '#7eccff'],
+                    value: [colorMode === 'dark' ? '#656565' : '#7eccff'],
                   },
                   move: {
                     direction: 'none',
@@ -75,7 +75,7 @@ export default function StartPanelParticles() {
                   line_linked: {
                     enable: true,
                     distance: 120,
-                    color: isDarkTheme ? '#656565' : '#7eccff',
+                    color: colorMode === 'dark' ? '#656565' : '#7eccff',
                     opacity: 0.4,
                     width: 1,
                   },
