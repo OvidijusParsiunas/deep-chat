@@ -161,3 +161,169 @@ If you are using a custom intro panel (example above), it will instead be applie
 :::tip
 To remove a default panel - add empty markup tags: `<deep-chat><div></div></deep-chat>` .
 :::
+
+<LineBreak></LineBreak>
+
+## More Examples
+
+<h3>Grey sections</h3>
+
+<ComponentContainer>
+  <DeepChatBrowser directConnection={{demo: true}}>
+    <div style={{display: 'none'}}>
+      <div
+        style={{
+          width: '250px',
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '-10px',
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: '#f2f2f2',
+            borderRadius: '10px',
+            padding: '10px',
+          }}
+        >
+          <div style={{fontSize: '14px', lineHeight: '20px'}}>"Explain quantum computing in simple terms"</div>
+        </div>
+        <div
+          style={{
+            backgroundColor: '#f2f2f2',
+            borderRadius: '10px',
+            padding: '10px',
+            marginTop: '15px',
+          }}
+        >
+          <div style={{fontSize: '14px', lineHeight: '20px'}}>Allows user to provide follow-up corrections</div>
+        </div>
+        <div
+          style={{
+            backgroundColor: '#f2f2f2',
+            borderRadius: '10px',
+            padding: '10px',
+            marginTop: '15px',
+          }}
+        >
+          <div style={{fontSize: '14px', lineHeight: '20px'}}>May occasionally generate incorrect information</div>
+        </div>
+      </div>
+    </div>
+  </DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat>
+  <div
+    style="
+      width: 250px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -10px;
+      display: none;
+    "
+  >
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px">
+      <div style="font-size: 14px; line-height: 20px">Explain quantum computing in simple terms</div>
+    </div>
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
+      <div style="font-size: 14px; line-height: 20px">Allows user to provide follow-up corrections</div>
+    </div>
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
+      <div style="font-size: 14px; line-height: 20px">May occasionally generate incorrect information</div>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat directConnection='{"demo": true}' containerStyle='{"borderRadius": "8px"}'>
+  <div
+    style="
+      width: 250px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -10px;
+      display: none;
+    "
+  >
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px">
+      <div style="font-size: 14px; line-height: 20px">Explain quantum computing in simple terms</div>
+    </div>
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
+      <div style="font-size: 14px; line-height: 20px">Allows user to provide follow-up corrections</div>
+    </div>
+    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
+      <div style="font-size: 14px; line-height: 20px">May occasionally generate incorrect information</div>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+<h3>Logo</h3>
+
+<ComponentContainer>
+  <DeepChatBrowser directConnection={{demo: true}}>
+    <div style={{width: '200px', textAlign: 'center', display: 'none'}}>
+      <img src="/img/deep-chat-favicon-large.svg" style={{width: '110px'}} />
+      <div style={{marginTop: '5px', marginBottom: '8px', fontSize: '38px', color: '#003064'}}>
+        <b>Deep Chat</b>
+      </div>
+    </div>
+  </DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat>
+  <div style="width: 200px; text-align: center; display: none">
+    <img src="path-to-image.png" style="width: 110px" />
+    <div style="margin-top: 5px; margin-bottom: 8px; font-size: 38px; color: #003064">
+      <b>Deep Chat</b>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat directConnection='{"demo": true}' containerStyle='{"borderRadius": "8px"}'>
+  <div style="width: 200px; text-align: center; display: none">
+    <img src="path-to-image.png" style="width: 110px" />
+    <div style="margin-top: 5px; margin-bottom: 8px; font-size: 38px; color: #003064">
+      <b>Deep Chat</b>
+    </div>
+  </div>
+</deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

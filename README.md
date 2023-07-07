@@ -14,9 +14,9 @@
 - Record audio via microphone
 - Speech To Text for message input
 - Text To Speech to hear message responses
-- Support for MarkDown to structure text and render code
-- Introduction panel and dynamic modals to help describe chat functionality for your users
-- Connect to popoular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
+- Support for MarkDown to help structure text and render code
+- Introduction panel and dynamic modals to describe functionality for your users
+- Connect to popular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
 - Everything is customizable!
 
 ### :computer: Getting started
@@ -41,7 +41,7 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-3.png)
+![alt text](./assets/readme/connect-10.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
@@ -51,13 +51,13 @@ Connecting to a service is simple, all you need to do is define its API details 
 
 The service will need to be able to handle appropriate request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
 
-To quickly connect without configuring the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing messages into the desired format.
+To connect without configuring the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing message formats.
 
 ### :electric_plug: Direct connection
 
-![alt text](./assets/readme/direct-connect-4.png)
+![alt text](./assets/readme/direct-connect-7.png)
 
-If you want to access one of the popular AI APIs directly from the browser without the use of an intermediary service, you can use the `directConnection` property:
+Access popular AI APIs directly from the browser via the use of `directConnection` property:
 
 ```
 <deep-chat directConnection='{"openAI":true}'/>
@@ -67,16 +67,16 @@ If you want to access one of the popular AI APIs directly from the browser witho
 
 Please note that this approach should ONLY be used for local/prototyping/demo purposes as it exposes the API Key to the browser. When ready to go live, please switch to using the `request` property described above with a combination of an [intermediary proxy service](HERE).
 
-Supported services:
+Currently supported AI APIs:
 [OpenAI](HERE), [HuggingFace](HERE), [Cohere](HERE), [Azure](HERE), [AssembleAI](HERE)
 
 ### :camera: :microphone: Camera and Microphone
 
-Deep Chat can be used to create new files. Use the camera modal to capture photos from your webcam or record audio via the microphone.
+Deep Chat can be used to capture photos using your webcam or record audio via the microphone.
 
-![alt text](./assets/readme/capture-2.png)
+![alt text](./assets/readme/capture-9.png)
 
-You can enable this via the use of the [`camera`](HERE) and [`microphone`](HERE) properties. Read more [here](HERE).
+You can enable this using the [`camera`](HERE) and [`microphone`](HERE) properties. Read more [here](HERE).
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
@@ -84,13 +84,13 @@ You can enable this via the use of the [`camera`](HERE) and [`microphone`](HERE)
 
 ### :microphone: :sound: Speech
 
-Input your text using real time Speech To Text transcription and have the responses read out to you automatically using Text To Speech synthesis.
+Input text using real time Speech To Text transcription and have the responses read out to you automatically using Text To Speech.
 
 ![alt text](./assets/readme/title.png)
 
-Speech To Text has been integrated via the use of the [speech to element](HERE) library which supports [Web Speech](HERE) and [Azure](HERE) APIs. Text To Speech is facilitated via [Web Speech](HERE).
+Speech To Text is integrated via the use of the [Speech to Element](HERE) library which supports [Web Speech](HERE) and [Azure](HERE) APIs. Text To Speech uses [Web Speech](HERE).
 
-You can enable this via the use of the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
+You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
 
 ```
 <deep-chat speechToText="true" microphone="textToSpeech" ...other properties />
