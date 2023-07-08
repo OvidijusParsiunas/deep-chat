@@ -41,7 +41,7 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-10.png)
+![alt text](./assets/readme/connect-14.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
@@ -49,15 +49,15 @@ Connecting to a service is simple, all you need to do is define its API details 
 <deep-chat request='{"url":"https://targetservice.com/message"}'/>
 ```
 
-The service will need to be able to handle appropriate request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
+The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
 
-To connect without configuring the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing message formats.
+If you want to connect without changing the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing request bodies.
 
 ### :electric_plug: Direct connection
 
-![alt text](./assets/readme/direct-connect-7.png)
+![alt text](./assets/readme/direct-connect-12.png)
 
-Access popular AI APIs directly from the browser via the use of `directConnection` property:
+Connect to popular AI APIs directly from the browser via the use of the `directConnection` property:
 
 ```
 <deep-chat directConnection='{"openAI":true}'/>
@@ -72,11 +72,9 @@ Currently supported AI APIs:
 
 ### :camera: :microphone: Camera and Microphone
 
-Deep Chat can be used to capture photos using your webcam or record audio via the microphone.
-
 ![alt text](./assets/readme/capture-9.png)
 
-You can enable this using the [`camera`](HERE) and [`microphone`](HERE) properties. Read more [here](HERE).
+Use Deep Chat to capture photos using your webcam and record audio via the microphone. You can enable these features with the [`camera`](HERE) and [`microphone`](HERE) properties:
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
@@ -84,13 +82,9 @@ You can enable this using the [`camera`](HERE) and [`microphone`](HERE) properti
 
 ### :microphone: :sound: Speech
 
-Input text using real time Speech To Text transcription and have the responses read out to you automatically using Text To Speech.
-
 ![alt text](./assets/readme/title.png)
 
-Speech To Text is integrated via the use of the [Speech to Element](HERE) library which supports [Web Speech](HERE) and [Azure](HERE) APIs. Text To Speech uses [Web Speech](HERE).
-
-You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
+Input text with your voice using Speech To Text and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
 
 ```
 <deep-chat speechToText="true" microphone="textToSpeech" ...other properties />

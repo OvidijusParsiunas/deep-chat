@@ -1,6 +1,7 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import OnVisibleAnimation from '../../utils/onVisibleAnimation';
 import {useColorMode} from '@docusaurus/theme-common';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import React from 'react';
 import './customize.css';
 
@@ -548,8 +549,14 @@ function ComponentsLight() {
 }
 
 function Components() {
-  const {colorMode} = useColorMode();
-  return colorMode === 'dark' ? <ComponentsDark></ComponentsDark> : <ComponentsLight></ComponentsLight>;
+  return (
+    <BrowserOnly>
+      {() => {
+        const {colorMode} = useColorMode();
+        return colorMode === 'dark' ? <ComponentsDark></ComponentsDark> : <ComponentsLight></ComponentsLight>;
+      }}
+    </BrowserOnly>
+  );
 }
 
 export default function Customize() {
