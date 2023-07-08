@@ -1,0 +1,9 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+deep-chat {
+  display: flex;
+  justify-content: center;
+}
