@@ -1,6 +1,6 @@
 import express, {Express, Request, Response} from 'express';
-import {OpenAI} from './openAI';
-import {Basic} from './basic';
+import {OpenAI} from './services/openAI';
+import {Basic} from './services/basic';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import cors from 'cors';
@@ -22,12 +22,12 @@ app.use(express.json());
 
 // ------------------ BASIC API ------------------
 
-app.post('/chat', async (_, res: Response) => {
-  Basic.chat(res);
+app.post('/chat', async (req: Request, res: Response) => {
+  Basic.chat(req.body, res);
 });
 
-app.post('/chat-stream', async (_, res: Response) => {
-  Basic.chatStream(res);
+app.post('/chat-stream', async (req: Request, res: Response) => {
+  Basic.chatStream(req.body, res);
 });
 
 app.post('/files', upload.array('files'), async (req: Request, res: Response) => {

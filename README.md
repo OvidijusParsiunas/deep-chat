@@ -52,7 +52,7 @@ Connecting to a service is simple, all you need to do is define its API details 
 
 The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
 
-If you want to connect without changing the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing request bodies.
+Alternatively, if you want to connect without changing the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing request details.
 
 ### :electric_plug: Direct connection
 

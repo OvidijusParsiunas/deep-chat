@@ -160,38 +160,3 @@ export class OpenAI {
     formReq.end();
   }
 }
-
-// app.post('/openai-create-image', async (req: Request, res: Response) => {
-//   const processedBody = {
-//     prompt: req.body.messages[req.body.messages.length - 1].text,
-//   };
-
-//   const newReq = https.request(
-//     'https://api.openai.com/v1/images/generations',
-//     {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: 'Bearer ' + process.env.OPENAI_API_KEY,
-//       },
-//     },
-//     (newResp) => {
-//       let data = '';
-//       newResp.on('error', (error: any) => {
-//         res.status(400).send(error);
-//       });
-//       newResp.on('data', (chunk: any) => {
-//         data += chunk;
-//       });
-//       newResp.on('end', () => {
-//         const result = JSON.parse(data);
-//         res.json({result: {files: [{type: 'image', src: result.data[0].url}]}});
-//       });
-//     }
-//   );
-//   newReq.on('error', (error: any) => {
-//     res.status(400).send(error);
-//   });
-//   newReq.write(JSON.stringify(processedBody));
-//   newReq.end();
-// });

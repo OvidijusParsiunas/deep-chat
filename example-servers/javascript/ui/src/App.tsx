@@ -13,10 +13,22 @@ function App() {
         <div className="components">
           {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
               requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}
+
+          {/* If you don't want to or can't edit the target service, you can preprocess the outgoing message using
+              responseInterceptor and preprocess the incoming message using responseInterceptor:
+              https://deepchat.dev/docs/interceptors */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a chat message to an example server. "
             request={{url: 'http://localhost:8080/chat'}}
+            requestInterceptor={(details: {body: any; headers?: {[key: string]: string}}) => {
+              console.log(details);
+              return details;
+            }}
+            responseInterceptor={(response: any) => {
+              console.log(response);
+              return response;
+            }}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}

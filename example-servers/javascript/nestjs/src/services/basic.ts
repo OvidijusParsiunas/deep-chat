@@ -1,12 +1,20 @@
+import {Injectable} from '@nestjs/common';
 import {Request, Response} from 'express';
 
+@Injectable()
 export class Basic {
-  public static async chat(res: Response) {
-    res.json({result: {text: 'This is a respone from the example server. Thankyou for your message!'}});
+  async chat(body: Request['body']) {
+    console.log(body);
+    return {
+      result: {
+        text: 'This is a respone from a NestJs server. Thankyou for your message!',
+      },
+    };
   }
 
-  public static async chatStream(res: Response) {
-    const responseChunks = 'This is a respone from the example server. Thankyou for your message!'.split(' ');
+  async chatStream(body: Request['body'], res: Response) {
+    console.log(body);
+    const responseChunks = 'This is a respone from a NestJs server. Thankyou for your message!'.split(' ');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
@@ -26,17 +34,21 @@ export class Basic {
     }, 70);
   }
 
-  public static async files(req: Request, res: Response) {
-    // files are stored inside req.files
-    if (req.files as Express.Multer.File[]) {
+  async files(files: Express.Multer.File[], body: Request['body']) {
+    // files are stored inside a files object
+    if (files) {
       console.log('Files:');
-      console.log(req.files);
+      console.log(files);
     }
     // text messages are stored inside req.body
-    if (Object.keys(req.body).length > 0) {
+    if (Object.keys(body).length > 0) {
       console.log('Text messages:');
-      console.log(req.body);
+      console.log(body);
     }
-    res.json({result: {text: 'This is a respone from the example server. Thankyou for your message!'}});
+    return {
+      result: {
+        text: 'This is a respone from a NestJs server. Thankyou for your message!',
+      },
+    };
   }
 }
