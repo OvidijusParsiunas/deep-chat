@@ -3,6 +3,8 @@ import {Request, Response} from 'express';
 export class Basic {
   public static async chat(body: Request['body'], res: Response) {
     console.log(body);
+    // sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
     res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
   }
 
@@ -20,6 +22,8 @@ export class Basic {
     setTimeout(() => {
       const chunk = responseChunks[chunkIndex];
       if (chunk) {
+        // sends response back to Deep Chat using the Result format:
+        // https://deepchat.dev/docs/connect/#Result
         res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
         Basic.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
@@ -39,6 +43,8 @@ export class Basic {
       console.log('Text messages:');
       console.log(req.body);
     }
+    // sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
     res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
   }
 }

@@ -5,6 +5,8 @@ import {Request, Response} from 'express';
 export class Basic {
   async chat(body: Request['body']) {
     console.log(body);
+    // sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
     return {
       result: {
         text: 'This is a respone from a NestJs server. Thankyou for your message!',
@@ -26,6 +28,8 @@ export class Basic {
     setTimeout(() => {
       const chunk = responseChunks[chunkIndex];
       if (chunk) {
+        // sends response back to Deep Chat using the Result format:
+        // https://deepchat.dev/docs/connect/#Result
         res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
         Basic.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
@@ -45,6 +49,8 @@ export class Basic {
       console.log('Text messages:');
       console.log(body);
     }
+    // sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
     return {
       result: {
         text: 'This is a respone from a NestJs server. Thankyou for your message!',
