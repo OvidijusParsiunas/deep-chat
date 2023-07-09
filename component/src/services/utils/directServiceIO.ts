@@ -20,7 +20,7 @@ export class DirectServiceIO extends BaseServiceIO {
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
       buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, existingFileTypes);
-    Object.assign(this.rawBody, deepChat.request?.body);
+    Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
     if (apiKey) this.setApiKeyProperties(apiKey);

@@ -7,3 +7,12 @@ deep-chat {
   display: flex;
   justify-content: center;
 }
+
+.components {
+  display: flex;
+  justify-content: center;
+}
+
+.components > * {
+  margin: 0 20px;
+}

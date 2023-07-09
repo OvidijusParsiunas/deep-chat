@@ -15,9 +15,9 @@ Outgoing request body contains all of the messages from the chat (to allow the t
 - When sending **text** based messages only, the request body will have the following JSON type: <br />
   {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
 
-// WORK - all messages should use the format above
-
-- When sending messages that contains **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type.
+- When sending messages that contains **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
+  where files are encapsulated inside an array property called _"files"_ and each text message is stored inside a _"message"_ property with a corresponding index: <br />
+  {`files: File[]`, [`message1: MessageContent`](./messages/#MessageContent), [`message2: MessageContent`](./messages/#MessageContent)... } <br />
 
 :::tip
 To limit the number of messages included in the request - use the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property.
@@ -59,7 +59,7 @@ Configuration for the outgoing message HTTP requests.
       url: 'https://customapi.com/message',
       method: 'POST',
       headers: {customName: 'customHeaderValue'},
-      body: {field: 'value'},
+      additionalBodyProps: {field: 'value'},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -73,7 +73,7 @@ Configuration for the outgoing message HTTP requests.
     "url": "https://customapi.com/message",
     "method": "POST",
     "headers": {"customName": "customHeaderValue"},
-    "body": {"field": "value"}
+    "additionalBodyProps": {"field": "value"}
   }'
 ></deep-chat>
 ```
@@ -89,7 +89,7 @@ Configuration for the outgoing message HTTP requests.
     "url": "https://customapi.com/message",
     "method": "POST",
     "headers": {"customName": "customHeaderValue"},
-    "body": {"field": "value"}
+    "additionalBodyProps": {"field": "value"}
   }'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
@@ -208,13 +208,13 @@ Types shared with other component properties:
   &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `body?: {[string]: any}` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `additionalBodyProps?: {[string]: any}` <br />
   }
 
 - Default: _{ method: "POST" }_
 
 Object used to configure the outgoing messages' HTTP request settings. <br />
-`body` is used to add additional key value properties to the outgoing message body.
+`additionalBodyProps` is used to add additional key value properties to the outgoing message body.
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -223,7 +223,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
       url: 'https://customapi.com/message',
       method: 'POST',
       headers: {customName: 'customHeaderValue'},
-      body: {customBodyField: 'customBodyValue'},
+      additionalBodyProps: {customBodyField: 'customBodyValue'},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -237,7 +237,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
     "url": "https://customapi.com/message",
     "method": "POST",
     "headers": {"customName": "customHeaderValue"},
-    "body": {"customBodyField": "customBodyValue"}
+    "additionalBodyProps": {"customBodyField": "customBodyValue"}
   }'
 ></deep-chat>
 ```
@@ -253,7 +253,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
     "url": "https://customapi.com/message",
     "method": "POST",
     "headers": {"customName": "customHeaderValue"},
-    "body": {"customBodyField": "customBodyValue"}
+    "additionalBodyProps": {"customBodyField": "customBodyValue"}
   }'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>

@@ -31,7 +31,7 @@ export class BaseServiceIO implements ServiceIO {
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
     this.deepChat = deepChat;
     this.demo = demo;
-    Object.assign(this.rawBody, deepChat.request?.body);
+    Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
     this._isStream = !!deepChat.stream;
     this.totalMessagesMaxCharLength = deepChat?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
     this.maxMessages = deepChat?.requestBodyMessageLimits?.maxMessages;
@@ -49,11 +49,10 @@ export class BaseServiceIO implements ServiceIO {
 
   private static createCustomFormDataBody(body: any, messages: MessageContent[], files: File[]) {
     const formData = new FormData();
-    files.forEach((file, index) => formData.append(`file${index + 1}`, file));
+    files.forEach((file) => formData.append(`files`, file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
-    let textMessageIndex = 0;
-    messages.forEach((message) => {
-      if (message.text) formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
+    messages.forEach((message, index) => {
+      if (message.text) formData.append(`message${index + 1}`, JSON.stringify(message));
     });
     return formData;
   }
@@ -74,12 +73,19 @@ export class BaseServiceIO implements ServiceIO {
   callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers,
       streamHandlers: StreamHandlers, _?: File[]) {
     const body = {messages: pMessages, ...this.rawBody};
+    let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
+    if (!this.requestSettings.headers?.['Content-Type']) {
+      this.requestSettings.headers ??= {};
+      this.requestSettings.headers['Content-Type'] ??= 'application/json';
+      tempHeaderSet = true;
+    }
     if (this._isStream) {
       HTTPRequest.requestStream(this, body, messages,
         streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
     } else {
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
+    if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
   // prettier-ignore

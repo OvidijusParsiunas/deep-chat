@@ -17,6 +17,7 @@
 - Support for MarkDown to help structure text and render code
 - Introduction panel and dynamic modals to describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
+- Support for all major ui frameworks/libraries
 - Everything is customizable!
 
 ### :computer: Getting started
@@ -41,12 +42,12 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-14.png)
+![alt text](./assets/readme/connect-16.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
 ```
-<deep-chat request='{"url":"https://targetservice.com/message"}'/>
+<deep-chat request='{"url":"https://service.com/message"}'/>
 ```
 
 The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
@@ -55,7 +56,7 @@ If you want to connect without changing the target service, use the `requestInte
 
 ### :electric_plug: Direct connection
 
-![alt text](./assets/readme/direct-connect-12.png)
+![alt text](./assets/readme/direct-connect-14.png)
 
 Connect to popular AI APIs directly from the browser via the use of the `directConnection` property:
 
@@ -72,9 +73,9 @@ Currently supported AI APIs:
 
 ### :camera: :microphone: Camera and Microphone
 
-![alt text](./assets/readme/capture-9.png)
+![alt text](./assets/readme/capture-12.png)
 
-Use Deep Chat to capture photos using your webcam and record audio via the microphone. You can enable these features with the [`camera`](HERE) and [`microphone`](HERE) properties:
+Use Deep Chat to capture photos with your webcam and record audio via the microphone. You can enable these features using the [`camera`](HERE) and [`microphone`](HERE) properties:
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />

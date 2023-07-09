@@ -5,5 +5,5 @@ export interface Request {
   url?: string;
   method?: string;
   headers?: GenericObject<string>;
-  body?: GenericObject<any>;
+  additionalBodyProps?: GenericObject<any>;
 }

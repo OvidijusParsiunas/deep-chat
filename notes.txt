@@ -7,3 +7,11 @@ Java example
 
 Potential features:
 display character limit like in bing
+
+Updating package version Checklist:
+
+Run npm run build:bundle
+Update Installation
+Update CDN references - in doc Live VanillaJS Example sections.
+Update React wrapper
+Update UI example for servers

@@ -55,6 +55,7 @@ export class HTTPRequest {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
+        console.error('Failed to open stream');
         throw new Error('error');
       },
       onmessage(message: EventSourceMessage) {
@@ -66,16 +67,17 @@ export class HTTPRequest {
         }
       },
       onerror(err) {
-        console.error(err);
-        messages.addNewErrorMessage('service', err);
         onClose();
-        throw new Error('error'); // need to throw otherwise stream will retry infinitely
+        throw new Error(err); // need to throw otherwise stream will retry infinitely
       },
       onclose() {
         messages.finaliseStreamedMessage();
         onClose();
       },
       signal: abortStream.signal,
+    }).catch((err) => {
+      console.error(err);
+      messages.addNewErrorMessage('service', 'Stream error');
     });
   }
 
