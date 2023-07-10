@@ -107,6 +107,11 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+      algolia: {
+        appId: 'R9MZ0HQPWJ',
+        apiKey: 'b86f7a2cbd4f547d926b48432455a217',
+        indexName: 'deepchat',
+      },
     }),
 };
 
