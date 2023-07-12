@@ -47,6 +47,10 @@ function App() {
             microphone={true}
             mixedFiles={true}
             requestBodyMessageLimits={{maxMessages: 1}}
+            textInput={{placeholder: {text: 'Send a file!'}}}
+            validateMessageBeforeSending={(_?: string, files?: File[]) => {
+              return files && files.length > 0;
+            }}
           />
         </div>
         <h1>Server for OpenAI</h1>
