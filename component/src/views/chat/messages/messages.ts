@@ -184,7 +184,7 @@ export class Messages {
   }
 
   public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
-    if (data.text !== undefined) {
+    if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
     } else if (data.files)
       data.files.forEach((fileData) => {

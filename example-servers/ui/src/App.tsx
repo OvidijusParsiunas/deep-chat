@@ -9,7 +9,7 @@ function App() {
           Deep Chat test ground for{' '}
           <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers">Example Servers</a>
         </h1>
-        <h1>Server</h1>
+        <h1>Server for custom API</h1>
         <div className="components">
           {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
               requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}

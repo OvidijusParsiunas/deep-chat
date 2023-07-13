@@ -42,7 +42,7 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-19.png)
+![alt text](./assets/readme/connect-23.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
@@ -56,7 +56,7 @@ Alternatively, if you want to connect without changing the target service, use t
 
 ### :electric_plug: Direct connection
 
-![alt text](./assets/readme/direct-connect-17.png)
+![alt text](./assets/readme/direct-connect-19.png)
 
 Connect to popular AI APIs directly from the browser via the use of the `directConnection` property:
 
