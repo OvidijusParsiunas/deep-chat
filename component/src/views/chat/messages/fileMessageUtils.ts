@@ -42,7 +42,7 @@ export class FileMessageUtils {
         .finally(() => {
           setTimeout(() => {
             messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
-          }, 10); // this timeout is used to allow the new image element dimensions to be rendered
+          }, 40); // this timeout is used to allow the new image element dimensions to be rendered
         });
     } catch (err) {
       messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;

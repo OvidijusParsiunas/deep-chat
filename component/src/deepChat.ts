@@ -9,10 +9,10 @@ import {DirectServiceIO} from './services/utils/directServiceIO';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
-import {RequestBodyMessageLimits} from './types/chatLimits';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {SubmitButtonStyles} from './types/submitButton';
+import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {MicrophoneStyles} from './types/microphone';
@@ -40,7 +40,7 @@ export class DeepChat extends InternalHTML {
   stream?: boolean;
 
   @Property('object')
-  requestBodyMessageLimits?: RequestBodyMessageLimits;
+  requestBodyLimits?: RequestBodyLimits;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;

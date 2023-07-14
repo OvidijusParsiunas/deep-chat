@@ -11,11 +11,8 @@ function App() {
         </h1>
         <h1>Server for custom API</h1>
         <div className="components">
-          {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
-              requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}
-
-          {/* If you don't want to or can't edit the target service, you can preprocess the outgoing message using
-              responseInterceptor and preprocess the incoming message using responseInterceptor:
+          {/* If you don't want to or can't edit the target service, you can process the outgoing message using
+              responseInterceptor and the incoming message using responseInterceptor:
               https://deepchat.dev/docs/interceptors */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
@@ -46,7 +43,6 @@ function App() {
             camera={true}
             microphone={true}
             mixedFiles={true}
-            requestBodyMessageLimits={{maxMessages: 1}}
             textInput={{placeholder: {text: 'Send a file!'}}}
             validateMessageBeforeSending={(_?: string, files?: File[]) => {
               return files && files.length > 0;
@@ -56,8 +52,6 @@ function App() {
         <h1>Server for OpenAI</h1>
         <h3>Make sure to set the OPENAI_API_KEY environment variable in your server</h3>
         <div className="components">
-          {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
-              requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}
           {/* additionalBodyProps is used to set other properties that will be sent to the server along with the message:
               https://deepchat.dev/docs/connect#request */}
           <DeepChat
@@ -76,7 +70,6 @@ function App() {
             introMessage="Send a 1024x1024 .png image through an example server to OpenAI and generate its variation."
             request={{url: 'http://localhost:8080/openai-image'}}
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
-            requestBodyMessageLimits={{maxMessages: 1}}
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
           />
         </div>

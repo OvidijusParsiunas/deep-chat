@@ -101,6 +101,7 @@ export class Messages {
         this.addNewMessage({files: [message.file]}, message.role === 'ai', true, true);
       }
     });
+    setTimeout(() => (this.elementRef.scrollTop = this.elementRef.scrollHeight));
   }
 
   // prettier-ignore

@@ -1,4 +1,3 @@
-import {KeyVerificationHandlers, CompletionsHandlers, ServiceFileTypes, StreamHandlers, ServiceIO} from '../serviceIO';
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {CustomServiceResponse} from '../../types/customService';
@@ -11,6 +10,14 @@ import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
+import {
+  KeyVerificationHandlers,
+  CompletionsHandlers,
+  ServiceFileTypes,
+  RequestContents,
+  StreamHandlers,
+  ServiceIO,
+} from '../serviceIO';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class BaseServiceIO implements ServiceIO {
@@ -33,8 +40,8 @@ export class BaseServiceIO implements ServiceIO {
     this.demo = demo;
     Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
     this._isStream = !!deepChat.stream;
-    this.totalMessagesMaxCharLength = deepChat?.requestBodyMessageLimits?.totalMessagesMaxCharLength;
-    this.maxMessages = deepChat?.requestBodyMessageLimits?.maxMessages;
+    this.totalMessagesMaxCharLength = deepChat?.requestBodyLimits?.totalMessagesMaxCharLength;
+    this.maxMessages = deepChat?.requestBodyLimits?.maxMessages;
     SetFileTypes.set(deepChat, this, existingFileTypes);
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
@@ -100,14 +107,15 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   // prettier-ignore
-  callAPI(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers, files?: File[]) {
+  callAPI(requestContents: RequestContents, messages: Messages, completionsHandlers: CompletionsHandlers,
+      streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
-      messages.messages, 0, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (files && !this._directServiceRequiresFiles) {
-      this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, files);
+      requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
+    if (requestContents.files && !this._directServiceRequiresFiles) {
+      this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, requestContents.files);
     } else {
-      this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, files);
+      this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, requestContents.files);
     }
   }
 

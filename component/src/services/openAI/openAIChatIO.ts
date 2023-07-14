@@ -29,6 +29,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }
+    if (this.maxMessages === undefined) this.maxMessages = -1;
     this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
   }
 
@@ -41,21 +42,21 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const processedMessages = MessageLimitUtils.processMessages(messages, this._systemMessage.content.length,
-        this.maxMessages, totalMessagesMaxCharLength)
+    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
+        totalMessagesMaxCharLength - this._systemMessage.content.length)
       .map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[],
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
       completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
-    const body = this.preprocessBody(this.rawBody, messages.messages);
+    const body = this.preprocessBody(this.rawBody, pMessages);
     if (this._isStream || body.stream) {
       body.stream = true;
       HTTPRequest.requestStream(this, body, messages,

@@ -13,9 +13,9 @@ const Logos = React.forwardRef((_, ref) => {
     <div
       id="start-panel-logos"
       ref={ref}
-      style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: '110px'}}
+      style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: '125px'}}
     >
-      <div style={{position: 'absolute', width: '1060px', height: '2px', backgroundColor: '#e5e5e5', top: '-55px'}}></div>
+      <div style={{position: 'absolute', width: '1060px', height: '2px', backgroundColor: '#e5e5e5', top: '-60px'}}></div>
       <div
         className="start-panel-logo"
         style={{

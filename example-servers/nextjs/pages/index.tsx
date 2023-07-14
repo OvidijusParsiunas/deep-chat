@@ -2,11 +2,8 @@ import styles from '../styles/Index.module.css';
 import dynamic from 'next/dynamic';
 
 export default function IndexPage() {
-  // need to import the component dynamically as it uses the 'window' property
-  // to calculate its dimensions and listen to user input events - which are only
-  // available in the browser
-  // if you have found a better way of adding the component in next, please create a new
-  // issue ticket so we can update the example!
+  // Need to import the component dynamically as it uses the 'window' property.
+  // If you have found a better way of adding the component in next, please create a new issue ticket so we can update the example!
   const DeepChat = dynamic(() => import('deep-chat-react').then((mod) => mod.DeepChat), {
     ssr: false,
   });
@@ -17,12 +14,9 @@ export default function IndexPage() {
         <div>
           <h1>Server for custom API</h1>
           <div className={styles.components}>
-            {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
-              requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}
-
-            {/* If you don't want to or can't edit the target service, you can preprocess the outgoing message using
-              responseInterceptor and preprocess the incoming message using responseInterceptor:
-              https://deepchat.dev/docs/interceptors */}
+            {/* If you don't want to or can't edit the target service, you can process the outgoing message using
+                responseInterceptor and the incoming message using responseInterceptor:
+                https://deepchat.dev/docs/interceptors */}
             <DeepChat
               containerStyle={{borderRadius: '10px'}}
               introMessage="Send a chat message to NestJS backend. "
@@ -61,10 +55,8 @@ export default function IndexPage() {
           <h1>Server for OpenAI</h1>
           <h3>Make sure to set the OPENAI_API_KEY environment variable in your server</h3>
           <div className={styles.components}>
-            {/* you can add the requestBodyMessageLimits property to limit the number of messages included in the request:
-              requestBodyMessageLimits={{maxMessages: 1}} - https://deepchat.dev/docs/connect#requestBodyMessageLimits */}
             {/* additionalBodyProps is used to set other properties that will be sent to the server along with the message:
-              https://deepchat.dev/docs/connect#request */}
+                https://deepchat.dev/docs/connect#request */}
             <DeepChat
               containerStyle={{borderRadius: '10px'}}
               introMessage="Send a chat message through NestJS backend to OpenAI. "

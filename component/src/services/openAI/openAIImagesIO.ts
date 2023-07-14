@@ -22,8 +22,8 @@ export class OpenAIImagesIO extends DirectServiceIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
     <p><b>Insert text</b> to generate an image.</p>
-    <p><b>Upload 1</b> image to generate its variation and optionally insert text to specify the change.</p>
-    <p><b>Upload 2</b> images where the second is a copy of the first with a transparent area where the edit should
+    <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>
+    <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should
       take place and text to specify the edit.</p>
     <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
 
@@ -34,7 +34,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const {directConnection, textInput} = deepChat;
     const apiKey = directConnection?.openAI;
-    const defaultFile = {images: {files: {acceptedFormats: 'png', maxNumberOfFiles: 2}}};
+    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
@@ -73,7 +73,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   private callApiWithImage(messages: Messages, pMessages: MessageContent[],
       completionsHandlers: CompletionsHandlers, files: File[]) {
     let formData: FormData;
-    const lastMessage = pMessages[pMessages.length - files.length + 1]?.text?.trim();
+    const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_EDIT_URL;

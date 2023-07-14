@@ -8,6 +8,11 @@ import {Result} from '../types/result';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
+export interface RequestContents {
+  text?: string;
+  files?: File[];
+}
+
 export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
 
 export interface CompletionsHandlers {
@@ -71,8 +76,8 @@ export interface ServiceIO {
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
   // prettier-ignore
-  callAPI(messages: Messages, completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers,
-    files?: File[]): void;
+  callAPI(requestContents: RequestContents, messages: Messages,
+    completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
 
   extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
 

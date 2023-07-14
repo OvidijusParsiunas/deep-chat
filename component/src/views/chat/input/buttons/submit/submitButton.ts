@@ -106,11 +106,11 @@ export class SubmitButton extends InputButton<Styles> {
       uploadedFilesData = this._fileAttachments.getAllFileData();
       fileData = uploadedFilesData?.map((fileData) => fileData.file);
     }
-    const validationText = userText === '' ? undefined : userText;
+    const submittedText = userText === '' ? undefined : userText;
     if (this._isRequestInProgress) return;
     if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
-      if (!this._serviceIO.deepChat.validateMessageBeforeSending(validationText, fileData)) return;
-    } else if (!this._serviceIO.canSendMessage(validationText, fileData)) return;
+      if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
+    } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;
     this.changeToLoadingIcon();
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
@@ -124,7 +124,8 @@ export class SubmitButton extends InputButton<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
-    this._serviceIO.callAPI(this._messages, completionsHandlers, streamHandlers, fileData);
+    const requestContents = {text: submittedText, files: fileData};
+    this._serviceIO.callAPI(requestContents, this._messages, completionsHandlers, streamHandlers);
     if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 

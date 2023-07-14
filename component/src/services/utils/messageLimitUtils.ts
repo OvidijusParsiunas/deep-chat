@@ -1,16 +1,9 @@
 import {MessageContent} from '../../types/messages';
+import {RequestContents} from '../serviceIO';
 
 export class MessageLimitUtils {
-  // prettier-ignore
-  // systemMessageLength is currently used for OpenAI
-  public static processMessages(messages: MessageContent[],
-      systemMessageLength: number, maxMessages?: number, totalMessagesMaxCharLength?: number) {
+  public static getCharacterLimitMessages(messages: MessageContent[], limit: number) {
     let totalCharacters = 0;
-    if (maxMessages !== undefined && maxMessages > 0) {
-      messages = messages.slice(Math.max(messages.length - maxMessages, 0));
-    }
-    if (totalMessagesMaxCharLength === undefined) return messages;
-    const limit = totalMessagesMaxCharLength - systemMessageLength;
     let i = messages.length - 1;
     for (i; i >= 0; i -= 1) {
       const text = messages[i]?.text;
@@ -23,5 +16,41 @@ export class MessageLimitUtils {
       }
     }
     return messages.slice(Math.max(i, 0));
+  }
+
+  private static getRequestMessages(requestContents: RequestContents, messages: MessageContent[]) {
+    const requestMessages = [];
+    let numberOfFilesToFind = requestContents.files?.length || 0;
+    let searchingForText = !!requestContents.text;
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      const message = messages[i];
+      requestMessages.push(message);
+      if (message.file) {
+        numberOfFilesToFind -= 1;
+      } else if (message.text) {
+        searchingForText = false;
+      }
+      if (numberOfFilesToFind === 0 && !searchingForText) break;
+    }
+    return requestMessages;
+  }
+
+  private static getMaxMessages(messages: MessageContent[], maxMessages: number) {
+    return messages.slice(Math.max(messages.length - maxMessages, 0));
+  }
+
+  // prettier-ignore
+  // if maxMessages is not defined we send all messages
+  // if maxMessages above 0 we send that number
+  // if maxMessages 0 or below we send only what is in the request
+  public static processMessages(requestContents: RequestContents, messages: MessageContent[],
+      maxMessages?: number, totalMessagesMaxCharLength?: number) {
+    if (maxMessages !== undefined) {
+      if (maxMessages > 0) messages = MessageLimitUtils.getMaxMessages(messages, maxMessages);
+    } else {
+      messages = MessageLimitUtils.getRequestMessages(requestContents, messages);
+    }
+    if (totalMessagesMaxCharLength === undefined) return messages;
+    return MessageLimitUtils.getCharacterLimitMessages(messages, totalMessagesMaxCharLength);
   }
 }

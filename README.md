@@ -44,21 +44,21 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ![alt text](./assets/readme/connect-24.png)
 
-Connecting to a service is simple, all you need to do is define its API details using the `request` property:
+Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
 
 ```
 <deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
-The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
+The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out full [project examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
 
-Alternatively, if you want to connect without changing the target service, use the `requestInterceptor` and `responseInterceptor` properties to augment the incoming and outgoing request details.
+Alternatively, if you want to connect without changing the target service, use the [`requestInterceptor`](https://deepchat.dev/docs/interceptors#requestInterceptor) and [`responseInterceptor`](https://deepchat.dev/docs/interceptors#responseInterceptor) properties to augment the incoming and outgoing request details.
 
 ### :electric_plug: Direct connection
 
 ![alt text](./assets/readme/direct-connect-19.png)
 
-Connect to popular AI APIs directly from the browser via the use of the `directConnection` property:
+Connect to popular AI APIs directly from the browser via the use of the [`directConnection`](https://deepchat.dev/docs/directConnection/#directConnection) property:
 
 ```
 <deep-chat directConnection='{"openAI":true}'/>
@@ -66,16 +66,16 @@ Connect to popular AI APIs directly from the browser via the use of the `directC
 <deep-chat directConnection='{"openAI":{"key": "optional-key-here"}}'/>
 ```
 
-Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the `request` property described above with a combination of a [proxy service](HERE).
+Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`request`](https://deepchat.dev/docs/connect#request) property described above with a combination of a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
 
 Currently supported direct API connections:
-[OpenAI](HERE), [HuggingFace](HERE), [Cohere](HERE), [Azure](HERE), [AssembleAI](HERE)
+[OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssembleAI](https://www.assemblyai.com/)
 
 ### :camera: :microphone: Camera and Microphone
 
 ![alt text](./assets/readme/capture-14.png)
 
-Use Deep Chat to capture photos with your webcam and record audio with the microphone. You can enable this using the [`camera`](HERE) and [`microphone`](HERE) properties:
+Use Deep Chat to capture photos with your webcam and record audio with the microphone. You can enable this using the [`camera`](https://deepchat.dev/docs/files#camera) and [`microphone`](https://deepchat.dev/docs/files#microphone) properties:
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
@@ -85,7 +85,7 @@ Use Deep Chat to capture photos with your webcam and record audio with the micro
 
 ![alt text](./assets/readme/title.png)
 
-Input text with your voice using Speech To Text capabilities and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
+Input text with your voice using Speech To Text capabilities and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties.
 
 ```
 <deep-chat speechToText="true" microphone="textToSpeech" ...other properties />

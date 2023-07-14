@@ -10,18 +10,14 @@ This is achieved by simply defining the request details inside the [`request`](#
 
 <h3>Request message</h3>
 
-Outgoing request body contains all of the messages from the chat (to allow the target service to interpret its context as needed) and is encapsulated in one of the following formats:
+The outgoing request body is encapsulated in one of the following formats:
 
 - When sending **text** based messages only, the request body will have the following JSON type: <br />
   {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
 
-- When sending messages that contains **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
-  where files are encapsulated inside an array property called _"files"_ and each text message is stored inside a _"message"_ property with a corresponding index: <br />
+- When sending messages that contain **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
+  where files are set inside an array property called _"files"_ and each text message is stored inside a _"message{index}"_ property with a corresponding index: <br />
   {`files: File[]`, [`message1: MessageContent`](./messages/#MessageContent), [`message2: MessageContent`](./messages/#MessageContent)... } <br />
-
-:::tip
-To limit the number of messages included in the request - use the [`requestBodyMessageLimits`](#requestBodyMessageLimits) property.
-:::
 
 <h3>Response message</h3>
 
@@ -143,20 +139,22 @@ Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main
 
 <LineBreak></LineBreak>
 
-### `requestBodyMessageLimits` {#requestBodyMessageLimits}
+### `requestBodyLimits` {#requestBodyLimits}
 
 - Type: {`maxMessages?: number`, `totalMessagesMaxCharLength?: number`}
 
-Used to limit the message content that is going to be included in the outgoing requests. <br />
-`maxMessages` is the maximum number of messages counting from the most recent one. <br />
-`totalMessagesMaxCharLength` is the total maximum number of text characters that can be included counting from the most recent message. <br />
+Used to limit the content that is going to be included in the outgoing requests. <br />
+`maxMessages` is the maximum number of messages counting from the most recent one. If this is set to a number higher than _0_ such as _1_ - the outgoing request will only include the new user message,
+if it is _2_ - it will also include the message before the latest one (from AI or the user) and so on... If the number is _0_ or below - the request will include all messages in the chat. If
+it is _undefined_, the request will only include the input text/files. <br />
+`totalMessagesMaxCharLength` is the total maximum number of text characters sent in the request counting from the most recent message. <br />
 These limits do not include the [`introMessage`](./messages#introMessage).
 
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     introMessage={`Observe the data that is going to be sent below.`}
-    requestBodyMessageLimits={{
+    requestBodyLimits={{
       totalMessagesMaxCharLength: 20,
       maxMessages: 2,
     }}
@@ -169,7 +167,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
 
 ```html
 <deep-chat
-  requestBodyMessageLimits='{
+  requestBodyLimits='{
     "totalMessagesMaxCharLength": 20,
     "maxMessages": 2
   }'
@@ -183,7 +181,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  requestBodyMessageLimits='{
+  requestBodyLimits='{
     "totalMessagesMaxCharLength": 20,
     "maxMessages": 2
   }'

@@ -1,4 +1,4 @@
-export interface RequestBodyMessageLimits {
+export interface RequestBodyLimits {
   maxMessages?: number;
   totalMessagesMaxCharLength?: number;
 }
