@@ -51,14 +51,14 @@ public class OpenAIService {
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.openai.com/v1/chat/completions");
 
     try {
-      // send the request to openAI
+      // Send the request to openAI
       ResponseEntity<OpenAIChatResult> response = restTemplate.exchange(
         builder.toUriString(), HttpMethod.POST, requestEntity,OpenAIChatResult.class);
 
       if (response.getStatusCode() == HttpStatus.OK) {
         OpenAIChatResult responseBody = response.getBody();
         if (responseBody == null) throw new Exception("Unexpected response from OpenAI");
-        // sends response back to Deep Chat using the Result format:
+        // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
         return new DeepChatTextRespose(responseBody.getChoices()[0].getMessage().getContent());
       } else {
@@ -79,7 +79,7 @@ public class OpenAIService {
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setBearerAuth(openAIAPIKey);
       WebClient client = WebClient.create("https://api.openai.com/v1");
-      // send the request to openAI
+      // Send the request to openAI
       return client.post()
         .uri("/chat/completions")
         .headers(httpHeaders -> httpHeaders.addAll(headers))
@@ -105,7 +105,7 @@ public class OpenAIService {
               Map<String, Object> deltaObj = (Map<String, Object>) choice.getOrDefault("delta", Collections.emptyMap());
               delta.append(deltaObj.getOrDefault("content", ""));
             }
-            // sends response back to Deep Chat using the Result format:
+            // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
             return Flux.just(new DeepChatTextRespose(delta.toString()));
           } catch (JsonProcessingException e) {
@@ -120,6 +120,8 @@ public class OpenAIService {
   }
 
   private static OpenAIChatBody createOpenAIChatBody(DeepChatRequestBody requestBody, Boolean stream) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     DeepChatRequestMessage[] requestMessages = requestBody.getMessages();
     OpenAIChatMessage[] opneAIChatMessages = new OpenAIChatMessage[requestMessages.length];
     for (int i = 0; i < requestMessages.length; i ++) {
@@ -130,6 +132,8 @@ public class OpenAIService {
   }
   
   public DeepChatFileResponse imageVariation(@RequestPart("files") List<MultipartFile> files) throws Exception {
+    // Files are stored inside a form using Deep Chat request FormData format:
+    // https://deepchat.dev/docs/connect
     MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
     if (files.size() > 0) {
       org.springframework.web.multipart.MultipartFile imageFile = files.get(0);
@@ -143,12 +147,14 @@ public class OpenAIService {
     RestTemplate restTemplate = new RestTemplate();
     String url = "https://api.openai.com/v1/images/variations";
     try {
-      // send the request to openAI
+      // Send the request to openAI
       ResponseEntity<OpenAIImageResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, OpenAIImageResult.class);
 
       if (responseEntity.getStatusCode() == HttpStatus.OK) {
         OpenAIImageResult responseData = responseEntity.getBody();
         if (responseData == null) throw new Exception("Unexpected response from OpenAI");
+        // Sends response back to Deep Chat using the Result format:
+        // https://deepchat.dev/docs/connect/#Result
         return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(responseData.getData()[0].getUrl(), "image")));
       }
     } catch (Exception e) {

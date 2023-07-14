@@ -549,25 +549,29 @@ function ComponentsLight() {
 }
 
 function Components() {
-  return (
-    <BrowserOnly>
-      {() => {
-        const {colorMode} = useColorMode();
-        return colorMode === 'dark' ? <ComponentsDark></ComponentsDark> : <ComponentsLight></ComponentsLight>;
-      }}
-    </BrowserOnly>
-  );
+  const {colorMode} = useColorMode();
+  return colorMode === 'dark' ? <ComponentsDark></ComponentsDark> : <ComponentsLight></ComponentsLight>;
 }
 
 export default function Customize() {
   return (
-    <div id="customize">
-      <OnVisibleAnimation beforeClass={'customize-content-bottom'} afterClass={'customize-content-top'} timeoutMS={50}>
-        <div id="customize-sub-header" className="feature-sub-header">
-          Customize with no limits
-        </div>
-        <Components></Components>
-      </OnVisibleAnimation>
-    </div>
+    <BrowserOnly>
+      {() => {
+        return (
+          <div id="customize">
+            <OnVisibleAnimation
+              beforeClass={'customize-content-bottom'}
+              afterClass={'customize-content-top'}
+              timeoutMS={50}
+            >
+              <div id="customize-sub-header" className="feature-sub-header">
+                Customize with no limits
+              </div>
+              <Components></Components>
+            </OnVisibleAnimation>
+          </div>
+        );
+      }}
+    </BrowserOnly>
   );
 }

@@ -4,8 +4,10 @@ import {Request, Response} from 'express';
 @Injectable()
 export class Basic {
   async chat(body: Request['body']) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     console.log(body);
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
       result: {
@@ -15,6 +17,8 @@ export class Basic {
   }
 
   async chatStream(body: Request['body'], res: Response) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     console.log(body);
     const responseChunks = 'This is a respone from a NestJs server. Thankyou for your message!'.split(' ');
     res.setHeader('Content-Type', 'text/event-stream');
@@ -28,7 +32,7 @@ export class Basic {
     setTimeout(() => {
       const chunk = responseChunks[chunkIndex];
       if (chunk) {
-        // sends response back to Deep Chat using the Result format:
+        // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
         res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
         Basic.sendStream(res, responseChunks, chunkIndex + 1);
@@ -39,17 +43,19 @@ export class Basic {
   }
 
   async files(files: Express.Multer.File[], body: Request['body']) {
-    // files are stored inside a files object
+    // Files are stored inside a form using Deep Chat request FormData format:
+    // https://deepchat.dev/docs/connect
     if (files) {
       console.log('Files:');
       console.log(files);
     }
-    // text messages are stored inside req.body
+    // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     if (Object.keys(body).length > 0) {
       console.log('Text messages:');
       console.log(body);
     }
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
       result: {

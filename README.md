@@ -15,7 +15,7 @@
 - Speech To Text for message input
 - Text To Speech to hear message responses
 - Support for MarkDown to help structure text and render code
-- Introduction panel and dynamic modals to describe functionality for your users
+- Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Azure directly from the browser
 - Support for all major ui frameworks/libraries
 - Everything is customizable!
@@ -42,12 +42,12 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-23.png)
+![alt text](./assets/readme/connect-24.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the `request` property:
 
 ```
-<deep-chat request='{"url":"https://service.com/message"}'/>
+<deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
 The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](Connect) section in documentation and check out full [project examples](HERE).
@@ -66,16 +66,16 @@ Connect to popular AI APIs directly from the browser via the use of the `directC
 <deep-chat directConnection='{"openAI":{"key": "optional-key-here"}}'/>
 ```
 
-Please note that this approach should ONLY be used for local/prototyping/demo purposes as it exposes the API Key to the browser. When ready to go live, please switch to using the `request` property described above with a combination of an [intermediary proxy service](HERE).
+Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the `request` property described above with a combination of a [proxy service](HERE).
 
-Currently supported AI APIs:
+Currently supported direct API connections:
 [OpenAI](HERE), [HuggingFace](HERE), [Cohere](HERE), [Azure](HERE), [AssembleAI](HERE)
 
 ### :camera: :microphone: Camera and Microphone
 
 ![alt text](./assets/readme/capture-14.png)
 
-Use Deep Chat to capture photos with your webcam and record audio via the microphone. You can enable these features using the [`camera`](HERE) and [`microphone`](HERE) properties:
+Use Deep Chat to capture photos with your webcam and record audio with the microphone. You can enable this using the [`camera`](HERE) and [`microphone`](HERE) properties:
 
 ```
 <deep-chat camera="true" microphone="true" ...other properties />
@@ -85,7 +85,7 @@ Use Deep Chat to capture photos with your webcam and record audio via the microp
 
 ![alt text](./assets/readme/title.png)
 
-Input text with your voice using Speech To Text and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
+Input text with your voice using Speech To Text capabilities and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](HERE) and [`textToSpeech`](HERE) properties. Read more [here](HERE).
 
 ```
 <deep-chat speechToText="true" microphone="textToSpeech" ...other properties />
@@ -93,5 +93,5 @@ Input text with your voice using Speech To Text and have the responses read out 
 
 ## :heart: Contributions
 
-Open source is built by the community for the community. All contributions to this project are welcome!
-<br> Additionally, if you have any suggestions for enhancements, ideas on how to take the project further or have discovered a bug, do not hesitate to create a new issue ticket and we will look into it as soon as possible!
+Open source is built by the community for the community. All contributions to this project are welcome!<br>
+Additionally, if you have any suggestions for enhancements, ideas on how to take the project further or have discovered a bug, do not hesitate to create a new issue ticket and we will look into it as soon as possible!

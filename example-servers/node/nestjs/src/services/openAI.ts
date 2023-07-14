@@ -6,6 +6,8 @@ import axios from 'axios';
 @Injectable()
 export class OpenAI {
   private static createChatBody(body: Request['body'], stream?: boolean) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     const chatBody = {
       messages: body.messages.map((message: {role: string; text: string}) => {
         return {
@@ -27,7 +29,7 @@ export class OpenAI {
         Authorization: 'Bearer ' + process.env.OPENAI_API_KEY,
       },
     });
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {result: {text: response.data.choices[0].message.content}};
   }
@@ -59,7 +61,7 @@ export class OpenAI {
             result.choices.forEach((choice: {delta?: {content: string}}) => {
               delta += choice.delta?.content || '';
             });
-            // sends response back to Deep Chat using the Result format:
+            // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
             res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
           }
@@ -81,6 +83,8 @@ export class OpenAI {
   }
 
   async imageVariation(files: Array<Express.Multer.File>) {
+    // Files are stored inside a form using Deep Chat request FormData format:
+    // https://deepchat.dev/docs/connect
     const formData = new FormData();
     if (files[0]) {
       formData.append(`image`, files[0].buffer, files[0].originalname);
@@ -91,7 +95,7 @@ export class OpenAI {
         Authorization: 'Bearer ' + process.env.OPENAI_API_KEY,
       },
     });
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
       result: {files: [{type: 'image', src: response.data.data[0].url}]},

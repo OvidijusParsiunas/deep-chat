@@ -4,6 +4,8 @@ import https from 'https';
 
 export class OpenAI {
   private static createChatBody(body: Request['body'], stream?: boolean) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     const chatBody = {
       messages: body.messages.map((message: {role: string; text: string}) => {
         return {role: message.role === 'ai' ? 'assistant' : message.role, content: message.text};
@@ -40,7 +42,7 @@ export class OpenAI {
             console.error(result.error);
             res.status(400).send(result.error);
           } else {
-            // sends response back to Deep Chat using the Result format:
+            // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
             res.json({result: {text: result.choices[0].message.content}});
           }
@@ -50,7 +52,7 @@ export class OpenAI {
     req.on('error', (error) => {
       res.status(400).send(error);
     });
-    // send the chat request to openAI
+    // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
   }
@@ -88,7 +90,7 @@ export class OpenAI {
               result.choices.forEach((choice: {delta?: {content: string}}) => {
                 delta += choice.delta?.content || '';
               });
-              // sends response back to Deep Chat using the Result format:
+              // Sends response back to Deep Chat using the Result format:
               // https://deepchat.dev/docs/connect/#Result
               res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
             }
@@ -109,13 +111,14 @@ export class OpenAI {
     req.on('error', (error) => {
       res.status(400).send(error);
     });
-    // send the chat request to openAI
+    // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
   }
 
   public static async imageVariation(req: Request, res: Response) {
-    // INFO - files are stored inside req.files and text messages inside req.body
+    // Files are stored inside a form using Deep Chat request FormData format:
+    // https://deepchat.dev/docs/connect
     const formData = new FormData();
     if ((req.files as Express.Multer.File[])?.[0]) {
       const imageFile = (req.files as Express.Multer.File[])?.[0];
@@ -145,7 +148,7 @@ export class OpenAI {
             console.error(result.error);
             res.status(400).send(result.error);
           } else {
-            // sends response back to Deep Chat using the Result format:
+            // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
             res.json({result: {files: [{type: 'image', src: result.data[0].url}]}});
           }
@@ -155,7 +158,7 @@ export class OpenAI {
     formReq.on('error', (error) => {
       res.status(400).send(error);
     });
-    // send the request to openAI
+    // Send the request to openAI
     formData.pipe(formReq);
     formReq.end();
   }

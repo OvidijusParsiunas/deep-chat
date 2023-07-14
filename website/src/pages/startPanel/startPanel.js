@@ -75,8 +75,8 @@ function ComponentPanel() {
   const component = React.useRef(null);
   const messageBubble = React.useRef(null);
   const messageLine = React.useRef(null);
-  setTimeout(() => displayLogos(logos.current), 600);
-  setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1700);
+  setTimeout(() => displayLogos(logos.current), 700);
+  setTimeout(() => animate(component.current, logos.current, messageLine.current, messageBubble.current), 1800);
   return (
     <div id="start-panel-animation-content-container">
       <div id="start-panel-component" ref={component} className={'start-panel-component-center'}>

@@ -5,14 +5,16 @@ export const config = {
 };
 
 export default async function handler(req: NextRequest) {
-  // files are stored inside form data
+  // Files are stored inside a form using Deep Chat request FormData format:
+  // https://deepchat.dev/docs/connect
   const formData = await req.formData();
   formData.forEach((data) => {
     if (data instanceof File) {
       console.log('File:');
       console.log(data);
     } else {
-      // if a message is sent along with files, it will also be in form data
+      // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+      // https://deepchat.dev/docs/connect
       console.log('Message:');
       console.log(data);
     }

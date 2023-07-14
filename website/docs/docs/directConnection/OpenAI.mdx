@@ -186,7 +186,7 @@ If chat responses are inaccurate, try setting the "max_tokens" to a higher numbe
 
 Connect to Open AI's [`Image Generation`](https://platform.openai.com/docs/guides/images) API to access DALL·E models. <br />
 You can either set this property to _true_ or use an object to augment the [`request body`](https://platform.openai.com/docs/api-reference/images/create): <br />
-`n` is the number of images to generate. Must be between 1 and 10. <br />
+`n` is the number of images to generate. Ranges between 1 and 10. <br />
 `size` is the pixel dimensions of the generated images. <br />
 `response_format` is the format in which the generated images are returned. <br />
 `user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
@@ -206,7 +206,7 @@ You can automatically call any of the following three APIs by combining differen
       directConnection={{
         openAI: {
           key: 'placeholder key',
-          images: {n: 2, size: '1024x1024', response_format: 'url'},
+          images: {n: 1, size: '1024x1024', response_format: 'url'},
         },
       }}
     ></DeepChatBrowser>
@@ -216,7 +216,7 @@ You can automatically call any of the following three APIs by combining differen
       containerStyle={{borderRadius: '8px'}}
       directConnection={{
         openAI: {
-          images: {n: 2, size: '1024x1024', response_format: 'url'},
+          images: {n: 1, size: '1024x1024', response_format: 'url'},
         },
       }}
     ></DeepChatBrowser>
@@ -231,7 +231,7 @@ You can automatically call any of the following three APIs by combining differen
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "images": {"n": 2, "size": "1024x1024", "response_format": "url"}
+      "images": {"n": 1, "size": "1024x1024", "response_format": "url"}
     }
   }'
 ></deep-chat>

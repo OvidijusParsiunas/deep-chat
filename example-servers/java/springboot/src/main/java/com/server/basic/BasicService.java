@@ -19,13 +19,17 @@ public class BasicService {
   private static final Logger LOGGER = LoggerFactory.getLogger(BasicService.class);
 
   public DeepChatTextRespose chat(DeepChatRequestBody requestBody) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return new DeepChatTextRespose("This is a response from a Java server. Thank you for your message!");
   }
 
   public void chatStream(DeepChatRequestBody requestBody, HttpServletResponse response) throws IOException {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
     LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
 
     String[] responseChunks = "This is a response from a Java server. Thank you for your message!".split(" ");
@@ -41,7 +45,7 @@ public class BasicService {
   private void sendStream(HttpServletResponse response, String[] responseChunks, int chunkIndex) throws IOException {
     if (chunkIndex < responseChunks.length) {
       String chunk = responseChunks[chunkIndex];
-      // sends response back to Deep Chat using the Result format:
+      // Sends response back to Deep Chat using the Result format:
       // https://deepchat.dev/docs/connect/#Result
       response.getWriter().write("data: " + "{\"result\": {\"text\": \"" + chunk + " \"}}\n\n");
       response.flushBuffer();
@@ -57,14 +61,16 @@ public class BasicService {
   }
 
   public DeepChatTextRespose files(@RequestPart("files") List<MultipartFile> files, Map<String, String> formDataProperties) {
-    // files are stored inside a form data object
+    // Files are stored inside a form using Deep Chat request FormData format:
+    // https://deepchat.dev/docs/connect
     if (!files.isEmpty()) {
       System.out.println("Files:");
       for (MultipartFile file : files) {
         String fileName = file.getOriginalFilename();
         System.out.println(fileName);
       }
-      // text messages that are sent with files are accessed in form data
+      // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+      // https://deepchat.dev/docs/connect
       if (!formDataProperties.isEmpty()) {
         System.out.println("Text messages:");
         for (Map.Entry<String, String> entry : formDataProperties.entrySet()) {
@@ -74,7 +80,7 @@ public class BasicService {
         }
       }
     }
-    // sends response back to Deep Chat using the Result format:
+    // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return new DeepChatTextRespose("This is a response from a Java server. Thank you for your message!");
   }

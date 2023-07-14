@@ -2,7 +2,6 @@
   "name": "deep-chat-server-nestjs",
   "version": "0.0.1",
   "description": "Example server for the deep-chat component",
-  "author": "",
   "scripts": {
     "build": "nest build",
     "start": "nest start",

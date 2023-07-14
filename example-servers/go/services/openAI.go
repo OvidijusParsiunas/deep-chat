@@ -106,7 +106,8 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 
 
 func createRequestBodyBytes(w http.ResponseWriter, r *http.Request, stream bool) ([]byte, error) {
-	// Read the user request body
+	// Text messages are stored inside request body using the Deep Chat JSON format:
+	// https://deepchat.dev/docs/connect
 	userRequestBodyBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println("Failed to read request body:", err)
@@ -149,18 +150,20 @@ func createChatBody(userRequestBody UserRequestBody, stream bool) OpenAIChatBody
 	return chatBody
 }
 
-
+// By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
+// You can use an example image here: (WORK - update link)
 func OpenAIImage(w http.ResponseWriter, r *http.Request) {
 	shouldContinue := ProcessIncomingRequest(&w, r)
 	if !shouldContinue { return }
 
+	// Files are stored inside a form using Deep Chat request FormData format:
+	// https://deepchat.dev/docs/connect
 	err := r.ParseMultipartForm(32 << 20) // 32MB maximum file size
 	if err != nil {
 		fmt.Println("Failed to read request body:", err)
 		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
 		return
 	}
-
 	files := r.MultipartForm.File["files"]
 
 	jsonResponse := SendImageVariationRequest(w, files)

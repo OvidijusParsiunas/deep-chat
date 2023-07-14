@@ -8,6 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function handler(req: NextRequest) {
   const messageRequestBody = (await req.json()) as DeepChatTextRequestBody;
+  // Text messages are stored inside request body using the Deep Chat JSON format:
+  // https://deepchat.dev/docs/connect
   console.log(messageRequestBody);
 
   const responseStream = new TransformStream();
@@ -25,7 +27,7 @@ export default async function handler(req: NextRequest) {
   return new Response(responseStream.readable, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Cache-Control': 'no-cache, no-transform',
     },
   });
