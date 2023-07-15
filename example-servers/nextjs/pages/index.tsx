@@ -68,6 +68,8 @@ export default function IndexPage() {
               request={{url: '/api/openai/chat-stream', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
               stream={true}
             />
+            {/* You can use an example image here:
+                https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
             <DeepChat
               containerStyle={{borderRadius: '10px'}}
               introMessage="Send a 1024x1024 .png image through NestJS backend to OpenAI and generate its variation."

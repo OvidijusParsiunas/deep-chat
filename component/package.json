@@ -1,7 +1,7 @@
 {
   "name": "deep-chat",
   "version": "0.1.14",
-  "description": "universal ai chat bot component",
+  "description": "Framework agnostic chat component that can power any API",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
   "type": "module",
@@ -22,22 +22,22 @@
   "bugs": {
     "url": "https://github.com/OvidijusParsiunas/deep-chat/issues"
   },
-  "homepage": "https://github.com/OvidijusParsiunas/deep-chat#readme",
+  "homepage": "https://deepchat.dev",
   "keywords": [
     "ai",
     "chat",
     "bot",
+    "chatbot",
     "assistant",
+    "openai",
+    "chatgpt",
     "react",
     "vue",
     "angular",
     "solid",
     "svelte",
     "next",
-    "javascript",
-    "framework-agnostic",
-    "component",
-    "web-component"
+    "component"
   ],
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.8",

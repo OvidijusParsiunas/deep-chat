@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Deep Chat',
-  tagline: 'Fully customizable chat component that can connect to any service',
+  tagline: 'Framework agnostic chat component that can power any API',
   url: 'https://deepchat.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -66,13 +66,13 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
-        {name: 'description', content: 'Framework agnostic table component for editable data experience'},
-        {name: 'keywords', content: 'table, grid, edit, component, javascript'},
-        {name: 'og:title', content: 'Active Table'},
-        {name: 'og:description', content: 'Framework agnostic table component for editable data experience'},
-        {name: 'og:url', content: 'https://activetable.io/'},
-        {name: 'twitter:title', content: 'Active Table'},
-        {name: 'twitter:description', content: 'Framework agnostic table component for editable data experience'},
+        {name: 'description', content: 'Framework agnostic chat component that can power any API'},
+        {name: 'keywords', content: 'ai, chat, bot, chatbot, assistant, component'},
+        {name: 'og:title', content: 'Deep Chat'},
+        {name: 'og:description', content: 'Framework agnostic chat component that can power any API'},
+        {name: 'og:url', content: 'https://deepchat.dev/'},
+        {name: 'twitter:title', content: 'Deep Chat'},
+        {name: 'twitter:description', content: 'Framework agnostic chat component that can power any API'},
       ],
       navbar: {
         title: 'Deep Chat',

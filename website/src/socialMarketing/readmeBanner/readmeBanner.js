@@ -1,4 +1,4 @@
-import DeepChatBrowser from '../components/table/deepChatBrowser';
+import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
@@ -6,7 +6,7 @@ import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
 import React from 'react';
 
-// used on the startPanel.js file
+// used in the startPanel.js file
 // may need to zoom out for a photo
 const Logos = React.forwardRef((_, ref) => {
   return (
@@ -361,7 +361,7 @@ function Components() {
   );
 }
 
-export default function SocialMediaPreview() {
+export default function ReadmeBanner() {
   return (
     <div
       id="customize"

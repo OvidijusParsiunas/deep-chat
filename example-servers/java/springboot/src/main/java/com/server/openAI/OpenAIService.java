@@ -131,6 +131,8 @@ public class OpenAIService {
     return new OpenAIChatBody(opneAIChatMessages, requestBody.getModel(), stream);
   }
   
+  // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
   public DeepChatFileResponse imageVariation(@RequestPart("files") List<MultipartFile> files) throws Exception {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect

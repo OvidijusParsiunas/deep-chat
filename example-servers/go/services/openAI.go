@@ -151,7 +151,7 @@ func createChatBody(userRequestBody UserRequestBody, stream bool) OpenAIChatBody
 }
 
 // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
-// You can use an example image here: (WORK - update link)
+// You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
 func OpenAIImage(w http.ResponseWriter, r *http.Request) {
 	shouldContinue := ProcessIncomingRequest(&w, r)
 	if !shouldContinue { return }

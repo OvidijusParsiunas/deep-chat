@@ -2,7 +2,7 @@
 
 <br>
 
-This is an example [Deep Chat](https://www.npmjs.com/package/deep-chat) UI project that can be used to communicate with the [example server](HERE) projects.
+This is an example [Deep Chat](https://www.npmjs.com/package/deep-chat) UI project that can be used to communicate with the [example server](https://deepchat.dev/examples/servers) projects.
 
 ### :computer: Local setup
 

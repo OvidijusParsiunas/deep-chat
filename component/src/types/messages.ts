@@ -3,7 +3,6 @@ import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
 export interface MessageElementsStyles {
-  // WORK - not sure if this is needed
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
