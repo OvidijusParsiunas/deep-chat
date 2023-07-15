@@ -1,4 +1,4 @@
-![alt text](../../../assets/readme/golang-connect-1.png)
+![Deep Chat](../../../assets/readme/nestjs-connect.png)
 
 This is an example NestJS server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes preconfigured endpoints for handling chat with text messages, file attachments and streamed responses; each accompanied with a variation for a `basic` server that you can customize to fit your use-cases and an `OpenAI` server that can act as a proxy for connecting to its API.
 

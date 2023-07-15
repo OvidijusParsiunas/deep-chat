@@ -1,6 +1,6 @@
 <br />
 
-![alt text](./assets/readme/screenshot-23.png)
+![Deep Chat](./assets/readme/screenshot-23.png)
 
 <b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
@@ -42,7 +42,7 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-28.png)
+![Connect](./assets/readme/connect.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
 
@@ -50,13 +50,13 @@ Connecting to a service is simple, all you need to do is define its API details 
 <deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
-The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out full [project examples](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
+The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out full [project examples](WORK).
 
 Alternatively, if you want to connect without changing the target service, use the [`requestInterceptor`](https://deepchat.dev/docs/interceptors#requestInterceptor) and [`responseInterceptor`](https://deepchat.dev/docs/interceptors#responseInterceptor) properties to augment the incoming and outgoing request details.
 
 ### :electric_plug: Direct connection
 
-![alt text](./assets/readme/direct-connect-19.png)
+![Direct conenction](./assets/readme/direct-connect.png)
 
 Connect to popular AI APIs directly from the browser via the use of the [`directConnection`](https://deepchat.dev/docs/directConnection/#directConnection) property:
 
@@ -73,7 +73,7 @@ Currently supported direct API connections:
 
 ### :camera: :microphone: Camera and Microphone
 
-![alt text](./assets/readme/capture-14.png)
+![Capture](./assets/readme/capture.png)
 
 Use Deep Chat to capture photos with your webcam and record audio with the microphone. You can enable this using the [`camera`](https://deepchat.dev/docs/files#camera) and [`microphone`](https://deepchat.dev/docs/files#microphone) properties:
 

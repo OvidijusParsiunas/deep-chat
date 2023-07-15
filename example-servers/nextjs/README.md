@@ -1,4 +1,4 @@
-![alt text](../../assets/readme/golang-connect-1.png)
+![Deep Chat](../../assets/readme/nextjs-connect.png)
 
 This is an example NextJS project template for [Deep Chat](https://www.npmjs.com/package/deep-chat). It includes preconfigured edge functions to handle text messages, file attachments and streaming responses; each accompanied with a variation for `basic` functionality that you can customize to fit your use-cases and an `OpenAI` proxy that can connect to its API.
 

@@ -1,4 +1,6 @@
-![alt text](../../assets/readme/golang-connect-1.png)
+![Deep Chat](../../assets/readme/ui-example.png)
+
+<br>
 
 This is an example [Deep Chat](https://www.npmjs.com/package/deep-chat) UI project that can be used to communicate with the [example server](HERE) projects.
 
