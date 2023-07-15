@@ -69,7 +69,7 @@
   --homepage-header-color: #003064;
   --speech-gradient-start-color: rgb(255, 255, 255);
   --speech-gradient-end-color: rgb(220, 238, 255);
-  --openai-logo-filter: unset;
+  --adaptive-logo-filter: unset;
   --explore-background-color-default: #3e79c0;
   --explore-background-color-hover: #336baf;
   --explore-background-color-click: #295e9f;
@@ -110,7 +110,7 @@
   --homepage-header-color: white;
   --speech-gradient-start-color: rgba(57, 57, 57, 0);
   --speech-gradient-end-color: #272727;
-  --openai-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)
+  --adaptive-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)
     brightness(108%) contrast(108%);
   --explore-background-color-default: #5d5d5d;
   --explore-background-color-hover: #525252;
@@ -359,8 +359,8 @@ h1 + h2 {
   margin-top: 35px !important;
 }
 
-#openai-logo {
-  filter: var(--openai-logo-filter);
+.adaptive-logo-filter {
+  filter: var(--adaptive-logo-filter);
 }
 
 @media (max-width: 575px) {

@@ -42,7 +42,7 @@ The exact syntax for the above example will vary depending on the framework of y
 
 ### :zap: Connect
 
-![alt text](./assets/readme/connect-24.png)
+![alt text](./assets/readme/connect-28.png)
 
 Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
 
