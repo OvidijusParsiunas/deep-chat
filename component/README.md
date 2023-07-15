@@ -1,6 +1,6 @@
 <br />
 
-![Deep Chat](../../assets/readme/banner.png)
+![Deep Chat](../assets/readme/banner.png)
 
 <b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
@@ -115,11 +115,18 @@ Browse the following example [server templates](WORK) to help complete your fina
 # Install node dependencies:
 $ npm install
 
-# Build the wrapper:
+# Build the component:
 $ npm run build
-```
 
-If you wish to edit the component functionality, please see the core [Deep Chat](https://www.npmjs.com/package/deep-chat) package and import your forked package into this component as has been done for `deep-chat`.
+# Automatically build the component as soon as you make a change:
+$ npm run build:watch
+
+# Serve the component locally (from index.html):
+$ npm run serve
+
+# Bundle the component into a single file (dist/activeTable.bundle.js):
+$ npm run build:bundle
+```
 
 ## :heart: Contributions
 

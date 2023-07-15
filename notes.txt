@@ -3,7 +3,7 @@ https://dashboard.cohere.ai/ - check if chat has been approved from the waitlist
 Type property description text
 Custom tts API props
 Custom stt API props
-Java example
+Kotlin and Swift example
 
 Potential features:
 display character limit like in bing
@@ -14,4 +14,4 @@ Run npm run build:bundle
 Update Installation
 Update CDN references - in doc Live VanillaJS Example sections.
 Update React wrapper
-Update UI example for servers
+Update UI and NextJS examples for servers

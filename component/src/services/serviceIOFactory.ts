@@ -22,6 +22,7 @@ import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
+// TO-DO - claude.ai
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
   public static create(deepChat: DeepChat): ServiceIO {
