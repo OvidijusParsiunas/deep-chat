@@ -26,7 +26,7 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a chat message to an example server. "
-            request={{url: '/api/chat'}}
+            request={{url: '/api/basic/chat'}}
             requestBodyLimits={{maxMessages: -1}}
             requestInterceptor={(details: {body: any; headers?: {[key: string]: string}}) => {
               console.log(details);
@@ -40,13 +40,13 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a streamed chat message to an example server."
-            request={{url: '/api/chat-stream'}}
+            request={{url: '/api/basic/chat-stream'}}
             stream={true}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send files to an example server."
-            request={{url: '/api/files'}}
+            request={{url: '/api/basic/files'}}
             audio={true}
             images={true}
             gifs={true}
@@ -109,22 +109,21 @@ export default function IndexPage() {
         <h3>Make sure to set the HUGGING_FACE_API_KEY environment variable in your server</h3>
         <div className={styles.components}>
           <div className={styles.diagonalLine} style={{background: '#fffdd9'}}></div>
-          {/* additionalBodyProps is used to set other properties that will be sent to the server along with the message:
-            https://deepchat.dev/docs/connect#request */}
           {/* by setting maxMessages requestBodyLimits to 0 or lower - each request will send full chat history:
             https://deepchat.dev/docs/connect/#requestBodyLimits */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a chat message through an example server to Hugging Face."
-            request={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
             requestBodyLimits={{maxMessages: -1}}
+            request={{url: '/api/huggingface/chat'}}
           />
           {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
+          {/* WORK - estimated_time */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send an image through an example server to Hugging Face and retrieve its classification."
-            request={{url: '/api/openai/image'}}
+            request={{url: '/api/huggingface/image'}}
             camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
@@ -133,7 +132,7 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send an audio file through an example server to Hugging Face and recieve its transcript."
-            request={{url: '/api/openai/image'}}
+            request={{url: '/api/huggingface/speech'}}
             audio={{files: {maxNumberOfFiles: 1}}}
             microphone={{files: {maxNumberOfFiles: 1}}}
             textInput={{disabled: true, placeholder: {text: 'Send an audio file!'}}}

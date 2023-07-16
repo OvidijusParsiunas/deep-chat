@@ -3,7 +3,7 @@ import os
 
 
 class Cohere:
-    def generateText(self, body):
+    def generate_text(self, body):
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + os.getenv('COHERE_API_KEY')
@@ -18,7 +18,7 @@ class Cohere:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': result}}
     
-    def summarizeText(self, body):
+    def summarize_text(self, body):
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + os.getenv('COHERE_API_KEY')

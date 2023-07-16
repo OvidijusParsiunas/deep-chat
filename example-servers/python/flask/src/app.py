@@ -26,7 +26,7 @@ def chat():
 
 
 @app.route("/chat-stream", methods=["POST"])
-def chatStream():
+def chat_stream():
     body = request.json
     return basic.chat_stream(body)
 
@@ -40,19 +40,19 @@ def files():
 open_ai = OpenAI()
 
 @app.route("/openai-chat", methods=["POST"])
-def openaiChat():
+def openai_chat():
     body = request.json
     return open_ai.chat(body)
 
 
 @app.route("/openai-chat-stream", methods=["POST"])
-def openaiChatStream():
+def openai_chat_stream():
     body = request.json
     return open_ai.chat_stream(body)
 
 
 @app.route("/openai-image", methods=["POST"])
-def openaiImage():
+def openai_image():
     files = request.files.getlist('files')
     return open_ai.image_variation(files)
 
@@ -61,7 +61,7 @@ def openaiImage():
 huggingFace = HuggingFace()
 
 @app.route("/huggingface-chat", methods=["POST"])
-def huggingFaceChat():
+def hugging_face_chat():
     body = request.json
     return huggingFace.chat(body)
 
@@ -80,17 +80,16 @@ def hugging_face_speech_recognition():
 cohere = Cohere()
 
 @app.route("/cohere-generate", methods=["POST"])
-def cohereGenerateText():
+def cohere_generate_text():
     body = request.json
-    return cohere.generateText(body)
+    return cohere.generate_text(body)
 
 @app.route("/cohere-summarize", methods=["POST"])
-def cohereSummarizeText():
+def cohere_summarize_text():
     body = request.json
-    return cohere.summarizeText(body)
+    return cohere.summarize_text(body)
 
 # ------------------ START SERVER ------------------
-
 
 if __name__ == "__main__":
     app.run(port=8080)
