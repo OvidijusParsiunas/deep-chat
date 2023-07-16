@@ -1,3 +1,4 @@
+from services.huggingFace import HuggingFace
 from services.openAI import OpenAI
 from services.cohere import Cohere
 from services.basic import Basic
@@ -36,9 +37,7 @@ def files():
 
 # ------------------ OPENAI API ------------------
 
-
 open_ai = OpenAI()
-
 
 @app.route("/openai-chat", methods=["POST"])
 def openaiChat():
@@ -57,20 +56,36 @@ def openaiImage():
     files = request.files.getlist('files')
     return open_ai.image_variation(files)
 
+# ------------------ HUGGING FACE API ------------------
+
+huggingFace = HuggingFace()
+
+@app.route("/huggingface-chat", methods=["POST"])
+def huggingFaceChat():
+    body = request.json
+    return huggingFace.chat(body)
+
+@app.route("/huggingface-image", methods=["POST"])
+def hugging_face_image_classification():
+    files = request.files.getlist('files')
+    return huggingFace.image_classification(files)
+
+@app.route("/huggingface-speech", methods=["POST"])
+def hugging_face_speech_recognition():
+    files = request.files.getlist('files')
+    return huggingFace.speech_recognition(files)
 
 # ------------------ COHERE API ------------------
 
-
 cohere = Cohere()
 
-
 @app.route("/cohere-generate", methods=["POST"])
-def generateText():
+def cohereGenerateText():
     body = request.json
     return cohere.generateText(body)
 
 @app.route("/cohere-summarize", methods=["POST"])
-def summarizeText():
+def cohereSummarizeText():
     body = request.json
     return cohere.summarizeText(body)
 
