@@ -1,5 +1,6 @@
 import {UseInterceptors, UploadedFiles, Controller, Post, Req, Res} from '@nestjs/common';
 import {FilesInterceptor} from '@nestjs/platform-express';
+import {HuggingFace} from './services/huggingFace';
 import {Request, Response} from 'express';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
@@ -7,7 +8,12 @@ import {Basic} from './services/basic';
 
 @Controller()
 export class AppController {
-  constructor(private readonly basic: Basic, private readonly openAI: OpenAI, private readonly cohere: Cohere) {}
+  constructor(
+    private readonly basic: Basic,
+    private readonly openAI: OpenAI,
+    private readonly cohere: Cohere,
+    private readonly huggingFace: HuggingFace
+  ) {}
 
   // ------------------ BASIC API ------------------
 
@@ -45,7 +51,26 @@ export class AppController {
     return this.openAI.imageVariation(files);
   }
 
-  // ------------------ Cohere API ------------------
+  // ------------------ HUGGING FACE API ------------------
+
+  @Post('huggingface-chat')
+  async huggingFaceChat(@Req() request: Request) {
+    return this.huggingFace.chat(request.body);
+  }
+
+  @Post('huggingface-image')
+  @UseInterceptors(FilesInterceptor('files'))
+  async huggingFaceImage(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.huggingFace.imageClassification(files);
+  }
+
+  @Post('huggingface-speech')
+  @UseInterceptors(FilesInterceptor('files'))
+  async huggingFaceSpeech(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.huggingFace.speechRecognition(files);
+  }
+
+  // ------------------ COHERE API ------------------
 
   @Post('cohere-generate')
   async cohereGenerate(@Req() request: Request) {

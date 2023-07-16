@@ -1,4 +1,5 @@
 import express, {Express, Request, Response} from 'express';
+import {HuggingFace} from './services/huggingFace';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
 import {Basic} from './services/basic';
@@ -47,6 +48,20 @@ app.post('/openai-chat-stream', async (req: Request, res: Response) => {
 
 app.post('/openai-image', upload.array('files'), async (req: Request, res: Response) => {
   OpenAI.imageVariation(req, res);
+});
+
+// ------------------ HUGGING FACE API ------------------
+
+app.post('/huggingface-chat', async (req: Request, res: Response) => {
+  HuggingFace.chat(req.body, res);
+});
+
+app.post('/huggingface-image', upload.array('files'), async (req: Request, res: Response) => {
+  HuggingFace.imageClassification(req, res);
+});
+
+app.post('/huggingface-speech', upload.array('files'), async (req: Request, res: Response) => {
+  HuggingFace.speechRecognition(req, res);
 });
 
 // ------------------ Cohere API ------------------

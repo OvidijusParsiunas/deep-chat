@@ -18,6 +18,7 @@ export class Cohere {
       (reqResp) => {
         let data = '';
         reqResp.on('error', (error) => {
+          console.error('Error:', error);
           res.status(400).send(error);
         });
         reqResp.on('data', (chunk) => {
@@ -26,8 +27,7 @@ export class Cohere {
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.message) {
-            console.error('Error:');
-            console.error(result.message);
+            console.error('Error:', result.message);
             res.status(400).send(result.message);
           } else {
             // Sends response back to Deep Chat using the Result format:
@@ -38,6 +38,7 @@ export class Cohere {
       }
     );
     req.on('error', (error) => {
+      console.error('Error:', error);
       res.status(400).send(error);
     });
     // Send the chat request to cohere
@@ -61,6 +62,7 @@ export class Cohere {
       (reqResp) => {
         let data = '';
         reqResp.on('error', (error) => {
+          console.error('Error:', error);
           res.status(400).send(error);
         });
         reqResp.on('data', (chunk) => {
@@ -69,8 +71,7 @@ export class Cohere {
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.message) {
-            console.error('Error:');
-            console.error(result.message);
+            console.error('Error:', result.message);
             res.status(400).send(result.message);
           } else {
             // Sends response back to Deep Chat using the Result format:
@@ -81,6 +82,7 @@ export class Cohere {
       }
     );
     req.on('error', (error) => {
+      console.error('Error:', error);
       res.status(400).send(error);
     });
     // Send the chat request to cohere

@@ -30,6 +30,7 @@ export class OpenAI {
       (reqResp) => {
         let data = '';
         reqResp.on('error', (error) => {
+          console.error('Error:', error);
           res.status(400).send(error);
         });
         reqResp.on('data', (chunk) => {
@@ -38,8 +39,7 @@ export class OpenAI {
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:');
-            console.error(result.error);
+            console.error('Error:', result.error);
             res.status(400).send(result.error);
           } else {
             // Sends response back to Deep Chat using the Result format:
@@ -50,6 +50,7 @@ export class OpenAI {
       }
     );
     req.on('error', (error) => {
+      console.error('Error:', error);
       res.status(400).send(error);
     });
     // Send the chat request to openAI
@@ -70,6 +71,7 @@ export class OpenAI {
       },
       (streamResp) => {
         streamResp.on('error', (error) => {
+          console.error('Error:', error);
           res.status(400).send(error);
         });
         streamResp.on('data', (chunk) => {
@@ -95,8 +97,7 @@ export class OpenAI {
               res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
             }
           } catch (e) {
-            console.error('Error when retrieving a stream chunk:');
-            console.error(e);
+            console.error('Error when retrieving a stream chunk:', e);
             return res.status(400).send(e);
           }
         });
@@ -109,6 +110,7 @@ export class OpenAI {
       }
     );
     req.on('error', (error) => {
+      console.error('Error:', error);
       res.status(400).send(error);
     });
     // Send the chat request to openAI
@@ -138,6 +140,7 @@ export class OpenAI {
       (reqResp) => {
         let data = '';
         reqResp.on('error', (error) => {
+          console.error('Error:', error);
           res.status(400).send(error);
         });
         reqResp.on('data', (chunk) => {
@@ -146,8 +149,7 @@ export class OpenAI {
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:');
-            console.error(result.error);
+            console.error('Error:', result.error);
             res.status(400).send(result.error);
           } else {
             // Sends response back to Deep Chat using the Result format:
@@ -158,6 +160,7 @@ export class OpenAI {
       }
     );
     formReq.on('error', (error) => {
+      console.error('Error:', error);
       res.status(400).send(error);
     });
     // Send the request to openAI
