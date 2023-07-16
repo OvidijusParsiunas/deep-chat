@@ -28,6 +28,10 @@ func main() {
 
 	http.HandleFunc("/openai-image", services.OpenAIImage)
 
+	http.HandleFunc("/cohere-generate", services.CohereGenerate)
+
+	http.HandleFunc("/cohere-summarize", services.CohereSummarize)
+
 	fmt.Printf("Starting server at port 8080\n")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 			log.Fatal(err)

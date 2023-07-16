@@ -26,8 +26,8 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("OpenAIError when calling OpenAI API:", err)
-		http.Error(w, "OpenAIError when calling OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when calling OpenAI API:", err)
+		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
 		return
 	}
 	
@@ -36,8 +36,8 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) {
 	var resultData OpenAIChatResult
 	err = json.NewDecoder(resp.Body).Decode(&resultData)
 	if err != nil {
-		fmt.Println("OpenAIError decoding response from OpenAI API:", err)
-		http.Error(w, "OpenAIError decoding response from OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when calling OpenAI API:", err)
+		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
 		return
 	}
 
@@ -73,8 +73,8 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("OpenAIError when calling OpenAI API:", err);
-		http.Error(w, "OpenAIError when calling OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when calling OpenAI API:", err)
+		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
 		return
 	}
 
@@ -87,8 +87,8 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 			var result OpenAIStreamResult
 			err := json.Unmarshal([]byte(line[6:]), &result)
 			if err != nil {
-				fmt.Println("OpenAIError when unmarshalling response chunk:", err)
-				http.Error(w, "OpenAIError when unmarshalling response chunk", http.StatusInternalServerError)
+				fmt.Println("Error when unmarshalling response chunk:", err)
+				http.Error(w, "Error when unmarshalling response chunk", http.StatusInternalServerError)
 				return
 			}
 			choices := result.Choices
@@ -212,8 +212,8 @@ func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHea
 
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/images/variations", &buf)
 	if err != nil {
-		fmt.Println("OpenAIError when calling OpenAI API:");
-		http.Error(w, "OpenAIError when calling OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when calling OpenAI API:", err)
+		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
 		return nil
 	}
 
@@ -223,8 +223,8 @@ func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHea
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("OpenAIError when calling OpenAI API:");
-		http.Error(w, "OpenAIError when calling OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when calling OpenAI API:", err)
+		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
 		return nil
 	}
 

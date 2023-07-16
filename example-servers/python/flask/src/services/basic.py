@@ -5,12 +5,16 @@ import json
 
 class Basic:
     def chat(self, body):
+        # Text messages are stored inside request body using the Deep Chat JSON format:
+        # https://deepchat.dev/docs/connect
         print(body)
-        # sends response back to Deep Chat using the Result format:
+        # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': 'This is a respone from a Flask server. Thankyou for your message!'}}
 
     def chat_stream(self, body):
+        # Text messages are stored inside request body using the Deep Chat JSON format:
+        # https://deepchat.dev/docs/connect
         print(body)
         response_chunks = 'This is a response from a Flask server. Thank you for your message!'.split(
             ' ')
@@ -31,24 +35,24 @@ class Basic:
             yield ''
 
     def files(self, request):
-        # files are stored inside a files object
+        # Files are stored inside a files object
         files = request.files.getlist('files')
         if files:
             print('Files:')
             for file in files:
                 print(file.filename)
 
-            # when sending text messages along with files - they are stored inside the data form
+            # When sending text messages along with files - they are stored inside the data form
             textMessages = list(request.form.items())
             if len(textMessages) > 0:
                 print('Text messages:')
                 for key, value in textMessages:
                     print(key, value)
         else:
-            # when sending text messages without any files - they are stored inside a json
+            # When sending text messages without any files - they are stored inside a json
             print("Text messages:")
             print(request.json)
 
-        # sends response back to Deep Chat using the Result format:
+        # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': 'This is a respone from a Flask server. Thankyou for your message!'}}

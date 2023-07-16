@@ -9,7 +9,7 @@ function App() {
           Deep Chat test ground for{' '}
           <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers">Example Servers</a>
         </h1>
-        <h1>Server for custom API</h1>
+        <h1>Server for a custom API</h1>
         <div className="components">
           {/* If you don't want to or can't edit the target service, you can process the outgoing message using
               responseInterceptor and the incoming message using responseInterceptor:
@@ -56,7 +56,7 @@ function App() {
               https://deepchat.dev/docs/connect#request */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
-            introMessage="Send a chat message through an example server to OpenAI. "
+            introMessage="Send a chat message through an example server to OpenAI."
             request={{url: 'http://localhost:8080/openai-chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
           />
           <DeepChat
@@ -73,6 +73,22 @@ function App() {
             request={{url: 'http://localhost:8080/openai-image'}}
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
+          />
+        </div>
+        <h1>Server for Cohere</h1>
+        <h3>Make sure to set the COHERE_API_KEY environment variable in your server</h3>
+        <div className="components">
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
+            introMessage='Insert text and Cohere will finish it for you! E.g. "Please explain to me how LLMs work"'
+            request={{url: 'http://localhost:8080/cohere-generate'}}
+            textInput={{placeholder: {text: 'Once upon a time...'}}}
+          />
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
+            introMessage="Insert text and Cohere will summarize it."
+            request={{url: 'http://localhost:8080/cohere-summarize'}}
+            textInput={{placeholder: {text: 'Insert text to summarize'}}}
           />
         </div>
       </div>

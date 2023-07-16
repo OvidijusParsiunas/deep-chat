@@ -7,6 +7,8 @@ import os
 class OpenAI:
     @staticmethod
     def create_chat_body(body, stream=False):
+        # Text messages are stored inside request body using the Deep Chat JSON format:
+        # https://deepchat.dev/docs/connect
         chat_body = {
             'messages': [
                 {
@@ -29,7 +31,7 @@ class OpenAI:
         response = requests.post(
             'https://api.openai.com/v1/chat/completions', json=chat_body, headers=headers)
         result = response.json()['choices'][0]['message']['content']
-        # sends response back to Deep Chat using the Result format:
+        # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': result}}
 
@@ -67,7 +69,7 @@ class OpenAI:
                                     for choice in result['choices']:
                                         delta += choice.get('delta',
                                                             {}).get('content', '')
-                                    # sends response back to Deep Chat using the Result format:
+                                    # Sends response back to Deep Chat using the Result format:
                                     # https://deepchat.dev/docs/connect/#Result
                                     yield 'data: {}\n\n'.format(json.dumps({"result": {"text": delta}}))
                                     accumulated_data = ""  # Reset the accumulated data
@@ -87,12 +89,13 @@ class OpenAI:
         headers = {
             'Authorization': 'Bearer ' + os.getenv('OPENAI_API_KEY')
         }
+        # Files are stored inside a files object
         image_file = files[0]
         files = {
             'image': (image_file.filename, image_file.read(), image_file.mimetype)
         }
         response = requests.post(url, files=files, headers=headers)
-        # sends response back to Deep Chat using the Result format:
+        # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         result = {'result': {
             'files': [{'type': 'image', 'src': response.json()['data'][0]['url']}]}}

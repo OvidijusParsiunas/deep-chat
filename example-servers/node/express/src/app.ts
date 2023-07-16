@@ -1,5 +1,6 @@
 import express, {Express, Request, Response} from 'express';
 import {OpenAI} from './services/openAI';
+import {Cohere} from './services/cohere';
 import {Basic} from './services/basic';
 import dotenv from 'dotenv';
 import multer from 'multer';
@@ -46,6 +47,16 @@ app.post('/openai-chat-stream', async (req: Request, res: Response) => {
 
 app.post('/openai-image', upload.array('files'), async (req: Request, res: Response) => {
   OpenAI.imageVariation(req, res);
+});
+
+// ------------------ Cohere API ------------------
+
+app.post('/cohere-generate', async (req: Request, res: Response) => {
+  Cohere.generateText(req.body, res);
+});
+
+app.post('/cohere-summarize', async (req: Request, res: Response) => {
+  Cohere.summarizeText(req.body, res);
 });
 
 // ------------------ START SERVER ------------------

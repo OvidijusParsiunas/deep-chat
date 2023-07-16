@@ -12,7 +12,7 @@ export default function IndexPage() {
     <>
       <main className={styles.main}>
         <div>
-          <h1>Server for custom API</h1>
+          <h1>Server for a custom API</h1>
           <div className={styles.components}>
             {/* If you don't want to or can't edit the target service, you can process the outgoing message using
                 responseInterceptor and the incoming message using responseInterceptor:
@@ -76,6 +76,22 @@ export default function IndexPage() {
               request={{url: '/api/openai/image'}}
               images={{files: {acceptedFormats: '.png'}}}
               textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
+            />
+          </div>
+          <h1>Server for Cohere</h1>
+          <h3>Make sure to set the COHERE_API_KEY environment variable in your server</h3>
+          <div className={styles.components}>
+            <DeepChat
+              containerStyle={{borderRadius: '10px'}}
+              introMessage='Insert text and Cohere will finish it for you! E.g. "Please explain to me how LLMs work"'
+              request={{url: '/api/cohere/generate'}}
+              textInput={{placeholder: {text: 'Once upon a time...'}}}
+            />
+            <DeepChat
+              containerStyle={{borderRadius: '10px'}}
+              introMessage="Insert text and Cohere will summarize it."
+              request={{url: '/api/cohere/summarize'}}
+              textInput={{placeholder: {text: 'Insert text to summarize'}}}
             />
           </div>
         </div>

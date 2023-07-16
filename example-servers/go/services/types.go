@@ -77,3 +77,25 @@ type File struct {
 	Type string `json:"type"`
 	Src  string `json:"src"`
 }
+
+type CohereGenerateBody struct {
+	Prompt string `json:"prompt"`
+}
+
+type CohereGenerateResult struct {
+	Generations []CohereGenerationResult `json:"generations"`
+	Message string `json:"message"`
+}
+
+type CohereGenerationResult struct {
+	Text string `json:"text"`
+}
+
+type CohereSummarizeBody struct {
+	Text string `json:"text"`
+}
+
+type CohereSummarizeResult struct {
+	Summary string `json:"summary"`
+	Message string `json:"message"`
+}

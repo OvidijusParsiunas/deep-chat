@@ -2,11 +2,12 @@ import {UseInterceptors, UploadedFiles, Controller, Post, Req, Res} from '@nestj
 import {FilesInterceptor} from '@nestjs/platform-express';
 import {Request, Response} from 'express';
 import {OpenAI} from './services/openAI';
+import {Cohere} from './services/cohere';
 import {Basic} from './services/basic';
 
 @Controller()
 export class AppController {
-  constructor(private readonly basic: Basic, private readonly openAI: OpenAI) {}
+  constructor(private readonly basic: Basic, private readonly openAI: OpenAI, private readonly cohere: Cohere) {}
 
   // ------------------ BASIC API ------------------
 
@@ -42,5 +43,17 @@ export class AppController {
   @UseInterceptors(FilesInterceptor('files'))
   async openaiImage(@UploadedFiles() files: Array<Express.Multer.File>) {
     return this.openAI.imageVariation(files);
+  }
+
+  // ------------------ Cohere API ------------------
+
+  @Post('cohere-generate')
+  async cohereGenerate(@Req() request: Request) {
+    return this.cohere.generateText(request.body);
+  }
+
+  @Post('cohere-summarize')
+  async cohereSummarize(@Req() request: Request) {
+    return this.cohere.summarizeText(request.body);
   }
 }
