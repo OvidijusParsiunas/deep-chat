@@ -1,3 +1,4 @@
+import {RequestDetails} from 'deep-chat/dist/types/interceptors';
 import {DeepChat} from 'deep-chat-react';
 import './App.css';
 
@@ -21,7 +22,7 @@ function App() {
           introMessage="Send a chat message to an example server. "
           request={{url: 'http://localhost:8080/chat'}}
           requestBodyLimits={{maxMessages: -1}}
-          requestInterceptor={(details: {body: any; headers?: {[key: string]: string}}) => {
+          requestInterceptor={(details: RequestDetails) => {
             console.log(details);
             return details;
           }}

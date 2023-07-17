@@ -8,23 +8,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.server.utils.deepChat.DeepChatRequestMessage;
+import com.server.utils.deepChat.HugginFaceSpeechResult;
 import org.springframework.web.multipart.MultipartFile;
-import com.server.utils.deepChat.DeepChatFileResponse;
 import com.server.utils.deepChat.DeepChatRequestBody;
 import com.server.utils.deepChat.DeepChatTextRespose;
-import com.server.utils.deepChat.HugginFaceSpeechResult;
-
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import com.server.utils.deepChat.OpenAIImageResult;
-import com.server.utils.deepChat.DeepChatFile;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import com.server.utils.PrintObjectUtil;
 import org.springframework.http.*;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.slf4j.Logger;
 import java.util.List;
 

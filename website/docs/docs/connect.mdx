@@ -6,11 +6,17 @@ sidebar_position: 2
 
 <h2>How to connect to an API</h2>
 
-This is achieved by simply defining the request details inside the [`request`](#request) property.
+You can connect to any API by defining their details inside the [`request`](#request) property. The target endpoint will need to be able to accept
+and respond using the formats described below.
+
+:::tip
+If you don't want / can't change the target server to handle the required object types, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
+and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming/outgoing message details.
+:::
 
 <h3>Request message</h3>
 
-The outgoing request body is encapsulated in one of the following formats:
+The outgoing Deep Chat request body is encapsulated in one of the following formats:
 
 - When sending **text** based messages only, the request body will have the following JSON type: <br />
   {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
@@ -21,15 +27,12 @@ The outgoing request body is encapsulated in one of the following formats:
 
 <h3>Response message</h3>
 
-The response message body needs to use the following JSON type: <br />
-&nbsp;&nbsp;&nbsp;&nbsp {[`result?: Result`](#Result), `error?: string`} <br />
+The response message from the target server needs to use the [`Result`](#Result) JSON type.
 
-Please see full code EXAMPLES on how to set up your own server [`HERE`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers).
+<h3>Examples</h3>
 
-:::tip
-If you don't want / can't change the target service to adhere to the required formats listed above, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
-and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming and outgoing message bodies into the format you need.
-:::
+We do not expect you to figure this out by yourself! Please see information along with full examples on how to setup your own server using your
+framework of choice and have Deep Chat connect to it [`HERE`](https://deepchat.dev/examples/servers).
 
 <h2>Component properties</h2>
 
@@ -102,7 +105,7 @@ Configuration for the outgoing message HTTP requests.
 
 If the target service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type, you
 can stream the response messages into the chat. This is only supported for text messages.
-Please see [`examples`](https://github.com/OvidijusParsiunas/deep-chat/tree/main/other-packages/servers) on how to set this up for your own server.
+Please see [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server.
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -264,10 +267,15 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 ### `Result` {#Result}
 
-- Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile)}
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp `result?:` {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp `error?: string` <br />
+  }
 
-Object containing result information retrieved from the target service. <br />
+Object containing information retrieved from the target service where the successful details are stored inside a `result` property and error
+information is summarized by the `error` property: <br />
 `text` is the message text content. <br />
-`files` is an array of details about response files.
+`files` is an array of details about response files. <br />
+`error` is the message text that will be displayed in the chat error bubble. <br />
 
 <LineBreak></LineBreak>

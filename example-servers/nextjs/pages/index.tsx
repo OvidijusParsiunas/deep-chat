@@ -1,3 +1,4 @@
+import {RequestDetails} from 'deep-chat/dist/types/interceptors';
 import styles from '../styles/Index.module.css';
 import dynamic from 'next/dynamic';
 
@@ -28,7 +29,7 @@ export default function IndexPage() {
             introMessage="Send a chat message to an example server. "
             request={{url: '/api/basic/chat'}}
             requestBodyLimits={{maxMessages: -1}}
-            requestInterceptor={(details: {body: any; headers?: {[key: string]: string}}) => {
+            requestInterceptor={(details: RequestDetails) => {
               console.log(details);
               return details;
             }}
