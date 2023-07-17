@@ -4,22 +4,13 @@ import axios from 'axios';
 
 @Injectable()
 export class HuggingFace {
-  private static createChatBody(messages: {text: string; role: string}[]) {
-    const {text} = messages[messages.length - 1];
-    const previousMessages = messages.slice(0, messages.length - 1);
-    if (!text) return;
-    const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
-    const generated_responses = previousMessages.filter((message) => message.role === 'ai').map((message) => message.text);
-    return {inputs: {past_user_inputs, generated_responses, text}, wait_for_model: true};
-  }
-
-  async chat(body: Request['body']) {
+  async conversation(body: Request['body']) {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
-    const chatBody = HuggingFace.createChatBody(body.messages);
+    const conversationBody = HuggingFace.createConversationBody(body.messages);
     const response = await axios.post(
       'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill',
-      chatBody,
+      conversationBody,
       {
         method: 'POST',
         headers: {
@@ -31,6 +22,15 @@ export class HuggingFace {
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {result: {text: response.data.generated_text}};
+  }
+
+  private static createConversationBody(messages: {text: string; role: string}[]) {
+    const {text} = messages[messages.length - 1];
+    const previousMessages = messages.slice(0, messages.length - 1);
+    if (!text) return;
+    const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
+    const generated_responses = previousMessages.filter((message) => message.role === 'ai').map((message) => message.text);
+    return {inputs: {past_user_inputs, generated_responses, text}, wait_for_model: true};
   }
 
   async imageClassification(files: Array<Express.Multer.File>) {

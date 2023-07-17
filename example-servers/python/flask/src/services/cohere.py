@@ -1,7 +1,6 @@
 import requests
 import os
 
-
 class Cohere:
     def generate_text(self, body):
         headers = {

@@ -99,3 +99,27 @@ type CohereSummarizeResult struct {
 	Summary string `json:"summary"`
 	Message string `json:"message"`
 }
+
+type HuggingFaceConversationBody struct {
+	Inputs HuggingFaceConversationInputs `json:"inputs"`
+	WaitForModel bool `json:"wait_for_model"`
+}
+
+type HuggingFaceConversationInputs struct {
+	PastUserInputs []string `json:"past_user_inputs"`
+	GeneratedResponses []string `json:"generated_responses"`
+	Text string `json:"text"`
+}
+
+type HuggingFaceConversationResult struct {
+	GeneratedText string `json:"generated_text"`
+	Error string `json:"error"`
+}
+
+type HugginFaceImageResultLabel struct {
+	Label string `json:"label"`
+}
+
+type HugginFaceSpeechResult struct {
+	Text string `json:"text"`
+}

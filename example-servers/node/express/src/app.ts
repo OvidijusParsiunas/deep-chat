@@ -52,8 +52,8 @@ app.post('/openai-image', upload.array('files'), async (req: Request, res: Respo
 
 // ------------------ HUGGING FACE API ------------------
 
-app.post('/huggingface-chat', async (req: Request, res: Response) => {
-  HuggingFace.chat(req.body, res);
+app.post('/huggingface-conversation', async (req: Request, res: Response) => {
+  HuggingFace.conversation(req.body, res);
 });
 
 app.post('/huggingface-image', upload.array('files'), async (req: Request, res: Response) => {

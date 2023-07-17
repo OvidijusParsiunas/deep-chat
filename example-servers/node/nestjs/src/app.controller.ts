@@ -53,9 +53,9 @@ export class AppController {
 
   // ------------------ HUGGING FACE API ------------------
 
-  @Post('huggingface-chat')
-  async huggingFaceChat(@Req() request: Request) {
-    return this.huggingFace.chat(request.body);
+  @Post('huggingface-conversation')
+  async huggingFaceConversation(@Req() request: Request) {
+    return this.huggingFace.conversation(request.body);
   }
 
   @Post('huggingface-image')

@@ -1,25 +1,24 @@
 import requests
 import os
 
-
 class HuggingFace:
-    def chat(self, body):
+    def conversation(self, body):
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + os.getenv('HUGGING_FACE_API_KEY')
         }
         # Text messages are stored inside request body using the Deep Chat JSON format:
         # https://deepchat.dev/docs/connect
-        chat_body = self.create_chat_body(body['messages'])
+        conversation_body = self.create_conversation_body(body['messages'])
         response = requests.post(
-            'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill', json=chat_body, headers=headers)
+            'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill', json=conversation_body, headers=headers)
         result = response.json()
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': result['generated_text']}}
 
     @staticmethod
-    def create_chat_body(messages):
+    def create_conversation_body(messages):
         text = messages[-1]['text']
         previous_messages = messages[:-1]
         if not text:

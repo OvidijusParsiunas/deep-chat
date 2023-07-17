@@ -12,7 +12,7 @@ export default async function handler(req: NextRequest) {
   const textRequestBody = (await req.json()) as DeepChatOpenAITextRequestBody;
   console.log(textRequestBody);
 
-  const chatBody = createReqChatBody(textRequestBody.messages);
+  const conversationBody = createReqConversationBody(textRequestBody.messages);
 
   const result = await fetch('https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill', {
     headers: {
@@ -20,7 +20,7 @@ export default async function handler(req: NextRequest) {
       Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
     },
     method: 'POST',
-    body: JSON.stringify(chatBody),
+    body: JSON.stringify(conversationBody),
   });
 
   const huggingFaceResult = (await result.json()) as HuggingFaceConversationResult;
@@ -30,7 +30,7 @@ export default async function handler(req: NextRequest) {
   return NextResponse.json({result: {text: huggingFaceResult.generated_text}});
 }
 
-function createReqChatBody(messages: DeepChatTextRequestBody['messages']) {
+function createReqConversationBody(messages: DeepChatTextRequestBody['messages']) {
   const {text} = messages[messages.length - 1];
   const previousMessages = messages.slice(0, messages.length - 1);
   if (!text) return;

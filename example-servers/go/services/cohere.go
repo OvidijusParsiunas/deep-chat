@@ -55,8 +55,8 @@ func CohereGenerate(w http.ResponseWriter, r *http.Request) {
 	var resultData CohereGenerateResult
 	err = json.NewDecoder(resp.Body).Decode(&resultData)
 	if err != nil {
-		fmt.Println("Error when calling Cohere API:", err)
-		http.Error(w, "Error when calling Cohere API", http.StatusInternalServerError)
+		fmt.Println("Error when decoding Cohere response:", err)
+		http.Error(w, "Error when decoding Cohere response", http.StatusInternalServerError)
 		return
 	}
 

@@ -16,7 +16,7 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) {
 	shouldContinue := ProcessIncomingRequest(&w, r)
 	if !shouldContinue { return }
 
-	chatBodyBytes, err := createRequestBodyBytes(w, r, false)
+	chatBodyBytes, err := createChatRequestBodyBytes(w, r, false)
 	if err != nil { return }
 
 	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(chatBodyBytes))
@@ -36,8 +36,8 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) {
 	var resultData OpenAIChatResult
 	err = json.NewDecoder(resp.Body).Decode(&resultData)
 	if err != nil {
-		fmt.Println("Error when calling OpenAI API:", err)
-		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
+		fmt.Println("Error when decoding OpenAI response:", err)
+		http.Error(w, "Error when decoding OpenAI response", http.StatusInternalServerError)
 		return
 	}
 
@@ -61,7 +61,7 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 	shouldContinue := ProcessIncomingRequest(&w, r)
 	if !shouldContinue { return }
 
-	chatBodyBytes, err := createRequestBodyBytes(w, r, true)
+	chatBodyBytes, err := createChatRequestBodyBytes(w, r, true)
 	if err != nil { return }
 
 	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(chatBodyBytes))
@@ -105,7 +105,7 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func createRequestBodyBytes(w http.ResponseWriter, r *http.Request, stream bool) ([]byte, error) {
+func createChatRequestBodyBytes(w http.ResponseWriter, r *http.Request, stream bool) ([]byte, error) {
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
 	userRequestBodyBytes, err := io.ReadAll(r.Body)

@@ -28,6 +28,12 @@ func main() {
 
 	http.HandleFunc("/openai-image", services.OpenAIImage)
 
+	http.HandleFunc("/huggingface-conversation", services.HuggingFaceConversation)
+
+	http.HandleFunc("/huggingface-image", services.HuggingFaceImage)
+
+	http.HandleFunc("/huggingface-speech", services.HuggingFaceSpeech)
+
 	http.HandleFunc("/cohere-generate", services.CohereGenerate)
 
 	http.HandleFunc("/cohere-summarize", services.CohereSummarize)

@@ -60,10 +60,10 @@ def openai_image():
 
 huggingFace = HuggingFace()
 
-@app.route("/huggingface-chat", methods=["POST"])
-def hugging_face_chat():
+@app.route("/huggingface-conversation", methods=["POST"])
+def hugging_face_conversation():
     body = request.json
-    return huggingFace.chat(body)
+    return huggingFace.conversation(body)
 
 @app.route("/huggingface-image", methods=["POST"])
 def hugging_face_image_classification():

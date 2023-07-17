@@ -3,7 +3,6 @@ import requests
 import json
 import os
 
-
 class OpenAI:
     @staticmethod
     def create_chat_body(body, stream=False):

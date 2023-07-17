@@ -113,9 +113,9 @@ export default function IndexPage() {
             https://deepchat.dev/docs/connect/#requestBodyLimits */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
-            introMessage="Send a chat message through an example server to Hugging Face."
+            introMessage="Send a conversation message through an example server to Hugging Face."
             requestBodyLimits={{maxMessages: -1}}
-            request={{url: '/api/huggingface/chat'}}
+            request={{url: '/api/huggingface/conversation'}}
           />
           {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
