@@ -23,16 +23,18 @@ export class HTTPRequest {
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
       .then((response) => HTTPRequest.processResponseByType(response))
-      .then(async (result: object) => {
+      .then(async (result: Response) => {
         if (!io.extractResultData) return;
         const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
+        // the reason why this is here is to allow extractResultData to extract error message and throw it
+        HTTPRequest.validateResponse(result);
         if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
       })
       .catch((err) => {
         console.error(err);
-        messages.addNewErrorMessage('service', err);
+        messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
         onFinish();
       });
   }
@@ -55,8 +57,8 @@ export class HTTPRequest {
           textElement = messages.addNewStreamedMessage();
           return onOpen();
         }
-        console.error('Failed to open stream');
-        throw new Error('error');
+        const result = await HTTPRequest.processResponseByType(response);
+        throw result;
       },
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
@@ -68,7 +70,7 @@ export class HTTPRequest {
       },
       onerror(err) {
         onClose();
-        throw new Error(err); // need to throw otherwise stream will retry infinitely
+        throw err; // need to throw otherwise stream will retry infinitely
       },
       onclose() {
         messages.finaliseStreamedMessage();
@@ -77,7 +79,7 @@ export class HTTPRequest {
       signal: abortStream.signal,
     }).catch((err) => {
       console.error(err);
-      messages.addNewErrorMessage('service', 'Stream error');
+      messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
     });
   }
 
@@ -103,7 +105,7 @@ export class HTTPRequest {
       .catch((err) => {
         console.log('caught an error');
         console.error(err);
-        messages.addNewErrorMessage('service', err);
+        messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
         onFinish();
       });
   }
@@ -130,6 +132,7 @@ export class HTTPRequest {
       body: body || null,
     })
       .then((response) => HTTPRequest.processResponseByType(response))
+      .then((response) => HTTPRequest.validateResponse(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);
       })
@@ -149,5 +152,10 @@ export class HTTPRequest {
       return response;
     }
     return response.blob();
+  }
+
+  private static validateResponse(response: Response) {
+    if (!response.ok) throw response;
+    return response;
   }
 }

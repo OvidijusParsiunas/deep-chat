@@ -1,6 +1,6 @@
 ![Deep Chat](../../assets/readme/nextjs-connect.png)
 
-This is an example NextJS project template for [Deep Chat](https://www.npmjs.com/package/deep-chat). It includes preconfigured edge functions to handle text messages, file attachments and streaming responses; each accompanied with a variation for `basic` functionality that you can customize to fit your use-cases and an `OpenAI` proxy that can connect to its API.
+This is an example NextJS server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to create your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs).
 
 This project is fully setup and ready to be hosted by a platform such as [Vercel](https://vercel.com/).
 

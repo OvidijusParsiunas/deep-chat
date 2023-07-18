@@ -438,7 +438,7 @@ will automatically have a loading animation.
 
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayServiceErrorMessages?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `overrides:` { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `overrides?:` { <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: string` <br />
@@ -449,8 +449,7 @@ will automatically have a loading animation.
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
-is for communication with the target service and `speechToText` is when there is a problem using the `speechToText`.
-functionality. <br />
+is for communication with the target service and `speechToText` is when there is a problem using the `speechToText` functionality. <br />
 
 // WORK - speechToText link
 

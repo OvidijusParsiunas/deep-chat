@@ -7,6 +7,7 @@ import {CustomStyle} from '../../../../types/styles';
 import {PasteUtils} from './pasteUtils';
 import {InputLimit} from './inputLimit';
 
+// TO-DO state for focused (like input)
 export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
   readonly elementRef: HTMLElement;

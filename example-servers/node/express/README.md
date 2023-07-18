@@ -1,6 +1,6 @@
 ![Deep Chat](../../../assets/readme/express-connect.png)
 
-This is an example Express server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes preconfigured endpoints for handling chat with text messages, file attachments and streamed responses; each accompanied with a variation for a `basic` server that you can customize to fit your use-cases and an `OpenAI` server that can act as a proxy for connecting to its API.
+This is an example Express server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to create your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs).
 
 ### :calling: UI component
 

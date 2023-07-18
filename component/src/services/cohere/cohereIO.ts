@@ -16,6 +16,7 @@ export class CohereIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Cohere API Key';
   override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
   textInputPlaceholderText: string;
+  permittedErrorPrefixes = ['invalid request'];
   url: string;
 
   constructor(deepChat: DeepChat, url: string, inputPlaceholder: string, config?: CohereServiceConfig, apiKey?: APIKey) {

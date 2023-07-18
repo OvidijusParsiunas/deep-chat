@@ -79,12 +79,14 @@ export default function IndexPage() {
             introMessage="Send a chat message through an example server to OpenAI."
             request={{url: '/api/openai/chat'}}
             requestBodyLimits={{maxMessages: -1}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a streamed chat message through an example server to OpenAI."
             request={{url: '/api/openai/chat-stream'}}
             requestBodyLimits={{maxMessages: -1}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
           {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
@@ -95,6 +97,7 @@ export default function IndexPage() {
             camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
         </div>
 
@@ -117,6 +120,7 @@ export default function IndexPage() {
             introMessage="Send a conversation message through an example server to Hugging Face."
             requestBodyLimits={{maxMessages: -1}}
             request={{url: '/api/huggingface/conversation'}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
           {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
@@ -128,6 +132,7 @@ export default function IndexPage() {
             camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
           {/* If not using the microphone, you can send an example audio file here - WORK */}
           <DeepChat
@@ -137,6 +142,7 @@ export default function IndexPage() {
             audio={{files: {maxNumberOfFiles: 1}}}
             microphone={{files: {maxNumberOfFiles: 1}}}
             textInput={{disabled: true, placeholder: {text: 'Send an audio file!'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
         </div>
 
@@ -157,12 +163,14 @@ export default function IndexPage() {
             introMessage='Send start text through an example server to Cohere and receive its genereated completion. E.g. "Please explain to me how LLMs work"'
             request={{url: '/api/cohere/generate'}}
             textInput={{placeholder: {text: 'Once upon a time...'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send text through an example server to Cohere and receive its summary."
             request={{url: '/api/cohere/summarize'}}
             textInput={{placeholder: {text: 'Insert text to summarize'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
           />
         </div>
       </main>
