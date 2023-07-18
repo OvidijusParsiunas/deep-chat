@@ -17,17 +17,22 @@ export class HTTPRequest {
     const {body: interceptedBody, headers: interceptedHeaders} =
       io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
+    let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     })
+      .then((response) => {
+        responseValid = !!response.ok;
+        return response;
+      })
       .then((response) => HTTPRequest.processResponseByType(response))
       .then(async (result: Response) => {
-        if (!io.extractResultData) return;
+        if (!io.extractResultData) return; // this return should theoretically not execute
         const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
-        // the reason why this is here is to allow extractResultData to extract error message and throw it
-        HTTPRequest.validateResponse(result);
+        // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
+        if (!responseValid) throw result;
         if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
@@ -126,13 +131,9 @@ export class HTTPRequest {
       handleVerificationResult: HandleVerificationResult, body?: string) {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
-    fetch(url, {
-      method,
-      headers,
-      body: body || null,
-    })
-      .then((response) => HTTPRequest.processResponseByType(response))
+    fetch(url, { method, headers, body: body || null })
       .then((response) => HTTPRequest.validateResponse(response))
+      .then((response) => HTTPRequest.processResponseByType(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);
       })

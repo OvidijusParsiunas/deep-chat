@@ -1,5 +1,6 @@
-import express, {Express, Request, Response} from 'express';
+import express, {Express, NextFunction, Request, Response} from 'express';
 import {HuggingFace} from './services/huggingFace';
+import {ErrorUtils} from './utils/errorUtils';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
 import {Basic} from './services/basic';
@@ -38,40 +39,40 @@ app.post('/files', upload.array('files'), async (req: Request, res: Response) =>
 
 // ------------------ OPENAI API ------------------
 
-app.post('/openai-chat', async (req: Request, res: Response) => {
-  OpenAI.chat(req.body, res);
+app.post('/openai-chat', async (req: Request, res: Response, next: NextFunction) => {
+  OpenAI.chat(req.body, res, next);
 });
 
-app.post('/openai-chat-stream', async (req: Request, res: Response) => {
-  OpenAI.chatStream(req.body, res);
+app.post('/openai-chat-stream', async (req: Request, res: Response, next: NextFunction) => {
+  OpenAI.chatStream(req.body, res, next);
 });
 
-app.post('/openai-image', upload.array('files'), async (req: Request, res: Response) => {
-  OpenAI.imageVariation(req, res);
+app.post('/openai-image', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  OpenAI.imageVariation(req, res, next);
 });
 
 // ------------------ HUGGING FACE API ------------------
 
-app.post('/huggingface-conversation', async (req: Request, res: Response) => {
-  HuggingFace.conversation(req.body, res);
+app.post('/huggingface-conversation', async (req: Request, res: Response, next: NextFunction) => {
+  HuggingFace.conversation(req.body, res, next);
 });
 
-app.post('/huggingface-image', upload.array('files'), async (req: Request, res: Response) => {
-  HuggingFace.imageClassification(req, res);
+app.post('/huggingface-image', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  HuggingFace.imageClassification(req, res, next);
 });
 
-app.post('/huggingface-speech', upload.array('files'), async (req: Request, res: Response) => {
-  HuggingFace.speechRecognition(req, res);
+app.post('/huggingface-speech', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  HuggingFace.speechRecognition(req, res, next);
 });
 
 // ------------------ Cohere API ------------------
 
-app.post('/cohere-generate', async (req: Request, res: Response) => {
-  Cohere.generateText(req.body, res);
+app.post('/cohere-generate', async (req: Request, res: Response, next: NextFunction) => {
+  Cohere.generateText(req.body, res, next);
 });
 
-app.post('/cohere-summarize', async (req: Request, res: Response) => {
-  Cohere.summarizeText(req.body, res);
+app.post('/cohere-summarize', async (req: Request, res: Response, next: NextFunction) => {
+  Cohere.summarizeText(req.body, res, next);
 });
 
 // ------------------ START SERVER ------------------
@@ -79,3 +80,7 @@ app.post('/cohere-summarize', async (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+// ------------------ ERROR HANDLER ------------------
+
+app.use(ErrorUtils.handle);

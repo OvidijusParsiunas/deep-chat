@@ -1,8 +1,8 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import https from 'https';
 
 export class HuggingFace {
-  public static async conversation(body: Request['body'], res: Response) {
+  public static async conversation(body: Request['body'], res: Response, next: NextFunction) {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
     const conversationBody = HuggingFace.createConversationBody(body.messages);
@@ -17,18 +17,14 @@ export class HuggingFace {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', (error) => {
-          console.error('Error:', error);
-          res.status(400).send(error);
-        });
+        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:', result.error);
-            res.status(400).send(result.error);
+            next(result.error); // forwarded to error handler ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -37,10 +33,7 @@ export class HuggingFace {
         });
       }
     );
-    req.on('error', (error) => {
-      console.error('Error:', error);
-      res.status(400).send(error);
-    });
+    req.on('error', next); // forwarded to error handler ErrorUtils.handle
     // Send the chat request to Hugging Face
     req.write(JSON.stringify(conversationBody));
     req.end();
@@ -55,19 +48,21 @@ export class HuggingFace {
     return {inputs: {past_user_inputs, generated_responses, text}, wait_for_model: true};
   }
 
-  public static async imageClassification(req: Request, res: Response) {
+  public static async imageClassification(req: Request, res: Response, next: NextFunction) {
     const url = 'https://api-inference.huggingface.co/models/google/vit-base-patch16-224';
     const parseResult = (result: any) => result[0].label;
-    HuggingFace.sendFile(req, res, url, parseResult);
+    HuggingFace.sendFile(req, res, url, parseResult, next);
   }
 
-  public static async speechRecognition(req: Request, res: Response) {
+  public static async speechRecognition(req: Request, res: Response, next: NextFunction) {
     const url = 'https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self';
     const parseResult = (result: any) => result.text;
-    HuggingFace.sendFile(req, res, url, parseResult);
+    HuggingFace.sendFile(req, res, url, parseResult, next);
   }
 
-  private static async sendFile(req: Request, res: Response, url: string, parseResult: (result: any) => string) {
+  // prettier-ignore
+  private static async sendFile(
+      req: Request, res: Response, url: string, parseResult: (result: any) => string, next: NextFunction) {
     const fileReq = https.request(
       url,
       {
@@ -79,18 +74,14 @@ export class HuggingFace {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', (error) => {
-          console.error('Error:', error);
-          res.status(400).send(error);
-        });
+        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:', result.error);
-            res.status(400).send(result.error);
+            next(result.error); // forwarded to error handler ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -99,10 +90,7 @@ export class HuggingFace {
         });
       }
     );
-    fileReq.on('error', (error) => {
-      console.error('Error:', error);
-      res.status(400).send(error);
-    });
+    fileReq.on('error', next); // forwarded to error handler ErrorUtils.handle
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     // Send the chat request to Hugging Face

@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import FormData from 'form-data';
 import https from 'https';
 
@@ -16,7 +16,7 @@ export class OpenAI {
     return chatBody;
   }
 
-  public static async chat(body: Request['body'], res: Response) {
+  public static async chat(body: Request['body'], res: Response, next: NextFunction) {
     const chatBody = OpenAI.createChatBody(body);
     const req = https.request(
       'https://api.openai.com/v1/chat/completions',
@@ -29,18 +29,14 @@ export class OpenAI {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', (error) => {
-          console.error('Error:', error);
-          res.status(400).send(error);
-        });
+        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:', result.error);
-            res.status(400).send(result.error);
+            next(result.error); // forwarded to error handler ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -49,16 +45,13 @@ export class OpenAI {
         });
       }
     );
-    req.on('error', (error) => {
-      console.error('Error:', error);
-      res.status(400).send(error);
-    });
+    req.on('error', next); // forwarded to error handler ErrorUtils.handle
     // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
   }
 
-  public static async chatStream(body: Request['body'], res: Response) {
+  public static async chatStream(body: Request['body'], res: Response, next: NextFunction) {
     const chatBody = OpenAI.createChatBody(body, true);
     const req = https.request(
       'https://api.openai.com/v1/chat/completions',
@@ -70,18 +63,15 @@ export class OpenAI {
         },
       },
       (streamResp) => {
-        streamResp.on('error', (error) => {
-          console.error('Error:', error);
-          res.status(400).send(error);
-        });
+        streamResp.on('error', next); // forwarded to error handler ErrorUtils.handle
         streamResp.on('data', (chunk) => {
           try {
             let delta = '';
             if (chunk?.toString().match(/^\{\n\s+\"error\"\:/)) {
               console.error('Error in the retrieved stream chunk:');
               const error = JSON.parse(chunk?.toString()).error;
-              console.error(error);
-              return res.status(400).send(error);
+              // check
+              return next(error); // forwarded to error handler ErrorUtils.handle
             }
             const lines = chunk?.toString()?.split('\n') || [];
             const filtredLines = lines.filter((line: string) => line.trim());
@@ -96,9 +86,9 @@ export class OpenAI {
               // https://deepchat.dev/docs/connect/#Result
               res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
             }
-          } catch (e) {
-            console.error('Error when retrieving a stream chunk:', e);
-            return res.status(400).send(e);
+          } catch (error) {
+            console.error('Error when retrieving a stream chunk');
+            return next(error); // forwarded to error handler ErrorUtils.handle
           }
         });
         streamResp.on('end', () => {
@@ -109,10 +99,7 @@ export class OpenAI {
         });
       }
     );
-    req.on('error', (error) => {
-      console.error('Error:', error);
-      res.status(400).send(error);
-    });
+    req.on('error', next); // forwarded to error handler ErrorUtils.handle
     // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
@@ -120,7 +107,7 @@ export class OpenAI {
 
   // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
   // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
-  public static async imageVariation(req: Request, res: Response) {
+  public static async imageVariation(req: Request, res: Response, next: NextFunction) {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     const formData = new FormData();
@@ -139,18 +126,14 @@ export class OpenAI {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', (error) => {
-          console.error('Error:', error);
-          res.status(400).send(error);
-        });
+        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            console.error('Error:', result.error);
-            res.status(400).send(result.error);
+            next(result.error); // forwarded to error handler ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -159,10 +142,7 @@ export class OpenAI {
         });
       }
     );
-    formReq.on('error', (error) => {
-      console.error('Error:', error);
-      res.status(400).send(error);
-    });
+    formReq.on('error', next); // forwarded to error handler ErrorUtils.handle
     // Send the request to openAI
     formData.pipe(formReq);
     formReq.end();
