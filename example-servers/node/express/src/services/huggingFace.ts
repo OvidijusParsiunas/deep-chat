@@ -17,14 +17,14 @@ export class HuggingFace {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            next(result.error); // forwarded to error handler ErrorUtils.handle
+            next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -33,7 +33,7 @@ export class HuggingFace {
         });
       }
     );
-    req.on('error', next); // forwarded to error handler ErrorUtils.handle
+    req.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the chat request to Hugging Face
     req.write(JSON.stringify(conversationBody));
     req.end();
@@ -74,14 +74,14 @@ export class HuggingFace {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            next(result.error); // forwarded to error handler ErrorUtils.handle
+            next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -90,7 +90,7 @@ export class HuggingFace {
         });
       }
     );
-    fileReq.on('error', next); // forwarded to error handler ErrorUtils.handle
+    fileReq.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     // Send the chat request to Hugging Face

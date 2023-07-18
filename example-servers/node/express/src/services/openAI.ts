@@ -29,14 +29,14 @@ export class OpenAI {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            next(result.error); // forwarded to error handler ErrorUtils.handle
+            next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -45,7 +45,7 @@ export class OpenAI {
         });
       }
     );
-    req.on('error', next); // forwarded to error handler ErrorUtils.handle
+    req.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
@@ -63,15 +63,14 @@ export class OpenAI {
         },
       },
       (streamResp) => {
-        streamResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        streamResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         streamResp.on('data', (chunk) => {
           try {
             let delta = '';
             if (chunk?.toString().match(/^\{\n\s+\"error\"\:/)) {
               console.error('Error in the retrieved stream chunk:');
-              const error = JSON.parse(chunk?.toString()).error;
-              // check
-              return next(error); // forwarded to error handler ErrorUtils.handle
+              // WORK - check
+              return next(JSON.parse(chunk?.toString()).error); // forwarded to error handler middleware in ErrorUtils.handle
             }
             const lines = chunk?.toString()?.split('\n') || [];
             const filtredLines = lines.filter((line: string) => line.trim());
@@ -88,7 +87,7 @@ export class OpenAI {
             }
           } catch (error) {
             console.error('Error when retrieving a stream chunk');
-            return next(error); // forwarded to error handler ErrorUtils.handle
+            return next(error); // forwarded to error handler middleware in ErrorUtils.handle
           }
         });
         streamResp.on('end', () => {
@@ -99,7 +98,7 @@ export class OpenAI {
         });
       }
     );
-    req.on('error', next); // forwarded to error handler ErrorUtils.handle
+    req.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the chat request to openAI
     req.write(JSON.stringify(chatBody));
     req.end();
@@ -126,14 +125,14 @@ export class OpenAI {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.error) {
-            next(result.error); // forwarded to error handler ErrorUtils.handle
+            next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -142,7 +141,7 @@ export class OpenAI {
         });
       }
     );
-    formReq.on('error', next); // forwarded to error handler ErrorUtils.handle
+    formReq.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the request to openAI
     formData.pipe(formReq);
     formReq.end();

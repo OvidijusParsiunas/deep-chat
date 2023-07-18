@@ -38,8 +38,7 @@ export class HTTPRequest {
         onFinish();
       })
       .catch((err) => {
-        console.error(err);
-        messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
+        HTTPRequest.displayError(messages, err);
         onFinish();
       });
   }
@@ -83,8 +82,12 @@ export class HTTPRequest {
       },
       signal: abortStream.signal,
     }).catch((err) => {
-      console.error(err);
-      messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
+      // allowing extractResultData to attempt extract error message and throw it
+      io.extractResultData?.(err).then(() => {
+        HTTPRequest.displayError(messages, err);
+      }).catch((parsedError) => {
+        HTTPRequest.displayError(messages, parsedError);
+      });
     });
   }
 
@@ -108,9 +111,7 @@ export class HTTPRequest {
         }
       })
       .catch((err) => {
-        console.log('caught an error');
-        console.error(err);
-        messages.addNewErrorMessage('service', typeof err === 'object' ? JSON.stringify(err) : err);
+        HTTPRequest.displayError(messages, err);
         onFinish();
       });
   }
@@ -158,5 +159,16 @@ export class HTTPRequest {
   private static validateResponse(response: Response) {
     if (!response.ok) throw response;
     return response;
+  }
+
+  private static displayError(messages: Messages, err: object) {
+    console.error(err);
+    if (typeof err === 'object') {
+      if (Object.keys(err).length === 0) {
+        return messages.addNewErrorMessage('service', 'Service error, please try again.');
+      }
+      return messages.addNewErrorMessage('service', JSON.stringify(err));
+    }
+    messages.addNewErrorMessage('service', err);
   }
 }

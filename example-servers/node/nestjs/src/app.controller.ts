@@ -24,7 +24,7 @@ export class AppController {
 
   @Post('chat-stream')
   async chatStream(@Req() request: Request, @Res() response: Response) {
-    this.basic.chatStream(request.body, response);
+    return this.basic.chatStream(request.body, response);
   }
 
   @Post('files')
@@ -42,7 +42,7 @@ export class AppController {
 
   @Post('openai-chat-stream')
   async openaiChatStream(@Req() request: Request, @Res() response: Response) {
-    this.openAI.chatStream(request.body, response);
+    return this.openAI.chatStream(request.body, response);
   }
 
   @Post('openai-image')

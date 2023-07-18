@@ -17,14 +17,14 @@ export class Cohere {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.message) {
-            next(result); // forwarded to error handler ErrorUtils.handle
+            next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -33,7 +33,7 @@ export class Cohere {
         });
       }
     );
-    req.on('error', next); // forwarded to error handler ErrorUtils.handle
+    req.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the chat request to cohere
     req.write(JSON.stringify(generationBody));
     req.end();
@@ -54,14 +54,14 @@ export class Cohere {
       },
       (reqResp) => {
         let data = '';
-        reqResp.on('error', next); // forwarded to error handler ErrorUtils.handle
+        reqResp.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
         reqResp.on('data', (chunk) => {
           data += chunk;
         });
         reqResp.on('end', () => {
           const result = JSON.parse(data);
           if (result.message) {
-            next(result); // forwarded to error handler ErrorUtils.handle
+            next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
@@ -70,7 +70,7 @@ export class Cohere {
         });
       }
     );
-    req.on('error', next); // forwarded to error handler ErrorUtils.handle
+    req.on('error', next); // forwarded to error handler middleware in ErrorUtils.handle
     // Send the chat request to cohere
     req.write(JSON.stringify(summarizationBody));
     req.end();
