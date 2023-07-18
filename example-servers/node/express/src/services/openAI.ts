@@ -69,7 +69,6 @@ export class OpenAI {
             let delta = '';
             if (chunk?.toString().match(/^\{\n\s+\"error\"\:/)) {
               console.error('Error in the retrieved stream chunk:');
-              // WORK - check
               return next(JSON.parse(chunk?.toString()).error); // forwarded to error handler middleware in ErrorUtils.handle
             }
             const lines = chunk?.toString()?.split('\n') || [];

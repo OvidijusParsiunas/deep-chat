@@ -1,4 +1,4 @@
-import {ExceptionMiddleware} from './utils/exceptionMiddleware';
+import {GlobalExceptionMiddleware} from './utils/globalExceptionMiddleware';
 import {HuggingFace} from './services/huggingFace';
 import {AppController} from './app.controller';
 import {OpenAI} from './services/openAI';
@@ -17,7 +17,7 @@ import {Module} from '@nestjs/common';
     HuggingFace,
     {
       provide: APP_FILTER,
-      useClass: ExceptionMiddleware,
+      useClass: GlobalExceptionMiddleware,
     },
   ],
 })

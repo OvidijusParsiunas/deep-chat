@@ -46,7 +46,6 @@ export class OpenAI {
       try {
         let delta = '';
         if (chunk?.toString().match(/^\{\n\s+\"error\"\:/)) {
-          // WORK - test this
           throw JSON.parse(chunk?.toString()).error;
         }
         const lines = chunk?.toString()?.split('\n') || [];
@@ -64,7 +63,7 @@ export class OpenAI {
         }
       } catch (e) {
         console.error('Error when retrieving a stream chunk');
-        throw e;
+        console.log(e);
       }
     });
     stream.data.on('end', () => {
