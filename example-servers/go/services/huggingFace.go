@@ -115,6 +115,12 @@ func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
 
 	rawResponse := json.RawMessage(responseBody)
 
+	// Check if the response is an error
+	var errorData HugginFaceFileError
+	if err := json.Unmarshal(rawResponse, &errorData); err == nil && errorData.Error != "" {
+		return errors.New(errorData.Error)
+	}
+
 	// Check if the response is a successful result
 	var resultData []HugginFaceImageResultLabel
 	if err := json.Unmarshal(rawResponse, &resultData); err == nil {
@@ -126,12 +132,6 @@ func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(jsonResponse)
 		return nil
-	}
-
-	// Check if the response is an error
-	var errorData HugginFaceFileError
-	if err := json.Unmarshal(rawResponse, &errorData); err == nil {
-		return errors.New(errorData.Error)
 	}
 
 	return errors.New("unexpected response format")
@@ -156,7 +156,7 @@ func HuggingFaceSpeech(w http.ResponseWriter, r *http.Request) error {
 	req, err := http.NewRequest("POST", "https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self", file)
 	if err != nil { return err }
 
-	req.Header.Set("Authorization", "Bearer "+ os.Getenv("HUGGING_FACE_API_KEY"))
+	req.Header.Set("Authorization", "Bearer " + os.Getenv("HUGGING_FACE_API_KEY"))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -170,6 +170,12 @@ func HuggingFaceSpeech(w http.ResponseWriter, r *http.Request) error {
 
 	rawResponse := json.RawMessage(responseBody)
 
+	// Check if the response is an error
+	var errorData HugginFaceFileError
+	if err := json.Unmarshal(rawResponse, &errorData); err == nil && errorData.Error != "" {
+		return errors.New(errorData.Error)
+	}
+
 	// Check if the response is a successful result
 	var resultData HugginFaceSpeechResult
 	if err := json.Unmarshal(rawResponse, &resultData); err == nil {
@@ -181,12 +187,6 @@ func HuggingFaceSpeech(w http.ResponseWriter, r *http.Request) error {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(jsonResponse)
 		return nil
-	}
-
-	// Check if the response is an error
-	var errorData HugginFaceFileError
-	if err := json.Unmarshal(rawResponse, &errorData); err == nil {
-		return errors.New(errorData.Error)
 	}
 
 	return errors.New("unexpected response format")

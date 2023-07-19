@@ -7,43 +7,41 @@ import (
 	"io"
 )
 
-func Chat(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func Chat(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
 	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-		return
-	}
+	if err != nil { return err }
+
 	fmt.Println("Request Body:", string(body))
 
 
 	// Create response
 	jsonResponse, err := CreateTextResponse(w, "This is a response from the Go server. Thank you for your message!")
-	if (err != nil) { return }
+	if err != nil { return err }
 
 	// Send response
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonResponse)
+	return nil
 }
 
-func ChatStream(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func ChatStream(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 	
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
 	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-		return
-	}
+	if err != nil { return err }
+
 	fmt.Println("Request Body:", string(body))
 	
 	respondWithStream(w)
+	return nil
 }
 
 func respondWithStream(w http.ResponseWriter) {
@@ -74,13 +72,13 @@ func respondWithStream(w http.ResponseWriter) {
 	ticker.Stop()
 }
 
-func Files(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func Files(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect
-	err := r.ParseMultipartForm(32 << 20) // Max memory of 32MB
+	err = r.ParseMultipartForm(32 << 20) // Max memory of 32MB
 	if err == nil {
 		files, ok := r.MultipartForm.File["files"]
 		if ok {
@@ -102,18 +100,17 @@ func Files(w http.ResponseWriter, r *http.Request) {
 		// If message is sent without any files, the text will be stored inside body using Deep Chat JSON request format:
 		// https://deepchat.dev/docs/connect
 		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-			return
-		}
+		if err != nil { return err }
+
 		fmt.Println("Request Body:", string(body))
 	}
 
 	// Create response
 	jsonResponse, err := CreateTextResponse(w, "This is a response from the Go server. Thank you for your message!")
-	if (err != nil) { return }
+	if err != nil { return err }
 
 	// Send response
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonResponse)
+	return nil
 }

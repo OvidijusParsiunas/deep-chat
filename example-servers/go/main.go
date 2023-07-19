@@ -18,9 +18,9 @@ func main() {
 
 	http.HandleFunc("/chat", services.ErrorHandler(services.Chat))
 
-	http.HandleFunc("/chat-stream", services.ChatStream)
+	http.HandleFunc("/chat-stream", services.ErrorHandler(services.ChatStream))
 
-	http.HandleFunc("/files", services.Files)
+	http.HandleFunc("/files", services.ErrorHandler(services.Files))
 
 	http.HandleFunc("/openai-chat", services.ErrorHandler(services.OpenAIChat))
 
