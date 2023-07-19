@@ -32,53 +32,35 @@ public class CohereService {
     HttpEntity<CohereGenerateBody> requestEntity = new HttpEntity<>(generateBody, headers);
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.cohere.ai/v1/generate");
 
-    try {
-      // Send the request to cohere
-      ResponseEntity<CohereGenerateResult> response = restTemplate.exchange(
-        builder.toUriString(), HttpMethod.POST, requestEntity,CohereGenerateResult.class);
+    // Send the request to cohere
+    ResponseEntity<CohereGenerateResult> response = restTemplate.exchange(
+      builder.toUriString(), HttpMethod.POST, requestEntity,CohereGenerateResult.class);
 
-      if (response.getStatusCode() == HttpStatus.OK) {
-        CohereGenerateResult responseBody = response.getBody();
-        if (responseBody == null) throw new Exception("Unexpected response from Cohere");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatTextRespose(responseBody.getGenerations()[0].getText());
-      } else {
-        throw new Exception(response.getStatusCode().toString());
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling Cohere API", e);
-      throw new Exception(e);
-    }
+    CohereGenerateResult responseBody = response.getBody();
+    if (responseBody == null) throw new Exception("Unexpected response from Cohere");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseBody.getGenerations()[0].getText());
   }
 
-    public DeepChatTextRespose summarizeText(DeepChatRequestBody requestBody) throws Exception {
-      LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
-      CohereSummarizeBody summarizeBody = new CohereSummarizeBody(requestBody.getMessages()[0].getText());
-      RestTemplate restTemplate = new RestTemplate();
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-      headers.set("Authorization", "Bearer " + cohereAPIKey);
-      HttpEntity<CohereSummarizeBody> requestEntity = new HttpEntity<>(summarizeBody, headers);
-      UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.cohere.ai/v1/summarize");
+  public DeepChatTextRespose summarizeText(DeepChatRequestBody requestBody) throws Exception {
+    LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
+    CohereSummarizeBody summarizeBody = new CohereSummarizeBody(requestBody.getMessages()[0].getText());
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", "Bearer " + cohereAPIKey);
+    HttpEntity<CohereSummarizeBody> requestEntity = new HttpEntity<>(summarizeBody, headers);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.cohere.ai/v1/summarize");
 
-      try {
-        // Send the request to cohere
-        ResponseEntity<CohereSummarizeResult> response = restTemplate.exchange(
-          builder.toUriString(), HttpMethod.POST, requestEntity,CohereSummarizeResult.class);
+    // Send the request to cohere
+    ResponseEntity<CohereSummarizeResult> response = restTemplate.exchange(
+      builder.toUriString(), HttpMethod.POST, requestEntity,CohereSummarizeResult.class);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-          CohereSummarizeResult responseBody = response.getBody();
-          if (responseBody == null) throw new Exception("Unexpected response from Cohere");
-          // Sends response back to Deep Chat using the Result format:
-          // https://deepchat.dev/docs/connect/#Result
-          return new DeepChatTextRespose(responseBody.getSummary());
-        } else {
-          throw new Exception(response.getStatusCode().toString());
-        }
-      } catch (Exception e) {
-        LOGGER.error("Error when calling Cohere API", e);
-        throw new Exception(e);
-      }
-    }
+    CohereSummarizeResult responseBody = response.getBody();
+    if (responseBody == null) throw new Exception("Unexpected response from Cohere");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseBody.getSummary());
+  }
 }

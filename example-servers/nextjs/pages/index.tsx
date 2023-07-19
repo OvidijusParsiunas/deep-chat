@@ -77,14 +77,15 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a chat message through an example server to OpenAI."
-            request={{url: '/api/openai/chat'}}
+            request={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
             requestBodyLimits={{maxMessages: -1}}
             errorMessages={{displayServiceErrorMessages: true}}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a streamed chat message through an example server to OpenAI."
-            request={{url: '/api/openai/chat-stream'}}
+            request={{url: '/api/openai/chat-stream', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
+            stream={true}
             requestBodyLimits={{maxMessages: -1}}
             errorMessages={{displayServiceErrorMessages: true}}
           />

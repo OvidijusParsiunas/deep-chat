@@ -12,10 +12,12 @@ class HuggingFace:
         conversation_body = self.create_conversation_body(body['messages'])
         response = requests.post(
             'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill', json=conversation_body, headers=headers)
-        result = response.json()
+        jsonResponse = response.json()
+        if jsonResponse['error']:
+            raise Exception(jsonResponse['error'])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {'result': {'text': result['generated_text']}}
+        return {'result': {'text': jsonResponse['generated_text']}}
 
     @staticmethod
     def create_conversation_body(messages):
@@ -36,10 +38,12 @@ class HuggingFace:
         data=files[0].read()
         response = requests.post(
             'https://api-inference.huggingface.co/models/google/vit-base-patch16-224', data=data, headers=headers)
-        result = response.json()
+        jsonResponse = response.json()
+        if jsonResponse['error']:
+            raise Exception(jsonResponse['error'])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {'result': {'text': result[0]['label']}}
+        return {'result': {'text': jsonResponse[0]['label']}}
     
     def speech_recognition(self, files):
         headers = {
@@ -49,7 +53,9 @@ class HuggingFace:
         data=files[0].read()
         response = requests.post(
             'https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self', data=data, headers=headers)
-        result = response.json()
+        jsonResponse = response.json()
+        if jsonResponse['error']:
+            raise Exception(jsonResponse['error'])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {'result': {'text': result['text']}}
+        return {'result': {'text': jsonResponse['text']}}

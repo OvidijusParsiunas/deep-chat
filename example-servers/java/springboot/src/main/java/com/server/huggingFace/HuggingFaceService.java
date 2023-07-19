@@ -39,24 +39,15 @@ public class HuggingFaceService {
     HttpEntity<HuggingFaceConversationBody> requestEntity = new HttpEntity<>(conversation, headers);
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill");
 
-    try {
-      // Send the request to Hugging Face
-      ResponseEntity<HuggingFaceConversationResult> response = restTemplate.exchange(
-        builder.toUriString(), HttpMethod.POST, requestEntity,HuggingFaceConversationResult.class);
+    // Send the request to Hugging Face
+    ResponseEntity<HuggingFaceConversationResult> response = restTemplate.exchange(
+      builder.toUriString(), HttpMethod.POST, requestEntity,HuggingFaceConversationResult.class);
 
-      if (response.getStatusCode() == HttpStatus.OK) {
-        HuggingFaceConversationResult responseBody = response.getBody();
-        if (responseBody == null) throw new Exception("Unexpected response from Hugging Face");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatTextRespose(responseBody.getGeneratedText());
-      } else {
-        throw new Exception(response.getStatusCode().toString());
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling Hugging Face API", e);
-      throw new Exception(e);
-    }
+    HuggingFaceConversationResult responseBody = response.getBody();
+    if (responseBody == null) throw new Exception("Unexpected response from Hugging Face");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseBody.getGeneratedText());
   }
 
   private static HuggingFaceConversationBody createConversationBody(DeepChatRequestMessage[] messages) {
@@ -74,7 +65,7 @@ public class HuggingFaceService {
     HuggingFaceConversationInputs inputs = new HuggingFaceConversationInputs(
       pastUserInputs.toArray(new String[0]), generatedResponses.toArray(new String[0]), text);
     return new HuggingFaceConversationBody(inputs, true);
-}
+  }
   
   public DeepChatTextRespose imageClassification(@RequestPart("files") List<MultipartFile> files) throws Exception {
     // Files are stored inside a form using Deep Chat request FormData format:
@@ -86,26 +77,19 @@ public class HuggingFaceService {
     HttpEntity<byte[]> requestEntity = new HttpEntity<>(files.get(0).getBytes(), headers);
     RestTemplate restTemplate = new RestTemplate();
     String url = "https://api-inference.huggingface.co/models/google/vit-base-patch16-224";
-    try {
-      // Send the request to Hugging Face
-      ResponseEntity<HuggingFaceImageResultLabel[]> responseEntity = restTemplate.exchange(
-        url, HttpMethod.POST, requestEntity, HuggingFaceImageResultLabel[].class);
 
-      if (responseEntity.getStatusCode() == HttpStatus.OK) {
-        HuggingFaceImageResultLabel[] responseData = responseEntity.getBody();
-        if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatTextRespose(responseData[0].getLabel());
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling Hugging Face API", e);
-      throw new Exception(e);
-    }
-    return null;
+    // Send the request to Hugging Face
+    ResponseEntity<HuggingFaceImageResultLabel[]> responseEntity = restTemplate.exchange(
+      url, HttpMethod.POST, requestEntity, HuggingFaceImageResultLabel[].class);
+
+    HuggingFaceImageResultLabel[] responseData = responseEntity.getBody();
+    if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseData[0].getLabel());
   }
 
-    public DeepChatTextRespose speechRecognition(@RequestPart("files") List<MultipartFile> files) throws Exception {
+  public DeepChatTextRespose speechRecognition(@RequestPart("files") List<MultipartFile> files) throws Exception {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     if (files.size() == 0) throw new Exception("No file was sent");
@@ -115,22 +99,15 @@ public class HuggingFaceService {
     HttpEntity<byte[]> requestEntity = new HttpEntity<>(files.get(0).getBytes(), headers);
     RestTemplate restTemplate = new RestTemplate();
     String url = "https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self";
-    try {
-      // Send the request to Hugging Face
-      ResponseEntity<HugginFaceSpeechResult> responseEntity = restTemplate.exchange(
-        url, HttpMethod.POST, requestEntity, HugginFaceSpeechResult.class);
 
-      if (responseEntity.getStatusCode() == HttpStatus.OK) {
-        HugginFaceSpeechResult responseData = responseEntity.getBody();
-        if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatTextRespose(responseData.getText());
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling Hugging Face API", e);
-      throw new Exception(e);
-    }
-    return null;
+    // Send the request to Hugging Face
+    ResponseEntity<HugginFaceSpeechResult> responseEntity = restTemplate.exchange(
+      url, HttpMethod.POST, requestEntity, HugginFaceSpeechResult.class);
+
+    HugginFaceSpeechResult responseData = responseEntity.getBody();
+    if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseData.getText());
   }
 }

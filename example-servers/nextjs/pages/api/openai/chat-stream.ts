@@ -2,13 +2,14 @@ import {DeepChatOpenAITextRequestBody} from '../../../types/deepChatTextRequestB
 import {createParser, ParsedEvent, ReconnectInterval} from 'eventsource-parser';
 import {OpenAIConverseResult} from 'deep-chat/dist/types/openAIResult';
 import {createReqChatBody} from '../../../utils/openAIChatBody';
+import errorHandler from '../../../utils/errorHandler';
 import {NextRequest} from 'next/server';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+async function handler(req: NextRequest) {
   // Text messages are stored inside request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect
   const textRequestBody = (await req.json()) as DeepChatOpenAITextRequestBody;
@@ -27,6 +28,11 @@ export default async function handler(req: NextRequest) {
     method: 'POST',
     body: JSON.stringify(chatBody),
   })) as any;
+
+  if (!result.ok) {
+    const openAPIResult = (await result.json()) as OpenAIConverseResult;
+    throw openAPIResult.error?.message || 'Stream error';
+  }
 
   const readableStream = new ReadableStream({
     async start(controller) {
@@ -73,3 +79,5 @@ export default async function handler(req: NextRequest) {
     headers: {'Content-Type': 'text/html; charset=utf-8'},
   });
 }
+
+export default errorHandler(handler);

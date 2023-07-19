@@ -50,73 +50,58 @@ public class OpenAIService {
     HttpEntity<OpenAIChatBody> requestEntity = new HttpEntity<>(chatBody, headers);
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.openai.com/v1/chat/completions");
 
-    try {
-      // Send the request to openAI
-      ResponseEntity<OpenAIChatResult> response = restTemplate.exchange(
-        builder.toUriString(), HttpMethod.POST, requestEntity,OpenAIChatResult.class);
-
-      if (response.getStatusCode() == HttpStatus.OK) {
-        OpenAIChatResult responseBody = response.getBody();
-        if (responseBody == null) throw new Exception("Unexpected response from OpenAI");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatTextRespose(responseBody.getChoices()[0].getMessage().getContent());
-      } else {
-        throw new Exception(response.getStatusCode().toString());
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling OpenAI API", e);
-      throw new Exception(e);
-    }
+    // Send the request to openAI
+    ResponseEntity<OpenAIChatResult> response = restTemplate.exchange(
+      builder.toUriString(), HttpMethod.POST, requestEntity,OpenAIChatResult.class);
+    OpenAIChatResult responseBody = response.getBody();
+    if (responseBody == null) throw new Exception("Unexpected response from OpenAI");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatTextRespose(responseBody.getChoices()[0].getMessage().getContent());
   }
 
   @SuppressWarnings("unchecked")
-  public Flux<Object> chatStream(DeepChatRequestBody requestBody) {
+  public Flux<DeepChatTextRespose> chatStream(DeepChatRequestBody requestBody) {
     LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
     OpenAIChatBody chatRequest = OpenAIService.createOpenAIChatBody(requestBody, true);
-    try {
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-      headers.setBearerAuth(openAIAPIKey);
-      WebClient client = WebClient.create("https://api.openai.com/v1");
-      // Send the request to openAI
-      return client.post()
-        .uri("/chat/completions")
-        .headers(httpHeaders -> httpHeaders.addAll(headers))
-        .bodyValue(chatRequest)
-        .retrieve()
-        .bodyToFlux(DataBuffer.class)
-        .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
-        .concatMap(chunk -> {
-          String[] lines = chunk.split("\n");
-          return Flux.fromArray(lines)
-            .filter(line -> !line.trim().isEmpty())
-            .map(line -> line.replace("data:", "")
-              .replace("[DONE]", "")
-              .replace("data: [DONE]", "")
-              .trim());
-        })
-        .filter(data -> !data.isEmpty())
-        .concatMap(data -> {
-          try {
-            Map<String, Object> resultObject = new ObjectMapper().readValue(data, Map.class);
-            StringBuilder delta = new StringBuilder();
-            for (Map<String, Object> choice : (List<Map<String, Object>>) resultObject.get("choices")) {
-              Map<String, Object> deltaObj = (Map<String, Object>) choice.getOrDefault("delta", Collections.emptyMap());
-              delta.append(deltaObj.getOrDefault("content", ""));
-            }
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            return Flux.just(new DeepChatTextRespose(delta.toString()));
-          } catch (JsonProcessingException e) {
-            LOGGER.error("Error when processing a stream chunk: ", e);
-            return null;
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setBearerAuth(openAIAPIKey);
+    WebClient client = WebClient.create("https://api.openai.com/v1");
+    // Send the request to openAI
+    return client.post()
+      .uri("/chat/completions")
+      .headers(httpHeaders -> httpHeaders.addAll(headers))
+      .bodyValue(chatRequest)
+      .retrieve()
+      .bodyToFlux(DataBuffer.class)
+      .map(dataBuffer -> dataBuffer.toString(StandardCharsets.UTF_8))
+      .concatMap(chunk -> {
+        String[] lines = chunk.split("\n");
+        return Flux.fromArray(lines)
+          .filter(line -> !line.trim().isEmpty())
+          .map(line -> line.replace("data:", "")
+            .replace("[DONE]", "")
+            .replace("data: [DONE]", "")
+            .trim());
+      })
+      .filter(data -> !data.isEmpty())
+      .concatMap(data -> {
+        try {
+          Map<String, Object> resultObject = new ObjectMapper().readValue(data, Map.class);
+          StringBuilder delta = new StringBuilder();
+          for (Map<String, Object> choice : (List<Map<String, Object>>) resultObject.get("choices")) {
+            Map<String, Object> deltaObj = (Map<String, Object>) choice.getOrDefault("delta", Collections.emptyMap());
+            delta.append(deltaObj.getOrDefault("content", ""));
           }
-      });
-    } catch (Exception e) {
-      LOGGER.error("Error when calling OpenAI API", e);
-      return null;
-    }
+          // Sends response back to Deep Chat using the Result format:
+          // https://deepchat.dev/docs/connect/#Result
+          return Flux.just(new DeepChatTextRespose(delta.toString()));
+        } catch (JsonProcessingException e) {
+          LOGGER.error("Error when processing a stream chunk: ", e);
+          return null;
+        }
+    });
   }
 
   private static OpenAIChatBody createOpenAIChatBody(DeepChatRequestBody requestBody, Boolean stream) {
@@ -148,21 +133,14 @@ public class OpenAIService {
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
     RestTemplate restTemplate = new RestTemplate();
     String url = "https://api.openai.com/v1/images/variations";
-    try {
-      // Send the request to openAI
-      ResponseEntity<OpenAIImageResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, OpenAIImageResult.class);
 
-      if (responseEntity.getStatusCode() == HttpStatus.OK) {
-        OpenAIImageResult responseData = responseEntity.getBody();
-        if (responseData == null) throw new Exception("Unexpected response from OpenAI");
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(responseData.getData()[0].getUrl(), "image")));
-      }
-    } catch (Exception e) {
-      LOGGER.error("Error when calling OpenAI API", e);
-      throw new Exception(e);
-    }
-    return null;
+    // Send the request to openAI
+    ResponseEntity<OpenAIImageResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, OpenAIImageResult.class);
+
+    OpenAIImageResult responseData = responseEntity.getBody();
+    if (responseData == null) throw new Exception("Unexpected response from OpenAI");
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(responseData.getData()[0].getUrl(), "image")));
   }
 }

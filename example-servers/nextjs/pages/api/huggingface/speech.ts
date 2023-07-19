@@ -1,11 +1,12 @@
 import {HuggingFaceAudioRecognitionResult} from 'deep-chat/dist/types/huggingFaceResult';
+import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+async function handler(req: NextRequest) {
   // Files are stored inside a form using Deep Chat request FormData format:
   // https://deepchat.dev/docs/connect
   const reqFormData = await req.formData();
@@ -26,3 +27,5 @@ export default async function handler(req: NextRequest) {
   // https://deepchat.dev/docs/connect/#Result
   return NextResponse.json({result: {text: huggingFaceResult.text}});
 }
+
+export default errorHandler(handler);

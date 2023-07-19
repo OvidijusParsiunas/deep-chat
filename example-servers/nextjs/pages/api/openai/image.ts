@@ -1,4 +1,5 @@
 import {OpenAIImageResult} from 'deep-chat/dist/types/openAIResult';
+import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
 import FormData from 'form-data';
 
@@ -8,7 +9,7 @@ export const config = {
 
 // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
-export default async function handler(req: NextRequest) {
+async function handler(req: NextRequest) {
   // Files are stored inside a form using Deep Chat request FormData format:
   // https://deepchat.dev/docs/connect
   const reqFormData = await req.formData();
@@ -28,3 +29,5 @@ export default async function handler(req: NextRequest) {
   // https://deepchat.dev/docs/connect/#Result
   return NextResponse.json({result: {files: [{type: 'image', src: openAPIResult.data[0].url}]}});
 }
+
+export default errorHandler(handler);

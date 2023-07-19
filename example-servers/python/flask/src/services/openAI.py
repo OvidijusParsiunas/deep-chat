@@ -29,57 +29,54 @@ class OpenAI:
         chat_body = self.create_chat_body(body)
         response = requests.post(
             'https://api.openai.com/v1/chat/completions', json=chat_body, headers=headers)
-        result = response.json()['choices'][0]['message']['content']
+        jsonResponse = response.json()
+        if jsonResponse['error']:
+            raise Exception(jsonResponse['error']['message'])
+        result = jsonResponse['choices'][0]['message']['content']
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         return {'result': {'text': result}}
 
     def chat_stream(self, body):
-        try:
-            headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + os.getenv('OPENAI_API_KEY')
-            }
-            chat_body = self.create_chat_body(body, stream=True)
-            response = requests.post(
-                'https://api.openai.com/v1/chat/completions', json=chat_body, headers=headers, stream=True)
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + os.getenv('OPENAI_API_KEY')
+        }
+        chat_body = self.create_chat_body(body, stream=True)
+        response = requests.post(
+            'https://api.openai.com/v1/chat/completions', json=chat_body, headers=headers, stream=True)
 
-            def generate():
-                accumulated_data = ""
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        delta = ''
-                        if chunk.decode().strip().startswith('{"error":'):
-                            print('Error in the retrieved stream chunk:')
-                            error = json.loads(chunk.decode())['error']
-                            print(error)
-                            yield json.dumps(error), 400
-                            return
-                        lines = chunk.decode().split('\n')
-                        filtered_lines = list(
-                            filter(lambda line: line.strip(), lines))
-                        for line in filtered_lines:
-                            data = line.replace('data:', '').replace(
-                                '[DONE]', '').replace('data: [DONE]', '').strip()
-                            if data:
-                                accumulated_data += data
-                                try:
-                                    result = json.loads(accumulated_data)
-                                    for choice in result['choices']:
-                                        delta += choice.get('delta',
-                                                            {}).get('content', '')
-                                    # Sends response back to Deep Chat using the Result format:
-                                    # https://deepchat.dev/docs/connect/#Result
-                                    yield 'data: {}\n\n'.format(json.dumps({"result": {"text": delta}}))
-                                    accumulated_data = ""  # Reset the accumulated data
-                                except json.JSONDecodeError:
-                                    # Incomplete JSON string, continue accumulating lines
-                                    pass
-                return Response(generate(), mimetype='text/event-stream')
-        except Exception as e:
-            print('Error when retrieving a stream chunk:')
-            print(e)
-            return Response(json.dumps(str(e)), status=400, mimetype='application/json')
+        def generate():
+            accumulated_data = ""
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    delta = ''
+                    if not(chunk.decode().strip().startswith('data')):
+                        errorMessage = json.loads(chunk.decode())['error']['message']
+                        print('Error in the retrieved stream chunk:', errorMessage)
+                        # this exception is not caught, however it signals to the user that there was an error
+                        raise Exception(errorMessage)
+                    lines = chunk.decode().split('\n')
+                    filtered_lines = list(
+                        filter(lambda line: line.strip(), lines))
+                    for line in filtered_lines:
+                        data = line.replace('data:', '').replace(
+                            '[DONE]', '').replace('data: [DONE]', '').strip()
+                        if data:
+                            accumulated_data += data
+                            try:
+                                result = json.loads(accumulated_data)
+                                for choice in result['choices']:
+                                    delta += choice.get('delta',
+                                                        {}).get('content', '')
+                                # Sends response back to Deep Chat using the Result format:
+                                # https://deepchat.dev/docs/connect/#Result
+                                yield 'data: {}\n\n'.format(json.dumps({"result": {"text": delta}}))
+                                accumulated_data = ""  # Reset the accumulated data
+                            except json.JSONDecodeError:
+                                # Incomplete JSON string, continue accumulating lines
+                                pass
+        return Response(generate(), mimetype='text/event-stream')
 
     # By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
     # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
@@ -94,8 +91,11 @@ class OpenAI:
             'image': (image_file.filename, image_file.read(), image_file.mimetype)
         }
         response = requests.post(url, files=files, headers=headers)
+        jsonResponse = response.json()
+        if jsonResponse['error']:
+            raise Exception(jsonResponse['error']['message'])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
         result = {'result': {
-            'files': [{'type': 'image', 'src': response.json()['data'][0]['url']}]}}
+            'files': [{'type': 'image', 'src': jsonResponse['data'][0]['url']}]}}
         return result

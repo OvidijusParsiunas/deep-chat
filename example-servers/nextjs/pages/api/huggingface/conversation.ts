@@ -1,12 +1,13 @@
 import {DeepChatOpenAITextRequestBody, DeepChatTextRequestBody} from '../../../types/deepChatTextRequestBody';
 import {HuggingFaceConversationResult} from 'deep-chat/dist/types/huggingFaceResult';
+import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+async function handler(req: NextRequest) {
   // Text messages are stored inside request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect
   const textRequestBody = (await req.json()) as DeepChatOpenAITextRequestBody;
@@ -38,3 +39,5 @@ function createReqConversationBody(messages: DeepChatTextRequestBody['messages']
   const generated_responses = previousMessages.filter((message) => message.role === 'ai').map((message) => message.text);
   return {inputs: {past_user_inputs, generated_responses, text}, wait_for_model: true};
 }
+
+export default errorHandler(handler);

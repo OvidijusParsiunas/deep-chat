@@ -64,19 +64,19 @@ public class BasicService {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     if (!files.isEmpty()) {
-      System.out.println("Files:");
+      LOGGER.info("Files:");
       for (MultipartFile file : files) {
         String fileName = file.getOriginalFilename();
-        System.out.println(fileName);
+        LOGGER.info(fileName);
       }
       // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
       // https://deepchat.dev/docs/connect
       if (!formDataProperties.isEmpty()) {
-        System.out.println("Text messages:");
+        LOGGER.info("Text messages:");
         for (Map.Entry<String, String> entry : formDataProperties.entrySet()) {
           String propertyName = entry.getKey();
           String propertyValue = entry.getValue();
-          System.out.println(propertyName + ": " + propertyValue);
+          LOGGER.info(propertyName + ": " + propertyValue);
         }
       }
     }

@@ -1,4 +1,5 @@
 import {DeepChatTextRequestBody} from '../../../types/deepChatTextRequestBody';
+import errorHandler from '../../../utils/errorHandler';
 import {NextRequest} from 'next/server';
 
 export const runtime = 'edge';
@@ -6,7 +7,7 @@ export const runtime = 'edge';
 // this is used to enable streaming
 export const dynamic = 'force-dynamic';
 
-export default async function handler(req: NextRequest) {
+async function handler(req: NextRequest) {
   const messageRequestBody = (await req.json()) as DeepChatTextRequestBody;
   // Text messages are stored inside request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect
@@ -51,3 +52,5 @@ export default async function handler(req: NextRequest) {
     }, 70);
   }
 }
+
+export default errorHandler(handler);
