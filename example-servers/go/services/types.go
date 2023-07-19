@@ -78,6 +78,10 @@ type File struct {
 	Src  string `json:"src"`
 }
 
+type DeepChatErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type CohereGenerateBody struct {
 	Prompt string `json:"prompt"`
 }
@@ -122,4 +126,8 @@ type HugginFaceImageResultLabel struct {
 
 type HugginFaceSpeechResult struct {
 	Text string `json:"text"`
+}
+
+type HugginFaceFileError struct {
+	Error string `json:"error"`
 }

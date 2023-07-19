@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"errors"
 	"bytes"
 	"bufio"
 	"fmt"
@@ -12,12 +13,12 @@ import (
 	"os"
 )
 
-func OpenAIChat(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func OpenAIChat(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 
 	chatBodyBytes, err := createChatRequestBodyBytes(w, r, false)
-	if err != nil { return }
+	if err != nil { return err }
 
 	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(chatBodyBytes))
 	req.Header.Set("Content-Type", "application/json")
@@ -25,44 +26,35 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) {
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error when calling OpenAI API:", err)
-		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
-		return
-	}
+	if err != nil { return err }
 	
 	defer resp.Body.Close()
 
 	var resultData OpenAIChatResult
 	err = json.NewDecoder(resp.Body).Decode(&resultData)
-	if err != nil {
-		fmt.Println("Error when decoding OpenAI response:", err)
-		http.Error(w, "Error when decoding OpenAI response", http.StatusInternalServerError)
-		return
-	}
+	if err != nil { return err }
 
 	if resultData.OpenAIError.Message != "" {
-    fmt.Println("API error:", resultData.OpenAIError.Message)
-    http.Error(w, resultData.OpenAIError.Message, http.StatusInternalServerError)
-    return
+    return errors.New(resultData.OpenAIError.Message)
 	}
 
 	// Create response
 	jsonResponse, err := CreateTextResponse(w, resultData.Choices[0].Message.Content)
-	if (err != nil) { return }
+	if (err != nil) { return err }
 
 	// Send response
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonResponse)
+	return nil
 }
 
 
-func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func OpenAIChatStream(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 
 	chatBodyBytes, err := createChatRequestBodyBytes(w, r, true)
-	if err != nil { return }
+	if err != nil { return err }
 
 	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(chatBodyBytes))
 	req.Header.Set("Content-Type", "application/json")
@@ -72,36 +64,40 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error when calling OpenAI API:", err)
-		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
-		return
-	}
+	if err != nil { return err }
 
+	var resultData OpenAIChatResult
+	err = json.NewDecoder(resp.Body).Decode(&resultData)
+	if err != nil { return err }
+
+	if resultData.OpenAIError.Message != "" {
+    return errors.New(resultData.OpenAIError.Message)
+	}
+	
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = strings.TrimSpace(line)
 		if line != "" {
-			if strings.HasPrefix(line, "data: [DONE]") { return }
+			if strings.HasPrefix(line, "data: [DONE]") { return nil }
 			var result OpenAIStreamResult
 			err := json.Unmarshal([]byte(line[6:]), &result)
 			if err != nil {
 				fmt.Println("Error when unmarshalling response chunk:", err)
-				http.Error(w, "Error when unmarshalling response chunk", http.StatusInternalServerError)
-				return
+				return err
 			}
 			choices := result.Choices
 			if len(choices) > 0 {
 				// Create response
 				jsonResponse, err := CreateTextResponse(w, choices[0].Delta.Content)
-				if (err != nil) { return }
+				if err != nil { return err }
 				// Send response
 				fmt.Fprintf(w, "data: %s\n\n", string(jsonResponse))
 				flusher.Flush()
 			}
 		}
 	}
+	return nil
 }
 
 
@@ -152,81 +148,55 @@ func createChatBody(userRequestBody UserRequestBody, stream bool) OpenAIChatBody
 
 // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
-func OpenAIImage(w http.ResponseWriter, r *http.Request) {
-	shouldContinue := ProcessIncomingRequest(&w, r)
-	if !shouldContinue { return }
+func OpenAIImage(w http.ResponseWriter, r *http.Request) error {
+	err := ProcessIncomingRequest2(&w, r)
+	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect
-	err := r.ParseMultipartForm(32 << 20) // 32MB maximum file size
-	if err != nil {
-		fmt.Println("Failed to read request body:", err)
-		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-		return
-	}
+	err = r.ParseMultipartForm(32 << 20) // 32MB maximum file size
+	if err != nil { return err }
 	files := r.MultipartForm.File["files"]
 
-	jsonResponse := SendImageVariationRequest(w, files)
-	if jsonResponse != nil {
-		// Send response
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(jsonResponse)
-	}
+	jsonResponse, err := SendImageVariationRequest(w, files)
+	if err != nil { return err }
+
+	// Send response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonResponse)
+	return nil
 }
 
-func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHeader) []byte {
+func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHeader) ([]byte, error) {
 	var buf bytes.Buffer
 	multipartWriter := multipart.NewWriter(&buf)
 
 	if len(files) > 0 {
 		file, err := files[0].Open()
-		if err != nil {
-			fmt.Println("Failed to read request body:", err)
-			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-			return nil
-		}
+		if err != nil { return nil, err }
 
 		defer file.Close()
 
 		part, err := multipartWriter.CreateFormFile("image", files[0].Filename)
-		if err != nil {
-			fmt.Println("Failed to read request body:", err)
-			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-			return nil
-		}
+		if err != nil { return nil, err }
 
 		_, err = io.Copy(part, file)
-		if err != nil {
-			fmt.Println("Failed to read request body:", err)
-			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-			return nil
-		}
+		if err != nil { return nil, err }
 	}
 
 	err := multipartWriter.Close()
-	if err != nil {
-		fmt.Println("Failed to read request body:", err)
-		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-		return nil
-	}
+	if err != nil { return nil, err }
 
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/images/variations", &buf)
-	if err != nil {
-		fmt.Println("Error when calling OpenAI API:", err)
-		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
-		return nil
-	}
+	if err != nil { return nil, err }
+
 
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 	req.Header.Set("Authorization", "Bearer "+ os.Getenv("OPENAI_API_KEY"))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error when calling OpenAI API:", err)
-		http.Error(w, "Error when calling OpenAI API", http.StatusInternalServerError)
-		return nil
-	}
+	if err != nil { return nil, err }
 
 	defer resp.Body.Close()
 
@@ -234,14 +204,12 @@ func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHea
 	json.NewDecoder(resp.Body).Decode(&resultData)
 
 	if resultData.OpenAIError.Message != "" {
-    fmt.Println("API error:", resultData.OpenAIError.Message)
-    http.Error(w, resultData.OpenAIError.Message, http.StatusInternalServerError)
-    return nil
+    return nil, errors.New(resultData.OpenAIError.Message)
 	}
 
-		// Create response
-		jsonResponse, err := CreateImageResponse(w, resultData.Data[0].Url)
-		if (err != nil) { return nil }
+	// Create response
+	jsonResponse, err := CreateImageResponse(w, resultData.Data[0].Url)
+	if err != nil { return nil, err }
 
-		return jsonResponse
+	return jsonResponse, nil
 }

@@ -16,27 +16,27 @@ func main() {
     log.Fatalf("Error loading .env file")
   }
 
-	http.HandleFunc("/chat", services.Chat)
+	http.HandleFunc("/chat", services.ErrorHandler(services.Chat))
 
 	http.HandleFunc("/chat-stream", services.ChatStream)
 
 	http.HandleFunc("/files", services.Files)
 
-	http.HandleFunc("/openai-chat", services.OpenAIChat)
+	http.HandleFunc("/openai-chat", services.ErrorHandler(services.OpenAIChat))
 
-	http.HandleFunc("/openai-chat-stream", services.OpenAIChatStream)
+	http.HandleFunc("/openai-chat-stream", services.ErrorHandler(services.OpenAIChatStream))
 
-	http.HandleFunc("/openai-image", services.OpenAIImage)
+	http.HandleFunc("/openai-image", services.ErrorHandler(services.OpenAIImage))
 
-	http.HandleFunc("/huggingface-conversation", services.HuggingFaceConversation)
+	http.HandleFunc("/huggingface-conversation", services.ErrorHandler(services.HuggingFaceConversation))
 
-	http.HandleFunc("/huggingface-image", services.HuggingFaceImage)
+	http.HandleFunc("/huggingface-image", services.ErrorHandler(services.HuggingFaceImage))
 
-	http.HandleFunc("/huggingface-speech", services.HuggingFaceSpeech)
+	http.HandleFunc("/huggingface-speech", services.ErrorHandler(services.HuggingFaceSpeech))
 
-	http.HandleFunc("/cohere-generate", services.CohereGenerate)
+	http.HandleFunc("/cohere-generate", services.ErrorHandler(services.CohereGenerate))
 
-	http.HandleFunc("/cohere-summarize", services.CohereSummarize)
+	http.HandleFunc("/cohere-summarize", services.ErrorHandler(services.CohereSummarize))
 
 	fmt.Printf("Starting server at port 8080\n")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
