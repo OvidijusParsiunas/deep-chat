@@ -2,6 +2,8 @@ import {Injectable} from '@nestjs/common';
 import {Request} from 'express';
 import axios from 'axios';
 
+// Make sure to set the COHERE_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 @Injectable()
 export class Cohere {
   async generateText(body: Request['body']) {

@@ -2,6 +2,8 @@ import {NextFunction, Request, Response} from 'express';
 import FormData from 'form-data';
 import https from 'https';
 
+// Make sure to set the OPENAI_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 export class OpenAI {
   private static createChatBody(body: Request['body'], stream?: boolean) {
     // Text messages are stored inside request body using the Deep Chat JSON format:

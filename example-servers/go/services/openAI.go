@@ -13,8 +13,10 @@ import (
 	"os"
 )
 
+// Make sure to set the OPENAI_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 func OpenAIChat(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	chatBodyBytes, err := createChatRequestBodyBytes(w, r, false)
@@ -50,7 +52,7 @@ func OpenAIChat(w http.ResponseWriter, r *http.Request) error {
 
 
 func OpenAIChatStream(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	chatBodyBytes, err := createChatRequestBodyBytes(w, r, true)
@@ -149,7 +151,7 @@ func createChatBody(userRequestBody UserRequestBody, stream bool) OpenAIChatBody
 // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
 func OpenAIImage(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:

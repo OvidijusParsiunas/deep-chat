@@ -1,6 +1,8 @@
 import requests
 import os
 
+# Make sure to set the COHERE_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 class Cohere:
     def generate_text(self, body):
         headers = {

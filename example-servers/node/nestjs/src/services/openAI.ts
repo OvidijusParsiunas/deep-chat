@@ -3,6 +3,8 @@ import {Request, Response} from 'express';
 import * as FormData from 'form-data';
 import axios from 'axios';
 
+// Make sure to set the OPENAI_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 @Injectable()
 export class OpenAI {
   private static createChatBody(body: Request['body'], stream?: boolean) {

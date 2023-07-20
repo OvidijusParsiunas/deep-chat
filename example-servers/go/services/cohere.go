@@ -10,8 +10,10 @@ import (
 	"os"
 )
 
+// Make sure to set the COHERE_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 func CohereGenerate(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:
@@ -62,7 +64,7 @@ func CohereGenerate(w http.ResponseWriter, r *http.Request) error {
 
 
 func CohereSummarize(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:

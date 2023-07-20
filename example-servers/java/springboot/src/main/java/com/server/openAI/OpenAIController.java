@@ -12,6 +12,8 @@ import com.server.utils.deepChat.DeepChatTextRespose;
 import reactor.core.publisher.Flux;
 import java.util.List;
 
+// Make sure to set the OPENAI_API_KEY environment variable in application.properties
+
 @RestController
 public class OpenAIController {
   @Autowired

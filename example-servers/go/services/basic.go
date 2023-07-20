@@ -8,7 +8,7 @@ import (
 )
 
 func Chat(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:
@@ -30,7 +30,7 @@ func Chat(w http.ResponseWriter, r *http.Request) error {
 }
 
 func ChatStream(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 	
 	// Text messages are stored inside request body using the Deep Chat JSON format:
@@ -73,7 +73,7 @@ func respondWithStream(w http.ResponseWriter) {
 }
 
 func Files(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:

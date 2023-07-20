@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import java.util.List;
 import java.util.Map;
 
+// Make sure to set the OPENAI_API_KEY environment variable in application.properties
+
 @Service
 public class OpenAIService {
   private static final Logger LOGGER = LoggerFactory.getLogger(OpenAIService.class);

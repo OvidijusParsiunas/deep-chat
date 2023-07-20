@@ -10,8 +10,10 @@ import (
 	"os"
 )
 
+// Make sure to set the HUGGING_FACE_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 func HuggingFaceConversation(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	conversationBodyBytes, err := createConversationRequestBodyBytes(w, r)
@@ -83,7 +85,7 @@ func createConversationBody(messages []UserRequestMessage) HuggingFaceConversati
 }
 
 func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
@@ -138,7 +140,7 @@ func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HuggingFaceSpeech(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest2(&w, r)
+	err := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
 
 	// Files are stored inside a form using Deep Chat request FormData format:

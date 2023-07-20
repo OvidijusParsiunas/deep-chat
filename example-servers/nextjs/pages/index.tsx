@@ -125,7 +125,6 @@ export default function IndexPage() {
           />
           {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
-          {/* WORK - estimated_time */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send an image through an example server to Hugging Face and retrieve its classification."

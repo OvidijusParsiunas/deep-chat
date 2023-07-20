@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import java.util.List;
 
+// Make sure to set the HUGGING_FACE_API_KEY environment variable in application.properties
+
 @Service
 public class HuggingFaceService {
   private static final Logger LOGGER = LoggerFactory.getLogger(HuggingFaceService.class);

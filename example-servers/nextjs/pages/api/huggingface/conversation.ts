@@ -7,6 +7,8 @@ export const config = {
   runtime: 'edge',
 };
 
+// Make sure to set the HUGGING_FACE_API_KEY environment variable
+
 async function handler(req: NextRequest) {
   // Text messages are stored inside request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect

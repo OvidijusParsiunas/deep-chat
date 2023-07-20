@@ -6,6 +6,8 @@ export const config = {
   runtime: 'edge',
 };
 
+// Make sure to set the HUGGING_FACE_API_KEY environment variable
+
 async function handler(req: NextRequest) {
   // Files are stored inside a form using Deep Chat request FormData format:
   // https://deepchat.dev/docs/connect

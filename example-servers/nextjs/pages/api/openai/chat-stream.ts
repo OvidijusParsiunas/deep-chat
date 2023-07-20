@@ -9,6 +9,8 @@ export const config = {
   runtime: 'edge',
 };
 
+// Make sure to set the OPENAI_API_KEY environment variable
+
 async function handler(req: NextRequest) {
   // Text messages are stored inside request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect
@@ -20,14 +22,14 @@ async function handler(req: NextRequest) {
 
   const chatBody = createReqChatBody(textRequestBody, true);
 
-  const result = (await fetch('https://api.openai.com/v1/chat/completions', {
+  const result = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
     },
     method: 'POST',
     body: JSON.stringify(chatBody),
-  })) as any;
+  });
 
   if (!result.ok) {
     const openAPIResult = (await result.json()) as OpenAIConverseResult;

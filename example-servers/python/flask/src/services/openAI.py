@@ -3,6 +3,8 @@ import requests
 import json
 import os
 
+# Make sure to set the OPENAI_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
+
 class OpenAI:
     @staticmethod
     def create_chat_body(body, stream=False):

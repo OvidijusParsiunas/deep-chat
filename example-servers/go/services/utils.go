@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"net/http"
+	"errors"
 	"fmt"
 )
 
@@ -13,18 +14,17 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) bool {
+func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) error {
 	enableCors(w)
 	// This is important as the browser sends a preflight OPTIONS request before the POST request
 	if r.Method == "OPTIONS" {
 		(*w).WriteHeader(204)
-		return false
+		return errors.New("this should not raise an error")
 	}
 	if r.Method != "POST" {
-		http.Error(*w, "Method is not supported.", http.StatusNotFound)
-		return false
+		return errors.New("Invalid request method - expected POST, got: " + r.Method)
 	}
-	return true
+	return nil
 }
 
 func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
@@ -55,6 +55,34 @@ func CreateImageResponse(w http.ResponseWriter, src string) ([]byte, error) {
 			Files: []File{{Type: "image", Src: src}},
 		},
 	}
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		fmt.Println("Failed to marshal JSON response");
+		http.Error(w, "Failed to marshal JSON response", http.StatusInternalServerError)
+	}
+	return jsonResponse, err
+}
+
+func ErrorHandler(f func(w http.ResponseWriter, r *http.Request) error) http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    if err := f(w, r); err != nil {
+			fmt.Println("Error:", err)
+			jsonResponse, err := createErrorResponse(w, err.Error())
+			if (err != nil) { return }
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(jsonResponse)
+    }
+  }
+}
+
+func createErrorResponse(w http.ResponseWriter, text string) ([]byte, error) {
+	// Create a response to Deep Chat using the Result format:
+	// https://deepchat.dev/docs/connect/#Result
+	response := DeepChatErrorResponse{
+		Error: text,
+	}
+
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		fmt.Println("Failed to marshal JSON response");

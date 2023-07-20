@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.server.utils.deepChat.DeepChatRequestBody;
 import com.server.utils.deepChat.DeepChatTextRespose;
 
+// Make sure to set the COHERE_API_KEY environment variable in application.properties
+
 @RestController
 public class CohereController {
   @Autowired

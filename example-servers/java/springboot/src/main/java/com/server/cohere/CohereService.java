@@ -15,6 +15,8 @@ import org.springframework.http.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+// Make sure to set the COHERE_API_KEY environment variable in application.properties
+
 @Service
 public class CohereService {
   private static final Logger LOGGER = LoggerFactory.getLogger(CohereService.class);
