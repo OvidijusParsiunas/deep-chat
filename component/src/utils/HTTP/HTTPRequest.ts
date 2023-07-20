@@ -133,7 +133,6 @@ export class HTTPRequest {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
     fetch(url, { method, headers, body: body || null })
-      .then((response) => HTTPRequest.validateResponse(response))
       .then((response) => HTTPRequest.processResponseByType(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);

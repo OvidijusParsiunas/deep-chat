@@ -1,4 +1,5 @@
 import {HuggingFace} from './huggingFace';
+import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
 import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
@@ -11,6 +12,7 @@ export interface DirectConnection {
   huggingFace?: HuggingFace & APIKey;
   azure?: Azure & APIKey;
   cohere?: Cohere & APIKey;
+  stabilityAI?: StabilityAI & APIKey;
   assemblyAI?: AssemblyAI & APIKey;
   demo?: Demo;
 }

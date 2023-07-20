@@ -6,6 +6,7 @@ import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnsw
 import {HuggingFaceSummarizationIO} from './huggingFace/huggingFaceSummarizationIO';
 import {HuggingFaceConversationIO} from './huggingFace/huggingFaceConversationIO';
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
+import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
 import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
@@ -77,18 +78,21 @@ export class ServiceIOFactory {
         return new HuggingFaceConversationIO(deepChat);
       }
       if (directConnection.azure) {
-        if (directConnection.azure?.speechToText) {
+        if (directConnection.azure.speechToText) {
           return new AzureSpeechToTextIO(deepChat);
         }
-        if (directConnection.azure?.textToSpeech) {
+        if (directConnection.azure.textToSpeech) {
           return new AzureTextToSpeechIO(deepChat);
         }
-        if (directConnection.azure?.summarization) {
+        if (directConnection.azure.summarization) {
           return new AzureSummarizationIO(deepChat);
         }
-        if (directConnection.azure?.translation) {
+        if (directConnection.azure.translation) {
           return new AzureTranslationIO(deepChat);
         }
+      }
+      if (directConnection.stabilityAI) {
+        return new StabilityAITextToImageIO(deepChat);
       }
       if (directConnection.demo) {
         return new BaseServiceIO(deepChat, undefined, directConnection.demo);

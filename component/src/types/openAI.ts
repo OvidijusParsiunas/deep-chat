@@ -14,6 +14,7 @@ export type OpenAIAudio = {
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
 };
 
+// https://platform.openai.com/docs/api-reference/images
 export interface OpenAIImages {
   n?: number;
   size?: '256x256' | '512x512' | '1024x1024';
