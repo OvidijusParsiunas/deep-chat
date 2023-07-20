@@ -1,9 +1,9 @@
 import express, {Express, NextFunction, Request, Response} from 'express';
 import {HuggingFace} from './services/huggingFace';
 import {ErrorUtils} from './utils/errorUtils';
+import {Custom} from './services/custom';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
-import {Basic} from './services/basic';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import cors from 'cors';
@@ -23,18 +23,18 @@ app.use(cors());
 
 app.use(express.json());
 
-// ------------------ BASIC API ------------------
+// ------------------ CUSTOM API ------------------
 
 app.post('/chat', async (req: Request, res: Response) => {
-  Basic.chat(req.body, res);
+  Custom.chat(req.body, res);
 });
 
 app.post('/chat-stream', async (req: Request, res: Response) => {
-  Basic.chatStream(req.body, res);
+  Custom.chatStream(req.body, res);
 });
 
 app.post('/files', upload.array('files'), async (req: Request, res: Response) => {
-  Basic.files(req, res);
+  Custom.files(req, res);
 });
 
 // ------------------ OPENAI API ------------------

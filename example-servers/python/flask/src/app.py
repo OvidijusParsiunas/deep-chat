@@ -1,8 +1,8 @@
 from requests.exceptions import ConnectionError
 from services.huggingFace import HuggingFace
+from services.custom import Custom
 from services.openAI import OpenAI
 from services.cohere import Cohere
-from services.basic import Basic
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -30,23 +30,23 @@ def handle_exception(e):
     print(e)
     return {'error': 'Internal service error'}, 500
 
-# ------------------ BASIC API ------------------
+# ------------------ CUSTOM API ------------------
 
-basic = Basic()
+custom = Custom()
 
 @app.route("/chat", methods=["POST"])
 def chat():
     body = request.json
-    return basic.chat(body)
+    return custom.chat(body)
 
 @app.route("/chat-stream", methods=["POST"])
 def chat_stream():
     body = request.json
-    return basic.chat_stream(body)
+    return custom.chat_stream(body)
 
 @app.route("/files", methods=["POST"])
 def files():
-    return basic.files(request)
+    return custom.files(request)
 
 # ------------------ OPENAI API ------------------
 

@@ -2,7 +2,7 @@ from flask import Response
 import time
 import json
 
-class Basic:
+class Custom:
     def chat(self, body):
         # Text messages are stored inside request body using the Deep Chat JSON format:
         # https://deepchat.dev/docs/connect

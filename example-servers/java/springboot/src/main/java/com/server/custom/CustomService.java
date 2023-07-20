@@ -1,4 +1,4 @@
-package com.server.basic;
+package com.server.custom;
 
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class BasicService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(BasicService.class);
+public class CustomService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomService.class);
 
   public DeepChatTextRespose chat(DeepChatRequestBody requestBody) {
     // Text messages are stored inside request body using the Deep Chat JSON format:

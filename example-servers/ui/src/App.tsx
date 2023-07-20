@@ -119,7 +119,7 @@ function App() {
           errorMessages={{displayServiceErrorMessages: true}}
         />
         {/* If not using the camera, you can use an example image here:
-            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
+            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
         <DeepChat
           containerStyle={{borderRadius: '10px'}}
           introMessage="Send an image through an example server to Hugging Face and retrieve its classification."
@@ -129,7 +129,8 @@ function App() {
           textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
-        {/* If not using the microphone, you can send an example audio file here - WORK */}
+        {/* If not using the microphone, you can send an example audio file here:
+            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a */}
         <DeepChat
           containerStyle={{borderRadius: '10px'}}
           introMessage="Send an audio file through an example server to Hugging Face and recieve its transcript."

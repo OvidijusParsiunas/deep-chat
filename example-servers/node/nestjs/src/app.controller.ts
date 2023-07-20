@@ -5,35 +5,35 @@ import {CohereExceptionMiddleware} from './utils/cohereExceptionMiddleware';
 import {FilesInterceptor} from '@nestjs/platform-express';
 import {HuggingFace} from './services/huggingFace';
 import {Request, Response} from 'express';
+import {Custom} from './services/custom';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
-import {Basic} from './services/basic';
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly basic: Basic,
+    private readonly custom: Custom,
     private readonly openAI: OpenAI,
     private readonly cohere: Cohere,
     private readonly huggingFace: HuggingFace
   ) {}
 
-  // ------------------ BASIC API ------------------
+  // ------------------ CUSTOM API ------------------
 
   @Post('chat')
   async chat(@Req() request: Request) {
-    return this.basic.chat(request.body);
+    return this.custom.chat(request.body);
   }
 
   @Post('chat-stream')
   async chatStream(@Req() request: Request, @Res() response: Response) {
-    return this.basic.chatStream(request.body, response);
+    return this.custom.chatStream(request.body, response);
   }
 
   @Post('files')
   @UseInterceptors(FilesInterceptor('files'))
   async files(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request) {
-    return this.basic.files(files, request.body);
+    return this.custom.files(files, request.body);
   }
 
   // ------------------ OPENAI API ------------------

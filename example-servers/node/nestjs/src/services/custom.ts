@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {Request, Response} from 'express';
 
 @Injectable()
-export class Basic {
+export class Custom {
   async chat(body: Request['body']) {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
@@ -25,7 +25,7 @@ export class Basic {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    Basic.sendStream(res, responseChunks);
+    Custom.sendStream(res, responseChunks);
   }
 
   private static sendStream(res: Response, responseChunks: string[], chunkIndex = 0) {
@@ -35,7 +35,7 @@ export class Basic {
         // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
         res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
-        Basic.sendStream(res, responseChunks, chunkIndex + 1);
+        Custom.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
         res.end();
       }

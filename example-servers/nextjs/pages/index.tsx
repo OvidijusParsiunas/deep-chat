@@ -27,7 +27,7 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a chat message to an example server. "
-            request={{url: '/api/basic/chat'}}
+            request={{url: '/api/custom/chat'}}
             requestBodyLimits={{maxMessages: -1}}
             requestInterceptor={(details: RequestDetails) => {
               console.log(details);
@@ -41,13 +41,13 @@ export default function IndexPage() {
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send a streamed chat message to an example server."
-            request={{url: '/api/basic/chat-stream'}}
+            request={{url: '/api/custom/chat-stream'}}
             stream={true}
           />
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send files to an example server."
-            request={{url: '/api/basic/files'}}
+            request={{url: '/api/custom/files'}}
             audio={true}
             images={true}
             gifs={true}
@@ -124,7 +124,7 @@ export default function IndexPage() {
             errorMessages={{displayServiceErrorMessages: true}}
           />
           {/* If not using the camera, you can use an example image here:
-            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
+            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send an image through an example server to Hugging Face and retrieve its classification."
@@ -134,7 +134,8 @@ export default function IndexPage() {
             textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
             errorMessages={{displayServiceErrorMessages: true}}
           />
-          {/* If not using the microphone, you can send an example audio file here - WORK */}
+          {/* If not using the microphone, you can send an example audio file here:
+            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a */}
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage="Send an audio file through an example server to Hugging Face and recieve its transcript."
