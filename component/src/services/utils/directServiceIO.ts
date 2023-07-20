@@ -1,13 +1,11 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {GenericObject} from '../../types/object';
+import {BuildHeadersFunc} from '../../types/headers';
 import {BaseServiceIO} from './baseServiceIO';
 import {Request} from '../../types/request';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-
-type BuildHeadersFunc = (key: string) => GenericObject<string>;
 
 export class DirectServiceIO extends BaseServiceIO {
   key?: string;

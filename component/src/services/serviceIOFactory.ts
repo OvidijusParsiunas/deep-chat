@@ -1,10 +1,13 @@
 import {HuggingFaceAudioClassificationIO} from './huggingFace/huggingFaceAudioClassificationIO';
 import {HuggingFaceImageClassificationIO} from './huggingFace/huggingFaceImageClassificationIO';
+import {StabilityAIImageToImageUpscaleIO} from './stabilityAI/stabilityAIImageToImageUpscaleIO';
+import {StabilityAIImageToImageMaskingIO} from './stabilityAI/stabilityAIImageToImageMaskingIO';
 import {HuggingFaceAudioRecognitionIO} from './huggingFace/huggingFaceAudioRecognitionIO';
 import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
 import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnswerIO';
 import {HuggingFaceSummarizationIO} from './huggingFace/huggingFaceSummarizationIO';
 import {HuggingFaceConversationIO} from './huggingFace/huggingFaceConversationIO';
+import {StabilityAIImageToImageIO} from './stabilityAI/stabilityAIImageToImageIO';
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
 import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
@@ -92,6 +95,15 @@ export class ServiceIOFactory {
         }
       }
       if (directConnection.stabilityAI) {
+        if (directConnection.stabilityAI.imageToImage) {
+          return new StabilityAIImageToImageIO(deepChat);
+        }
+        if (directConnection.stabilityAI.imageToImageUpscale) {
+          return new StabilityAIImageToImageUpscaleIO(deepChat);
+        }
+        if (directConnection.stabilityAI.imageToImageMasking) {
+          return new StabilityAIImageToImageMaskingIO(deepChat);
+        }
         return new StabilityAITextToImageIO(deepChat);
       }
       if (directConnection.demo) {
