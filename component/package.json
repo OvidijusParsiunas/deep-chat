@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Framework agnostic chat component that can power any API",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",

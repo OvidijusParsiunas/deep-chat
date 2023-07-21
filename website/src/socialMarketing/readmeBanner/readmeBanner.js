@@ -1,5 +1,6 @@
 import DeepChatBrowser from '../../components/table/deepChatBrowser';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
+import stabilityAILogo from '/img/stabilityAILogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
@@ -79,6 +80,19 @@ const Logos = React.forwardRef((_, ref) => {
       >
         <a href="docs/directConnection/AssemblyAI" target="_blank">
           <img src={assemblyAILogo} width="35" style={{marginTop: '9px'}} />
+        </a>
+      </div>
+      <div
+        className="start-panel-logo"
+        style={{
+          textAlign: 'center',
+          marginRight: '60px',
+          transform: 'scale(1.5)',
+          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
+        }}
+      >
+        <a href="docs/directConnection/AssemblyAI" target="_blank">
+          <img src={stabilityAILogo} width="44" style={{marginTop: '6px'}} />
         </a>
       </div>
     </div>
