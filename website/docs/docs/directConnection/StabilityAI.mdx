@@ -6,9 +6,9 @@ sidebar_position: 4
 
 import stabilityAILogo from '/img/stabilityAILogo.png';
 
-# <img src={stabilityAILogo} width="48" style={{float: 'left', marginTop: '5px', marginRight: '6px', marginLeft: '2px'}} /> StabilityAI
+# <img src={stabilityAILogo} width="48" style={{float: 'left', marginTop: '5px', marginRight: '6px', marginLeft: '2px'}} /><span className="direct-service-title">StabilityAI</span>
 
-Properties used to connect to [StabilityAI](https://platform.stability.ai/).
+Properties used to connect to [Stability AI](https://platform.stability.ai/).
 
 ### `stabilityAI` {#stabilityAI}
 
@@ -273,7 +273,7 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
 ### `ImageToImageUpscale` {#ImageToImageUpscale}
 
 - Type: `true` | {`engine_id?: string`, `width?: number`, `height?: number`}
-- Default: _{engine_id: "stable-diffusion-v1-5"}_
+- Default: _{engine_id: "esrgan-v1-x2plus"}_
 
 Connect to Stability AI's [`image-to-image-upscale`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage) API. <br />
 `engine_id` is the engine that will be used to process the image. <br />

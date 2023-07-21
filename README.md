@@ -1,6 +1,6 @@
 <br />
 
-![Deep Chat](./assets/readme/banner.png)
+![Deep Chat](./assets/readme/banner-2.png)
 
 <b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or you want to connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
@@ -69,7 +69,7 @@ Connect to popular AI APIs directly from the browser via the use of the [`direct
 Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`request`](https://deepchat.dev/docs/connect#request) property described above with a combination of a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
 
 Currently supported direct API connections:
-[OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssembleAI](https://www.assemblyai.com/)
+[OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs), [Stability AI](https://stability.ai/), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssemblyAI](https://www.assemblyai.com/)
 
 ### :camera: :microphone: Camera and Microphone
 

@@ -363,6 +363,14 @@ h1 + h2 {
   filter: var(--adaptive-logo-filter);
 }
 
+/* fix for incosistent text padding in firefox */
+@-moz-document url-prefix() {
+  .direct-service-title {
+    display: flex;
+    padding-top: 3px;
+  }
+}
+
 @media (max-width: 575px) {
   .documentation-example-container {
     display: none;
