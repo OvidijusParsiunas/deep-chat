@@ -1,5 +1,6 @@
 import express, {Express, NextFunction, Request, Response} from 'express';
 import {HuggingFace} from './services/huggingFace';
+import {StabilityAI} from './services/stabilityAI';
 import {ErrorUtils} from './utils/errorUtils';
 import {Custom} from './services/custom';
 import {OpenAI} from './services/openAI';
@@ -63,6 +64,12 @@ app.post('/huggingface-image', upload.array('files'), async (req: Request, res: 
 
 app.post('/huggingface-speech', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
   HuggingFace.speechRecognition(req, res, next);
+});
+
+// ------------------ STABILITY AI API ------------------
+
+app.post('/stability-text-to-image', async (req: Request, res: Response, next: NextFunction) => {
+  StabilityAI.textToImage(req.body, res, next);
 });
 
 // ------------------ Cohere API ------------------
