@@ -17,7 +17,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   textInputPlaceholderText = 'Describe image changes';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI</b></div>
-    <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 2px"><b>Image to Image Upscale</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 5px"><b>Image to Image Upscale</b></div>
     <p>Upload an image to generate a new one with higher resolution.</p>
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 
@@ -28,7 +28,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
     const config = directConnection?.stabilityAI?.imageToImageUpscale as NonNullable<StabilityAI['imageToImageUpscale']>;
     if (typeof config === 'object') {
-      if (config.engineId) this.url = `https://api.stability.ai/v1/generation/${config.engineId}/image-to-image/upscale`;
+      if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/image-to-image/upscale`;
       StabilityAIImageToImageUpscaleIO.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }
@@ -36,7 +36,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   }
 
   private static cleanConfig(config: StabilityAIImageToImageUpscale) {
-    delete config.engineId;
+    delete config.engine_id;
   }
 
   private static canSendFileMessage(_?: string, files?: File[]) {

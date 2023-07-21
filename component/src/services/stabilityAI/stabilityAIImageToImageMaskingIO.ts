@@ -15,11 +15,11 @@ import {DeepChat} from '../../deepChat';
 export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/stable-inpainting-512-v2-0/image-to-image/masking';
   private readonly _imageWeight: number | undefined;
-  private readonly _maskSource: StabilityAIImageToImageMasking['maskSource'] = 'MASK_IMAGE_WHITE';
+  private readonly _maskSource: StabilityAIImageToImageMasking['mask_source'] = 'MASK_IMAGE_WHITE';
   textInputPlaceholderText = 'Describe image changes';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI</b></div>
-    <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 2px"><b>Image to Image Masking</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 5px"><b>Image to Image Masking</b></div>
     <p>Upload an image, its mask image to create a new one based on the changes you have described for the mask area.</p>
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 
@@ -30,9 +30,9 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
     const config = directConnection?.stabilityAI?.imageToImageMasking as NonNullable<StabilityAI['imageToImageMasking']>;
     if (typeof config === 'object') {
-      if (config.engineId) this.url = `https://api.stability.ai/v1/generation/${config.engineId}/image-to-image/masking`;
+      if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/image-to-image/masking`;
       if (config.weight !== undefined && config.weight !== null) this._imageWeight = config.weight;
-      if (config.maskSource !== undefined && config.maskSource !== null) this._maskSource = config.maskSource;
+      if (config.mask_source !== undefined && config.mask_source !== null) this._maskSource = config.mask_source;
       StabilityAIImageToImageMaskingIO.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }
@@ -40,12 +40,12 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   }
 
   private static cleanConfig(config: StabilityAIImageToImageMasking) {
-    delete config.engineId;
+    delete config.engine_id;
     delete config.weight;
   }
 
   private static canSendFileTextMessage(text?: string, files?: File[]) {
-    return !!files?.[0] && !!files[1] && !!(text && text.trim() !== '');
+    return !!files?.[0] && !!(text && text.trim() !== '');
   }
 
   private createFormDataBody(body: StabilityAIImageToImageMasking, image: File, mask: File, text?: string) {

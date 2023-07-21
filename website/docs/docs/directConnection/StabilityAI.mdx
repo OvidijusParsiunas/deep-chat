@@ -1,0 +1,448 @@
+---
+sidebar_position: 4
+---
+
+<div></div>
+
+import stabilityAILogo from '/img/stabilityAILogo.png';
+
+# <img src={stabilityAILogo} width="48" style={{float: 'left', marginTop: '5px', marginRight: '6px', marginLeft: '2px'}} /> StabilityAI
+
+Properties used to connect to [StabilityAI](https://platform.stability.ai/).
+
+### `stabilityAI` {#stabilityAI}
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`textToImage?: TextToImage`](#TextToImage), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImage?: ImageToImage`](#ImageToImage), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImageMasking?: ImageToImageMasking`](#ImageToImageMasking), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImageUpscale?: ImageToImageUpscale`](#ImageToImageUpscale) <br />
+  }
+- Default: _{textToImage: true}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `TextToImage` {#TextToImage}
+
+- Type: `true` | { [`StabilityAICommon`](#StabilityAICommon), `width?: number`, `height?: number` }
+- Default: _{engine_id: "stable-diffusion-v1-5", width: 512, height: 512}_
+
+Connect to Stability AI's [`text-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage) API. <br />
+`StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
+`width` and `height` is used to set the image dimensions. They must be multiples of _64_ and pass the following: <br />
+For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engines: 262,144 ≤ _width \* height_ ≤ 1,048,576.<br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          key: 'placeholder key',
+          textToImage: {engine_id: 'stable-diffusion-v1-5', height: 640, samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          textToImage: {engine_id: 'stable-diffusion-v1-5', height: 640, samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "textToImage": {"engine_id": "stable-diffusion-v1-5", "height": 640, "samples": 1}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "textToImage": {"engine_id": "stable-diffusion-v1-5", "height": 640, "samples": 1}
+    }
+  }'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `ImageToImage` {#ImageToImage}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`StabilityAICommon`](#StabilityAICommon), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `init_image_mode?:` `"image_strength"` | `"step_schedule_*"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `image_strength?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `step_schedule_start?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `step_schedule_end?: number` <br />
+  }
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _engine_id: "stable-diffusion-v1-5"_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _init_image_mode: "image_strength"_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _image_strength: 0.35_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _step_schedule_start: 0.65_ <br />
+  }
+
+Connect to Stability AI's [`image-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage) API. <br />
+`StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
+`init_image_mode` denotes whether the `image_strength` or `step_schedule` properties control the influence of the uploaded image on the new image. <br />
+`image_strength` determines how much influence the uploaded image has on the diffusion process. A value close to _1_ will yield an image
+very similar to the original, whilst a value closer to _0_ will yield an image that is wildly different. (0 to 1) <br />
+`step_schedule_start` and `step_schedule_end` are used to skip a proportion of the start/end of the diffusion steps,
+allowing the uploaded image to influence the final generated image. Lower values will result in more influence from the original image, while higher
+values will result in more influence from the diffusion steps. (0 to 1)
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          key: 'placeholder key',
+          imageToImage: {engine_id: 'stable-diffusion-v1-5', init_image_mode: 'image_strength', samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          imageToImage: {engine_id: 'stable-diffusion-v1-5', init_image_mode: 'image_strength', samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImage": {"engine_id": "stable-diffusion-v1-5", "init_image_mode": "image_strength", "samples": 1}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImage": {"engine_id": "stable-diffusion-v1-5", "width": 1024, "height": 1024, "samples": 1}
+    }
+  }'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `ImageToImageMasking` {#ImageToImageMasking}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`StabilityAICommon`](#StabilityAICommon), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `mask_source?:` `"MASK_IMAGE_WHITE"` | `"MASK_IMAGE_BLACK"` | `"INIT_IMAGE_ALPHA"` <br />
+  }
+
+- Default: _{engine_id: "stable-inpainting-512-v2-0", mask_source: "MASK_IMAGE_WHITE"}_
+
+Connect to Stability AI's [`image-to-image-masking`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking) API. <br />
+`StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
+`mask_source` is used to define where the source of the mask is from. _"MASK_IMAGE_WHITE"_ will use the white pixels of the mask image (second image) as the mask,
+where white pixels are completely replaced and black pixels are unchanged. _"MASK_IMAGE_BLACK"_ will use the black pixels of the mask image (second image) as the mask,
+where black pixels are completely replaced and white pixels are unchanged. _"INIT_IMAGE_ALPHA"_ will use the alpha channel of the uploaded image as the mask,
+where fully transparent pixels are completely replaced and fully opaque pixels are unchanged - in this instance the mask image does not need to be uploaded.
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          key: 'placeholder key',
+          imageToImageMasking: {mask_source: 'MASK_IMAGE_WHITE', samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          imageToImageMasking: {mask_source: 'MASK_IMAGE_WHITE', samples: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImageMasking": {"mask_source": "MASK_IMAGE_WHITE", "samples": 1}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImageMasking": {"mask_source": "MASK_IMAGE_WHITE", "samples": 1}
+    }
+  }'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `ImageToImageUpscale` {#ImageToImageUpscale}
+
+- Type: `true` | {`engine_id?: string`, `width?: number`, `height?: number`}
+- Default: _{engine_id: "stable-diffusion-v1-5"}_
+
+Connect to Stability AI's [`image-to-image-upscale`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage) API. <br />
+`engine_id` is the engine that will be used to process the image. <br />
+`width` and `height` are used to define the _desired_ with of the result image where only EITHER ONE of the two can be set.
+Minimum dimension number is 512. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          key: 'placeholder key',
+          imageToImageUpscale: {width: 1000},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          imageToImageUpscale: {width: 1000},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImageUpscale": {"width": 1000}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "imageToImageUpscale": {"width": 1000}
+    }
+  }'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Shared Types
+
+Types used in [`stabilityAI`](#stabilityAI) properties:
+
+### `StabilityAICommon` {#StabilityAICommon}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `engine_id?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `samples?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `weight?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `cfg_scale?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `sampler?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `seed?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `steps?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `style_preset?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `clip_guidance_preset?: string` <br />
+  }
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _samples: 1_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _cfg_scale: 7_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _seed: 0_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _steps: 50_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _clip_guidance_preset: "NONE"_ <br />
+  }
+
+Object that is used to define the target engine and other image processing parameters. <br />
+`engine_id` is the identifier for the engine that will be used to process the images. <br />
+`samples` is the number of images that will be generated (1 to 10). <br />
+`weight` defines how specific to the prompt the generated image should be (0 to 1). <br />
+`cfg_scale` defines how strictly the diffusion process should adhere to the prompt (0 to 35). <br />
+`sampler` is the sampler that will be used for the diffusion process. If this value is not set - the most appropriate one is automatically selected. <br />
+`seed` is the number for the random noise (0 to 4294967295). <br />
+`steps` is the number of diffusion steps to run (10 to 150). <br />
+`style_preset` guides the image model towards a particular style. <br />
+`clip_guidance_preset` is the clip guidance preset. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          key: 'placeholder key',
+          textToImage: {engine_id: 'stable-diffusion-v1-5', weight: 1, style_preset: 'fantasy-art', samples: 2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        stabilityAI: {
+          textToImage: {engine_id: 'stable-diffusion-v1-5', weight: 1, style_preset: 'fantasy-art', samples: 2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "textToImage": {
+        "engine_id": "stable-diffusion-v1-5",
+        "weight": 1,
+        "style_preset": "fantasy-art",
+        "samples": 2
+  }}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "stabilityAI": {
+      "key": "placeholder key",
+      "textToImage": {
+        "engine_id": "stable-diffusion-v1-5",
+        "weight": 1,
+        "style_preset": "fantasy-art",
+        "samples": 2
+  }}}'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

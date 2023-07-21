@@ -27,12 +27,11 @@ The outgoing Deep Chat request body is encapsulated in one of the following form
 
 <h3>Response message</h3>
 
-The response message from the target server needs to use the [`Result`](#Result) JSON type.
+Response from the target server needs to use the [`Result`](#Result) JSON type.
 
 <h3>Examples</h3>
 
-We do not expect you to figure this out by yourself! Please see information along with full examples on how to setup your own server using your
-framework of choice and have Deep Chat connect to it [`HERE`](https://deepchat.dev/examples/servers).
+We do not expect you to figure things out by yourself! Please see information along with full examples on how to setup your own server [`HERE`](https://deepchat.dev/examples/servers).
 
 <h2>Component properties</h2>
 
@@ -272,11 +271,10 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
   &nbsp;&nbsp;&nbsp;&nbsp `error?: string` <br />
   }
 
-Object containing information retrieved from the target service where the successful details are stored inside a `result` property and error
-information is summarized by the `error` property: <br />
-`text` is the message text content. <br />
-`files` is an array of details about response files. <br />
-`error` is a string that describes the details about the server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](./messages#errorMessages)
-is set to _true_, this message will be displayed in the chat error bubble. <br />
+Object containing response information from the target service: <br />
+`text` is the content for a text message. <br />
+`files` is an array that encapsulates details on the response files. <br />
+`error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](./messages#errorMessages)
+is set to _true_, this message will be displayed in the chat inside the error bubble. <br />
 
 <LineBreak></LineBreak>

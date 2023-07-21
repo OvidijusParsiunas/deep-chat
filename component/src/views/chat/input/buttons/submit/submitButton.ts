@@ -98,6 +98,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
+  // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
   public async submit(programmatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;

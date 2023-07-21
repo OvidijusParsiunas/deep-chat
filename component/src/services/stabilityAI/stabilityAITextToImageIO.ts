@@ -26,7 +26,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey);
     const config = directConnection?.stabilityAI?.textToImage as NonNullable<StabilityAI['textToImage']>;
     if (typeof config === 'object') {
-      if (config.engineId) this.url = `https://api.stability.ai/v1/generation/${config.engineId}/text-to-image`;
+      if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/text-to-image`;
       if (config.weight !== undefined && config.weight !== null) this._imageWeight = config.weight;
       StabilityAITextToImageIO.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -35,7 +35,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   }
 
   private static cleanConfig(config: StabilityAITextToImage) {
-    delete config.engineId;
+    delete config.engine_id;
     delete config.weight;
   }
 

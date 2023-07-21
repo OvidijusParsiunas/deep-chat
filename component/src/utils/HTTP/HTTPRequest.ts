@@ -155,11 +155,6 @@ export class HTTPRequest {
     return response.blob();
   }
 
-  private static validateResponse(response: Response) {
-    if (!response.ok) throw response;
-    return response;
-  }
-
   private static displayError(messages: Messages, err: object) {
     console.error(err);
     if (typeof err === 'object') {
