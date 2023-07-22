@@ -72,6 +72,14 @@ app.post('/stability-text-to-image', async (req: Request, res: Response, next: N
   StabilityAI.textToImage(req.body, res, next);
 });
 
+app.post('/stability-image-to-image', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  StabilityAI.imageToImage(req, res, next);
+});
+
+app.post('/stability-image-upscale', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  StabilityAI.imageToImageUpscale(req, res, next);
+});
+
 // ------------------ Cohere API ------------------
 
 app.post('/cohere-generate', async (req: Request, res: Response, next: NextFunction) => {

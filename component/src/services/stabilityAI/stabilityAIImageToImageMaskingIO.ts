@@ -62,6 +62,9 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
     Object.keys(body).forEach((key) => {
       formData.append(key, String(body[key as keyof StabilityAIImageToImageMasking]));
     });
+    if (formData.get('weight') === undefined) {
+      formData.append('weight', String(1));
+    }
     return formData;
   }
 

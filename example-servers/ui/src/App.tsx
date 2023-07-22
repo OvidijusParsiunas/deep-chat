@@ -146,8 +146,8 @@ function App() {
       <a href="https://platform.stability.ai/" target="_blank" rel="noreferrer">
         <img
           className="server-title-icon"
-          src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/huggingFaceLogo.png"
-          style={{width: 36, marginBottom: '-6px', marginLeft: '7px'}}
+          src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/stabilityAILogo.png"
+          style={{width: 34, marginBottom: '-6px', marginLeft: '8px'}}
           alt={'Title icon'}
         />
       </a>
@@ -171,13 +171,16 @@ function App() {
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{placeholder: {text: 'Describe the desired changes'}}}
           errorMessages={{displayServiceErrorMessages: true}}
+          validateMessageBeforeSending={(text?: string, files?: File[]) => {
+            return !!text && text?.trim() !== '' && files && files.length > 0;
+          }}
         />
         {/* If not using the camera, you can use an example image here:
             https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
         <DeepChat
           containerStyle={{borderRadius: '10px'}}
           introMessage="Send an image through an example server to Stability AI in order to generate a new one with a higher resolution."
-          request={{url: 'http://localhost:8080/stability-image-to-image-upscale'}}
+          request={{url: 'http://localhost:8080/stability-image-upscale'}}
           camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{disabled: true, placeholder: {text: 'Send an image'}}}

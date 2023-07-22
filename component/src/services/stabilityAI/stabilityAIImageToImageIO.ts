@@ -57,6 +57,9 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
     Object.keys(body).forEach((key) => {
       formData.append(key, String(body[key as keyof StabilityAIImageToImage]));
     });
+    if (formData.get('weight') === undefined) {
+      formData.append('weight', String(1));
+    }
     return formData;
   }
 

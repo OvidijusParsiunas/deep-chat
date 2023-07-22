@@ -43,10 +43,11 @@ export class Custom {
       console.log('Files:');
       console.log(req.files);
     }
-    // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+    // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
     if (Object.keys(req.body).length > 0) {
       console.log('Text messages:');
+      // message objects are stored as strings and they will need to be parsed (JSON.parse) before processing
       console.log(req.body);
     }
     // Sends response back to Deep Chat using the Result format:

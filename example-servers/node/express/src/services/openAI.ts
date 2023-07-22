@@ -113,7 +113,7 @@ export class OpenAI {
     const formData = new FormData();
     if ((req.files as Express.Multer.File[])?.[0]) {
       const imageFile = (req.files as Express.Multer.File[])?.[0];
-      formData.append(`image`, imageFile.buffer, imageFile.originalname);
+      formData.append('image', imageFile.buffer, imageFile.originalname);
     }
     const formReq = https.request(
       'https://api.openai.com/v1/images/variations',

@@ -58,8 +58,9 @@ export class BaseServiceIO implements ServiceIO {
     const formData = new FormData();
     files.forEach((file) => formData.append(`files`, file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
-    messages.forEach((message, index) => {
-      if (message.text) formData.append(`message${index + 1}`, JSON.stringify(message));
+    let textMessageIndex = 0;
+    messages.forEach((message) => {
+      if (message.text) formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
     });
     return formData;
   }

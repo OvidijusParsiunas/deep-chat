@@ -14,7 +14,7 @@ async function handler(req: NextRequest) {
       console.log('File:');
       console.log(data);
     } else {
-      // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+      // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
       // https://deepchat.dev/docs/connect
       console.log('Message:');
       console.log(data);

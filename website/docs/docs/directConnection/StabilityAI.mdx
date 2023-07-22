@@ -118,7 +118,8 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
   &nbsp;&nbsp;&nbsp;&nbsp; _engine_id: "stable-diffusion-v1-5"_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _init_image_mode: "image_strength"_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _image_strength: 0.35_, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; _step_schedule_start: 0.65_ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _step_schedule_start: 0.65_, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; _weight: 1_ <br />
   }
 
 Connect to Stability AI's [`image-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage) API. <br />
@@ -199,7 +200,7 @@ values will result in more influence from the diffusion steps. (0 to 1)
   &nbsp;&nbsp;&nbsp;&nbsp; `mask_source?:` `"MASK_IMAGE_WHITE"` | `"MASK_IMAGE_BLACK"` | `"INIT_IMAGE_ALPHA"` <br />
   }
 
-- Default: _{engine_id: "stable-inpainting-512-v2-0", mask_source: "MASK_IMAGE_WHITE"}_
+- Default: _{engine_id: "stable-inpainting-512-v2-0", mask_source: "MASK_IMAGE_WHITE", weight: 1}_
 
 Connect to Stability AI's [`image-to-image-masking`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking) API. <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />

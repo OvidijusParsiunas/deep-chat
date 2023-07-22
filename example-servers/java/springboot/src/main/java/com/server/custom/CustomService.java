@@ -69,7 +69,7 @@ public class CustomService {
         String fileName = file.getOriginalFilename();
         LOGGER.info(fileName);
       }
-      // When sending text along with files, they are stored inside the request body using the Deep Chat JSON format:
+      // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
       // https://deepchat.dev/docs/connect
       if (!formDataProperties.isEmpty()) {
         LOGGER.info("Text messages:");
