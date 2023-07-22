@@ -8,7 +8,7 @@ export class StabilityAI {
   public static async textToImage(body: Request['body'], res: Response, next: NextFunction) {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
-    const descriptionBody = {text_prompts: [{text: body.messages[body.messages.length - 1].text}]};
+    const descriptionBody = {text_prompts: [{text: body.messages[0].text}]};
     const req = https.request(
       'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image',
       {
@@ -51,7 +51,7 @@ export class StabilityAI {
       formData.append('init_image', imageFile.buffer, imageFile.originalname);
       // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
       // https://deepchat.dev/docs/connect
-      formData.append('text_prompts[0][text]', JSON.parse(req.body.message2).text);
+      formData.append('text_prompts[0][text]', JSON.parse(req.body.message1).text);
       formData.append('text_prompts[0][weight]', 1);
     }
     const formReq = https.request(

@@ -53,6 +53,7 @@ export class Custom {
     // https://deepchat.dev/docs/connect
     if (Object.keys(body).length > 0) {
       console.log('Text messages:');
+      // message objects are stored as strings and they will need to be parsed (JSON.parse) before processing
       console.log(body);
     }
     // Sends response back to Deep Chat using the Result format:

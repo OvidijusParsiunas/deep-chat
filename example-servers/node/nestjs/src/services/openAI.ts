@@ -77,13 +77,13 @@ export class OpenAI {
   }
 
   // By default - the OpenAI API will accept 1024x1024 png images, however other dimensions/formats can sometimes work by default
-  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   async imageVariation(files: Array<Express.Multer.File>) {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
     const formData = new FormData();
     if (files[0]) {
-      formData.append(`image`, files[0].buffer, files[0].originalname);
+      formData.append('image', files[0].buffer, files[0].originalname);
     }
     const response = await axios.post('https://api.openai.com/v1/images/variations', formData, {
       headers: {

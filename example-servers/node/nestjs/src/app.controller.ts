@@ -1,9 +1,11 @@
 import {UseInterceptors, UploadedFiles, Controller, Post, Req, Res, UseFilters} from '@nestjs/common';
 import {HuggingFaceExceptionMiddleware} from './utils/huggingFaceExceptionMiddleware';
+import {StabilityAIExceptionMiddleware} from './utils/stabilityAIExceptionMiddleware';
 import {OpenAIExceptionMiddleware} from './utils/openAIExceptionMiddleware';
 import {CohereExceptionMiddleware} from './utils/cohereExceptionMiddleware';
 import {FilesInterceptor} from '@nestjs/platform-express';
 import {HuggingFace} from './services/huggingFace';
+import {StabilityAI} from './services/stabilityAI';
 import {Request, Response} from 'express';
 import {Custom} from './services/custom';
 import {OpenAI} from './services/openAI';
@@ -15,6 +17,7 @@ export class AppController {
     private readonly custom: Custom,
     private readonly openAI: OpenAI,
     private readonly cohere: Cohere,
+    private readonly stabilityAI: StabilityAI,
     private readonly huggingFace: HuggingFace
   ) {}
 
@@ -77,6 +80,28 @@ export class AppController {
   @UseInterceptors(FilesInterceptor('files'))
   async huggingFaceSpeech(@UploadedFiles() files: Array<Express.Multer.File>) {
     return this.huggingFace.speechRecognition(files);
+  }
+
+  // ------------------ STABILITY AI API ------------------
+
+  @Post('stability-text-to-image')
+  @UseFilters(new StabilityAIExceptionMiddleware())
+  async stabilityTextToImage(@Req() request: Request) {
+    return this.stabilityAI.textToImage(request.body);
+  }
+
+  @Post('stability-image-to-image')
+  @UseFilters(new StabilityAIExceptionMiddleware())
+  @UseInterceptors(FilesInterceptor('files'))
+  async stabilityImageToImage(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request) {
+    return this.stabilityAI.imageToImage(files, request.body);
+  }
+
+  @Post('stability-image-upscale')
+  @UseFilters(new StabilityAIExceptionMiddleware())
+  @UseInterceptors(FilesInterceptor('files'))
+  async stabilityImageToImageUpscale(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.stabilityAI.imageToImageUpscale(files);
   }
 
   // ------------------ COHERE API ------------------

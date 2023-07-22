@@ -1,5 +1,6 @@
 import {GlobalExceptionMiddleware} from './utils/globalExceptionMiddleware';
 import {HuggingFace} from './services/huggingFace';
+import {StabilityAI} from './services/stabilityAI';
 import {AppController} from './app.controller';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
@@ -14,6 +15,7 @@ import {Module} from '@nestjs/common';
     Custom,
     OpenAI,
     Cohere,
+    StabilityAI,
     HuggingFace,
     {
       provide: APP_FILTER,

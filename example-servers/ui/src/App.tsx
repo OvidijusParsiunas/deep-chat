@@ -85,7 +85,7 @@ function App() {
           errorMessages={{displayServiceErrorMessages: true}}
         />
         {/* If not using the camera, you can use an example image here:
-            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png */}
+            https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
         <DeepChat
           containerStyle={{borderRadius: '10px'}}
           introMessage="Send a 1024x1024 .png image through an example server to OpenAI, which will generate its variation."
@@ -147,7 +147,7 @@ function App() {
         <img
           className="server-title-icon"
           src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/stabilityAILogo.png"
-          style={{width: 34, marginBottom: '-6px', marginLeft: '8px'}}
+          style={{width: 34, marginBottom: '-6px', marginLeft: '10px'}}
           alt={'Title icon'}
         />
       </a>
@@ -193,7 +193,7 @@ function App() {
         <img
           className="server-title-icon"
           src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/cohereLogo.png"
-          style={{width: 37, marginBottom: '-8px', marginLeft: '5px'}}
+          style={{width: 37, marginBottom: '-8px', marginLeft: '4px'}}
           alt={'Title icon'}
         />
       </a>

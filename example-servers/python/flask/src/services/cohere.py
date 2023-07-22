@@ -6,36 +6,36 @@ import os
 class Cohere:
     def generate_text(self, body):
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + os.getenv('COHERE_API_KEY')
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + os.getenv("COHERE_API_KEY")
         }
         # Text messages are stored inside request body using the Deep Chat JSON format:
         # https://deepchat.dev/docs/connect
-        generationBody = {"prompt": body['messages'][0]['text']}
+        generation_body = {"prompt": body["messages"][0]["text"]}
         response = requests.post(
-            'https://api.cohere.ai/v1/generate', json=generationBody, headers=headers)
-        jsonResponse = response.json()
-        if jsonResponse['message']:
-            raise Exception(jsonResponse['message'])
-        result = jsonResponse['generations'][0]['text']
+            "https://api.cohere.ai/v1/generate", json=generation_body, headers=headers)
+        json_response = response.json()
+        if "message" in json_response:
+            raise Exception(json_response["message"])
+        result = json_response["generations"][0]["text"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {'result': {'text': result}}
+        return {"result": {"text": result}}
     
     def summarize_text(self, body):
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + os.getenv('COHERE_API_KEY')
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + os.getenv("COHERE_API_KEY")
         }
         # Text messages are stored inside request body using the Deep Chat JSON format:
         # https://deepchat.dev/docs/connect
-        generationBody = {"text": body['messages'][0]['text']}
+        summarization_body = {"text": body["messages"][0]["text"]}
         response = requests.post(
-            'https://api.cohere.ai/v1/summarize', json=generationBody, headers=headers)
-        jsonResponse = response.json()
-        if jsonResponse['message']:
-            raise Exception(jsonResponse['message'])
-        result = response['summary']
+            "https://api.cohere.ai/v1/summarize", json=summarization_body, headers=headers)
+        json_response = response.json()
+        if "message" in json_response:
+            raise Exception(json_response["message"])
+        result = json_response["summary"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {'result': {'text': result}}
+        return {"result": {"text": result}}
