@@ -31,7 +31,7 @@ class HuggingFace:
         generated_responses = [message["text"] for message in previous_messages if message["role"] == "ai"]
         return {"inputs": {"past_user_inputs": past_user_inputs, "generated_responses": generated_responses, "text": text}, "wait_for_model": True}
 
-
+    # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
     def image_classification(self, files):
         headers = {
             "Authorization": "Bearer " + os.getenv("HUGGING_FACE_API_KEY")
@@ -48,6 +48,7 @@ class HuggingFace:
         # https://deepchat.dev/docs/connect/#Result
         return {"result": {"text": json_response[0]["label"]}}
     
+    # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
     def speech_recognition(self, files):
         headers = {
             "Authorization": "Bearer " + os.getenv("HUGGING_FACE_API_KEY")

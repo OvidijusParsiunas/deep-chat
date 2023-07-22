@@ -147,6 +147,52 @@ export default function IndexPage() {
           />
         </div>
 
+        <h1 className={styles.serverTitle}>Server for Stability AI</h1>
+        <a href="https://platform.stability.ai/" target="_blank" rel="noreferrer">
+          <img
+            className="server-title-icon"
+            src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/stabilityAILogo.png"
+            style={{width: 34, marginBottom: '-6px', marginLeft: '10px'}}
+            alt={'Title icon'}
+          />
+        </a>
+        <h3>Make sure to set the STABILITY_API_KEY environment variable in your server</h3>
+        <div className={styles.components}>
+          <div className={styles.diagonalLine} style={{background: '#f7efff'}}></div>
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
+            introMessage="Send a prompt through an example server to Stability AI to generate an image."
+            request={{url: '/api/stabilityai/text-to-image'}}
+            textInput={{placeholder: {text: 'Describe an image'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
+          />
+          {/* If not using the camera, you can use an example image here:
+              https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
+            introMessage="Send an image along with a description through an example server to Stability AI in order to generate a new one with the described changes."
+            request={{url: '/api/stabilityai/image-to-image'}}
+            camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
+            images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
+            textInput={{placeholder: {text: 'Describe the desired changes'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
+            validateMessageBeforeSending={(text?: string, files?: File[]) => {
+              return !!text && text?.trim() !== '' && files && files.length > 0;
+            }}
+          />
+          {/* If not using the camera, you can use an example image here:
+              https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png */}
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
+            introMessage="Send an image through an example server to Stability AI in order to generate a new one with a higher resolution."
+            request={{url: '/api/stabilityai/image-upscale'}}
+            camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
+            images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
+            textInput={{disabled: true, placeholder: {text: 'Send an image'}}}
+            errorMessages={{displayServiceErrorMessages: true}}
+          />
+        </div>
+
         <h1 className={styles.serverTitle}>Server for Cohere</h1>
         <a href="https://docs.cohere.com/docs" target="_blank" rel="noreferrer">
           <img
@@ -158,7 +204,7 @@ export default function IndexPage() {
         </a>
         <h3>Make sure to set the COHERE_API_KEY environment variable in your server</h3>
         <div className={styles.components}>
-          <div className={styles.diagonalLine} style={{background: '#fff2fd'}}></div>
+          <div className={styles.diagonalLine} style={{background: '#fff2f7'}}></div>
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
             introMessage='Send start text through an example server to Cohere and receive its genereated completion. E.g. "Please explain to me how LLMs work"'

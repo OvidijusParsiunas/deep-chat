@@ -32,8 +32,8 @@ async function handler(req: NextRequest) {
   });
 
   if (!result.ok) {
-    const openAPIResult = (await result.json()) as OpenAIConverseResult;
-    throw openAPIResult.error?.message || 'Stream error';
+    const openAIResult = (await result.json()) as OpenAIConverseResult;
+    throw openAIResult.error?.message || 'Stream error';
   }
 
   const readableStream = new ReadableStream({

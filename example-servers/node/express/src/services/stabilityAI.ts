@@ -42,6 +42,7 @@ export class StabilityAI {
     req.end();
   }
 
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   public static async imageToImage(req: Request, res: Response, next: NextFunction) {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
@@ -93,6 +94,7 @@ export class StabilityAI {
     formReq.end();
   }
 
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   public static async imageToImageUpscale(req: Request, res: Response, next: NextFunction) {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect

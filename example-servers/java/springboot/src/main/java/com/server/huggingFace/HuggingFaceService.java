@@ -69,6 +69,7 @@ public class HuggingFaceService {
     return new HuggingFaceConversationBody(inputs, true);
   }
   
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   public DeepChatTextRespose imageClassification(@RequestPart("files") List<MultipartFile> files) throws Exception {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect
@@ -91,6 +92,7 @@ public class HuggingFaceService {
     return new DeepChatTextRespose(responseData[0].getLabel());
   }
 
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
   public DeepChatTextRespose speechRecognition(@RequestPart("files") List<MultipartFile> files) throws Exception {
     // Files are stored inside a form using Deep Chat request FormData format:
     // https://deepchat.dev/docs/connect

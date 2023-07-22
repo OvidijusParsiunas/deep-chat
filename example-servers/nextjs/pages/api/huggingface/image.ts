@@ -8,6 +8,7 @@ export const config = {
 
 // Make sure to set the HUGGING_FACE_API_KEY environment variable
 
+// You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
 async function handler(req: NextRequest) {
   // Files are stored inside a form using Deep Chat request FormData format:
   // https://deepchat.dev/docs/connect

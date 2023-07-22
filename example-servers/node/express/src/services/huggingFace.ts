@@ -50,12 +50,14 @@ export class HuggingFace {
     return {inputs: {past_user_inputs, generated_responses, text}, wait_for_model: true};
   }
 
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   public static async imageClassification(req: Request, res: Response, next: NextFunction) {
     const url = 'https://api-inference.huggingface.co/models/google/vit-base-patch16-224';
     const parseResult = (result: any) => result[0].label;
     HuggingFace.sendFile(req, res, url, parseResult, next);
   }
 
+  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
   public static async speechRecognition(req: Request, res: Response, next: NextFunction) {
     const url = 'https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self';
     const parseResult = (result: any) => result.text;

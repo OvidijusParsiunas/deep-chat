@@ -28,7 +28,6 @@ export class StabilityAI {
     };
   }
 
-  // WORK
   // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
   async imageToImage(files: Array<Express.Multer.File>, body: Request['body']) {
     // Files are stored inside a form using Deep Chat request FormData format:
