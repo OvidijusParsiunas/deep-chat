@@ -24,7 +24,7 @@ public class OpenAIController {
     return this.openAIService.chat(requestBody);
   }
 
-  @PostMapping(value = "/openai-chat-stream")
+  @PostMapping("/openai-chat-stream")
   public Flux<DeepChatTextRespose> chatStream(@RequestBody DeepChatRequestBody requestBody) {
     return this.openAIService.chatStream(requestBody);
   }

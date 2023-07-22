@@ -21,14 +21,14 @@ func CohereGenerate(w http.ResponseWriter, r *http.Request) error {
 	userRequestBodyBytes, err := io.ReadAll(r.Body)
 	if err != nil { return err }
 
-	var userRequestBody UserRequestBody
-	err = json.Unmarshal(userRequestBodyBytes, &userRequestBody)
+	var deepChatRequestBody DeepChatRequestBody
+	err = json.Unmarshal(userRequestBodyBytes, &deepChatRequestBody)
 	if err != nil { return err }
 
-	fmt.Println("Request Body:", userRequestBody.Messages[0].Text)
+	fmt.Println("Request Body:", deepChatRequestBody.Messages[0].Text)
 
 	generateBody := CohereGenerateBody{
-		Prompt: userRequestBody.Messages[0].Text,
+		Prompt: deepChatRequestBody.Messages[0].Text,
 	}
 
 	generateBodyBytes, err := json.Marshal(generateBody)
@@ -72,13 +72,13 @@ func CohereSummarize(w http.ResponseWriter, r *http.Request) error {
 	userRequestBodyBytes, err := io.ReadAll(r.Body)
 	if err != nil { return err }
 
-	var userRequestBody UserRequestBody
-	err = json.Unmarshal(userRequestBodyBytes, &userRequestBody)
+	var deepChatRequestBody DeepChatRequestBody
+	err = json.Unmarshal(userRequestBodyBytes, &deepChatRequestBody)
 	if err != nil { return err }
-	fmt.Println("Request Body:", userRequestBody.Messages[0].Text)
+	fmt.Println("Request Body:", deepChatRequestBody.Messages[0].Text)
 
 	summarizeBody := CohereSummarizeBody{
-		Text: userRequestBody.Messages[0].Text,
+		Text: deepChatRequestBody.Messages[0].Text,
 	}
 
 	summarizeBodyBytes, err := json.Marshal(summarizeBody)

@@ -34,6 +34,12 @@ func main() {
 
 	http.HandleFunc("/huggingface-speech", services.ErrorHandler(services.HuggingFaceSpeech))
 
+	http.HandleFunc("/stability-text-to-image", services.ErrorHandler(services.StabilityAITextToImage))
+
+	http.HandleFunc("/stability-image-to-image", services.ErrorHandler(services.StabilityAIImageToImage))
+
+	http.HandleFunc("/stability-image-upscale", services.ErrorHandler(services.StabilityAIImageToImageUpscale))
+
 	http.HandleFunc("/cohere-generate", services.ErrorHandler(services.CohereGenerate))
 
 	http.HandleFunc("/cohere-summarize", services.ErrorHandler(services.CohereSummarize))

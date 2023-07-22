@@ -113,24 +113,24 @@ func createChatRequestBodyBytes(w http.ResponseWriter, r *http.Request, stream b
 		return userRequestBodyBytes, err
 	}
 
-	var userRequestBody UserRequestBody
-	err = json.Unmarshal(userRequestBodyBytes, &userRequestBody)
+	var deepChatRequestBody DeepChatRequestBody
+	err = json.Unmarshal(userRequestBodyBytes, &deepChatRequestBody)
 	if err != nil {
 		fmt.Println("Failed to unmarshal request body:", err)
 		http.Error(w, "Failed to unmarshal request body", http.StatusInternalServerError)
 		return userRequestBodyBytes, err
 	}
 
-	chatBody := createChatBody(userRequestBody, stream)
+	chatBody := createChatBody(deepChatRequestBody, stream)
 	return json.Marshal(chatBody)
 }
 
-func createChatBody(userRequestBody UserRequestBody, stream bool) OpenAIChatBody {
+func createChatBody(deepChatRequestBody DeepChatRequestBody, stream bool) OpenAIChatBody {
 	chatBody := OpenAIChatBody{
-		Messages: make([]OpenAIChatMessage, len(userRequestBody.Messages)),
-		Model:    userRequestBody.Model,
+		Messages: make([]OpenAIChatMessage, len(deepChatRequestBody.Messages)),
+		Model:    deepChatRequestBody.Model,
 	}
-	for i, message := range userRequestBody.Messages {
+	for i, message := range deepChatRequestBody.Messages {
 		role := message.Role
 		content := message.Text
 		updatedRole := role
@@ -191,7 +191,6 @@ func SendImageVariationRequest(w http.ResponseWriter, files []*multipart.FileHea
 
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/images/variations", &buf)
 	if err != nil { return nil, err }
-
 
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 	req.Header.Set("Authorization", "Bearer "+ os.Getenv("OPENAI_API_KEY"))

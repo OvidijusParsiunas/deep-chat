@@ -54,16 +54,16 @@ func createConversationRequestBodyBytes(w http.ResponseWriter, r *http.Request) 
 	userRequestBodyBytes, err := io.ReadAll(r.Body)
 	if err != nil { return userRequestBodyBytes, err }
 
-	var userRequestBody UserRequestBody
-	err = json.Unmarshal(userRequestBodyBytes, &userRequestBody)
+	var deepChatRequestBody DeepChatRequestBody
+	err = json.Unmarshal(userRequestBodyBytes, &deepChatRequestBody)
 	if err != nil { return userRequestBodyBytes, err }
 
-	conversationBody := createConversationBody(userRequestBody.Messages)
+	conversationBody := createConversationBody(deepChatRequestBody.Messages)
 	fmt.Println(conversationBody)
 	return json.Marshal(conversationBody)
 }
 
-func createConversationBody(messages []UserRequestMessage) HuggingFaceConversationBody {
+func createConversationBody(messages []DeepChatRequestMessage) HuggingFaceConversationBody {
 	previousMessages := messages[:len(messages)-1]
 	var pastUserInputs []string
 	var generatedResponses []string

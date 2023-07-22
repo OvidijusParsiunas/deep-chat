@@ -1,14 +1,35 @@
 package services
 
-type UserRequestBody struct {
-	Messages []UserRequestMessage `json:"messages"`
+type DeepChatRequestBody struct {
+	Messages []DeepChatRequestMessage `json:"messages"`
 	Model string `json:"model"`
 	Stream bool `json:"stream"`
 }
 
-type UserRequestMessage struct {
+type DeepChatRequestMessage struct {
 	Role string `json:"role"`
 	Text string `json:"text"`
+}
+
+type DeepChatTextResponse struct {
+	Result struct {
+		Text string `json:"text"`
+	} `json:"result"`
+}
+
+type DeepChatFileResponse struct {
+	Result struct {
+		Files []File `json:"files"`
+	} `json:"result"`
+}
+
+type File struct {
+	Type string `json:"type"`
+	Src  string `json:"src"`
+}
+
+type DeepChatErrorResponse struct {
+	Error string `json:"error"`
 }
 
 type OpenAIChatBody struct {
@@ -61,27 +82,6 @@ type OpenAIError struct {
 	Message string `json:"message"`
 }
 
-type DeepChatTextResponse struct {
-	Result struct {
-		Text string `json:"text"`
-	} `json:"result"`
-}
-
-type DeepChatFileResponse struct {
-	Result struct {
-		Files []File `json:"files"`
-	} `json:"result"`
-}
-
-type File struct {
-	Type string `json:"type"`
-	Src  string `json:"src"`
-}
-
-type DeepChatErrorResponse struct {
-	Error string `json:"error"`
-}
-
 type CohereGenerateBody struct {
 	Prompt string `json:"prompt"`
 }
@@ -130,4 +130,21 @@ type HugginFaceSpeechResult struct {
 
 type HugginFaceFileError struct {
 	Error string `json:"error"`
+}
+
+type StabilityAITextToImageBody struct {
+	TextPrompts []StabilityAIPromptText `json:"text_prompts"`
+}
+
+type StabilityAIPromptText struct {
+	Text string `json:"text"`
+}
+
+type StabilityAIImageResult struct {
+	Artifacts []StabilityAIImageArtifact `json:"artifacts"`
+	Message string `json:"message"`
+}
+
+type StabilityAIImageArtifact struct {
+	Base64 string `json:"base64"`
 }
