@@ -14,101 +14,27 @@
     </style>
   </head>
   <body>
-    <deep-chat id="chat-element" style="float: left"></deep-chat>
-    <deep-chat id="chat-element-2"></deep-chat>
+    <!-- Attributes can be set as strings either directly on the element (directConnection) or via a `setAttribute` method on its reference (containerStyle).
+      When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
+      to properties must not have external references and all regex values are properly escaped (See bottom).
+      -->
+    <deep-chat id="chat-element" directConnection='{"demo": true}'></deep-chat>
     <script type="module">
       const chatElement = document.getElementById('chat-element');
-      // chatElement.initialMessages = [
-      //   {role: 'user', content: 'Hey'},
-      //   {role: 'ai', content: 'how are you today'},
-      // ];
-      // chatElement.auxiliaryStyle = `
-      // ::-webkit-scrollbar {
-      //   height: 1rem;
-      //   width: 0.5rem;
-      // }
-
-      // ::-webkit-scrollbar-thumb {
-      //   background-color: red;
-      // }`;
-      // chatElement.errorMessageOverrides = {
-      //   text: 'asdasdasd',
-      // };
-      // chatElement.avatars = {
-      //   styles: {
-      //     default: {
-      //       container: {
-      //         marginTop: '10px',
-      //       },
-      //       avatar: {
-      //         padding: 'unset',
-      //       },
-      //       position: 'left',
-      //     },
-      //   },
-      // };
-      // chatElement.messageStyles = {
-      //   default: {
-      //     outerContainer: {
-      //       borderBottom: '1px solid #c3c3c3',
-      //     },
-      //     innerContainer: {
-      //       width: '90%',
-      //       marginLeft: 'auto',
-      //       marginRight: 'auto',
-      //     },
-      //     text: {
-      //       color: 'rgba(52, 53, 65)',
-      //       margin: 'unset',
-      //       padding: 'unset',
-      //       maxWidth: 'unset',
-      //       border: 'unset',
-      //       paddingTop: '12px',
-      //       paddingBottom: '10px',
-      //       width: 'inherit',
-      //       backgroundColor: 'unset',
-      //     },
-      //   },
-      //   user: {
-      //     outerContainer: {
-      //       backgroundColor: 'white',
-      //     },
-      //   },
-      //   ai: {
-      //     outerContainer: {
-      //       backgroundColor: '#f3f3f3',
-      //     },
-      //   },
-      // };
-      // chatElement.names = {
-      //   default: {
-      //     style: {
-      //       minWidth: '36px',
-      //     },
-      //   },
-      //   user: {
-      //     text: 'me:',
-      //     style: {
-      //       color: 'blue',
-      //     },
-      //   },
-      //   ai: {
-      //     text: 'ai:',
-      //     style: {
-      //       color: 'green',
-      //     },
-      //   },
-      // };
-      // chatElement.openAI = {
-      //   audio: {
-      //     microphone: true,
-      //   },
-      // };
-      // chatElement.dragAndDrop = true;
-      // chatElement2.dragAndDrop = true;
-      // chatElement.requestSettings = {
-      //   url: 'http://127.0.0.1:3000/v1/chat/completions',
-      // };
+      // Setting value via a property (easiest way)
+      chatElement.initialMessages = [
+        {role: 'user', text: 'Hey, how are you today?'},
+        {role: 'ai', text: 'I am doing very well!'},
+      ];
+      // Attributes can be set as strings either directly on the element (directConnection) or via a `setAttribute` method on its reference (containerStyle).
+      // When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
+      // to properties must not have external references and all regex values are properly escaped (See bottom).
+      chatElement.setAttribute(
+        'containerStyle',
+        JSON.stringify({
+          border: '1px solid black',
+        })
+      );
     </script>
   </body>
 </html>
