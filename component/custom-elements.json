@@ -419,6 +419,54 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/serviceIO.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/serviceIOFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ServiceIOFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ServiceIO"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ServiceIOFactory",
+          "declaration": {
+            "name": "ServiceIOFactory",
+            "module": "src/services/serviceIOFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/icons/audioIcon.ts",
       "declarations": [
         {
@@ -776,54 +824,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/serviceIO.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/serviceIOFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ServiceIOFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ServiceIO"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ServiceIOFactory",
-          "declaration": {
-            "name": "ServiceIOFactory",
-            "module": "src/services/serviceIOFactory.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/types/APIKey.ts",
       "declarations": [],
       "exports": []
@@ -1097,581 +1097,6 @@
       "path": "src/types/validateMessageBeforeSending.ts",
       "declarations": [],
       "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/chatView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ChatView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ChatView",
-          "declaration": {
-            "name": "ChatView",
-            "module": "src/views/chat/chatView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/insertKeyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InsertKeyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createCautionText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpLink",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createFailText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpTextContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFail",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addVerificationEvents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createStartButton",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "onInputFocus",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "FocusEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "placeholderText",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InsertKeyView",
-          "declaration": {
-            "name": "InsertKeyView",
-            "module": "src/views/insertKey/insertKeyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/visibilityIcon.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "VisibilityIcon",
-          "members": [
-            {
-              "kind": "field",
-              "name": "VISIBLE_ICON_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'visible-icon'"
-            },
-            {
-              "kind": "method",
-              "name": "changeVisibility",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "visibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "notVisibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIconElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "iconString",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "id",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "VisibilityIcon",
-          "declaration": {
-            "name": "VisibilityIcon",
-            "module": "src/views/insertKey/visibilityIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/error/errorView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ErrorView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorView",
-          "declaration": {
-            "name": "ErrorView",
-            "module": "src/views/error/errorView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ValidateKeyPropertyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "startElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ValidateKeyPropertyView",
-          "declaration": {
-            "name": "ValidateKeyPropertyView",
-            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
-          }
-        }
-      ]
     },
     {
       "kind": "javascript-module",
@@ -5599,73 +5024,48 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/cohere/cohereIO.ts",
+      "path": "src/services/cohere/cohereChatIO.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "CohereIO",
+          "name": "CohereChatIO",
           "members": [
             {
               "kind": "field",
-              "name": "insertKeyPlaceholderText",
+              "name": "username",
               "type": {
                 "text": "string"
               },
-              "default": "'Cohere API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
+              "privacy": "private",
+              "default": "'USER'"
             },
             {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://dashboard.cohere.ai/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "inputPlaceholder"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['invalid request']"
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "url"
+              "kind": "method",
+              "name": "cleanConfig",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "config",
+                  "type": {
+                    "text": "CohereChatConfig"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
               "name": "preprocessBody",
+              "privacy": "private",
               "parameters": [
                 {
                   "name": "body",
                   "type": {
-                    "text": "InterfacesUnion<CohereGenerateConfig | CohereSummarizationConfig>"
+                    "text": "CohereChatConfig"
                   }
                 },
                 {
-                  "name": "messages",
+                  "name": "pMessages",
                   "type": {
                     "text": "MessageContent[]"
                   }
@@ -5698,6 +5098,87 @@
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "CohereChatResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid request']",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
               }
             },
             {
@@ -6112,6 +5593,535 @@
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
               }
+            }
+          ],
+          "superclass": {
+            "name": "CohereIO",
+            "module": "/src/services/cohere/cohereIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereChatIO",
+          "declaration": {
+            "name": "CohereChatIO",
+            "module": "src/services/cohere/cohereChatIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/cohereIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid request']"
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isStream",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!!deepChat.stream",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "completionsHandlers",
+                  "type": {
+                    "text": "CompletionsHandlers"
+                  }
+                },
+                {
+                  "name": "streamHandlers",
+                  "type": {
+                    "text": "StreamHandlers"
+                  }
+                },
+                {
+                  "name": "_",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "completionsHandlers",
+                  "type": {
+                    "text": "CompletionsHandlers"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "completionsHandlers",
+                  "type": {
+                    "text": "CompletionsHandlers"
+                  }
+                },
+                {
+                  "name": "streamHandlers",
+                  "type": {
+                    "text": "StreamHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
             },
             {
               "kind": "method",
@@ -6177,10 +6187,34 @@
                     "text": "MessageContent[]"
                   }
                 }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "completionsHandlers",
+                  "type": {
+                    "text": "CompletionsHandlers"
+                  }
+                }
               ],
               "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
               }
             },
             {
@@ -6262,34 +6296,6 @@
               "inheritedFrom": {
                 "name": "CohereIO",
                 "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "completionsHandlers",
-                  "type": {
-                    "text": "CompletionsHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
               }
             },
             {
@@ -6748,10 +6754,34 @@
                     "text": "MessageContent[]"
                   }
                 }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "completionsHandlers",
+                  "type": {
+                    "text": "CompletionsHandlers"
+                  }
+                }
               ],
               "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
               }
             },
             {
@@ -6833,34 +6863,6 @@
               "inheritedFrom": {
                 "name": "CohereIO",
                 "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "completionsHandlers",
-                  "type": {
-                    "text": "CompletionsHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
               }
             },
             {
@@ -20918,6 +20920,581 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/chatView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ChatView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "panel",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "panel",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ChatView",
+          "declaration": {
+            "name": "ChatView",
+            "module": "src/views/chat/chatView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/error/errorView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ErrorView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorView",
+          "declaration": {
+            "name": "ErrorView",
+            "module": "src/views/error/errorView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/insertKeyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InsertKeyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createCautionText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpLink",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createFailText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpTextContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFail",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addVerificationEvents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createStartButton",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "onInputFocus",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "FocusEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "placeholderText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InsertKeyView",
+          "declaration": {
+            "name": "InsertKeyView",
+            "module": "src/views/insertKey/insertKeyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/visibilityIcon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VisibilityIcon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "VISIBLE_ICON_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'visible-icon'"
+            },
+            {
+              "kind": "method",
+              "name": "changeVisibility",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "visibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "notVisibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIconElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "iconString",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VisibilityIcon",
+          "declaration": {
+            "name": "VisibilityIcon",
+            "module": "src/views/insertKey/visibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ValidateKeyPropertyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "startElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ValidateKeyPropertyView",
+          "declaration": {
+            "name": "ValidateKeyPropertyView",
+            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/HTTP/HTTPRequest.ts",
       "declarations": [
         {
@@ -22277,253 +22854,89 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/input.ts",
+      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "Input",
+          "name": "AssemblyAIUtils",
           "members": [
             {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
               "kind": "method",
-              "name": "createPanelElement",
-              "privacy": "private",
+              "name": "poll",
+              "privacy": "public",
               "static": true,
               "parameters": [
                 {
-                  "name": "customStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createFileUploadComponents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createUploadButtons",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileTypes",
-                  "type": {
-                    "text": "ServiceFileTypes"
-                  }
-                },
-                {
-                  "name": "fileAtt",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "containerEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "panel",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "type": {
-                    "text": "TextInputEl"
-                  }
-                },
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                },
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileAttachments",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "dropupStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "DropupStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "object"
-              },
-              "default": "{button: submitButton}"
-            },
-            {
-              "kind": "field",
-              "name": "submitUserMessage"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Input",
-          "declaration": {
-            "name": "Input",
-            "module": "src/views/chat/input/input.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/introPanel/introPanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "IntroPanel",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isDisplayed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanelWithChild",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "childElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInternalIntroPanel",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "introPanelMarkUp",
+                  "name": "api_token",
                   "type": {
                     "text": "string"
                   }
                 },
                 {
-                  "name": "introPanelStyle",
-                  "optional": true,
+                  "name": "audio_url",
                   "type": {
-                    "text": "CustomStyle"
+                    "text": "string"
                   }
                 }
               ]
             },
             {
               "kind": "method",
-              "name": "hide",
-              "privacy": "public"
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
             }
           ]
         }
@@ -22531,10 +22944,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "IntroPanel",
+          "name": "AssemblyAIUtils",
           "declaration": {
-            "name": "IntroPanel",
-            "module": "src/views/chat/introPanel/introPanel.ts"
+            "name": "AssemblyAIUtils",
+            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
           }
         }
       ]
@@ -22780,6 +23193,599 @@
           "declaration": {
             "name": "AzureUtils",
             "module": "src/services/azure/utils/azureUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "HuggingFaceUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "HuggingFaceUtils",
+          "declaration": {
+            "name": "HuggingFaceUtils",
+            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereUtils",
+          "declaration": {
+            "name": "CohereUtils",
+            "module": "src/services/cohere/utils/cohereUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/openAI/utils/openAIConverseBaseBody.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIConverseBaseBody",
+          "members": [
+            {
+              "kind": "field",
+              "name": "GPT_COMPLETIONS_DAVINCI_MODEL",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'text-davinci-003'"
+            },
+            {
+              "kind": "field",
+              "name": "GPT_CHAT_TURBO_MODEL",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'gpt-3.5-turbo'"
+            },
+            {
+              "kind": "method",
+              "name": "generateDefaultBody",
+              "privacy": "private",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIConverseBodyInternal"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "modelName",
+                  "type": {
+                    "text": "ModelName"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "build",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "OpenAIConverseBodyInternal"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "modelName",
+                  "type": {
+                    "text": "ModelName"
+                  }
+                },
+                {
+                  "name": "clientConfig",
+                  "optional": true,
+                  "type": {
+                    "text": "ClientConfig"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIConverseBaseBody",
+          "declaration": {
+            "name": "OpenAIConverseBaseBody",
+            "module": "src/services/openAI/utils/openAIConverseBaseBody.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/openAI/utils/openAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIUtils",
+          "members": [
+            {
+              "kind": "field",
+              "name": "CONVERSE_MAX_CHAR_LENGTH",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "13352"
+            },
+            {
+              "kind": "field",
+              "name": "FILE_MAX_CHAR_LENGTH",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "1000"
+            },
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIUtils",
+          "declaration": {
+            "name": "OpenAIUtils",
+            "module": "src/services/openAI/utils/openAIUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StabilityAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StabilityAIUtils",
+          "declaration": {
+            "name": "StabilityAIUtils",
+            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/input.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Input",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createPanelElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createFileUploadComponents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createUploadButtons",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileTypes",
+                  "type": {
+                    "text": "ServiceFileTypes"
+                  }
+                },
+                {
+                  "name": "fileAtt",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "containerEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "panel",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "type": {
+                    "text": "TextInputEl"
+                  }
+                },
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                },
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachments",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "dropupStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "DropupStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "object"
+              },
+              "default": "{button: submitButton}"
+            },
+            {
+              "kind": "field",
+              "name": "submitUserMessage"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Input",
+          "declaration": {
+            "name": "Input",
+            "module": "src/views/chat/input/input.ts"
           }
         }
       ]
@@ -23037,7 +24043,21 @@
             },
             {
               "kind": "method",
-              "name": "scrollDownWhenMetaDataLoaded",
+              "name": "waitToLoadThenScroll",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messagesContainerEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "scrollDownOnImageLoad",
               "privacy": "public",
               "static": true,
               "parameters": [
@@ -24176,623 +25196,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "poll",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "api_token",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "audio_url",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIUtils",
-          "declaration": {
-            "name": "AssemblyAIUtils",
-            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "HuggingFaceUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "HuggingFaceUtils",
-          "declaration": {
-            "name": "HuggingFaceUtils",
-            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/utils/cohereUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereUtils",
-          "declaration": {
-            "name": "CohereUtils",
-            "module": "src/services/cohere/utils/cohereUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/openAI/utils/openAIConverseBaseBody.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIConverseBaseBody",
-          "members": [
-            {
-              "kind": "field",
-              "name": "GPT_COMPLETIONS_DAVINCI_MODEL",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'text-davinci-003'"
-            },
-            {
-              "kind": "field",
-              "name": "GPT_CHAT_TURBO_MODEL",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'gpt-3.5-turbo'"
-            },
-            {
-              "kind": "method",
-              "name": "generateDefaultBody",
-              "privacy": "private",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "OpenAIConverseBodyInternal"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "modelName",
-                  "type": {
-                    "text": "ModelName"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "build",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "OpenAIConverseBodyInternal"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "modelName",
-                  "type": {
-                    "text": "ModelName"
-                  }
-                },
-                {
-                  "name": "clientConfig",
-                  "optional": true,
-                  "type": {
-                    "text": "ClientConfig"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIConverseBaseBody",
-          "declaration": {
-            "name": "OpenAIConverseBaseBody",
-            "module": "src/services/openAI/utils/openAIConverseBaseBody.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/openAI/utils/openAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIUtils",
-          "members": [
-            {
-              "kind": "field",
-              "name": "CONVERSE_MAX_CHAR_LENGTH",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "13352"
-            },
-            {
-              "kind": "field",
-              "name": "FILE_MAX_CHAR_LENGTH",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "1000"
-            },
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIUtils",
-          "declaration": {
-            "name": "OpenAIUtils",
-            "module": "src/services/openAI/utils/openAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StabilityAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StabilityAIUtils",
-          "declaration": {
-            "name": "StabilityAIUtils",
-            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttonContainers/buttonContainers.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ButtonContainers",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputContainer",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getContainerIndex",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "position",
-                  "type": {
-                    "text": "ButtonPosition"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addButton",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "elementRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "position",
-                  "type": {
-                    "text": "ButtonPosition"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ButtonContainers",
-          "declaration": {
-            "name": "ButtonContainers",
-            "module": "src/views/chat/input/buttonContainers/buttonContainers.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/buttons/buttonCSS.ts",
       "declarations": [
         {
@@ -25227,6 +25630,95 @@
           "declaration": {
             "name": "InputButton",
             "module": "src/views/chat/input/buttons/inputButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttonContainers/buttonContainers.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonContainers",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getContainerIndex",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "ButtonPosition"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addButton",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "elementRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "ButtonPosition"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonContainers",
+          "declaration": {
+            "name": "ButtonContainers",
+            "module": "src/views/chat/input/buttonContainers/buttonContainers.ts"
           }
         }
       ]
@@ -26089,72 +26581,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RemarkableConfig",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createNew",
-              "privacy": "public",
-              "static": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RemarkableConfig",
-          "declaration": {
-            "name": "RemarkableConfig",
-            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextToSpeech",
-          "members": [
-            {
-              "kind": "method",
-              "name": "speak",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextToSpeech",
-          "declaration": {
-            "name": "TextToSpeech",
-            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/textInput/focusUtils.ts",
       "declarations": [
         {
@@ -26830,6 +27256,43 @@
           "declaration": {
             "name": "CameraButton",
             "module": "src/views/chat/input/buttons/camera/cameraButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextToSpeech",
+          "members": [
+            {
+              "kind": "method",
+              "name": "speak",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextToSpeech",
+          "declaration": {
+            "name": "TextToSpeech",
+            "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
           }
         }
       ]
@@ -31085,6 +31548,134 @@
           "declaration": {
             "name": "Modal",
             "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/introPanel/introPanel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "IntroPanel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isDisplayed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanelWithChild",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "childElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInternalIntroPanel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "introPanelMarkUp",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IntroPanel",
+          "declaration": {
+            "name": "IntroPanel",
+            "module": "src/views/chat/introPanel/introPanel.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RemarkableConfig",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createNew",
+              "privacy": "public",
+              "static": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RemarkableConfig",
+          "declaration": {
+            "name": "RemarkableConfig",
+            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
           }
         }
       ]

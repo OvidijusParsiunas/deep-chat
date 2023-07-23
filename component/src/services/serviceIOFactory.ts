@@ -23,6 +23,7 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
+import {CohereChatIO} from './cohere/cohereChatIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
@@ -48,6 +49,9 @@ export class ServiceIOFactory {
         return new AssemblyAIAudioIO(deepChat);
       }
       if (directConnection.cohere) {
+        if (directConnection.cohere.chat) {
+          return new CohereChatIO(deepChat);
+        }
         if (directConnection.cohere.summarization) {
           return new CohereSummarizationIO(deepChat);
         }

@@ -6,7 +6,7 @@ import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
-  permittedErrorPrefixes = ['Error in'];
+  override permittedErrorPrefixes = ['Authorization header', 'Error in'];
 
   private readonly context: string;
 

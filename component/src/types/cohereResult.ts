@@ -4,6 +4,12 @@ type ErrorMessage = {
   message?: string;
 };
 
+type ChatResult = {
+  text: string;
+};
+
+export type CohereChatResult = InterfacesUnion<ChatResult | ErrorMessage>;
+
 type CompletionsResult = {
   generations: {id: string; text: string}[];
 };

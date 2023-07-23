@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 <div></div>
@@ -12,7 +12,7 @@ Properties used to connect to [Cohere](https://docs.cohere.com/docs).
 
 ### `cohere` {#cohere}
 
-- Type: {[`textGeneration?: TextGeneration`](#TextGeneration), [`summarization?: Summarization`](#Summarization)}
+- Type: {[`chat?: Chat`](#Chat), [`textGeneration?: TextGeneration`](#TextGeneration), [`summarization?: Summarization`](#Summarization)}
 - Default: _{textGeneration: true}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -26,6 +26,84 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 ## Service Types
+
+### `Chat` {#Chat}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `user_name?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number` <br />
+  }
+
+Connect to Cohere's [`conversational AI`](https://docs.cohere.com/docs/conversational-ai) API (you may first need to apply for access to [Coral](https://cohere.com/coral) before using this). <br />
+You can either set this property to _true_ or use an object to augment the request parameters: <br />
+`model` is the name of the model used to generate text. <br />
+`user_name` is the name of the user. <br />
+`temperature` is the degree of the response randomness. <br />
+`max_tokens` is the maximum amount of tokens that can be used to generate the response. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        cohere: {
+          key: 'placeholder key',
+          chat: {temperature: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{
+        cohere: {
+          chat: {temperature: 1},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "cohere": {
+      "key": "placeholder key",
+      "chat": {"temperature": 1}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "cohere": {
+      "key": "placeholder key",
+      "chat": {"temperature": 1}
+    }
+  }'
+  containerStyle='{"borderRadius": "8px"}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
 
 ### `TextGeneration` {#TextGeneration}
 

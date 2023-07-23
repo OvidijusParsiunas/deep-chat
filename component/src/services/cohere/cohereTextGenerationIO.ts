@@ -1,26 +1,32 @@
 import {CohereCompletionsResult} from '../../types/cohereResult';
-import {CohereGenerateConfig} from '../../types/cohere';
+import {Cohere, CohereGenerateConfig} from '../../types/cohere';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {GenericObject} from '../../types/object';
+import {CompletionsHandlers} from '../serviceIO';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
-type CohereServiceConfig = GenericObject<string>;
-
 export class CohereTextGenerationIO extends CohereIO {
   constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default service
-    const config = deepChat.directConnection?.cohere?.textGeneration as CohereServiceConfig | undefined;
+    const config = deepChat.directConnection?.cohere?.textGeneration as Cohere['textGeneration'];
     const apiKey = deepChat.directConnection?.cohere;
     super(deepChat, 'https://api.cohere.ai/v1/generate', 'Once upon a time', config, apiKey);
   }
 
-  override preprocessBody(body: CohereGenerateConfig, messages: MessageContent[]) {
+  preprocessBody(body: CohereGenerateConfig, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     return {prompt: mostRecentMessageText, ...bodyCopy};
+  }
+
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    const body = this.preprocessBody(this.rawBody, pMessages);
+    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
   }
 
   override async extractResultData(result: CohereCompletionsResult): Promise<Result> {

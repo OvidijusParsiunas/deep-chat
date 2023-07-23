@@ -28,7 +28,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  permittedErrorPrefixes = ['Invalid input image'];
+  permittedErrorPrefixes = ['Incorrect', 'Invalid input image'];
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(deepChat: DeepChat) {

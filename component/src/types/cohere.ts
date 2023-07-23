@@ -25,7 +25,16 @@ export interface CohereGenerateConfig {
   truncate?: 'NONE' | 'START' | 'END';
 }
 
+// https://docs.cohere.com/docs/conversational-ai
+export interface CohereChatConfig {
+  model?: string;
+  user_name?: string;
+  temperature?: number;
+  max_tokens?: number;
+}
+
 export interface Cohere {
+  chat?: true | CohereChatConfig;
   textGeneration?: true | CohereGenerateConfig;
   summarization?: true | CohereSummarizationConfig;
 }

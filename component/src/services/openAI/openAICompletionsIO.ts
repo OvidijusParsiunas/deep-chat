@@ -15,6 +15,7 @@ export class OpenAICompletionsIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/completions';
+  permittedErrorPrefixes = ['Incorrect'];
   private readonly _maxCharLength: number = OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
   // text-davinci-003 total max limit is 4097 - keeping it at 4000 just to be safe
   private readonly full_transaction_max_tokens = 4000;

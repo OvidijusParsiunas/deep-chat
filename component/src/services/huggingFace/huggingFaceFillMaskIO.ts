@@ -10,7 +10,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
     <p>Insert a sentence with the word [MASK] and the model will try to fill it for you. E.g. I want [MASK].</p>
     <p>First message may take an extented amount of time to complete as the model needs to be initialized.</p>`;
 
-  permittedErrorPrefixes = ['No mask_token'];
+  override permittedErrorPrefixes = ['Authorization header', 'No mask_token'];
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.huggingFace?.fillMask as NonNullable<HuggingFace['fillMask']>;

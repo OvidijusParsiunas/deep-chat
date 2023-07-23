@@ -43,6 +43,7 @@ export class HTTPRequest {
       });
   }
 
+  // TO-DO can potentially offer an option to simulate a stream where a response message can be streamed word by word
   // prettier-ignore
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
@@ -65,6 +66,7 @@ export class HTTPRequest {
         throw result;
       },
       onmessage(message: EventSourceMessage) {
+        console.log(message);
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response).then((text) => {

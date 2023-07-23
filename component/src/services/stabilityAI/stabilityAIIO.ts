@@ -8,7 +8,7 @@ import {DeepChat} from '../../deepChat';
 export class StabilityAIIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Stability AI API Key';
   override getKeyLink = 'https://platform.stability.ai/docs/getting-started/authentication';
-  permittedErrorPrefixes = ['invalid_'];
+  permittedErrorPrefixes = ['Incorrect', 'invalid_'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
