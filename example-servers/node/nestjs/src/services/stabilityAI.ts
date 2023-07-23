@@ -24,7 +24,7 @@ export class StabilityAI {
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
-      result: {files: [{type: 'image', base64: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
+      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
     };
   }
 
@@ -54,7 +54,7 @@ export class StabilityAI {
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
-      result: {files: [{type: 'image', base64: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
+      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
     };
   }
 
@@ -80,7 +80,7 @@ export class StabilityAI {
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
     return {
-      result: {files: [{type: 'image', base64: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
+      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
     };
   }
 }

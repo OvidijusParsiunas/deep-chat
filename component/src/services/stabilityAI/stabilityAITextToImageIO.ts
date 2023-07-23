@@ -62,7 +62,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Result> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return {base64: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
+      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
     }) as MessageFiles;
     return {files};
   }

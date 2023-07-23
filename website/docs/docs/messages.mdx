@@ -599,25 +599,25 @@ Entity that the message is from.
 
 ### `MessageFile` {#MessageFile}
 
-- Type: <br />
-  &nbsp | {`name?: string`, [`type?: MessageFileType`](#MessageFileType), `src: string`} <br />
-  &nbsp | {`name?: string`, [`type?: MessageFileType`](#MessageFileType), `base64: string`} <br />
-
+- Type: {`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType)} <br />
 - Default: _{name: "file", type: "any"}_
 
-Object format that defines the details for a single file. <br />
-The `name` property displays the file name inside the message bubble when `type` is not defined or is set to _"any"_. <br />
-You can optionally define its `type` to help the component to render it inside an interative media bubble. <br />
-Interactive media bubbles also need EITHER `src` (path to the file) or `base64` (binary encoding).
+Format that defines the details for a single file. <br />
+`name` is used to display the file name inside the message bubble (if not image/gif/audio). <br />
+`src` is either the _url_ path to the file location or the base64 encoding as a string (make sure to use the correct type prefix e.g: _"data:(type);base64,"_).<br />
+The component will automatically try to infer the file type from the `src` property so that it can render its media correctly,
+however you can help it by setting the `type`.
 
 #### Example
 
-<ComponentContainer>
+<ComponentContainer minHeight={535}>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    containerStyle={{borderRadius: '8px', height: '480px'}}
     initialMessages={[
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
+      {file: {src: '/img/example-gif-1.gif', type: 'image'}, role: 'user'},
       {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
+      {file: {name: 'placeholder.exe'}, role: 'user'},
       {file: {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
     ]}
     directConnection={{demo: true}}
@@ -631,7 +631,9 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
 <deep-chat
   initialMessages='[
     {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
+    {"file": {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"}, "role": "user"},
     {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
+    {"file": {"name": "placeholder.exe"}, "role": "user"},
     {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
   ]'
 ></deep-chat>
@@ -646,10 +648,12 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
 <deep-chat
   initialMessages='[
     {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
+    {"file": {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"}, "role": "user"},
     {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
+    {"file": {"name": "placeholder.exe"}, "role": "user"},
     {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  containerStyle='{"borderRadius": "8px", "height": "480px"}'
   directConnection='{"demo": true}'
 ></deep-chat>
 ```
@@ -660,7 +664,7 @@ Interactive media bubbles also need EITHER `src` (path to the file) or `base64` 
 <LineBreak></LineBreak>
 
 :::info
-Files with _"image"_ or _"any"_ types that contain a `src` property will have their bubble set as a hyperlink.
+Files with _"image"_ or _"any"_ types that contain a `src` property as a url will have their bubble set as a hyperlink.
 :::
 
 <LineBreak></LineBreak>

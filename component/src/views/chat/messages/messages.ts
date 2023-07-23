@@ -190,9 +190,9 @@ export class Messages {
     } else if (data.files)
       data.files.forEach((fileData) => {
         // extra checks are used for 'any'
-        if (fileData.type === 'audio' || fileData.base64?.startsWith('data:audio')) {
+        if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
           FileMessages.addNewAudioMessage(this, fileData, isAI, isInitial);
-        } else if (fileData.type === 'image' || fileData.type === 'gif' || fileData.base64?.startsWith('data:image')) {
+        } else if (fileData.type === 'image' || fileData.type === 'gif' || fileData.src?.startsWith('data:image')) {
           FileMessages.addNewImageMessage(this, fileData, isAI, isInitial);
         } else {
           FileMessages.addNewAnyFileMessage(this, fileData, isAI, isInitial);
@@ -314,7 +314,7 @@ export class Messages {
             const reader = new FileReader();
             reader.readAsDataURL(fileData.file);
             reader.onload = () => {
-              this.addNewMessage({files: [{base64: reader.result as string, type: fileData.type}]}, false, true);
+              this.addNewMessage({files: [{src: reader.result as string, type: fileData.type}]}, false, true);
               resolve(true);
             };
           }

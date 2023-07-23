@@ -31,7 +31,7 @@ export class StabilityAI {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {files: [{type: 'image', base64: `data:image/png;base64,${result.artifacts[0].base64}`}]}});
+            res.json({result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]}});
           }
         });
       }
@@ -79,7 +79,7 @@ export class StabilityAI {
               // Sends response back to Deep Chat using the Result format:
               // https://deepchat.dev/docs/connect/#Result
               res.json({
-                result: {files: [{type: 'image', base64: `data:image/png;base64,${result.artifacts[0].base64}`}]},
+                result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]},
               });
             }
           } catch (e) {
@@ -127,7 +127,7 @@ export class StabilityAI {
               // Sends response back to Deep Chat using the Result format:
               // https://deepchat.dev/docs/connect/#Result
               res.json({
-                result: {files: [{type: 'image', base64: `data:image/png;base64,${result.artifacts[0].base64}`}]},
+                result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]},
               });
             }
           } catch (e) {

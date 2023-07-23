@@ -31,7 +31,7 @@ async function handler(req: NextRequest) {
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
   return NextResponse.json({
-    result: {files: [{type: 'image', base64: `data:image/png;base64,${stabilityAIResult.artifacts[0].base64}`}]},
+    result: {files: [{type: 'image', src: `data:image/png;base64,${stabilityAIResult.artifacts[0].base64}`}]},
   });
 }
 

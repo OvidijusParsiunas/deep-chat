@@ -8,9 +8,9 @@ import {Messages} from './messages';
 export class FileMessages {
   private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement) {
     const imageElement = new Image();
-    imageElement.src = (imageData.src || imageData.base64) as string;
-    if (imageData.src) FileMessageUtils.scrollDownWhenMetaDataLoaded(imageData.src, messagesContainerEl);
-    return FileMessageUtils.processContent(imageElement, imageData.src);
+    imageElement.src = imageData.src as string;
+    FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
+    return FileMessageUtils.processContent(imageElement, imageElement.src);
   }
 
   public static async addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
@@ -23,9 +23,8 @@ export class FileMessages {
   }
 
   private static createAudioElement(audioData: MessageFile, isAI: boolean) {
-    const data = (audioData.src || audioData.base64) as string;
     const audioElement = document.createElement('audio');
-    audioElement.src = data;
+    audioElement.src = audioData.src as string;
     audioElement.classList.add('audio-player');
     audioElement.controls = true;
     if (Browser.IS_SAFARI) {

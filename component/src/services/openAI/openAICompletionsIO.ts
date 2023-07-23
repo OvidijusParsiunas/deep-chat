@@ -26,8 +26,7 @@ export class OpenAICompletionsIO extends DirectServiceIO {
     const apiKey = directConnection?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnection?.openAI?.completions as NonNullable<OpenAI['completions']>;
-    // Completions with no max_tokens behave weirdly and do not give full responses
-    // Client should specify their own max_tokens.
+    // overwrites OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.rawBody.model ??= OpenAIConverseBaseBody.GPT_COMPLETIONS_DAVINCI_MODEL;
@@ -39,6 +38,8 @@ export class OpenAICompletionsIO extends DirectServiceIO {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
+    // Completions with no max_tokens behave weirdly and do not give full responses
+    // Client should specify their own max_tokens.
     const maxTokens = bodyCopy.max_tokens
       || this.full_transaction_max_tokens - processedMessage.length / this.numberOfCharsPerToken;
     const maxTokensInt = Math.floor(maxTokens);

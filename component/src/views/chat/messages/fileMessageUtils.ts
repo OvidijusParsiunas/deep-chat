@@ -24,28 +24,34 @@ export class FileMessageUtils {
   }
 
   public static processContent(contentEl: HTMLElement, url?: string) {
-    if (!url) return contentEl;
+    if (!url || url.startsWith('data')) return contentEl;
     return FileMessageUtils.wrapInLink(contentEl, url);
   }
 
-  // this is used to prevent an issue where we immediately scroll down before the image meta data has been
-  // downloaded which is used to create the image element dimensions (before the image data is loaded)
-  // we cannot use the .onload event handler as it is only triggered when the image is fully rendered on
-  // the screen and not when it first appears - hence not appropriate for slow images
-  // please remember - this is only an estimation of when scroll is needed
-  public static scrollDownWhenMetaDataLoaded(url: string, messagesContainerEl: HTMLElement) {
-    try {
-      // no-cors is an attempt to prevent a typical 'No 'Access-Control-Allow-Origin' header' error
-      // being logged in the console
-      fetch(url, {mode: 'no-cors'})
-        .catch(() => {})
-        .finally(() => {
-          setTimeout(() => {
-            messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
-          }, 80); // this timeout is used to allow the new image element dimensions to be rendered
-        });
-    } catch (err) {
+  private static waitToLoadThenScroll(messagesContainerEl: HTMLElement) {
+    setTimeout(() => {
       messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
+    }, 60); // this timeout is used to allow the new image element dimensions to be rendered
+  }
+  public static scrollDownOnImageLoad(url: string, messagesContainerEl: HTMLElement) {
+    if (url.startsWith('data')) {
+      FileMessageUtils.waitToLoadThenScroll(messagesContainerEl);
+    } else {
+      // this is used to prevent an issue where we immediately scroll down before the image meta data has been
+      // downloaded which is used to create the image element dimensions (before the image data is loaded)
+      // we cannot use the .onload event handler as it is only triggered when the image is fully rendered on
+      // the screen and not when it first appears - hence not appropriate for slow images
+      try {
+        // no-cors is an attempt to prevent a typical 'No 'Access-Control-Allow-Origin' header' error
+        // being logged in the console
+        fetch(url, {mode: 'no-cors'})
+          .catch(() => {})
+          .finally(() => {
+            FileMessageUtils.waitToLoadThenScroll(messagesContainerEl);
+          });
+      } catch (err) {
+        messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
+      }
     }
   }
 }

@@ -57,7 +57,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
       const reader = new FileReader();
       reader.readAsDataURL(result);
       reader.onload = (event) => {
-        resolve({files: [{base64: (event.target as FileReader).result as string, type: 'audio'}]});
+        resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
       };
     });
   }

@@ -76,11 +76,11 @@ export class OpenAIImagesIO extends DirectServiceIO {
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
-      this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_EDIT_URL;
+      this.url = OpenAIImagesIO.IMAGE_EDIT_URL;
       const body = this.preprocessBody(this.rawBody, lastMessage);
       formData = OpenAIImagesIO.createFormDataBody(body, files[0], files[1]);
     } else {
-      this.url = this.requestSettings?.url || OpenAIImagesIO.IMAGE_VARIATIONS_URL;
+      this.url = OpenAIImagesIO.IMAGE_VARIATIONS_URL;
       formData = OpenAIImagesIO.createFormDataBody(this.rawBody, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
@@ -96,7 +96,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
       this.callApiWithImage(messages, pMessages, completionsHandlers, files);
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
-      this.url = this.requestSettings.url || OpenAIImagesIO.IMAGE_GENERATION_URL;
+      this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
       const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
       HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
     }
@@ -106,7 +106,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
       if (imageData.url) return {src: imageData.url, type: 'image'};
-      return {base64: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
+      return {src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
     }) as MessageFiles;
     return {files};
   }
