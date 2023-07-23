@@ -207,6 +207,13 @@ export default function IndexPage() {
           <div className={styles.diagonalLine} style={{background: '#fff2f7'}}></div>
           <DeepChat
             containerStyle={{borderRadius: '10px'}}
+            introMessage="Send a chat message through an example server to Cohere. You may need to apply for Coral access before using this."
+            request={{url: '/api/cohere/chat'}}
+            requestBodyLimits={{maxMessages: -1}}
+            errorMessages={{displayServiceErrorMessages: true}}
+          />
+          <DeepChat
+            containerStyle={{borderRadius: '10px'}}
             introMessage='Send start text through an example server to Cohere and receive its genereated completion. E.g. "Please explain to me how LLMs work"'
             request={{url: '/api/cohere/generate'}}
             textInput={{placeholder: {text: 'Once upon a time...'}}}

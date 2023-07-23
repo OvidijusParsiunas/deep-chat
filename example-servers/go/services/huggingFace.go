@@ -13,8 +13,9 @@ import (
 // Make sure to set the HUGGING_FACE_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
 
 func HuggingFaceConversation(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	conversationBodyBytes, err := createConversationRequestBodyBytes(w, r)
 	if err != nil { return err }
@@ -86,8 +87,9 @@ func createConversationBody(messages []DeepChatRequestMessage) HuggingFaceConver
 
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
 func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect
@@ -142,8 +144,9 @@ func HuggingFaceImage(w http.ResponseWriter, r *http.Request) error {
 
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
 func HuggingFaceSpeech(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect

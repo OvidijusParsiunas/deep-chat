@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import com.server.utils.deepChat.DeepChatRequestBody;
-import com.server.utils.deepChat.DeepChatTextRespose;
+import com.server.utils.types.DeepChatRequestBody;
+import com.server.utils.types.DeepChatTextRespose;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 
 @RestController
 public class CustomController {

@@ -1,5 +1,7 @@
+import {MessageContent} from 'deep-chat/dist/types/messages';
+
 export interface DeepChatTextRequestBody {
-  messages: {role: string; text: string}[];
+  messages: MessageContent[];
 }
 
 // model is added for OpenAI requests - check this file in the example ui project:

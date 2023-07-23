@@ -6,6 +6,33 @@ import axios from 'axios';
 
 @Injectable()
 export class Cohere {
+  async chat(body: Request['body']) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
+    const chatBody = Cohere.createChatBody(body);
+    const response = await axios.post('https://api.cohere.ai/v1/chat', chatBody, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + process.env.COHERE_API_KEY,
+      },
+    });
+    // Sends response back to Deep Chat using the Result format:
+    // https://deepchat.dev/docs/connect/#Result
+    return {result: {text: response.data.text}};
+  }
+
+  private static createChatBody(body: Request['body']) {
+    // Text messages are stored inside request body using the Deep Chat JSON format:
+    // https://deepchat.dev/docs/connect
+    return {
+      query: body.messages[body.messages.length - 1].text,
+      chat_history: body.messages.slice(0, body.messages.length - 1).map((message: {role: string; text: string}) => {
+        return {user_name: message.role === 'ai' ? 'CHATBOT' : 'USER', text: message.text};
+      }),
+    };
+  }
+
   async generateText(body: Request['body']) {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect

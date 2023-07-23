@@ -82,6 +82,21 @@ type OpenAIError struct {
 	Message string `json:"message"`
 }
 
+type CohereChatBody struct {
+	Query string `json:"query"`
+	ChatHistory []CohereChatHistoryMessage `json:"chat_history"`
+}
+
+type CohereChatHistoryMessage struct {
+	UserName string `json:"user_name"`
+	Text string `json:"text"`
+}
+
+type CohereChatResult struct {
+	Text string `json:"text"`
+	Message string `json:"message"`
+}
+
 type CohereGenerateBody struct {
 	Prompt string `json:"prompt"`
 }

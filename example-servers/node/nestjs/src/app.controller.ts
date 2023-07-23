@@ -106,6 +106,12 @@ export class AppController {
 
   // ------------------ COHERE API ------------------
 
+  @Post('cohere-chat')
+  @UseFilters(new CohereExceptionMiddleware())
+  async cohereChat(@Req() request: Request) {
+    return this.cohere.chat(request.body);
+  }
+
   @Post('cohere-generate')
   @UseFilters(new CohereExceptionMiddleware())
   async cohereGenerate(@Req() request: Request) {

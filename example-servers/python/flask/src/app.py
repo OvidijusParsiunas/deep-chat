@@ -109,6 +109,11 @@ def stabilityai_image_to_image_upscale():
 
 cohere = Cohere()
 
+@app.route("/cohere-chat", methods=["POST"])
+def cohere_chat():
+    body = request.json
+    return cohere.chat(body)
+
 @app.route("/cohere-generate", methods=["POST"])
 def cohere_generate_text():
     body = request.json

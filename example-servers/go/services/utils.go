@@ -14,17 +14,17 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) error {
+func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) (error, bool) {
 	enableCors(w)
 	// This is important as the browser sends a preflight OPTIONS request before the POST request
 	if r.Method == "OPTIONS" {
 		(*w).WriteHeader(204)
-		return errors.New("this should not raise an error")
+		return nil, true
 	}
 	if r.Method != "POST" {
-		return errors.New("Invalid request method - expected POST, got: " + r.Method)
+		return errors.New("Invalid request method - expected POST, got: " + r.Method), false
 	}
-	return nil
+	return nil, false
 }
 
 func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {

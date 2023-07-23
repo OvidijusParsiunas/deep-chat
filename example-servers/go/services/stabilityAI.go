@@ -14,8 +14,9 @@ import (
 // Make sure to set the STABILITY_API_KEY environment variable in a .env file (create if does not exist) - see .env.example
 
 func StabilityAITextToImage(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
@@ -66,8 +67,9 @@ func StabilityAITextToImage(w http.ResponseWriter, r *http.Request) error {
 
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
 func StabilityAIImageToImage(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 	
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect
@@ -135,8 +137,9 @@ func StabilityAIImageToImage(w http.ResponseWriter, r *http.Request) error {
 
 // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image-for-openai.png
 func StabilityAIImageToImageUpscale(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 	
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect

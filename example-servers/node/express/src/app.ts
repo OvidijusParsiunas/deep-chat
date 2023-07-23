@@ -82,6 +82,10 @@ app.post('/stability-image-upscale', upload.array('files'), async (req: Request,
 
 // ------------------ Cohere API ------------------
 
+app.post('/cohere-chat', async (req: Request, res: Response, next: NextFunction) => {
+  Cohere.chat(req.body, res, next);
+});
+
 app.post('/cohere-generate', async (req: Request, res: Response, next: NextFunction) => {
   Cohere.generateText(req.body, res, next);
 });

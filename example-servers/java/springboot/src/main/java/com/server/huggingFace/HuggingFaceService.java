@@ -1,18 +1,18 @@
 package com.server.huggingFace;
 
-import com.server.utils.deepChat.HuggingFaceConversationInputs;
-import com.server.utils.deepChat.HuggingFaceConversationResult;
-import com.server.utils.deepChat.HuggingFaceImageResultLabel;
-import com.server.utils.deepChat.HuggingFaceConversationBody;
+import com.server.utils.types.HuggingFaceConversationInputs;
+import com.server.utils.types.HuggingFaceConversationResult;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.beans.factory.annotation.Value;
+import com.server.utils.types.HuggingFaceConversationBody;
+import com.server.utils.types.HuggingFaceImageResultLabel;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.server.utils.deepChat.DeepChatRequestMessage;
-import com.server.utils.deepChat.HugginFaceSpeechResult;
 import org.springframework.web.multipart.MultipartFile;
-import com.server.utils.deepChat.DeepChatRequestBody;
-import com.server.utils.deepChat.DeepChatTextRespose;
+import com.server.utils.types.DeepChatRequestMessage;
+import com.server.utils.types.HugginFaceSpeechResult;
 import org.springframework.web.client.RestTemplate;
+import com.server.utils.types.DeepChatRequestBody;
+import com.server.utils.types.DeepChatTextRespose;
 import org.springframework.stereotype.Service;
 import com.server.utils.PrintObjectUtil;
 import org.springframework.http.*;

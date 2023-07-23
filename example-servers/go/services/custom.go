@@ -8,8 +8,9 @@ import (
 )
 
 func Chat(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
@@ -30,8 +31,9 @@ func Chat(w http.ResponseWriter, r *http.Request) error {
 }
 
 func ChatStream(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 	
 	// Text messages are stored inside request body using the Deep Chat JSON format:
 	// https://deepchat.dev/docs/connect
@@ -73,8 +75,9 @@ func respondWithStream(w http.ResponseWriter) {
 }
 
 func Files(w http.ResponseWriter, r *http.Request) error {
-	err := ProcessIncomingRequest(&w, r)
+	err, skipPreflight := ProcessIncomingRequest(&w, r)
 	if err != nil { return err }
+	if skipPreflight { return nil }
 
 	// Files are stored inside a form using Deep Chat request FormData format:
 	// https://deepchat.dev/docs/connect

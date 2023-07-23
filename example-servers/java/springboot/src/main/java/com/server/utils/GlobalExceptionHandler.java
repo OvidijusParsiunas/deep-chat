@@ -2,7 +2,7 @@ package com.server.utils;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import com.server.utils.deepChat.DeepChatErrorResponse;
+import com.server.utils.types.DeepChatErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.LoggerFactory;

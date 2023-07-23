@@ -1,18 +1,18 @@
 package com.server.stabilityAI;
 
-import com.server.utils.deepChat.StabilityAITextToImageBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.server.utils.deepChat.StabilityAIImageResult;
+import com.server.utils.types.StabilityAITextToImageBody;
 import org.springframework.web.multipart.MultipartFile;
-import com.server.utils.deepChat.DeepChatFileResponse;
-import com.server.utils.deepChat.DeepChatRequestBody;
+import com.server.utils.types.StabilityAIImageResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import com.server.utils.deepChat.DeepChatFile;
+import com.server.utils.types.DeepChatFileResponse;
+import com.server.utils.types.DeepChatRequestBody;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import com.server.utils.types.DeepChatFile;
 import com.server.utils.PrintObjectUtil;
 import org.springframework.http.*;
 import org.slf4j.LoggerFactory;

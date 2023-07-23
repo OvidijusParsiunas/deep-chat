@@ -40,6 +40,8 @@ func main() {
 
 	http.HandleFunc("/stability-image-upscale", services.ErrorHandler(services.StabilityAIImageToImageUpscale))
 
+	http.HandleFunc("/cohere-chat", services.ErrorHandler(services.CohereChat))
+
 	http.HandleFunc("/cohere-generate", services.ErrorHandler(services.CohereGenerate))
 
 	http.HandleFunc("/cohere-summarize", services.ErrorHandler(services.CohereSummarize))
