@@ -1,5 +1,5 @@
+import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
-import {AzureSummarizationResult} from '../../types/azureResult';
 import {CompletionsHandlers, PollResult} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -56,7 +56,8 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     this.completionsHandlers = completionsHandlers;
   }
 
-  override async extractResultData(result: Response): Promise<{pollingInAnotherRequest: true}> {
+  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{pollingInAnotherRequest: true}> {
+    if (result.error) throw result.error.message;
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
       const requestInit = {method: 'GET', headers: this.requestSettings?.headers as GenericObject<string>};
@@ -70,6 +71,10 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     if (result.status === 'running') return {timeoutMS: 2000};
     if (result.errors.length > 0) throw result.errors[0];
     if (result.tasks.items[0].results.errors.length > 0) throw result.tasks.items[0].results.errors[0];
-    return {text: result.tasks.items[0].results.documents[0].sentences[0]?.text || ''};
+    let textResult = '';
+    for (const a of result.tasks.items[0].results.documents[0].sentences) {
+      textResult += a.text;
+    }
+    return {text: textResult || ''};
   }
 }

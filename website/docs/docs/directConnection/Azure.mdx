@@ -189,8 +189,8 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
 - Default: _{language: "en"}_
 
 Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/overview?tabs=document-summarization) API. Please read [here](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/quickstart?tabs=document-summarization%2Cwindows&pivots=rest-api) how to generate a language service. <br />
-`endpoint` is a full endpoint for your generated language service. <br />
-`language` is the [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.) for the language of your text. <br />
+`endpoint` is the full endpoint for your generated language service. <br />
+`language` is a [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.) for the language of your text. <br />
 
 #### Example
 
@@ -205,6 +205,10 @@ Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cog
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
+
+:::caution
+Cannot input a test key as user's language service `endpoint` is required.
+:::
 
 <Tabs>
 <TabItem value="js" label="Sample code">

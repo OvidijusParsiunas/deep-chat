@@ -1,6 +1,9 @@
 package com.server.utils.types;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CohereChatMessageHistory {
+  @JsonProperty("user_name")
   private String userName;
   private String text;
 

@@ -6,6 +6,12 @@ export type AzureSpeechToTextResult = InterfacesUnion<{DisplayText: string} | {e
 
 export type AzureKeyRetrievalResult = InterfacesUnion<Blob | {error: string}>;
 
+export interface AzureAuthenticationError {
+  error: {
+    message: string;
+  };
+}
+
 export type AzureSummarizationResult = InterfacesUnion<
   | {
       errors: string[];

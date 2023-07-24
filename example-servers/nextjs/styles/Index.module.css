@@ -25,7 +25,7 @@
 
 .diagonalLine {
   position: absolute;
-  transform: skewY(-3deg);
+  transform: skewY(-2.5deg);
   height: 200px;
   width: 100%;
   background: #e8f5ff;

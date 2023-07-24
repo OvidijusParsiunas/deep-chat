@@ -10,6 +10,7 @@ export class AzureLanguageIO extends DirectServiceIO {
   override getKeyLink =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
+  permittedErrorPrefixes = ['Access'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, endpoint: string, apiKey?: APIKey,
