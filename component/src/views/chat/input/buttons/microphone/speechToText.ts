@@ -14,13 +14,21 @@ export class SpeechToText extends MicrophoneButton {
     if (!SpeechToElement.isWebSpeechAPISupported()) {
       this.changeToUnsupported();
     }
-    this.elementRef.onclick = this.buttonClick.bind(this, textInput.inputElementRef);
+    this.elementRef.onclick = this.buttonClick.bind(this, textInput);
     this._addErrorMessage = addErrorMessage;
   }
 
-  // WORK - do not add text if disabled
-  private buttonClick(inputElement: HTMLElement) {
-    SpeechToElement.toggle('webspeech', {element: inputElement, onError: this.onError, onStop: this.changeToDefault});
+  private buttonClick(textInput: TextInputEl) {
+    SpeechToElement.toggle('webspeech', {
+      insertInCursorLocation: false,
+      element: textInput.inputElementRef,
+      onError: this.onError,
+      onStop: this.changeToDefault,
+      onResult: (text: string) => {
+        console.log(text);
+        textInput.removeTextIfPlaceholder();
+      },
+    });
   }
 
   private onError() {
