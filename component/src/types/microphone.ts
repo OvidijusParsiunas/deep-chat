@@ -1,3 +1,4 @@
+import {AzureOptions, TextColor, Translations, WebSpeechAPIOptions} from 'speech-to-element/dist/types/options';
 import {ButtonStyles, ButtonPosition} from './button';
 
 export interface MicrophoneStyles {
@@ -15,3 +16,12 @@ export interface AudioRecordingFiles {
   maxNumberOfFiles?: number;
   maxDurationSeconds?: number;
 }
+
+export type SpeechToTextConfig = {
+  webSpeech?: true | WebSpeechAPIOptions;
+  azure?: true | AzureOptions;
+  displayInterimResults?: boolean;
+  textColor?: TextColor;
+  stopAfterSilenceMS?: number;
+  translations?: Translations;
+} & MicrophoneStyles;

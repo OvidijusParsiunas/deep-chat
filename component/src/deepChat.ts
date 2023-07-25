@@ -11,11 +11,12 @@ import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
+import {TextToSpeechConfig} from './types/textToSpeech';
 import {SubmitButtonStyles} from './types/submitButton';
+import {SpeechToTextConfig} from './types/microphone';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
-import {MicrophoneStyles} from './types/microphone';
 import {DropupStyles} from './types/dropupStyles';
 import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
@@ -49,10 +50,10 @@ export class DeepChat extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  speechToText?: true | MicrophoneStyles; // only activated if not used by recording for audio
+  speechToText?: boolean | SpeechToTextConfig; // only activated if not used for recording audio
 
-  @Property('boolean')
-  textToSpeech?: boolean;
+  @Property('object')
+  textToSpeech?: boolean | TextToSpeechConfig;
 
   @Property('object')
   containerStyle?: CustomStyle;

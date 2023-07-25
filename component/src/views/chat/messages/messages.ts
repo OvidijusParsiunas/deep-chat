@@ -1,3 +1,4 @@
+import {ProcessedTextToSpeechConfig, TextToSpeech} from './textToSpeech/textToSpeech';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
@@ -5,7 +6,6 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
 import {FireEvents} from '../../../utils/events/fireEvents';
-import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
@@ -40,11 +40,11 @@ export class Messages {
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
-  private readonly _speechOutput?: boolean;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _remarkable: Remarkable;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly displayServiceErrorMessages?: boolean;
+  private _textToSpeech?: ProcessedTextToSpeechConfig;
   private _introPanel?: IntroPanel;
   private _streamedText = '';
   messages: MessageContent[] = [];
@@ -57,7 +57,6 @@ export class Messages {
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
-    this._speechOutput = deepChat.textToSpeech;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
     this._permittedErrorPrefixes = permittedErrorPrefixes;
@@ -67,6 +66,11 @@ export class Messages {
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     if (demo) this.prepareDemo(demo);
+    if (deepChat.textToSpeech) {
+      TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
+        this._textToSpeech = processedConfig;
+      });
+    }
   }
 
   private prepareDemo(demo: Demo) {
@@ -165,7 +169,6 @@ export class Messages {
     const messageElements = this.createNewMessageElement(text, isAI);
     this.elementRef.appendChild(messageElements.outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    if (this._speechOutput && isAI) TextToSpeech.speak(text);
     return messageElements;
   }
 
@@ -187,6 +190,7 @@ export class Messages {
   public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
     if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
+      if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(data.text, this._textToSpeech);
     } else if (data.files)
       data.files.forEach((fileData) => {
         // extra checks are used for 'any'
@@ -229,7 +233,7 @@ export class Messages {
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
     this.elementRef.scrollTop = this.elementRef.scrollHeight;
-    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(text);
+    if (this._textToSpeech) TextToSpeech.speak(text, this._textToSpeech);
     this._streamedText = '';
   }
 
@@ -291,7 +295,7 @@ export class Messages {
   public finaliseStreamedMessage() {
     this.messages[this.messages.length - 1].text = this._streamedText;
     this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
-    if (this._speechOutput && window.SpeechSynthesisUtterance) TextToSpeech.speak(this._streamedText);
+    if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
     this._streamedText = '';
   }
 
