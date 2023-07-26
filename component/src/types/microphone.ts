@@ -1,4 +1,4 @@
-import {AzureOptions, TextColor, Translations, WebSpeechAPIOptions} from 'speech-to-element/dist/types/options';
+import {AzureOptions, Commands, TextColor, Translations, WebSpeechOptions} from 'speech-to-element/dist/types/options';
 import {ButtonStyles, ButtonPosition} from './button';
 
 export interface MicrophoneStyles {
@@ -18,10 +18,14 @@ export interface AudioRecordingFiles {
 }
 
 export type SpeechToTextConfig = {
-  webSpeech?: true | WebSpeechAPIOptions;
+  webSpeech?: true | WebSpeechOptions;
   azure?: true | AzureOptions;
   displayInterimResults?: boolean;
   textColor?: TextColor;
   stopAfterSilenceMS?: number;
   translations?: Translations;
+  // please note that it ise best to set submit property with 'send' because webspeech recognises submit after sub
+  // and the word sub is sent
+  commands?: Commands & {submit?: string};
+  commandModeStyles?: ButtonStyles;
 } & MicrophoneStyles;

@@ -1,9 +1,12 @@
 import {SpeechToTextConfig} from '../../../../../types/microphone';
+import {OnPreResult} from 'speech-to-element/dist/types/options';
 import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {MicrophoneButton} from './microphoneButton';
 import {DeepChat} from '../../../../../deepChat';
 import SpeechToElement from 'speech-to-element';
+
+type ProcessedConfig = SpeechToTextConfig & {onPreResult?: OnPreResult};
 
 export type AddErrorMessage = Messages['addNewErrorMessage'];
 
@@ -12,41 +15,36 @@ export class SpeechToText extends MicrophoneButton {
 
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText : {});
-    const {serviceName, processedConfig} = SpeechToText.processConfiguration(deepChat.speechToText);
+    const {serviceName, processedConfig} = SpeechToText.processConfiguration(textInput, deepChat.speechToText);
     this._addErrorMessage = addErrorMessage;
-    if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechAPISupported()) {
+    if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechSupported()) {
       this.changeToUnsupported();
     } else {
-      const isInputDisabled = !deepChat.textInput || !deepChat.textInput.disabled;
-      this.elementRef.onclick = this.buttonClick.bind(this, textInput, isInputDisabled, serviceName, processedConfig);
+      const isInputEnabled = !deepChat.textInput || !deepChat.textInput.disabled;
+      this.elementRef.onclick = this.buttonClick.bind(this, textInput, isInputEnabled, serviceName, processedConfig);
     }
   }
 
-  private buttonClick(textInput: TextInputEl, isInputDisabled: boolean, serviceName: string, config?: SpeechToTextConfig) {
-    const confirmPhrase = 'confirm';
+  private buttonClick(textInput: TextInputEl, isInputEnabled: boolean, serviceName: string, config?: SpeechToTextConfig) {
+    textInput.removeTextIfPlaceholder();
     SpeechToElement.toggle(serviceName as 'webspeech', {
       insertInCursorLocation: false,
-      element: isInputDisabled ? textInput.inputElementRef : undefined,
-      onError: this.onError,
-      onStop: this.changeToDefault,
-      onResult: (text: string) => {
-        const lowerCaseText = text.toLowerCase();
-        if (lowerCaseText.includes(confirmPhrase)) {
-          textInput.submit?.();
-        }
-        textInput.removeTextIfPlaceholder();
-      },
+      element: isInputEnabled ? textInput.inputElementRef : undefined,
+      onError: this.onError.bind(this),
+      onStart: this.changeToActive.bind(this),
+      onStop: this.changeToDefault.bind(this),
+      onCommandModeTrigger: this.changeToCommandMode.bind(this),
       ...config,
     });
   }
 
   // prettier-ignore
-  private static processConfiguration(config?: boolean | SpeechToTextConfig):
-      {serviceName: string, processedConfig: SpeechToTextConfig} {
+  private static processConfiguration(textInput: TextInputEl, config?: boolean | SpeechToTextConfig):
+      {serviceName: string, processedConfig: ProcessedConfig} {
     const newConfig = typeof config === 'object' ? config : {};
     const webSpeechConfig = typeof newConfig.webSpeech === 'object' ? newConfig.webSpeech : {};
     const azureConfig = typeof newConfig.azure === 'object' ? newConfig.azure : {};
-    const processedConfig = {
+    const processedConfig: ProcessedConfig = {
       displayInterimResults: newConfig.displayInterimResults ?? undefined,
       textColor: newConfig.textColor ?? undefined,
       stopAfterSilenceMS: newConfig.stopAfterSilenceMS ?? undefined,
@@ -54,6 +52,16 @@ export class SpeechToText extends MicrophoneButton {
       ...webSpeechConfig,
       ...azureConfig,
     };
+    const submitPhrase = newConfig.commands?.submit;
+    if (submitPhrase) {
+      processedConfig.onPreResult = (text: string) => {
+        if (text.toLowerCase().includes(submitPhrase)) {
+          textInput.submit?.();
+          return {restart: true, displayText: false};
+        }
+        return null;
+      };
+    }
     const serviceName = SpeechToText.getServiceName(newConfig);
     return {serviceName, processedConfig};
   }

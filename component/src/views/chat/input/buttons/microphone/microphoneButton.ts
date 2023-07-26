@@ -3,17 +3,21 @@ import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/microphone';
+import {ButtonStyles} from '../../../../../types/button';
 import {InputButton} from '../inputButton';
 
-type Styles = DefinedButtonStateStyles<MicrophoneStyles>;
+// commandModeStyles is used for speech to text
+// the reason why its called that instead of command is because it is used in SpeechToTextConfig
+type AllMicrophoneStyles = MicrophoneStyles & {commandModeStyles?: ButtonStyles};
 
-// WORK - check if webapi is available for browser
-// WORK - chat gpt/microsoft integration
+type Styles = DefinedButtonStateStyles<AllMicrophoneStyles>;
+
+// TO-DO - chat gpt/microsoft integration
 export class MicrophoneButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 
-  constructor(styles?: MicrophoneStyles) {
+  constructor(styles?: AllMicrophoneStyles) {
     if (styles?.position === 'dropup-menu') styles.position = 'outside-right'; // not allowed to be in dropup for UX
     super(MicrophoneButton.createMicrophoneElement(), styles?.position, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
@@ -26,6 +30,7 @@ export class MicrophoneButton extends InputButton<Styles> {
       default: this.createInnerElement(baseButton, 'default', customStyles),
       active: this.createInnerElement(baseButton, 'active', customStyles),
       unsupported: this.createInnerElement(baseButton, 'unsupported', customStyles),
+      commandModeStyles: this.createInnerElement(baseButton, 'commandModeStyles', customStyles),
     };
   }
 
@@ -50,16 +55,22 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   public changeToActive() {
     this.elementRef.replaceChildren(this._innerElements.active);
-    this.toggleIconFilter(false);
-    this.reapplyStateStyle('active', ['default']);
+    this.toggleIconFilter('active');
+    this.reapplyStateStyle('active', ['default', 'commandModeStyles']);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
-    this.toggleIconFilter(true);
-    this.reapplyStateStyle('default', ['active']);
+    this.toggleIconFilter('default');
+    this.reapplyStateStyle('default', ['active', 'commandModeStyles']);
     this.isActive = false;
+  }
+
+  public changeToCommandMode() {
+    this.elementRef.replaceChildren(this._innerElements.unsupported);
+    this.toggleIconFilter('command');
+    this.reapplyStateStyle('commandModeStyles', ['active']);
   }
 
   public changeToUnsupported() {
@@ -68,14 +79,22 @@ export class MicrophoneButton extends InputButton<Styles> {
     this.reapplyStateStyle('unsupported', ['active']);
   }
 
-  private toggleIconFilter(isDefault: boolean) {
+  private toggleIconFilter(mode: 'default' | 'active' | 'command') {
     const iconElement = this.elementRef.children[0];
     if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
-      if (isDefault) {
-        iconElement.classList.remove('active-microphone-icon');
-        iconElement.classList.add('default-microphone-icon');
-      } else {
-        iconElement.classList.replace('default-microphone-icon', 'active-microphone-icon');
+      switch (mode) {
+        case 'default':
+          iconElement.classList.remove('active-microphone-icon', 'command-microphone-icon');
+          iconElement.classList.add('default-microphone-icon');
+          break;
+        case 'active':
+          iconElement.classList.remove('default-microphone-icon', 'command-microphone-icon');
+          iconElement.classList.add('active-microphone-icon');
+          break;
+        case 'command':
+          iconElement.classList.remove('active-microphone-icon', 'default-microphone-icon');
+          iconElement.classList.add('command-microphone-icon');
+          break;
       }
     }
   }

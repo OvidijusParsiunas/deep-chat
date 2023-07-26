@@ -25,6 +25,11 @@
   border-radius: 10px;
 }
 
+.command-microphone-icon {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(96%) saturate(1067%) hue-rotate(77deg) brightness(99%)
+    contrast(102%);
+}
+
 .unsupported-microphone {
   display: none;
 }
