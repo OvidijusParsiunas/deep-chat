@@ -5,6 +5,7 @@ import React, {useCallback} from 'react';
 import {loadFull} from 'tsparticles';
 import './startPanelParticles.css';
 
+// Particles throws error on navigatiion to another page - but I can't seem to be able to suppress it
 export default function StartPanelParticles() {
   return (
     <BrowserOnly>

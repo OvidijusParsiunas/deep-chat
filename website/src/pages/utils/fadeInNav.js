@@ -12,7 +12,7 @@ export default function FadeInNav() {
           // because the selector is used to set opacity 0 at the start - its opacity takes over
           // after the animation is finished - hence we manually set it here
           if (navbar) navbar.style.opacity = '1';
-        }, 1800);
+        }, 1900);
         navToggle.fadeIn();
         navToggle.readdAutoNavShadowToggle();
       }}

@@ -10,7 +10,7 @@ export default function FadeInContent({contentRef}) {
         // in a timeout as moving back to the homepage from a different tab has the page ref 'current' as null
         setTimeout(() => {
           if (contentRef?.current) contentRef.current.className = 'fade-in';
-        }, 200);
+        }, 300);
       }}
     </BrowserOnly>
   );

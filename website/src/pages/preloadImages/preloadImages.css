@@ -1,0 +1,5 @@
+.preload-image {
+  width: 1px;
+  position: absolute;
+  opacity: 0.1;
+}
