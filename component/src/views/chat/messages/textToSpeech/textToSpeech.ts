@@ -6,8 +6,6 @@ export type ProcessedTextToSpeechConfig = {
   pitch?: number;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/rate)
   rate?: number;
-  // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/text)
-  text?: string;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/voice)
   // to get the full list use - window.speechSynthesis.getVoices()
   voice?: SpeechSynthesisVoice;

@@ -1,0 +1,140 @@
+---
+sidebar_position: 7
+---
+
+# Speech
+
+<video controls style={{width: '80%'}}>
+  <source src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/e103a42e-b3a7-4449-b9db-73fed6d7876e" />
+</video>
+
+### `textToSpeech` {#textToSpeech}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `voiceName?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `pitch?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `rate?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number` <br />
+  }
+
+When a text message has been received, it will automatically be read out. <br />
+`voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different browsers/operating-systems
+support different voices. To see the available list for your system, you can use the following code snippet: `window.speechSynthesis.getVoices()` <br />
+`lang` is used to set the language of the utterance. <br />
+`pitch` sets the pitch at which the utterance will be spoken at. <br />
+`volume` set the volume at which the utterance will be spoken at.
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    introMessage={'Send a message to hear the response.'}
+    containerStyle={{borderRadius: '8px'}}
+    textToSpeech={{volume: 0.9}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat textToSpeech='{"volume": "0.9"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textToSpeech='{"volume": "0.9"}'
+  introMessage="Send a message to hear the response."
+  containerStyle='{"borderRadius": "8px"}'
+  directConnection='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::caution
+Please note that this functionality is using the [`SpeechSynthesis`](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) Web API
+which has varying support for different devices.
+:::
+
+<LineBreak></LineBreak>
+
+### `speechToText` {#speechToText}
+
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `voiceName?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `pitch?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `rate?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number` <br />
+  }
+
+When a text message has been received, it will automatically be read out. <br />
+`voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different browsers/operating-systems
+support different voices. To see the available list for your system, you can use the following code snippet: `window.speechSynthesis.getVoices()` <br />
+`lang` is used to set the language of the utterance. <br />
+`pitch` sets the pitch at which the utterance will be spoken at. <br />
+`volume` set the volume at which the utterance will be spoken at.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    introMessage={'Send a message to hear the response.'}
+    containerStyle={{borderRadius: '8px'}}
+    textToSpeech={{volume: 0.9}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat textToSpeech='{"volume": "0.9"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textToSpeech='{"volume": "0.9"}'
+  introMessage="Send a message to hear the response."
+  containerStyle='{"borderRadius": "8px"}'
+  directConnection='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::caution
+Please note that this functionality is using the [`SpeechSynthesis`](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) Web API
+which has varying support for different devices.
+:::
+
+<LineBreak></LineBreak>

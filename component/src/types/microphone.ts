@@ -19,13 +19,11 @@ export interface AudioRecordingFiles {
 
 export type SpeechToTextConfig = {
   webSpeech?: true | WebSpeechOptions;
-  azure?: true | AzureOptions;
+  azure?: AzureOptions;
   displayInterimResults?: boolean;
   textColor?: TextColor;
   stopAfterSilenceMS?: number;
   translations?: Translations;
-  // please note that it ise best to set submit property with 'send' because webspeech recognises submit after sub
-  // and the word sub is sent
   commands?: Commands & {submit?: string};
   commandModeStyles?: ButtonStyles;
 } & MicrophoneStyles;
