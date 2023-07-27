@@ -25,19 +25,6 @@ export class SpeechToText extends MicrophoneButton {
     }
   }
 
-  private buttonClick(textInput: TextInputEl, isInputEnabled: boolean, serviceName: string, config?: SpeechToTextConfig) {
-    textInput.removeTextIfPlaceholder();
-    SpeechToElement.toggle(serviceName as 'webspeech', {
-      insertInCursorLocation: false,
-      element: isInputEnabled ? textInput.inputElementRef : undefined,
-      onError: this.onError.bind(this),
-      onStart: this.changeToActive.bind(this),
-      onStop: this.changeToDefault.bind(this),
-      onCommandModeTrigger: this.changeToCommandMode.bind(this),
-      ...config,
-    });
-  }
-
   // prettier-ignore
   private static processConfiguration(textInput: TextInputEl, config?: boolean | SpeechToTextConfig):
       {serviceName: string, processedConfig: ProcessedConfig} {
@@ -49,6 +36,7 @@ export class SpeechToText extends MicrophoneButton {
       textColor: newConfig.textColor ?? undefined,
       stopAfterSilenceMS: newConfig.stopAfterSilenceMS ?? undefined,
       translations: newConfig.translations ?? undefined,
+      commands: newConfig.commands ?? undefined,
       ...webSpeechConfig,
       ...azureConfig,
     };
@@ -57,6 +45,7 @@ export class SpeechToText extends MicrophoneButton {
       processedConfig.onPreResult = (text: string) => {
         if (text.toLowerCase().includes(submitPhrase)) {
           textInput.submit?.();
+          SpeechToElement.endCommandMode();
           return {restart: true, displayText: false};
         }
         return null;
@@ -74,6 +63,27 @@ export class SpeechToText extends MicrophoneButton {
       return 'azure';
     }
     return 'webspeech';
+  }
+
+  private buttonClick(textInput: TextInputEl, isInputEnabled: boolean, serviceName: string, config?: SpeechToTextConfig) {
+    textInput.removeTextIfPlaceholder();
+    SpeechToElement.toggle(serviceName as 'webspeech', {
+      insertInCursorLocation: false,
+      element: isInputEnabled ? textInput.inputElementRef : undefined,
+      onError: this.onError.bind(this),
+      onStart: this.changeToActive.bind(this),
+      onStop: this.changeToDefault.bind(this),
+      onCommandModeTrigger: this.onCommandModeTrigger.bind(this),
+      ...config,
+    });
+  }
+
+  private onCommandModeTrigger(isStart: boolean) {
+    if (isStart) {
+      this.changeToCommandMode();
+    } else {
+      this.changeToActive();
+    }
   }
 
   private onError() {
