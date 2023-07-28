@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Speech
 
-<video controls style={{width: '80%'}}>
+<video className="documentation-video" controls>
   <source src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/e103a42e-b3a7-4449-b9db-73fed6d7876e" />
 </video>
 
@@ -19,9 +19,9 @@ sidebar_position: 7
   }
 
 When a text message has been received, it will automatically be read out. <br />
-`voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different browsers/operating-systems
-support different voices. To see the available list for your system, you can use the following code snippet: `window.speechSynthesis.getVoices()` <br />
-`lang` is used to set the language of the utterance. <br />
+`voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different Operating Systems
+support different voices. Use the following code snippet to see the available voices for your device: `window.speechSynthesis.getVoices()` <br />
+`lang` is used to set the utterance language. <br />
 `pitch` sets the pitch at which the utterance will be spoken at. <br />
 `volume` set the volume at which the utterance will be spoken at.
 

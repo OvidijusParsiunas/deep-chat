@@ -229,6 +229,10 @@ code {
   --ifm-code-font-size: 87%;
 }
 
+.documentation-video {
+  width: 80%;
+}
+
 .documentation-example-container {
   width: 100%;
   padding: 18px 18px 35px;
@@ -372,6 +376,10 @@ h1 + h2 {
 }
 
 @media (max-width: 575px) {
+  .documentation-video {
+    display: none;
+  }
+
   .documentation-example-container {
     display: none;
   }

@@ -30,7 +30,7 @@ export class SpeechToText extends MicrophoneButton {
       {serviceName: string, processedConfig: ProcessedConfig} {
     const newConfig = typeof config === 'object' ? config : {};
     const webSpeechConfig = typeof newConfig.webSpeech === 'object' ? newConfig.webSpeech : {};
-    const azureConfig = typeof newConfig.azure === 'object' ? newConfig.azure : {};
+    const azureConfig = newConfig.azure || {};
     const processedConfig: ProcessedConfig = {
       displayInterimResults: newConfig.displayInterimResults ?? undefined,
       textColor: newConfig.textColor ?? undefined,
@@ -44,7 +44,8 @@ export class SpeechToText extends MicrophoneButton {
     if (submitPhrase) {
       processedConfig.onPreResult = (text: string) => {
         if (text.toLowerCase().includes(submitPhrase)) {
-          textInput.submit?.();
+          // wait for command words to be removed
+          setTimeout(() => textInput.submit?.());
           SpeechToElement.endCommandMode();
           return {restart: true, displayText: false};
         }
