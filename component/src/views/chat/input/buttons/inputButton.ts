@@ -52,7 +52,7 @@ export class InputButton<T extends {[key: string]: ButtonStyles} = {}> {
     this.elementRef.onmouseleave = this.buttonMouseLeave.bind(this, customStyles);
   }
 
-  public unsetFirstAvailableStateStyle(unsetTypes: (keyof T)[]) {
+  public unsetCustomStateStyles(unsetTypes: (keyof T)[]) {
     if (!this._customStyles) return;
     for (let i = 0; i < unsetTypes.length; i += 1) {
       const type = unsetTypes[i];
@@ -63,7 +63,7 @@ export class InputButton<T extends {[key: string]: ButtonStyles} = {}> {
 
   public reapplyStateStyle(setType: keyof T, unsetTypes?: (keyof T)[]) {
     if (!this._customStyles) return;
-    if (unsetTypes) this.unsetFirstAvailableStateStyle(unsetTypes);
+    if (unsetTypes) this.unsetCustomStateStyles(unsetTypes);
     const setStyle = this._customStyles[setType];
     if (setStyle) ButtonCSS.setElementCssUpToState(this.elementRef, setStyle, this._mouseState.state);
     this.setEvents(setStyle);
