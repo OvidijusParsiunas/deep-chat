@@ -5,71 +5,114 @@ sidebar_position: 3
 # External Modules
 
 To keep Deep Chat as lightweight as possible, some of its functionality requires the use of external modules.
-These have been set up to be recognised inside the `window` object:
+The component has been set up to recognise them by using the `window` object:
 
-| Functionality                             | Module                                                                                                         | Window             |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Formatting [messages with code](HERE)     | [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                    | `window.hljs`      |
-| [Speech to text](HERE) with [Azure](HERE) | [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
+| Functionality                                                                           | Module                                                                                                         | Window             |
+| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Formatting [messages with code](WORK)                                                   | [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                    | `window.hljs`      |
+| [Speech to text](../docs/speech#speechToText) with [Azure](../docs/speech#AzureOptions) | [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
 
 ## Implementation
 
-Here are some simple ways to add these modules to your project:
+Here are some simple approaches you can use to add these modules to your project:
+
+- <b>Import from a dependancy</b> <br />
+  If you are using a dependancy manager such as npm, you can dynamically import the modules and assign them to the window
+  object:
+
+  <br />
+  <br />
+
+  | Module                                                                         | URL                                                                                            |
+  | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import hljs from "highlight.js"; <br /> window.hljs = hljs;                                    |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk; |
+
+  <br />
 
 - <b>Dynamic import from a dependancy</b> <br />
   If you are using a dependancy manager such as npm, you can dynamically import the modules and assign them to the window
-  object.
-- <b>Dynamic import from a CDN</b> <br />
-  If you are using a dependancy manager such as npm, you can dynamically import the modules from the following URLs and
-  assign them to the window object: <br />
-- <b>Script/Style from a CDN</b> <br />
-  You can create script/style tags with the following URLs and append them to the document body.
+  object. The highlightjs module can load after messages are generated, use the refreshMessages method to apply it:
 
-  | Module                                                                                                         | URL                                                                                                                                                                    |
-  | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight.js](https://highlightjs.org/)                                                                       | script: <br /> https://aka.ms/csspeech/jsbrowserpackageraw <br /> stylesheet: <br /> https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css |
-  | [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | script (will automatically assign itself to the window object): <br /> https://aka.ms/csspeech/jsbrowserpackageraw                                                     |
+  <br />
+  <br />
 
-- <b>Script/Style from within the project</b> <br />
-  You can manually download the files from the URLs above, add them to the script/style tags, append them to the document
-  body and add the modules to the window object (automatic for speech sdk).
+  | Module                                                                         | URL                                                                                                                                                                                           |
+  | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import("highlight.js").then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.refreshMessages(); <br /> }); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import('microsoft-cognitiveservices-speech-sdk').then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.SpeechSDK = module; <br /> });                                                     |
 
-If you are using `TypeScript`, add this to the file where the module is used:
+  <br />
+
+- <b>Script from a CDN</b> <br />
+  You can create script tags with the following URLs and append them to the document body. The highlightjs module can load
+  after messages are generated, use the refreshMessages method to apply it (window object is automatically populated).
+
+  <br />
+  <br />
+
+  | Module                                                                         | URL                                                                                                                                                                                                                                                                   |
+  | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.refreshMessages(); <br /> document.body.appendChild(script); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                         |
+
+  <br />
+
+- <b>Script from within the project</b> <br />
+  You can manually download the files from the URLs above, add them to the script tags and append them to the document body
+  (window object is automatically populated).
+
+  <br />
+  <br />
+
+  | Module                                                                         | URL                                                                                                                                                                                                        |
+  | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.refreshMessages(); <br /> document.body.appendChild(script); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'speech.js'; <br /> document.body.appendChild(script);                                                                                |
+
+  <br />
+
+If your project is using `TypeScript`, add this to the file where the modules are being used:
 
 ```
+import hljs from 'highlight.js';
+import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
+
 declare global {
   interface Window {
-    XLSX: typeof xlsx;
+    hljs: typeof hljs;
+    SpeechSDK: typeof sdk;
   }
 }
 ```
 
 ## Examples
 
-A React project that contains a package bundler - should work similarly across other Frameworks:
+React project that uses a package bundler - should work similarly for other [Frameworks](./frameworks):
 
-[Click for Live Example](https://codesandbox.io/s/active-table-react-xlsx-h3j7rq?file=/src/App.tsx)
+[Click for Live Example](https://stackblitz.com/edit/stackblitz-starters-cebqwu?file=src%2FApp.tsx)
 
-VanillaJS approach with no bundler (can also use as fallback if above doesn't work):
+VanillaJS approach with no bundler (this can also be used as fallback if above doesn't work):
 
-[Click for Live Example](https://codesandbox.io/s/active-table-vanillajs-xlsx-9h3tcj?file=/index.html)
+[Click for Live Example](https://codesandbox.io/s/deep-chat-vanillajs-external-modules-fgw5k5?file=/index.html)
 
-## Why
+## Explanation
 
-The decision for developers to download an external dependancy was not easy to make and there are a multiple reasons that
-lead us down this road. <br />
-The [`xlsx`](https://www.npmjs.com/package/xlsx) module's post compression file size is similar to Active Table itself, which
-ruled out the idea of bundling it together as it would effectively double its size. <br />
-We spent some time experimenting with dynamic imports which seemed promising, but unfortunatelly we came to
-a roadblock that had no simple way of overcoming; Active Table is an injectable component that exists as part of a project
-that can have a wide range of possible framework + bundler configurations and needs to do its best to run in as many of their
-combinations as possible. This is where dynamic imports become problematic as they are not supported by all bundlers and in
-many cases need extra configuration to make them work. <br />
-Therefore, in order to help make the lives of our developers as simple as possible, we have left the decision of how to implement
-[`xlsx`](https://www.npmjs.com/package/xlsx) in their hands in order to alllow them to tailor the configuration to their specific setup.
+The decision to have developers download external dependancies was not easily made and there were multiple reasons that
+lead us down this path. <br />
+First, the post-compression size of the above modules is orders of magnitude bigger than Deep Chat. This
+ruled out the idea of pre-bundling them into the component. <br />
+We then spent some time experimenting with [dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) which
+seemed promising, but unfortunatelly we hit a roadblock that had no simple way of overcoming; Deep Chat itself is an injectable component that
+exists as part of a parent project which can use any type of a bundler to compile it. This is where
+[dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) become
+problematic as they are not supported by all bundlers and in many cases need extra configuration to work. <br />
+Therefore, to make the lives of our developers as simple as possible; for use cases that do not need the extra functionality - Deep Chat can
+be installed without any extra work, for use cases that do - we leave the decision of how to implement the modules
+in their hands to alllow them to tailor the approach for their project.
 
 ## Troubleshooting
 
-If you are experiencing issues for importing/exporting files, please see [**github issues**](https://github.com/OvidijusParsiunas/active-table/issues) or create
-a [**new issue ticket**](https://github.com/OvidijusParsiunas/active-table/issues/new/choose) and we will look into
+If you are experiencing issues for importing/exporting files, please see [**github issues**](https://github.com/OvidijusParsiunas/deep-chat/issues) or create
+a [**new issue ticket**](https://github.com/OvidijusParsiunas/deep-chat/issues/new) and we will look into
 it as soon as possible.

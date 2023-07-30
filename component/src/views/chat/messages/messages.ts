@@ -41,9 +41,9 @@ export class Messages {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
   private readonly _displayLoadingMessage?: boolean;
-  private readonly _remarkable: Remarkable;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly displayServiceErrorMessages?: boolean;
+  private _remarkable: Remarkable;
   private _textToSpeech?: ProcessedTextToSpeechConfig;
   private _introPanel?: IntroPanel;
   private _streamedText = '';
@@ -65,6 +65,7 @@ export class Messages {
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
+    deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -325,5 +326,13 @@ export class Messages {
         });
       })
     );
+  }
+
+  // this is mostly used for enabling highlight.js to highlight code if it is downloads later
+  private refreshTextMessages() {
+    this._remarkable = RemarkableConfig.createNew();
+    this.messages.forEach((message, index) => {
+      if (message.text) this._messageElementRefs[index].bubbleElement.innerHTML = this._remarkable.render(message.text);
+    });
   }
 }

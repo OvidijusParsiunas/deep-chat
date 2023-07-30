@@ -1,11 +1,21 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import OnVisibleAnimation from '../../utils/onVisibleAnimation';
+import hljs from 'highlight.js';
 import React from 'react';
 import './media.css';
 
 function RightPanel() {
+  const chatElementRef = React.useRef(null);
+  React.useEffect(() => {
+    setTimeout(() => {
+      window.hljs = hljs;
+      const chatElement = chatElementRef.current?.children[0].children[0];
+      chatElement.current?.refreshMessages();
+    }, 10);
+  }, []);
+
   return (
-    <div id="media-panel-right" className="feature-panel">
+    <div id="media-panel-right" ref={chatElementRef} className="feature-panel">
       <OnVisibleAnimation beforeClass={'media-bottom'} afterClass={'media-top'} timeoutMS={0}>
         <DeepChatBrowser
           directConnection={{demo: true}}

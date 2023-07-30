@@ -30,6 +30,7 @@ import {Names} from './types/names';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
+// WORK - sort props in order
 export class DeepChat extends InternalHTML {
   @Property('object')
   directConnection?: DirectConnection;
@@ -135,6 +136,8 @@ export class DeepChat extends InternalHTML {
   };
 
   getMessages: () => MessageContent[] = () => [];
+
+  refreshMessages: () => void = () => {};
 
   // will need to add an example for this
   submitUserMessage: (text: string) => void = () =>

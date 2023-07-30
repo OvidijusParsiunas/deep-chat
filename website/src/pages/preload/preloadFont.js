@@ -13,7 +13,6 @@ export default function PreloadFont() {
           (link) => link.getAttribute('href') === FONT_URL
         );
         if (!linkExists) {
-          console.log('call');
           const link = document.createElement('link');
           link.rel = 'stylesheet';
           link.href = FONT_URL;

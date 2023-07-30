@@ -27,7 +27,7 @@ support different voices. Use the following code snippet to see the available vo
 
 :::info
 Text to speech is using [`SpeechSynthesis`](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) Web API
-which has varying support for different devices.
+which is supported differently across different devices.
 :::
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -289,12 +289,17 @@ for the full list.
 
 This object requires either `retrieveToken`, `subscriptionKey` or the `token` property to be defined. <br />
 `retrieveToken` is a function used to retrieve a new the token for the speech resource. This is the recommended property to use as
-it can retrieve the token from a secure server that will hide your subscription key. Check out the [EXAMPLES](WORK) on how you can run this. <br />
+it can retrieve the token from a secure server that will hide your subscription key. Check out the [EXAMPLES](WORK) on how you can facilitate this. <br />
 `subscriptionKey` is the subscription key for your speech resource. <br />
 `token` is a temporary token for your speech resource. <br />
 `region` is the location/region of your speech resource and is REQUIRED if you are using either the `subscriptionKey` or the `token` properties. <br />
 `language` is a BCP-47 string value to denote the language of the recognition. You cand find the full
 list [here](https://docs.microsoft.com/azure/cognitive-services/speech-service/supported-languages). <br />
+
+:::info
+To use the Azure Speech To Text service - please add the [`Speech SDK`](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) to your project.
+See [EXAMPLES](../examples/externalModules).
+:::
 
 #### Example
 
@@ -344,11 +349,6 @@ list [here](https://docs.microsoft.com/azure/cognitive-services/speech-service/s
 </Tabs>
 
 <LineBreak></LineBreak>
-
-:::info
-To use the Azure Speech To Text service - please add the [`Speech SDK`](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) to your project.
-See [EXAMPLES](WORK).
-:::
 
 :::caution
 The `subscriptionKey` and `token` properties should only be used for local/prototyping/demo purposes ONLY. When you are ready to deploy your application,
