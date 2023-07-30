@@ -530,18 +530,12 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     initialMessages={[
+      {file: {src: '/img/bird-2.jpeg', type: 'image'}, role: 'user'},
       {
-        text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
+        text: 'This is a nice image of a yellow bird on a branch.',
         role: 'ai',
       },
     ]}
-    messageStyles={{
-      default: {
-        shared: {
-          bubble: {maxWidth: '270px'},
-        },
-      },
-    }}
     directConnection={{demo: true}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -549,41 +543,30 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 <Tabs>
 <TabItem value="js" label="Sample code">
 
-````html
+```html
 <deep-chat
   initialMessages='[
-    {
-      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
-      "role": "ai"
-    }
+    {"file": {"src": "path-to-image.jpeg", "type": "image"}, "role": "user"},
+    {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
 ></deep-chat>
-````
+```
 
 </TabItem>
 <TabItem value="py" label="Full code">
 
-````html
+```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  messageStyles='{
-    "default": {
-      "shared": {
-        "bubble": {"maxWidth": "270px"}
-      }
-    }
-  }'
   initialMessages='[
-    {
-      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
-      "role": "ai"
-    }
+    {"file": {"src": "path-to-image.jpeg", "type": "image"}, "role": "user"},
+    {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
   containerStyle='{"borderRadius": "8px"}'
   directConnection='{"demo": true}'
 ></deep-chat>
-````
+```
 
 </TabItem>
 </Tabs>
@@ -675,5 +658,77 @@ Files with _"image"_ or _"any"_ types that contain a `src` property as a url wil
 - Type: `"image"` | `"audio"` | `"any"`
 
 Type of a file stored inside a message. _"any"_ is the default type.
+
+<LineBreak></LineBreak>
+
+## Code messages
+
+By default, messages containing code will be rendered with white text in a dark background.
+In order to highlight the code, you will need to add an external module called [`highligtjs`](https://www.npmjs.com/package/highlight.js?activeTab=readme).
+Check out external module [EXAMPLES](../examples/externalModules) to find multiple ways of how you can add it to your project.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    initialMessages={[
+      {
+        text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
+        role: 'ai',
+      },
+    ]}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {maxWidth: '270px'},
+        },
+      },
+    }}
+    directConnection={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+````html
+<deep-chat
+  initialMessages='[
+    {
+      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
+      "role": "ai"
+    }
+  ]'
+></deep-chat>
+````
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+````html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "default": {
+      "shared": {
+        "bubble": {"maxWidth": "270px"}
+      }
+    }
+  }'
+  initialMessages='[
+    {
+      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
+      "role": "ai"
+    }
+  ]'
+  containerStyle='{"borderRadius": "8px"}'
+  directConnection='{"demo": true}'
+></deep-chat>
+````
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
