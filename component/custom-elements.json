@@ -23788,105 +23788,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/introPanel/introPanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "IntroPanel",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isDisplayed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanelWithChild",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "childElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInternalIntroPanel",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "introPanelMarkUp",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "IntroPanel",
-          "declaration": {
-            "name": "IntroPanel",
-            "module": "src/views/chat/introPanel/introPanel.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/input.ts",
       "declarations": [
         {
@@ -24046,6 +23947,105 @@
           "declaration": {
             "name": "Input",
             "module": "src/views/chat/input/input.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/introPanel/introPanel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "IntroPanel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isDisplayed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanelWithChild",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "childElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInternalIntroPanel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "introPanelMarkUp",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IntroPanel",
+          "declaration": {
+            "name": "IntroPanel",
+            "module": "src/views/chat/introPanel/introPanel.ts"
           }
         }
       ]
@@ -25994,6 +25994,382 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/focusUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FocusUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "focusEndOfInput",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "focusFromParentElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FocusUtils",
+          "declaration": {
+            "name": "FocusUtils",
+            "module": "src/views/chat/input/textInput/focusUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/inputLimit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputLimit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "PERMITTED_KEYS",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeyDown",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isKeyCombinationPermitted",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputLimit",
+          "declaration": {
+            "name": "InputLimit",
+            "module": "src/views/chat/input/textInput/inputLimit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/textInput/pasteUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/textInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextInputEl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "TEXT_INPUT_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'text-input'"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "TextInput"
+              },
+              "privacy": "private",
+              "default": "processedConfig"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "processConfig",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preventAutomaticScrollUpOnNewLine",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLDivElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextInputEl",
+          "declaration": {
+            "name": "TextInputEl",
+            "module": "src/views/chat/input/textInput/textInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
       "declarations": [
         {
@@ -26850,382 +27226,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/focusUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FocusUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "focusEndOfInput",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "focusFromParentElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FocusUtils",
-          "declaration": {
-            "name": "FocusUtils",
-            "module": "src/views/chat/input/textInput/focusUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/inputLimit.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputLimit",
-          "members": [
-            {
-              "kind": "field",
-              "name": "PERMITTED_KEYS",
-              "privacy": "private",
-              "static": true,
-              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeyDown",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isKeyCombinationPermitted",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputLimit",
-          "declaration": {
-            "name": "InputLimit",
-            "module": "src/views/chat/input/textInput/inputLimit.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/textInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/textInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextInputEl",
-          "members": [
-            {
-              "kind": "field",
-              "name": "TEXT_INPUT_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'text-input'"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_config",
-              "type": {
-                "text": "TextInput"
-              },
-              "privacy": "private",
-              "default": "processedConfig"
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "processConfig",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preventAutomaticScrollUpOnNewLine",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLDivElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "clear",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextInputEl",
-          "declaration": {
-            "name": "TextInputEl",
-            "module": "src/views/chat/input/textInput/textInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
       "declarations": [
         {
@@ -27322,311 +27322,6 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/camera/cameraButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CameraButton",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createInnerElements",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "Styles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInnerElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "baseButton",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "'styles'"
-                  }
-                },
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "Styles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createButtonElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createSVGIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "addClickEvent",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileAttachmentsType",
-                  "type": {
-                    "text": "FileAttachmentsType"
-                  }
-                },
-                {
-                  "name": "modalContainerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "cameraFiles",
-                  "optional": true,
-                  "type": {
-                    "text": "CameraFiles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "InputButton",
-            "module": "/src/views/chat/input/buttons/inputButton"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CameraButton",
-          "declaration": {
-            "name": "CameraButton",
-            "module": "src/views/chat/input/buttons/camera/cameraButton.ts"
           }
         }
       ]
@@ -31813,6 +31508,311 @@
           "declaration": {
             "name": "Modal",
             "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/camera/cameraButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CameraButton",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createInnerElements",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "Styles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInnerElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "baseButton",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "'styles'"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "Styles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createButtonElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createSVGIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "addClickEvent",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachmentsType",
+                  "type": {
+                    "text": "FileAttachmentsType"
+                  }
+                },
+                {
+                  "name": "modalContainerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "cameraFiles",
+                  "optional": true,
+                  "type": {
+                    "text": "CameraFiles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "InputButton",
+            "module": "/src/views/chat/input/buttons/inputButton"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CameraButton",
+          "declaration": {
+            "name": "CameraButton",
+            "module": "src/views/chat/input/buttons/camera/cameraButton.ts"
           }
         }
       ]

@@ -450,9 +450,7 @@ will automatically have a loading animation.
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
-is for communication with the target service and `speechToText` is when there is a problem using the `speechToText` functionality. <br />
-
-// WORK - speechToText link
+is for communication with the target service and `speechToText` is when there is a problem using the [`speechToText`](./speech#speechToText) functionality. <br />
 
 #### Example
 
@@ -710,6 +708,12 @@ Check out external module [EXAMPLES](../examples/externalModules) to find multip
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
+  initialMessages='[
+    {
+      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
+      "role": "ai"
+    }
+  ]'
   messageStyles='{
     "default": {
       "shared": {
@@ -717,12 +721,6 @@ Check out external module [EXAMPLES](../examples/externalModules) to find multip
       }
     }
   }'
-  initialMessages='[
-    {
-      "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
-      "role": "ai"
-    }
-  ]'
   containerStyle='{"borderRadius": "8px"}'
   directConnection='{"demo": true}'
 ></deep-chat>

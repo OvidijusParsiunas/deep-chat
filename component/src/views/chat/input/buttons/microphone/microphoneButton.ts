@@ -6,9 +6,9 @@ import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonStyles} from '../../../../../types/button';
 import {InputButton} from '../inputButton';
 
-// commandModeStyles is used for speech to text
+// commandMode is used for speech to text
 // the reason why its called that instead of command is because it is used in SpeechToTextConfig
-type AllMicrophoneStyles = MicrophoneStyles & {commandModeStyles?: ButtonStyles};
+type AllMicrophoneStyles = MicrophoneStyles & {commandMode?: ButtonStyles};
 
 type Styles = DefinedButtonStateStyles<AllMicrophoneStyles>;
 
@@ -30,7 +30,7 @@ export class MicrophoneButton extends InputButton<Styles> {
       default: this.createInnerElement(baseButton, 'default', customStyles),
       active: this.createInnerElement(baseButton, 'active', customStyles),
       unsupported: this.createInnerElement(baseButton, 'unsupported', customStyles),
-      commandModeStyles: this.createInnerElement(baseButton, 'commandModeStyles', customStyles),
+      commandMode: this.createInnerElement(baseButton, 'commandMode', customStyles),
     };
   }
 
@@ -56,21 +56,21 @@ export class MicrophoneButton extends InputButton<Styles> {
   public changeToActive() {
     this.elementRef.replaceChildren(this._innerElements.active);
     this.toggleIconFilter('active');
-    this.reapplyStateStyle('active', ['default', 'commandModeStyles']);
+    this.reapplyStateStyle('active', ['default', 'commandMode']);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
     this.toggleIconFilter('default');
-    this.reapplyStateStyle('default', ['active', 'commandModeStyles']);
+    this.reapplyStateStyle('default', ['active', 'commandMode']);
     this.isActive = false;
   }
 
   public changeToCommandMode() {
     this.elementRef.replaceChildren(this._innerElements.unsupported);
     this.toggleIconFilter('command');
-    this.reapplyStateStyle('commandModeStyles', ['active']);
+    this.reapplyStateStyle('commandMode', ['active']);
   }
 
   public changeToUnsupported() {

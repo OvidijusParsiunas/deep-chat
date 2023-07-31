@@ -14,7 +14,7 @@ export class SpeechToText extends MicrophoneButton {
   private readonly _addErrorMessage: AddErrorMessage;
 
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
-    super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText : {});
+    super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText?.button : {});
     const {serviceName, processedConfig} = SpeechToText.processConfiguration(textInput, deepChat.speechToText);
     this._addErrorMessage = addErrorMessage;
     if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechSupported()) {

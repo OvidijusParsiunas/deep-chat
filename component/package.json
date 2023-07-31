@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "0.1.25",
+  "version": "0.1.28",
   "description": "Framework agnostic chat component that can power any API",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
@@ -65,6 +65,6 @@
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "remarkable": "^2.0.1",
-    "speech-to-element": "^0.1.36"
+    "speech-to-element": "^0.1.38"
   }
 }

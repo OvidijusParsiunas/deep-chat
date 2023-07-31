@@ -194,8 +194,6 @@ import Tabs from '@theme/Tabs';
 
 <LineBreak></LineBreak>
 
-// WORK - Change microphone button to speech to text.
-
 ### Bard {#bard}
 
 Simulation of the styling used in [Google Bard](https://bard.google.com/). If you are using a custom avatar - please replace the _"path-to-icon.png"_ string to your file's path or
@@ -243,11 +241,11 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
       default: {styles: {position: 'left', container: {marginLeft: '12px', marginRight: '5px'}}},
       ai: {src: '/img/googleBardLogo.png', styles: {position: 'left', avatar: {paddingTop: '6px'}}},
     }}
-    microphone={{
+    speechToText={{
       button: {
         default: {
           container: {default: {bottom: '1em', right: '0.6em', borderRadius: '20px', width: '1.9em', height: '1.9em'}},
-          svg: {styles: {default: {bottom: '0.4em', left: '0.3em'}}},
+          svg: {styles: {default: {bottom: '0.35em', left: '0.35em'}}},
         },
         position: 'inside-right',
       },
@@ -317,11 +315,11 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
     },
     "ai": {"src": "path-to-icon.png", "styles": {"position": "left", "avatar": {"paddingTop": "6px"}}}
   }'
-  microphone='{
+  speechToText='{
     "button": {
       "default": {
         "container": {"default": {"bottom": "1em", "right": "0.6em", "borderRadius": "20px", "width": "1.9em", "height": "1.9em"}},
-        "svg": {"styles": {"default": {"bottom": "0.4em", "left": "0.3em"}}}
+        "svg": {"styles": {"default": {"bottom": "0.35em", "left": "0.35em"}}}
       },
       "position": "inside-right"
     }

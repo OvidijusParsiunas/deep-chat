@@ -18,6 +18,7 @@ Returns details of messages inside the chat.
 
 #### Example
 
+import ComponentContainerHighlightMethod from '@site/src/components/table/componentContainerHighlightMethod';
 import ComponentContainerMethods from '@site/src/components/table/componentContainerMethods';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -85,6 +86,48 @@ Focuses the cursor on the text input.
 
 ```html
 tableElementRef.focusInput();
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `refreshMessages` {#refreshMessages}
+
+- Type: `() => void`
+
+If your messages contain [Code](./messages/#code-messages) and you are using the [`higlight.js`](https://www.npmjs.com/package/highlight.js?activeTab=readme) module to highlight them
+(as per [external module](../examples/externalModules) guidelines), sometimes the module may load after the messages have been rendered, leaving the code without a highlight. In such instances, you can use this
+method to highlight the code with the loaded module.
+
+#### Example
+
+<ComponentContainerHighlightMethod displayResults={false}>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    initialMessages={[
+      {
+        text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
+        role: 'ai',
+      },
+    ]}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {maxWidth: '270px'},
+        },
+      },
+    }}
+    directConnection={{demo: true}}
+  ></DeepChatBrowser>
+</ComponentContainerHighlightMethod>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+tableElementRef.refreshMessages();
 ```
 
 </TabItem>

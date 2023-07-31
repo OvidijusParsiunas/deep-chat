@@ -25,5 +25,5 @@ export type SpeechToTextConfig = {
   stopAfterSilenceMS?: number;
   translations?: Translations;
   commands?: Commands & {submit?: string};
-  commandModeStyles?: ButtonStyles;
-} & MicrophoneStyles;
+  button?: {commandMode?: ButtonStyles} & MicrophoneStyles;
+};

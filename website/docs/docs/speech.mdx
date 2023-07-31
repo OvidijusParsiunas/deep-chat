@@ -86,11 +86,10 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSilenceMS?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `translations?: {[key: string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`commands?: Commands`](#Commands), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`commandModeStyles?: ButtonStyles`](./styles/#ButtonStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`MicrophoneStyles`](./styles/#MicrophoneStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles) <br />
   }
 
-- Default: _{webSpeech: true}_
+- Default: _{webSpeech: true, stopAfterSilenceMS: 25000}_
 
 Transcribe your voice into text and control chat with commands.<br />
 `webSpeech` utilises [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to transcribe your speech. <br />
@@ -100,8 +99,7 @@ Transcribe your voice into text and control chat with commands.<br />
 `stopAfterSilenceMS` is the milliseconds of silence required for the microphone to automatically turn off. <br />
 `translations` is a case-sensitive one-to-one mapping of words that will automatically be translated to others. <br />
 `commands` is used to set the phrases that will trigger various chat functionality. <br />
-`commandModeStyles` defines the styling that is used when the [`command mode`](#Commands) is activated. <br />
-`MicrophoneStyles` contains other styling properties for the microphone button.
+`button` defines the styling used for the microphone button.
 
 #### Example
 
@@ -115,27 +113,7 @@ Transcribe your voice into text and control chat with commands.<br />
       stopAfterSilenceMS: 5000,
       translations: {hello: 'goodbye', Hello: 'Goodbye'},
       commands: {resume: 'resume', settings: {commandMode: 'hello'}},
-      commandModeStyles: {
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)',
-            },
-          },
-        },
-      },
-      default: {
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%)',
-            },
-          },
-        },
-      },
-      position: 'outside-left',
+      button: {position: 'outside-left'},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -150,25 +128,7 @@ Transcribe your voice into text and control chat with commands.<br />
     "stopAfterSilenceMS": 5000,
     "translations": {"hello": "goodbye", "Hello": "Goodbye"},
     "commands": {"resume": "resume", "settings": {"commandMode": "hello"}},
-    "commandModeStyles": {
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)"
-          }
-        }
-      }
-    },
-    "default": {
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%)"
-          }
-        }
-      }
-    },
-    "position": "outside-left"
+    "button": {"position": "outside-left"}
   }'
 ></deep-chat>
 ```
@@ -185,25 +145,7 @@ Transcribe your voice into text and control chat with commands.<br />
     "stopAfterSilenceMS": 5000,
     "translations": {"hello": "goodbye", "Hello": "Goodbye"},
     "commands": {"resume": "resume", "settings": {"commandMode": "hello"}},
-    "commandModeStyles": {
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)"
-          }
-        }
-      }
-    },
-    "default": {
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(32%) sepia(0%) saturate(924%) hue-rotate(46deg) brightness(95%) contrast(99%)"
-          }
-        }
-      }
-    },
-    "position": "outside-left"
+    "button": {"position": "outside-left"}
   }'
   introMessage="Click the microphone to start transcribing your speech."
   containerStyle='{"borderRadius": "8px"}'
@@ -408,7 +350,8 @@ This object is used to set the color of `interim` and `final` results text. <br 
   &nbsp;&nbsp;&nbsp;&nbsp; `resume?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `removeAllText?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `submit?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `settings?:` {`commandMode?: string`, `substrings?: boolean`, `caseSensitive?: boolean`} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `commandMode?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `settings?:` {`substrings?: boolean`, `caseSensitive?: boolean`} <br />
   }
 
 - Default: _{settings: {substrings: true, caseSensitive: false}}_
@@ -496,6 +439,140 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
 
 </TabItem>
 </Tabs>
+
+<LineBreak></LineBreak>
+
+### `ButtonStyles` {#ButtonStyles}
+
+- Type: {[`commandMode?: ButtonStyles`](./styles/#ButtonStyles), [`MicrophoneStyles`](./styles/#MicrophoneStyles)}
+
+This object is used to define the styling for the microphone button. <br />
+It contains the same properties as the [`MicrophoneStyles`](./styles/#MicrophoneStyles) object
+and an additional `commandMode` property which sets the button styling when the [`command mode`](#Commands) is activated. <br />
+
+// WORK - potentially include a pause style
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    introMessage={'Click the microphone to start transcribing your speech.'}
+    containerStyle={{borderRadius: '8px'}}
+    speechToText={{
+      button: {
+        commandMode: {
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)',
+              },
+            },
+          },
+        },
+        active: {
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(16%) sepia(48%) saturate(4810%) hue-rotate(347deg) brightness(110%) contrast(106%)',
+              },
+            },
+          },
+        },
+        default: {
+          svg: {
+            styles: {
+              default: {
+                filter:
+                  'brightness(0) saturate(100%) invert(77%) sepia(9%) saturate(7093%) hue-rotate(32deg) brightness(99%) contrast(83%)',
+              },
+            },
+          },
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  speechToText='{
+    "button": {
+      "commandMode": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)"
+      }}}},
+      "active": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(16%) sepia(48%) saturate(4810%) hue-rotate(347deg) brightness(110%) contrast(106%)"
+      }}}},
+      "default": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(77%) sepia(9%) saturate(7093%) hue-rotate(32deg) brightness(99%) contrast(83%)"
+    }}}}}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  speechToText='{
+    "button": {
+      "commandMode": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(70%) sepia(70%) saturate(4438%) hue-rotate(170deg) brightness(92%) contrast(98%)"
+      }}}},
+      "active": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(16%) sepia(48%) saturate(4810%) hue-rotate(347deg) brightness(110%) contrast(106%)"
+      }}}},
+      "default": {
+        "svg": {
+          "styles": {
+            "default": {
+              "filter":
+                "brightness(0) saturate(100%) invert(77%) sepia(9%) saturate(7093%) hue-rotate(32deg) brightness(99%) contrast(83%)"
+    }}}}}
+  }'
+  introMessage="Click the microphone to start transcribing your speech."
+  containerStyle='{"borderRadius": "8px"}'
+  directConnection='{"demo": true}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to generate filter values for the microphone icon color.
+:::
 
 <LineBreak></LineBreak>
 
