@@ -83,20 +83,20 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; [`azure?: AzureOptions`](#AzureOptions), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textColor?: TextColor`](#TextColor), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayInterimResults?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSilenceMS?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSilenceMs?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `translations?: {[key: string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`commands?: Commands`](#Commands), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles) <br />
   }
 
-- Default: _{webSpeech: true, stopAfterSilenceMS: 25000}_
+- Default: _{webSpeech: true, stopAfterSilenceMs: 25000 (25 seconds)}_
 
 Transcribe your voice into text and control chat with commands.<br />
 `webSpeech` utilises [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to transcribe your speech. <br />
 `azure` utilises [`Azure Cognitive Speech Services API`](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-to-text) to transcribe your speech. <br />
 `textColor` is used to set the color of interim and final results text. <br />
 `displayInterimResults` controls whether interim results are displayed. <br />
-`stopAfterSilenceMS` is the milliseconds of silence required for the microphone to automatically turn off. <br />
+`stopAfterSilenceMs` is the milliseconds of silence required for the microphone to automatically turn off. <br />
 `translations` is a case-sensitive one-to-one mapping of words that will automatically be translated to others. <br />
 `commands` is used to set the phrases that will trigger various chat functionality. <br />
 `button` defines the styling used for the microphone button.
@@ -110,7 +110,7 @@ Transcribe your voice into text and control chat with commands.<br />
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
       webSpeech: true,
-      stopAfterSilenceMS: 5000,
+      stopAfterSilenceMs: 5000,
       translations: {hello: 'goodbye', Hello: 'Goodbye'},
       commands: {resume: 'resume', settings: {commandMode: 'hello'}},
       button: {position: 'outside-left'},
@@ -125,7 +125,7 @@ Transcribe your voice into text and control chat with commands.<br />
 <deep-chat
   speechToText='{
     "webSpeech": true,
-    "stopAfterSilenceMS": 5000,
+    "stopAfterSilenceMs": 5000,
     "translations": {"hello": "goodbye", "Hello": "Goodbye"},
     "commands": {"resume": "resume", "settings": {"commandMode": "hello"}},
     "button": {"position": "outside-left"}
@@ -142,7 +142,7 @@ Transcribe your voice into text and control chat with commands.<br />
 <deep-chat
   speechToText='{
     "webSpeech": true,
-    "stopAfterSilenceMS": 5000,
+    "stopAfterSilenceMs": 5000,
     "translations": {"hello": "goodbye", "Hello": "Goodbye"},
     "commands": {"resume": "resume", "settings": {"commandMode": "hello"}},
     "button": {"position": "outside-left"}
@@ -157,6 +157,10 @@ Transcribe your voice into text and control chat with commands.<br />
 </Tabs>
 
 <LineBreak></LineBreak>
+
+:::info
+If the [`microphone`](./files#microphone) recorder is set - this will not be enabled. <br />
+:::
 
 :::info
 Speech to text functionality is provided by the [`speech to element`](https://github.com/OvidijusParsiunas/speech-to-element) library.
@@ -222,19 +226,20 @@ for the full list.
 ### `AzureOptions` {#AzureOptions}
 
 - Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `region: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `retrieveToken?: () => Promise<string>`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `subscriptionKey?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `token?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `region?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `language?: string` <br />
   }
 
-This object requires either `retrieveToken`, `subscriptionKey` or the `token` property to be defined. <br />
-`retrieveToken` is a function used to retrieve a new the token for the speech resource. This is the recommended property to use as
-it can retrieve the token from a secure server that will hide your subscription key. Check out the [EXAMPLES](WORK) on how you can facilitate this. <br />
-`subscriptionKey` is the subscription key for your speech resource. <br />
-`token` is a temporary token for your speech resource. <br />
-`region` is the location/region of your speech resource and is REQUIRED if you are using either the `subscriptionKey` or the `token` properties. <br />
+This object requires `region` and either `retrieveToken`, `subscriptionKey` or the `token` properties: <br />
+`region` is the location/region of your speech resource. <br />
+`retrieveToken` is a function used to retrieve a new token for the Azure speech resource. It is the recommended property to use as
+it can retrieve the token from a secure server that will hide your credentials. Check out the [retrieval example](#retrieve-token-example) below
+and [starter server templates](https://github.com/OvidijusParsiunas/speech-to-element/tree/main/examples). <br />
+`subscriptionKey` is the subscription key for the Azure speech resource. <br />
+`token` is a temporary token for the Azure speech resource. <br />
 `language` is a BCP-47 string value to denote the language of the recognition. You cand find the full
 list [here](https://docs.microsoft.com/azure/cognitive-services/speech-service/supported-languages). <br />
 
@@ -294,8 +299,48 @@ See [EXAMPLES](../examples/externalModules).
 
 :::caution
 The `subscriptionKey` and `token` properties should only be used for local/prototyping/demo purposes ONLY. When you are ready to deploy your application,
-please switch to using the `retrieveToken` property. Check out the [EXAMPLES](HERE) on how to set it up.
+please switch to using the `retrieveToken` property. Check out the example below and [starter server templates](https://github.com/OvidijusParsiunas/speech-to-element/tree/main/examples).
 :::
+
+<LineBreak></LineBreak>
+
+#### Retrieve token example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    introMessage={'Click the microphone to start transcribing your speech.'}
+    containerStyle={{borderRadius: '8px'}}
+    speechToText={{
+      azure: {
+        region: 'resource-region',
+        retrieveToken: async () => {
+          return fetch('http://localhost:8080/token')
+            .then((res) => res.text())
+            .then((token) => token)
+            .catch((error) => console.error('error'));
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```javascript
+speechToText.speechToText = {
+  region: 'resource-region',
+  retrieveToken: async () => {
+    return fetch('http://localhost:8080/token')
+      .then((res) => res.text())
+      .then((token) => token);
+  },
+};
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -382,8 +427,8 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
         resume: 'resume',
         removeAllText: 'remove text',
         submit: 'submit',
+        commandMode: 'command',
         settings: {
-          commandMode: 'command',
           substrings: true,
           caseSensitive: false,
         },
@@ -404,8 +449,8 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
       "resume": "resume",
       "removeAllText": "remove text",
       "submit": "submit",
+      "commandMode": "command",
       "settings": {
-        "commandMode": "command",
         "substrings": true,
         "caseSensitive": false
   }}}'
@@ -426,8 +471,8 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
       "resume": "resume",
       "removeAllText": "remove text",
       "submit": "submit",
+      "commandMode": "command",
       "settings": {
-        "commandMode": "command",
         "substrings": true,
         "caseSensitive": false
   }}}'
@@ -571,7 +616,7 @@ and an additional `commandMode` property which sets the button styling when the 
 <LineBreak></LineBreak>
 
 :::tip
-You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to generate filter values for the microphone icon color.
+You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to generate filter values for the icon color.
 :::
 
 <LineBreak></LineBreak>
@@ -616,7 +661,7 @@ to add the Speech SDK to your project and add your resource properties.
         removeAllText: 'remove',
         pause: 'pause',
         resume: 'continue',
-        settings: {commandMode: 'belfast'},
+        commandMode: 'belfast',
       },
     }}
   ></DeepChatBrowser>
@@ -631,33 +676,35 @@ to add the Speech SDK to your project and add your resource properties.
 <div style="display: flex">
   <deep-chat
     speechToText='{
+      "azure": {
+        "subscriptionKey": "resource-key",
+        "region": "resource-region"
+      },
       "commands": {
         "stop": "stop",
         "pause": "pause",
         "resume": "resume",
         "removeAllText": "remove text",
         "submit": "submit",
-        "settings": {
-          "commandMode": "command",
-          "substrings": true,
-          "caseSensitive": false
-    }}}'
+        "commandMode": "command"
+    }}'
     containerStyle='{"marginRight": "30px"}'
     directConnection='{"demo": true}'
   ></deep-chat>
   <deep-chat
     speechToText='{
       "commands": {
+        "azure": {
+          "subscriptionKey": "resource-key",
+          "region": "resource-region"
+        },
         "stop": "stop",
         "pause": "pause",
         "resume": "resume",
         "removeAllText": "remove text",
         "submit": "submit",
-        "settings": {
-          "commandMode": "command",
-          "substrings": true,
-          "caseSensitive": false
-    }}}'
+        "commandMode": "command"
+    }}'
     directConnection='{"demo": true}'
   ></deep-chat>
 </div>

@@ -1,4 +1,4 @@
-import DeepChatBrowser from '../../components/table/deepChatBrowser';
+import DeepChatBrowser from '../components/table/deepChatBrowser';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import stabilityAILogo from '/img/stabilityAILogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
@@ -9,6 +9,7 @@ import React from 'react';
 
 // used in the startPanel.js file
 // may need to zoom out for a photo
+// the social media preview is this without the second element
 const Logos = React.forwardRef((_, ref) => {
   return (
     <div
@@ -375,7 +376,7 @@ function Components() {
   );
 }
 
-export default function ReadmeBanner() {
+export default function SocialMedia() {
   return (
     <div
       id="customize"

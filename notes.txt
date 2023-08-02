@@ -12,6 +12,6 @@ Updating package version Checklist:
 
 Run npm run build:bundle
 Update Installation
-Update CDN references - in doc Live VanillaJS Example sections.
+Update CDN references - in doc Live VanillaJS Example sections and External Modules
 Update React wrapper
 Update UI and NextJS examples for servers

@@ -30,7 +30,6 @@ import {Names} from './types/names';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
-// WORK - sort props in order
 export class DeepChat extends InternalHTML {
   @Property('object')
   directConnection?: DirectConnection;
@@ -44,41 +43,35 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;
 
-  @Property('object')
-  attachmentContainerStyle?: CustomStyle;
+  @Property('function')
+  requestInterceptor?: RequestInterceptor;
 
-  @Property('object')
-  dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
+  @Property('function')
+  responseInterceptor?: ResponseInterceptor;
 
-  @Property('object')
-  speechToText?: boolean | SpeechToTextConfig; // only activated if not used for recording audio
-
-  @Property('object')
-  textToSpeech?: boolean | TextToSpeechConfig;
+  @Property('function')
+  validateMessageBeforeSending?: ValidateMessageBeforeSending;
 
   @Property('object')
   containerStyle?: CustomStyle;
 
   @Property('object')
-  dropupStyles?: DropupStyles;
+  attachmentContainerStyle?: CustomStyle;
 
   @Property('object')
-  textInput?: TextInput;
+  dropupStyles?: DropupStyles;
 
   @Property('object')
   inputAreaStyle?: CustomStyle;
 
   @Property('object')
+  textInput?: TextInput;
+
+  @Property('object')
   submitButtonStyles?: SubmitButtonStyles;
 
-  @Property('object')
-  messageStyles?: MessageStyles;
-
-  @Property('object')
-  avatars?: Avatars;
-
-  @Property('object')
-  names?: Names;
+  @Property('string')
+  auxiliaryStyle?: string;
 
   @Property('array')
   initialMessages?: MessageContent[];
@@ -87,61 +80,66 @@ export class DeepChat extends InternalHTML {
   introMessage?: string;
 
   @Property('object')
+  avatars?: Avatars;
+
+  @Property('object')
+  names?: Names;
+
+  @Property('boolean')
+  displayLoadingBubble?: boolean;
+
+  @Property('object')
+  errorMessages?: ErrorMessages;
+
+  @Property('object')
+  messageStyles?: MessageStyles;
+
+  @Property('object')
+  textToSpeech?: boolean | TextToSpeechConfig;
+
+  @Property('object')
+  speechToText?: boolean | SpeechToTextConfig; // only activated if not used for recording audio
+
+  @Property('object')
   images?: boolean | FilesServiceConfig;
 
   @Property('object')
   gifs?: boolean | FilesServiceConfig;
 
   @Property('object')
-  audio?: boolean | FilesServiceConfig;
-
-  @Property('object')
-  mixedFiles?: boolean | FilesServiceConfig;
-
-  @Property('object')
   camera?: boolean | CameraFilesServiceConfig;
+
+  @Property('object')
+  audio?: boolean | FilesServiceConfig;
 
   @Property('object')
   microphone?: boolean | MicrophoneFilesServiceConfig;
 
   @Property('object')
-  introPanelStyle?: CustomStyle;
+  mixedFiles?: boolean | FilesServiceConfig;
 
   @Property('object')
-  errorMessages?: ErrorMessages;
+  dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
-  @Property('boolean')
-  displayLoadingBubble?: boolean;
+  @Property('object')
+  introPanelStyle?: CustomStyle;
 
-  @Property('string')
-  auxiliaryStyle?: string;
+  getMessages: () => MessageContent[] = () => [];
 
-  @Property('function')
-  requestInterceptor?: RequestInterceptor;
+  submitUserMessage: (text: string) => void = () =>
+    console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
-  @Property('function')
-  responseInterceptor?: ResponseInterceptor;
+  focusInput: () => void = () => {
+    FocusUtils.focusFromParentElement(this._elementRef);
+  };
+
+  refreshMessages: () => void = () => {};
 
   @Property('function')
   onNewMessage: OnNewMessage = () => {};
 
   @Property('function')
   onComponentRender: () => void = () => {};
-
-  @Property('function')
-  validateMessageBeforeSending?: ValidateMessageBeforeSending;
-
-  focusInput: () => void = () => {
-    FocusUtils.focusFromParentElement(this._elementRef);
-  };
-
-  getMessages: () => MessageContent[] = () => [];
-
-  refreshMessages: () => void = () => {};
-
-  // will need to add an example for this
-  submitUserMessage: (text: string) => void = () =>
-    console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
   _hasBeenRendered = false;
 

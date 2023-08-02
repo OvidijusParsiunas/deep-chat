@@ -353,6 +353,13 @@ html[data-theme='dark'] .header-github-link:before {
   color: var(--code-punctuation-color) !important;
 }
 
+/* JavaScript */
+.token + .property,
+.token + .keyword,
+.token + .string {
+  color: var(--code-tag-color) !important;
+}
+
 /* The following class is used when docusaurus automatically creates a header - we hide it to display another header with a logo beside it */
 .theme-doc-markdown header {
   display: none;

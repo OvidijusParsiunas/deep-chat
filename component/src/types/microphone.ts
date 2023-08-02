@@ -22,7 +22,7 @@ export type SpeechToTextConfig = {
   azure?: AzureOptions;
   displayInterimResults?: boolean;
   textColor?: TextColor;
-  stopAfterSilenceMS?: number;
+  stopAfterSilenceMs?: number;
   translations?: Translations;
   commands?: Commands & {submit?: string};
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles;
