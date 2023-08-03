@@ -7,7 +7,7 @@ function RightPanel() {
   return (
     <div id="capture-files-right-panel" className="feature-panel">
       <div className="capture-files-text">
-        Deep Chat can be used to create new files within the component! Click the camera button to capture photos or use
+        Deep Chat can be used to create new files inside the component! Click the camera button to capture photos or use
         the microphone button to record audio.
       </div>
     </div>

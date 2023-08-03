@@ -82,8 +82,8 @@ function LeftPanel() {
   return (
     <div id="media-panel-left" className="feature-panel">
       <div id="media-text">
-        Send images, audio, gifs, spreadsheets and any other files types to and from the target service. Text messages
-        support <b>MarkDown</b> to help control text layout and render code.
+        Send images, audio, gifs, spreadsheets and other files to and from the chat. Text messages support <b>MarkDown</b>{' '}
+        to help control text layout and render code.
       </div>
     </div>
   );

@@ -73,13 +73,13 @@ const config = {
         {name: 'og:url', content: 'https://deepchat.dev/'},
         {
           name: 'og:image',
-          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media.png',
+          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',
         },
         {name: 'twitter:title', content: 'Deep Chat'},
         {name: 'twitter:description', content: 'Framework agnostic chat component that can power any API'},
         {
           name: 'twitter:image',
-          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media.png',
+          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',
         },
       ],
       navbar: {

@@ -233,14 +233,14 @@ for the full list.
   &nbsp;&nbsp;&nbsp;&nbsp; `language?: string` <br />
   }
 
-This object requires `region` and either `retrieveToken`, `subscriptionKey` or the `token` properties: <br />
-`region` is the location/region of your speech resource. <br />
+This object requires `region` and either `retrieveToken`, `subscriptionKey` or the `token` properties to be defined with it: <br />
+`region` is the location/region of your Azure speech resource. <br />
 `retrieveToken` is a function used to retrieve a new token for the Azure speech resource. It is the recommended property to use as
 it can retrieve the token from a secure server that will hide your credentials. Check out the [retrieval example](#retrieve-token-example) below
 and [starter server templates](https://github.com/OvidijusParsiunas/speech-to-element/tree/main/examples). <br />
 `subscriptionKey` is the subscription key for the Azure speech resource. <br />
 `token` is a temporary token for the Azure speech resource. <br />
-`language` is a BCP-47 string value to denote the language of the recognition. You cand find the full
+`language` is a BCP-47 string value to denote the recognition language. You can find the full
 list [here](https://docs.microsoft.com/azure/cognitive-services/speech-service/supported-languages). <br />
 
 :::info
