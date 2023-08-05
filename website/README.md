@@ -12,11 +12,15 @@ The documentation website has been built using [Docusaurus 2](https://docusaurus
 # Install node dependencies:
 $ npm install
 
-# build the website:
-$ npm run build
+# Install node dependencies:
+$ npm install
 
-# serve and automatically build the website:
+# automatically build and serve:
 $ npm run start
+
+# build and serve for production:
+$ npm run build
+$ npm run serve
 ```
 
 ## :heart: Contributions

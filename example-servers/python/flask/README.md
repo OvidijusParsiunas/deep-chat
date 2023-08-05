@@ -1,6 +1,6 @@
 ![Deep Chat](../../../assets/readme/flask-connect.png)
 
-This is an example Flask server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [StabilityAI](https://stability.ai/), [Cohere].
+This is an example Flask server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [StabilityAI](https://stability.ai/), [Cohere](https://docs.cohere.com/docs).
 
 ### :calling: UI component
 
@@ -26,7 +26,7 @@ Run the project:
 python app.py
 ```
 
-If you want to use the OpenAI API examples, please create an `.env` file and define the `OPENAI_API_KEY` environment variable. See the `.env.example` file.
+If you want to use the proxies, please create an `.env` file and define the corresponding environment variables. E.g. if you want to use OpenAI API, define the `OPENAI_API_KEY` variable. See the `.env.example` file.
 
 ### :wrench: Improvements
 

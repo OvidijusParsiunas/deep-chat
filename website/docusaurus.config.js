@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Deep Chat',
-  tagline: 'Framework agnostic chat component that can power any API',
+  tagline: 'Framework agnostic chat component used to power AI APIs',
   url: 'https://deepchat.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -66,17 +66,19 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
-        {name: 'description', content: 'Framework agnostic chat component that can power any API'},
+        {name: 'description', content: 'Framework agnostic chat component used to power AI APIs'},
         {name: 'keywords', content: 'ai, chat, bot, chatbot, assistant, component'},
         {name: 'og:title', content: 'Deep Chat'},
-        {name: 'og:description', content: 'Framework agnostic chat component that can power any API'},
+        {name: 'og:description', content: 'Framework agnostic chat component used to power AI APIs'},
         {name: 'og:url', content: 'https://deepchat.dev/'},
         {
           name: 'og:image',
           content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',
         },
         {name: 'twitter:title', content: 'Deep Chat'},
-        {name: 'twitter:description', content: 'Framework agnostic chat component that can power any API'},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {name: 'twitter:site', content: '@deepchat'},
+        {name: 'twitter:description', content: 'Framework agnostic chat component used to power AI APIs'},
         {
           name: 'twitter:image',
           content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',

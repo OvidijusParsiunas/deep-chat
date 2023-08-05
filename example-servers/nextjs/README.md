@@ -1,6 +1,6 @@
 ![Deep Chat](../../assets/readme/nextjs-connect.png)
 
-This is an example NextJS server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [StabilityAI](https://stability.ai/), [Cohere].
+This is an example NextJS server template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [StabilityAI](https://stability.ai/), [Cohere](https://docs.cohere.com/docs).
 
 This project is fully setup and ready to be hosted by a platform such as [Vercel](https://vercel.com/).
 
@@ -24,10 +24,11 @@ Run the project:
 npm run dev
 ```
 
-If you want to use the OpenAI API examples:
+If you want to use the proxy functions:
 
-- Local - Replace the `process.env.OPENAI_API_KEY` in code with your key
-- Hosting platform - Add an `OPENAI_API_KEY` environment variable
+<b>Local</b> - Replace their environment variables (`process.env.`) with the corresponding API key values. E.g. if you want to use the OpenAI Chat, replace [`process.env.OPENAI_API_KEY`](https://github.com/OvidijusParsiunas/deep-chat/blob/d2fdd06dabbf30f3bd318c37e37dce99650d60f3/example-servers/nextjs/pages/api/openai/chat.ts#L24) with a string value of the key.
+
+<b>Hosting Platform</b> - Add the environment variables to your deploy config. E.g. if you want to use the OpenAI Chat, add the `OPENAI_API_KEY` environment variable.
 
 ### :wrench: Improvements
 

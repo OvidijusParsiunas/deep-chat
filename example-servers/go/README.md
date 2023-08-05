@@ -26,7 +26,7 @@ Start the server:
 go run main.go
 ```
 
-If you want to use the OpenAI API examples, please create an `.env` file and define the `OPENAI_API_KEY` environment variable. See the `.env.example` file.
+If you want to use the proxies, please create an `.env` file and define the corresponding environment variables. E.g. if you want to use OpenAI API, define the `OPENAI_API_KEY` variable. See the `.env.example` file.
 
 ### :wrench: Improvements
 

@@ -12,7 +12,7 @@ import './index.css';
 export default function Home() {
   const homepageContentRef = React.useRef(null);
   return (
-    <Layout description="Framework agnostic chat component that can power any API">
+    <Layout description="Framework agnostic chat component used to power AI APIs">
       <main>
         <FadeInNav></FadeInNav>
         <Preload></Preload>

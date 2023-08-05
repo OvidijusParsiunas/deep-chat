@@ -47,7 +47,7 @@ export class SpeechToText extends MicrophoneButton {
           // wait for command words to be removed
           setTimeout(() => textInput.submit?.());
           SpeechToElement.endCommandMode();
-          return {restart: true, displayText: false};
+          return {restart: true, removeNewText: true};
         }
         return null;
       };
