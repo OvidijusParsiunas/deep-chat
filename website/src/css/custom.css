@@ -374,6 +374,15 @@ h1 + h2 {
   filter: var(--adaptive-logo-filter);
 }
 
+#web-speech-not-supported-error {
+  display: none;
+}
+
+#web-speech-not-supported-error,
+#web-speech-not-supported-error > a {
+  color: red;
+}
+
 /* fix for incosistent text padding in firefox */
 @-moz-document url-prefix() {
   .direct-service-title {

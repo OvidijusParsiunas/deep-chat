@@ -73,7 +73,7 @@ const config = {
         {name: 'og:url', content: 'https://deepchat.dev/'},
         {
           name: 'og:image',
-          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',
+          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-4.png',
         },
         {name: 'twitter:title', content: 'Deep Chat'},
         {name: 'twitter:card', content: 'summary_large_image'},
@@ -81,7 +81,7 @@ const config = {
         {name: 'twitter:description', content: 'Framework agnostic chat component used to power AI APIs'},
         {
           name: 'twitter:image',
-          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-2.png',
+          content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-4.png',
         },
       ],
       navbar: {
@@ -123,6 +123,15 @@ const config = {
         indexName: 'deepchat',
       },
     }),
+  // this is used to prevent the website font changing after it is rendered
+  // https://github.com/OvidijusParsiunas/deep-chat/issues/3
+  stylesheets: [
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
+      rel: 'preload',
+      as: 'style',
+    },
+  ],
 };
 
 module.exports = config;

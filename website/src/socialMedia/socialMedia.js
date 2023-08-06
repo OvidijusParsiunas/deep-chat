@@ -9,7 +9,10 @@ import React from 'react';
 
 // used in the startPanel.js file
 // may need to zoom out for a photo
-// the social media preview is this without the second element
+// to prepare the social media preview:
+//  remove the second element
+// add the following property to customize - background: 'linear-gradient(19deg, rgba(255,255,255,1) 32%, rgba(247,250,255,1) 100%)',
+// replace the customize-sub-header marginTop: '40px' with paddingTop: '40px'
 const Logos = React.forwardRef((_, ref) => {
   return (
     <div

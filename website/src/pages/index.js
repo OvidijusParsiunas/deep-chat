@@ -1,9 +1,9 @@
 import ExploreButton from './exploreButton/exploreButton';
+import PreloadImages from './preload/preloadImages';
 import FadeInContent from './utils/fadeInContent';
 import StartPanel from './startPanel/startPanel';
 import Features from './features/features';
 import FadeInNav from './utils/fadeInNav';
-import Preload from './preload/preload';
 import Footer from './footer/footer';
 import Layout from '@theme/Layout';
 import React from 'react';
@@ -15,7 +15,7 @@ export default function Home() {
     <Layout description="Framework agnostic chat component used to power AI APIs">
       <main>
         <FadeInNav></FadeInNav>
-        <Preload></Preload>
+        <PreloadImages></PreloadImages>
         <div id="homepage-content" ref={homepageContentRef} className="invisible-component">
           <StartPanel></StartPanel>
           <Features></Features>

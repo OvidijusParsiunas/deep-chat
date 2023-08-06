@@ -19,7 +19,8 @@ function RightPanel() {
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
           borderColor: '#ededed',
         }}
-        microphone={true}
+        textToSpeech={true}
+        speechToText={true}
         stream={true}
       ></DeepChatBrowser>
     </div>

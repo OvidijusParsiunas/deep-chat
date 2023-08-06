@@ -89,6 +89,5 @@ export class SpeechToText extends MicrophoneButton {
 
   private onError() {
     this._addErrorMessage('speechToText', 'speech input error');
-    this.changeToDefault();
   }
 }
