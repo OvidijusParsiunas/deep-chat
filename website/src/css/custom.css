@@ -374,12 +374,12 @@ h1 + h2 {
   filter: var(--adaptive-logo-filter);
 }
 
-#web-speech-not-supported-error {
+.web-speech-not-supported-error {
   display: none;
 }
 
-#web-speech-not-supported-error,
-#web-speech-not-supported-error > a {
+.web-speech-not-supported-error,
+.web-speech-not-supported-error > a {
   color: red;
 }
 

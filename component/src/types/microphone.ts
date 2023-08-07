@@ -22,8 +22,7 @@ export type SpeechToTextConfig = {
   azure?: AzureOptions;
   displayInterimResults?: boolean;
   textColor?: TextColor;
-  stopAfterSilenceMs?: number;
   translations?: Translations;
   commands?: Commands & {submit?: string};
-  button?: {commandMode?: ButtonStyles} & MicrophoneStyles;
+  button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
 };

@@ -7,7 +7,7 @@
   /* this property prevents outside styles from affecting this component */
   all: initial;
   /* keeps child absolute elements in place and wraps component dimensions on it */
-  /* inline css cause padding at the bottom of component, see in the website */
+  /* inline css causes padding at the bottom of component, see in the website */
   display: table-cell;
 }
 

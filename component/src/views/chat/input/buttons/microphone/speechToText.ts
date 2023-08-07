@@ -34,7 +34,6 @@ export class SpeechToText extends MicrophoneButton {
     const processedConfig: ProcessedConfig = {
       displayInterimResults: newConfig.displayInterimResults ?? undefined,
       textColor: newConfig.textColor ?? undefined,
-      stopAfterSilenceMs: newConfig.stopAfterSilenceMs ?? undefined,
       translations: newConfig.translations ?? undefined,
       commands: newConfig.commands ?? undefined,
       ...webSpeechConfig,

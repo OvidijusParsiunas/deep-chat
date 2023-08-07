@@ -10,6 +10,7 @@ import city from '/img/city.jpeg';
 import './preloadImages.css';
 import React from 'react';
 
+// If this still does not work - simply use: https://docusaurus.io/docs/api/docusaurus-config#headTags
 // this is an optimization approach to stop images rendering whilst they are being displayed
 export default function PreloadImages() {
   const [displayContentImages, setDisplayContentImages] = React.useState(false);
