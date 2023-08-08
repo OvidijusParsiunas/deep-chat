@@ -4,6 +4,7 @@ import {CustomServiceResponse} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
+import {Websocket} from '../../utils/HTTP/websocket';
 import {MessageContent} from '../../types/messages';
 import {Request} from '../../types/request';
 import {SetFileTypes} from './setFileTypes';
@@ -34,6 +35,7 @@ export class BaseServiceIO implements ServiceIO {
   maxMessages?: number;
   private readonly _directServiceRequiresFiles: boolean;
   demo?: Demo;
+  websocket?: WebSocket;
 
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
     this.deepChat = deepChat;
@@ -46,6 +48,7 @@ export class BaseServiceIO implements ServiceIO {
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
     this._directServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
+    if (this.requestSettings.websocket) Websocket.setup(this, this.requestSettings.websocket);
   }
 
   private static canSendMessage(text?: string, files?: File[]) {
@@ -113,7 +116,10 @@ export class BaseServiceIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (requestContents.files && !this._directServiceRequiresFiles) {
+    if (this.websocket) {
+      const body = {messages: processedMessages, ...this.rawBody};
+      Websocket.sendWebsocket(this.websocket, this, body, messages, completionsHandlers.onFinish, false);
+    } else if (requestContents.files && !this._directServiceRequiresFiles) {
       this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, requestContents.files);
     } else {
       this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, requestContents.files);

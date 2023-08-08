@@ -1,7 +1,7 @@
-import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -84,7 +84,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
       formData = OpenAIImagesIO.createFormDataBody(this.rawBody, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
+    RequestUtils.temporarilyRemoveHeader(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 

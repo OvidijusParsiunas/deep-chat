@@ -20,7 +20,7 @@ import azureCredentials from '/img/azure-credentials.png';
   &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number` <br />
   }
 
-When the chat receives a new text message - your device will automatically be read out. <br />
+When the chat receives a new text message - your device will automatically read it out. <br />
 `voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different Operating Systems
 support different voices. Use the following code snippet to see the available voices for your device: `window.speechSynthesis.getVoices()` <br />
 `lang` is used to set the utterance language. See the following [`QA`](https://stackoverflow.com/questions/23733537/what-are-the-supported-languages-for-web-speech-api-in-html5) for the available options. <br />
@@ -30,6 +30,10 @@ support different voices. Use the following code snippet to see the available vo
 :::info
 Text to speech is using [`SpeechSynthesis`](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) Web API
 which is supported differently across different devices.
+:::
+
+:::info
+Your mouse needs to be focused on the browser window for this to work.
 :::
 
 import ComponentContainer from '@site/src/components/table/componentContainer';

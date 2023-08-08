@@ -50,6 +50,8 @@ export interface ServiceIO {
 
   url?: string;
 
+  websocket?: WebSocket;
+
   // overwrites textInput disabled property if not provided
   isTextInputDisabled?: boolean;
 

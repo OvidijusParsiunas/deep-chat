@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Deep Chat',
-  tagline: 'Feature rich chat component for AI APIs',
+  tagline: 'Customizable chat component for AI APIs',
   url: 'https://deepchat.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -66,10 +66,10 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
-        {name: 'description', content: 'Feature rich chat component for AI APIs'},
+        {name: 'description', content: 'Customizable chat component for AI APIs'},
         {name: 'keywords', content: 'ai, chat, bot, chatbot, assistant, component'},
         {name: 'og:title', content: 'Deep Chat'},
-        {name: 'og:description', content: 'Feature rich chat component for AI APIs'},
+        {name: 'og:description', content: 'Customizable chat component for AI APIs'},
         {
           name: 'og:image',
           content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-4.png',
@@ -78,7 +78,7 @@ const config = {
         {name: 'twitter:title', content: 'Deep Chat'},
         {name: 'twitter:card', content: 'summary_large_image'},
         {name: 'twitter:site', content: '@deepchat'},
-        {name: 'twitter:description', content: 'Feature rich chat component for AI APIs'},
+        {name: 'twitter:description', content: 'Customizable chat component for AI APIs'},
         {
           name: 'twitter:image',
           content: 'https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/main/assets/readme/social-media-4.png',

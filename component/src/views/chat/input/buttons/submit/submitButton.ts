@@ -99,6 +99,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
+  // TO-DO - button should be disabled if websocket connection is not open
   public async submit(programmatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;
@@ -145,6 +146,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private changeToLoadingIcon() {
+    if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.add('loading-button');
     this.reapplyStateStyle('loading', ['submit']);

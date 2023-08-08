@@ -1,9 +1,9 @@
 import {StabilityAI, StabilityAIImageToImageMasking} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
-import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
@@ -76,7 +76,7 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], files[1], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
+    RequestUtils.temporarilyRemoveHeader(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 

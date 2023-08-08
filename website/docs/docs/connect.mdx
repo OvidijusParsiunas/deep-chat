@@ -9,11 +9,6 @@ sidebar_position: 2
 You can connect to any API by defining their details inside the [`request`](#request) property. The target endpoint will need to be able to accept
 and respond using the formats described below.
 
-:::tip
-If you don't want / can't change the target server to handle the required object types, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
-and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming/outgoing message details.
-:::
-
 <h3>Request message</h3>
 
 The outgoing Deep Chat request body is encapsulated in one of the following formats:
@@ -28,6 +23,11 @@ The outgoing Deep Chat request body is encapsulated in one of the following form
 <h3>Response message</h3>
 
 Response from the target server needs to use the [`Result`](#Result) JSON type.
+
+:::tip
+If you don't want / can't change the target server to handle the required object types, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
+and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming/outgoing message details.
+:::
 
 <h3>Examples</h3>
 

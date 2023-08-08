@@ -58,7 +58,7 @@ export class Messages {
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
-    this._displayLoadingMessage = deepChat.displayLoadingBubble ?? true;
+    this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
@@ -72,6 +72,11 @@ export class Messages {
         this._textToSpeech = processedConfig;
       });
     }
+  }
+
+  private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
+    if (serviceIO.websocket) return false;
+    return deepChat.displayLoadingBubble ?? true;
   }
 
   private prepareDemo(demo: Demo) {

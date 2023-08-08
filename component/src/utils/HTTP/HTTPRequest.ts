@@ -3,6 +3,7 @@ import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
+import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 
 // prettier-ignore
@@ -38,12 +39,13 @@ export class HTTPRequest {
         onFinish();
       })
       .catch((err) => {
-        HTTPRequest.displayError(messages, err);
+        RequestUtils.displayError(messages, err);
         onFinish();
       });
   }
 
-  // TO-DO can potentially offer an option to simulate a stream where a response message can be streamed word by word
+  // TO-DO can potentially offer an option to simulate a stream where a response message can be streamed word by word;
+  // this can also be used for websockets
   // prettier-ignore
   public static requestStream(io: ServiceIO, body: object, messages: Messages,
       onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
@@ -86,9 +88,9 @@ export class HTTPRequest {
     }).catch((err) => {
       // allowing extractResultData to attempt extract error message and throw it
       io.extractResultData?.(err).then(() => {
-        HTTPRequest.displayError(messages, err);
+        RequestUtils.displayError(messages, err);
       }).catch((parsedError) => {
-        HTTPRequest.displayError(messages, parsedError);
+        RequestUtils.displayError(messages, parsedError);
       });
     });
   }
@@ -113,7 +115,7 @@ export class HTTPRequest {
         }
       })
       .catch((err) => {
-        HTTPRequest.displayError(messages, err);
+        RequestUtils.displayError(messages, err);
         onFinish();
       });
   }
@@ -155,16 +157,5 @@ export class HTTPRequest {
       return response;
     }
     return response.blob();
-  }
-
-  private static displayError(messages: Messages, err: object) {
-    console.error(err);
-    if (typeof err === 'object') {
-      if (Object.keys(err).length === 0) {
-        return messages.addNewErrorMessage('service', 'Service error, please try again.');
-      }
-      return messages.addNewErrorMessage('service', JSON.stringify(err));
-    }
-    messages.addNewErrorMessage('service', err);
   }
 }

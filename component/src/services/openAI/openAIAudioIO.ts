@@ -1,7 +1,7 @@
 import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
-import {RequestHeaderUtils} from '../../utils/HTTP/RequestHeaderUtils';
 import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -87,7 +87,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
     const body = this.preprocessBody(this.rawBody, pMessages, files);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestHeaderUtils.temporarilyRemoveContentType(this.requestSettings,
+    RequestUtils.temporarilyRemoveHeader(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
   }
 
