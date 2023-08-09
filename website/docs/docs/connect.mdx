@@ -296,7 +296,7 @@ is set to _true_, this message will be displayed in the chat inside the error bu
 This is used to establish a websocket connection with your server. Enable it by defining the `websocket` property inside the [`request`](#Request) object
 as a `boolean` _true_ or as a string [connection protocol](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#creating_a_websocket_object)
 (or an array of strings for multiple protocols). <br />
-It is important to note that exchanged messages must be Stringified JSONs where Deep Chat will send its messages using the [Request message](./connect) format
+It is important to note that exchanged messages must be Stringified JSONs where Deep Chat will send its messages using the [Request message](connect) format
 and the server must send its messages using the [`Result`](#Result) format. Example messages: <br />
 Deep Chat message: <br />
 `'{"messages":[{"role":"user","text":"Message from Deep Chat"}]}'` <br />
@@ -308,7 +308,7 @@ Server message: <br />
 <ComponentContainer>
   <DeepChatBrowser
     request={{
-      url: 'ws://customapi.com',
+      url: 'wss://customapi.com',
       websocket: true,
     }}
     containerStyle={{borderRadius: '8px'}}
