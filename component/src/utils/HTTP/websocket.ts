@@ -7,9 +7,6 @@ import {Demo} from '../demo/demo';
 type Finish = () => void;
 
 export class Websocket {
-  // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
-  private static WEBSOCKET_ERROR_DISPLAYED = false;
-
   public static setup(io: ServiceIO, websocketConfig: boolean | string | string[]) {
     if (io.requestSettings.url !== Demo.URL) {
       const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
@@ -37,14 +34,11 @@ export class Websocket {
     io.websocket.onerror = (error) => {
       console.error(error);
       messages.addNewErrorMessage('service', 'Connection error');
-      Websocket.WEBSOCKET_ERROR_DISPLAYED = true;
-      setTimeout(() => {
-        Websocket.WEBSOCKET_ERROR_DISPLAYED = false;
-      }, 2);
     };
     io.websocket.onclose = () => {
       console.error('Connection closed');
-      if (!Websocket.WEBSOCKET_ERROR_DISPLAYED) messages.addNewErrorMessage('service', 'Connection error');
+      // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
+      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     };
   }
 
@@ -57,7 +51,7 @@ export class Websocket {
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     if (ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');
-      if (!Websocket.WEBSOCKET_ERROR_DISPLAYED) messages.addNewErrorMessage('service', 'Connection error');
+      messages.addNewErrorMessage('service', 'Connection error');
     } else {
       ws.send(JSON.stringify(processedBody));
     }

@@ -266,6 +266,12 @@ export class Messages {
     return undefined;
   }
 
+  public isLastMessageError() {
+    return this.elementRef.children[this.elementRef.children.length - 1]?.children?.[0]?.children?.[0]?.classList.contains(
+      'error-message-text'
+    );
+  }
+
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
     const messageElements = this.createMessageElements('', true);

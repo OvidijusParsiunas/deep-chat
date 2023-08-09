@@ -20,6 +20,12 @@
 - Support for all major ui frameworks/libraries
 - Everything is customizable!
 
+### :tada: Latest update
+
+![websocket](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/35072ec4-9489-4e28-a7c4-054f9d3fe3af)
+
+Deep Chat can now connect to your service via websockets! Read more [here](https://deepchat.dev/docs/connect#Websocket).
+
 ### :computer: Getting started
 
 ```
