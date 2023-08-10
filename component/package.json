@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Customizable chat component for AI APIs",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
@@ -65,6 +65,6 @@
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "remarkable": "^2.0.1",
-    "speech-to-element": "^0.1.65"
+    "speech-to-element": "^0.1.66"
   }
 }
