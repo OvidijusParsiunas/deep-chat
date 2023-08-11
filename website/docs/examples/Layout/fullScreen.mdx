@@ -4,8 +4,7 @@ sidebar_position: 0
 
 # Full Screen
 
-Examples to help you expand the chat component dimensions. The trick is to simply set the [`containerStyle`](../../docs/styles#containerStyle) property to the dimensions you desire
-and define the _fontSize_ which will control the size of the elements.
+Examples to help you expand the chat component dimensions.
 
 ### Default {#default}
 
@@ -37,8 +36,20 @@ import Tabs from '@theme/Tabs';
       borderRadius: '10px',
       width: '96vw',
       height: 'calc(100vh - 70px)',
-      fontSize: '1.37rem',
       paddingTop: '10px',
+    }}
+    messageStyles={{
+      default: {
+        shared: {
+          innerContainer: {
+            fontSize: '1rem',
+            width: '95%',
+          },
+        },
+      },
+    }}
+    inputAreaStyle={{
+      fontSize: '1rem',
     }}
     stream={true}
   ></DeepChatBrowser>
@@ -55,9 +66,10 @@ import Tabs from '@theme/Tabs';
     "borderRadius": "10px",
     "width": "96vw",
     "height": "calc(100vh - 70px)",
-    "fontSize": "1.37rem",
     "paddingTop": "10px"
   }'
+  messageStyles='{"default": {"shared": {"innerContainer": {"fontSize": "1rem", "width": "95%"}}}}'
+  inputAreaStyle='{"fontSize": "1rem"}'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
@@ -95,11 +107,13 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
       width: '96vw',
       height: 'calc(100vh - 70px)',
       paddingTop: '10px',
-      fontSize: '1.37rem',
     }}
     messageStyles={{
       default: {
-        shared: {bubble: {maxWidth: '100%', backgroundColor: 'unset', marginTop: '10px', marginBottom: '10px'}},
+        shared: {
+          innerContainer: {width: '95%'},
+          bubble: {maxWidth: '100%', backgroundColor: 'unset', marginTop: '10px', marginBottom: '10px', fontSize: '1rem'},
+        },
         user: {bubble: {marginLeft: '0px', color: 'black'}},
         ai: {
           outerContainer: {
@@ -173,6 +187,9 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
         },
       },
     }}
+    inputAreaStyle={{
+      fontSize: '1rem',
+    }}
     textInput={{
       placeholder: {text: `Send a message`},
     }}
@@ -190,14 +207,14 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
     "borderRadius": "10px",
     "width": "96vw",
     "height": "calc(100vh - 70px)",
-    "paddingTop": "10px",
-    "fontSize": "1.37rem"
+    "paddingTop": "10px"
   }'
   messageStyles='{
     "default": {
       "shared": {
+        "innerContainer": {"width": "95%"},
         "bubble": {
-          "maxWidth": "100%", "backgroundColor": "unset", "marginTop": "10px", "marginBottom": "10px"}},
+          "maxWidth": "100%", "backgroundColor": "unset", "marginTop": "10px", "marginBottom": "10px", "fontSize": "1rem"}},
       "user": {
         "bubble": {
           "marginLeft": "0px", "color": "black"}},
@@ -246,7 +263,66 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
       }
     }
   }'
+  inputAreaStyle='{"fontSize": "1rem"}'
   textInput='{"placeholder": {"text": "Send a message"}}'
+  initialMessages='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "This completely depends on the person.", "role": "ai"}
+  ]'
+  directConnection='{"demo": true}'
+  stream="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
+### Simple {#simple}
+
+If you want to automatically scale the inner chat's elements relative to the font-size, you can simply add the desired _fontSize_
+inside the [`containerStyle`](../../docs/styles#containerStyle) property.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This completely depends on the person.',
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{
+      borderRadius: '10px',
+      width: '96vw',
+      height: 'calc(100vh - 70px)',
+      fontSize: '1.37rem',
+      paddingTop: '10px',
+    }}
+    stream={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  containerStyle='{
+    "borderRadius": "10px",
+    "width": "96vw",
+    "height": "calc(100vh - 70px)",
+    "fontSize": "1.37rem",
+    "paddingTop": "10px"
+  }'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
