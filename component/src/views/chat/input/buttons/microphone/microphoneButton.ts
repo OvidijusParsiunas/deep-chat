@@ -12,7 +12,6 @@ type AllMicrophoneStyles = MicrophoneStyles & {commandMode?: ButtonStyles};
 
 type Styles = DefinedButtonStateStyles<AllMicrophoneStyles>;
 
-// TO-DO - chat gpt/microsoft integration
 export class MicrophoneButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
