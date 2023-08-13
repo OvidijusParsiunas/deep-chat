@@ -26505,549 +26505,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/focusUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FocusUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "focusEndOfInput",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "focusFromParentElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FocusUtils",
-          "declaration": {
-            "name": "FocusUtils",
-            "module": "src/views/chat/input/textInput/focusUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/inputLimit.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputLimit",
-          "members": [
-            {
-              "kind": "field",
-              "name": "PERMITTED_KEYS",
-              "privacy": "private",
-              "static": true,
-              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeyDown",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isKeyCombinationPermitted",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputLimit",
-          "declaration": {
-            "name": "InputLimit",
-            "module": "src/views/chat/input/textInput/inputLimit.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/textInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/textInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextInputEl",
-          "members": [
-            {
-              "kind": "field",
-              "name": "TEXT_INPUT_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'text-input'"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_config",
-              "type": {
-                "text": "TextInput"
-              },
-              "privacy": "private",
-              "default": "processedConfig"
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "processConfig",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preventAutomaticScrollUpOnNewLine",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLDivElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "clear",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextInputEl",
-          "declaration": {
-            "name": "TextInputEl",
-            "module": "src/views/chat/input/textInput/textInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsTypes",
-              "type": {
-                "text": "FileAttachmentsType[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addType",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachmentsT"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAttachmentContainer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "toggleContainerDisplay",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "display",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getAllFileData"
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholders"
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToType",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "fileAttachmentTypes",
-                  "type": {
-                    "text": "FileAttachmentsType[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToAnyType",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAllFiles"
-            },
-            {
-              "kind": "method",
-              "name": "getNumberOfTypes"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachments",
-          "declaration": {
-            "name": "FileAttachments",
-            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "NewFileName",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "prefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "extension",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "NewFileName",
-          "declaration": {
-            "name": "NewFileName",
-            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/dropup/dropup.ts",
       "declarations": [
         {
@@ -27737,6 +27194,549 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsTypes",
+              "type": {
+                "text": "FileAttachmentsType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addType",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachmentsT"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAttachmentContainer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleContainerDisplay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "display",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllFileData"
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholders"
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "fileAttachmentTypes",
+                  "type": {
+                    "text": "FileAttachmentsType[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToAnyType",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAllFiles"
+            },
+            {
+              "kind": "method",
+              "name": "getNumberOfTypes"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachments",
+          "declaration": {
+            "name": "FileAttachments",
+            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NewFileName",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getFileName",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "prefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "extension",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NewFileName",
+          "declaration": {
+            "name": "NewFileName",
+            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/focusUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FocusUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "focusEndOfInput",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "focusFromParentElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FocusUtils",
+          "declaration": {
+            "name": "FocusUtils",
+            "module": "src/views/chat/input/textInput/focusUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/inputLimit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputLimit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "PERMITTED_KEYS",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeyDown",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isKeyCombinationPermitted",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputLimit",
+          "declaration": {
+            "name": "InputLimit",
+            "module": "src/views/chat/input/textInput/inputLimit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/textInput/pasteUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/textInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextInputEl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "TEXT_INPUT_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'text-input'"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "TextInput"
+              },
+              "privacy": "private",
+              "default": "processedConfig"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "processConfig",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preventAutomaticScrollUpOnNewLine",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLDivElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextInputEl",
+          "declaration": {
+            "name": "TextInputEl",
+            "module": "src/views/chat/input/textInput/textInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
       "declarations": [
         {
@@ -27833,338 +27833,6 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/styleAdjustments/inputButtonPositions.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputButtonPositions",
-          "members": [
-            {
-              "kind": "method",
-              "name": "addToDropup",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                },
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "dropupStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "DropupStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addToSideContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setPosition",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonsObj",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                },
-                {
-                  "name": "buttonType",
-                  "type": {
-                    "text": "keyof Buttons"
-                  }
-                },
-                {
-                  "name": "positionButtons",
-                  "type": {
-                    "text": "ButtonProps[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createPositionsObj",
-              "privacy": "private",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "Positions"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "generatePositions",
-              "privacy": "private",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "Positions"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "buttonsObj",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addButtons",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "Buttons"
-                  }
-                },
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "dropupStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "DropupStyles"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputButtonPositions",
-          "declaration": {
-            "name": "InputButtonPositions",
-            "module": "src/views/chat/input/buttons/styleAdjustments/inputButtonPositions.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/styleAdjustments/inputButtonStyleAdjustments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputButtonStyleAdjustments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'text-input-container-left-adjustment'"
-            },
-            {
-              "kind": "field",
-              "name": "INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'text-input-container-right-adjustment'"
-            },
-            {
-              "kind": "field",
-              "name": "INPUT_OUTSIDE_LEFT_SMALL_ADJUSTMENT_CLASS",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'text-input-container-left-small-adjustment'"
-            },
-            {
-              "kind": "field",
-              "name": "INPUT_OUTSIDE_RIGHT_SMALL_ADJUSTMENT_CLASS",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'text-input-container-right-small-adjustment'"
-            },
-            {
-              "kind": "method",
-              "name": "adjustInputPadding",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "textInputEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "adjustForOutsideButton",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "fileAtt",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "adjustOutsideSubmit",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "fileAtt",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "set",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "textInputEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "containers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "fileAtt",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "positions",
-                  "type": {
-                    "text": "Positions"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputButtonStyleAdjustments",
-          "declaration": {
-            "name": "InputButtonStyleAdjustments",
-            "module": "src/views/chat/input/buttons/styleAdjustments/inputButtonStyleAdjustments.ts"
           }
         }
       ]
@@ -29715,6 +29383,338 @@
           "declaration": {
             "name": "SpeechToText",
             "module": "src/views/chat/input/buttons/microphone/speechToText.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/styleAdjustments/inputButtonPositions.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputButtonPositions",
+          "members": [
+            {
+              "kind": "method",
+              "name": "addToDropup",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                },
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "dropupStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "DropupStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addToSideContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setPosition",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonsObj",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                },
+                {
+                  "name": "buttonType",
+                  "type": {
+                    "text": "keyof Buttons"
+                  }
+                },
+                {
+                  "name": "positionButtons",
+                  "type": {
+                    "text": "ButtonProps[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createPositionsObj",
+              "privacy": "private",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "Positions"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "generatePositions",
+              "privacy": "private",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "Positions"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "buttonsObj",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addButtons",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "Buttons"
+                  }
+                },
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "dropupStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "DropupStyles"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputButtonPositions",
+          "declaration": {
+            "name": "InputButtonPositions",
+            "module": "src/views/chat/input/buttons/styleAdjustments/inputButtonPositions.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/styleAdjustments/inputButtonStyleAdjustments.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputButtonStyleAdjustments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'text-input-container-left-adjustment'"
+            },
+            {
+              "kind": "field",
+              "name": "INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'text-input-container-right-adjustment'"
+            },
+            {
+              "kind": "field",
+              "name": "INPUT_OUTSIDE_LEFT_SMALL_ADJUSTMENT_CLASS",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'text-input-container-left-small-adjustment'"
+            },
+            {
+              "kind": "field",
+              "name": "INPUT_OUTSIDE_RIGHT_SMALL_ADJUSTMENT_CLASS",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'text-input-container-right-small-adjustment'"
+            },
+            {
+              "kind": "method",
+              "name": "adjustInputPadding",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "textInputEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "adjustForOutsideButton",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "fileAtt",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "adjustOutsideSubmit",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "fileAtt",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "set",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "textInputEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "containers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "fileAtt",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "positions",
+                  "type": {
+                    "text": "Positions"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputButtonStyleAdjustments",
+          "declaration": {
+            "name": "InputButtonStyleAdjustments",
+            "module": "src/views/chat/input/buttons/styleAdjustments/inputButtonStyleAdjustments.ts"
           }
         }
       ]

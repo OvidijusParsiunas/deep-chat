@@ -29,7 +29,7 @@ export class Demo {
         return "What's updog?";
       }
     }
-    return 'Hello! I am a helpful AI assistant!';
+    return 'Hi there! This is a demo response!';
   }
 
   private static generateResponse(messages: Messages) {
