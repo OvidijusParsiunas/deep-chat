@@ -31,7 +31,7 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Code">
 
 ```html
-tableElementRef.requestInterceptor = (request) => { console.log(request); return request; };
+chatElementRef.requestInterceptor = (request) => { console.log(request); return request; };
 ```
 
 </TabItem>
@@ -76,7 +76,7 @@ This property is not enabled for [`stream`](https://deepchat.dev/docs/connect#st
 <TabItem value="js" label="Code">
 
 ```html
-tableElementRef.responseInterceptor = (response) => { console.log(response); return response; };
+chatElementRef.responseInterceptor = (response) => { console.log(response); return response; };
 ```
 
 </TabItem>
@@ -106,7 +106,7 @@ The method must return a boolean value with either _true_ or _false_ for whether
 <TabItem value="js" label="Code">
 
 ```html
-tableElementRef.validateMessageBeforeSending = (text, files) => { return text ? true : false };
+chatElementRef.validateMessageBeforeSending = (text, files) => { return text ? true : false };
 ```
 
 </TabItem>
