@@ -67,6 +67,10 @@
   );
   --media-background-color: rgb(239, 246, 255);
   --homepage-header-color: #003064;
+  --start-header-color: #002e61;
+  --start-text-hover-color: #0d5297;
+  --start-text-code-color: #154b7a;
+  --start-text-back-option-color: #2c2c2c;
   --speech-gradient-start-color: rgb(255, 255, 255);
   --speech-gradient-end-color: rgb(220, 238, 255);
   --adaptive-logo-filter: unset;
@@ -108,6 +112,10 @@
   --media-background-color: #232323;
   --homepage-background: #232323;
   --homepage-header-color: white;
+  --start-header-color: white;
+  --start-text-hover-color: #5da9f6;
+  --start-text-code-color: #5da9f6;
+  --start-text-back-option-color: white;
   --speech-gradient-start-color: rgba(57, 57, 57, 0);
   --speech-gradient-end-color: #272727;
   --adaptive-logo-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(37deg)

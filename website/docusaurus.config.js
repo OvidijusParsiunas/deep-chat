@@ -94,6 +94,11 @@ const config = {
         },
         items: [
           {
+            to: 'start',
+            position: 'left',
+            label: 'Start',
+          },
+          {
             type: 'docSidebar',
             position: 'left',
             label: 'Docs',

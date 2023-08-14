@@ -9,7 +9,7 @@ export default function FadeInNav() {
           // REF-39
           const navToggle = require('@site/src/components/nav/autoNavToggle');
           setTimeout(() => {
-            const navbar = document.querySelector('.plugin-pages > body > #__docusaurus > nav');
+            const navbar = document.querySelector('.homepage > body > #__docusaurus > nav');
             // because the selector is used to set opacity 0 at the start - its opacity takes over
             // after the fade-in animation is finished - hence we manually set it here
             if (navbar) navbar.style.opacity = '1';

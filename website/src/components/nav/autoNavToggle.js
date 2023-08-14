@@ -23,7 +23,7 @@ export function readdAutoNavShadowToggle() {
 
 export function fadeIn() {
   setTimeout(() => {
-    const element = document.querySelectorAll('.plugin-pages > body > #__docusaurus > nav')?.[0];
+    const element = document.querySelectorAll('.homepage > body > #__docusaurus > nav')?.[0];
     // WORK
     // already throwing an error when moving from home to documentation:
     // Cannot read properties of undefined (reading 'classList')
@@ -37,7 +37,7 @@ export function fadeIn() {
 }
 
 // export function observeForElement() {
-//   const targetElement = document.querySelector('.plugin-pages > body > #__docusaurus > nav');
+//   const targetElement = document.querySelector('.homepage > body > #__docusaurus > nav');
 
 //   if (!targetElement) {
 //     // If the target element is not found, we create a new MutationObserver
@@ -46,7 +46,7 @@ export function fadeIn() {
 //       for (const mutation of mutationsList) {
 //         // We check each added node to see if it's the target element.
 //         for (const node of mutation.addedNodes) {
-//           if (node instanceof HTMLElement && node.matches('.plugin-pages > body > #__docusaurus > nav')) {
+//           if (node instanceof HTMLElement && node.matches('.homepage > body > #__docusaurus > nav')) {
 //             // We've found the target element, so we stop observing and return it.
 //             observer.disconnect();
 //             console.log('found later');

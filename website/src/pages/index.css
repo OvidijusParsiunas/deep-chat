@@ -29,7 +29,7 @@
 }
 
 /* using selector for homepage as the navbar needs to have opacity: 0 from the very start and not when the element is found */
-.plugin-pages > body > #__docusaurus > nav {
+.homepage > body > #__docusaurus > nav {
   opacity: 0;
 }
 

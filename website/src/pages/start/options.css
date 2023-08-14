@@ -1,0 +1,83 @@
+#start-page-options {
+  height: 180px;
+}
+
+#start-page-options > div > .start-page-text {
+  transition: 0.1s;
+  margin-left: 0px;
+  opacity: 1;
+  color: var(--ifm-font-color-base);
+}
+
+#start-page-options > div > .start-page-text:hover {
+  color: var(--start-text-hover-color);
+  margin-left: 4px;
+}
+
+.start-page-text-option-container {
+  transition: 1s;
+  opacity: 0;
+  margin-left: 70px;
+  position: relative;
+  text-align: left;
+  width: 100%;
+}
+
+.start-page-options-visible > .start-page-text-option-container {
+  opacity: 1;
+  margin-left: 0px;
+}
+
+.start-page-text-option-container-2 {
+  transition-delay: 0.6s;
+  top: 45px;
+}
+
+.start-page-text-option-container-3 {
+  transition-delay: 1.2s;
+  top: 90px;
+}
+
+.start-page-options-leave > .start-page-text-option-container {
+  transition: 0.5s;
+}
+
+.start-page-options-leave > .start-page-text-option-container:hover {
+  margin-left: 70px;
+}
+
+.start-page-options-leave > .start-page-text-option-container-2 {
+  transition-delay: 0.2s;
+}
+
+.start-page-options-leave > .start-page-text-option-container-3 {
+  transition-delay: 0.4s;
+}
+
+.start-page-options-quick-entry > .start-page-text-option-container {
+  transition: 0.7s;
+}
+
+.start-page-options-quick-entry > .start-page-text-option-container-2 {
+  transition-delay: 0.4s;
+}
+
+.start-page-options-quick-entry > .start-page-text-option-container-3 {
+  transition-delay: 0.8s;
+}
+
+.start-page-option-back {
+  font-size: 18px !important;
+  color: color(--start-text-back-option-color);
+  margin-top: 11px !important;
+}
+
+#start-page-small-screen > div > div > a {
+  font-size: 19px;
+}
+
+@media (max-height: 700px) {
+  #start-page-options {
+    height: 130px;
+  }
+}

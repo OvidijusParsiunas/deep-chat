@@ -1,0 +1,104 @@
+#start-page-connect-to-custom {
+  width: 846px;
+  height: 180px;
+}
+
+/* must be same as connectToPopularAPI for seamless transition */
+#start-page-connect-to-custom.start-page-main-details-expanded {
+  height: 470px;
+}
+
+#start-page-requirements {
+  margin-top: 30px;
+}
+
+#start-page-connect-to-custom-interceptor {
+  margin-left: 11px;
+}
+
+.interceptor-code {
+  transition: 1s;
+  display: inline-block;
+  margin-left: 20px;
+  opacity: 0;
+}
+
+.interceptor-code.start-page-main-details-visible {
+  opacity: 1;
+  margin-left: 0px;
+  margin-right: 10px;
+}
+
+.interceptor-code.start-page-main-details-visible:nth-child(2) {
+  transition-delay: 0.5s;
+}
+
+.start-page-connect-to-custom-padded-content {
+  left: 8px;
+}
+
+#start-page-connect-to-custom-navigation {
+  padding-left: 40px;
+  margin-top: 45px;
+  margin-left: 0px;
+  cursor: pointer;
+}
+
+#start-page-connect-to-custom-navigation.start-page-main-details-visible {
+  padding-left: 0px;
+}
+
+#start-page-connect-to-custom-navigation:hover {
+  padding-left: 4px;
+}
+
+@media (max-height: 700px) {
+  #start-page-connect-to-custom {
+    height: 130px;
+  }
+
+  #start-page-requirements {
+    margin-top: 20px;
+  }
+
+  /* must be same as connectToPopularAPI for seamless transition */
+  #start-page-connect-to-custom.start-page-main-details-expanded {
+    height: 400px;
+  }
+
+  #start-page-connect-to-custom-navigation {
+    margin-top: 30px;
+  }
+}
+
+@media (max-height: 590px) {
+  #start-page-connect-to-custom.start-page-main-details-expanded {
+    height: 370px;
+  }
+
+  #start-page-connect-to-popular > .start-page-connect-to-popular-navigation {
+    margin-top: 15px;
+  }
+
+  #start-page-connect-to-custom-navigation {
+    margin-top: 15px;
+  }
+}
+
+@media (min-height: 880px) {
+  #start-page-connect-to-custom.start-page-main-details-expanded {
+    height: 520px;
+  }
+}
+
+@media (max-width: 1000px) {
+  #start-page-connect-to-custom {
+    width: 680px;
+  }
+}
+
+@media (max-width: 815px) {
+  #start-page-connect-to-custom {
+    width: 600px;
+  }
+}
