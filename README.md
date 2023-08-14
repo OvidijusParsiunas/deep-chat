@@ -22,9 +22,9 @@
 
 ### :tada: Latest update
 
-![websocket](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/35072ec4-9489-4e28-a7c4-054f9d3fe3af)
+![start](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/256d086e-a8e3-487d-ba05-762e678cb469)
 
-Deep Chat can now connect to your service via websockets! Read more [here](https://deepchat.dev/docs/connect#Websocket).
+To further our commitment in helping devs get started quickly, the website has a new [Start](https://deepchat.dev/start) page which is designed to help lead them to the right resources!
 
 ### :computer: Getting started
 

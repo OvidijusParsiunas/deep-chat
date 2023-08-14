@@ -1,3 +1,5 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
 .start > body {
   overflow: hidden !important;
 }
@@ -95,28 +97,32 @@
   margin-left: 0px;
 }
 
+.start-page-display-logos > div:nth-child(1) {
+  transition: all 1s 0s;
+}
+
 .start-page-display-logos > div:nth-child(2) {
-  transition-delay: 0.1s;
+  transition: all 1s 0.1s;
 }
 
 .start-page-display-logos > div:nth-child(3) {
-  transition-delay: 0.2s;
+  transition: all 1s 0.2s;
 }
 
 .start-page-display-logos > div:nth-child(4) {
-  transition-delay: 0.3s;
+  transition: all 1s 0.3s;
 }
 
 .start-page-display-logos > div:nth-child(5) {
-  transition-delay: 0.4s;
+  transition: all 1s 0.4s;
 }
 
 .start-page-display-logos > div:nth-child(6) {
-  transition-delay: 0.5s;
+  transition: all 1s 0.5s;
 }
 
 .start-page-display-logos > div:nth-child(7) {
-  transition-delay: 0.6s;
+  transition: all 1s 0.6s;
 }
 
 .start-page-logo {
@@ -126,8 +132,7 @@
 }
 
 .start-page-hoverable-logos > .start-page-logo {
-  transition-delay: 0s !important;
-  transition: 0.1s;
+  transition: all 0.1s 0s !important;
 }
 
 .start-page-navigation {

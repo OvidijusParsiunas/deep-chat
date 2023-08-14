@@ -1,4 +1,5 @@
 import ConnectToPopularAPI from './start/connectToPopularAPI';
+import PreloadStartImages from './preload/preloadStartImages';
 import ConnectToCustomAPI from './start/connectToCustomAPI';
 import StartSmallScreen from './start/startSmallScreen';
 import CreateComponent from './start/createComponent';
@@ -80,6 +81,7 @@ export default function Start() {
       <Head>
         <html className="plugin-pages plugin-id-default start" />
       </Head>
+      <PreloadStartImages></PreloadStartImages>
       <div id="start-page-content">
         <div>
           <b id="start-page-title" className={displayTitle ? 'start-page-title-visible' : 'start-page-title-not-visible'}>

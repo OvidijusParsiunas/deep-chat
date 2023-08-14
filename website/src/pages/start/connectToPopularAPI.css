@@ -1,3 +1,5 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
 #start-page-connect-to-popular {
   width: 756px;
   height: 180px;
@@ -18,12 +20,12 @@
 
 #start-page-connect-to-popular-navigation-left {
   text-align: left;
-  padding-left: 40px;
+  padding-left: 44px;
 }
 
 #start-page-connect-to-popular-navigation-right {
   text-align: right;
-  padding-right: 40px;
+  padding-right: 84px;
 }
 
 #start-page-connect-to-popular-navigation-left.start-page-main-details-visible {
@@ -31,7 +33,7 @@
 }
 
 #start-page-connect-to-popular-navigation-right.start-page-main-details-visible {
-  padding-right: 0px;
+  padding-right: 40px;
 }
 
 #start-page-connect-to-popular-navigation-left:hover {

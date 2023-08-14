@@ -1,3 +1,5 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
 #start-page-options {
   height: 180px;
 }
@@ -54,16 +56,16 @@
   transition-delay: 0.4s;
 }
 
-.start-page-options-quick-entry > .start-page-text-option-container {
-  transition: 0.7s;
+.start-page-options-quick-entry > .start-page-text-option-container-1 {
+  transition: all 0.7s 0s;
 }
 
 .start-page-options-quick-entry > .start-page-text-option-container-2 {
-  transition-delay: 0.4s;
+  transition: all 0.7s 0.4s;
 }
 
 .start-page-options-quick-entry > .start-page-text-option-container-3 {
-  transition-delay: 0.8s;
+  transition: all 0.7s 0.8s;
 }
 
 .start-page-option-back {
