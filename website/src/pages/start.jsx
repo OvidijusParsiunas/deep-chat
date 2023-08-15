@@ -66,7 +66,6 @@ function Main() {
   );
 }
 
-// WORK - dark mode
 export default function Start() {
   const [displayTitle, setDisplayTitle] = React.useState(false);
 

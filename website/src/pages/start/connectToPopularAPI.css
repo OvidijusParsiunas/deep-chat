@@ -20,7 +20,7 @@
 
 #start-page-connect-to-popular-navigation-left {
   text-align: left;
-  padding-left: 44px;
+  padding-left: 40px;
 }
 
 #start-page-connect-to-popular-navigation-right {
@@ -41,7 +41,7 @@
 }
 
 #start-page-connect-to-popular-navigation-right:hover {
-  padding-right: 4px;
+  padding-right: 44px;
 }
 
 @media (max-height: 700px) {

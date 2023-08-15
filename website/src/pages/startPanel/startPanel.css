@@ -99,6 +99,7 @@
   display: inline-block;
   transition: margin-bottom 1s;
   cursor: pointer;
+  user-select: none;
 }
 
 .start-panel-logo:hover {
