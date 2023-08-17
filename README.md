@@ -22,7 +22,7 @@
 
 ### :tada: Latest update
 
-![start](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/256d086e-a8e3-487d-ba05-762e678cb469)
+![start](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/9dce61df-5f96-4853-ae03-e4d435f66db9)
 
 To further our commitment in helping devs get started quickly, the website has a new [Start](https://deepchat.dev/start) page which is designed to help lead them to the right resources!
 

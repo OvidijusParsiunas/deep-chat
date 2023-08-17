@@ -24,9 +24,6 @@ export function readdAutoNavShadowToggle() {
 export function fadeIn() {
   setTimeout(() => {
     const element = document.querySelectorAll('.homepage > body > #__docusaurus > nav')?.[0];
-    // WORK
-    // already throwing an error when moving from home to documentation:
-    // Cannot read properties of undefined (reading 'classList')
     try {
       element.classList.add('fade-in');
     } catch (e) {

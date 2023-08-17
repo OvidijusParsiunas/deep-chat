@@ -3,6 +3,7 @@ import PreloadStartImages from './preload/preloadStartImages';
 import ConnectToCustomAPI from './start/connectToCustomAPI';
 import StartSmallScreen from './start/startSmallScreen';
 import CreateComponent from './start/createComponent';
+import StartParticles from './start/startParticles';
 import Options from './start/options';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
@@ -66,7 +67,6 @@ function Main() {
   );
 }
 
-// WORK - dark mode
 export default function Start() {
   const [displayTitle, setDisplayTitle] = React.useState(false);
 
@@ -82,6 +82,7 @@ export default function Start() {
         <html className="plugin-pages plugin-id-default start" />
       </Head>
       <PreloadStartImages></PreloadStartImages>
+      <StartParticles></StartParticles>
       <div id="start-page-content">
         <div>
           <b id="start-page-title" className={displayTitle ? 'start-page-title-visible' : 'start-page-title-not-visible'}>
