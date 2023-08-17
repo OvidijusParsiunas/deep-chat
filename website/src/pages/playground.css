@@ -1,0 +1,37 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
+.start > body {
+  overflow: hidden !important;
+}
+
+#start-page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  margin-left: -20px;
+  text-align: center;
+}
+
+#start-page-title {
+  font-size: 33px;
+  font-family: sans-serif;
+  color: var(--start-header-color);
+  transition: 1s;
+}
+
+.playground-component {
+  transition: 0.5s;
+}
+
+.playground-component-collapsed {
+  transform: scale(0);
+}
+
+.playground-component-expanded {
+  transform: scale(1);
+}

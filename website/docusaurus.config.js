@@ -111,6 +111,11 @@ const config = {
             sidebarId: 'examples',
           },
           {
+            to: 'playground',
+            position: 'left',
+            label: 'Playground',
+          },
+          {
             href: 'https://github.com/OvidijusParsiunas/deep-chat',
             position: 'right',
             className: 'header-github-link',
