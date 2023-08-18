@@ -117,7 +117,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
-    if (!programmatic) TextInputEl.clear(this._inputElementRef);
+    if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
     const completionsHandlers = {
       onFinish: this.changeToSubmitIcon.bind(this),
     };

@@ -22,9 +22,11 @@
 
 ### :tada: Latest update
 
-![start](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/9dce61df-5f96-4853-ae03-e4d435f66db9)
+<p align="center">
+    <img width="400" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/7eb0d123-0b4d-4cc8-bcc4-d699dbfee2ee" alt="Logo">
+</p>
 
-To further our commitment in helping devs get started quickly, the website has a new [Start](https://deepchat.dev/start) page which is designed to help lead them to the right resources!
+You can now set the on-focus styling for the input element via the [`focus`](https://deepchat.dev/docs/styles#textInput) property.
 
 ### :computer: Getting started
 

@@ -12,9 +12,6 @@ The documentation website has been built using [Docusaurus 2](https://docusaurus
 # Install node dependencies:
 $ npm install
 
-# Install node dependencies:
-$ npm install
-
 # automatically build and serve:
 $ npm run start
 
