@@ -17,11 +17,12 @@
   text-align: center;
 }
 
-#start-page-title {
+#playground-title {
   font-size: 33px;
   font-family: sans-serif;
   color: var(--start-header-color);
   transition: 1s;
+  margin-bottom: 20px;
 }
 
 .playground-component {
