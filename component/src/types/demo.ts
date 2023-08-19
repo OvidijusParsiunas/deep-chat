@@ -1,7 +1,15 @@
-import {ErrorMessageOverrides} from './messages';
+import {ErrorMessageOverrides, MessageContent} from './messages';
+import {Result} from './result';
 
 export type DemoErrors = {[key in keyof ErrorMessageOverrides]?: boolean};
 
+export type DemoResponse = Result | ((message: MessageContent) => Result);
+
 export type Demo =
   | true
-  | {displayErrors?: DemoErrors; displayLoadingBubble?: boolean; displayFileAttachmentContainer?: boolean};
+  | {
+      response?: DemoResponse;
+      displayErrors?: DemoErrors;
+      displayLoadingBubble?: boolean;
+      displayFileAttachmentContainer?: boolean;
+    };

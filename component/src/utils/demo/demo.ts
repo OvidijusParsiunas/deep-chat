@@ -1,6 +1,7 @@
 import {ResponseInterceptor} from '../../types/interceptors';
 import {Messages} from '../../views/chat/messages/messages';
 import {MessageContent} from '../../types/messages';
+import {DemoResponse} from '../../types/demo';
 import {Result} from '../../types/result';
 
 type Finish = () => void;
@@ -49,10 +50,20 @@ export class Demo {
     return 'Wow, very cool files!';
   }
 
+  private static getCustomResponse(customResponse: DemoResponse, requestMessage: MessageContent) {
+    if (typeof customResponse === 'function') return customResponse(requestMessage);
+    return customResponse;
+  }
+
+  private static getResponse(messages: Messages) {
+    return messages.customDemoResponse
+      ? Demo.getCustomResponse(messages.customDemoResponse, messages.messages[messages.messages.length - 1])
+      : {text: Demo.generateResponse(messages)};
+  }
+
   public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
-    const responseText = Demo.generateResponse(messages);
+    const message = Demo.getResponse(messages);
     setTimeout(() => {
-      const message = {text: responseText};
       const preprocessedMessage = responseInterceptor?.(message) || message;
       messages.addNewMessage(preprocessedMessage as Result, true, true);
       onFinish();
@@ -60,7 +71,7 @@ export class Demo {
   }
 
   public static requestStream(messages: Messages, onOpen: () => void, onClose: () => void) {
-    const responseText = Demo.generateResponse(messages).split(' ');
+    const responseText = Demo.getResponse(messages).text?.split(' ') || [];
     setTimeout(() => {
       const textElement = messages.addNewStreamedMessage();
       onOpen();

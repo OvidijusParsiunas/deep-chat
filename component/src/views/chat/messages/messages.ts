@@ -6,6 +6,7 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {Result as MessageData} from '../../../types/result';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
@@ -14,7 +15,6 @@ import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
-import {Demo} from '../../../types/demo';
 import {Remarkable} from 'remarkable';
 import {AvatarEl} from './avatar';
 import {Name} from './name';
@@ -48,6 +48,7 @@ export class Messages {
   private _introPanel?: IntroPanel;
   private _streamedText = '';
   messages: MessageContent[] = [];
+  customDemoResponse?: DemoResponse;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
@@ -81,6 +82,7 @@ export class Messages {
 
   private prepareDemo(demo: Demo) {
     if (typeof demo === 'object') {
+      if (demo.response) this.customDemoResponse = demo.response;
       if (demo.displayErrors) {
         if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
