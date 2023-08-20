@@ -1,4 +1,4 @@
-#playground-config-modal {
+#playground-service-modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -11,4 +11,37 @@
   background-color: white;
   padding: 20px;
   padding-top: 10px;
+}
+
+#playground-service-modal > div {
+  width: 100%;
+}
+
+#playground-service-modal-title {
+  text-align: center;
+}
+
+.playground-service-modal-sub-title {
+  margin-top: 10px;
+}
+
+.playground-service-modal-input-label {
+  display: table-cell;
+  white-space: nowrap;
+  /* WORK - find a solution for safari */
+  /* set to 0 in order to automatically use the largest field */
+  width: 0px;
+  padding-right: 10px;
+}
+
+.playground-constructable-object {
+  display: table;
+}
+
+#playgroud-service-modal-required-fields {
+  display: table;
+}
+
+#playgroud-service-modal-required-fields > div {
+  display: table-row;
 }

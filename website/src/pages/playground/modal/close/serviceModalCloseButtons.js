@@ -1,3 +1,4 @@
+import './serviceModalCloseButtons.css';
 import React from 'react';
 
 function updateExistingConfigWithNew(existingConfig, newConfig) {
@@ -16,7 +17,7 @@ function submit(chatComponent, oldConfig, constructConfig, setModalDisplayed) {
 
 export default function CloseButtons({chatComponent, config, constructConfig, setModalDisplayed}) {
   return (
-    <div style={{textAlign: 'center'}}>
+    <div id="playground-service-modal-close-buttons">
       <button onClick={() => setModalDisplayed(false)}>Cancel</button>
       <button onClick={() => submit(chatComponent, config, constructConfig, setModalDisplayed)}>Submit</button>
     </div>

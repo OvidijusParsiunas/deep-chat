@@ -1,3 +1,4 @@
+import './serviceConstructableObject.css';
 import React from 'react';
 
 function add(properties, setProperties, changeCode) {
@@ -7,7 +8,10 @@ function add(properties, setProperties, changeCode) {
 
 function AddButton({properties, setProperties, changeCode}) {
   return (
-    <button style={{width: 48}} onClick={() => add(properties, setProperties, changeCode)}>
+    <button
+      className="playground-constructable-object-add-property"
+      onClick={() => add(properties, setProperties, changeCode)}
+    >
       Add
     </button>
   );
@@ -20,16 +24,25 @@ function remove(index, properties, setProperties, changeCode) {
 }
 
 function RemoveButton({index, properties, setProperties, changeCode}) {
-  return <button onClick={() => remove(index, properties, setProperties, changeCode)}>Remove</button>;
+  return <button onClick={() => remove(index, properties, setProperties, changeCode)}>R</button>;
 }
 
 function Field({index, property, properties, setProperties, changeCode}) {
   return (
     <div>
-      <div style={{float: 'left', marginRight: '5px', color: '#5e5e5e', fontSize: '15px'}}>
-        <input type="string" defaultValue={property.keyName} onChange={() => changeCode()}></input>:
-      </div>
-      <input type="string" defaultValue={property.value} onChange={() => changeCode()}></input>
+      <input
+        type="string"
+        className="playground-constructable-object-property-input"
+        defaultValue={property.keyName}
+        onChange={() => changeCode()}
+      ></input>
+      :
+      <input
+        type="string"
+        className="playground-constructable-object-property-input"
+        defaultValue={property.value}
+        onChange={() => changeCode()}
+      ></input>
       <RemoveButton index={index} properties={properties} setProperties={setProperties} changeCode={changeCode} />
     </div>
   );
@@ -44,7 +57,7 @@ export default function ConstructableObject({config, changeCode}) {
   );
 
   return (
-    <div style={{display: 'flow-root'}} className={'constructable-object'}>
+    <div className="playground-constructable-object">
       {properties.map((property, index) => (
         <Field
           key={index}

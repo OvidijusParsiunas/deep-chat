@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function Service({activeService, changeService}) {
   return (
-    <div style={{width: '100%'}}>
-      <div style={{float: 'left', marginRight: '5px'}}>Service:</div>
+    <div>
+      <div className="playground-service-modal-input-label">Service:</div>
       <select value={activeService} onChange={(event) => changeService(event.target.value)}>
         <option value="demo">None</option>
         <option value="custom">Custom</option>

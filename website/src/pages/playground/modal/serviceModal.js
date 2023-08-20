@@ -1,4 +1,4 @@
-import AdditionalParameters from './fields/serviceAdditionalParametersFields';
+import OptionalParameters from './fields/serviceOptionalParametersFields';
 import CloseButtons from './close/serviceModalCloseButtons';
 import Required from './fields/serviceRequiredField';
 import ServiceType from './fields/serviceTypeField';
@@ -15,8 +15,8 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
   const [activeType, setActiveType] = React.useState('');
   const [requiredValue, setRequiredValue] = React.useState(''); // this can either be an apiKey or a URL
   const requiredValueRef = React.useRef(null);
-  const [additionalParameters, setAdditionalParameters] = React.useState({});
-  const additionalParamsRef = React.useRef(null);
+  const [optionalParameters, setOptionalParameters] = React.useState({});
+  const optionalParamsRef = React.useRef(null);
   const [code, setCode] = React.useState('');
   const [websocket, setWebsocket] = React.useState(false); // have to keep it in this state as it must not affect config
 
@@ -32,17 +32,17 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
     setActiveType(availableTypes[0]);
     if (newService === 'custom') {
       setRequiredValue(config[newService]?.url || '');
-      setAdditionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
+      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
       setRequiredValue(config[newService]?.key || '');
-      setAdditionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
+      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
     }
     setTimeout(() => changeCode(newService, availableTypes[0]));
   };
 
   const changeType = (newType) => {
     setActiveType(newType);
-    setAdditionalParameters(
+    setOptionalParameters(
       activeService === 'custom'
         ? SERVICE_MODAL_FORM_CONFIG[newService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][newType]
@@ -58,12 +58,12 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
   const changeCode = (serviceArg, newTypeArg) => {
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
-    const config = constructConfig(additionalParamsRef.current, service, type, requiredValueRef.current.value);
+    const config = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current.value);
     if (service === 'custom') {
       setWebsocket(config['custom'].websocket);
       if (config['custom'].websocket) {
         setTimeout(() => {
-          const newConfig = constructConfig(additionalParamsRef.current, service, type, requiredValueRef.current.value);
+          const newConfig = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current.value);
           setCode(getCodeStr(newConfig, true));
         });
         return;
@@ -74,40 +74,42 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
   };
 
   return (
-    <div id="playground-config-modal">
-      <div style={{width: '100%', textAlign: 'center'}}>Service Settings</div>
-      <Service activeService={activeService} changeService={changeService} />
-      {activeService !== 'demo' && activeService !== 'custom' && (
-        <ServiceType
-          availableTypes={availableTypes}
-          activeType={activeType}
-          changeType={changeType}
-          pseudoNames={pseudoNames}
-        />
-      )}
-      {activeService !== 'demo' && activeService !== 'custom' && (
-        <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="API Key:" />
-      )}
-      {activeService === 'custom' && (
-        <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="URL:" />
-      )}
-      <div style={{marginTop: '10px'}}>Additional parameters:</div>
-      <AdditionalParameters
-        ref={additionalParamsRef}
-        additionalParameters={additionalParameters}
+    <div id="playground-service-modal">
+      <div id="playground-service-modal-title">Service Settings</div>
+      <div id="playgroud-service-modal-required-fields">
+        <Service activeService={activeService} changeService={changeService} />
+        {activeService !== 'demo' && activeService !== 'custom' && (
+          <ServiceType
+            availableTypes={availableTypes}
+            activeType={activeType}
+            changeType={changeType}
+            pseudoNames={pseudoNames}
+          />
+        )}
+        {activeService !== 'demo' && activeService !== 'custom' && (
+          <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="API Key:" />
+        )}
+        {activeService === 'custom' && (
+          <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="URL:" />
+        )}
+      </div>
+      <div className="playground-service-modal-sub-title">Optional parameters:</div>
+      <OptionalParameters
+        ref={optionalParamsRef}
+        optionalParameters={optionalParameters}
         config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
         changeCode={changeCode}
         websocket={websocket}
         pseudoNames={pseudoNames}
       />
-      <div style={{marginTop: '10px'}}>Code:</div>
+      <div className="playground-service-modal-sub-title">Code:</div>
       <Code code={code} />
       <CloseButtons
         setModalDisplayed={setModalDisplayed}
         chatComponent={chatComponent}
         config={config}
         constructConfig={() =>
-          constructConfig(additionalParamsRef.current, activeService, activeType, requiredValueRef.current.value)
+          constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current.value)
         }
       />
     </div>
@@ -138,13 +140,13 @@ function getCodeStr(config, isCustom) {
   return `<deep-chat directConnection='${JSON.stringify(config, null, 2)}'></deep-chat>`;
 }
 
-function constructConfig(additionalParamsEl, activeService, activeType, requiredProp) {
-  const additionParamsValues = extractAdditionalParameterValues(additionalParamsEl);
-  const additionalParams =
+function constructConfig(optionalParamsEl, activeService, activeType, requiredProp) {
+  const optionalParamsValues = extractOptionalParameterValues(optionalParamsEl);
+  const optionalParams =
     activeService === 'custom'
       ? SERVICE_MODAL_FORM_CONFIG[activeService]
       : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
-  const config = buildConfig(additionalParams, additionParamsValues);
+  const config = buildConfig(optionalParams, optionalParamsValues);
   return {
     [activeService]:
       activeService === 'custom'
@@ -153,21 +155,19 @@ function constructConfig(additionalParamsEl, activeService, activeType, required
   };
 }
 
-function extractAdditionalParameterValues(additionalParamsEl) {
-  return Array.from(additionalParamsEl.children).map((element) => {
+function extractOptionalParameterValues(optionalParamsEl) {
+  return Array.from(optionalParamsEl.children).map((element) => {
     const value = element.children[1].value;
     if (value === 'true') return true;
     if (value === 'false') return false;
     const attemptedParseNumber = parseNumber(value);
     if (attemptedParseNumber !== null) return attemptedParseNumber;
-    if (element.children[1].classList.contains('constructable-object')) {
+    if (element.children[1].classList.contains('playground-constructable-object')) {
       const object = Array.from(element.children[1].children || []).reduce((currentObject, propertyElement) => {
         if (propertyElement?.tagName === 'DIV') {
-          const keyName = propertyElement.children[0].children[0].value;
+          const keyName = propertyElement.children[0].value;
           const value = propertyElement.children[1].value;
-          if (keyName.trim().length > 0 || value.trim().length > 0) {
-            currentObject[propertyElement.children[0].children[0].value] = propertyElement.children[1].value;
-          }
+          if (keyName.trim().length > 0 || value.trim().length > 0) currentObject[keyName] = value;
         }
         return currentObject;
       }, {});
@@ -177,22 +177,22 @@ function extractAdditionalParameterValues(additionalParamsEl) {
   });
 }
 
-function buildConfig(additionalParams, additionParamsValues) {
+function buildConfig(optionalParams, optionalParamsValues) {
   const config = {};
   let index = 0;
-  Object.keys(additionalParams).forEach((parameter) => {
-    const value = additionalParams[parameter];
+  Object.keys(optionalParams).forEach((parameter) => {
+    const value = optionalParams[parameter];
     if (typeof value === 'object' && !Array.isArray(value)) {
       Object.keys(value).forEach((parameter1) => {
-        if (additionParamsValues[index] !== '') {
+        if (optionalParamsValues[index] !== '') {
           config[parameter] ??= {};
-          config[parameter][changeFirstLetter(parameter1, false)] = additionParamsValues[index];
+          config[parameter][changeFirstLetter(parameter1, false)] = optionalParamsValues[index];
         }
         index += 1;
       });
     } else {
-      if (additionParamsValues[index] !== undefined && additionParamsValues[index] !== '') {
-        config[changeFirstLetter(parameter, false)] = additionParamsValues[index];
+      if (optionalParamsValues[index] !== undefined && optionalParamsValues[index] !== '') {
+        config[changeFirstLetter(parameter, false)] = optionalParamsValues[index];
       }
       index += 1;
     }

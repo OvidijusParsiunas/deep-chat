@@ -6,8 +6,8 @@ function changeFirstLetter(string, capitalize = true) {
 
 export default function ServiceType({availableTypes, activeType, changeType, pseudoNames}) {
   return (
-    <div style={{width: '100%'}}>
-      <div style={{float: 'left', marginRight: '5px'}}>Type:</div>
+    <div>
+      <div className="playground-service-modal-input-label">Type:</div>
       <select value={activeType} onChange={(event) => changeType(event.target.value)}>
         {availableTypes?.map((type, index) => {
           return (
