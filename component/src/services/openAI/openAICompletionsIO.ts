@@ -1,6 +1,5 @@
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -47,17 +46,14 @@ export class OpenAICompletionsIO extends DirectServiceIO {
     return {prompt: processedMessage, max_tokens: maxTokensInt, ...bodyCopy};
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     if (this._isStream || body.stream) {
       body.stream = true;
-      HTTPRequest.requestStream(this, body, messages,
-        streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
+      HTTPRequest.requestStream(this, body, messages);
     } else {
-      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages);
     }
   }
 

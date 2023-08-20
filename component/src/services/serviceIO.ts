@@ -52,6 +52,10 @@ export interface ServiceIO {
 
   websocket?: WebSocket;
 
+  completionsHandlers: CompletionsHandlers;
+
+  streamHandlers: StreamHandlers;
+
   // overwrites textInput disabled property if not provided
   isTextInputDisabled?: boolean;
 
@@ -77,9 +81,7 @@ export interface ServiceIO {
 
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  // prettier-ignore
-  callAPI(requestContents: RequestContents, messages: Messages,
-    completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
+  callAPI(requestContents: RequestContents, messages: Messages): void;
 
   extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
 

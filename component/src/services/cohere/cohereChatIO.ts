@@ -3,7 +3,6 @@ import {Cohere, CohereChatConfig} from '../../types/cohere';
 import {CohereChatResult} from '../../types/cohereResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {CompletionsHandlers} from '../serviceIO';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
@@ -36,10 +35,10 @@ export class CohereChatIO extends CohereIO {
     return bodyCopy;
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body, messages);
   }
 
   override async extractResultData(result: CohereChatResult): Promise<Result> {

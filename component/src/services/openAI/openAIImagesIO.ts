@@ -1,4 +1,3 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
@@ -70,8 +69,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, files: File[]) {
+  private callApiWithImage(messages: Messages, pMessages: MessageContent[], files: File[]) {
     let formData: FormData;
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     // if there is a mask image or text, call edit
@@ -85,20 +83,18 @@ export class OpenAIImagesIO extends DirectServiceIO {
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestUtils.temporarilyRemoveHeader(this.requestSettings,
-      HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
+      HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
-      this.callApiWithImage(messages, pMessages, completionsHandlers, files);
+      this.callApiWithImage(messages, pMessages, files);
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
       const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
-      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages);
     }
   }
 

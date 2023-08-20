@@ -1,4 +1,3 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -40,9 +39,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     return !!files?.[0];
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[],
-      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     if (this.requestSettings?.headers) {
@@ -50,7 +47,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
         ? 'audio/wav; codecs=audio/pcm; samplerate=16000'
         : 'audio/ogg; codecs=opus';
     }
-    HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);
+    HTTPRequest.request(this, files[0], messages, false);
   }
 
   override async extractResultData(result: AzureSpeechToTextResult): Promise<Result> {

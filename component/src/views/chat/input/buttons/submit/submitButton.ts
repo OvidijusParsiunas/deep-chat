@@ -36,6 +36,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._serviceIO = serviceIO;
     this.attemptOverwriteLoadingStyle(deepChat);
     this.changeToSubmitIcon();
+    this.assignHandlers();
   }
 
   // prettier-ignore
@@ -89,6 +90,17 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
+  private assignHandlers() {
+    this._serviceIO.completionsHandlers = {
+      onFinish: this.changeToSubmitIcon.bind(this),
+    };
+    this._serviceIO.streamHandlers = {
+      onOpen: this.changeToStopIcon.bind(this),
+      onClose: this.changeToSubmitIcon.bind(this),
+      abortStream: this._abortStream,
+    };
+  }
+
   public submitFromInput() {
     if (this._inputElementRef.classList.contains('text-input-placeholder')) {
       this.submit(false, '');
@@ -118,16 +130,9 @@ export class SubmitButton extends InputButton<Styles> {
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
     if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
-    const completionsHandlers = {
-      onFinish: this.changeToSubmitIcon.bind(this),
-    };
-    const streamHandlers = {
-      onOpen: this.changeToStopIcon.bind(this),
-      onClose: this.changeToSubmitIcon.bind(this),
-      abortStream: this._abortStream,
-    };
+
     const requestContents = {text: submittedText, files: fileData};
-    this._serviceIO.callAPI(requestContents, this._messages, completionsHandlers, streamHandlers);
+    this._serviceIO.callAPI(requestContents, this._messages);
     if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 

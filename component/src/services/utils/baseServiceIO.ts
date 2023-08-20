@@ -36,6 +36,9 @@ export class BaseServiceIO implements ServiceIO {
   private readonly _directServiceRequiresFiles: boolean;
   demo?: Demo;
   websocket?: WebSocket;
+  // these are placeholders that are later populated in submitButton.ts
+  completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
+  streamHandlers: StreamHandlers = {} as StreamHandlers;
 
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
     this.deepChat = deepChat;
@@ -80,9 +83,7 @@ export class BaseServiceIO implements ServiceIO {
     return this.fileTypes.mixedFiles;
   }
 
-  // prettier-ignore
-  callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers,
-      streamHandlers: StreamHandlers, _?: File[]) {
+  callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
     if (!this.requestSettings.headers?.['Content-Type']) {
@@ -91,38 +92,34 @@ export class BaseServiceIO implements ServiceIO {
       tempHeaderSet = true;
     }
     if (this._isStream) {
-      HTTPRequest.requestStream(this, body, messages,
-        streamHandlers.onOpen, streamHandlers.onClose, streamHandlers.abortStream);
+      HTTPRequest.requestStream(this, body, messages);
     } else {
-      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages);
     }
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
-  // prettier-ignore
-  callApiWithFiles(body: any, messages: Messages, completionsHandlers: CompletionsHandlers,
-      pMessages: MessageContent[], files: File[]) {
+  callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);
     this.requestSettings = fileIO?.request || this.requestSettings;
-    HTTPRequest.request(this, formData, messages, completionsHandlers.onFinish, false);
+    HTTPRequest.request(this, formData, messages, false);
     this.requestSettings = previousRequestSettings;
   }
 
   // prettier-ignore
-  callAPI(requestContents: RequestContents, messages: Messages, completionsHandlers: CompletionsHandlers,
-      streamHandlers: StreamHandlers) {
+  callAPI(requestContents: RequestContents, messages: Messages) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
     if (this.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
-      Websocket.sendWebsocket(this.websocket, this, body, messages, completionsHandlers.onFinish, false);
+      Websocket.sendWebsocket(this.websocket, this, body, messages, false);
     } else if (requestContents.files && !this._directServiceRequiresFiles) {
-      this.callApiWithFiles(this.rawBody, messages, completionsHandlers, processedMessages, requestContents.files);
+      this.callApiWithFiles(this.rawBody, messages, processedMessages, requestContents.files);
     } else {
-      this.callServiceAPI(messages, processedMessages, completionsHandlers, streamHandlers, requestContents.files);
+      this.callServiceAPI(messages, processedMessages, requestContents.files);
     }
   }
 

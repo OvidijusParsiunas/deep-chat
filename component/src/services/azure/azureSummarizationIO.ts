@@ -1,12 +1,12 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
-import {CompletionsHandlers, PollResult} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
 import {AzureUtils} from './utils/azureUtils';
+import {PollResult} from '../serviceIO';
 import {DeepChat} from '../../deepChat';
 
 type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
@@ -15,7 +15,6 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   url = '';
   textInputPlaceholderText = 'Insert text to summarize';
   private messages?: Messages;
-  private completionsHandlers?: CompletionsHandlers;
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.summarization as NonNullable<Azure['summarization']>;
@@ -48,12 +47,11 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     };
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body as object, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body as object, messages);
     this.messages = messages;
-    this.completionsHandlers = completionsHandlers;
   }
 
   override async extractResultData(result: Response & AzureAuthenticationError): Promise<{pollingInAnotherRequest: true}> {
@@ -61,7 +59,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
       const requestInit = {method: 'GET', headers: this.requestSettings?.headers as GenericObject<string>};
-      HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages, this.completionsHandlers.onFinish);
+      HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
     return {pollingInAnotherRequest: true};
   }

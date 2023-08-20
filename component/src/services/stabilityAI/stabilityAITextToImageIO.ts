@@ -1,6 +1,5 @@
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
@@ -51,12 +50,10 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
     return bodyCopy;
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
-    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body, messages);
   }
 
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Result> {

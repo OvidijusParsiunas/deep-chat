@@ -4,8 +4,6 @@ import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 
-type Finish = () => void;
-
 export class Websocket {
   public static setup(io: ServiceIO, websocketConfig: boolean | string | string[]) {
     if (io.requestSettings.url !== Demo.URL) {
@@ -42,13 +40,13 @@ export class Websocket {
     };
   }
 
-  // prettier-ignore
-  public static sendWebsocket(
-      ws: WebSocket, io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+  public static sendWebsocket(ws: WebSocket, io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
-    if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
+    if (io.requestSettings?.url === Demo.URL) {
+      return Demo.request(messages, io.completionsHandlers.onFinish, io.deepChat.responseInterceptor);
+    }
     if (ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');
       messages.addNewErrorMessage('service', 'Connection error');

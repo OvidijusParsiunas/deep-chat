@@ -1,10 +1,10 @@
-import {CompletionsHandlers, ServiceFileTypes, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
+import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -49,11 +49,9 @@ export class HuggingFaceIO extends DirectServiceIO {
     return {inputs: mostRecentMessageText, ...bodyCopy};
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
-    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body, messages);
   }
 }

@@ -1,8 +1,8 @@
-import {CompletionsHandlers, ServiceFileTypes, StreamHandlers} from '../serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
+import {ServiceFileTypes} from '../serviceIO';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -26,10 +26,9 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[],
-      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    HTTPRequest.poll(this, files[0], messages, completionsHandlers.onFinish, false);
+    HTTPRequest.poll(this, files[0], messages, false);
   }
 }

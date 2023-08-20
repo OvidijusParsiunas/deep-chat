@@ -10,13 +10,12 @@ import {Demo} from '../demo/demo';
 export type HandleVerificationResult = (
   result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
 
-type Finish = () => void;
-
 export class HTTPRequest {
-  public static request(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+  public static request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} =
       io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    const {onFinish} = io.completionsHandlers;
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {
@@ -47,11 +46,11 @@ export class HTTPRequest {
   // TO-DO can potentially offer an option to simulate a stream where a response message can be streamed word by word;
   // this can also be used for websockets
   // prettier-ignore
-  public static requestStream(io: ServiceIO, body: object, messages: Messages,
-      onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
+  public static requestStream(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} =
       io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    const {onOpen, onClose, abortStream} = io.streamHandlers;
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, onOpen, onClose);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
@@ -68,7 +67,6 @@ export class HTTPRequest {
         throw result;
       },
       onmessage(message: EventSourceMessage) {
-        console.log(message);
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response).then((text) => {
@@ -96,9 +94,9 @@ export class HTTPRequest {
   }
 
   // prettier-ignore
-  public static executePollRequest(io: ServiceIO,
-      url: string, requestInit: RequestInit, messages: Messages, onFinish: Finish) {
+  public static executePollRequest(io: ServiceIO, url: string, requestInit: RequestInit, messages: Messages) {
     console.log('polling');
+    const {onFinish} = io.completionsHandlers;
     fetch(url, requestInit)
       .then((response) => response.json())
       .then(async (result: object) => {
@@ -106,7 +104,7 @@ export class HTTPRequest {
         const resultData = await io.extractPollResultData(io.deepChat.responseInterceptor?.(result) || result);
         if (resultData.timeoutMS) {
           setTimeout(() => {
-            HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);            
+            HTTPRequest.executePollRequest(io, url, requestInit, messages);            
           }, resultData.timeoutMS);
         } else {
           console.log('finished polling');
@@ -120,14 +118,14 @@ export class HTTPRequest {
       });
   }
 
-  public static poll(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+  public static poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit = {method, body: requestBody, headers};
-    HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);
+    HTTPRequest.executePollRequest(io, url, requestInit, messages);
   }
 
   // prettier-ignore

@@ -1,4 +1,3 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -33,12 +32,10 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
     return !!files?.[0];
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[],
-      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
+  override callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);
+    HTTPRequest.request(this, files[0], messages, false);
   }
 
   override async extractResultData(result: AssemblyAIResult): Promise<Result> {
