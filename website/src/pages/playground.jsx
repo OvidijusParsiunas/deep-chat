@@ -1,5 +1,5 @@
 import DeepChatBrowser from '../components/table/deepChatBrowser';
-import ConfigModal from './playground/configModal';
+import ServiceModal from './playground/modal/serviceModal';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
 import React from 'react';
@@ -130,10 +130,10 @@ export default function Playground() {
         <html className="plugin-pages plugin-id-default playground" />
       </Head>
       {modalDisplayed && (
-        <ConfigModal
+        <ServiceModal
           setModalDisplayed={setModalDisplayed}
-          activeConfig={activeModalConfig}
-          component={activeModalComponentRef}
+          config={activeModalConfig}
+          chatComponent={activeModalComponentRef}
         />
       )}
       <div id="start-page-content">
