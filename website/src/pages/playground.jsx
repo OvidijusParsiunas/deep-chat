@@ -14,6 +14,8 @@ import './playground.css';
 // Ability to remove a component
 // Ability to change view to horizontal overflow or stack all on same screen
 
+// Move
+// Reset messages
 // Save config
 // Load config
 
@@ -40,17 +42,32 @@ const NewComponent = React.forwardRef(
         key={counter}
         className={`playground-component ${expanded ? 'playground-component-expanded' : 'playground-component-collapsed'}`}
       >
-        <DeepChatBrowser
-          directConnection={config}
-          containerStyle={{
-            borderRadius: '10px',
-            boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-            borderColor: '#ededed',
-            marginLeft: '10px',
-            marginRight: '10px',
-            width: '20vw',
-          }}
-        ></DeepChatBrowser>
+        {config.custom ? (
+          <DeepChatBrowser
+            request={config.custom}
+            containerStyle={{
+              borderRadius: '10px',
+              boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
+              borderColor: '#ededed',
+              marginLeft: '10px',
+              marginRight: '10px',
+              width: '20vw',
+            }}
+          ></DeepChatBrowser>
+        ) : (
+          <DeepChatBrowser
+            directConnection={config}
+            containerStyle={{
+              borderRadius: '10px',
+              boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
+              borderColor: '#ededed',
+              marginLeft: '10px',
+              marginRight: '10px',
+              width: '20vw',
+            }}
+          ></DeepChatBrowser>
+        )}
+
         {/* The button is going to turn into the active logo */}
         <button
           onClick={() => {
@@ -76,7 +93,7 @@ const NewComponent = React.forwardRef(
 
 export default function Playground() {
   const [chatCounter, setChatCounter] = React.useState(0);
-  const [modalDisplayed, setModalDisplayed] = React.useState(true);
+  const [modalDisplayed, setModalDisplayed] = React.useState(false);
   const [configs, setConfigs] = React.useState([{}]);
   const [activeModalConfig, setActiveModalConfig] = React.useState(null);
   const [activeModalComponentRef, setActiveModalComponentRef] = React.useState(null);
@@ -86,7 +103,9 @@ export default function Playground() {
   React.useEffect(() => {
     const ref = React.createRef();
     const newChatCounter = chatCounter + 1;
-    const newConfig = {};
+    const newConfig = {
+      openAI: {},
+    };
     setChatCounter(newChatCounter);
     setConfigs([...configs, newConfig]);
     setChatComponents([
@@ -102,6 +121,7 @@ export default function Playground() {
     ]);
     setActiveModalConfig(newConfig);
     setActiveModalComponentRef(ref);
+    setModalDisplayed(true);
   }, []);
 
   return (
