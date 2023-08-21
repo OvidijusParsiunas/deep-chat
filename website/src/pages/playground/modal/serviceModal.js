@@ -44,13 +44,13 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
     setActiveType(newType);
     setOptionalParameters(
       activeService === 'custom'
-        ? SERVICE_MODAL_FORM_CONFIG[newService]
+        ? SERVICE_MODAL_FORM_CONFIG[activeService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][newType]
     );
     setTimeout(() => changeCode(activeService, newType));
   };
 
-  const changeKey = (newKey) => {
+  const changeRequiredValue = (newKey) => {
     setRequiredValue(newKey);
     setTimeout(() => changeCode(activeService, activeType));
   };
@@ -87,10 +87,10 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
           />
         )}
         {activeService !== 'demo' && activeService !== 'custom' && (
-          <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="API Key:" />
+          <Required ref={requiredValueRef} requiredValue={requiredValue} setValue={changeRequiredValue} title="API Key:" />
         )}
         {activeService === 'custom' && (
-          <Required ref={requiredValueRef} requiredValue={requiredValue} changeKey={changeKey} title="URL:" />
+          <Required ref={requiredValueRef} requiredValue={requiredValue} setValue={changeRequiredValue} title="URL:" />
         )}
       </div>
       <div className="playground-service-modal-sub-title">Optional parameters:</div>
