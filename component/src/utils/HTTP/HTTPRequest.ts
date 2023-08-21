@@ -4,6 +4,7 @@ import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
+import {Result} from '../../types/result';
 import {Demo} from '../demo/demo';
 
 // prettier-ignore
@@ -30,9 +31,12 @@ export class HTTPRequest {
       .then((response) => HTTPRequest.processResponseByType(response))
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
-        const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
+        const finalResult = io.deepChat.responseInterceptor?.(result) || result;
+        const resultData = await io.extractResultData(finalResult);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
+        if (!resultData)
+          throw Error(ErrorMessages.INVALID_RESPONSE_FORMAT(result, !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
@@ -69,9 +73,12 @@ export class HTTPRequest {
       onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
-          io.extractResultData?.(response).then((text) => {
-            if (textElement) messages.updateStreamedMessage(text.text as string, textElement);            
-          });
+          io.extractResultData?.(response).then((textBody?: Result) => {
+            if (!textBody?.text) {
+              // strategy - do not to stop the stream on one message failure to give other messages a change to display
+              console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_FORMAT}`);
+            } else if (textElement) messages.updateStreamedMessage(textBody.text, textElement);            
+          }).catch((e) => RequestUtils.displayError(messages, e));
         }
       },
       onerror(err) {

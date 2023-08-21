@@ -95,7 +95,7 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Sample code">
 
 ```javascript
-chatRef.directConnection = {
+chatElementRef.directConnection = {
   demo: {
     response: (message) => {
       const options = ['rock', 'paper', 'scissors'];
@@ -126,8 +126,8 @@ chatRef.directConnection = {
 
 <script>
 // ...other code
-const chatRef = document.getElementById('chat-element');
-chatRef.directConnection = {
+const chatElementRef = document.getElementById('chat-element');
+chatElementRef.directConnection = {
   demo: {
     response: (message) => {
       const options = ['rock', 'paper', 'scissors'];

@@ -1703,2318 +1703,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/cohere/cohereChatIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereChatIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "username",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'USER'"
-            },
-            {
-              "kind": "method",
-              "name": "cleanConfig",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "config",
-                  "type": {
-                    "text": "CohereChatConfig"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preprocessBody",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "CohereChatConfig"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "CohereChatResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cohere API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://dashboard.cohere.ai/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "inputPlaceholder",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['invalid']",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "url",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "CohereIO",
-            "module": "/src/services/cohere/cohereIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereChatIO",
-          "declaration": {
-            "name": "CohereChatIO",
-            "module": "src/services/cohere/cohereChatIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/cohereIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cohere API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://dashboard.cohere.ai/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "inputPlaceholder"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['invalid']"
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "url"
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "_",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "any | CustomServiceResponse"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "DirectServiceIO",
-            "module": "/src/services/utils/directServiceIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereIO",
-          "declaration": {
-            "name": "CohereIO",
-            "module": "src/services/cohere/cohereIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/cohereSummarizationIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereSummarizationIO",
-          "members": [
-            {
-              "kind": "method",
-              "name": "preprocessBody",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "CohereSummarizationConfig"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "CohereSummarizationResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cohere API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://dashboard.cohere.ai/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "inputPlaceholder",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['invalid']",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "url",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "CohereIO",
-            "module": "/src/services/cohere/cohereIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereSummarizationIO",
-          "declaration": {
-            "name": "CohereSummarizationIO",
-            "module": "src/services/cohere/cohereSummarizationIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/cohereTextGenerationIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereTextGenerationIO",
-          "members": [
-            {
-              "kind": "method",
-              "name": "preprocessBody",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "CohereGenerateConfig"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "CohereCompletionsResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cohere API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://dashboard.cohere.ai/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "inputPlaceholder",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['invalid']",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "url",
-              "inheritedFrom": {
-                "name": "CohereIO",
-                "module": "src/services/cohere/cohereIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "CohereIO",
-            "module": "/src/services/cohere/cohereIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereTextGenerationIO",
-          "declaration": {
-            "name": "CohereTextGenerationIO",
-            "module": "src/services/cohere/cohereTextGenerationIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/services/azure/azureLanguageIO.ts",
       "declarations": [
         {
@@ -7408,6 +5096,2318 @@
           "declaration": {
             "name": "AzureTranslationIO",
             "module": "src/services/azure/azureTranslationIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/cohereChatIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereChatIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "username",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'USER'"
+            },
+            {
+              "kind": "method",
+              "name": "cleanConfig",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "config",
+                  "type": {
+                    "text": "CohereChatConfig"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preprocessBody",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "CohereChatConfig"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "CohereChatResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid']",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isStream",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!!deepChat.stream",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "CohereIO",
+            "module": "/src/services/cohere/cohereIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereChatIO",
+          "declaration": {
+            "name": "CohereChatIO",
+            "module": "src/services/cohere/cohereChatIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/cohereIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid']"
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isStream",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!!deepChat.stream",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "_",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "any | CustomServiceResponse"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "DirectServiceIO",
+            "module": "/src/services/utils/directServiceIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereIO",
+          "declaration": {
+            "name": "CohereIO",
+            "module": "src/services/cohere/cohereIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/cohereSummarizationIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereSummarizationIO",
+          "members": [
+            {
+              "kind": "method",
+              "name": "preprocessBody",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "CohereSummarizationConfig"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "CohereSummarizationResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid']",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isStream",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!!deepChat.stream",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "CohereIO",
+            "module": "/src/services/cohere/cohereIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereSummarizationIO",
+          "declaration": {
+            "name": "CohereSummarizationIO",
+            "module": "src/services/cohere/cohereSummarizationIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/cohereTextGenerationIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereTextGenerationIO",
+          "members": [
+            {
+              "kind": "method",
+              "name": "preprocessBody",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "CohereGenerateConfig"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "CohereCompletionsResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cohere API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://dashboard.cohere.ai/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "inputPlaceholder",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['invalid']",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "url",
+              "inheritedFrom": {
+                "name": "CohereIO",
+                "module": "src/services/cohere/cohereIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isStream",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!!deepChat.stream",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "CohereIO",
+            "module": "/src/services/cohere/cohereIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereTextGenerationIO",
+          "declaration": {
+            "name": "CohereTextGenerationIO",
+            "module": "src/services/cohere/cohereTextGenerationIO.ts"
           }
         }
       ]
@@ -22964,7 +22964,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n}"
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n  INVALID_RESPONSE_FORMAT: getInvalidResponseMessage,\n  INVALID_STREAM_FORMAT:\n    `Make sure the events are using the Result format: ` +\n    `https://deepchat.dev/docs/connect/#Result \\n` +\n    `You can also augment them using the responseInterceptor property: ` +\n    `https://deepchat.dev/docs/interceptors#responseInterceptor`,\n}"
         }
       ],
       "exports": [
@@ -23043,30 +23043,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/utils/fileTypes/fileTypeButtonIcons.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "FILE_TYPE_BUTTON_ICONS",
-          "type": {
-            "text": "ServiceFileTypes"
-          },
-          "default": "{\n  images: {id: 'upload-images-icon', svgString: IMAGE_ICON_STRING, dropupText: 'Image'},\n  gifs: {id: 'upload-gifs-icon', svgString: GIF_ICON_STRING, dropupText: 'GIF'},\n  audio: {id: 'upload-audio-icon', svgString: AUDIO_ICON_STRING, dropupText: 'Audio'},\n  mixedFiles: {id: 'upload-mixed-files-icon', svgString: MIXED_FILES_ICON_STRING, dropupText: 'File'},\n}"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FILE_TYPE_BUTTON_ICONS",
-          "declaration": {
-            "name": "FILE_TYPE_BUTTON_ICONS",
-            "module": "src/utils/fileTypes/fileTypeButtonIcons.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/svg/svgIconUtils.ts",
       "declarations": [
         {
@@ -23103,6 +23079,30 @@
           "declaration": {
             "name": "SVGIconUtils",
             "module": "src/utils/svg/svgIconUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/fileTypes/fileTypeButtonIcons.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "FILE_TYPE_BUTTON_ICONS",
+          "type": {
+            "text": "ServiceFileTypes"
+          },
+          "default": "{\n  images: {id: 'upload-images-icon', svgString: IMAGE_ICON_STRING, dropupText: 'Image'},\n  gifs: {id: 'upload-gifs-icon', svgString: GIF_ICON_STRING, dropupText: 'GIF'},\n  audio: {id: 'upload-audio-icon', svgString: AUDIO_ICON_STRING, dropupText: 'Audio'},\n  mixedFiles: {id: 'upload-mixed-files-icon', svgString: MIXED_FILES_ICON_STRING, dropupText: 'File'},\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FILE_TYPE_BUTTON_ICONS",
+          "declaration": {
+            "name": "FILE_TYPE_BUTTON_ICONS",
+            "module": "src/utils/fileTypes/fileTypeButtonIcons.ts"
           }
         }
       ]
@@ -23409,86 +23409,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/cohere/utils/cohereUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereUtils",
-          "declaration": {
-            "name": "CohereUtils",
-            "module": "src/services/cohere/utils/cohereUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/services/azure/utils/azureUtils.ts",
       "declarations": [
         {
@@ -23734,6 +23654,86 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereUtils",
+          "declaration": {
+            "name": "CohereUtils",
+            "module": "src/services/cohere/utils/cohereUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
       "declarations": [
         {
@@ -23808,6 +23808,86 @@
           "declaration": {
             "name": "HuggingFaceUtils",
             "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StabilityAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StabilityAIUtils",
+          "declaration": {
+            "name": "StabilityAIUtils",
+            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
           }
         }
       ]
@@ -23996,86 +24076,6 @@
           "declaration": {
             "name": "OpenAIUtils",
             "module": "src/services/openAI/utils/openAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StabilityAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StabilityAIUtils",
-          "declaration": {
-            "name": "StabilityAIUtils",
-            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
           }
         }
       ]
@@ -25880,6 +25880,613 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonCSS.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonCSS",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetAllCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetActionCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementsCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementCssUpToState",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonCSS",
+          "declaration": {
+            "name": "ButtonCSS",
+            "module": "src/views/chat/input/buttons/buttonCSS.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CustomButtonInnerElements",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createTextElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "string",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isText",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createCustomElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "processElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "element",
+                  "optional": true,
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createSpecificStateElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ButtonInnerElements<T>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "states",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CustomButtonInnerElements",
+          "declaration": {
+            "name": "CustomButtonInnerElements",
+            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/inputButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement"
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}"
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position"
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText"
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputButton",
+          "declaration": {
+            "name": "InputButton",
+            "module": "src/views/chat/input/buttons/inputButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsTypes",
+              "type": {
+                "text": "FileAttachmentsType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addType",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachmentsT"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAttachmentContainer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleContainerDisplay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "display",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllFileData"
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholders"
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "fileAttachmentTypes",
+                  "type": {
+                    "text": "FileAttachmentsType[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToAnyType",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAllFiles"
+            },
+            {
+              "kind": "method",
+              "name": "getNumberOfTypes"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachments",
+          "declaration": {
+            "name": "FileAttachments",
+            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NewFileName",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getFileName",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "prefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "extension",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NewFileName",
+          "declaration": {
+            "name": "NewFileName",
+            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/dropup/dropup.ts",
       "declarations": [
         {
@@ -26569,446 +27176,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/buttonCSS.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ButtonCSS",
-          "members": [
-            {
-              "kind": "method",
-              "name": "unsetAllCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetActionCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementsCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementCssUpToState",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ButtonCSS",
-          "declaration": {
-            "name": "ButtonCSS",
-            "module": "src/views/chat/input/buttons/buttonCSS.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CustomButtonInnerElements",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createTextElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "string",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isText",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createCustomElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "processElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "element",
-                  "optional": true,
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createSpecificStateElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ButtonInnerElements<T>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "states",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CustomButtonInnerElements",
-          "declaration": {
-            "name": "CustomButtonInnerElements",
-            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/inputButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement"
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}"
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position"
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText"
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputButton",
-          "declaration": {
-            "name": "InputButton",
-            "module": "src/views/chat/input/buttons/inputButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/textInput/focusUtils.ts",
       "declarations": [
         {
@@ -27434,202 +27601,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsTypes",
-              "type": {
-                "text": "FileAttachmentsType[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addType",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachmentsT"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAttachmentContainer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "toggleContainerDisplay",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "display",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getAllFileData"
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholders"
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToType",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "fileAttachmentTypes",
-                  "type": {
-                    "text": "FileAttachmentsType[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToAnyType",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAllFiles"
-            },
-            {
-              "kind": "method",
-              "name": "getNumberOfTypes"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachments",
-          "declaration": {
-            "name": "FileAttachments",
-            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "NewFileName",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "prefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "extension",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "NewFileName",
-          "declaration": {
-            "name": "NewFileName",
-            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RemarkableConfig",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createNew",
-              "privacy": "public",
-              "static": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RemarkableConfig",
-          "declaration": {
-            "name": "RemarkableConfig",
-            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
       "declarations": [
         {
@@ -27697,6 +27668,35 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RemarkableConfig",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createNew",
+              "privacy": "public",
+              "static": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RemarkableConfig",
+          "declaration": {
+            "name": "RemarkableConfig",
+            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
           }
         }
       ]
