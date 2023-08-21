@@ -141,11 +141,11 @@ export default function ConnectToCustomAPI(props) {
         id="start-page-requirements"
         className={`start-page-text start-page-large-text ${displayRequirements ? 'start-page-main-details-visible' : ''}`}
       >
-        The target service needs to handle{' '}
+        The target service needs to handle request{' '}
         <a href="https://deepchat.dev/docs/connect" target="_blank">
-          request message
-        </a>
-        s and respond using the{' '}
+          messages
+        </a>{' '}
+        and respond using the{' '}
         <a href="https://deepchat.dev/docs/connect#Result" target="_blank">
           result
         </a>{' '}
