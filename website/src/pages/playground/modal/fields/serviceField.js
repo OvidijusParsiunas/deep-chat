@@ -1,11 +1,11 @@
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import stabilityAILogo from '/img/stabilityAILogo.png';
+import PlaygroundSelect from '../../playgroundSelect';
 import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
 import Flash from '/img/flash.svg';
-import Select from 'react-select';
 import Cog from '/img/cog.svg';
 import React from 'react';
 
@@ -14,58 +14,11 @@ export default function Service({activeService, changeService}) {
   return (
     <div>
       <div className="playground-service-modal-input-label">Service:</div>
-      <Select
-        isSearchable={false}
-        value={services[activeService]}
-        styles={{
-          control: (baseStyles) => ({
-            ...baseStyles,
-            width: '200px',
-            padding: '0px',
-            minHeight: '10px',
-          }),
-          dropdownIndicator: (baseStyles) => ({
-            ...baseStyles,
-            margin: '0px',
-            padding: '0px',
-          }),
-          input: (baseStyles) => ({
-            ...baseStyles,
-            margin: '0px',
-            padding: '0px',
-            pointerEvents: 'none',
-          }),
-          valueContainer: (baseStyles) => ({
-            ...baseStyles,
-            margin: '0px',
-            padding: '0px',
-          }),
-          menu: (baseStyles) => ({
-            ...baseStyles,
-            width: '200px',
-          }),
-          option: (baseStyles, {isSelected, isFocused}) => ({
-            ...baseStyles,
-            margin: '0px',
-            padding: '0px',
-            backgroundColor: isSelected ? '#c9e2ff' : isFocused ? '#e0eeff' : baseStyles.backgroundColor,
-            color: isSelected ? 'black' : baseStyles.color,
-          }),
-          indicatorSeparator: (baseStyles) => ({
-            ...baseStyles,
-            display: 'none',
-          }),
-        }}
+      <PlaygroundSelect
         options={Object.keys(services).map((service) => services[service])}
-        onChange={(event) => {
-          changeService(event.value);
-        }}
-        getOptionLabel={(e) => (
-          <div style={{display: 'flex', alignItems: 'center', paddingLeft: '6px'}}>
-            {e.icon}
-            <span style={{marginLeft: 5}}>{e.text}</span>
-          </div>
-        )}
+        defaultOption={services[activeService]}
+        onChange={changeService}
+        isImages={true}
       />
     </div>
   );
@@ -75,7 +28,7 @@ const services = {
   demo: {
     value: 'demo',
     text: 'None',
-    icon: <Cog width="14" style={{marginLeft: '1px', marginRight: '2px'}} />,
+    icon: <Cog width="14" style={{marginLeft: '0.5px', marginRight: '2.5px'}} />,
   },
   custom: {
     value: 'custom',
@@ -102,7 +55,7 @@ const services = {
   huggingFace: {
     value: 'huggingFace',
     text: 'Hugging Face',
-    icon: <img src={huggingFaceLogo} width="18" style={{marginTop: '1px', marginLeft: '-2px', marginRight: '1px'}} />,
+    icon: <img src={huggingFaceLogo} width="17" style={{marginLeft: '-2px', marginRight: '1px'}} />,
   },
   cohere: {
     value: 'cohere',

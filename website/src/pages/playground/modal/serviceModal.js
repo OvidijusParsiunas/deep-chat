@@ -129,8 +129,8 @@ function parseNumber(inputString) {
 
 const pseudoNames = {textGeneration: 'Text Generation'};
 
-function changeFirstLetter(string, capitalize = true) {
-  return string.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + string.slice(1);
+function changeFirstLetter(text, capitalize = true) {
+  return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
 function getCodeStr(config, isCustom) {
@@ -157,13 +157,17 @@ function constructConfig(optionalParamsEl, activeService, activeType, requiredPr
 
 function extractOptionalParameterValues(optionalParamsEl) {
   return Array.from(optionalParamsEl.children).map((element) => {
-    const value = element.children[1].value;
+    const valueEl = element.children[1];
+    let value = valueEl.value;
+    if (valueEl.classList.contains('playground-select')) {
+      value = valueEl.children[2].children[0].children[0].children[0].children[0].textContent.trim().toLowerCase();
+    }
     if (value === 'true') return true;
     if (value === 'false') return false;
     const attemptedParseNumber = parseNumber(value);
     if (attemptedParseNumber !== null) return attemptedParseNumber;
-    if (element.children[1].classList.contains('playground-constructable-object')) {
-      const object = Array.from(element.children[1].children || []).reduce((currentObject, propertyElement) => {
+    if (valueEl.classList.contains('playground-constructable-object')) {
+      const object = Array.from(valueEl.children || []).reduce((currentObject, propertyElement) => {
         if (propertyElement?.tagName === 'DIV') {
           const keyName = propertyElement.children[0].value;
           const value = propertyElement.children[1].value;

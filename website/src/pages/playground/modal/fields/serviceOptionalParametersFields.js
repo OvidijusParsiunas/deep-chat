@@ -1,23 +1,20 @@
 import ConstructableObject from './serviceConstructableObject';
+import PlaygroundSelect from '../../playgroundSelect';
 import './serviceOptionalParametersFields.css';
 import React from 'react';
 
-function changeFirstLetter(string, capitalize = true) {
-  return string.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + string.slice(1);
+function changeFirstLetter(text, capitalize = true) {
+  return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
 function SelectInput({parameter, configVal, changeCode}) {
   return (
-    <select defaultValue={configVal} onChange={() => changeCode()}>
-      <option value={''} key={-1}></option>
-      {parameter.map((optionName, index) => {
-        return (
-          <option value={optionName} key={index}>
-            {optionName}
-          </option>
-        );
-      })}
-    </select>
+    <PlaygroundSelect
+      options={['', ...parameter]}
+      defaultOption={configVal}
+      onChange={() => setTimeout(changeCode)}
+      passValueToChange={false}
+    />
   );
 }
 
