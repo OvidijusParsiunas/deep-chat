@@ -1,4 +1,5 @@
 import OptionalParameters from './fields/serviceOptionalParametersFields';
+import CollapsableSection from './wrappers/collapsableSection';
 import CloseButtons from './close/serviceModalCloseButtons';
 import Required from './fields/serviceRequiredField';
 import ServiceType from './fields/serviceTypeField';
@@ -9,7 +10,7 @@ import React from 'react';
 
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
-export default function ServiceModal({config, setModalDisplayed, chatComponent}) {
+export default function ServiceModal({config, setModalDisplayed, chatComponent, collapseStates}) {
   const [activeService, setActiveService] = React.useState('Service');
   const [availableTypes, setAvailableTypes] = React.useState([]);
   const [activeType, setActiveType] = React.useState('');
@@ -37,7 +38,9 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
       setRequiredValue(config[newService]?.key || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
     }
-    setTimeout(() => changeCode(newService, availableTypes[0]));
+    setTimeout(() => {
+      changeCode(newService, availableTypes[0]);
+    });
   };
 
   const changeType = (newType) => {
@@ -93,17 +96,25 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent})
           <Required ref={requiredValueRef} requiredValue={requiredValue} setValue={changeRequiredValue} title="URL:" />
         )}
       </div>
-      <div className="playground-service-modal-sub-title">Optional parameters:</div>
-      <OptionalParameters
-        ref={optionalParamsRef}
-        optionalParameters={optionalParameters}
-        config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
-        changeCode={changeCode}
-        websocket={websocket}
-        pseudoNames={pseudoNames}
-      />
-      <div className="playground-service-modal-sub-title">Code:</div>
-      <Code code={code} />
+      <CollapsableSection
+        changeVar={optionalParameters}
+        title={'Optional parameters'}
+        collapseStates={collapseStates}
+        prop={'optionalParams'}
+        initExpanded={typeof config[activeService]?.[activeType] === 'object'}
+      >
+        <OptionalParameters
+          ref={optionalParamsRef}
+          optionalParameters={optionalParameters}
+          config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
+          changeCode={changeCode}
+          websocket={websocket}
+          pseudoNames={pseudoNames}
+        />
+      </CollapsableSection>
+      <CollapsableSection changeVar={code} title={'Code'} collapseStates={collapseStates} prop={'code'}>
+        <Code code={code} />
+      </CollapsableSection>
       <CloseButtons
         setModalDisplayed={setModalDisplayed}
         chatComponent={chatComponent}

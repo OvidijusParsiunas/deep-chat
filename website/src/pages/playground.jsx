@@ -91,6 +91,8 @@ const NewComponent = React.forwardRef(
   }
 );
 
+const modalCollapseStates = {optionalParams: true, code: true};
+
 export default function Playground() {
   const [chatCounter, setChatCounter] = React.useState(0);
   const [modalDisplayed, setModalDisplayed] = React.useState(false);
@@ -134,6 +136,7 @@ export default function Playground() {
           setModalDisplayed={setModalDisplayed}
           config={activeModalConfig}
           chatComponent={activeModalComponentRef}
+          collapseStates={modalCollapseStates}
         />
       )}
       <div id="start-page-content">

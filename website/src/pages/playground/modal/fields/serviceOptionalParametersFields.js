@@ -57,7 +57,7 @@ const OptionalParameters = React.forwardRef(({optionalParameters, config, change
                 name={innerParamName}
                 isDisplayed={innerParamName === 'websocket' || !websocket}
                 parameter={optionalParameters[paramName][innerParamName]}
-                config={config?.[paramName]?.[innerParamName]}
+                configVal={config?.[paramName]?.[innerParamName]}
                 changeCode={changeCode}
                 pseudoNames={pseudoNames}
               />
@@ -69,7 +69,7 @@ const OptionalParameters = React.forwardRef(({optionalParameters, config, change
             name={paramName}
             isDisplayed={paramName === 'websocket' || !websocket}
             parameter={optionalParameters[paramName]}
-            config={config?.[paramName]}
+            configVal={config?.[paramName]}
             changeCode={changeCode}
             pseudoNames={pseudoNames}
           ></ParameterField>

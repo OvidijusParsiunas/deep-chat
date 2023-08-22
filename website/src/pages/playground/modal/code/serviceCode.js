@@ -1,9 +1,6 @@
+import './serviceCode.css';
 import React from 'react';
 
 export default function Code({code}) {
-  return (
-    <div>
-      <pre>{code}</pre>
-    </div>
-  );
+  return <pre id="service-code">{code}</pre>;
 }
