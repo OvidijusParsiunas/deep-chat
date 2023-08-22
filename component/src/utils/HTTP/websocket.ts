@@ -10,7 +10,7 @@ export class Websocket {
     if (io.requestSettings.url !== Demo.URL) {
       const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
       io.websocket = Websocket.connect(io.requestSettings.url, protocols);
-      io.permittedErrorPrefixes = ['Connection error'];
+      io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
     }
   }
 
@@ -28,10 +28,9 @@ export class Websocket {
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
-        console.log(resultData);
         messages.addNewMessage(resultData, true, true);
       } catch (error) {
-        RequestUtils.displayError(messages, error as object);
+        RequestUtils.displayError(messages, error as object, 'Error in server message');
       }
     };
     io.websocket.onerror = (error) => {

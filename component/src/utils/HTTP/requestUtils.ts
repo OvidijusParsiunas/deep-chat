@@ -15,11 +15,11 @@ export class RequestUtils {
     requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousHeader;
   }
 
-  public static displayError(messages: Messages, err: object) {
+  public static displayError(messages: Messages, err: object, defMessage = 'Service error, please try again.') {
     console.error(err);
     if (typeof err === 'object') {
       if (Object.keys(err).length === 0) {
-        return messages.addNewErrorMessage('service', 'Service error, please try again.');
+        return messages.addNewErrorMessage('service', defMessage);
       }
       return messages.addNewErrorMessage('service', JSON.stringify(err));
     }
