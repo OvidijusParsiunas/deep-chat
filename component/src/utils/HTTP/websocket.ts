@@ -1,4 +1,5 @@
 import {CustomServiceResponse} from '../../types/customService';
+import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
@@ -23,7 +24,11 @@ export class Websocket {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: CustomServiceResponse = JSON.parse(message.data);
-        const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
+        const finalResult = io.deepChat.responseInterceptor?.(result) || result;
+        const resultData = await io.extractResultData(finalResult);
+        if (!resultData || typeof resultData !== 'object')
+          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
+        console.log(resultData);
         messages.addNewMessage(resultData, true, true);
       } catch (error) {
         RequestUtils.displayError(messages, error as object);

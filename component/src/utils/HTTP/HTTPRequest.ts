@@ -35,8 +35,8 @@ export class HTTPRequest {
         const resultData = await io.extractResultData(finalResult);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
-        if (!resultData)
-          throw Error(ErrorMessages.INVALID_RESPONSE_FORMAT(result, !!io.deepChat.responseInterceptor, finalResult));
+        if (!resultData || typeof resultData !== 'object')
+          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.pollingInAnotherRequest) return;
         messages.addNewMessage(resultData, true, true);
         onFinish();
@@ -76,7 +76,7 @@ export class HTTPRequest {
           io.extractResultData?.(response).then((textBody?: Result) => {
             if (!textBody?.text) {
               // strategy - do not to stop the stream on one message failure to give other messages a change to display
-              console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_FORMAT}`);
+              console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_RESPONSE}`);
             } else if (textElement) messages.updateStreamedMessage(textBody.text, textElement);            
           }).catch((e) => RequestUtils.displayError(messages, e));
         }
