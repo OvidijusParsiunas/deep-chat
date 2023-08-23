@@ -1,10 +1,13 @@
 import {ResponseInterceptor} from '../../types/interceptors';
 import {Messages} from '../../views/chat/messages/messages';
+import {StreamHandlers} from '../../services/serviceIO';
 import {MessageContent} from '../../types/messages';
 import {DemoResponse} from '../../types/demo';
 import {Result} from '../../types/result';
 
 type Finish = () => void;
+
+type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
 
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
@@ -70,27 +73,30 @@ export class Demo {
     }, 400);
   }
 
-  public static requestStream(messages: Messages, onOpen: () => void, onClose: () => void) {
+  public static requestStream(messages: Messages, sh: StreamHandlers) {
+    const simulationSH = sh as unknown as SimulationSH;
     const responseText = Demo.getResponse(messages).text?.split(' ') || [];
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const textElement = messages.addNewStreamedMessage();
-      onOpen();
-      Demo.populateMessages(textElement, responseText, messages, onClose);
+      sh.onOpen();
+      Demo.populateMessages(textElement, responseText, messages, simulationSH);
     }, 400);
+    simulationSH.abortStream.abort = () => clearTimeout(timeout);
   }
 
   // prettier-ignore
   private static populateMessages(
-      textElement: HTMLElement, responseText: string[], messages: Messages, onClose: () => void, wordIndex = 0) {
-    setTimeout(() => {
+      textEl: HTMLElement, responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
+    const timeout = setTimeout(() => {
       const word = responseText[wordIndex];
       if (word) {
-        messages.updateStreamedMessage(`${word} `, textElement);
-        Demo.populateMessages(textElement, responseText, messages, onClose, wordIndex + 1);
+        messages.updateStreamedMessage(`${word} `, textEl);
+        Demo.populateMessages(textEl, responseText, messages, sh, wordIndex + 1);
       } else {
         messages.finaliseStreamedMessage();
-        onClose();
+        sh.onClose();
       }
     }, 70);
+    sh.abortStream.abort = () => clearTimeout(timeout);
   }
 }

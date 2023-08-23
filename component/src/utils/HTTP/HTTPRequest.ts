@@ -54,8 +54,8 @@ export class HTTPRequest {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders} =
       io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     const {onOpen, onClose, abortStream} = io.streamHandlers;
-    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, onOpen, onClose);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
