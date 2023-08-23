@@ -1,0 +1,8 @@
+.playground-service-modal-select-option {
+  display: flex;
+  align-items: center;
+}
+
+.playground-service-modal-select-empty-option {
+  margin-top: -2px;
+}

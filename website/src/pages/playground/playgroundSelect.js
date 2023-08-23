@@ -1,4 +1,5 @@
 import Select from 'react-select';
+import './playgroundSelect.css';
 import React from 'react';
 
 function changeFirstLetter(text, capitalize = true) {
@@ -33,6 +34,7 @@ export default function PlaygroundSelect({options, defaultOption, onChange, pass
           minHeight: '10px',
           border: '1px solid grey',
           fontSize: '15px',
+          top: '1px',
         }),
         dropdownIndicator: (baseStyles) => ({
           ...baseStyles,
@@ -53,6 +55,7 @@ export default function PlaygroundSelect({options, defaultOption, onChange, pass
         menu: (baseStyles) => ({
           ...baseStyles,
           width: '200px',
+          marginTop: '5px',
         }),
         option: (baseStyles, {isSelected, isFocused}) => ({
           ...baseStyles,
@@ -79,12 +82,17 @@ export default function PlaygroundSelect({options, defaultOption, onChange, pass
         }
       }}
       getOptionLabel={(e) => (
-        <div style={{display: 'flex', alignItems: 'center', paddingLeft: isImages ? '6px' : '4px'}}>
+        <div
+          className="playground-service-modal-select-option"
+          style={{
+            paddingLeft: isImages ? '6px' : '4px',
+          }}
+        >
           {e.icon}
           {e.text === '' ? (
-            <span style={{marginTop: '-2px'}}>&nbsp;</span>
+            <span className="playground-service-modal-select-empty-option">&nbsp;</span>
           ) : (
-            <span style={{marginLeft: isImages ? '6px' : '', marginTop: '-2px'}}>{e.text}</span>
+            <span style={{marginLeft: isImages ? '6px' : '', marginTop: '-1px'}}>{e.text}</span>
           )}
         </div>
       )}

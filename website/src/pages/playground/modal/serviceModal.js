@@ -16,6 +16,8 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
   const [activeType, setActiveType] = React.useState('');
   const [requiredValue, setRequiredValue] = React.useState(''); // this can either be an apiKey or a URL
   const requiredValueRef = React.useRef(null);
+  const [requiredValue2, setRequiredValue2] = React.useState('');
+  const requiredValue2Ref = React.useRef(null);
   const [optionalParameters, setOptionalParameters] = React.useState({});
   const optionalParamsRef = React.useRef(null);
   const [code, setCode] = React.useState('');
@@ -53,7 +55,7 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
     setTimeout(() => changeCode(activeService, newType));
   };
 
-  const changeRequiredValue = (newKey) => {
+  const changeRequiredValue = (setRequiredValue, newKey) => {
     setRequiredValue(newKey);
     setTimeout(() => changeCode(activeService, activeType));
   };
@@ -79,7 +81,7 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
   return (
     <div id="playground-service-modal">
       <div id="playground-service-modal-title">Service Settings</div>
-      <div id="playgroud-service-modal-required-fields">
+      <div className="playgroud-service-modal-form">
         <Service activeService={activeService} changeService={changeService} />
         {activeService !== 'demo' && activeService !== 'custom' && (
           <ServiceType
@@ -90,14 +92,31 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
           />
         )}
         {activeService !== 'demo' && activeService !== 'custom' && (
-          <Required ref={requiredValueRef} requiredValue={requiredValue} setValue={changeRequiredValue} title="API Key:" />
+          <Required
+            ref={requiredValueRef}
+            requiredValue={requiredValue}
+            setValue={changeRequiredValue.bind(this, setRequiredValue)}
+            title="API Key:"
+          />
         )}
         {activeService === 'custom' && (
-          <Required ref={requiredValueRef} requiredValue={requiredValue} setValue={changeRequiredValue} title="URL:" />
+          <Required
+            ref={requiredValueRef}
+            requiredValue={requiredValue}
+            setValue={changeRequiredValue.bind(this, setRequiredValue)}
+            title="URL:"
+          />
+        )}
+        {activeService === 'azure' && (activeType === 'textToSpeech' || activeType === 'speechToText') && (
+          <Required
+            ref={requiredValue2Ref}
+            requiredValue={requiredValue2}
+            setValue={changeRequiredValue.bind(this, setRequiredValue2)}
+            title="Region:"
+          />
         )}
       </div>
       <CollapsableSection
-        changeVar={optionalParameters}
         title={'Optional parameters'}
         collapseStates={collapseStates}
         prop={'optionalParams'}
@@ -112,12 +131,13 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
           pseudoNames={pseudoNames}
         />
       </CollapsableSection>
-      <CollapsableSection changeVar={code} title={'Code'} collapseStates={collapseStates} prop={'code'}>
+      <CollapsableSection title={'Code'} collapseStates={collapseStates} prop={'code'}>
         <Code code={code} />
       </CollapsableSection>
       <CloseButtons
         setModalDisplayed={setModalDisplayed}
         chatComponent={chatComponent}
+        requiredFields={[requiredValueRef, requiredValue2Ref]}
         config={config}
         constructConfig={() =>
           constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current.value)
@@ -268,5 +288,16 @@ const SERVICE_MODAL_FORM_CONFIG = {
     // audioSpeechRecognition: true | HuggingFaceModel;
     // audioClassification: true | HuggingFaceModel;
     // imageClassification: true | HuggingFaceModel;
+  },
+  azure: {
+    textToSpeech: {
+      model: 'string',
+      max_tokens: 'number',
+      temperature: 'number',
+      top_p: 'number',
+    },
+    speechToText: {},
+    summarization: {},
+    translation: {},
   },
 };

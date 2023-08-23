@@ -25,7 +25,14 @@ function Input({parameter, configVal, changeCode}) {
   if (parameter === 'constructable object') {
     return <ConstructableObject configVal={configVal} changeCode={changeCode} />;
   }
-  return <input onChange={() => changeCode()} defaultValue={configVal ?? ''} type={parameter}></input>;
+  return (
+    <input
+      className="playground-service-modal-input"
+      onChange={() => changeCode()}
+      defaultValue={configVal ?? ''}
+      type={parameter}
+    ></input>
+  );
 }
 
 // toggling the display property instead of not rendering to allow extractOptionalParameterValues to pick it up
@@ -47,7 +54,7 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
 
 const OptionalParameters = React.forwardRef(({optionalParameters, config, changeCode, websocket, pseudoNames}, ref) => {
   return (
-    <div ref={ref} id="playground-service-modal-optional-parameters">
+    <div ref={ref} className="playgroud-service-modal-form">
       {Object.keys(optionalParameters || {}).map((paramName, index) => {
         return typeof optionalParameters[paramName] === 'object' && !Array.isArray(optionalParameters[paramName]) ? (
           Object.keys(optionalParameters[paramName]).map((innerParamName, index) => {

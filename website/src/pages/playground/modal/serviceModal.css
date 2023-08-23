@@ -21,6 +21,11 @@
   text-align: center;
 }
 
+.playgroud-service-modal-form > div {
+  height: 31px;
+  display: table-row;
+}
+
 .playground-service-modal-input-label {
   display: table-cell;
   white-space: nowrap;
@@ -29,14 +34,24 @@
   padding-right: 10px;
 }
 
-.playground-constructable-object {
-  display: table;
+.playground-service-modal-input {
+  border: 1px solid grey;
+  border-radius: 4px;
+  height: 25px;
+  width: 200px;
+  font-size: 15px;
+  padding-left: 6px;
+  padding-top: 1px;
+  color: #333333;
+  top: 1px;
+  position: relative;
 }
 
-#playgroud-service-modal-required-fields {
-  display: table;
+.playground-modal-field-invalid {
+  border: 1px solid red;
 }
 
-#playgroud-service-modal-required-fields > div {
-  display: table-row;
+/* this is used to produce a temporary brighter color when user clicks submit */
+.playground-modal-field-invalid-2 {
+  border: 1.5px solid red;
 }

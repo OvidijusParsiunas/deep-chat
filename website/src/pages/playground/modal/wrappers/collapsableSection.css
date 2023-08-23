@@ -3,6 +3,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid rgb(235, 235, 235);
+  user-select: none;
 }
 
 .playground-service-modal-collapsible-title:hover {
@@ -21,8 +22,4 @@
 
 .playground-service-modal-collapsible-title-text {
   font-weight: 400 !important;
-}
-
-.playground-service-modal-collapsible-child {
-  overflow: hidden;
 }
