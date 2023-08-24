@@ -17,7 +17,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
   private static readonly DEFAULT_MODEL = 'whisper-1';
 
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Audio</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Whisper</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio
       processing.
     <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
