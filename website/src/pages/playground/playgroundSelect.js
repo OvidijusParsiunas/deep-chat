@@ -35,6 +35,7 @@ export default function PlaygroundSelect({options, defaultOption, onChange, pass
           border: '1px solid grey',
           fontSize: '15px',
           top: '1px',
+          cursor: 'pointer',
         }),
         dropdownIndicator: (baseStyles) => ({
           ...baseStyles,
@@ -63,8 +64,9 @@ export default function PlaygroundSelect({options, defaultOption, onChange, pass
           padding: '0px',
           paddingTop: '1px',
           paddingBottom: '0.5px',
+          cursor: 'pointer',
           fontSize: '15px',
-          backgroundColor: isSelected ? '#c9e2ff' : isFocused ? '#e0eeff' : baseStyles.backgroundColor,
+          backgroundColor: isSelected ? '#c9e2ff' : isFocused ? '#e7f2ff' : baseStyles.backgroundColor,
           color: isSelected ? 'black' : baseStyles.color,
         }),
         indicatorSeparator: (baseStyles) => ({

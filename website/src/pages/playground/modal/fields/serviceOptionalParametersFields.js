@@ -52,6 +52,7 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
   );
 }
 
+// WORK - do not display this if there aren't any
 const OptionalParameters = React.forwardRef(({optionalParameters, config, changeCode, websocket, pseudoNames}, ref) => {
   return (
     <div ref={ref} className="playgroud-service-modal-form">

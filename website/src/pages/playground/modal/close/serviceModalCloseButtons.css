@@ -1,3 +1,24 @@
 #playground-service-modal-close-buttons {
   text-align: center;
+  margin-top: 10px;
+}
+
+.playground-service-modal-close-button {
+  width: 68px;
+  height: 30px;
+  font-size: 15px;
+  background-color: rgb(252, 252, 252);
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.playground-service-modal-close-button:hover {
+  background-color: rgb(242, 242, 242);
+}
+
+#playground-service-modal-submit-button {
+  color: #003a6b;
+  border: 1px solid #003a6b;
 }

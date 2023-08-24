@@ -9,10 +9,11 @@ function add(properties, setProperties, changeCode) {
 function AddButton({properties, setProperties, changeCode}) {
   return (
     <button
-      className="playground-constructable-object-add-property"
+      id="playground-constructable-object-add-button"
+      className="playground-constructable-object-button"
       onClick={() => add(properties, setProperties, changeCode)}
     >
-      Add
+      +
     </button>
   );
 }
@@ -23,8 +24,17 @@ function remove(index, properties, setProperties, changeCode) {
   setTimeout(() => changeCode());
 }
 
+// WORK - does not remove the selected property
 function RemoveButton({index, properties, setProperties, changeCode}) {
-  return <button onClick={() => remove(index, properties, setProperties, changeCode)}>R</button>;
+  return (
+    <button
+      id="playground-constructable-object-remove-button"
+      className="playground-constructable-object-button"
+      onClick={() => remove(index, properties, setProperties, changeCode)}
+    >
+      -
+    </button>
+  );
 }
 
 function Field({index, property, properties, setProperties, changeCode}) {
@@ -32,6 +42,7 @@ function Field({index, property, properties, setProperties, changeCode}) {
     <div>
       <input
         type="string"
+        style={{marginRight: '2px'}}
         className="playground-constructable-object-property-input"
         defaultValue={property.keyName}
         onChange={() => changeCode()}
@@ -39,6 +50,7 @@ function Field({index, property, properties, setProperties, changeCode}) {
       :
       <input
         type="string"
+        style={{marginLeft: '2px'}}
         className="playground-constructable-object-property-input"
         defaultValue={property.value}
         onChange={() => changeCode()}
@@ -57,7 +69,7 @@ export default function ConstructableObject({config, changeCode}) {
   );
 
   return (
-    <div className="playground-constructable-object">
+    <div className="playgroud-service-modal-form">
       {properties.map((property, index) => (
         <Field
           key={index}

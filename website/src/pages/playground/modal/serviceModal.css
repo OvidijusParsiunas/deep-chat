@@ -1,16 +1,43 @@
+.playground-modal-fade-out {
+  opacity: 0;
+}
+
+.playground-modal-fade-in {
+  opacity: 1;
+}
+
+#playground-service-modal-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transition: 0.2s;
+}
+
+.playground-modal-fade-in-background {
+  background-color: rgba(128, 128, 128, 0.438);
+}
+
+.playground-modal-fade-out-background {
+  background-color: rgba(128, 128, 128, 0);
+}
+
 #playground-service-modal {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 500px;
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 7px;
   z-index: 2;
   text-align: left;
   background-color: white;
   padding: 20px;
   padding-top: 10px;
+  transition: 0.2s;
 }
 
 #playground-service-modal > div {
@@ -19,6 +46,12 @@
 
 #playground-service-modal-title {
   text-align: center;
+  margin-bottom: 10px;
+  font-size: 21px;
+  display: flex;
+  justify-content: center;
+  color: var(--start-header-color);
+  padding-bottom: 5px;
 }
 
 .playgroud-service-modal-form > div {

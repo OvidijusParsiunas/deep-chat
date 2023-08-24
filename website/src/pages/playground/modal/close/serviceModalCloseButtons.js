@@ -22,21 +22,30 @@ function validate(requiredFields) {
   return isValid;
 }
 
-function submit(chatComponent, oldConfig, constructConfig, setModalDisplayed, requiredFields) {
+function submit(chatComponent, oldConfig, constructConfig, close, requiredFields) {
   if (!validate(requiredFields)) return;
   const newConfig = constructConfig();
   updateExistingConfigWithNew(oldConfig, newConfig);
   chatComponent.current.update();
-  setModalDisplayed(false);
+  close(false);
 }
 
-export default function CloseButtons({chatComponent, config, constructConfig, setModalDisplayed, requiredFields}) {
+const CloseButtons = React.forwardRef(({chatComponent, config, constructConfig, close, requiredFields}, ref) => {
   return (
     <div id="playground-service-modal-close-buttons">
-      <button onClick={() => setModalDisplayed(false)}>Cancel</button>
-      <button onClick={() => submit(chatComponent, config, constructConfig, setModalDisplayed, requiredFields)}>
+      <button className="playground-service-modal-close-button" onClick={() => close(false)}>
+        Close
+      </button>
+      <button
+        ref={ref}
+        id="playground-service-modal-submit-button"
+        className="playground-service-modal-close-button"
+        onClick={() => submit(chatComponent, config, constructConfig, close, requiredFields)}
+      >
         Submit
       </button>
     </div>
   );
-}
+});
+
+export default CloseButtons;

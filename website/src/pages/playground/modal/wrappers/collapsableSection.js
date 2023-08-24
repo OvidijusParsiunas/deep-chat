@@ -41,9 +41,13 @@ export default function CollapsableSection({children, title, collapseStates, pro
 
   return (
     <div>
-      <div className="playground-service-modal-collapsible-title" onClick={toggle}>
-        <div className="playground-service-modal-collapsible-title-button">{isCollapsed ? '+' : '-'}</div>
-        <span className="playground-service-modal-collapsible-title-text">{title}</span>
+      <div className="playground-service-modal-collapsible-title">
+        <div className="playground-service-modal-collapsible-title-button" onClick={toggle}>
+          {isCollapsed ? '+' : '-'}
+        </div>
+        <span className="playground-service-modal-collapsible-title-text" onClick={toggle}>
+          {title}
+        </span>
       </div>
       <div
         // The reason why transition is not always enabled is because if the height is reduced - the parent maxHeight

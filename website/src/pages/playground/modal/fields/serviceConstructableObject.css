@@ -1,7 +1,40 @@
 .playground-constructable-object-property-input {
-  width: 42%;
+  width: 94.5px;
+  border: 1px solid grey;
+  border-radius: 4px;
+  height: 25px;
+  font-size: 15px;
+  padding-left: 6px;
+  padding-top: 1px;
+  color: #333333;
+  top: 1px;
+  position: relative;
 }
 
-.playground-constructable-object-add-property {
-  width: 48px;
+.playground-constructable-object-button {
+  background-color: rgb(252, 252, 252);
+  margin-bottom: 3px;
+  margin-right: 8px;
+  font-size: 13px;
+  position: relative;
+  border: 1px solid grey;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.playground-constructable-object-button:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+.playground-constructable-object-add-button {
+  width: 26px;
+  height: 24px;
+  top: -1px;
+}
+
+.playground-constructable-object-remove-button {
+  width: 24px;
+  height: 23px;
+  margin-left: 5px;
+  top: 0.5px;
 }
