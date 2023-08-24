@@ -4,10 +4,9 @@ import {StreamHandlers} from '../../services/serviceIO';
 import {MessageContent} from '../../types/messages';
 import {DemoResponse} from '../../types/demo';
 import {Result} from '../../types/result';
+import {Stream} from '../HTTP/stream';
 
 type Finish = () => void;
-
-type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
 
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
@@ -74,29 +73,7 @@ export class Demo {
   }
 
   public static requestStream(messages: Messages, sh: StreamHandlers) {
-    const simulationSH = sh as unknown as SimulationSH;
-    const responseText = Demo.getResponse(messages).text?.split(' ') || [];
-    const timeout = setTimeout(() => {
-      const textElement = messages.addNewStreamedMessage();
-      sh.onOpen();
-      Demo.populateMessages(textElement, responseText, messages, simulationSH);
-    }, 400);
-    simulationSH.abortStream.abort = () => clearTimeout(timeout);
-  }
-
-  // prettier-ignore
-  private static populateMessages(
-      textEl: HTMLElement, responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
-    const timeout = setTimeout(() => {
-      const word = responseText[wordIndex];
-      if (word) {
-        messages.updateStreamedMessage(`${word} `, textEl);
-        Demo.populateMessages(textEl, responseText, messages, sh, wordIndex + 1);
-      } else {
-        messages.finaliseStreamedMessage();
-        sh.onClose();
-      }
-    }, 70);
-    sh.abortStream.abort = () => clearTimeout(timeout);
+    const responseText = Demo.getResponse(messages)?.text;
+    Stream.simulate(messages, sh, responseText);
   }
 }

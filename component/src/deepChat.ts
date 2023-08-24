@@ -26,6 +26,7 @@ import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
 import {Request} from './types/request';
 import {Avatars} from './types/avatars';
+import {Stream} from './types/stream';
 import {Names} from './types/names';
 
 // TO-DO - ability to export files
@@ -38,7 +39,7 @@ export class DeepChat extends InternalHTML {
   request?: Request;
 
   @Property('boolean')
-  stream?: boolean;
+  stream?: Stream;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;

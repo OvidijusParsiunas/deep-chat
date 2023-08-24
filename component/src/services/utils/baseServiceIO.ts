@@ -6,6 +6,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {MessageContent} from '../../types/messages';
+import {Stream} from '../../utils/HTTP/stream';
 import {Request} from '../../types/request';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
@@ -30,7 +31,6 @@ export class BaseServiceIO implements ServiceIO {
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
   recordAudio?: MicrophoneFilesServiceConfig;
-  readonly _isStream: boolean = false;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
   private readonly _directServiceRequiresFiles: boolean;
@@ -44,7 +44,6 @@ export class BaseServiceIO implements ServiceIO {
     this.deepChat = deepChat;
     this.demo = demo;
     Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
-    this._isStream = !!deepChat.stream;
     this.totalMessagesMaxCharLength = deepChat?.requestBodyLimits?.totalMessagesMaxCharLength;
     this.maxMessages = deepChat?.requestBodyLimits?.maxMessages;
     SetFileTypes.set(deepChat, this, existingFileTypes);
@@ -91,8 +90,10 @@ export class BaseServiceIO implements ServiceIO {
       this.requestSettings.headers['Content-Type'] ??= 'application/json';
       tempHeaderSet = true;
     }
-    if (this._isStream) {
-      HTTPRequest.requestStream(this, body, messages);
+    // use actual stream if demo or when simulation prop not set
+    const {stream} = this.deepChat;
+    if (stream && (this.demo || typeof stream !== 'object' || !stream.simulation)) {
+      Stream.request(this, body, messages);
     } else {
       HTTPRequest.request(this, body, messages);
     }

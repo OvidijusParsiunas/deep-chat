@@ -7,6 +7,7 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {Stream} from '../../utils/HTTP/stream';
 import {OpenAIChat} from '../../types/openAI';
 import {Result} from '../../types/result';
 import {DeepChat} from '../../deepChat';
@@ -55,9 +56,9 @@ export class OpenAIChatIO extends DirectServiceIO {
   override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    if (this._isStream || body.stream) {
+    if (this.deepChat.stream || body.stream) {
       body.stream = true;
-      HTTPRequest.requestStream(this, body, messages);
+      Stream.request(this, body, messages);
     } else {
       HTTPRequest.request(this, body, messages);
     }

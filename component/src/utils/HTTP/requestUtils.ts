@@ -25,4 +25,16 @@ export class RequestUtils {
     }
     messages.addNewErrorMessage('service', err);
   }
+
+  public static processResponseByType(response: Response) {
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return response.json();
+    }
+    // when no contentType - the response is returned primarily for azure summarization to allow examination of headers
+    if (contentType?.includes('text/plain') || !contentType) {
+      return response;
+    }
+    return response.blob();
+  }
 }
