@@ -39,5 +39,5 @@ function recursivelySendMessagesToClient(ws: WebSocket) {
 // ------------------ START SERVER ------------------
 
 server.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at ws://localhost:${port}`);
 });

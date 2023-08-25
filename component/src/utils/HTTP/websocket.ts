@@ -4,6 +4,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
+import {Stream} from './stream';
 
 export class Websocket {
   public static setup(io: ServiceIO, websocketConfig: boolean | string | string[]) {
@@ -28,7 +29,11 @@ export class Websocket {
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
-        messages.addNewMessage(resultData, true, true);
+        if (io.deepChat.stream && resultData.text) {
+          Stream.simulate(messages, io.streamHandlers, resultData.text);
+        } else {
+          messages.addNewMessage(resultData, true, true);
+        }
       } catch (error) {
         RequestUtils.displayError(messages, error as object, 'Error in server message');
       }

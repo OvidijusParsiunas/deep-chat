@@ -30,7 +30,7 @@ import {DeepChat} from '../deepChat';
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
   public static create(deepChat: DeepChat): ServiceIO {
-    const {directConnection} = deepChat;
+    const {directConnection, request} = deepChat;
     if (directConnection) {
       if (directConnection.openAI) {
         if (directConnection.openAI.images) {
@@ -109,7 +109,7 @@ export class ServiceIOFactory {
         }
         return new StabilityAITextToImageIO(deepChat);
       }
-      if (directConnection.demo) {
+      if (directConnection.demo && !request?.url) {
         return new BaseServiceIO(deepChat, undefined, directConnection.demo);
       }
     }
