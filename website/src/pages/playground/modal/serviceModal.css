@@ -65,6 +65,8 @@
   /* set to 1 in order to automatically use the largest field - must be above 0 for Safari */
   width: 1px;
   padding-right: 10px;
+  color: #04345c;
+  cursor: pointer;
 }
 
 .playground-service-modal-input {

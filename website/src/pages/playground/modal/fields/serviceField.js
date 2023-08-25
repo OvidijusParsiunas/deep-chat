@@ -14,15 +14,22 @@ import React from 'react';
 export default function Service({activeService, changeService}) {
   return (
     <div>
-      <div id="playground-service-modal-service-label" className="playground-service-modal-input-label">
+      <a
+        href={SERVICE_TO_LINK[activeService]}
+        target="_blank"
+        id="playground-service-modal-service-label"
+        className="playground-service-modal-input-label"
+      >
         Service:
+      </a>
+      <div>
+        <PlaygroundSelect
+          options={Object.keys(services).map((service) => services[service])}
+          defaultOption={services[activeService]}
+          onChange={changeService}
+          isImages={true}
+        />
       </div>
-      <PlaygroundSelect
-        options={Object.keys(services).map((service) => services[service])}
-        defaultOption={services[activeService]}
-        onChange={changeService}
-        isImages={true}
-      />
     </div>
   );
 }
@@ -74,7 +81,7 @@ const services = {
       <img
         src={stabilityAILogo}
         className="playground-service-modal-service-icon"
-        style={{marginLeft: '3px', transform: 'scale(1.6)'}}
+        style={{marginLeft: '3px', transform: 'scale(1.6)', marginTop: '1px'}}
       />
     ),
   },
@@ -85,7 +92,7 @@ const services = {
       <img
         src={azureLogo}
         className="playground-service-modal-service-icon"
-        style={{marginTop: '-2px', transform: 'scale(1.6)'}}
+        style={{transform: 'scale(1.05)', width: '14px', marginLeft: '-0.2px'}} // need to set width here manually as for some reason this image causes select to move down
       />
     ),
   },
@@ -100,4 +107,13 @@ const services = {
       />
     ),
   },
+};
+
+const SERVICE_TO_LINK = {
+  demo: 'https://deepchat.dev/docs/directConnection/demo',
+  custom: 'https://deepchat.dev/docs/connect',
+  openAI: 'https://openai.com/blog/openai-api',
+  cohere: 'https://docs.cohere.com/docs',
+  huggingFace: 'https://learn.microsoft.com/en-gb/azure/ai-services',
+  azure: 'https://learn.microsoft.com/en-gb/azure/ai-services',
 };

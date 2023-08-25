@@ -10,7 +10,7 @@ function AddButton({properties, setProperties, changeCode}) {
   return (
     <button
       id="playground-constructable-object-add-button"
-      className="playground-constructable-object-button"
+      className="playground-constructable-object-button playground-constructable-object-add-button"
       onClick={() => add(properties, setProperties, changeCode)}
     >
       +
@@ -20,16 +20,19 @@ function AddButton({properties, setProperties, changeCode}) {
 
 function remove(index, properties, setProperties, changeCode) {
   properties.splice(index, 1);
-  setProperties([...properties]);
-  setTimeout(() => changeCode());
+  setTimeout(() => {
+    // for some reason setProperties needs to be in a timeout and does not refresh html unless we set it with [] first
+    setProperties([]);
+    setProperties([...properties]);
+    changeCode();
+  });
 }
 
-// WORK - does not remove the selected property
 function RemoveButton({index, properties, setProperties, changeCode}) {
   return (
     <button
       id="playground-constructable-object-remove-button"
-      className="playground-constructable-object-button"
+      className="playground-constructable-object-button playground-constructable-object-remove-button"
       onClick={() => remove(index, properties, setProperties, changeCode)}
     >
       -
@@ -38,22 +41,32 @@ function RemoveButton({index, properties, setProperties, changeCode}) {
 }
 
 function Field({index, property, properties, setProperties, changeCode}) {
+  const [keyName, setKeyName] = React.useState(property.keyName);
+  const [value, setValue] = React.useState(property.value);
   return (
     <div>
       <input
         type="string"
         style={{marginRight: '2px'}}
         className="playground-constructable-object-property-input"
-        defaultValue={property.keyName}
-        onChange={() => changeCode()}
+        value={keyName}
+        onChange={(event) => {
+          property.keyName = event.target.value;
+          setKeyName(property.keyName);
+          changeCode();
+        }}
       ></input>
       :
       <input
         type="string"
         style={{marginLeft: '2px'}}
         className="playground-constructable-object-property-input"
-        defaultValue={property.value}
-        onChange={() => changeCode()}
+        value={value}
+        onChange={(event) => {
+          property.value = event.target.value;
+          setValue(property.value);
+          changeCode();
+        }}
       ></input>
       <RemoveButton index={index} properties={properties} setProperties={setProperties} changeCode={changeCode} />
     </div>
@@ -69,6 +82,7 @@ export default function ConstructableObject({config, changeCode}) {
   );
 
   return (
+    // class is also used for extraction
     <div className="playgroud-service-modal-form">
       {properties.map((property, index) => (
         <Field

@@ -18,6 +18,7 @@ function SelectInput({parameter, configVal, changeCode}) {
   );
 }
 
+// TO-DO - use a range for numbers
 function Input({parameter, configVal, changeCode}) {
   if (Array.isArray(parameter)) {
     return <SelectInput parameter={parameter} configVal={configVal ?? ''} changeCode={changeCode} />;
@@ -40,9 +41,14 @@ function Input({parameter, configVal, changeCode}) {
 function ParameterField({name, isDisplayed, parameter, configVal, changeCode, pseudoNames}) {
   return (
     <div style={{display: isDisplayed ? 'table-row' : 'none'}}>
-      <div className="playground-service-modal-input-label playground-service-modal-optional-parameter-input-label">
+      <a
+        href={'test'}
+        target="_blank"
+        id="playground-service-modal-service-label"
+        className="playground-service-modal-input-label playground-service-modal-optional-parameter-input-label"
+      >
         {pseudoNames[name] || changeFirstLetter(name)}:{' '}
-      </div>
+      </a>
       <Input
         parameter={isDisplayed ? parameter : ''}
         configVal={isDisplayed ? configVal : ''}
@@ -52,7 +58,6 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
   );
 }
 
-// WORK - do not display this if there aren't any
 const OptionalParameters = React.forwardRef(({optionalParameters, config, changeCode, websocket, pseudoNames}, ref) => {
   return (
     <div ref={ref} className="playgroud-service-modal-form">

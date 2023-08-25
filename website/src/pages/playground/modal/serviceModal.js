@@ -3,7 +3,6 @@ import CollapsableSection from './wrappers/collapsableSection';
 import CloseButtons from './close/serviceModalCloseButtons';
 import Required from './fields/serviceRequiredField';
 import ServiceType from './fields/serviceTypeField';
-import ServiceInfo from './info/serviceInfo';
 import Service from './fields/serviceField';
 import Code from './code/serviceCode';
 import './serviceModal.css';
@@ -118,6 +117,7 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
           {activeService !== 'demo' && activeService !== 'custom' && (
             <ServiceType
               availableTypes={availableTypes}
+              activeService={activeService}
               activeType={activeType}
               changeType={changeType}
               pseudoNames={pseudoNames}
@@ -148,25 +148,26 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
             />
           )}
         </div>
-        <CollapsableSection
-          title={'Optional parameters'}
-          collapseStates={collapseStates}
-          prop={'optionalParams'}
-          initExpanded={typeof config[activeService]?.[activeType] === 'object'}
-        >
-          <OptionalParameters
-            ref={optionalParamsRef}
-            optionalParameters={optionalParameters}
-            config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
-            changeCode={changeCode}
-            websocket={websocket}
-            pseudoNames={pseudoNames}
-          />
-        </CollapsableSection>
+        {Object.keys(optionalParameters).length > 0 && (
+          <CollapsableSection
+            title={'Optional parameters'}
+            collapseStates={collapseStates}
+            prop={'optionalParams'}
+            initExpanded={typeof config[activeService]?.[activeType] === 'object'}
+          >
+            <OptionalParameters
+              ref={optionalParamsRef}
+              optionalParameters={optionalParameters}
+              config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
+              changeCode={changeCode}
+              websocket={websocket}
+              pseudoNames={pseudoNames}
+            />
+          </CollapsableSection>
+        )}
         <CollapsableSection title={'Code'} collapseStates={collapseStates} prop={'code'}>
           <Code code={code} />
         </CollapsableSection>
-        <ServiceInfo service={activeService} type={activeType} />
         <CloseButtons
           chatComponent={chatComponent}
           requiredFields={[requiredValueRef, requiredValue2Ref]}
@@ -207,7 +208,7 @@ function getCodeStr(config, isCustom) {
 }
 
 function constructConfig(optionalParamsEl, activeService, activeType, requiredProp) {
-  const optionalParamsValues = extractOptionalParameterValues(optionalParamsEl);
+  const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
   const optionalParams =
     activeService === 'custom'
       ? SERVICE_MODAL_FORM_CONFIG[activeService]
@@ -232,7 +233,7 @@ function extractOptionalParameterValues(optionalParamsEl) {
     if (value === 'false') return false;
     const attemptedParseNumber = parseNumber(value);
     if (attemptedParseNumber !== null) return attemptedParseNumber;
-    if (valueEl.classList.contains('playground-constructable-object')) {
+    if (valueEl.classList.contains('playgroud-service-modal-form')) {
       const object = Array.from(valueEl.children || []).reduce((currentObject, propertyElement) => {
         if (propertyElement?.tagName === 'DIV') {
           const keyName = propertyElement.children[0].value;
