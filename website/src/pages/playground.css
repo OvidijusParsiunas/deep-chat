@@ -24,15 +24,3 @@
   transition: 1s;
   margin-bottom: 20px;
 }
-
-.playground-component {
-  transition: 0.5s;
-}
-
-.playground-component-collapsed {
-  transform: scale(0);
-}
-
-.playground-component-expanded {
-  transform: scale(1);
-}

@@ -10,7 +10,9 @@ import React from 'react';
 
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
-export default function ServiceModal({config, setModalDisplayed, chatComponent, collapseStates}) {
+
+// editingChatRef is used for displaying modal
+export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef}) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [activeService, setActiveService] = React.useState('Service');
   const [availableTypes, setAvailableTypes] = React.useState([]);
@@ -27,7 +29,7 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
   const [keyPressCloseFunc, setKeyPressCloseFunc] = React.useState(null);
 
   React.useEffect(() => {
-    changeService(Object.keys(config || {demo: true})[0]);
+    changeService(Object.keys(chatComponent.config || {demo: true})[0]);
     setIsVisible(true);
     setKeyPressCloseFunc(() => closeOnKeyPress);
     window.addEventListener('keydown', closeOnKeyPress);
@@ -50,10 +52,10 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
     setAvailableTypes(availableTypes);
     setActiveType(availableTypes[0]);
     if (newService === 'custom') {
-      setRequiredValue(config[newService]?.url || '');
+      setRequiredValue(chatComponent.config[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
-      setRequiredValue(config[newService]?.key || '');
+      setRequiredValue(chatComponent.config[newService]?.key || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
     }
     setTimeout(() => {
@@ -98,7 +100,7 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
     window.removeEventListener('keydown', keyPressCloseFunc); // keyPressCloseFunc reference is right only in the context of a button click
     setIsVisible(false);
     setTimeout(() => {
-      setModalDisplayed(false);
+      setEditingChatRef(null);
     }, 200);
   };
 
@@ -153,12 +155,16 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
             title={'Optional parameters'}
             collapseStates={collapseStates}
             prop={'optionalParams'}
-            initExpanded={typeof config[activeService]?.[activeType] === 'object'}
+            initExpanded={typeof chatComponent.config[activeService]?.[activeType] === 'object'}
           >
             <OptionalParameters
               ref={optionalParamsRef}
               optionalParameters={optionalParameters}
-              config={activeService === 'custom' ? config[activeService] : config[activeService]?.[activeType]}
+              config={
+                activeService === 'custom'
+                  ? chatComponent.config[activeService]
+                  : chatComponent.config[activeService]?.[activeType]
+              }
               changeCode={changeCode}
               websocket={websocket}
               pseudoNames={pseudoNames}
@@ -171,7 +177,6 @@ export default function ServiceModal({config, setModalDisplayed, chatComponent, 
         <CloseButtons
           chatComponent={chatComponent}
           requiredFields={[requiredValueRef, requiredValue2Ref]}
-          config={config}
           constructConfig={() =>
             constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current.value)
           }

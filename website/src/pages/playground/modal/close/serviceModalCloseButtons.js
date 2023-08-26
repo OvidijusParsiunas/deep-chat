@@ -22,15 +22,15 @@ function validate(requiredFields) {
   return isValid;
 }
 
-function submit(chatComponent, oldConfig, constructConfig, close, requiredFields) {
+function submit(chatComponent, constructConfig, close, requiredFields) {
   if (!validate(requiredFields)) return;
   const newConfig = constructConfig();
-  updateExistingConfigWithNew(oldConfig, newConfig);
-  chatComponent.current.update();
+  updateExistingConfigWithNew(chatComponent.config, newConfig);
+  chatComponent.update();
   close(false);
 }
 
-const CloseButtons = React.forwardRef(({chatComponent, config, constructConfig, close, requiredFields}, ref) => {
+const CloseButtons = React.forwardRef(({chatComponent, constructConfig, close, requiredFields}, ref) => {
   return (
     <div id="playground-service-modal-close-buttons">
       <button className="playground-service-modal-close-button" onClick={() => close(false)}>
@@ -40,7 +40,7 @@ const CloseButtons = React.forwardRef(({chatComponent, config, constructConfig, 
         ref={ref}
         id="playground-service-modal-submit-button"
         className="playground-service-modal-close-button"
-        onClick={() => submit(chatComponent, config, constructConfig, close, requiredFields)}
+        onClick={() => submit(chatComponent, constructConfig, close, requiredFields)}
       >
         Submit
       </button>

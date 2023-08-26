@@ -1,4 +1,5 @@
-import DeepChatBrowser from '../components/table/deepChatBrowser';
+import AddButton from './playground/chat/manipulate/playgroundAddButton';
+import ChatComponent from './playground/chat/playgroundChatComponent';
 import ServiceModal from './playground/modal/serviceModal';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
@@ -21,121 +22,99 @@ import './playground.css';
 
 // Video to show off how it works
 
-const NewComponent = React.forwardRef(
-  ({setModalDisplayed, setActiveModalConfig, setActiveModalComponentRef, config}, ref) => {
-    React.useImperativeHandle(ref, () => ({
-      update() {
-        setCounter(counter + 1);
-      },
-    }));
-    const [expanded, setExpanded] = React.useState(false);
-    const [counter, setCounter] = React.useState(0);
-
-    React.useEffect(() => {
-      setTimeout(() => {
-        setExpanded(true);
-      }); // in a timeout as otherwise if add button is spammed the animations will not show
-    }, []);
-
-    return (
-      <div
-        key={counter}
-        className={`playground-component ${expanded ? 'playground-component-expanded' : 'playground-component-collapsed'}`}
-      >
-        {config.custom ? (
-          <DeepChatBrowser
-            request={config.custom}
-            containerStyle={{
-              borderRadius: '10px',
-              boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-              borderColor: '#ededed',
-              marginLeft: '10px',
-              marginRight: '10px',
-              width: '20vw',
-            }}
-          ></DeepChatBrowser>
-        ) : (
-          <DeepChatBrowser
-            directConnection={config}
-            containerStyle={{
-              borderRadius: '10px',
-              boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-              borderColor: '#ededed',
-              marginLeft: '10px',
-              marginRight: '10px',
-              width: '20vw',
-            }}
-          ></DeepChatBrowser>
-        )}
-
-        {/* The button is going to turn into the active logo */}
-        <button
-          onClick={() => {
-            setActiveModalConfig(config);
-            setActiveModalComponentRef(ref);
-            setModalDisplayed(true);
-          }}
-        >
-          Configure
-        </button>
-        <button
-          onClick={() => {
-            setCounter(counter + 1);
-          }}
-        >
-          Refresh
-        </button>
-        {/* Option description for chat at bottom or at top */}
-      </div>
-    );
-  }
-);
-
 const modalCollapseStates = {optionalParams: true, code: true};
+// state kept here as the chat components are not re-rendered when something happens in other components, hence
+// they do not have a reference to the latest state
+const chatComponents = [];
+const latestChatIndex = {index: 0};
 
 export default function Playground() {
-  const [chatCounter, setChatCounter] = React.useState(0);
-  const [modalDisplayed, setModalDisplayed] = React.useState(false);
-  const [configs, setConfigs] = React.useState([{}]);
-  const [activeModalConfig, setActiveModalConfig] = React.useState(null);
-  const [activeModalComponentRef, setActiveModalComponentRef] = React.useState(null);
-  const [chatComponents, setChatComponents] = React.useState([]);
-  const components = React.useRef(null);
+  // this is a workaround to force component list render
+  const [, refreshList] = React.useState(-1);
+  const [editingChatRef, setEditingChatRef] = React.useState(null);
+  const componentListRef = React.useRef(null);
 
   React.useEffect(() => {
     const ref = React.createRef();
-    const newChatCounter = chatCounter + 1;
     const newConfig = {
       openAI: {},
     };
-    setChatCounter(newChatCounter);
-    setConfigs([...configs, newConfig]);
-    setChatComponents([
-      ...chatComponents,
-      <NewComponent
-        key={newChatCounter}
-        setModalDisplayed={setModalDisplayed}
-        setActiveModalConfig={setActiveModalConfig}
-        setActiveModalComponentRef={setActiveModalComponentRef}
+    refreshList(0);
+    const component = (
+      <ChatComponent
+        key={0}
+        chatComponents={chatComponents}
+        setEditingChatRef={setEditingChatRef}
+        moveComponent={moveComponent}
+        removeComponent={removeComponent}
+        cloneComponent={cloneComponent}
         config={newConfig}
         ref={ref}
-      ></NewComponent>,
-    ]);
-    setActiveModalConfig(newConfig);
-    setActiveModalComponentRef(ref);
-    setModalDisplayed(true);
+      ></ChatComponent>
+    );
+    chatComponents.push(component);
+    setTimeout(() => {
+      setEditingChatRef(ref);
+    });
   }, []);
+
+  // logic placed here to not have to pass down state to child components
+  function addComponent(config) {
+    refreshList((latestChatIndex.index += 1));
+    const newComponent = (
+      <ChatComponent
+        key={latestChatIndex.index}
+        setEditingChatRef={setEditingChatRef}
+        moveComponent={moveComponent}
+        removeComponent={removeComponent}
+        cloneComponent={cloneComponent}
+        config={config || {demo: true}}
+        ref={React.createRef()}
+      ></ChatComponent>
+    );
+    chatComponents.push(newComponent);
+    setTimeout(() => {
+      componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
+    }, 5);
+  }
+
+  function removeComponent(componentToBeRemoved) {
+    componentToBeRemoved.current.fadeOut();
+    setTimeout(() => {
+      componentToBeRemoved.current.remove();
+      setTimeout(() => {
+        const index = chatComponents.findIndex((component) => component.ref === componentToBeRemoved);
+        chatComponents.splice(index, 1);
+        refreshList((latestChatIndex.index += 1));
+      }, 400);
+    }, 200);
+  }
+
+  function cloneComponent(componentToBeCloned) {
+    addComponent(componentToBeCloned.current.config);
+  }
+
+  function moveComponent(componentToBeMoved, isRightward) {
+    const initialIndex = chatComponents.findIndex((component) => component.ref === componentToBeMoved);
+    const secondIndex = isRightward ? initialIndex + 1 : initialIndex - 1;
+    const secondComponent = chatComponents[secondIndex];
+    if (!secondComponent) return;
+    const initialComponent = chatComponents[initialIndex];
+    chatComponents[initialIndex] = secondComponent;
+    chatComponents[secondIndex] = initialComponent;
+    componentToBeMoved.current.updateIndex(0);
+    refreshList((latestChatIndex.index += 1));
+  }
 
   return (
     <Layout title="Start" description="Deep Chat's official playground">
       <Head>
         <html className="plugin-pages plugin-id-default playground" />
       </Head>
-      {modalDisplayed && (
+      {editingChatRef && (
         <ServiceModal
-          setModalDisplayed={setModalDisplayed}
-          config={activeModalConfig}
-          chatComponent={activeModalComponentRef}
+          setEditingChatRef={setEditingChatRef}
+          chatComponent={editingChatRef.current}
           collapseStates={modalCollapseStates}
         />
       )}
@@ -146,7 +125,7 @@ export default function Playground() {
           </div>
           <div>
             <div
-              ref={components}
+              ref={componentListRef}
               style={{
                 display: 'flex',
                 width: '95vw',
@@ -156,30 +135,7 @@ export default function Playground() {
             >
               {chatComponents}
             </div>
-            <button
-              onClick={() => {
-                const newChatCounter = chatCounter + 1;
-                const newConfig = {demo: true};
-                setChatCounter(newChatCounter);
-                setConfigs([...configs, newConfig]);
-                setChatComponents([
-                  ...chatComponents,
-                  <NewComponent
-                    key={newChatCounter}
-                    setModalDisplayed={setModalDisplayed}
-                    setActiveModalConfig={setActiveModalConfig}
-                    setActiveModalComponentRef={setActiveModalComponentRef}
-                    config={newConfig}
-                    ref={React.createRef()}
-                  ></NewComponent>,
-                ]);
-                setTimeout(() => {
-                  components.current.scrollLeft = components.current.scrollWidth;
-                }, 5);
-              }}
-            >
-              Add
-            </button>
+            <AddButton addComponent={addComponent} />
           </div>
         </div>
       </div>
