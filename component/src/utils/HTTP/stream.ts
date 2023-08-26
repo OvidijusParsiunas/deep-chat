@@ -64,7 +64,6 @@ export class Stream {
     });
   }
 
-  // WORK - this can also be used for websockets
   public static simulate(messages: Messages, sh: StreamHandlers, text?: string) {
     const simulationSH = sh as unknown as SimulationSH;
     const responseText = text?.split(' ') || [];

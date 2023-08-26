@@ -29,7 +29,7 @@
               "kind": "field",
               "name": "stream",
               "type": {
-                "text": "boolean | undefined"
+                "text": "Stream | undefined"
               }
             },
             {
@@ -1071,6 +1071,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/types/stream.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/styles.ts",
       "declarations": [],
       "exports": []
@@ -1110,6 +1116,584 @@
       "path": "src/types/validateMessageBeforeSending.ts",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIAudioIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'AssemblyAI API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://www.assemblyai.com/app/account'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "introPanelMarkUp",
+              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.assemblyai.com/v2/upload'"
+            },
+            {
+              "kind": "field",
+              "name": "isTextInputDisabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Upload an audio file'"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['Authentication', 'Invalid']"
+            },
+            {
+              "kind": "method",
+              "name": "canFileSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "_",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "_",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "AssemblyAIResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "DirectServiceIO",
+            "module": "/src/services/utils/directServiceIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIAudioIO",
+          "declaration": {
+            "name": "AssemblyAIAudioIO",
+            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -1381,18 +1965,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -1912,18 +2484,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -2562,18 +3122,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -3165,18 +3713,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -3754,18 +4290,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -4298,18 +4822,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -4506,596 +5018,6 @@
           "declaration": {
             "name": "AzureTranslationIO",
             "module": "src/services/azure/azureTranslationIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIAudioIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'AssemblyAI API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://www.assemblyai.com/app/account'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "introPanelMarkUp",
-              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.assemblyai.com/v2/upload'"
-            },
-            {
-              "kind": "field",
-              "name": "isTextInputDisabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Upload an audio file'"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['Authentication', 'Invalid']"
-            },
-            {
-              "kind": "method",
-              "name": "canFileSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "_",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "_",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "AssemblyAIResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "DirectServiceIO",
-            "module": "/src/services/utils/directServiceIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIAudioIO",
-          "declaration": {
-            "name": "AssemblyAIAudioIO",
-            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
           }
         }
       ]
@@ -5482,18 +5404,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -5987,18 +5897,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -6622,18 +6520,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -7193,18 +7079,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -7845,18 +7719,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -8525,18 +8387,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -9171,18 +9021,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -9791,18 +9629,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -10438,18 +10264,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -11005,18 +10819,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -11685,18 +11487,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -12326,18 +12116,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -12938,18 +12716,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -13564,18 +13330,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -14183,18 +13937,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -14461,7 +14203,7 @@
             {
               "kind": "field",
               "name": "introPanelMarkUp",
-              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>OpenAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio\n      processing.\n    <p>Click <a href=\"https://platform.openai.com/docs/api-reference/audio/create\">here</a> for more info.</p>`"
+              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>OpenAI Whisper</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio\n      processing.\n    <p>Click <a href=\"https://platform.openai.com/docs/api-reference/audio/create\">here</a> for more info.</p>`"
             },
             {
               "kind": "field",
@@ -14881,18 +14623,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -15491,18 +15221,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -16080,18 +15798,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -16358,7 +16064,7 @@
             {
               "kind": "field",
               "name": "introPanelMarkUp",
-              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>OpenAI Images</b></div>\n    <p><b>Insert text</b> to generate an image.</p>\n    <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>\n    <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should\n      take place and text to specify the edit.</p>\n    <p>Click <a href=\"https://platform.openai.com/docs/guides/images/introduction\">here</a> for more info.</p>`"
+              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>OpenAI DALL·E</b></div>\n    <p><b>Insert text</b> to generate an image.</p>\n    <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>\n    <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should\n      take place and text to specify the edit.</p>\n    <p>Click <a href=\"https://platform.openai.com/docs/guides/images/introduction\">here</a> for more info.</p>`"
             },
             {
               "kind": "field",
@@ -16757,18 +16463,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -17246,18 +16940,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -17937,18 +17619,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -18586,18 +18256,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -19198,18 +18856,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -19819,18 +19465,6 @@
             },
             {
               "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "totalMessagesMaxCharLength",
               "type": {
                 "text": "number | undefined"
@@ -20100,14 +19734,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream"
             },
             {
               "kind": "field",
@@ -20575,18 +20201,6 @@
               "type": {
                 "text": "MicrophoneFilesServiceConfig | undefined"
               },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isStream",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "!!deepChat.stream",
               "inheritedFrom": {
                 "name": "BaseServiceIO",
                 "module": "src/services/utils/baseServiceIO.ts"
@@ -21870,36 +21484,6 @@
             },
             {
               "kind": "method",
-              "name": "requestStream",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "stringifyBody",
-                  "default": "true"
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "executePollRequest",
               "privacy": "public",
               "static": true,
@@ -22022,20 +21606,6 @@
                   }
                 }
               ]
-            },
-            {
-              "kind": "method",
-              "name": "processResponseByType",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "response",
-                  "type": {
-                    "text": "Response"
-                  }
-                }
-              ]
             }
           ]
         }
@@ -22119,6 +21689,20 @@
                   "default": "'Service error, please try again.'"
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "processResponseByType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "response",
+                  "type": {
+                    "text": "Response"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -22130,6 +21714,148 @@
           "declaration": {
             "name": "RequestUtils",
             "module": "src/utils/HTTP/requestUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/HTTP/stream.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Stream",
+          "members": [
+            {
+              "kind": "method",
+              "name": "request",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "stringifyBody",
+                  "default": "true"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "simulate",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "sh",
+                  "type": {
+                    "text": "StreamHandlers"
+                  }
+                },
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "populateMessages",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "textEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "responseText",
+                  "type": {
+                    "text": "string[]"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "sh",
+                  "type": {
+                    "text": "SimulationSH"
+                  }
+                },
+                {
+                  "name": "wordIndex",
+                  "default": "0"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "abort",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "timeout",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "onClose",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Stream",
+          "declaration": {
+            "name": "Stream",
+            "module": "src/utils/HTTP/stream.ts"
           }
         }
       ]
@@ -22557,42 +22283,6 @@
                   "type": {
                     "text": "StreamHandlers"
                   }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "populateMessages",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "textEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "responseText",
-                  "type": {
-                    "text": "string[]"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "sh",
-                  "type": {
-                    "text": "SimulationSH"
-                  }
-                },
-                {
-                  "name": "wordIndex",
-                  "default": "0"
                 }
               ]
             }
@@ -23307,6 +22997,106 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "poll",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "api_token",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "audio_url",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIUtils",
+          "declaration": {
+            "name": "AssemblyAIUtils",
+            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/services/azure/utils/azureUtils.ts",
       "declarations": [
         {
@@ -23552,106 +23342,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "poll",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "api_token",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "audio_url",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIUtils",
-          "declaration": {
-            "name": "AssemblyAIUtils",
-            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/services/cohere/utils/cohereUtils.ts",
       "declarations": [
         {
@@ -23806,6 +23496,86 @@
           "declaration": {
             "name": "HuggingFaceUtils",
             "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StabilityAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StabilityAIUtils",
+          "declaration": {
+            "name": "StabilityAIUtils",
+            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
           }
         }
       ]
@@ -23994,86 +23764,6 @@
           "declaration": {
             "name": "OpenAIUtils",
             "module": "src/services/openAI/utils/openAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/stabilityAI/utils/stabilityAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StabilityAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StabilityAIUtils",
-          "declaration": {
-            "name": "StabilityAIUtils",
-            "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
           }
         }
       ]
@@ -26318,431 +26008,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/focusUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FocusUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "focusEndOfInput",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "focusFromParentElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FocusUtils",
-          "declaration": {
-            "name": "FocusUtils",
-            "module": "src/views/chat/input/textInput/focusUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/inputLimit.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputLimit",
-          "members": [
-            {
-              "kind": "field",
-              "name": "PERMITTED_KEYS",
-              "privacy": "private",
-              "static": true,
-              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeyDown",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isKeyCombinationPermitted",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputLimit",
-          "declaration": {
-            "name": "InputLimit",
-            "module": "src/views/chat/input/textInput/inputLimit.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/textInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/textInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextInputEl",
-          "members": [
-            {
-              "kind": "field",
-              "name": "TEXT_INPUT_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'text-input'"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_config",
-              "type": {
-                "text": "TextInput"
-              },
-              "privacy": "private",
-              "default": "processedConfig"
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "processConfig",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preventAutomaticScrollUpOnNewLine",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLDivElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "clear",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addEventListeners",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "focusStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onBlur",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "focusStyle",
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextInputEl",
-          "declaration": {
-            "name": "TextInputEl",
-            "module": "src/views/chat/input/textInput/textInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
       "declarations": [
         {
@@ -27599,18 +26864,40 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
+      "path": "src/views/chat/input/textInput/focusUtils.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "RemarkableConfig",
+          "name": "FocusUtils",
           "members": [
             {
               "kind": "method",
-              "name": "createNew",
+              "name": "focusEndOfInput",
               "privacy": "public",
-              "static": true
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "focusFromParentElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -27618,10 +26905,384 @@
       "exports": [
         {
           "kind": "js",
-          "name": "RemarkableConfig",
+          "name": "FocusUtils",
           "declaration": {
-            "name": "RemarkableConfig",
-            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
+            "name": "FocusUtils",
+            "module": "src/views/chat/input/textInput/focusUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/inputLimit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputLimit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "PERMITTED_KEYS",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeyDown",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isKeyCombinationPermitted",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputLimit",
+          "declaration": {
+            "name": "InputLimit",
+            "module": "src/views/chat/input/textInput/inputLimit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/textInput/pasteUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/textInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextInputEl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "TEXT_INPUT_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'text-input'"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "TextInput"
+              },
+              "privacy": "private",
+              "default": "processedConfig"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "processConfig",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preventAutomaticScrollUpOnNewLine",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLDivElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addEventListeners",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "focusStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onBlur",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "focusStyle",
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextInputEl",
+          "declaration": {
+            "name": "TextInputEl",
+            "module": "src/views/chat/input/textInput/textInput.ts"
           }
         }
       ]
@@ -27695,6 +27356,35 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RemarkableConfig",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createNew",
+              "privacy": "public",
+              "static": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RemarkableConfig",
+          "declaration": {
+            "name": "RemarkableConfig",
+            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
           }
         }
       ]

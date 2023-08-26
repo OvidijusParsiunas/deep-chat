@@ -102,13 +102,14 @@ Configuration for the outgoing message HTTP requests.
 
 ### `stream` {#stream}
 
-- Type: `boolean`
+- Type: `boolean` | {`simulation?: boolean`}
 
+Used to stream text responses. <br />
 If the target service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type,
-you can stream the response text messages into the chat.
-Please see [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server.
+you can asynchronously stream the incoming events by setting this to _true_. See [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server. <br />
+Use the `simulation` object property to facilitate a <b>stream-like</b> experience for regular HTTP responses.
 
-#### Example
+#### Stream Service Example
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -134,6 +135,43 @@ Please see [`examples`](https://deepchat.dev/examples/servers) on how to set thi
 
 <deep-chat
   stream="true"
+  directConnection='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
+  introMessage="The response message bubble will be populated gradually with text events."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Regular Service Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    stream={{simulation: true}}
+    directConnection={{demo: true}}
+    introMessage={`The response message bubble will be populated gradually with text events.`}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat stream='{"simulation": true}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  stream='{"simulation": true}'
   directConnection='{"demo": true}'
   containerStyle='{"borderRadius": "8px"}'
   introMessage="The response message bubble will be populated gradually with text events."

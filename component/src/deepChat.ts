@@ -38,7 +38,7 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   request?: Request;
 
-  @Property('boolean')
+  @Property('object')
   stream?: Stream;
 
   @Property('object')
