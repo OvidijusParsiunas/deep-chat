@@ -1,1 +1,1 @@
-export type Stream = boolean | {simulation?: boolean};
+export type Stream = boolean | {simulation?: boolean | number};

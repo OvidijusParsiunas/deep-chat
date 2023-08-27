@@ -99,6 +99,10 @@ export class SubmitButton extends InputButton<Styles> {
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
     };
+    const {stream} = this._serviceIO.deepChat;
+    if (typeof stream === 'object' && typeof stream.simulation === 'number') {
+      this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
+    }
   }
 
   public submitFromInput() {

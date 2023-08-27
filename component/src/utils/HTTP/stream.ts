@@ -67,28 +67,25 @@ export class Stream {
   public static simulate(messages: Messages, sh: StreamHandlers, text?: string) {
     const simulationSH = sh as unknown as SimulationSH;
     const responseText = text?.split(' ') || [];
-    const timeout = setTimeout(() => {
-      const textElement = messages.addNewStreamedMessage();
-      sh.onOpen();
-      Stream.populateMessages(textElement, responseText, messages, simulationSH);
-    }, 400);
-    simulationSH.abortStream.abort = () => Stream.abort(timeout, messages, simulationSH.onClose);
+    const textElement = messages.addNewStreamedMessage();
+    sh.onOpen();
+    Stream.populateMessages(textElement, responseText, messages, simulationSH);
   }
 
   // prettier-ignore
   private static populateMessages(
       textEl: HTMLElement, responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
-    const timeout = setTimeout(() => {
-      const word = responseText[wordIndex];
-      if (word) {
-        messages.updateStreamedMessage(`${word} `, textEl);
+    const word = responseText[wordIndex];
+    if (word) {
+      messages.updateStreamedMessage(`${word} `, textEl);
+      const timeout = setTimeout(() => {
         Stream.populateMessages(textEl, responseText, messages, sh, wordIndex + 1);
-      } else {
-        messages.finaliseStreamedMessage();
-        sh.onClose();
-      }
-    }, 70);
-    sh.abortStream.abort = () => Stream.abort(timeout, messages, sh.onClose);
+      }, sh.simulationInterim || 70);
+      sh.abortStream.abort = () => Stream.abort(timeout, messages, sh.onClose);
+    } else {
+      messages.finaliseStreamedMessage();
+      sh.onClose();
+    }
   }
 
   private static abort(timeout: number, messages: Messages, onClose: () => void) {

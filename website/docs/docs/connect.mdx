@@ -102,12 +102,13 @@ Configuration for the outgoing message HTTP requests.
 
 ### `stream` {#stream}
 
-- Type: `boolean` | {`simulation?: boolean`}
+- Type: `boolean` | {`simulation?: boolean | number`}
 
-Used to stream text responses. <br />
-If the target service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type,
+Used to stream text responses from the target service. <br />
+If the service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type,
 you can asynchronously stream the incoming events by setting this to _true_. See [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server. <br />
-Use the `simulation` object property to facilitate a <b>stream-like</b> experience for regular HTTP responses.
+Alternatively, use the `simulation` object property to facilitate a <b>stream-like</b> experience for regular responses (incl. [websockets](HERE)). You can also control
+the millisecond interim of each word's appearance by assigning it a number with the default being _70_.
 
 #### Stream Service Example
 
@@ -151,7 +152,7 @@ Use the `simulation` object property to facilitate a <b>stream-like</b> experien
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    stream={{simulation: true}}
+    stream={{simulation: 150}}
     directConnection={{demo: true}}
     introMessage={`The response message bubble will be populated gradually with text events.`}
   ></DeepChatBrowser>
@@ -161,7 +162,7 @@ Use the `simulation` object property to facilitate a <b>stream-like</b> experien
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat stream='{"simulation": true}'></deep-chat>
+<deep-chat stream='{"simulation": 150}'></deep-chat>
 ```
 
 </TabItem>
@@ -171,7 +172,7 @@ Use the `simulation` object property to facilitate a <b>stream-like</b> experien
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  stream='{"simulation": true}'
+  stream='{"simulation": 150}'
   directConnection='{"demo": true}'
   containerStyle='{"borderRadius": "8px"}'
   introMessage="The response message bubble will be populated gradually with text events."

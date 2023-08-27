@@ -23,6 +23,7 @@ export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
   abortStream: AbortController;
+  simulationInterim?: number;
 }
 
 export interface KeyVerificationHandlers {

@@ -63,6 +63,7 @@ export class Demo {
       : {text: Demo.generateResponse(messages)};
   }
 
+  // timeout is used to simulate a timeout for a response to come back
   public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
     const message = Demo.getResponse(messages);
     setTimeout(() => {
@@ -72,8 +73,11 @@ export class Demo {
     }, 400);
   }
 
+  // timeout is used to simulate a timeout for a response to come back
   public static requestStream(messages: Messages, sh: StreamHandlers) {
-    const responseText = Demo.getResponse(messages)?.text;
-    Stream.simulate(messages, sh, responseText);
+    setTimeout(() => {
+      const responseText = Demo.getResponse(messages)?.text;
+      Stream.simulate(messages, sh, responseText);
+    }, 400);
   }
 }

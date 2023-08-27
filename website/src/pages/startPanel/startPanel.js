@@ -86,7 +86,7 @@ function ComponentPanel() {
             {text: 'What is Deep Chat?', role: 'user'},
             {text: 'A framework agnostic chat component.', role: 'ai'},
             {text: 'What exactly can it be used for?', role: 'user'},
-            {text: 'Add it to your website to connect with AI APIs.', role: 'ai'},
+            {text: 'Add it to your website to connect to AI APIs.', role: 'ai'},
           ]}
           containerStyle={{
             borderRadius: '10px',
