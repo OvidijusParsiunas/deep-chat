@@ -25,7 +25,7 @@ export class Websocket {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: CustomServiceResponse = JSON.parse(message.data);
-        const finalResult = io.deepChat.responseInterceptor?.(result) || result;
+        const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));

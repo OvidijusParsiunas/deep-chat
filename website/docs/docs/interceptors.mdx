@@ -39,12 +39,6 @@ chatElementRef.requestInterceptor = (request) => { console.log(request); return 
 
 <LineBreak></LineBreak>
 
-:::info
-Remember that by default - a request will contain all chat messages in order to allow the target service to interpret the chat context as needed.
-:::
-
-<LineBreak></LineBreak>
-
 #### `RequestDetails` {#RequestDetails}
 
 - Type: {`body: any`, `headers: {[key: string]: string}`}
@@ -64,7 +58,7 @@ The types for the `response` argument and the return object (that is REQUIRED) a
 - If you are connecting to a server via the [`request`](./connect/#request) property - the type will be [`Result`](./connect/#Result).
 - If you are connecting via the [`directConnection`](./directConnection) property - the type will be defined by the chosen service API.
 
-This property is not enabled for [`stream`](https://deepchat.dev/docs/connect#stream) responses.
+This property is not enabled for [`server-sent`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) [`stream`](https://deepchat.dev/docs/connect#stream) responses.
 
 #### Example
 
@@ -81,6 +75,14 @@ chatElementRef.responseInterceptor = (response) => { console.log(response); retu
 
 </TabItem>
 </Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+if the _response_ needs asynchronous processing, you can instead return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) object
+and resolve it as: `resolve(response)`. The _response_ variable should use the [`Result`](./connect/#Result) format. Do not use the `reject` function as errors should be
+referenced inside the _response_ variable e.g. `resolve({error: 'error'})`.
+:::
 
 <LineBreak></LineBreak>
 

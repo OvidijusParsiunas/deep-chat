@@ -26,7 +26,7 @@
     <img width="725" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/329d295d-0368-4447-ab54-b97b466b17ee" alt="Logo">
 </p>
 
-Stream here, stream there, stream anywhere! As well as providing native support for [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events); Deep Chat can now simulate a <b>stream-like</b> experience for regular text messages to help give that AI feel for your users without any extra effort. Check out the [`stream`](https://deepchat.dev/docs/connect#stream) property to find out more.
+Stream here, stream there, stream anywhere! As well as providing native support for [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) - Deep Chat can now simulate a <b>stream-like</b> experience for regular text messages to help give that AI feel for your users without any extra effort. Check out the [`stream`](https://deepchat.dev/docs/connect#stream) property to find out more.
 
 ### :computer: Getting started
 

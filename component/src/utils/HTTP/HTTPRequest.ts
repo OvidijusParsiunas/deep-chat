@@ -29,7 +29,7 @@ export class HTTPRequest {
       .then((response) => RequestUtils.processResponseByType(response))
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
-        const finalResult = io.deepChat.responseInterceptor?.(result) || result;
+        const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
@@ -57,7 +57,7 @@ export class HTTPRequest {
       .then((response) => response.json())
       .then(async (result: object) => {
         if (!io.extractPollResultData) return;
-        const resultData = await io.extractPollResultData(io.deepChat.responseInterceptor?.(result) || result);
+        const resultData = await io.extractPollResultData(await io.deepChat.responseInterceptor?.(result) || result);
         if (resultData.timeoutMS) {
           setTimeout(() => {
             HTTPRequest.executePollRequest(io, url, requestInit, messages);            

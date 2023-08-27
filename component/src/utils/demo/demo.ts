@@ -3,7 +3,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {StreamHandlers} from '../../services/serviceIO';
 import {MessageContent} from '../../types/messages';
 import {DemoResponse} from '../../types/demo';
-import {Result} from '../../types/result';
 import {Stream} from '../HTTP/stream';
 
 type Finish = () => void;
@@ -65,10 +64,15 @@ export class Demo {
 
   // timeout is used to simulate a timeout for a response to come back
   public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
-    const message = Demo.getResponse(messages);
-    setTimeout(() => {
-      const preprocessedMessage = responseInterceptor?.(message) || message;
-      messages.addNewMessage(preprocessedMessage as Result, true, true);
+    // encapsulating inside response object to maintain consistency for responseInterceptor
+    const response = {result: Demo.getResponse(messages)};
+    setTimeout(async () => {
+      const preprocessedResponse = (await responseInterceptor?.(response)) || response;
+      if (preprocessedResponse.error) {
+        messages.addNewErrorMessage('service', preprocessedResponse.error);
+      } else {
+        messages.addNewMessage(preprocessedResponse.result, true, true);
+      }
       onFinish();
     }, 400);
   }
