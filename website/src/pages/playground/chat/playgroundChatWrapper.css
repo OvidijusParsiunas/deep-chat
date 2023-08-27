@@ -1,0 +1,21 @@
+.playground-chat-wrapper {
+  height: 440px;
+}
+
+.playground-chat-wrapper-scale-shrunk {
+  transform: scale(0);
+  transition: 0.3s;
+}
+
+.playground-chat-wrapper-scale-expanded {
+  transform: scale(1);
+  transition: 0.5s;
+}
+
+.playground-chat-wrapper-width-shrunk {
+  width: 0px;
+}
+
+.playground-chat-wrapper-width-expanded {
+  width: 400px;
+}

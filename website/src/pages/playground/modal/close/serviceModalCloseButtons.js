@@ -27,13 +27,13 @@ function submit(chatComponent, constructConfig, close, requiredFields) {
   const newConfig = constructConfig();
   updateExistingConfigWithNew(chatComponent.config, newConfig);
   chatComponent.update();
-  close(false);
+  close();
 }
 
 const CloseButtons = React.forwardRef(({chatComponent, constructConfig, close, requiredFields}, ref) => {
   return (
     <div id="playground-service-modal-close-buttons">
-      <button className="playground-service-modal-close-button" onClick={() => close(false)}>
+      <button className="playground-service-modal-close-button" onClick={close}>
         Close
       </button>
       <button

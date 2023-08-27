@@ -26,31 +26,35 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const [code, setCode] = React.useState('');
   const [websocket, setWebsocket] = React.useState(false); // have to keep it in this state as it must not affect config
   const submitButtonRef = React.useRef(null); // using ref in order to keep submit logic inside another component
-  const [keyPressCloseFunc, setKeyPressCloseFunc] = React.useState(null);
 
   React.useEffect(() => {
-    changeService(Object.keys(chatComponent.config || {demo: true})[0]);
+    const initialService = Object.keys(chatComponent.config || {demo: true})[0];
+    const initialType =
+      initialService && typeof chatComponent.config?.[initialService] === 'object'
+        ? Object.keys(SERVICE_MODAL_FORM_CONFIG[initialService]).find((key) => chatComponent.config?.[initialService][key])
+        : undefined;
+    changeService(initialService, initialType);
     setIsVisible(true);
-    setKeyPressCloseFunc(() => closeOnKeyPress);
     window.addEventListener('keydown', closeOnKeyPress);
+    return () => {
+      window.removeEventListener('keydown', closeOnKeyPress);
+    };
   }, []);
 
   // closeOnKeyPress listener removed here as close() does not have the same context
   const closeOnKeyPress = (event) => {
     if (event.key === 'Escape') {
       close();
-      window.removeEventListener('keydown', closeOnKeyPress);
     } else if (event.key === 'Enter') {
       submitButtonRef.current.click();
-      window.removeEventListener('keydown', closeOnKeyPress);
     }
   };
 
-  const changeService = (newService) => {
+  const changeService = (newService, newActiveType) => {
     setActiveService(newService);
     const availableTypes = Object.keys(SERVICE_MODAL_FORM_CONFIG[newService]);
     setAvailableTypes(availableTypes);
-    setActiveType(availableTypes[0]);
+    setActiveType(newActiveType || availableTypes[0]);
     if (newService === 'custom') {
       setRequiredValue(chatComponent.config[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
@@ -97,7 +101,6 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   };
 
   const close = () => {
-    window.removeEventListener('keydown', keyPressCloseFunc); // keyPressCloseFunc reference is right only in the context of a button click
     setIsVisible(false);
     setTimeout(() => {
       setEditingChatRef(null);

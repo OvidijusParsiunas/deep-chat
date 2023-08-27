@@ -1,5 +1,6 @@
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
 import ChatComponent from './playground/chat/playgroundChatComponent';
+import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/modal/serviceModal';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
@@ -41,16 +42,17 @@ export default function Playground() {
     };
     refreshList(0);
     const component = (
-      <ChatComponent
+      <ChatWrapper
         key={0}
-        chatComponents={chatComponents}
         setEditingChatRef={setEditingChatRef}
         moveComponent={moveComponent}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
         config={newConfig}
         ref={ref}
-      ></ChatComponent>
+      >
+        <ChatComponent config={newConfig}></ChatComponent>
+      </ChatWrapper>
     );
     chatComponents.push(component);
     setTimeout(() => {
@@ -59,20 +61,24 @@ export default function Playground() {
   }, []);
 
   // logic placed here to not have to pass down state to child components
-  function addComponent(config) {
+  function addComponent(config, index) {
     refreshList((latestChatIndex.index += 1));
+    const isAtEnd = !index || chatComponents.length === index;
     const newComponent = (
-      <ChatComponent
+      <ChatWrapper
         key={latestChatIndex.index}
         setEditingChatRef={setEditingChatRef}
         moveComponent={moveComponent}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
         config={config || {demo: true}}
+        isAtEnd={isAtEnd}
         ref={React.createRef()}
-      ></ChatComponent>
+      >
+        <ChatComponent config={config || {demo: true}}></ChatComponent>
+      </ChatWrapper>
     );
-    chatComponents.push(newComponent);
+    chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
     setTimeout(() => {
       componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
     }, 5);
@@ -91,7 +97,8 @@ export default function Playground() {
   }
 
   function cloneComponent(componentToBeCloned) {
-    addComponent(componentToBeCloned.current.config);
+    const index = chatComponents.findIndex((component) => component.ref === componentToBeCloned);
+    addComponent(componentToBeCloned.current.config, index + 1);
   }
 
   function moveComponent(componentToBeMoved, isRightward) {
@@ -102,7 +109,6 @@ export default function Playground() {
     const initialComponent = chatComponents[initialIndex];
     chatComponents[initialIndex] = secondComponent;
     chatComponents[secondIndex] = initialComponent;
-    componentToBeMoved.current.updateIndex(0);
     refreshList((latestChatIndex.index += 1));
   }
 

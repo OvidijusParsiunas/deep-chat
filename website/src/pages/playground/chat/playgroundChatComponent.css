@@ -1,20 +1,4 @@
-.playground-component {
-  height: 440px;
-  transition: 0.5s;
-}
-
-.playground-component-collapsed {
-  transform: scale(0);
-}
-
-.playground-component-expanded {
-  transform: scale(1);
-}
-
-.playground-component-visible {
-  width: 400px;
-}
-
-.playground-component-removed {
-  width: 0px;
+.playground-chat-component {
+  display: flex;
+  justify-content: center;
 }
