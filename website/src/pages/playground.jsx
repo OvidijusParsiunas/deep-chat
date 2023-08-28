@@ -1,4 +1,5 @@
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
+import MoveChat from './playground/chat/manipulate/playgroundMoveChat';
 import ChatComponent from './playground/chat/playgroundChatComponent';
 import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/modal/serviceModal';
@@ -34,58 +35,47 @@ export default function Playground() {
   const [, refreshList] = React.useState(-1);
   const [editingChatRef, setEditingChatRef] = React.useState(null);
   const componentListRef = React.useRef(null);
+  const moveChatRef = React.useRef(null); // used to encapsulate drag logic (docusaurus files must be components)
 
   React.useEffect(() => {
-    const ref = React.createRef();
-    const newConfig = {
-      openAI: {},
-    };
-    refreshList(0);
-    const component = (
-      <ChatWrapper
-        key={0}
-        setEditingChatRef={setEditingChatRef}
-        moveComponent={moveComponent}
-        removeComponent={removeComponent}
-        cloneComponent={cloneComponent}
-        config={newConfig}
-        ref={ref}
-      >
-        <ChatComponent config={newConfig}></ChatComponent>
-      </ChatWrapper>
-    );
-    chatComponents.push(component);
     setTimeout(() => {
+      addComponent();
       setEditingChatRef(ref);
     });
+    return () => {
+      chatComponents.splice(0, chatComponents.length);
+      latestChatIndex.index = 0;
+    };
   }, []);
 
   // logic placed here to not have to pass down state to child components
   function addComponent(config, index) {
-    refreshList((latestChatIndex.index += 1));
     const isAtEnd = !index || chatComponents.length === index;
+    const newConfig = config || {demo: true};
     const newComponent = (
       <ChatWrapper
         key={latestChatIndex.index}
         setEditingChatRef={setEditingChatRef}
         moveComponent={moveComponent}
+        startDrag={moveChatRef.current.startDrag}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
-        config={config || {demo: true}}
+        config={newConfig}
         isAtEnd={isAtEnd}
         ref={React.createRef()}
       >
-        <ChatComponent config={config || {demo: true}}></ChatComponent>
+        <ChatComponent config={newConfig}></ChatComponent>
       </ChatWrapper>
     );
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
+    refreshList((latestChatIndex.index += 1));
     setTimeout(() => {
       componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
     }, 5);
   }
 
   function removeComponent(componentToBeRemoved) {
-    componentToBeRemoved.current.fadeOut();
+    componentToBeRemoved.current.scaleOut();
     setTimeout(() => {
       componentToBeRemoved.current.remove();
       setTimeout(() => {
@@ -117,6 +107,13 @@ export default function Playground() {
       <Head>
         <html className="plugin-pages plugin-id-default playground" />
       </Head>
+      <MoveChat
+        ref={moveChatRef}
+        chatComponents={chatComponents}
+        componentListRef={componentListRef}
+        refreshList={refreshList}
+        latestChatIndex={latestChatIndex}
+      ></MoveChat>
       {editingChatRef && (
         <ServiceModal
           setEditingChatRef={setEditingChatRef}
@@ -137,6 +134,7 @@ export default function Playground() {
                 width: '95vw',
                 overflow: 'auto',
                 scrollBehavior: 'smooth',
+                position: 'relative',
               }}
             >
               {chatComponents}

@@ -1,5 +1,7 @@
 .playground-chat-wrapper {
   height: 440px;
+  width: 400px;
+  min-width: 400px;
 }
 
 .playground-chat-wrapper-scale-shrunk {
@@ -18,4 +20,21 @@
 
 .playground-chat-wrapper-width-expanded {
   width: 400px;
+}
+
+.playground-chat-wrapper-no-animation {
+  transition: 0s;
+}
+
+.playground-chat-wrapper-dragging {
+  position: absolute;
+  z-index: 1;
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.playground-chat-wrapper-dragging > *,
+.playground-chat-wrapper-dragging > * > * {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
 }
