@@ -1,3 +1,4 @@
+import {CustomServiceResponse} from '../../types/customService';
 import {ResponseInterceptor} from '../../types/interceptors';
 import {Messages} from '../../views/chat/messages/messages';
 import {StreamHandlers} from '../../services/serviceIO';
@@ -56,16 +57,15 @@ export class Demo {
     return customResponse;
   }
 
-  private static getResponse(messages: Messages) {
+  private static getResponse(messages: Messages): CustomServiceResponse {
     return messages.customDemoResponse
       ? Demo.getCustomResponse(messages.customDemoResponse, messages.messages[messages.messages.length - 1])
-      : {text: Demo.generateResponse(messages)};
+      : {result: {text: Demo.generateResponse(messages)}};
   }
 
   // timeout is used to simulate a timeout for a response to come back
   public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
-    // encapsulating inside response object to maintain consistency for responseInterceptor
-    const response = {result: Demo.getResponse(messages)};
+    const response = Demo.getResponse(messages);
     setTimeout(async () => {
       const preprocessedResponse = (await responseInterceptor?.(response)) || response;
       if (preprocessedResponse.error) {
@@ -80,7 +80,7 @@ export class Demo {
   // timeout is used to simulate a timeout for a response to come back
   public static requestStream(messages: Messages, sh: StreamHandlers) {
     setTimeout(() => {
-      const responseText = Demo.getResponse(messages)?.text;
+      const responseText = Demo.getResponse(messages)?.result?.text;
       Stream.simulate(messages, sh, responseText);
     }, 400);
   }
