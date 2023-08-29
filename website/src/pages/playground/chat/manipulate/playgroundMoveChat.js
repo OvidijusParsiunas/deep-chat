@@ -11,110 +11,147 @@ const mouseMove = {
   initialMarginLeft: 0,
   newMarginLeft: 0,
   lastScrollLeft: 0,
+  concludeFunc: null,
+  concludeFuncTimeout: null,
+  earlyTrackMouseMovement: false, // used for case where dragging started before another chat drag is waiting to conclude
 };
 const WIDTH = 400;
 const HALF_WIDTH = 400 / 2;
 
 const Move = React.forwardRef(({chatComponents, componentListRef, refreshList, latestChatIndex}, ref) => {
   React.useImperativeHandle(ref, () => ({
-    startDrag(componentToBeMoved) {
-      clearTimeout(mouseMove.timeout);
-      const index = chatComponents.findIndex((component) => component.ref === componentToBeMoved);
-      mouseMove.chat = componentToBeMoved;
-      mouseMove.initialMarginLeft = index * WIDTH;
-      mouseMove.newMarginLeft = mouseMove.initialMarginLeft;
-      chatComponents[index].ref.current.startDragging(mouseMove.initialMarginLeft);
-      mouseMove.previousChat = chatComponents[index - 1]?.ref.current;
-      mouseMove.nextChat = chatComponents[index + 1]?.ref.current;
-      if (mouseMove.nextChat) {
-        mouseMove.nextChat.tempNoAnimation(mouseMove.nextChat.updateMarginLeft.bind(this, WIDTH), 0);
-      } else if (mouseMove.previousChat) {
-        mouseMove.previousChat.updateMarginRight(WIDTH);
+    startDrag(chatToBeMoved) {
+      // if waiting to conclude dragging another chat
+      if (mouseMove.concludeFunc) {
+        clearTimeout(mouseMove.concludeFuncTimeout);
+        mouseMove.concludeFunc();
+        prePrepareForDrag(chatToBeMoved);
+        setTimeout(() => prepareForDrag(chatToBeMoved), 300); // wait for other animation to finish
+      } else {
+        prePrepareForDrag(chatToBeMoved);
+        prepareForDrag(chatToBeMoved);
       }
-      mouseMove.newIndex = index;
-      mouseMove.initialIndex = index;
-      mouseMove.lastScrollLeft = componentListRef.current.scrollLeft;
     },
   }));
 
-  function moveChat(newMovement) {
-    if (mouseMove.chat) {
-      mouseMove.newMarginLeft += newMovement;
-      if (
-        (mouseMove.newIndex + 1 === chatComponents.length && mouseMove.newMarginLeft > mouseMove.initialMarginLeft) ||
-        mouseMove.newMarginLeft < 0
-      ) {
-        return;
-      }
-      mouseMove.chat.current.updateMarginLeft(mouseMove.newMarginLeft);
-      if (mouseMove.newMarginLeft > mouseMove.initialMarginLeft + HALF_WIDTH) {
-        mouseMove.nextChat?.updateMarginLeft(0);
-        mouseMove.previousChat = mouseMove.nextChat;
-        const indexIncrement =
-          mouseMove.newIndex >= mouseMove.initialIndex || mouseMove.newIndex + 1 === mouseMove.initialIndex ? 2 : 1;
-        mouseMove.nextChat = chatComponents[mouseMove.newIndex + indexIncrement]?.ref.current;
-        if (mouseMove.nextChat) {
-          mouseMove.nextChat.updateMarginLeft(WIDTH);
-        } else {
-          mouseMove.previousChat?.updateMarginRight(WIDTH);
-        }
-        mouseMove.initialMarginLeft += WIDTH;
-        mouseMove.newIndex += 1;
-      } else if (mouseMove.newMarginLeft > 0 && mouseMove.newMarginLeft < mouseMove.initialMarginLeft - 200) {
-        if (mouseMove.nextChat) {
-          mouseMove.nextChat?.updateMarginLeft(0);
-        } else {
-          mouseMove.previousChat?.updateMarginRight(0);
-        }
-        mouseMove.nextChat = mouseMove.previousChat;
-        const decrementIncrement =
-          mouseMove.newIndex <= mouseMove.initialIndex || mouseMove.newIndex - 1 === mouseMove.initialIndex ? 2 : 1;
-        mouseMove.previousChat = chatComponents[mouseMove.newIndex - decrementIncrement]?.ref.current;
-        mouseMove.nextChat.updateMarginLeft(WIDTH);
-        mouseMove.initialMarginLeft -= WIDTH;
-        mouseMove.newIndex -= 1;
-      }
+  // need for pre is used for case where dragging started before another chat drag is waiting to conclude
+  // hence it allows to move the new chat component to the new mouse position when ready
+  function prePrepareForDrag(chatToBeMoved) {
+    const index = chatComponents.findIndex((component) => component.ref === chatToBeMoved);
+    mouseMove.newIndex = index;
+    mouseMove.initialIndex = index;
+    mouseMove.initialMarginLeft = index * WIDTH;
+    mouseMove.newMarginLeft = mouseMove.initialMarginLeft;
+    mouseMove.earlyTrackMouseMovement = true;
+    mouseMove.lastScrollLeft = componentListRef.current.scrollLeft;
+  }
+
+  function prepareForDrag(chatToBeMoved) {
+    mouseMove.chat = chatToBeMoved;
+    mouseMove.chat.current.startDragging(mouseMove.initialMarginLeft);
+    mouseMove.previousChat = chatComponents[mouseMove.newIndex - 1]?.ref.current;
+    mouseMove.nextChat = chatComponents[mouseMove.newIndex + 1]?.ref.current;
+    if (mouseMove.nextChat) {
+      mouseMove.nextChat.tempNoAnimation(mouseMove.nextChat.updateMarginLeft.bind(this, WIDTH), 0);
+    } else if (mouseMove.previousChat) {
+      mouseMove.previousChat.updateMarginRight(WIDTH);
+    }
+  }
+
+  function isOutOfBounds() {
+    return (
+      (mouseMove.newIndex + 1 === chatComponents.length && mouseMove.newMarginLeft > mouseMove.initialMarginLeft) ||
+      mouseMove.newMarginLeft < 0
+    );
+  }
+
+  function toggleSideChatMargin(width) {
+    if (mouseMove.nextChat) {
+      mouseMove.nextChat.updateMarginLeft(width);
+    } else {
+      mouseMove.previousChat?.updateMarginRight(width);
+    }
+  }
+
+  function dragChat() {
+    if (isOutOfBounds()) return;
+    mouseMove.chat.current.updateMarginLeft(mouseMove.newMarginLeft);
+    // right
+    if (mouseMove.newMarginLeft > mouseMove.initialMarginLeft + HALF_WIDTH) {
+      mouseMove.nextChat?.updateMarginLeft(0);
+      mouseMove.previousChat = mouseMove.nextChat;
+      // initial index affects what the next index should be
+      const newNextIndex =
+        mouseMove.newIndex >= mouseMove.initialIndex || mouseMove.newIndex + 1 === mouseMove.initialIndex ? 2 : 1;
+      mouseMove.nextChat = chatComponents[mouseMove.newIndex + newNextIndex]?.ref.current;
+      toggleSideChatMargin(WIDTH);
+      mouseMove.initialMarginLeft += WIDTH;
+      mouseMove.newIndex += 1;
+      // left
+    } else if (mouseMove.newMarginLeft > 0 && mouseMove.newMarginLeft < mouseMove.initialMarginLeft - HALF_WIDTH) {
+      toggleSideChatMargin(0);
+      mouseMove.nextChat = mouseMove.previousChat;
+      // initial index affects what the previous index should be
+      const newPreviousIndex =
+        mouseMove.newIndex <= mouseMove.initialIndex || mouseMove.newIndex - 1 === mouseMove.initialIndex ? 2 : 1;
+      mouseMove.previousChat = chatComponents[mouseMove.newIndex - newPreviousIndex]?.ref.current;
+      mouseMove.nextChat.updateMarginLeft(WIDTH);
+      mouseMove.initialMarginLeft -= WIDTH;
+      mouseMove.newIndex -= 1;
+    }
+  }
+
+  function concludeDragging(chatRef) {
+    mouseMove.concludeFuncTimeout = null;
+    mouseMove.concludeFunc = null;
+    if (!chatRef.current) return; // will be null when changing page when dragging
+    chatRef.current.tempNoAnimation(chatRef.current.concludeDragging);
+    mouseMove.nextChat?.tempNoAnimation(mouseMove.nextChat?.updateMarginLeft.bind(this, 0));
+    mouseMove.previousChat?.tempNoAnimation(mouseMove.previousChat?.updateMarginRight.bind(this, 0));
+    if (mouseMove.newIndex !== mouseMove.initialIndex) {
+      const chatComponent = chatComponents[mouseMove.initialIndex];
+      chatComponents.splice(mouseMove.initialIndex, 1);
+      chatComponents.splice(mouseMove.newIndex, 0, chatComponent);
+      refreshList((latestChatIndex.index += 1));
     }
   }
 
   function stopDrag() {
     if (mouseMove.chat) {
-      const index = chatComponents.findIndex((component) => component.ref === mouseMove.chat);
       mouseMove.chat.current.releaseDragging(mouseMove.initialMarginLeft);
-      const element = mouseMove.chat;
+      mouseMove.concludeFunc = concludeDragging.bind(this, mouseMove.chat);
       mouseMove.chat = null;
-      mouseMove.timeout = setTimeout(() => {
-        if (!element.current) return; // will be null when changing page when dragging
-        element.current.tempNoAnimation(element.current.concludeDragging);
-        mouseMove.nextChat?.tempNoAnimation(mouseMove.nextChat?.updateMarginLeft.bind(this, 0));
-        mouseMove.previousChat?.tempNoAnimation(mouseMove.previousChat?.updateMarginRight.bind(this, 0));
-        if (mouseMove.newIndex !== index) {
-          const element1 = chatComponents[index];
-          chatComponents.splice(index, 1);
-          chatComponents.splice(mouseMove.newIndex - 1, 0, element1);
-          refreshList((latestChatIndex.index += 1));
-        }
-      }, 300);
+      mouseMove.earlyTrackMouseMovement = false;
+      mouseMove.concludeFuncTimeout = setTimeout(() => {
+        mouseMove.concludeFunc();
+        // needs to be at least animation length or else chat components will move after drag
+        // you can test this by having 3 chats and moving middle one to left or right
+      }, 500);
     }
   }
 
-  function mouseMoveFunc(event) {
-    moveChat(event.movementX);
+  function onMouseMove(event) {
+    if (mouseMove.earlyTrackMouseMovement) {
+      mouseMove.newMarginLeft += event.movementX;
+      if (mouseMove.chat) dragChat();
+    }
   }
 
-  function scroll(event) {
-    if (mouseMove.chat) {
-      moveChat(event.target.scrollLeft - mouseMove.lastScrollLeft);
+  // when dragging and there is overflow, the list can autoscroll with cursor - hence this is used to make sure chat is at correct position
+  function onListElementScroll(event) {
+    if (mouseMove.earlyTrackMouseMovement) {
+      mouseMove.newMarginLeft += event.target.scrollLeft - mouseMove.lastScrollLeft;
+      if (mouseMove.chat) dragChat();
       mouseMove.lastScrollLeft = event.target.scrollLeft;
     }
   }
 
   React.useEffect(() => {
-    window.addEventListener('mousemove', mouseMoveFunc);
+    window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', stopDrag);
-    componentListRef.current.addEventListener('scroll', scroll);
+    componentListRef.current.addEventListener('scroll', onListElementScroll);
     return () => {
-      window.removeEventListener('mousemove', mouseMoveFunc);
+      window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', stopDrag);
     };
   }, []);

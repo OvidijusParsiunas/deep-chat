@@ -75,7 +75,7 @@ export default function Playground() {
   }
 
   function removeComponent(componentToBeRemoved) {
-    componentToBeRemoved.current.scaleOut();
+    componentToBeRemoved.current.fadeOut();
     setTimeout(() => {
       componentToBeRemoved.current.remove();
       setTimeout(() => {
