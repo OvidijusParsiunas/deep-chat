@@ -1,6 +1,6 @@
 .playground-chat-wrapper {
+  float: left;
   height: 440px;
-  width: 400px;
   min-width: 400px;
 }
 

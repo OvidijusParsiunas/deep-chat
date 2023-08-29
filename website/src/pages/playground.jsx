@@ -34,6 +34,7 @@ export default function Playground() {
   // this is a workaround to force component list render
   const [, refreshList] = React.useState(-1);
   const [editingChatRef, setEditingChatRef] = React.useState(null);
+  const [gridView, setGridView] = React.useState(true);
   const componentListRef = React.useRef(null);
   const moveChatRef = React.useRef(null); // used to encapsulate drag logic (docusaurus files must be components)
 
@@ -69,8 +70,13 @@ export default function Playground() {
     );
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
     refreshList((latestChatIndex.index += 1));
+    // don't think scrolling is needed on startup
     setTimeout(() => {
-      componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
+      if (gridView) {
+        window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
+      } else {
+        componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
+      }
     }, 5);
   }
 
@@ -121,25 +127,24 @@ export default function Playground() {
           collapseStates={modalCollapseStates}
         />
       )}
-      <div id="start-page-content">
+      <div>
+        <div id="playground-title" className={'start-page-title-visible'}>
+          <b>Playground</b>
+        </div>
         <div>
-          <div id="playground-title" className={'start-page-title-visible'}>
-            <b>Playground</b>
-          </div>
-          <div>
+          <div id="playground-chat-list-parent">
             <div
               ref={componentListRef}
-              style={{
-                display: 'flex',
-                width: '95vw',
-                overflow: 'auto',
-                scrollBehavior: 'smooth',
-                position: 'relative',
-              }}
+              id="playground-chat-list"
+              // not using actual grid as dragging does not work due to drag using margins
+              style={{display: gridView ? '' : 'flex'}}
             >
               {chatComponents}
             </div>
+          </div>
+          <div id="playground-bottom-buttons">
             <AddButton addComponent={addComponent} />
+            <button onClick={() => setGridView((previousValue) => !previousValue)}>Layout</button>
           </div>
         </div>
       </div>

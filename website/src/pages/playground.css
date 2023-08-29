@@ -4,23 +4,30 @@
   overflow: hidden !important;
 }
 
-#start-page-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  overflow: hidden;
-  margin-left: -20px;
-  text-align: center;
-}
-
 #playground-title {
   font-size: 33px;
+  text-align: center;
   font-family: sans-serif;
   color: var(--start-header-color);
   transition: 1s;
+  margin-bottom: 20px;
+}
+
+#playground-chat-list-parent {
+  display: flex;
+  justify-content: center;
+}
+
+#playground-chat-list {
+  width: 1200px;
+  overflow: auto;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+#playground-bottom-buttons {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
