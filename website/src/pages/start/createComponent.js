@@ -29,12 +29,12 @@ function Logos(props) {
     >
       <div className="start-page-logo start-panel-logo">
         <a href="https://codesandbox.io/s/deep-chat-react-ythnyl?file=/src/App.tsx" target="_blank">
-          <img src={reactLogo} width="42" style={{paddingTop: 9}} />
+          <img src={reactLogo} width="41" style={{paddingTop: 10}} />
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
         <a href="https://codesandbox.io/s/deep-chat-vue3-7y99jq?file=/src/App.vue" target="_blank">
-          <img src={vueLogo} width="39" style={{paddingTop: 10}} />
+          <img src={vueLogo} width="38" style={{paddingTop: 10}} />
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
