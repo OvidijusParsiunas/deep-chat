@@ -15,3 +15,4 @@ Update React wrapper
 Update Installation
 Update CDN references - in doc Live VanillaJS Example sections and External Modules
 Update UI and NextJS examples for servers
+Update package in GitHub
