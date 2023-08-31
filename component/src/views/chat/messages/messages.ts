@@ -66,6 +66,7 @@ export class Messages {
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
+    // deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
@@ -340,6 +341,19 @@ export class Messages {
       })
     );
   }
+
+  // private clearMessages() {
+  //   const retainedElements: MessageElements[] = [];
+  //   this._messageElementRefs.forEach((message) => {
+  //     const bubbleClasslist = message.bubbleElement.classList;
+  //     if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains('streamed-message')) {
+  //       retainedElements.push(message);
+  //     } else {
+  //       message.outerContainer.remove();
+  //     }
+  //   });
+  //   this._messageElementRefs = retainedElements;
+  // }
 
   // this is mostly used for enabling highlight.js to highlight code if it is downloads later
   private refreshTextMessages() {

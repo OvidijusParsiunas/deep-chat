@@ -1119,584 +1119,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIAudioIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'AssemblyAI API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://www.assemblyai.com/app/account'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "introPanelMarkUp",
-              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.assemblyai.com/v2/upload'"
-            },
-            {
-              "kind": "field",
-              "name": "isTextInputDisabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Upload an audio file'"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['Authentication', 'Invalid']"
-            },
-            {
-              "kind": "method",
-              "name": "canFileSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "_",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "_",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Result>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "AssemblyAIResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "Demo | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "websocket",
-              "type": {
-                "text": "WebSocket | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "DirectServiceIO",
-            "module": "/src/services/utils/directServiceIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIAudioIO",
-          "declaration": {
-            "name": "AssemblyAIAudioIO",
-            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/services/cohere/cohereChatIO.ts",
       "declarations": [
         {
@@ -3955,6 +3377,584 @@
           "declaration": {
             "name": "CohereTextGenerationIO",
             "module": "src/services/cohere/cohereTextGenerationIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIAudioIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'AssemblyAI API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://www.assemblyai.com/app/account'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "introPanelMarkUp",
+              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.assemblyai.com/v2/upload'"
+            },
+            {
+              "kind": "field",
+              "name": "isTextInputDisabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Upload an audio file'"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['Authentication', 'Invalid']"
+            },
+            {
+              "kind": "method",
+              "name": "canFileSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "_",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "_",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Result>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "AssemblyAIResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "Demo | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "websocket",
+              "type": {
+                "text": "WebSocket | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "DirectServiceIO",
+            "module": "/src/services/utils/directServiceIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIAudioIO",
+          "declaration": {
+            "name": "AssemblyAIAudioIO",
+            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
           }
         }
       ]
@@ -20870,581 +20870,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/chatView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ChatView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ChatView",
-          "declaration": {
-            "name": "ChatView",
-            "module": "src/views/chat/chatView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/error/errorView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ErrorView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorView",
-          "declaration": {
-            "name": "ErrorView",
-            "module": "src/views/error/errorView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/insertKeyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InsertKeyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createCautionText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpLink",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createFailText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpTextContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFail",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addVerificationEvents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createStartButton",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "onInputFocus",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "FocusEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "placeholderText",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InsertKeyView",
-          "declaration": {
-            "name": "InsertKeyView",
-            "module": "src/views/insertKey/insertKeyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/visibilityIcon.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "VisibilityIcon",
-          "members": [
-            {
-              "kind": "field",
-              "name": "VISIBLE_ICON_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'visible-icon'"
-            },
-            {
-              "kind": "method",
-              "name": "changeVisibility",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "visibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "notVisibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIconElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "iconString",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "id",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "VisibilityIcon",
-          "declaration": {
-            "name": "VisibilityIcon",
-            "module": "src/views/insertKey/visibilityIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ValidateKeyPropertyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "startElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ValidateKeyPropertyView",
-          "declaration": {
-            "name": "ValidateKeyPropertyView",
-            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/HTTP/HTTPRequest.ts",
       "declarations": [
         {
@@ -22802,106 +22227,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "poll",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "api_token",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "audio_url",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIUtils",
-          "declaration": {
-            "name": "AssemblyAIUtils",
-            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/webComponent/googleFont.ts",
       "declarations": [
         {
@@ -23102,12 +22427,587 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
+      "path": "src/views/chat/chatView.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "HuggingFaceUtils",
+          "name": "ChatView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "panel",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "panel",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ChatView",
+          "declaration": {
+            "name": "ChatView",
+            "module": "src/views/chat/chatView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/error/errorView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ErrorView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorView",
+          "declaration": {
+            "name": "ErrorView",
+            "module": "src/views/error/errorView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/insertKeyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InsertKeyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createCautionText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpLink",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createFailText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpTextContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFail",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addVerificationEvents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createStartButton",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "onInputFocus",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "FocusEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "placeholderText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InsertKeyView",
+          "declaration": {
+            "name": "InsertKeyView",
+            "module": "src/views/insertKey/insertKeyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/visibilityIcon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VisibilityIcon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "VISIBLE_ICON_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'visible-icon'"
+            },
+            {
+              "kind": "method",
+              "name": "changeVisibility",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "visibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "notVisibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIconElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "iconString",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VisibilityIcon",
+          "declaration": {
+            "name": "VisibilityIcon",
+            "module": "src/views/insertKey/visibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ValidateKeyPropertyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "startElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ValidateKeyPropertyView",
+          "declaration": {
+            "name": "ValidateKeyPropertyView",
+            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereUtils",
           "members": [
             {
               "kind": "method",
@@ -23172,10 +23072,110 @@
       "exports": [
         {
           "kind": "js",
-          "name": "HuggingFaceUtils",
+          "name": "CohereUtils",
           "declaration": {
-            "name": "HuggingFaceUtils",
-            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
+            "name": "CohereUtils",
+            "module": "src/services/cohere/utils/cohereUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "poll",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "api_token",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "audio_url",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIUtils",
+          "declaration": {
+            "name": "AssemblyAIUtils",
+            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
           }
         }
       ]
@@ -23427,12 +23427,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "CohereUtils",
+          "name": "HuggingFaceUtils",
           "members": [
             {
               "kind": "method",
@@ -23497,10 +23497,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "CohereUtils",
+          "name": "HuggingFaceUtils",
           "declaration": {
-            "name": "CohereUtils",
-            "module": "src/services/cohere/utils/cohereUtils.ts"
+            "name": "HuggingFaceUtils",
+            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
           }
         }
       ]
@@ -23775,105 +23775,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/introPanel/introPanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "IntroPanel",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isDisplayed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanelWithChild",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "childElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInternalIntroPanel",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "introPanelMarkUp",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "IntroPanel",
-          "declaration": {
-            "name": "IntroPanel",
-            "module": "src/views/chat/introPanel/introPanel.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/input.ts",
       "declarations": [
         {
@@ -24033,6 +23934,105 @@
           "declaration": {
             "name": "Input",
             "module": "src/views/chat/input/input.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/introPanel/introPanel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "IntroPanel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isDisplayed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanelWithChild",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "childElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInternalIntroPanel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "introPanelMarkUp",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IntroPanel",
+          "declaration": {
+            "name": "IntroPanel",
+            "module": "src/views/chat/introPanel/introPanel.ts"
           }
         }
       ]
@@ -25573,6 +25573,1038 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonCSS.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonCSS",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetAllCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetActionCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementsCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementCssUpToState",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonCSS",
+          "declaration": {
+            "name": "ButtonCSS",
+            "module": "src/views/chat/input/buttons/buttonCSS.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CustomButtonInnerElements",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createTextElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "string",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isText",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createCustomElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "processElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "element",
+                  "optional": true,
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createSpecificStateElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ButtonInnerElements<T>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "states",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CustomButtonInnerElements",
+          "declaration": {
+            "name": "CustomButtonInnerElements",
+            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/inputButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement"
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}"
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position"
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText"
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputButton",
+          "declaration": {
+            "name": "InputButton",
+            "module": "src/views/chat/input/buttons/inputButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/focusUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FocusUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "focusEndOfInput",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "focusFromParentElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FocusUtils",
+          "declaration": {
+            "name": "FocusUtils",
+            "module": "src/views/chat/input/textInput/focusUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/inputLimit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputLimit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "PERMITTED_KEYS",
+              "privacy": "private",
+              "static": true,
+              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeyDown",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isKeyCombinationPermitted",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "characterLimit",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputLimit",
+          "declaration": {
+            "name": "InputLimit",
+            "module": "src/views/chat/input/textInput/inputLimit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/pasteUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasteUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "sanitizePastedTextContent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "ClipboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasteUtils",
+          "declaration": {
+            "name": "PasteUtils",
+            "module": "src/views/chat/input/textInput/pasteUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/textInput/textInput.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextInputEl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "TEXT_INPUT_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "'text-input'"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "TextInput"
+              },
+              "privacy": "private",
+              "default": "processedConfig"
+            },
+            {
+              "kind": "field",
+              "name": "submit",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "processConfig",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preventAutomaticScrollUpOnNewLine",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLDivElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInputElement",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeTextIfPlaceholder",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "toggleEditability",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "isEditable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addEventListeners",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "textInput",
+                  "optional": true,
+                  "type": {
+                    "text": "TextInput"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFocus",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "focusStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onBlur",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "focusStyle",
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContainerElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TextInputEl",
+          "declaration": {
+            "name": "TextInputEl",
+            "module": "src/views/chat/input/textInput/textInput.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsTypes",
+              "type": {
+                "text": "FileAttachmentsType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addType",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachmentsT"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAttachmentContainer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleContainerDisplay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "display",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllFileData"
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholders"
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "fileAttachmentTypes",
+                  "type": {
+                    "text": "FileAttachmentsType[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToAnyType",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAllFiles"
+            },
+            {
+              "kind": "method",
+              "name": "getNumberOfTypes"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachments",
+          "declaration": {
+            "name": "FileAttachments",
+            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NewFileName",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getFileName",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "prefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "extension",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NewFileName",
+          "declaration": {
+            "name": "NewFileName",
+            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/dropup/dropup.ts",
       "declarations": [
         {
@@ -26256,1038 +27288,6 @@
           "declaration": {
             "name": "DropupMenu",
             "module": "src/views/chat/input/dropup/dropupMenu.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/buttonCSS.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ButtonCSS",
-          "members": [
-            {
-              "kind": "method",
-              "name": "unsetAllCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetActionCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementsCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementCssUpToState",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ButtonCSS",
-          "declaration": {
-            "name": "ButtonCSS",
-            "module": "src/views/chat/input/buttons/buttonCSS.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CustomButtonInnerElements",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createTextElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "string",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isText",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createCustomElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "processElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "element",
-                  "optional": true,
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createSpecificStateElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ButtonInnerElements<T>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "states",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CustomButtonInnerElements",
-          "declaration": {
-            "name": "CustomButtonInnerElements",
-            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/inputButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement"
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}"
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position"
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText"
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputButton",
-          "declaration": {
-            "name": "InputButton",
-            "module": "src/views/chat/input/buttons/inputButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsTypes",
-              "type": {
-                "text": "FileAttachmentsType[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addType",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachmentsT"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAttachmentContainer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "toggleContainerDisplay",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "display",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getAllFileData"
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholders"
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToType",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "fileAttachmentTypes",
-                  "type": {
-                    "text": "FileAttachmentsType[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToAnyType",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAllFiles"
-            },
-            {
-              "kind": "method",
-              "name": "getNumberOfTypes"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachments",
-          "declaration": {
-            "name": "FileAttachments",
-            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "NewFileName",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "prefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "extension",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "NewFileName",
-          "declaration": {
-            "name": "NewFileName",
-            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/focusUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FocusUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "focusEndOfInput",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "focusFromParentElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FocusUtils",
-          "declaration": {
-            "name": "FocusUtils",
-            "module": "src/views/chat/input/textInput/focusUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/inputLimit.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputLimit",
-          "members": [
-            {
-              "kind": "field",
-              "name": "PERMITTED_KEYS",
-              "privacy": "private",
-              "static": true,
-              "default": "new Set<string>([\n    KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,\n    KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER\n  ])"
-            },
-            {
-              "kind": "method",
-              "name": "add",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeyDown",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isKeyCombinationPermitted",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "characterLimit",
-                  "type": {
-                    "text": "number"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputLimit",
-          "declaration": {
-            "name": "InputLimit",
-            "module": "src/views/chat/input/textInput/inputLimit.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/pasteUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PasteUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "sanitizePastedTextContent",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "ClipboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "PasteUtils",
-          "declaration": {
-            "name": "PasteUtils",
-            "module": "src/views/chat/input/textInput/pasteUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/textInput/textInput.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "TextInputEl",
-          "members": [
-            {
-              "kind": "field",
-              "name": "TEXT_INPUT_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "'text-input'"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_config",
-              "type": {
-                "text": "TextInput"
-              },
-              "privacy": "private",
-              "default": "processedConfig"
-            },
-            {
-              "kind": "field",
-              "name": "submit",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "processConfig",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preventAutomaticScrollUpOnNewLine",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLDivElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "clear",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInputElement",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeTextIfPlaceholder",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "toggleEditability",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "isEditable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addEventListeners",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "textInput",
-                  "optional": true,
-                  "type": {
-                    "text": "TextInput"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFocus",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "focusStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onBlur",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "focusStyle",
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContainerElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TextInputEl",
-          "declaration": {
-            "name": "TextInputEl",
-            "module": "src/views/chat/input/textInput/textInput.ts"
           }
         }
       ]
@@ -28027,440 +28027,6 @@
           "declaration": {
             "name": "InputButtonStyleAdjustments",
             "module": "src/views/chat/input/buttons/styleAdjustments/inputButtonStyleAdjustments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/submit/submitButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SubmitButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_isRequestInProgress",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_isLoadingActive",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_serviceIO",
-              "type": {
-                "text": "ServiceIO"
-              },
-              "privacy": "private",
-              "default": "serviceIO"
-            },
-            {
-              "kind": "field",
-              "name": "_messages",
-              "type": {
-                "text": "Messages"
-              },
-              "privacy": "private",
-              "default": "messages"
-            },
-            {
-              "kind": "field",
-              "name": "_inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "inputElementRef"
-            },
-            {
-              "kind": "field",
-              "name": "_abortStream",
-              "type": {
-                "text": "AbortController"
-              },
-              "privacy": "private",
-              "default": "new AbortController()"
-            },
-            {
-              "kind": "field",
-              "name": "_innerElements",
-              "type": {
-                "text": "DefinedButtonInnerElements<Styles>"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachments",
-              "type": {
-                "text": "FileAttachments"
-              },
-              "privacy": "private",
-              "default": "fileAttachments"
-            },
-            {
-              "kind": "field",
-              "name": "_isSVGLoadingIconOverriden",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createInnerElements",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createButtonContainerElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createSubmitIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createLoadingIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createStopIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "attemptOverwriteLoadingStyle",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "assignHandlers",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "submitFromInput",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "submit",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "programmatic",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "userText",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "stopStream",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToStopIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToLoadingIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToSubmitIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "InputButton",
-            "module": "/src/views/chat/input/buttons/inputButton"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SubmitButton",
-          "declaration": {
-            "name": "SubmitButton",
-            "module": "src/views/chat/input/buttons/submit/submitButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SubmitButtonStateStyle",
-          "members": [
-            {
-              "kind": "method",
-              "name": "resetSubmit",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "submitButton",
-                  "type": {
-                    "text": "SubmitButton"
-                  }
-                },
-                {
-                  "name": "wasLoading",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SubmitButtonStateStyle",
-          "declaration": {
-            "name": "SubmitButtonStateStyle",
-            "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
           }
         }
       ]
@@ -29706,6 +29272,440 @@
           "declaration": {
             "name": "SpeechToText",
             "module": "src/views/chat/input/buttons/microphone/speechToText.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/submit/submitButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SubmitButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_isRequestInProgress",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_isLoadingActive",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_serviceIO",
+              "type": {
+                "text": "ServiceIO"
+              },
+              "privacy": "private",
+              "default": "serviceIO"
+            },
+            {
+              "kind": "field",
+              "name": "_messages",
+              "type": {
+                "text": "Messages"
+              },
+              "privacy": "private",
+              "default": "messages"
+            },
+            {
+              "kind": "field",
+              "name": "_inputElementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "inputElementRef"
+            },
+            {
+              "kind": "field",
+              "name": "_abortStream",
+              "type": {
+                "text": "AbortController"
+              },
+              "privacy": "private",
+              "default": "new AbortController()"
+            },
+            {
+              "kind": "field",
+              "name": "_innerElements",
+              "type": {
+                "text": "DefinedButtonInnerElements<Styles>"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_fileAttachments",
+              "type": {
+                "text": "FileAttachments"
+              },
+              "privacy": "private",
+              "default": "fileAttachments"
+            },
+            {
+              "kind": "field",
+              "name": "_isSVGLoadingIconOverriden",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createInnerElements",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createButtonContainerElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createSubmitIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createLoadingIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createStopIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "attemptOverwriteLoadingStyle",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "assignHandlers",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "submitFromInput",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "submit",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "programmatic",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "userText",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "stopStream",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToStopIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToLoadingIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToSubmitIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "InputButton",
+            "module": "/src/views/chat/input/buttons/inputButton"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SubmitButton",
+          "declaration": {
+            "name": "SubmitButton",
+            "module": "src/views/chat/input/buttons/submit/submitButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SubmitButtonStateStyle",
+          "members": [
+            {
+              "kind": "method",
+              "name": "resetSubmit",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "submitButton",
+                  "type": {
+                    "text": "SubmitButton"
+                  }
+                },
+                {
+                  "name": "wasLoading",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SubmitButtonStateStyle",
+          "declaration": {
+            "name": "SubmitButtonStateStyle",
+            "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
           }
         }
       ]

@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "Customizable chat component for AI APIs",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
@@ -9,9 +9,12 @@
     "start": "vite",
     "build": "vite build",
     "build:watch": "vite build --watch",
-    "build:bundle": "npm run lint && tsc && vite build && npm run analyze && rollup -c",
+    "build:bundle": "npm run lint && tsc && vite build && npm run analyze && rollup -c && npm run build:babel",
     "analyze": "cem analyze --globs \"src/**/*.ts\"",
-    "lint": "eslint --parser-options '{'project':'./tsconfig.json'}' 'src/**/*.ts'"
+    "lint": "eslint --parser-options '{'project':'./tsconfig.json'}' 'src/**/*.ts'",
+    "build:babel": "npm run build:temp && npm run transpile && rimraf dist/deepChatTemp.js",
+    "build:temp": "cp dist/deepChat.js dist/deepChatTemp.js && rimraf dist/deepChat.js",
+    "transpile": "babel dist/deepChatTemp.js --out-file dist/deepChat.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +43,9 @@
     "component"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.22.10",
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.14",
     "@custom-elements-manifest/analyzer": "^0.6.8",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^4.0.0",
@@ -47,14 +53,15 @@
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.15.0",
+    "highlight.js": "^11.7.0",
     "prettier": "^2.8.4",
+    "rimraf": "^5.0.1",
     "rollup": "^2.79.1",
     "rollup-plugin-summary": "^1.4.3",
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.9.5",
     "vite": "^4.1.4",
-    "vite-plugin-dts": "^2.0.2",
-    "highlight.js": "^11.7.0"
+    "vite-plugin-dts": "^2.0.2"
   },
   "customElements": "custom-elements.json",
   "files": [
