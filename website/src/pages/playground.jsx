@@ -5,6 +5,7 @@ import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/modal/serviceModal';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
+import Sortable from 'sortablejs';
 import React from 'react';
 import './playground.css';
 
@@ -29,6 +30,8 @@ const modalCollapseStates = {optionalParams: true, code: true};
 // they do not have a reference to the latest state
 const chatComponents = [];
 const latestChatIndex = {index: 0};
+// because components are not refreshed, they will not have access to the latest isGridView, hence this is an alternative for them
+const view = {isGrid: true};
 
 export default function Playground() {
   // this is a workaround to force component list render
@@ -42,6 +45,7 @@ export default function Playground() {
     setTimeout(() => {
       addComponent();
       setEditingChatRef(ref);
+      Sortable.create(componentListRef.current, {animation: 450, handle: '#playground-chat-drag-handle'});
     });
     return () => {
       chatComponents.splice(0, chatComponents.length);
@@ -51,14 +55,18 @@ export default function Playground() {
 
   // logic placed here to not have to pass down state to child components
   function addComponent(config, index) {
-    const isAtEnd = !index || chatComponents.length === index;
-    const newConfig = config || {demo: true};
+    let isAtEnd = !index || chatComponents.length === index;
+    if (!isAtEnd && view.isGrid) {
+      isAtEnd =
+        !chatComponents[index + 1] ||
+        chatComponents[index + 1].ref.current.getOffsetTop() !== chatComponents[index]?.ref.current.getOffsetTop();
+    }
+    const newConfig = {openAI: {key: 'asdsadasd'}} || {demo: true};
     const newComponent = (
       <ChatWrapper
         key={latestChatIndex.index}
         setEditingChatRef={setEditingChatRef}
         moveComponent={moveComponent}
-        startDrag={moveChatRef.current.startDrag}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
         config={newConfig}
@@ -72,7 +80,7 @@ export default function Playground() {
     refreshList((latestChatIndex.index += 1));
     // don't think scrolling is needed on startup
     setTimeout(() => {
-      if (isGridView) {
+      if (view.isGrid && !config) {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       } else {
         componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
@@ -81,7 +89,7 @@ export default function Playground() {
   }
 
   function removeComponent(componentToBeRemoved) {
-    componentToBeRemoved.current.fadeOut();
+    componentToBeRemoved.current.scaleOut();
     setTimeout(() => {
       componentToBeRemoved.current.remove();
       setTimeout(() => {
@@ -89,7 +97,7 @@ export default function Playground() {
         chatComponents.splice(index, 1);
         refreshList((latestChatIndex.index += 1));
       }, 400);
-    }, 200);
+    }, 300);
   }
 
   function cloneComponent(componentToBeCloned) {
@@ -108,6 +116,11 @@ export default function Playground() {
     refreshList((latestChatIndex.index += 1));
   }
 
+  function toggleView() {
+    setIsGridView((previousValue) => !previousValue);
+    view.isGrid = !view.isGrid;
+  }
+
   return (
     <Layout title="Start" description="Deep Chat's official playground">
       <Head>
@@ -119,7 +132,7 @@ export default function Playground() {
         componentListRef={componentListRef}
         refreshList={refreshList}
         latestChatIndex={latestChatIndex}
-        isGridView={isGridView}
+        isGridView={view.isGrid}
       ></MoveChat>
       {editingChatRef && (
         <ServiceModal
@@ -145,7 +158,7 @@ export default function Playground() {
           </div>
           <div id="playground-bottom-buttons">
             <AddButton addComponent={addComponent} />
-            <button onClick={() => setIsGridView((previousValue) => !previousValue)}>Layout</button>
+            <button onClick={toggleView}>Layout</button>
           </div>
         </div>
       </div>

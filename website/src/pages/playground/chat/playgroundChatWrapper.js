@@ -3,16 +3,19 @@ import React from 'react';
 
 // The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children
 const ChatWrapper = React.forwardRef(
-  ({children, config, removeComponent, cloneComponent, setEditingChatRef, moveComponent, startDrag, isAtEnd}, ref) => {
+  ({children, config, removeComponent, cloneComponent, setEditingChatRef, moveComponent, isAtEnd}, ref) => {
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
       },
       scaleOut() {
-        setScaleExpanded(false);
+        setScaleExpanded(false); // shrunk already has animation
       },
       remove() {
         setWidthExpanded(false);
+      },
+      getOffsetTop() {
+        return elementRef.current.offsetTop;
       },
       startDragging(marginLeft, marginTop) {
         setPreventAnimation(true);
@@ -49,10 +52,12 @@ const ChatWrapper = React.forwardRef(
       config,
     }));
 
+    const elementRef = React.createRef(null);
     const [counter, setCounter] = React.useState(0); // this is used to re-render the component
     const [scaleExpanded, setScaleExpanded] = React.useState(false);
     const [widthExpanded, setWidthExpanded] = React.useState(isAtEnd);
     const [preventAnimation, setPreventAnimation] = React.useState(false);
+    const [allowAnimation, setAllowAnimation] = React.useState(false);
     const [dragging, setDragging] = React.useState(false);
     const [marginLeft, setMarginLeft] = React.useState(0);
     const [marginRight, setMarginRight] = React.useState(0);
@@ -62,12 +67,19 @@ const ChatWrapper = React.forwardRef(
       let isMounted = true;
       setTimeout(() => {
         if (!isMounted) return;
+        setAllowAnimation(true);
         if (isAtEnd) {
           setScaleExpanded(true);
+          setTimeout(() => {
+            setAllowAnimation(false);
+          }, 500);
         } else {
           setWidthExpanded(true);
           setTimeout(() => {
             setScaleExpanded(true);
+            setTimeout(() => {
+              setAllowAnimation(false);
+            }, 500);
           }, 200);
         }
       }); // in a timeout as otherwise if add button is spammed the animations will not show
@@ -79,13 +91,11 @@ const ChatWrapper = React.forwardRef(
     return (
       <div
         key={counter}
+        ref={elementRef}
         style={{marginLeft, marginRight, marginTop}}
-        className={`playground-chat-wrapper ${
+        className={`playground-chat-wrapper ${allowAnimation ? 'playground-chat-animated' : ''} ${
           scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
-        } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'}
-        ${preventAnimation ? 'playground-chat-wrapper-no-animation' : ''} ${
-          dragging ? 'playground-chat-wrapper-dragging' : ''
-        }`}
+        } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'}`}
       >
         {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}
         {children}
@@ -96,9 +106,7 @@ const ChatWrapper = React.forwardRef(
           <button onClick={() => cloneComponent(ref)}>Clone</button>
           <button onClick={() => moveComponent(ref, false)}>Move Left</button>
           <button onClick={() => moveComponent(ref, true)}>Move Right</button>
-          <button style={{cursor: dragging ? 'grabbing' : 'grab'}} onMouseDown={() => startDrag(ref)}>
-            Move
-          </button>
+          <button id="playground-chat-drag-handle">Move</button>
         </div>
         {/* Option description for chat at bottom or at top */}
       </div>

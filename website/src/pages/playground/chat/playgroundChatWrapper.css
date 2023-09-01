@@ -6,24 +6,24 @@
 
 .playground-chat-wrapper-scale-shrunk {
   transform: scale(0);
-  transition: 0.3s;
+  transition: 0.4s;
 }
 
 .playground-chat-wrapper-scale-expanded {
   transform: scale(1);
-  transition: 0.5s;
 }
 
 .playground-chat-wrapper-width-shrunk {
   width: 0px;
+  min-width: 0px;
 }
 
 .playground-chat-wrapper-width-expanded {
   width: 400px;
 }
 
-.playground-chat-wrapper-no-animation {
-  transition: 0s;
+.playground-chat-animated {
+  transition: 0.5s;
 }
 
 .playground-chat-wrapper-dragging {
@@ -37,4 +37,9 @@
 .playground-chat-wrapper-dragging > * > * {
   cursor: grabbing;
   cursor: -webkit-grabbing;
+}
+
+#playground-chat-drag-handle {
+  /* sortablejs makes the draggable element use mouse-events: none; hence there is no custom cursor when dragging */
+  cursor: grab;
 }
