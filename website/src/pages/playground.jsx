@@ -34,7 +34,7 @@ export default function Playground() {
   // this is a workaround to force component list render
   const [, refreshList] = React.useState(-1);
   const [editingChatRef, setEditingChatRef] = React.useState(null);
-  const [gridView, setGridView] = React.useState(true);
+  const [isGridView, setIsGridView] = React.useState(true);
   const componentListRef = React.useRef(null);
   const moveChatRef = React.useRef(null); // used to encapsulate drag logic (docusaurus files must be components)
 
@@ -72,7 +72,7 @@ export default function Playground() {
     refreshList((latestChatIndex.index += 1));
     // don't think scrolling is needed on startup
     setTimeout(() => {
-      if (gridView) {
+      if (isGridView) {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       } else {
         componentListRef.current.scrollLeft = componentListRef.current.scrollWidth;
@@ -119,6 +119,7 @@ export default function Playground() {
         componentListRef={componentListRef}
         refreshList={refreshList}
         latestChatIndex={latestChatIndex}
+        isGridView={isGridView}
       ></MoveChat>
       {editingChatRef && (
         <ServiceModal
@@ -137,14 +138,14 @@ export default function Playground() {
               ref={componentListRef}
               id="playground-chat-list"
               // not using actual grid as dragging does not work due to drag using margins
-              style={{display: gridView ? '' : 'flex'}}
+              style={{display: isGridView ? '' : 'flex'}}
             >
               {chatComponents}
             </div>
           </div>
           <div id="playground-bottom-buttons">
             <AddButton addComponent={addComponent} />
-            <button onClick={() => setGridView((previousValue) => !previousValue)}>Layout</button>
+            <button onClick={() => setIsGridView((previousValue) => !previousValue)}>Layout</button>
           </div>
         </div>
       </div>

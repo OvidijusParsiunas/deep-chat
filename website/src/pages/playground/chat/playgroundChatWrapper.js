@@ -14,17 +14,20 @@ const ChatWrapper = React.forwardRef(
       remove() {
         setWidthExpanded(false);
       },
-      startDragging(marginLeft) {
+      startDragging(marginLeft, marginTop) {
         setPreventAnimation(true);
         setMarginLeft(marginLeft);
+        setMarginTop(marginTop);
         setDragging(true);
       },
-      releaseDragging(marginLeft) {
+      releaseDragging(marginLeft, marginTop) {
         setMarginLeft(marginLeft);
+        setMarginTop(marginTop);
         setPreventAnimation(false);
       },
       concludeDragging() {
         setMarginLeft(0);
+        setMarginTop(0);
         setDragging(false);
       },
       tempNoAnimation(func, timeout = 200) {
@@ -40,6 +43,9 @@ const ChatWrapper = React.forwardRef(
       updateMarginRight(marginRight) {
         setMarginRight(marginRight);
       },
+      updateMarginTop(marginTop) {
+        setMarginTop(marginTop);
+      },
       config,
     }));
 
@@ -50,6 +56,7 @@ const ChatWrapper = React.forwardRef(
     const [dragging, setDragging] = React.useState(false);
     const [marginLeft, setMarginLeft] = React.useState(0);
     const [marginRight, setMarginRight] = React.useState(0);
+    const [marginTop, setMarginTop] = React.useState(0);
 
     React.useEffect(() => {
       let isMounted = true;
@@ -72,7 +79,7 @@ const ChatWrapper = React.forwardRef(
     return (
       <div
         key={counter}
-        style={{marginLeft, marginRight}}
+        style={{marginLeft, marginRight, marginTop}}
         className={`playground-chat-wrapper ${
           scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
         } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'}
