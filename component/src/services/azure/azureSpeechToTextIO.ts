@@ -39,7 +39,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     return !!files?.[0];
   }
 
-  override callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     if (this.requestSettings?.headers) {

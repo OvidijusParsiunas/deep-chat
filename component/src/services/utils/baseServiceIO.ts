@@ -82,7 +82,7 @@ export class BaseServiceIO implements ServiceIO {
     return this.fileTypes.mixedFiles;
   }
 
-  callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
+  async callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
     if (!this.requestSettings.headers?.['Content-Type']) {
@@ -93,24 +93,24 @@ export class BaseServiceIO implements ServiceIO {
     // use actual stream if demo or when simulation prop not set
     const {stream} = this.deepChat;
     if (stream && (this.demo || typeof stream !== 'object' || !stream.simulation)) {
-      Stream.request(this, body, messages);
+      await Stream.request(this, body, messages);
     } else {
-      HTTPRequest.request(this, body, messages);
+      await HTTPRequest.request(this, body, messages);
     }
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
-  callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
+  async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);
     this.requestSettings = fileIO?.request || this.requestSettings;
-    HTTPRequest.request(this, formData, messages, false);
+    await HTTPRequest.request(this, formData, messages, false);
     this.requestSettings = previousRequestSettings;
   }
 
   // prettier-ignore
-  callAPI(requestContents: RequestContents, messages: Messages) {
+  async callAPI(requestContents: RequestContents, messages: Messages) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);

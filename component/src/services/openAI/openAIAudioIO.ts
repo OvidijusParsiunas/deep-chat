@@ -78,7 +78,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;

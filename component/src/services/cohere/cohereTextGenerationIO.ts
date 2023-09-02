@@ -22,7 +22,7 @@ export class CohereTextGenerationIO extends CohereIO {
     return {prompt: mostRecentMessageText, ...bodyCopy};
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body, messages);

@@ -52,7 +52,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files) throw new Error('Image was not found');
     const formData = this.createFormDataBody(this.rawBody, files[0]);

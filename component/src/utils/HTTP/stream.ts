@@ -10,12 +10,14 @@ import {Demo} from '../demo/demo';
 type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
 
 export class Stream {
-  public static request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+  // prettier-ignore
+  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} =
-      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
-    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
+    const {body: interceptedBody, headers: interceptedHeaders, error} =
+      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
     const {onOpen, onClose, abortStream} = io.streamHandlers;
+    if (error) return Stream.onInterceptorError(messages, error, onClose);
+    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
@@ -62,6 +64,11 @@ export class Stream {
           RequestUtils.displayError(messages, parsedError);
         });
     });
+  }
+
+  private static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
+    messages.addNewErrorMessage('service', error);
+    onFinish?.();
   }
 
   public static simulate(messages: Messages, sh: StreamHandlers, text?: string) {

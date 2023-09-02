@@ -1,17 +1,21 @@
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestDetails} from '../../types/interceptors';
 import {Request} from '../../types/request';
+import {DeepChat} from '../../deepChat';
+
+type InterceptorResult = Promise<RequestDetails & {error?: string}>;
 
 export class RequestUtils {
   public static readonly CONTENT_TYPE = 'Content-Type';
 
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
   // prettier-ignore
-  public static temporarilyRemoveHeader(requestSettings: Request | undefined,
-      request: (stringifyBody?: boolean) => void, stringifyBody: boolean) {
+  public static async temporarilyRemoveHeader(requestSettings: Request | undefined,
+      request: (stringifyBody?: boolean) => Promise<void>, stringifyBody: boolean) {
     if (!requestSettings?.headers) throw new Error('Request settings have not been set up');
     const previousHeader = requestSettings.headers[RequestUtils.CONTENT_TYPE];
     delete requestSettings.headers[RequestUtils.CONTENT_TYPE];
-    request(stringifyBody);
+    await request(stringifyBody);
     requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousHeader;
   }
 
@@ -36,5 +40,12 @@ export class RequestUtils {
       return response;
     }
     return response.blob();
+  }
+
+  public static async processResponseInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResult {
+    const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
+    const resReqDetails = result as RequestDetails;
+    const resErrDetails = result as {error?: string};
+    return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
   }
 }

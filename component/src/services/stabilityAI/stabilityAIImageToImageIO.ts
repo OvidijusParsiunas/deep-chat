@@ -64,7 +64,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files) throw new Error('Image was not found');
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();

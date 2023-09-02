@@ -86,7 +86,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
       this.callApiWithImage(messages, pMessages, files);

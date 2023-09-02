@@ -4,13 +4,14 @@ sidebar_position: 12
 
 # Interceptors
 
-Message transaction functionality can be intercepted to change its behaviour by assigning a function to a property.
+Message transactions can be intercepted to change their contents or execute other code.
 
 ### `requestInterceptor` {#requestInterceptor}
 
-- Type: ([`RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails)
+- Type: ([`RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails) | {`error: string`}
 
-Triggered before a message is sent and can be used to observe/alter the outgoing details. The method MUST return a [`RequestDetails`](#RequestDetails) object.
+Triggered before a user message is sent out. This method MUST either return a [`RequestDetails`](#RequestDetails) object or
+an object that contains an `error` property to cancel the request.
 
 #### Example
 
@@ -23,15 +24,47 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-<ComponentContainerInterceptors propertyName={'requestInterceptor'}>
+<ComponentContainerInterceptors propertyName={'requestInterceptor'} displayConsole={true}>
   <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
-<TabItem value="js" label="Code">
+<TabItem value="js" label="Sync">
 
-```html
-chatElementRef.requestInterceptor = (request) => { console.log(request); return request; };
+```js
+chatElementRef.requestInterceptor = (requestDetails) => {
+  console.log(requestDetails); // printed above
+  requestDetails.body = {prompt: requestDetails.body.messages[0].text}; // custom body
+  return requestDetails;
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Async">
+
+```js
+// Async function
+chatElementRef.requestInterceptor = async (requestDetails) => {
+  console.log(requestDetails); // printed above
+  const otherTask = await fetch('http://localhost:8080/other-task');
+  if (!otherTask.ok) {
+    return {error: 'Error in other task'};
+  }
+  return requestDetails;
+};
+
+// Promise function - use resolve() for both success and error responses
+chatElementRef.requestInterceptor = (requestDetails) => {
+  return new Promise((resolve) => {
+    console.log(requestDetails); // printed above
+    fetch('http://localhost:8080/other-task').then((otherTask) => {
+      if (!otherTask.ok) {
+        return resolve({error: 'Error in other task'});
+      }
+      resolve(requestDetails);
+    });
+  });
+};
 ```
 
 </TabItem>
@@ -52,8 +85,8 @@ chatElementRef.requestInterceptor = (request) => { console.log(request); return 
 
 - Type: (`response: any`) => `any`
 
-Triggered when a message has been retrieved from the target service and can be used to observe/alter the incoming object details.
-The types for the `response` argument and the return object (that is REQUIRED) are both the same and depend on the connection variety used:
+Triggered when a message has been received from the target service.
+The types for the `response` argument and the return object (REQUIRED) are both the same and depend on the connection variety:
 
 - If you are connecting to a server via the [`request`](./connect/#request) property - the type will be [`Result`](./connect/#Result).
 - If you are connecting via the [`directConnection`](./directConnection) property - the type will be defined by the chosen service API.
@@ -62,27 +95,50 @@ This property is not enabled for [`server-sent`](https://developer.mozilla.org/e
 
 #### Example
 
-<ComponentContainerInterceptors propertyName={'responseInterceptor'}>
+<ComponentContainerInterceptors propertyName={'responseInterceptor'} displayConsole={true}>
   <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
-<TabItem value="js" label="Code">
+<TabItem value="js" label="Sync">
 
-```html
-chatElementRef.responseInterceptor = (response) => { console.log(response); return response; };
+```js
+chatElementRef.responseInterceptor = (response) => {
+  console.log(response); // printed above
+  return response;
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Async">
+
+```js
+// Async function
+chatElementRef.responseInterceptor = async (response) => {
+  console.log(response); // printed above
+  const otherTask = await fetch('http://localhost:8080/other-task');
+  if (!otherTask.ok) {
+    return {error: 'Error in other task'};
+  }
+  return response;
+};
+
+// Promise function - use resolve() for both success and error responses
+chatElementRef.responseInterceptor = (response) => {
+  return new Promise((resolve) => {
+    console.log(response); // printed above
+    fetch('http://localhost:8080/other-task').then((result) => {
+      if (!result.ok) {
+        return resolve({error: 'Error in other task'});
+      }
+      resolve(response);
+    });
+  });
+};
 ```
 
 </TabItem>
 </Tabs>
-
-<LineBreak></LineBreak>
-
-:::info
-if the _response_ needs asynchronous processing, you can instead return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) object
-and resolve it as: `resolve(response)`. The _response_ variable should use the [`Result`](./connect/#Result) format. Do not use the `reject` function as errors should be
-referenced inside the _response_ variable e.g. `resolve({error: 'error'})`.
-:::
 
 <LineBreak></LineBreak>
 
@@ -96,7 +152,7 @@ The method must return a boolean value with either _true_ or _false_ for whether
 
 #### Example
 
-<ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'}>
+<ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'} displayConsole={false}>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     directConnection={{demo: true}}
@@ -107,17 +163,13 @@ The method must return a boolean value with either _true_ or _false_ for whether
 <Tabs>
 <TabItem value="js" label="Code">
 
-```html
-chatElementRef.validateMessageBeforeSending = (text, files) => { return text ? true : false };
+```js
+chatElementRef.validateMessageBeforeSending = (text, files) => {
+  return text ? true : false;
+};
 ```
 
 </TabItem>
 </Tabs>
-
-<LineBreak></LineBreak>
-
-:::info
-Please note that because files objects are not serializable, their details are not fully displayed in this example.
-:::
 
 <LineBreak></LineBreak>

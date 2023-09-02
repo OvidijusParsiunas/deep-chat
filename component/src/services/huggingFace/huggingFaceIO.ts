@@ -49,7 +49,7 @@ export class HuggingFaceIO extends DirectServiceIO {
     return {inputs: mostRecentMessageText, ...bodyCopy};
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
     HTTPRequest.request(this, body, messages);

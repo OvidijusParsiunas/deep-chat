@@ -6,7 +6,9 @@ export interface RequestDetails {
   headers?: GenericObject<string>;
 }
 
-export type RequestInterceptor = (details: RequestDetails) => RequestDetails;
+export type ResponseDetails = RequestDetails | {error: string};
+
+export type RequestInterceptor = (details: RequestDetails) => ResponseDetails | Promise<ResponseDetails>;
 
 // not enabled for streaming
 // the response type is subject to what type of connection you are using:

@@ -49,9 +49,10 @@ export class Websocket {
     };
   }
 
-  public static sendWebsocket(ws: WebSocket, io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+  public static async sendWebsocket(ws: WebSocket, io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    const {body: interceptedBody, error} = await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails);
+    if (error) return messages.addNewErrorMessage('service', error);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (io.requestSettings?.url === Demo.URL) {
       return Demo.request(messages, io.completionsHandlers.onFinish, io.deepChat.responseInterceptor);

@@ -82,7 +82,7 @@ export interface ServiceIO {
 
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  callAPI(requestContents: RequestContents, messages: Messages): void;
+  callAPI(requestContents: RequestContents, messages: Messages): Promise<void>;
 
   extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
 

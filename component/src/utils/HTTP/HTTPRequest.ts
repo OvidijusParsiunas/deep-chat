@@ -1,5 +1,6 @@
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {ResponseDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -10,11 +11,13 @@ export type HandleVerificationResult = (
   result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
 
 export class HTTPRequest {
-  public static request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
-    const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} =
-      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+  // prettier-ignore
+  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+    const requestDetails: ResponseDetails = {body, headers: io.requestSettings?.headers};
+    const {body: interceptedBody, headers: interceptedHeaders, error} =
+      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
+    if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {
@@ -74,14 +77,22 @@ export class HTTPRequest {
       });
   }
 
-  public static poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+  // prettier-ignore
+  public static async poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    const {body: interceptedBody, headers, error} =
+      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
+    if (error) return HTTPRequest.onInterceptorError(messages, error);
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit = {method, body: requestBody, headers};
     HTTPRequest.executePollRequest(io, url, requestInit, messages);
+  }
+
+  private static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
+    messages.addNewErrorMessage('service', error);
+    onFinish?.();
   }
 
   // prettier-ignore

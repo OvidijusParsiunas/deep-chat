@@ -32,7 +32,7 @@ export class AzureTranslationIO extends DirectServiceIO {
     return [{Text: mostRecentMessageText}];
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(pMessages);
     HTTPRequest.request(this, body as unknown as object, messages);

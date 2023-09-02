@@ -136,7 +136,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
 
     const requestContents = {text: submittedText, files: fileData};
-    this._serviceIO.callAPI(requestContents, this._messages);
+    await this._serviceIO.callAPI(requestContents, this._messages);
     if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 
