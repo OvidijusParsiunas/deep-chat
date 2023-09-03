@@ -1,0 +1,42 @@
+.app {
+  font-family: sans-serif;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+deep-chat {
+  display: flex;
+  justify-content: center;
+}
+
+#page-title {
+  padding-bottom: 5px;
+}
+
+.components {
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.components > * {
+  margin: 0 20px;
+}
+
+.diagonal-line {
+  position: absolute;
+  transform: skewY(-2.5deg);
+  height: 200px;
+  width: 100%;
+  background: #e8f5ff;
+  padding-top: 30px;
+  margin-top: 50px;
+}
+
+.server-title {
+  display: contents;
+}
+
+.server-title-icon {
+  margin-left: 10px;
+}
