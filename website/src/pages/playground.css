@@ -10,7 +10,8 @@
   font-family: sans-serif;
   color: var(--start-header-color);
   transition: 1s;
-  margin-bottom: 20px;
+  margin-top: 30px;
+  margin-bottom: 60px;
 }
 
 #playground-chat-list-parent {
@@ -25,9 +26,19 @@
   position: relative;
 }
 
-#playground-bottom-buttons {
+#playground-bottom-panel {
+  position: fixed;
+  bottom: 0;
   width: 100%;
+  display: flex;
+  justify-content: right;
+  pointer-events: none;
+}
+
+#playground-bottom-buttons {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
+  /* enabling as panel background does not have events */
+  pointer-events: all;
 }

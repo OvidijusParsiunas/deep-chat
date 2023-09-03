@@ -26,20 +26,27 @@
   transition: 0.5s;
 }
 
-.playground-chat-wrapper-dragging {
-  position: absolute;
-  z-index: 1;
-  cursor: grabbing;
-  cursor: -webkit-grabbing;
+.playground-chat-details {
+  display: flex;
+  padding-top: 18px;
+  justify-content: center;
 }
 
-.playground-chat-wrapper-dragging > *,
-.playground-chat-wrapper-dragging > * > * {
-  cursor: grabbing;
-  cursor: -webkit-grabbing;
+.playground-chat-configure-button {
+  cursor: pointer;
+  transition: 0.1s;
 }
 
-#playground-chat-drag-handle {
+.playground-chat-configure-button:hover {
+  transform: scale(1.15);
+}
+
+.playground-chat-description {
+  font-size: 17px;
+}
+
+.playground-chat-drag-handle {
   /* sortablejs makes the draggable element use mouse-events: none; hence there is no custom cursor when dragging */
   cursor: grab;
+  cursor: -webkit-grab;
 }

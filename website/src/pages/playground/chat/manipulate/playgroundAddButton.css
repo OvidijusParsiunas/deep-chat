@@ -1,0 +1,32 @@
+#playground-add-button-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+#playground-add-button {
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 0rem 12px 0 rgba(44, 51, 73, 0.1);
+}
+
+#playground-add-button:hover {
+  background-color: rgb(250, 250, 250);
+  box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.141);
+}
+
+#playground-add-button:active {
+  transform: scale(0.95);
+}
+
+#playground-add-button-image {
+  width: 31px;
+  padding-top: 9px;
+  filter: brightness(0) saturate(100%) invert(65%) sepia(1%) saturate(0%) hue-rotate(338deg) brightness(92%) contrast(91%);
+}
+
+/* can't do image directly as it doesn't cover full button */
+#playground-add-button:hover > #playground-add-button-image {
+  filter: brightness(0) saturate(100%) invert(28%) sepia(3%) saturate(0%) hue-rotate(180deg) brightness(92%) contrast(98%);
+}
