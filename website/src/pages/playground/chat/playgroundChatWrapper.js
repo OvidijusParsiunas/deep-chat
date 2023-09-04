@@ -122,19 +122,23 @@ const ChatWrapper = React.forwardRef(
           <div className="playground-chat-config-buttons">
             <img className="playground-chat-drag-handle" src="img/drag-handle.svg"></img>
             <img
-              src="img/configure.svg"
-              className="playground-chat-config-button"
+              src="img/configure-2.svg"
+              className="playground-chat-config-button playground-button"
               onClick={() => setEditingChatRef(ref)}
             ></img>
-            <img src="img/clear-messages.svg" className="playground-chat-config-button playground-chat-clear-button"></img>
+            {/* <Cog className="playground-chat-config-button" onClick={() => setEditingChatRef(ref)} /> */}
+            <img
+              src="img/clear-messages.svg"
+              className="playground-chat-config-button playground-chat-clear-button playground-button"
+            ></img>
             <img
               src="img/clone.svg"
-              className="playground-chat-config-button playground-chat-clone-button"
+              className="playground-chat-config-button playground-chat-clone-button playground-button"
               onClick={() => cloneComponent(ref)}
             ></img>
             <img
               src="img/bin.svg"
-              className="playground-chat-config-button playground-chat-remove-button"
+              className="playground-chat-config-button playground-chat-remove-button playground-button"
               onClick={() => removeComponent(ref)}
             ></img>
           </div>

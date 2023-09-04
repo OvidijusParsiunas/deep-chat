@@ -42,3 +42,37 @@
   /* enabling as panel background does not have events */
   pointer-events: all;
 }
+
+.playground-fixed-button {
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 0rem 10px 0 rgba(44, 51, 73, 0.238);
+  margin-right: 50px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.playground-fixed-button:hover {
+  background-color: rgb(250, 250, 250);
+  box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.242);
+}
+
+.playground-fixed-button:hover > img {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%) hue-rotate(284deg) brightness(102%)
+    contrast(97%);
+}
+
+.playground-fixed-button > img {
+  margin-top: 7px;
+  width: 35px;
+  filter: brightness(0) saturate(100%) invert(85%) sepia(0%) saturate(271%) hue-rotate(86deg) brightness(83%) contrast(96%);
+}
+
+.playground-button {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}

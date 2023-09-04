@@ -156,7 +156,12 @@ export default function Playground() {
           <AddButton addComponent={addComponent} />
           <div id="playground-bottom-panel">
             <div id="playground-bottom-buttons">
-              <button onClick={toggleView}>Layout</button>
+              <div className="playground-fixed-button" onClick={toggleView}>
+                <img
+                  src={view.isGrid ? 'img/layout-panorama.svg' : 'img/layout-grid.svg'}
+                  className="playground-button"
+                ></img>
+              </div>
             </div>
           </div>
         </div>
