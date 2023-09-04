@@ -27,26 +27,82 @@
 }
 
 .playground-chat-details {
-  display: flex;
+  text-align: center;
   padding-top: 18px;
-  justify-content: center;
 }
 
-.playground-chat-configure-button {
+.playground-chat-logo-button {
   cursor: pointer;
   transition: 0.1s;
 }
 
-.playground-chat-configure-button:hover {
+.playground-chat-logo-button:hover {
   transform: scale(1.15);
 }
 
 .playground-chat-description {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.playground-chat-description-text {
   font-size: 17px;
 }
 
+.playground-chat-config-buttons {
+  width: 100%;
+}
+
+.playground-chat-config-buttons > img {
+  opacity: 0;
+  transition: 0.15s;
+}
+
+.playground-chat-details:hover > .playground-chat-config-buttons > img {
+  opacity: 1;
+}
+
 .playground-chat-drag-handle {
-  /* sortablejs makes the draggable element use mouse-events: none; hence there is no custom cursor when dragging */
   cursor: grab;
   cursor: -webkit-grab;
+  margin-right: 3px;
+  padding-bottom: 1px;
+  width: 22px;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(0%) saturate(1%) hue-rotate(169deg) brightness(97%) contrast(97%);
+}
+
+.playground-chat-drag-handle:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.playground-chat-drag-handle:hover {
+  filter: brightness(0) saturate(100%) invert(0%) sepia(100%) saturate(7480%) hue-rotate(217deg) brightness(98%)
+    contrast(105%);
+}
+
+.playground-chat-config-button {
+  cursor: pointer;
+  margin-right: 8px;
+  padding-bottom: 1px;
+  width: 20px;
+  filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(308%) hue-rotate(283deg) brightness(96%)
+    contrast(93%);
+}
+
+.playground-chat-clear-button {
+  padding-bottom: 2px;
+}
+
+.playground-chat-clone-button {
+  width: 19px;
+  padding-bottom: 2px;
+}
+
+.playground-chat-remove-button {
+  filter: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(827%) hue-rotate(226deg) brightness(93%)
+    contrast(92%);
+  width: 17px;
+  padding-bottom: 3.5px;
 }

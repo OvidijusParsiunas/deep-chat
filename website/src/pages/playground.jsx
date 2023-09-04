@@ -79,8 +79,9 @@ export default function Playground() {
 
   // logic placed here to not have to pass down state to child components
   function addComponent(config, index) {
+    // WORK - expand height when on a new row
     // config
-    const newConfig = {openAI: {key: 'asdsadasd'}} || {demo: true};
+    const newConfig = config || {demo: true};
     const ref = React.createRef();
     const newComponent = (
       <ChatWrapper

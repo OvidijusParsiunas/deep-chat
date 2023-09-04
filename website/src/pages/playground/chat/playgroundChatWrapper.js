@@ -113,18 +113,32 @@ const ChatWrapper = React.forwardRef(
         {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}
         {children}
         <div className="playground-chat-details">
-          <div className="playground-chat-configure-button" onClick={() => setEditingChatRef(ref)}>
-            <Logo config={config}></Logo>
+          <div className="playground-chat-description">
+            <div className="playground-chat-logo-button" onClick={() => setEditingChatRef(ref)}>
+              <Logo config={config}></Logo>
+            </div>
+            <div className="playground-chat-description-text">{getDescription(config)}</div>
           </div>
-          <div className="playground-chat-description">{getDescription(config)}</div>
-          {/* The button is going to turn into the active logo */}
-          {/* <button onClick={() => setEditingChatRef(ref)}>Configure</button> */}
-          {/* <button onClick={() => removeComponent(ref)}>Remove</button>
-          <button onClick={() => cloneComponent(ref)}>Clone</button>
-          <button onClick={() => cloneComponent(ref)}>Clear</button>
-          <button className="playground-chat-drag-handle">Move</button> */}
+          <div className="playground-chat-config-buttons">
+            <img className="playground-chat-drag-handle" src="img/drag-handle.svg"></img>
+            <img
+              src="img/configure.svg"
+              className="playground-chat-config-button"
+              onClick={() => setEditingChatRef(ref)}
+            ></img>
+            <img src="img/clear-messages.svg" className="playground-chat-config-button playground-chat-clear-button"></img>
+            <img
+              src="img/clone.svg"
+              className="playground-chat-config-button playground-chat-clone-button"
+              onClick={() => cloneComponent(ref)}
+            ></img>
+            <img
+              src="img/bin.svg"
+              className="playground-chat-config-button playground-chat-remove-button"
+              onClick={() => removeComponent(ref)}
+            ></img>
+          </div>
         </div>
-        {/* Option description for chat at bottom or at top */}
       </div>
     );
   }
@@ -136,7 +150,7 @@ const SERVICE_TO_NAME = {
   demo: 'Default',
   custom: 'Service',
   openAI: {
-    chat: 'OpenAI - Chat',
+    chat: 'OpenAI: Chat',
     completions: 'OpenAI - Completions',
     images: 'OpenAI - Dalle 2',
     audio: 'OpenAI - Whisper',
