@@ -15,22 +15,32 @@ export class InternalHTML extends HTMLElement {
   // If this is not working, try using propertyName directly
   constructor() {
     super();
-    Object.keys(InternalHTML._attributeToProperty_).forEach((propertyName) => {
-      this.constructPropertyAccessors(InternalHTML._attributeToProperty_[propertyName]);
+    Object.keys(InternalHTML._attributeToProperty_).forEach((attributeName) => {
+      const propertyName = InternalHTML._attributeToProperty_[attributeName];
+      this.constructPropertyAccessors(propertyName);
+      if (!this.hasOwnProperty(attributeName)) {
+        // need to also set the lowercase version as a property for svelte
+        this.constructPropertyAccessors(propertyName, attributeName);
+      }
     });
   }
 
   // need to be called here as accessors need to be set for the class instance
-  private constructPropertyAccessors(propertyKey: string) {
+  private constructPropertyAccessors(propertyKey: string, attributeName?: string) {
     let value: string;
     const getter = function () {
       return value;
     };
     const setter = function (this: InternalHTML, newVal: string) {
       value = newVal;
-      RenderControl.attemptRender(this);
+      if (attributeName) {
+        // if the lower case version - assign the value to the actual property
+        (this as unknown as GenericObject)[propertyKey] = newVal;
+      } else {
+        RenderControl.attemptRender(this);
+      }
     };
-    Object.defineProperty(this, propertyKey, {
+    Object.defineProperty(this, attributeName || propertyKey, {
       get: getter,
       set: setter,
     });

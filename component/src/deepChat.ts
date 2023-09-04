@@ -195,6 +195,7 @@ export class DeepChat extends InternalHTML {
       // then the chatview would be rendered after it, which causes a blink and is bad UX
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else {
+      // WORK - have the word request as a hyperlink
       ErrorView.render(this._elementRef, 'Please define "request" with a "url"');
     }
     this._hasBeenRendered = true;
