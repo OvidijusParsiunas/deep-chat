@@ -1,0 +1,36 @@
+#playground-header-buttons {
+  position: absolute;
+  right: 20px;
+  top: 95px;
+  display: flex;
+}
+
+.playground-header-button {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 0rem 10px 0 rgba(44, 51, 73, 0.238);
+  margin-right: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.playground-header-button:hover {
+  background-color: rgb(250, 250, 250);
+  box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.242);
+}
+
+.playground-header-button:hover > img {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%) hue-rotate(284deg) brightness(102%)
+    contrast(97%);
+}
+
+.playground-header-button > img {
+  width: 25px;
+  padding-bottom: 6px;
+  filter: brightness(0) saturate(100%) invert(85%) sepia(0%) saturate(271%) hue-rotate(86deg) brightness(83%) contrast(96%);
+}
+
+.playground-file-button {
+  width: 23px;
+  padding-bottom: 8px;
+}

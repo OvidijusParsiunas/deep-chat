@@ -1,4 +1,5 @@
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
+import HeaderButtons from './playground/header/playgroundHeaderButtons';
 import ChatComponent from './playground/chat/playgroundChatComponent';
 import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/modal/serviceModal';
@@ -32,7 +33,7 @@ export default function Playground() {
   // this is a workaround to force component list render
   const [, refreshList] = React.useState(-1);
   const [editingChatRef, setEditingChatRef] = React.useState(null);
-  const [isGridView, setIsGridView] = React.useState(view.isGrid);
+  const [isGrid, setIsGrid] = React.useState(view.isGrid);
   const componentListRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -41,6 +42,7 @@ export default function Playground() {
       setEditingChatRef(ref);
       view.isBeingCreated = false;
       Sortable.create(componentListRef.current, {animation: 450, handle: '.playground-chat-drag-handle'});
+      setHorizontalScroll(componentListRef.current);
     });
     return () => {
       // check if state really needed to be removed as user can navigate pages and comeback to playground
@@ -99,9 +101,10 @@ export default function Playground() {
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
     refreshList((latestChatIndex.index += 1));
     if (view.isBeingCreated) return;
+    const timeout = config ? 50 : 5; // cloning and auto scrolling in panorama does not work
     setTimeout(() => {
       scrollToNewChat(index, config, ref.current);
-    }, 250);
+    }, timeout);
   }
 
   function removeComponent(componentToBeRemoved) {
@@ -121,8 +124,8 @@ export default function Playground() {
     addComponent(componentToBeCloned.current.config, index + 1);
   }
 
-  function toggleView() {
-    setIsGridView((previousValue) => !previousValue);
+  function toggleLayout() {
+    setIsGrid((previousValue) => !previousValue);
     view.isGrid = !view.isGrid;
   }
 
@@ -141,6 +144,7 @@ export default function Playground() {
       <div>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
+          <HeaderButtons toggleLayout={toggleLayout} isGrid={isGrid}></HeaderButtons>
         </div>
         <div>
           <div id="playground-chat-list-parent">
@@ -148,24 +152,23 @@ export default function Playground() {
               ref={componentListRef}
               id="playground-chat-list"
               // not using actual grid as dragging does not work due to drag using margins
-              style={{display: isGridView ? '' : 'flex'}}
+              style={{display: isGrid ? '' : 'flex'}}
             >
               {chatComponents}
             </div>
           </div>
-          <AddButton addComponent={addComponent} />
-          <div id="playground-bottom-panel">
-            <div id="playground-bottom-buttons">
-              <div className="playground-fixed-button" onClick={toggleView}>
-                <img
-                  src={view.isGrid ? 'img/layout-panorama.svg' : 'img/layout-grid.svg'}
-                  className="playground-button"
-                ></img>
-              </div>
-            </div>
-          </div>
+          <AddButton addComponent={addComponent} isGrid={isGrid} />
         </div>
       </div>
     </Layout>
   );
+}
+
+function setHorizontalScroll(componentList) {
+  componentList.addEventListener('wheel', (e) => {
+    if (!view.isGrid) {
+      e.preventDefault();
+      componentList.scrollLeft += e.deltaY;
+    }
+  });
 }

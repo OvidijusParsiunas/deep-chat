@@ -70,6 +70,10 @@
   padding-bottom: 1px;
   width: 22px;
   filter: brightness(0) saturate(100%) invert(27%) sepia(0%) saturate(1%) hue-rotate(169deg) brightness(97%) contrast(97%);
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .playground-chat-drag-handle:active {
