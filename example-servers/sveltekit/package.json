@@ -20,6 +20,6 @@
   },
   "type": "module",
   "dependencies": {
-    "deep-chat": "^1.1.23"
+    "deep-chat": "^1.2.0"
   }
 }
