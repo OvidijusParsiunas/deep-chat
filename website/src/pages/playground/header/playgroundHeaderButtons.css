@@ -19,15 +19,15 @@
   box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.242);
 }
 
-.playground-header-button:hover > img {
-  filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%) hue-rotate(284deg) brightness(102%)
-    contrast(97%);
-}
-
-.playground-header-button > img {
+.playground-header-button > a > img {
   width: 25px;
   padding-bottom: 6px;
-  filter: brightness(0) saturate(100%) invert(85%) sepia(0%) saturate(271%) hue-rotate(86deg) brightness(83%) contrast(96%);
+  filter: brightness(0) saturate(100%) invert(66%) sepia(0%) saturate(0%) hue-rotate(37deg) brightness(94%) contrast(94%);
+}
+
+.playground-header-button:hover > a > img {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%) hue-rotate(284deg) brightness(102%)
+    contrast(97%);
 }
 
 .playground-file-button {

@@ -85,12 +85,12 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const changeCode = (serviceArg, newTypeArg) => {
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
-    const config = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current.value);
+    const config = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
     if (service === 'custom') {
       setWebsocket(config['custom'].websocket);
       if (config['custom'].websocket) {
         setTimeout(() => {
-          const newConfig = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current.value);
+          const newConfig = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
           setCode(getCodeStr(newConfig, true));
         });
         return;
@@ -174,14 +174,16 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
             />
           </CollapsableSection>
         )}
-        <CollapsableSection title={'Code'} collapseStates={collapseStates} prop={'code'}>
-          <Code code={code} />
-        </CollapsableSection>
+        {code && (
+          <CollapsableSection title={'Code'} collapseStates={collapseStates} prop={'code'}>
+            <Code code={code} />
+          </CollapsableSection>
+        )}
         <CloseButtons
           chatComponent={chatComponent}
           requiredFields={[requiredValueRef, requiredValue2Ref]}
           constructConfig={() =>
-            constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current.value)
+            constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current?.value)
           }
           close={close}
           ref={submitButtonRef}
@@ -216,6 +218,7 @@ function getCodeStr(config, isCustom) {
 }
 
 function constructConfig(optionalParamsEl, activeService, activeType, requiredProp) {
+  if (activeService === 'demo') return {demo: true};
   const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
   const optionalParams =
     activeService === 'custom'
@@ -280,7 +283,7 @@ function buildConfig(optionalParams, optionalParamsValues) {
 }
 
 const SERVICE_MODAL_FORM_CONFIG = {
-  demo: {},
+  demo: {demo: {}}, // inserting demo key as a placeholder
   custom: {
     method: ['POST', 'PUT', 'GET'],
     websocket: ['true', 'false'],

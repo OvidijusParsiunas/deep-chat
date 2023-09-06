@@ -22,6 +22,10 @@
   width: 400px;
 }
 
+.playground-chat-wrapper-height-shrunk {
+  height: 0px;
+}
+
 .playground-chat-animated {
   transition: 0.5s;
 }

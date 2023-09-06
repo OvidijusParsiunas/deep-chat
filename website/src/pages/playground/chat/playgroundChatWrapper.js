@@ -1,3 +1,4 @@
+import PlaygroundChatWrapperConfig from './playgroundChatWrapperConfig';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import stabilityAILogo from '/img/stabilityAILogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
@@ -6,7 +7,6 @@ import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
 import './playgroundChatWrapper.css';
 import Flash from '/img/flash.svg';
-import Cog from '/img/cog.svg';
 import React from 'react';
 
 function getDescription(config) {
@@ -14,10 +14,11 @@ function getDescription(config) {
   if (service === 'custom') {
     return SERVICE_TO_NAME[service];
   }
-  const type = Object.keys(config[service])[0];
-  return SERVICE_TO_NAME[service][type];
+  const keys = Object.keys(config[service]);
+  return SERVICE_TO_NAME[service][keys[0] === 'key' ? keys[1] : keys[0]];
 }
 
+// prettier-ignore
 function Logo({config}) {
   if (config.custom) {
     return <Flash width="19" style={{paddingTop: '5px', marginRight: '6px', marginLeft: '-10px'}} />;
@@ -40,7 +41,15 @@ function Logo({config}) {
   if (config.assemblyAILogo) {
     return <img src={assemblyAILogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
   }
-  return <Cog width="19" style={{paddingTop: '5px', marginRight: '6px'}} />;
+  return (
+    <Flash
+      width="19"
+      style={{
+        paddingTop: '5px', marginRight: '6px', marginLeft: '-10px', transform: 'scale(1.1)',
+        filter: 'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(926%) hue-rotate(322deg) brightness(97%) contrast(91%)',
+      }}
+    />
+  );
 }
 
 // The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children
@@ -52,6 +61,14 @@ const ChatWrapper = React.forwardRef(
       },
       scaleOut() {
         setScaleExpanded(false); // shrunk already has animation
+      },
+      reduceHeightWhenLastOnRow() {
+        const previousSibling = elementRef.current.previousSibling;
+        if (!elementRef.current.nextSibling && previousSibling) {
+          if (previousSibling.offsetTop !== elementRef.current.offsetTop) {
+            setHeightExpanded(false);
+          }
+        }
       },
       remove() {
         setWidthExpanded(false);
@@ -82,6 +99,7 @@ const ChatWrapper = React.forwardRef(
     const [counter, setCounter] = React.useState(0); // this is used to re-render the component
     const [scaleExpanded, setScaleExpanded] = React.useState(false);
     const [widthExpanded, setWidthExpanded] = React.useState(isAtEnd);
+    const [heightExpanded, setHeightExpanded] = React.useState(true);
     const [allowAnimation, setAllowAnimation] = React.useState(false);
 
     React.useEffect(() => {
@@ -108,7 +126,9 @@ const ChatWrapper = React.forwardRef(
         ref={elementRef}
         className={`playground-chat-wrapper ${allowAnimation ? 'playground-chat-animated' : ''} ${
           scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
-        } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'}`}
+        } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'} ${
+          heightExpanded ? '' : 'playground-chat-wrapper-height-shrunk'
+        }`}
       >
         {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}
         {children}
@@ -119,29 +139,12 @@ const ChatWrapper = React.forwardRef(
             </div>
             <div className="playground-chat-description-text">{getDescription(config)}</div>
           </div>
-          <div className="playground-chat-config-buttons">
-            <img className="playground-chat-drag-handle" src="img/drag-handle.svg"></img>
-            <img
-              src="img/configure-2.svg"
-              className="playground-chat-config-button playground-button"
-              onClick={() => setEditingChatRef(ref)}
-            ></img>
-            {/* <Cog className="playground-chat-config-button" onClick={() => setEditingChatRef(ref)} /> */}
-            <img
-              src="img/clear-messages.svg"
-              className="playground-chat-config-button playground-chat-clear-button playground-button"
-            ></img>
-            <img
-              src="img/clone.svg"
-              className="playground-chat-config-button playground-chat-clone-button playground-button"
-              onClick={() => cloneComponent(ref)}
-            ></img>
-            <img
-              src="img/bin.svg"
-              className="playground-chat-config-button playground-chat-remove-button playground-button"
-              onClick={() => removeComponent(ref)}
-            ></img>
-          </div>
+          <PlaygroundChatWrapperConfig
+            setEditingChatRef={setEditingChatRef}
+            cloneComponent={cloneComponent}
+            removeComponent={removeComponent}
+            wrapperRef={ref}
+          />
         </div>
       </div>
     );

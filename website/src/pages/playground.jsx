@@ -3,6 +3,7 @@ import HeaderButtons from './playground/header/playgroundHeaderButtons';
 import ChatComponent from './playground/chat/playgroundChatComponent';
 import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/modal/serviceModal';
+import {Tooltip} from 'react-tooltip';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
 import Sortable from 'sortablejs';
@@ -39,7 +40,6 @@ export default function Playground() {
   React.useEffect(() => {
     setTimeout(() => {
       addComponent();
-      setEditingChatRef(ref);
       view.isBeingCreated = false;
       Sortable.create(componentListRef.current, {animation: 450, handle: '.playground-chat-drag-handle'});
       setHorizontalScroll(componentListRef.current);
@@ -81,7 +81,6 @@ export default function Playground() {
 
   // logic placed here to not have to pass down state to child components
   function addComponent(config, index) {
-    // WORK - expand height when on a new row
     // config
     const newConfig = config || {demo: true};
     const ref = React.createRef();
@@ -109,6 +108,7 @@ export default function Playground() {
 
   function removeComponent(componentToBeRemoved) {
     componentToBeRemoved.current.scaleOut();
+    if (view.isGrid) componentToBeRemoved.current.reduceHeightWhenLastOnRow();
     setTimeout(() => {
       componentToBeRemoved.current.remove();
       setTimeout(() => {
@@ -141,6 +141,7 @@ export default function Playground() {
           collapseStates={modalCollapseStates}
         />
       )}
+      <Tooltip id="chat-wrapper-configuration-tooltip" />
       <div>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
@@ -157,7 +158,7 @@ export default function Playground() {
               {chatComponents}
             </div>
           </div>
-          <AddButton addComponent={addComponent} isGrid={isGrid} />
+          <AddButton addComponent={addComponent} />
         </div>
       </div>
     </Layout>

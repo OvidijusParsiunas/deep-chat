@@ -21,9 +21,14 @@
 
 #playground-chat-list {
   width: 1200px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   scroll-behavior: smooth;
   position: relative;
+}
+
+#playground-chat-list:empty {
+  height: 440px;
 }
 
 #playground-chat-list::-webkit-scrollbar {
@@ -45,4 +50,15 @@
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+#chat-wrapper-configuration-tooltip {
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  font-size: 11px;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 100;
 }

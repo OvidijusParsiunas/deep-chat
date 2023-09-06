@@ -6,7 +6,6 @@ import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
 import Flash from '/img/flash.svg';
-import Cog from '/img/cog.svg';
 import './serviceField.css';
 import React from 'react';
 
@@ -40,7 +39,18 @@ const services = {
   demo: {
     value: 'demo',
     text: 'None',
-    icon: <Cog className="playground-service-modal-service-icon" style={{transform: 'scale(1.5)'}} />,
+    icon: (
+      <Flash
+        className="playground-service-modal-service-icon"
+        width="19"
+        style={{
+          marginLeft: '1px',
+          transform: 'scale(1.6)',
+          filter:
+            'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(926%) hue-rotate(322deg) brightness(97%) contrast(91%)',
+        }}
+      />
+    ),
   },
   custom: {
     value: 'custom',
