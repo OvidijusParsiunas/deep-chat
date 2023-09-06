@@ -9,9 +9,27 @@ function processDirectConfig(config) {
   return config;
 }
 
-export default function ChatComponent({config}) {
+export default function ChatComponent({config, messages, globalConfig}) {
+  const componentRef = React.createRef(null);
+  const [currentMessages] = React.useState(messages || []);
+
+  // updating messages here to keep track of them so that when user moves to a different page they can be added to config
+  function newestMessages({isInitial}) {
+    if (!isInitial) {
+      currentMessages.splice(0, currentMessages.length);
+      currentMessages.push(...componentRef.current.children[0].getMessages());
+    }
+  }
+
+  // when user moves to a different page, this is used to populate the latest messages
+  React.useEffect(() => {
+    return () => {
+      globalConfig.components[globalConfig.components.length - 1].messages = currentMessages;
+    };
+  });
+
   return (
-    <div className="playground-chat-component">
+    <div ref={componentRef} className="playground-chat-component">
       {config.custom ? (
         <DeepChatBrowser
           request={config.custom}
@@ -23,6 +41,8 @@ export default function ChatComponent({config}) {
             marginRight: '10px',
             width: '20vw',
           }}
+          initialMessages={messages}
+          onNewMessage={newestMessages}
         ></DeepChatBrowser>
       ) : (
         <DeepChatBrowser
@@ -35,6 +55,8 @@ export default function ChatComponent({config}) {
             marginRight: '10px',
             width: '20vw',
           }}
+          initialMessages={messages}
+          onNewMessage={newestMessages}
         ></DeepChatBrowser>
       )}
     </div>

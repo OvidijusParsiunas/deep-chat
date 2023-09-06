@@ -54,10 +54,11 @@ function Logo({config}) {
 
 // The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children
 const ChatWrapper = React.forwardRef(
-  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd}, ref) => {
+  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd, messages, globalConfig}, ref) => {
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
+        messages?.splice(0, messages?.length); // these are initial messages from the config, remove when changing config
       },
       scaleOut() {
         setScaleExpanded(false); // shrunk already has animation
@@ -84,6 +85,9 @@ const ChatWrapper = React.forwardRef(
       },
       getOffsetTop() {
         return elementRef.current.offsetTop;
+      },
+      getMessages() {
+        return elementRef.current.children[0].children[0].getMessages();
       },
       config,
     }));
@@ -117,6 +121,7 @@ const ChatWrapper = React.forwardRef(
       }); // in a timeout as otherwise if add button is spammed the animations will not show
       return () => {
         isMounted = false;
+        globalConfig.components.push({config, messages: []}); // when the user moved to different page - update global config
       };
     }, []);
 

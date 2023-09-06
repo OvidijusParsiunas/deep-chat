@@ -1,7 +1,7 @@
 import React from 'react';
 
 // not using @mui/material/Tooltip as by having it on the configuration the modal opens up with no animation
-const TooltipWrapper = React.forwardRef(({children, text}) => {
+export default function TooltipWrapper({children, text}) {
   return (
     <a
       data-tooltip-id="chat-wrapper-configuration-tooltip"
@@ -12,6 +12,4 @@ const TooltipWrapper = React.forwardRef(({children, text}) => {
       {children}
     </a>
   );
-});
-
-export default TooltipWrapper;
+}

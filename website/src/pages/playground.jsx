@@ -22,6 +22,7 @@ import './playground.css';
 
 // Video to show off how it works
 
+const globalConfig = {components: [{config: {demo: true}, messages: []}]};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -39,13 +40,13 @@ export default function Playground() {
 
   React.useEffect(() => {
     setTimeout(() => {
-      addComponent();
+      applyNewGlobalConfig(globalConfig);
       view.isBeingCreated = false;
       Sortable.create(componentListRef.current, {animation: 450, handle: '.playground-chat-drag-handle'});
       setHorizontalScroll(componentListRef.current);
     });
     return () => {
-      // check if state really needed to be removed as user can navigate pages and comeback to playground
+      globalConfig.components = []; // removed so that it can be repopulated by individual components
       chatComponents.splice(0, chatComponents.length);
       latestChatIndex.index = 0;
       view.isBeingCreated = false;
@@ -80,7 +81,7 @@ export default function Playground() {
   }
 
   // logic placed here to not have to pass down state to child components
-  function addComponent(config, index) {
+  function addComponent(config, index, messages) {
     // config
     const newConfig = config || {demo: true};
     const ref = React.createRef();
@@ -91,10 +92,12 @@ export default function Playground() {
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
         config={newConfig}
+        messages={messages}
+        globalConfig={globalConfig}
         isAtEnd={isChatAtEnd(index)}
         ref={ref}
       >
-        <ChatComponent config={newConfig}></ChatComponent>
+        <ChatComponent config={newConfig} messages={messages} globalConfig={globalConfig}></ChatComponent>
       </ChatWrapper>
     );
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
@@ -129,6 +132,14 @@ export default function Playground() {
     view.isGrid = !view.isGrid;
   }
 
+  function applyNewGlobalConfig(newConfig) {
+    chatComponents.splice(0, chatComponents.length);
+    refreshList((latestChatIndex.index += 1));
+    newConfig.components.forEach((component) => {
+      addComponent(component.config, undefined, component.messages);
+    });
+  }
+
   return (
     <Layout title="Start" description="Deep Chat's official playground">
       <Head>
@@ -145,7 +156,11 @@ export default function Playground() {
       <div>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
-          <HeaderButtons toggleLayout={toggleLayout} isGrid={isGrid}></HeaderButtons>
+          <HeaderButtons
+            toggleLayout={toggleLayout}
+            isGrid={isGrid}
+            applyNewGlobalConfig={applyNewGlobalConfig}
+          ></HeaderButtons>
         </div>
         <div>
           <div id="playground-chat-list-parent">
