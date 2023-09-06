@@ -10,28 +10,17 @@
 	onMount(async () => {
 		await import("deep-chat");
     isLoaded = true;
-    request();
 	});
 
   let isLoaded = false;
   const chatContainerStyle = {borderRadius: '10px'};
-
-  async function request() {
-    const response = await fetch('/api/custom', {
-      method: 'POST',
-      body: JSON.stringify({messages: [{role: 'user', text: 'aa'}]})
-    });
-    const result = await response.json();
-    console.log(result);
-  }
 </script>
 
 <main class='app'>
   {#if isLoaded}
     <h1 id="page-title">
       Deep Chat test ground for{' '}
-      <!-- WORK - update -->
-      <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/nextjs">SvelteKit</a>
+      <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/sveltekit">SvelteKit</a>
     </h1>
     <h1>Server for a custom API</h1>
     <div class="components">
