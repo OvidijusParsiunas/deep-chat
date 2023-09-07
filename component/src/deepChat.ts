@@ -136,8 +136,13 @@ export class DeepChat extends InternalHTML {
 
   refreshMessages: () => void = () => {};
 
+  clearMessages: (isReset?: boolean) => void = () => {};
+
   @Property('function')
   onNewMessage: OnNewMessage = () => {};
+
+  @Property('function')
+  onMessagesCleared: () => void = () => {};
 
   @Property('function')
   onComponentRender: () => void = () => {};
@@ -184,7 +189,7 @@ export class DeepChat extends InternalHTML {
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if ((this._activeService instanceof DirectServiceIO && this._activeService.key)
-        || this.request?.url || this.directConnection?.demo) {
+        || this.request?.url || this.request?.handler || this.directConnection?.demo) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;

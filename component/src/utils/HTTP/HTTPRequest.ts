@@ -18,6 +18,8 @@ export class HTTPRequest {
       (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
     if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
+    // WORK - will enable this later on
+    // if (io.requestSettings?.handler) return CustomRequest.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {

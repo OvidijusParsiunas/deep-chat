@@ -18,7 +18,9 @@ Triggered when a message is sent from the user and recieved from the target serv
 
 #### Example
 
+import ComponentContainerMethods from '@site/src/components/table/componentContainerMethods';
 import ComponentContainerEvents from '@site/src/components/table/componentContainerEvents';
+import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
@@ -45,6 +47,51 @@ chatElementRef.onNewMessage = (message) => { console.log(message); };
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 chatElementRef.addEventListener('new-message', (message) => { console.log(message.detail); });
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `onMessagesCleared` {#onMessagesCleared}
+
+- Function: () => `void`
+- Event: `messages-cleared`
+
+Triggered when the [`clearMessages`](./methods#clearMessages) method has been executed.
+
+#### Example
+
+<ComponentContainerEvents propertyName={'onMessagesCleared'} withMethod={true}>
+  <ComponentContainerMethods propertyName={'clearMessages'} displayResults={false} withEvent={true}>
+    <DeepChatBrowser
+      containerStyle={{borderRadius: '8px'}}
+      directConnection={{demo: true}}
+      initialMessages={[
+        {text: 'What is 2 + 2?', role: 'user'},
+        {text: 'The result of 2 + 2 is 4.', role: 'ai'},
+        {text: 'Wrong, it is 5.', role: 'user'},
+        {text: 'You are correct, the result of 2 + 2 is 5.', role: 'ai'},
+      ]}
+    ></DeepChatBrowser>
+  </ComponentContainerMethods>
+</ComponentContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+chatElementRef.onMessagesCleared = () => { console.log("Messages cleared"); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+chatElementRef.addEventListener('messages-cleared', () => { console.log("Messages cleared"); });
 ```
 
 </TabItem>

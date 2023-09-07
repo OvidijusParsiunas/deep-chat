@@ -70,7 +70,7 @@ export class Demo {
       const preprocessedResponse = (await responseInterceptor?.(response)) || response;
       if (preprocessedResponse.error) {
         messages.addNewErrorMessage('service', preprocessedResponse.error);
-      } else {
+      } else if (preprocessedResponse.result) {
         messages.addNewMessage(preprocessedResponse.result, true, true);
       }
       onFinish();

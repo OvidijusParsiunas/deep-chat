@@ -23,7 +23,7 @@ function click(table, resultText, setResultText, propertyName, displayResults, a
   }
 }
 
-export default function ComponentContainerMethods({children, propertyName, displayResults, argument}) {
+export default function ComponentContainerMethods({children, propertyName, displayResults, argument, withEvent}) {
   const containerRef = React.useRef(null);
   const [resultText, setResultText] = React.useState(['']);
 
@@ -32,7 +32,10 @@ export default function ComponentContainerMethods({children, propertyName, displ
       <div ref={containerRef}>
         <ComponentContainer>{children}</ComponentContainer>
       </div>
-      <div className="documentation-example-container method-example-container">
+      <div
+        className="documentation-example-container method-example-container"
+        style={{paddingBottom: withEvent ? 0 : ''}}
+      >
         <button
           className="documentation-button"
           onClick={() =>

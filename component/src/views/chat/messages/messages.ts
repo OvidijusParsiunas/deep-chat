@@ -35,17 +35,19 @@ export interface MessageElements {
 export class Messages {
   elementRef: HTMLElement;
   readonly messageStyles?: MessageStyles;
-  private readonly _messageElementRefs: MessageElements[] = [];
+  private _messageElementRefs: MessageElements[] = [];
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
+  private readonly _onMessagesCleared?: () => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly displayServiceErrorMessages?: boolean;
   private _remarkable: Remarkable;
   private _textToSpeech?: ProcessedTextToSpeechConfig;
   private _introPanel?: IntroPanel;
+  private _introMessage?: string;
   private _streamedText = '';
   messages: MessageContent[] = [];
   customDemoResponse?: DemoResponse;
@@ -59,6 +61,7 @@ export class Messages {
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
+    this._onMessagesCleared = FireEvents.onMessagesCleared.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
@@ -66,7 +69,7 @@ export class Messages {
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
-    // deepChat.clearMessages = this.clearMessages.bind(this);
+    deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
@@ -101,9 +104,12 @@ export class Messages {
     return container;
   }
 
-  private addIntroductoryMessage(introMessage: string) {
-    const elements = this.createAndAppendNewMessageElement(introMessage, true);
-    this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+  private addIntroductoryMessage(introMessage?: string) {
+    if (introMessage) this._introMessage = introMessage;
+    if (this._introMessage) {
+      const elements = this.createAndAppendNewMessageElement(this._introMessage, true);
+      this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+    }
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
@@ -342,18 +348,23 @@ export class Messages {
     );
   }
 
-  // private clearMessages() {
-  //   const retainedElements: MessageElements[] = [];
-  //   this._messageElementRefs.forEach((message) => {
-  //     const bubbleClasslist = message.bubbleElement.classList;
-  //     if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains('streamed-message')) {
-  //       retainedElements.push(message);
-  //     } else {
-  //       message.outerContainer.remove();
-  //     }
-  //   });
-  //   this._messageElementRefs = retainedElements;
-  // }
+  private clearMessages(isReset?: boolean) {
+    const retainedElements: MessageElements[] = [];
+    this._messageElementRefs.forEach((message) => {
+      const bubbleClasslist = message.bubbleElement.classList;
+      if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains('streamed-message')) {
+        retainedElements.push(message);
+      } else {
+        message.outerContainer.remove();
+      }
+    });
+    this._messageElementRefs = retainedElements;
+    if (isReset !== false) {
+      if (this._introPanel?._elementRef) this._introPanel.display();
+      this.addIntroductoryMessage();
+    }
+    this._onMessagesCleared?.();
+  }
 
   // this is mostly used for enabling highlight.js to highlight code if it is downloads later
   private refreshTextMessages() {

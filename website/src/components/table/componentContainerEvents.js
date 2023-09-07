@@ -9,10 +9,16 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
     const closureEventsText = [];
     return {
       updateText: (argument) => {
-        if (!ref.current || argument === undefined) return;
-        if (closureEventsText.length > 3) closureEventsText.pop();
-        closureEventsText.unshift(JSON.parse(JSON.stringify(argument)));
-        setEventsText([...closureEventsText]);
+        if (propertyName === 'onMessagesCleared') {
+          if (closureEventsText.length > 3) closureEventsText.pop();
+          closureEventsText.unshift('Messages cleared');
+          setEventsText([...closureEventsText]);
+        } else {
+          if (!ref.current || argument === undefined) return;
+          if (closureEventsText.length > 3) closureEventsText.pop();
+          closureEventsText.unshift(JSON.parse(JSON.stringify(argument)));
+          setEventsText([...closureEventsText]);
+        }
       },
     };
   });
@@ -24,7 +30,7 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
   );
 });
 
-export default function ComponentContainerEvents({children, propertyName}) {
+export default function ComponentContainerEvents({children, propertyName, withMethod}) {
   const containerRef = React.useRef(null);
   const eventTextRef = React.useRef(null);
 
@@ -33,7 +39,10 @@ export default function ComponentContainerEvents({children, propertyName}) {
       if (containerRef.current) {
         const syncReference = containerRef.current;
         if (containerRef.current && eventTextRef.current) {
-          const deepChatReference = extractChildChatElement(containerRef.current.children[0]);
+          const container = withMethod
+            ? containerRef.current.children[0].children[0].children[0]
+            : containerRef.current.children[0];
+          const deepChatReference = extractChildChatElement(container);
           deepChatReference[propertyName] = eventTextRef.current?.updateText;
         } else {
           const deepChatReference = extractChildChatElement(syncReference.children[0]);
@@ -45,9 +54,13 @@ export default function ComponentContainerEvents({children, propertyName}) {
 
   return (
     <div>
-      <div ref={containerRef}>
-        <ComponentContainer>{children}</ComponentContainer>
-      </div>
+      {withMethod ? (
+        <div ref={containerRef}>{children}</div>
+      ) : (
+        <div ref={containerRef}>
+          <ComponentContainer>{children}</ComponentContainer>
+        </div>
+      )}
       <div className="documentation-example-container method-example-container">
         <EventText propertyName={propertyName} ref={eventTextRef}></EventText>
       </div>

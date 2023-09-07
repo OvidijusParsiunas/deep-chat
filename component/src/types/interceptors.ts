@@ -1,5 +1,7 @@
+import {CustomServiceResponse} from './customService';
 import {GenericObject} from './object';
 
+// WORK - change body to a type
 export interface RequestDetails {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any;
@@ -17,4 +19,4 @@ export type RequestInterceptor = (details: RequestDetails) => ResponseDetails | 
 // dependend to the defined service
 // https://deepchat.dev/docs/interceptors#responseInterceptor
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ResponseInterceptor = (response: any) => any;
+export type ResponseInterceptor = (response: any) => CustomServiceResponse | Promise<CustomServiceResponse>;

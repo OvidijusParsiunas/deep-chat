@@ -41,4 +41,11 @@ export class IntroPanel {
       this._isDisplayed = false;
     }
   }
+
+  public display() {
+    if (!this._isDisplayed && this._elementRef) {
+      this._elementRef.style.display = '';
+      this._isDisplayed = true;
+    }
+  }
 }
