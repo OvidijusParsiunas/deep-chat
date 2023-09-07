@@ -9,31 +9,24 @@ function processConnectObject(connect) {
   return connect;
 }
 
-export default function ChatComponent({connect, messages, playgroundConfig}) {
+export default function ChatComponent({config}) {
   const componentRef = React.createRef(null);
-  const [currentMessages] = React.useState(messages || []);
 
   // updating messages here to keep track of them so that when user moves to a different page they can be added to config
   // to note componentRef.current will be undefined, hence need to keep track
   function newestMessages({isInitial}) {
     if (!isInitial) {
-      currentMessages.splice(0, currentMessages.length);
-      currentMessages.push(...componentRef.current.children[0].getMessages());
+      const {messages} = config;
+      messages.splice(0, messages.length);
+      messages.push(...componentRef.current.children[0].getMessages());
     }
   }
 
-  // when user moves to a different page, this is used to populate the latest messages
-  React.useEffect(() => {
-    return () => {
-      playgroundConfig.components[playgroundConfig.components.length - 1].messages = currentMessages;
-    };
-  });
-
   return (
     <div ref={componentRef} className="playground-chat-component">
-      {connect.custom ? (
+      {config.connect.custom ? (
         <DeepChatBrowser
-          request={connect.custom}
+          request={config.connect.custom}
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
@@ -42,12 +35,12 @@ export default function ChatComponent({connect, messages, playgroundConfig}) {
             marginRight: '10px',
             width: '20vw',
           }}
-          initialMessages={messages}
+          initialMessages={config.messages}
           onNewMessage={newestMessages}
         ></DeepChatBrowser>
       ) : (
         <DeepChatBrowser
-          directConnection={processConnectObject(connect)}
+          directConnection={processConnectObject(config.connect)}
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
@@ -56,7 +49,7 @@ export default function ChatComponent({connect, messages, playgroundConfig}) {
             marginRight: '10px',
             width: '20vw',
           }}
-          initialMessages={messages}
+          initialMessages={config.messages}
           onNewMessage={newestMessages}
         ></DeepChatBrowser>
       )}

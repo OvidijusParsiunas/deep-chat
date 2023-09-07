@@ -10,9 +10,9 @@ const ChatWrapper = React.forwardRef(
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
-        config.messages?.splice(0, config.messages?.length); // these are initial messages from the config, remove when changing connection object
+        config.messages.splice(0, config.messages.length); // these are initial messages from the config, remove when changing connection object
         if (!descriptionRef.current.getDirty()) {
-          setDescription(getDescription(config.connect));
+          setDescriptionText(getDescription(config.connect));
         }
       },
       scaleOut() {
@@ -44,13 +44,7 @@ const ChatWrapper = React.forwardRef(
       getMessages() {
         return elementRef.current.children[0].children[0].getMessages();
       },
-      getConfig() {
-        return {
-          connect: config.connect,
-          messages: elementRef.current.children[0].children[0].getMessages(),
-          description,
-        };
-      },
+      config,
       connect: config.connect,
     }));
 
@@ -68,7 +62,9 @@ const ChatWrapper = React.forwardRef(
     const [heightExpanded, setHeightExpanded] = React.useState(true);
     const [allowAnimation, setAllowAnimation] = React.useState(false);
     const descriptionRef = React.useRef(null);
-    const [description, setDescription] = React.useState(config.description); // tracked here as otherwise re-rendering component would re-render description
+    // need to use state for input
+    // tracked here as otherwise re-rendering component would re-render description
+    const [description, setDescription] = React.useState(config.description);
 
     React.useEffect(() => {
       let isMounted = true;
@@ -85,11 +81,14 @@ const ChatWrapper = React.forwardRef(
       }); // in a timeout as otherwise if add button is spammed the animations will not show
       return () => {
         isMounted = false;
-        // when the user moved to different page - update global config
-        // elementRef.current will be undefined
-        playgroundConfig.components.push({connect: config.connect, messages: [], description});
+        playgroundConfig.components.push(config);
       };
     }, []);
+
+    function setDescriptionText(text) {
+      config.description = text;
+      setDescription(text);
+    }
 
     return (
       <div
@@ -106,7 +105,11 @@ const ChatWrapper = React.forwardRef(
         <div className="playground-chat-details">
           <div className="playground-chat-description">
             <Logo connect={config.connect}></Logo>
-            <ChatWrapperText ref={descriptionRef} textValue={description} setTextValue={setDescription}></ChatWrapperText>
+            <ChatWrapperText
+              ref={descriptionRef}
+              textValue={description}
+              setTextValue={setDescriptionText}
+            ></ChatWrapperText>
           </div>
           <PlaygroundChatWrapperConfig
             setEditingChatRef={setEditingChatRef}

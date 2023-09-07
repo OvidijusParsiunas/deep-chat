@@ -19,7 +19,7 @@ import './playground.css';
 // Video to show off how it works
 
 // TO-DO - when the user is typing in one chat and hits tab - focus next
-const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: 'asdadasd'}]};
+const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}]};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -79,7 +79,7 @@ export default function Playground() {
 
   // logic placed here to not have to pass down state to child components
   function addComponent(config, index) {
-    const newConfig = config || {connect: {demo: true}};
+    const newConfig = config || {connect: {demo: true}, description: '', messages: []};
     const ref = React.createRef();
     const newComponent = (
       <ChatWrapper
@@ -92,7 +92,7 @@ export default function Playground() {
         isAtEnd={isChatAtEnd(index)}
         ref={ref}
       >
-        <ChatComponent connect={newConfig.connect} playgroundConfig={playgroundConfig}></ChatComponent>
+        <ChatComponent config={newConfig}></ChatComponent>
       </ChatWrapper>
     );
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
@@ -119,9 +119,8 @@ export default function Playground() {
 
   function cloneComponent(componentToBeCloned) {
     const index = chatComponents.findIndex((component) => component.ref === componentToBeCloned);
-    const component = componentToBeCloned.current.getConfig();
-    component.connect = JSON.parse(JSON.stringify(component.connect));
-    addComponent(component, index + 1);
+    const newConfig = JSON.parse(JSON.stringify(componentToBeCloned.current.config));
+    addComponent(newConfig, index + 1);
   }
 
   function toggleLayout() {
