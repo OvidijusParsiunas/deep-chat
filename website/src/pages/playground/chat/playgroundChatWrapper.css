@@ -32,16 +32,7 @@
 
 .playground-chat-details {
   text-align: center;
-  padding-top: 18px;
-}
-
-.playground-chat-logo-button {
-  cursor: pointer;
-  transition: 0.1s;
-}
-
-.playground-chat-logo-button:hover {
-  transform: scale(1.15);
+  padding-top: 17px;
 }
 
 .playground-chat-description {
@@ -50,12 +41,9 @@
   width: 100%;
 }
 
-.playground-chat-description-text {
-  font-size: 17px;
-}
-
 .playground-chat-config-buttons {
   width: 100%;
+  padding-top: 1px;
 }
 
 .playground-chat-config-buttons > * {

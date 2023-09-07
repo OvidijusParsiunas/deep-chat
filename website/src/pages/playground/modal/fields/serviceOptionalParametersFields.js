@@ -37,7 +37,7 @@ function Input({parameter, configVal, changeCode}) {
 }
 
 // toggling the display property instead of not rendering to allow extractOptionalParameterValues to pick it up
-// and let buildConfig to match it to the correct config index
+// and let buildConfig to match it to the correct connect index
 function ParameterField({name, isDisplayed, parameter, configVal, changeCode, pseudoNames}) {
   return (
     <div style={{display: isDisplayed ? 'table-row' : 'none'}}>
@@ -58,7 +58,7 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
   );
 }
 
-const OptionalParameters = React.forwardRef(({optionalParameters, config, changeCode, websocket, pseudoNames}, ref) => {
+const OptionalParameters = React.forwardRef(({optionalParameters, connect, changeCode, websocket, pseudoNames}, ref) => {
   return (
     <div ref={ref} className="playgroud-service-modal-form">
       {Object.keys(optionalParameters || {}).map((paramName, index) => {
@@ -70,7 +70,7 @@ const OptionalParameters = React.forwardRef(({optionalParameters, config, change
                 name={innerParamName}
                 isDisplayed={innerParamName === 'websocket' || !websocket}
                 parameter={optionalParameters[paramName][innerParamName]}
-                configVal={config?.[paramName]?.[innerParamName]}
+                configVal={connect?.[paramName]?.[innerParamName]}
                 changeCode={changeCode}
                 pseudoNames={pseudoNames}
               />
@@ -82,7 +82,7 @@ const OptionalParameters = React.forwardRef(({optionalParameters, config, change
             name={paramName}
             isDisplayed={paramName === 'websocket' || !websocket}
             parameter={optionalParameters[paramName]}
-            configVal={config?.[paramName]}
+            configVal={connect?.[paramName]}
             changeCode={changeCode}
             pseudoNames={pseudoNames}
           ></ParameterField>

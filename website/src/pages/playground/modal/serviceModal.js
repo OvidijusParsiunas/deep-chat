@@ -24,14 +24,15 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const [optionalParameters, setOptionalParameters] = React.useState({});
   const optionalParamsRef = React.useRef(null);
   const [code, setCode] = React.useState('');
-  const [websocket, setWebsocket] = React.useState(false); // have to keep it in this state as it must not affect config
+  const [websocket, setWebsocket] = React.useState(false); // have to keep it in this state as it must not affect connect object
   const submitButtonRef = React.useRef(null); // using ref in order to keep submit logic inside another component
 
   React.useEffect(() => {
-    const initialService = Object.keys(chatComponent.config || {demo: true})[0];
+    const initialService = Object.keys(chatComponent.connect || {demo: true})[0];
+    const initialServiceObj = chatComponent.connect?.[initialService];
     const initialType =
-      initialService && typeof chatComponent.config?.[initialService] === 'object'
-        ? Object.keys(SERVICE_MODAL_FORM_CONFIG[initialService]).find((key) => chatComponent.config?.[initialService][key])
+      initialService && typeof initialServiceObj === 'object'
+        ? Object.keys(SERVICE_MODAL_FORM_CONFIG[initialService]).find((key) => initialServiceObj[key])
         : undefined;
     changeService(initialService, initialType);
     setIsVisible(true);
@@ -56,15 +57,16 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     setAvailableTypes(availableTypes);
     setActiveType(newActiveType || availableTypes[0]);
     if (newService === 'custom') {
-      setRequiredValue(chatComponent.config[newService]?.url || '');
+      setRequiredValue(chatComponent.connect[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
-      setRequiredValue(chatComponent.config[newService]?.key || '');
+      setRequiredValue(chatComponent.connect[newService]?.key || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
     }
     setTimeout(() => {
       changeCode(newService, availableTypes[0]);
-    });
+      // 6 as otherwise when connect is custom and opening modal causes extractOptionalParameterValues to throw error
+    }, 6);
   };
 
   const changeType = (newType) => {
@@ -85,19 +87,19 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const changeCode = (serviceArg, newTypeArg) => {
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
-    const config = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
+    const connect = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
     if (service === 'custom') {
-      setWebsocket(config['custom'].websocket);
-      if (config['custom'].websocket) {
+      setWebsocket(connect['custom'].websocket);
+      if (connect['custom'].websocket) {
         setTimeout(() => {
-          const newConfig = constructConfig(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
+          const newConfig = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
           setCode(getCodeStr(newConfig, true));
         });
         return;
       }
-      return setCode(getCodeStr(config, true));
+      return setCode(getCodeStr(connect, true));
     }
-    setCode(getCodeStr(config, false));
+    setCode(getCodeStr(connect, false));
   };
 
   const close = () => {
@@ -158,15 +160,15 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
             title={'Optional parameters'}
             collapseStates={collapseStates}
             prop={'optionalParams'}
-            initExpanded={typeof chatComponent.config[activeService]?.[activeType] === 'object'}
+            initExpanded={typeof chatComponent.connect[activeService]?.[activeType] === 'object'}
           >
             <OptionalParameters
               ref={optionalParamsRef}
               optionalParameters={optionalParameters}
-              config={
+              connect={
                 activeService === 'custom'
-                  ? chatComponent.config[activeService]
-                  : chatComponent.config[activeService]?.[activeType]
+                  ? chatComponent.connect[activeService]
+                  : chatComponent.connect[activeService]?.[activeType]
               }
               changeCode={changeCode}
               websocket={websocket}
@@ -182,8 +184,8 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         <CloseButtons
           chatComponent={chatComponent}
           requiredFields={[requiredValueRef, requiredValue2Ref]}
-          constructConfig={() =>
-            constructConfig(optionalParamsRef.current, activeService, activeType, requiredValueRef.current?.value)
+          constructConnect={() =>
+            constructConnect(optionalParamsRef.current, activeService, activeType, requiredValueRef.current?.value)
           }
           close={close}
           ref={submitButtonRef}
@@ -210,26 +212,26 @@ function changeFirstLetter(text, capitalize = true) {
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
-function getCodeStr(config, isCustom) {
+function getCodeStr(connect, isCustom) {
   if (isCustom) {
-    return `<deep-chat request='${JSON.stringify(config['custom'], null, 2)}'></deep-chat>`;
+    return `<deep-chat request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
   }
-  return `<deep-chat directConnection='${JSON.stringify(config, null, 2)}'></deep-chat>`;
+  return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
 }
 
-function constructConfig(optionalParamsEl, activeService, activeType, requiredProp) {
+function constructConnect(optionalParamsEl, activeService, activeType, requiredProp) {
   if (activeService === 'demo') return {demo: true};
   const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
   const optionalParams =
     activeService === 'custom'
       ? SERVICE_MODAL_FORM_CONFIG[activeService]
       : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
-  const config = buildConfig(optionalParams, optionalParamsValues);
+  const connect = buildConnect(optionalParams, optionalParamsValues);
   return {
     [activeService]:
       activeService === 'custom'
-        ? {url: requiredProp, ...config}
-        : {key: requiredProp, [activeType]: Object.keys(config).length > 0 ? config : true},
+        ? {url: requiredProp, ...connect}
+        : {key: requiredProp, [activeType]: Object.keys(connect).length > 0 ? connect : true},
   };
 }
 
@@ -259,27 +261,27 @@ function extractOptionalParameterValues(optionalParamsEl) {
   });
 }
 
-function buildConfig(optionalParams, optionalParamsValues) {
-  const config = {};
+function buildConnect(optionalParams, optionalParamsValues) {
+  const connect = {};
   let index = 0;
   Object.keys(optionalParams).forEach((parameter) => {
     const value = optionalParams[parameter];
     if (typeof value === 'object' && !Array.isArray(value)) {
       Object.keys(value).forEach((parameter1) => {
         if (optionalParamsValues[index] !== '') {
-          config[parameter] ??= {};
-          config[parameter][changeFirstLetter(parameter1, false)] = optionalParamsValues[index];
+          connect[parameter] ??= {};
+          connect[parameter][changeFirstLetter(parameter1, false)] = optionalParamsValues[index];
         }
         index += 1;
       });
     } else {
       if (optionalParamsValues[index] !== undefined && optionalParamsValues[index] !== '') {
-        config[changeFirstLetter(parameter, false)] = optionalParamsValues[index];
+        connect[changeFirstLetter(parameter, false)] = optionalParamsValues[index];
       }
       index += 1;
     }
   });
-  return config;
+  return connect;
 }
 
 const SERVICE_MODAL_FORM_CONFIG = {

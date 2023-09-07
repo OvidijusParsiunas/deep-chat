@@ -2,18 +2,19 @@ import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import './playgroundChatComponent.css';
 import React from 'react';
 
-function processDirectConfig(config) {
-  if (config.demo) {
+function processConnectObject(connect) {
+  if (connect.demo) {
     return {demo: {response: {result: {text: "Click the 'Configure' button below to connect to a service."}}}};
   }
-  return config;
+  return connect;
 }
 
-export default function ChatComponent({config, messages, globalConfig}) {
+export default function ChatComponent({connect, messages, playgroundConfig}) {
   const componentRef = React.createRef(null);
   const [currentMessages] = React.useState(messages || []);
 
   // updating messages here to keep track of them so that when user moves to a different page they can be added to config
+  // to note componentRef.current will be undefined, hence need to keep track
   function newestMessages({isInitial}) {
     if (!isInitial) {
       currentMessages.splice(0, currentMessages.length);
@@ -24,15 +25,15 @@ export default function ChatComponent({config, messages, globalConfig}) {
   // when user moves to a different page, this is used to populate the latest messages
   React.useEffect(() => {
     return () => {
-      globalConfig.components[globalConfig.components.length - 1].messages = currentMessages;
+      playgroundConfig.components[playgroundConfig.components.length - 1].messages = currentMessages;
     };
   });
 
   return (
     <div ref={componentRef} className="playground-chat-component">
-      {config.custom ? (
+      {connect.custom ? (
         <DeepChatBrowser
-          request={config.custom}
+          request={connect.custom}
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
@@ -46,7 +47,7 @@ export default function ChatComponent({config, messages, globalConfig}) {
         ></DeepChatBrowser>
       ) : (
         <DeepChatBrowser
-          directConnection={processDirectConfig(config)}
+          directConnection={processConnectObject(connect)}
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',

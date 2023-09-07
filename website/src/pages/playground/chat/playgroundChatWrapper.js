@@ -1,64 +1,19 @@
 import PlaygroundChatWrapperConfig from './playgroundChatWrapperConfig';
-import huggingFaceLogo from '/img/huggingFaceLogo.png';
-import stabilityAILogo from '/img/stabilityAILogo.png';
-import assemblyAILogo from '/img/assemblyAILogo.png';
-import openAILogo from '/img/openAILogo.png';
-import cohereLogo from '/img/cohereLogo.png';
-import azureLogo from '/img/azureLogo.png';
+import ChatWrapperText from './playgroundChatWrapperText';
+import Logo from './playgroundChatWrapperLogo';
 import './playgroundChatWrapper.css';
-import Flash from '/img/flash.svg';
 import React from 'react';
-
-function getDescription(config) {
-  const service = Object.keys(config)[0];
-  if (service === 'custom') {
-    return SERVICE_TO_NAME[service];
-  }
-  const keys = Object.keys(config[service]);
-  return SERVICE_TO_NAME[service][keys[0] === 'key' ? keys[1] : keys[0]];
-}
-
-// prettier-ignore
-function Logo({config}) {
-  if (config.custom) {
-    return <Flash width="19" style={{paddingTop: '5px', marginRight: '6px', marginLeft: '-10px'}} />;
-  }
-  if (config.openAI) {
-    return <img src={openAILogo} width="17" style={{paddingTop: '6px', marginRight: '8px'}} />;
-  }
-  if (config.cohere) {
-    return <img src={cohereLogo} width="26" style={{paddingTop: '1.5px', marginLeft: '-1px', marginRight: '3px'}} />;
-  }
-  if (config.azure) {
-    return <img src={azureLogo} width="21" style={{paddingTop: '5px', marginRight: '6px'}} />;
-  }
-  if (config.huggingFace) {
-    return <img src={huggingFaceLogo} width="24" style={{paddingTop: '2.5px', marginRight: '6px'}} />;
-  }
-  if (config.stabilityAI) {
-    return <img src={stabilityAILogo} width="19" style={{paddingTop: '4.8px', marginRight: '6px'}} />;
-  }
-  if (config.assemblyAILogo) {
-    return <img src={assemblyAILogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
-  }
-  return (
-    <Flash
-      width="19"
-      style={{
-        paddingTop: '5px', marginRight: '6px', marginLeft: '-10px', transform: 'scale(1.1)',
-        filter: 'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(926%) hue-rotate(322deg) brightness(97%) contrast(91%)',
-      }}
-    />
-  );
-}
 
 // The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children
 const ChatWrapper = React.forwardRef(
-  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd, messages, globalConfig}, ref) => {
+  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd, playgroundConfig}, ref) => {
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
-        messages?.splice(0, messages?.length); // these are initial messages from the config, remove when changing config
+        config.messages?.splice(0, config.messages?.length); // these are initial messages from the config, remove when changing connection object
+        if (!descriptionRef.current.getDirty()) {
+          setDescription(getDescription(config.connect));
+        }
       },
       scaleOut() {
         setScaleExpanded(false); // shrunk already has animation
@@ -89,7 +44,14 @@ const ChatWrapper = React.forwardRef(
       getMessages() {
         return elementRef.current.children[0].children[0].getMessages();
       },
-      config,
+      getConfig() {
+        return {
+          connect: config.connect,
+          messages: elementRef.current.children[0].children[0].getMessages(),
+          description,
+        };
+      },
+      connect: config.connect,
     }));
 
     function stretchOutOnMount() {
@@ -105,6 +67,8 @@ const ChatWrapper = React.forwardRef(
     const [widthExpanded, setWidthExpanded] = React.useState(isAtEnd);
     const [heightExpanded, setHeightExpanded] = React.useState(true);
     const [allowAnimation, setAllowAnimation] = React.useState(false);
+    const descriptionRef = React.useRef(null);
+    const [description, setDescription] = React.useState(config.description); // tracked here as otherwise re-rendering component would re-render description
 
     React.useEffect(() => {
       let isMounted = true;
@@ -121,7 +85,9 @@ const ChatWrapper = React.forwardRef(
       }); // in a timeout as otherwise if add button is spammed the animations will not show
       return () => {
         isMounted = false;
-        globalConfig.components.push({config, messages: []}); // when the user moved to different page - update global config
+        // when the user moved to different page - update global config
+        // elementRef.current will be undefined
+        playgroundConfig.components.push({connect: config.connect, messages: [], description});
       };
     }, []);
 
@@ -139,10 +105,8 @@ const ChatWrapper = React.forwardRef(
         {children}
         <div className="playground-chat-details">
           <div className="playground-chat-description">
-            <div className="playground-chat-logo-button" onClick={() => setEditingChatRef(ref)}>
-              <Logo config={config}></Logo>
-            </div>
-            <div className="playground-chat-description-text">{getDescription(config)}</div>
+            <Logo connect={config.connect}></Logo>
+            <ChatWrapperText ref={descriptionRef} textValue={description} setTextValue={setDescription}></ChatWrapperText>
           </div>
           <PlaygroundChatWrapperConfig
             setEditingChatRef={setEditingChatRef}
@@ -157,6 +121,26 @@ const ChatWrapper = React.forwardRef(
 );
 
 export default ChatWrapper;
+
+function isChildElementVisible(parentElement, childElement) {
+  const parentRect = parentElement.getBoundingClientRect();
+  const childRect = childElement.getBoundingClientRect();
+  return (
+    childRect.top >= parentRect.top &&
+    childRect.bottom <= parentRect.bottom &&
+    childRect.left >= parentRect.left &&
+    childRect.right <= parentRect.right
+  );
+}
+
+function getDescription(connect) {
+  const service = Object.keys(connect)[0];
+  if (service === 'custom') {
+    return SERVICE_TO_NAME[service];
+  }
+  const keys = Object.keys(connect[service]);
+  return SERVICE_TO_NAME[service][keys[0] === 'key' ? keys[1] : keys[0]];
+}
 
 const SERVICE_TO_NAME = {
   demo: 'Default',
@@ -214,14 +198,3 @@ const SERVICE_TO_NAME = {
     translation: {},
   },
 };
-
-function isChildElementVisible(parentElement, childElement) {
-  const parentRect = parentElement.getBoundingClientRect();
-  const childRect = childElement.getBoundingClientRect();
-  return (
-    childRect.top >= parentRect.top &&
-    childRect.bottom <= parentRect.bottom &&
-    childRect.left >= parentRect.left &&
-    childRect.right <= parentRect.right
-  );
-}

@@ -10,19 +10,16 @@ import Sortable from 'sortablejs';
 import React from 'react';
 import './playground.css';
 
-// TO-DO have a config to preset the playground
-
 // Styling of the butttons
 // Title based on current service
 // Connect to a service - insert key panel (info bubble that the key will not be shared)
 // Different shadow/bubble color depending on service used
 // Clear messages
-// Save config
-// Load config
 
 // Video to show off how it works
 
-const globalConfig = {components: [{config: {demo: true}, messages: []}]};
+// TO-DO - when the user is typing in one chat and hits tab - focus next
+const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: 'asdadasd'}]};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -40,28 +37,28 @@ export default function Playground() {
 
   React.useEffect(() => {
     setTimeout(() => {
-      applyNewGlobalConfig(globalConfig);
+      applyNewPlaygroundConfig(playgroundConfig);
       view.isBeingCreated = false;
       Sortable.create(componentListRef.current, {animation: 450, handle: '.playground-chat-drag-handle'});
       setHorizontalScroll(componentListRef.current);
     });
     return () => {
-      globalConfig.components = []; // removed so that it can be repopulated by individual components
+      playgroundConfig.components = []; // removed so that it can be repopulated by individual components
       chatComponents.splice(0, chatComponents.length);
       latestChatIndex.index = 0;
       view.isBeingCreated = false;
     };
   }, []);
 
-  function scrollToNewChat(index, config, elementRef) {
+  function scrollToNewChat(index, wasCloned, elementRef) {
     if (view.isGrid) {
-      if (config) {
+      if (wasCloned) {
         if (index - 1 !== 0 && isChatAtEnd(index - 1)) elementRef.scrollIntoView();
       } else {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       }
     }
-    if (config) {
+    if (wasCloned) {
       if (!elementRef.isVisibleInParent(componentListRef.current)) {
         componentListRef.current.scrollLeft = componentListRef.current.scrollLeft + 400;
       }
@@ -81,23 +78,21 @@ export default function Playground() {
   }
 
   // logic placed here to not have to pass down state to child components
-  function addComponent(config, index, messages) {
-    // config
-    const newConfig = config || {demo: true};
+  function addComponent(config, index) {
+    const newConfig = config || {connect: {demo: true}};
     const ref = React.createRef();
     const newComponent = (
       <ChatWrapper
         key={latestChatIndex.index}
+        config={newConfig}
         setEditingChatRef={setEditingChatRef}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
-        config={newConfig}
-        messages={messages}
-        globalConfig={globalConfig}
+        playgroundConfig={playgroundConfig}
         isAtEnd={isChatAtEnd(index)}
         ref={ref}
       >
-        <ChatComponent config={newConfig} messages={messages} globalConfig={globalConfig}></ChatComponent>
+        <ChatComponent connect={newConfig.connect} playgroundConfig={playgroundConfig}></ChatComponent>
       </ChatWrapper>
     );
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
@@ -105,7 +100,7 @@ export default function Playground() {
     if (view.isBeingCreated) return;
     const timeout = config ? 50 : 5; // cloning and auto scrolling in panorama does not work
     setTimeout(() => {
-      scrollToNewChat(index, config, ref.current);
+      scrollToNewChat(index, !!config?.connect, ref.current);
     }, timeout);
   }
 
@@ -124,7 +119,9 @@ export default function Playground() {
 
   function cloneComponent(componentToBeCloned) {
     const index = chatComponents.findIndex((component) => component.ref === componentToBeCloned);
-    addComponent(componentToBeCloned.current.config, index + 1);
+    const component = componentToBeCloned.current.getConfig();
+    component.connect = JSON.parse(JSON.stringify(component.connect));
+    addComponent(component, index + 1);
   }
 
   function toggleLayout() {
@@ -132,11 +129,11 @@ export default function Playground() {
     view.isGrid = !view.isGrid;
   }
 
-  function applyNewGlobalConfig(newConfig) {
+  function applyNewPlaygroundConfig(newConfig) {
     chatComponents.splice(0, chatComponents.length);
     refreshList((latestChatIndex.index += 1));
     newConfig.components.forEach((component) => {
-      addComponent(component.config, undefined, component.messages);
+      addComponent(component);
     });
   }
 
@@ -159,7 +156,8 @@ export default function Playground() {
           <HeaderButtons
             toggleLayout={toggleLayout}
             isGrid={isGrid}
-            applyNewGlobalConfig={applyNewGlobalConfig}
+            chatComponents={chatComponents}
+            applyNewPlaygroundConfig={applyNewPlaygroundConfig}
           ></HeaderButtons>
         </div>
         <div>
