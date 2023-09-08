@@ -9,7 +9,7 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
     const closureEventsText = [];
     return {
       updateText: (argument) => {
-        if (propertyName === 'onMessagesCleared') {
+        if (propertyName === 'onClearMessages') {
           if (closureEventsText.length > 3) closureEventsText.pop();
           closureEventsText.unshift('Messages cleared');
           setEventsText([...closureEventsText]);

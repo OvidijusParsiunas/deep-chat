@@ -9,18 +9,20 @@ import {Stream} from './stream';
 export class Websocket {
   public static setup(io: ServiceIO, websocketConfig: boolean | string | string[]) {
     if (io.requestSettings.url !== Demo.URL) {
-      const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
-      io.websocket = Websocket.connect(io.requestSettings.url, protocols);
       io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
+      const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
+      try {
+        // this will throw an error when url doesn't start with 'ws:'
+        io.websocket = new WebSocket(io.requestSettings.url || '', protocols);
+      } catch (e) {
+        console.error(e);
+        io.websocket = 'error'; // we mark it as 'error' to display error message later
+      }
     }
   }
 
-  public static connect(url?: string, protocols?: string | string[]) {
-    return new WebSocket(url || '', protocols);
-  }
-
   public static assignListeners(io: ServiceIO, messages: Messages) {
-    if (!io.websocket) return;
+    if (!io.websocket || io.websocket === 'error') return messages.addNewErrorMessage('service', 'Connection error');
     io.websocket.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {

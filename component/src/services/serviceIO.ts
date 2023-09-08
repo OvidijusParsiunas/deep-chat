@@ -51,7 +51,8 @@ export interface ServiceIO {
 
   url?: string;
 
-  websocket?: WebSocket;
+  // 'error' used to display error
+  websocket?: WebSocket | 'error';
 
   completionsHandlers: CompletionsHandlers;
 

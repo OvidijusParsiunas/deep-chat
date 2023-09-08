@@ -40,7 +40,7 @@ export class Messages {
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
-  private readonly _onMessagesCleared?: () => void;
+  private readonly _onClearMessages?: () => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly displayServiceErrorMessages?: boolean;
@@ -61,7 +61,7 @@ export class Messages {
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
-    this._onMessagesCleared = FireEvents.onMessagesCleared.bind(this, deepChat);
+    this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
@@ -363,7 +363,7 @@ export class Messages {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessage();
     }
-    this._onMessagesCleared?.();
+    this._onClearMessages?.();
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it is downloads later

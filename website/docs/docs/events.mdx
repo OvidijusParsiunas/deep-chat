@@ -54,16 +54,16 @@ chatElementRef.addEventListener('new-message', (message) => { console.log(messag
 
 <LineBreak></LineBreak>
 
-### `onMessagesCleared` {#onMessagesCleared}
+### `onClearMessages` {#onClearMessages}
 
 - Function: () => `void`
-- Event: `messages-cleared`
+- Event: `clear-messages`
 
-Triggered when the [`clearMessages`](./methods#clearMessages) method has been executed.
+Triggered when the [`clearMessages`](./methods#clearMessages) method has been executed. The core purpose of this is to help track messages state.
 
 #### Example
 
-<ComponentContainerEvents propertyName={'onMessagesCleared'} withMethod={true}>
+<ComponentContainerEvents propertyName={'onClearMessages'} withMethod={true}>
   <ComponentContainerMethods propertyName={'clearMessages'} displayResults={false} withEvent={true}>
     <DeepChatBrowser
       containerStyle={{borderRadius: '8px'}}
@@ -82,7 +82,7 @@ Triggered when the [`clearMessages`](./methods#clearMessages) method has been ex
 <TabItem value="js" label="Function">
 
 ```html
-chatElementRef.onMessagesCleared = () => { console.log("Messages cleared"); };
+chatElementRef.onClearMessages = () => { console.log("Messages cleared"); };
 ```
 
 </TabItem>
