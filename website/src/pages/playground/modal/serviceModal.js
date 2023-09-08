@@ -235,12 +235,15 @@ function constructConnect(optionalParamsEl, activeService, activeType, requiredP
   };
 }
 
+// prettier-ignore
 function extractOptionalParameterValues(optionalParamsEl) {
   return Array.from(optionalParamsEl.children).map((element) => {
     const valueEl = element.children[1];
     let value = valueEl.value;
     if (valueEl.classList.contains('playground-select')) {
-      value = valueEl.children[2].children[0].children[0].children[0].children[0].textContent.trim().toLowerCase();
+      const selectValue = valueEl.children[2].children[0].children[0].children[0].children[0].textContent.trim();
+      // connect methods (POST/GET/PUT) or strings with second letter as upper case don't need to be lower cased
+      value = selectValue.length > 1 && selectValue.charAt(1) === selectValue.charAt(1).toUpperCase() ? selectValue : selectValue.toLowerCase();
     }
     if (value === 'true') return true;
     if (value === 'false') return false;

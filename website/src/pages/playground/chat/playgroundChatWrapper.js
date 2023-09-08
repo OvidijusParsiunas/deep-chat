@@ -90,6 +90,10 @@ const ChatWrapper = React.forwardRef(
       setDescription(text);
     }
 
+    function clearMessages() {
+      elementRef.current.children[0].children[0].clearMessages();
+    }
+
     return (
       <div
         key={counter}
@@ -115,6 +119,7 @@ const ChatWrapper = React.forwardRef(
             setEditingChatRef={setEditingChatRef}
             cloneComponent={cloneComponent}
             removeComponent={removeComponent}
+            clearMessages={clearMessages}
             wrapperRef={ref}
           />
         </div>

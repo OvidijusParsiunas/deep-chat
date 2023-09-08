@@ -1,7 +1,9 @@
 import TooltipWrapper from '../tooltip/playgroundTooltipWrapper';
 import React from 'react';
 
-export default function PlaygroundChatWrapperConfig({setEditingChatRef, cloneComponent, removeComponent, wrapperRef}) {
+// prettier-ignore
+export default function PlaygroundChatWrapperConfig(
+    {setEditingChatRef, cloneComponent, removeComponent, clearMessages, wrapperRef}) {
   return (
     <div className="playground-chat-config-buttons">
       <img className="playground-chat-drag-handle" src="img/drag-handle.svg"></img>
@@ -17,6 +19,7 @@ export default function PlaygroundChatWrapperConfig({setEditingChatRef, cloneCom
         <img
           src="img/clear-messages.svg"
           className="playground-chat-config-button playground-chat-clear-button playground-button"
+          onClick={() => clearMessages()}
         ></img>
       </TooltipWrapper>
       <TooltipWrapper text="Clone">

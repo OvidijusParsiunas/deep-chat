@@ -22,6 +22,10 @@ export default function ChatComponent({config}) {
     }
   }
 
+  function clearMessages() {
+    config.messages.splice(0, config.messages.length);
+  }
+
   return (
     <div ref={componentRef} className="playground-chat-component">
       {config.connect.custom ? (
@@ -37,6 +41,7 @@ export default function ChatComponent({config}) {
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}
+          onMessagesCleared={clearMessages}
         ></DeepChatBrowser>
       ) : (
         <DeepChatBrowser
@@ -51,6 +56,7 @@ export default function ChatComponent({config}) {
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}
+          onMessagesCleared={clearMessages}
         ></DeepChatBrowser>
       )}
     </div>

@@ -14,7 +14,7 @@ export default function CollapsableSection({children, title, collapseStates, pro
     const newCollapseState = initExpanded ? false : collapseStates[prop];
     setIsCollapsed(newCollapseState);
     setIsHidden(newCollapseState);
-    setTimeout(() => setMaxHeight(childRef.current.children[0].clientHeight), 2); // in a timeout to allow optional parameters and code to render
+    setMaxHeight('unset');
   }, [initExpanded]);
 
   const toggle = () => {
@@ -22,7 +22,7 @@ export default function CollapsableSection({children, title, collapseStates, pro
     const timeout = setTimeout(() => setIsTransitionAllowed(null), TRANSITION_LENGTH_MS);
     const newCollapseState = !isCollapsed;
     setMaxHeight(childRef.current.children[0].clientHeight);
-    // in a timeout to allow maxHeight to be set for the transitiona animation to occur - test by collapsing the section
+    // in a timeout to allow maxHeight to be set for the transition animation to occur - test by collapsing the section
     setTimeout(() => {
       setIsHidden(true);
       setIsTransitionAllowed(timeout);

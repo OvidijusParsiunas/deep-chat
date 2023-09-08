@@ -3,6 +3,7 @@ import './playgroundSelect.css';
 import React from 'react';
 
 function changeFirstLetter(text, capitalize = true) {
+  if (typeof text === 'boolean') return text;
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
