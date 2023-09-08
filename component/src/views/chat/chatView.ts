@@ -10,7 +10,7 @@ export class ChatView {
     const containerElement = document.createElement('div');
     containerElement.id = 'chat-view';
     const messages = new Messages(deepChat, serviceIO, panel);
-    if (serviceIO.websocket) Websocket.assignListeners(serviceIO, messages);
+    if (serviceIO.websocket) Websocket.createConnection(serviceIO, messages);
     const userInput = new Input(deepChat, messages, serviceIO, containerElement);
     ElementUtils.addElements(containerElement, messages.elementRef, userInput.elementRef);
     return containerElement;

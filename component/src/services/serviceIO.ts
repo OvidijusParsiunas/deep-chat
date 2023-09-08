@@ -51,8 +51,8 @@ export interface ServiceIO {
 
   url?: string;
 
-  // 'error' used to display error
-  websocket?: WebSocket | 'error';
+  // true is used to signify that the websocket connection will need to be established
+  websocket?: WebSocket | true;
 
   completionsHandlers: CompletionsHandlers;
 

@@ -281,6 +281,10 @@ export class Messages {
     );
   }
 
+  public removeError() {
+    if (this.isLastMessageError()) this.elementRef.children[this.elementRef.children.length - 1].remove();
+  }
+
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
     const messageElements = this.createMessageElements('', true);

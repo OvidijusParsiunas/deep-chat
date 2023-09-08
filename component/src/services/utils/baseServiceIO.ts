@@ -50,7 +50,7 @@ export class BaseServiceIO implements ServiceIO {
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
     this._directServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
-    if (this.requestSettings.websocket) Websocket.setup(this, this.requestSettings.websocket);
+    if (this.requestSettings.websocket) Websocket.setup(this);
   }
 
   private static canSendMessage(text?: string, files?: File[]) {

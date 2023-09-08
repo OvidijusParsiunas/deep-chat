@@ -7,23 +7,45 @@ import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
 export class Websocket {
-  public static setup(io: ServiceIO, websocketConfig: boolean | string | string[]) {
+  public static setup(io: ServiceIO) {
     if (io.requestSettings.url !== Demo.URL) {
       io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
-      const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
-      try {
-        // this will throw an error when url doesn't start with 'ws:'
-        io.websocket = new WebSocket(io.requestSettings.url || '', protocols);
-      } catch (e) {
-        console.error(e);
-        io.websocket = 'error'; // we mark it as 'error' to display error message later
-      }
+      io.websocket = true;
     }
   }
 
-  public static assignListeners(io: ServiceIO, messages: Messages) {
-    if (!io.websocket || io.websocket === 'error') return messages.addNewErrorMessage('service', 'Connection error');
-    io.websocket.onmessage = async (message) => {
+  public static createConnection(io: ServiceIO, messages: Messages) {
+    const websocketConfig = io.requestSettings.websocket;
+    if (!websocketConfig) return;
+    try {
+      const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
+      // this will throw an error when url doesn't start with 'ws:'
+      io.websocket = new WebSocket(io.requestSettings.url || '', protocols);
+      io.websocket.onopen = () => {
+        // TO-DO - when ability to disable submit button is set, instead of removing error message
+        // reenable the submit button
+        messages.removeError();
+        if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, io.websocket, messages);
+      };
+      io.websocket.onerror = (event) => {
+        console.error(event);
+        Websocket.retryConnection(io, messages);
+      };
+    } catch (error) {
+      console.error(error);
+      Websocket.retryConnection(io, messages);
+    }
+  }
+
+  private static retryConnection(io: ServiceIO, messages: Messages) {
+    if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+    setTimeout(() => {
+      Websocket.createConnection(io, messages);
+    }, 5000);
+  }
+
+  public static assignListeners(io: ServiceIO, ws: WebSocket, messages: Messages) {
+    ws.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: CustomServiceResponse = JSON.parse(message.data);
@@ -40,14 +62,15 @@ export class Websocket {
         RequestUtils.displayError(messages, error as object, 'Error in server message');
       }
     };
-    io.websocket.onerror = (error) => {
+    ws.onerror = (error) => {
       console.error(error);
-      messages.addNewErrorMessage('service', 'Connection error');
+      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     };
-    io.websocket.onclose = () => {
+    ws.onclose = () => {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+      Websocket.createConnection(io, messages);
     };
   }
 
@@ -59,9 +82,9 @@ export class Websocket {
     if (io.requestSettings?.url === Demo.URL) {
       return Demo.request(messages, io.completionsHandlers.onFinish, io.deepChat.responseInterceptor);
     }
-    if (ws.readyState !== ws.OPEN) {
+    if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');
-      messages.addNewErrorMessage('service', 'Connection error');
+      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     } else {
       ws.send(JSON.stringify(processedBody));
     }

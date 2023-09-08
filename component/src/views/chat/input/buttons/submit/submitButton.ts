@@ -116,6 +116,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
   // TO-DO - button should be disabled if websocket connection is not open
+  // TO-DO - should be disabled when websocket is connecting and option when loading history
   public async submit(programmatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;
