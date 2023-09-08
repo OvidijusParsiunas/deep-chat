@@ -10,7 +10,7 @@ export class Websocket {
   public static setup(io: ServiceIO) {
     if (io.requestSettings.url !== Demo.URL) {
       io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
-      io.websocket = true;
+      io.websocket = 'pending'; // main reason why not connecting here is because messages is not available yet
     }
   }
 
@@ -44,7 +44,7 @@ export class Websocket {
     }, 5000);
   }
 
-  public static assignListeners(io: ServiceIO, ws: WebSocket, messages: Messages) {
+  private static assignListeners(io: ServiceIO, ws: WebSocket, messages: Messages) {
     ws.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {

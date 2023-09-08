@@ -51,8 +51,8 @@ export interface ServiceIO {
 
   url?: string;
 
-  // true is used to signify that the websocket connection will need to be established
-  websocket?: WebSocket | true;
+  // 'pending' is used to signify that the websocket connection will need to be established
+  websocket?: WebSocket | 'pending';
 
   completionsHandlers: CompletionsHandlers;
 

@@ -127,6 +127,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
     const submittedText = userText === '' ? undefined : userText;
     if (this._isRequestInProgress) return;
+    if (this._serviceIO.websocket === 'pending') return;
     if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
       if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
     } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;
