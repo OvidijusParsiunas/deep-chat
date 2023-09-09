@@ -117,6 +117,7 @@ export class SubmitButton extends InputButton<Styles> {
   // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
   // TO-DO - button should be disabled if websocket connection is not open
   // TO-DO - should be disabled when websocket is connecting and option when loading history
+  // prettier-ignore
   public async submit(programmatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;
@@ -127,7 +128,9 @@ export class SubmitButton extends InputButton<Styles> {
     }
     const submittedText = userText === '' ? undefined : userText;
     if (this._isRequestInProgress) return;
-    if (this._serviceIO.websocket === 'pending') return;
+    const {websocket} = this._serviceIO;
+    if (websocket && (
+      websocket === 'pending' || websocket.readyState === undefined || websocket.readyState !== websocket.OPEN)) return;
     if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
       if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
     } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;

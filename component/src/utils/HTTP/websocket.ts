@@ -38,6 +38,7 @@ export class Websocket {
   }
 
   private static retryConnection(io: ServiceIO, messages: Messages) {
+    io.websocket = 'pending';
     if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     setTimeout(() => {
       Websocket.createConnection(io, messages);
