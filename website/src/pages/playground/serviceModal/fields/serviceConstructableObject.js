@@ -73,11 +73,11 @@ function Field({index, property, properties, setProperties, changeCode}) {
   );
 }
 
-export default function ConstructableObject({connect, changeCode}) {
+export default function ConstructableObject({configVal, changeCode}) {
   const [properties, setProperties] = React.useState(
-    Object.keys(connect || []).map((property) => ({
+    Object.keys(configVal || []).map((property) => ({
       keyName: property,
-      value: connect[property],
+      value: configVal[property],
     }))
   );
 

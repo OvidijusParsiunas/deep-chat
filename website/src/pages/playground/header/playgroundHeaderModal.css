@@ -1,0 +1,15 @@
+.playground-header-modal-title {
+  margin-top: 2px !important;
+}
+
+.playground-header-modal-description {
+  font-size: 17px;
+  color: rgb(58, 58, 58);
+}
+
+.playground-header-modal-buttons {
+  margin-top: 15px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+}

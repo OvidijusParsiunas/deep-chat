@@ -33,13 +33,12 @@ function submit(chatComponent, constructConnect, close, requiredFields) {
 const CloseButtons = React.forwardRef(({chatComponent, constructConnect, close, requiredFields}, ref) => {
   return (
     <div id="playground-service-modal-close-buttons">
-      <button className="playground-service-modal-close-button" onClick={close}>
+      <button className="playground-modal-button playground-modal-close-button" onClick={close}>
         Close
       </button>
       <button
         ref={ref}
-        id="playground-service-modal-submit-button"
-        className="playground-service-modal-close-button"
+        className="playground-modal-button playground-modal-submit-button"
         onClick={() => submit(chatComponent, constructConnect, close, requiredFields)}
       >
         Submit

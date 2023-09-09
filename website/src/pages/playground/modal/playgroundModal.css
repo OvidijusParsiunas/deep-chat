@@ -6,7 +6,7 @@
   opacity: 1;
 }
 
-#playground-service-modal-background {
+.playground-service-modal-background {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -24,7 +24,7 @@
   background-color: rgba(128, 128, 128, 0);
 }
 
-#playground-service-modal {
+.playground-service-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -40,12 +40,13 @@
   transition: 0.2s;
 }
 
-#playground-service-modal > div {
+.playground-service-modal > div {
   width: 100%;
 }
 
-#playground-service-modal-title {
+.playground-service-modal-title {
   text-align: center;
+  margin-top: 1px;
   margin-bottom: 10px;
   font-size: 21px;
   display: flex;
@@ -54,39 +55,37 @@
   padding-bottom: 5px;
 }
 
-.playgroud-service-modal-form > div {
-  height: 31px;
-  display: table-row;
-}
-
-.playground-service-modal-input-label {
-  display: table-cell;
-  white-space: nowrap;
-  /* set to 1 in order to automatically use the largest field - must be above 0 for Safari */
-  width: 1px;
-  padding-right: 10px;
-  color: #04345c;
+.playground-modal-button {
+  width: 68px;
+  height: 30px;
+  font-size: 15px;
+  background-color: rgb(252, 252, 252);
+  border-radius: 5px;
+  margin-right: 8px;
   cursor: pointer;
 }
 
-.playground-service-modal-input {
+.playground-modal-close-button {
   border: 1px solid grey;
-  border-radius: 4px;
-  height: 25px;
-  width: 200px;
-  font-size: 15px;
-  padding-left: 6px;
-  padding-top: 1px;
-  color: #333333;
-  top: 1px;
-  position: relative;
 }
 
-.playground-modal-field-invalid {
-  border: 1px solid red;
+.playground-modal-close-button:hover {
+  background-color: rgb(244, 244, 244);
 }
 
-/* this is used to produce a temporary brighter color when user clicks submit */
-.playground-modal-field-invalid-2 {
-  border: 1.5px solid red;
+.playground-modal-close-button:active {
+  background-color: rgb(236, 236, 236);
+}
+
+.playground-modal-submit-button {
+  color: #003a6b;
+  border: 1px solid #003a6b;
+}
+
+.playground-modal-submit-button:hover {
+  background-color: rgb(245, 248, 250);
+}
+
+.playground-modal-submit-button:active {
+  background-color: rgb(234, 243, 255);
 }

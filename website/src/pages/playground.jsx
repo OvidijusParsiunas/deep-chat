@@ -2,7 +2,8 @@ import AddButton from './playground/chat/manipulate/playgroundAddButton';
 import HeaderButtons from './playground/header/playgroundHeaderButtons';
 import ChatComponent from './playground/chat/playgroundChatComponent';
 import ChatWrapper from './playground/chat/playgroundChatWrapper';
-import ServiceModal from './playground/modal/serviceModal';
+import ServiceModal from './playground/serviceModal/serviceModal';
+import './playground/modal/playgroundModal.css';
 import {Tooltip} from 'react-tooltip';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
@@ -19,7 +20,7 @@ import './playground.css';
 // Video to show off how it works
 
 // TO-DO - when the user is typing in one chat and hits tab - focus next
-const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}]};
+const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}], redactKeys: false};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -134,6 +135,7 @@ export default function Playground() {
     newConfig.components.forEach((component) => {
       addComponent(component);
     });
+    playgroundConfig.redactKeys = newConfig.redactKeys;
   }
 
   return (
@@ -153,9 +155,10 @@ export default function Playground() {
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
           <HeaderButtons
-            toggleLayout={toggleLayout}
             isGrid={isGrid}
+            toggleLayout={toggleLayout}
             chatComponents={chatComponents}
+            playgroundConfig={playgroundConfig}
             applyNewPlaygroundConfig={applyNewPlaygroundConfig}
           ></HeaderButtons>
         </div>

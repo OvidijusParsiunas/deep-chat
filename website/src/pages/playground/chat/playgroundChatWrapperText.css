@@ -6,13 +6,15 @@
   font-size: 17px;
   border: unset;
   outline: none;
-  color: #1c1e21;
+  color: white;
 }
 
 .playground-chat-description-text-input {
   position: absolute;
   top: 4px;
   left: -1px;
+  color: #1c1e21;
+  background-color: unset;
   /* This is a bug fix where text inside input is no longer visible when either using spaces or at maximum width */
   width: calc(100% + 15px);
 }

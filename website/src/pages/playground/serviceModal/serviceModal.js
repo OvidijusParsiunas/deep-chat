@@ -113,12 +113,13 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     <div>
       {/* WORK - check if dirty before closing */}
       <div
-        id="playground-service-modal-background"
-        className={isVisible ? 'playground-modal-fade-in-background' : 'playground-modal-fade-out-background'}
+        className={`playground-service-modal-background ${
+          isVisible ? 'playground-modal-fade-in-background' : 'playground-modal-fade-out-background'
+        }`}
         onClick={close}
       ></div>
-      <div id="playground-service-modal" className={isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}>
-        <b id="playground-service-modal-title">Service Settings</b>
+      <div className={`playground-service-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
+        <b className="playground-service-modal-title">Service Settings</b>
         <div className="playgroud-service-modal-form">
           <Service activeService={activeService} changeService={changeService} />
           {activeService !== 'demo' && activeService !== 'custom' && (

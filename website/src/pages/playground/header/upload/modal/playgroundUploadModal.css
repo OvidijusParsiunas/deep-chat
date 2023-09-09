@@ -1,0 +1,13 @@
+#playground-upload-modal-buttons {
+  margin-top: 20;
+}
+
+#playground-upload-modal-input {
+  display: none;
+}
+
+#playground-upload-modal-error {
+  color: red;
+  text-align: center;
+  margin-top: 8px;
+}
