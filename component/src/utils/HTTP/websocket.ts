@@ -1,8 +1,8 @@
-import {CustomServiceResponse} from '../../types/customService';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
+import {Result} from '../../types/result';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
@@ -15,6 +15,7 @@ export class Websocket {
   }
 
   public static createConnection(io: ServiceIO, messages: Messages) {
+    if (!document.body.contains(io.deepChat)) return; // check if element is still present
     const websocketConfig = io.requestSettings.websocket;
     if (!websocketConfig) return;
     try {
@@ -38,6 +39,7 @@ export class Websocket {
   }
 
   private static retryConnection(io: ServiceIO, messages: Messages) {
+    if (!document.body.contains(io.deepChat)) return; // check if element is still present
     io.websocket = 'pending';
     if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     setTimeout(() => {
@@ -49,7 +51,7 @@ export class Websocket {
     ws.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
-        const result: CustomServiceResponse = JSON.parse(message.data);
+        const result: Result = JSON.parse(message.data);
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')

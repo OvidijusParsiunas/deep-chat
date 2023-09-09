@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {CustomServiceResponse} from './customService';
 import {GenericObject} from './object';
+import {Result} from './result';
 
 export interface Request {
   url?: string;
@@ -8,5 +8,5 @@ export interface Request {
   headers?: GenericObject<string>;
   additionalBodyProps?: GenericObject<any>;
   websocket?: boolean | string | string[];
-  handler?: (body: any) => Promise<CustomServiceResponse>;
+  handler?: (body: any) => Promise<Result>;
 }

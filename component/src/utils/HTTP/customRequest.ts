@@ -1,16 +1,16 @@
-import {CustomServiceResponse} from '../../types/customService';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
+import {Result} from '../../types/result';
 import {Stream} from './stream';
 
 export class CustomRequest {
   public static async request(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     io.requestSettings
       .handler?.(body)
-      .then(async (result: CustomServiceResponse) => {
+      .then(async (result: Result) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);

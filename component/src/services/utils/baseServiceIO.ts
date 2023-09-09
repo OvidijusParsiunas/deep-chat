@@ -1,6 +1,5 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
-import {CustomServiceResponse} from '../../types/customService';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
@@ -124,8 +123,16 @@ export class BaseServiceIO implements ServiceIO {
     }
   }
 
-  async extractResultData(result: any | CustomServiceResponse): Promise<Result | {pollingInAnotherRequest: true}> {
+  async extractResultData(result: any | Result): Promise<Result | {pollingInAnotherRequest: true}> {
     if (result.error) throw result.error;
-    return result.result as Result;
+    if (result.result) {
+      // TO-DO - do not handle this in future versions
+      console.error(
+        `The {result: ....} response object is deprecated since version 1.3.0 and will not be handled in future versions.`
+      );
+      console.error('Please change to using the new simpler response object: https://deepchat.dev/docs/connect#Result');
+      return result.result;
+    }
+    return result;
   }
 }

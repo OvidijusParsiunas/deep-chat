@@ -1,9 +1,9 @@
 import {ErrorMessageOverrides, MessageContent} from './messages';
-import {CustomServiceResponse} from './customService';
+import {Result} from './result';
 
 export type DemoErrors = {[key in keyof ErrorMessageOverrides]?: boolean};
 
-export type DemoResponse = CustomServiceResponse | ((message: MessageContent) => CustomServiceResponse);
+export type DemoResponse = Result | ((message: MessageContent) => Result);
 
 export type Demo =
   | true
