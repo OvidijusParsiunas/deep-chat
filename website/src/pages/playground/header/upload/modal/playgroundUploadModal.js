@@ -80,8 +80,8 @@ export default function UploadModal({setIsModalDisplayed, applyNewPlaygroundConf
         }`}
         onClick={close}
       ></div>
-      <div className={`playground-service-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
-        <b className="playground-service-modal-title playground-header-modal-title">Upload Config</b>
+      <div className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
+        <b className="playground-modal-title playground-header-modal-title">Upload Config</b>
         <div className="playground-header-modal-description">
           Upload playground configuration to create chat components with your setup and continue where you left of.
         </div>

@@ -11,6 +11,7 @@ import React from 'react';
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
 
+// WORK - do not display api key
 // editingChatRef is used for displaying modal
 export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef}) {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -118,8 +119,8 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         }`}
         onClick={close}
       ></div>
-      <div className={`playground-service-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
-        <b className="playground-service-modal-title">Service Settings</b>
+      <div className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
+        <b className="playground-modal-title">Service Settings</b>
         <div className="playgroud-service-modal-form">
           <Service activeService={activeService} changeService={changeService} />
           {activeService !== 'demo' && activeService !== 'custom' && (

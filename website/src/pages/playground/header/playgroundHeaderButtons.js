@@ -1,3 +1,4 @@
+import InformationButton from './information/playgroundInformationButton';
 import TooltipWrapper from '../tooltip/playgroundTooltipWrapper';
 import ExportButton from './export/playgroundExportButton';
 import UploadButton from './upload/playgroundUploadButton';
@@ -16,6 +17,7 @@ export default function HeaderButtons({isGrid, toggleLayout, chatComponents, pla
 
   return (
     <div id="playground-header-buttons">
+      {/* <Shield></Shield> */}
       <ExportButton chatComponents={chatComponents} playgroundConfig={playgroundConfig}></ExportButton>
       <UploadButton applyNewPlaygroundConfig={applyNewPlaygroundConfig}></UploadButton>
       <div className="playground-header-button" onClick={layoutIconClick}>
@@ -23,6 +25,7 @@ export default function HeaderButtons({isGrid, toggleLayout, chatComponents, pla
           <img src={isGridI ? 'img/layout-panorama.svg' : 'img/layout-grid.svg'} className="playground-button"></img>
         </TooltipWrapper>
       </div>
+      <InformationButton></InformationButton>
     </div>
   );
 }

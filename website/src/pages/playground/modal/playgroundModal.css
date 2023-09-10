@@ -24,7 +24,7 @@
   background-color: rgba(128, 128, 128, 0);
 }
 
-.playground-service-modal {
+.playground-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -40,11 +40,11 @@
   transition: 0.2s;
 }
 
-.playground-service-modal > div {
+.playground-modal > div {
   width: 100%;
 }
 
-.playground-service-modal-title {
+.playground-modal-title {
   text-align: center;
   margin-top: 1px;
   margin-bottom: 10px;

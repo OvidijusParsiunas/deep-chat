@@ -20,6 +20,7 @@ import './playground.css';
 // Video to show off how it works
 
 // TO-DO - when the user is typing in one chat and hits tab - focus next
+// TO-DO - attempt to cache the configuration
 const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}], redactKeys: false};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence

@@ -1,0 +1,19 @@
+.playground-information-modal-item {
+  display: flex;
+}
+
+#playground-information-modal-shield {
+  width: 26px;
+  margin-right: 12px;
+  padding-bottom: 1px;
+}
+
+#playground-information-modal-video {
+  width: 27px;
+  padding-bottom: 1px;
+  margin-right: 10px;
+}
+
+.playground-information-modal-icon {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(0%) saturate(844%) hue-rotate(69deg) brightness(96%) contrast(91%);
+}

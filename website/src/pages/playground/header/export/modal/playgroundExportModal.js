@@ -88,8 +88,8 @@ export default function ExportModal({chatComponents, setIsModalDisplayed, playgr
         }`}
         onClick={close}
       ></div>
-      <div className={`playground-service-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
-        <b className="playground-service-modal-title playground-header-modal-title">Export Config</b>
+      <div className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
+        <b className="playground-modal-title playground-header-modal-title">Export Config</b>
         <div className="playground-header-modal-description">
           Export your playground configuration to continue where you left of next time.
         </div>
