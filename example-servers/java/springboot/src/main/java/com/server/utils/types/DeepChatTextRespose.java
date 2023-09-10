@@ -1,13 +1,15 @@
 package com.server.utils.types;
 
 public class DeepChatTextRespose {
-  private DeepChatTextResponseMessage result;
+  private String text;
 
   public DeepChatTextRespose(String text) {
-    result = new DeepChatTextResponseMessage(text);
+    if (text != null) {
+      this.text = text;
+    }
   }
 
-  public DeepChatTextResponseMessage getResult() {
-    return this.result;
+  public String getText() {
+    return text;
   }
 }

@@ -30,7 +30,7 @@ export class Cohere {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.text}});
+            res.json({text: result.text});
           }
         });
       }
@@ -78,7 +78,7 @@ export class Cohere {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.generations?.[0].text}});
+            res.json({text: result.generations?.[0].text});
           }
         });
       }
@@ -115,7 +115,7 @@ export class Cohere {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.summary}});
+            res.json({text: result.summary});
           }
         });
       }

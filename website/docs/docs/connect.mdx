@@ -315,12 +315,9 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 ### `Result` {#Result}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp `result?:` {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp `error?: string` <br />
-  }
+- Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile), `error?: string`}
 
-Object containing response information from the target service: <br />
+Object containing response information from the target service. It should have _one_ of these properties: <br />
 `text` is the content for a text message. <br />
 `files` is an array that encapsulates details on the response files. <br />
 `error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](./messages#errorMessages)
@@ -340,7 +337,7 @@ and the server must send its messages using the [`Result`](#Result) format. Exam
 Deep Chat message: <br />
 `'{"messages":[{"role":"user","text":"Message from Deep Chat"}]}'` <br />
 Server message: <br />
-`'{"result":{"text":"Message from the server"}}'`
+`'{"text":"Message from the server"}'`
 
 #### Example
 

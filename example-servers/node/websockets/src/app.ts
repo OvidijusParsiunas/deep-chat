@@ -31,7 +31,7 @@ function recursivelySendMessagesToClient(ws: WebSocket) {
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
   setTimeout(() => {
-    ws.send(JSON.stringify({result: {text: 'Message from the server'}}));
+    ws.send(JSON.stringify({text: 'Message from the server'}));
     recursivelySendMessagesToClient(ws);
   }, 3000);
 }

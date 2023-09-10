@@ -31,11 +31,7 @@ func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
 	// Create a response to Deep Chat using the Result format:
 	// https://deepchat.dev/docs/connect/#Result
 	response := DeepChatTextResponse{
-		Result: struct {
-			Text string `json:"text"`
-		}{
-			Text: text,
-		},
+		Text: text,
 	}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
@@ -49,11 +45,7 @@ func CreateImageResponse(w http.ResponseWriter, src string) ([]byte, error) {
 	// Create a response to Deep Chat using the Result format:
 	// https://deepchat.dev/docs/connect/#Result
 	response := DeepChatFileResponse{
-		Result: struct {
-			Files []File `json:"files"`
-		}{
-			Files: []File{{Type: "image", Src: src}},
-		},
+		Files: []File{{Type: "image", Src: src}},
 	}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {

@@ -31,7 +31,7 @@ async function handler(req: NextRequest) {
   if (openAIResult.error) throw openAIResult.error.message;
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
-  return NextResponse.json({result: {text: openAIResult.choices[0].message.content}});
+  return NextResponse.json({text: openAIResult.choices[0].message.content});
 }
 
 export default errorHandler(handler);

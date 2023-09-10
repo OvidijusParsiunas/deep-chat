@@ -85,7 +85,7 @@ import Tabs from '@theme/Tabs';
           else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
           else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
           else response = 'Guess either rock, paper or scissors';
-          return {result: {text: response}};
+          return {text: response};
         },
       },
     }}
@@ -108,7 +108,7 @@ chatElementRef.directConnection = {
       else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
       else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
       else response = 'Guess either rock, paper or scissors';
-      return {result: {text: response}};
+      return {text: response};
     },
   },
 };
@@ -141,7 +141,7 @@ chatElementRef.directConnection = {
       else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
       else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
       else response = 'Guess either rock, paper or scissors';
-      return {result: {text: response}};
+      return {text: response};
     },
   },
 };

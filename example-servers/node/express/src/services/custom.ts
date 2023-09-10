@@ -7,7 +7,7 @@ export class Custom {
     console.log(body);
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
+    res.json({text: 'This is a respone from ExpressJs server. Thankyou for your message!'});
   }
 
   public static async chatStream(body: Request['body'], res: Response) {
@@ -28,7 +28,7 @@ export class Custom {
       if (chunk) {
         // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
-        res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
+        res.write(`data: ${JSON.stringify({text: `${chunk} `})}\n\n`);
         Custom.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
         res.end();
@@ -52,6 +52,6 @@ export class Custom {
     }
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
+    res.json({text: 'This is a respone from ExpressJs server. Thankyou for your message!'});
   }
 }

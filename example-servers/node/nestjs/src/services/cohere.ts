@@ -19,7 +19,7 @@ export class Cohere {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.text}};
+    return {text: response.data.text};
   }
 
   private static createChatBody(body: Request['body']) {
@@ -46,7 +46,7 @@ export class Cohere {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.generations?.[0].text}};
+    return {text: response.data.generations?.[0].text};
   }
 
   async summarizeText(body: Request['body']) {
@@ -62,6 +62,6 @@ export class Cohere {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.summary}};
+    return {text: response.data.summary};
   }
 }

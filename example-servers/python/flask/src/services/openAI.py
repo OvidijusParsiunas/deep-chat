@@ -37,7 +37,7 @@ class OpenAI:
         result = json_response["choices"][0]["message"]["content"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {"text": result}}
+        return {"text": result}
 
     def chat_stream(self, body):
         headers = {
@@ -73,7 +73,7 @@ class OpenAI:
                                                         {}).get("content", "")
                                 # Sends response back to Deep Chat using the Result format:
                                 # https://deepchat.dev/docs/connect/#Result
-                                yield "data: {}\n\n".format(json.dumps({"result": {"text": delta}}))
+                                yield "data: {}\n\n".format(json.dumps({"text": delta}))
                                 accumulated_data = ""  # Reset the accumulated data
                             except json.JSONDecodeError:
                                 # Incomplete JSON string, continue accumulating lines
@@ -99,5 +99,4 @@ class OpenAI:
             raise Exception(json_response["error"]["message"])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {
-            "files": [{"type": "image", "src": json_response["data"][0]["url"]}]}}
+        return {"files": [{"type": "image", "src": json_response["data"][0]["url"]}]}

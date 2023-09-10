@@ -28,7 +28,7 @@ async function handler(req: NextRequest) {
   if (huggingFaceResult.error) throw huggingFaceResult.error;
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
-  return NextResponse.json({result: {text: huggingFaceResult.text}});
+  return NextResponse.json({text: huggingFaceResult.text});
 }
 
 export default errorHandler(handler);

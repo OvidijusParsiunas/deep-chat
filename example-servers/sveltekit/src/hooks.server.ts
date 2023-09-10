@@ -5,5 +5,5 @@ export async function handleError({error}) {
   const message = (error as Error)?.message || 'error';
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
-  return {result: {error: message}} as unknown as Error;
+  return {error: message} as unknown as Error;
 }

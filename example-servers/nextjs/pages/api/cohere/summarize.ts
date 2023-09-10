@@ -30,7 +30,7 @@ async function handler(req: NextRequest) {
   if (cohereResult.message) throw cohereResult.message;
   // Sends response back to Deep Chat using the Result format:
   // https://deepchat.dev/docs/connect/#Result
-  return NextResponse.json({result: {text: cohereResult.summary}});
+  return NextResponse.json({text: cohereResult.summary});
 }
 
 export default errorHandler(handler);

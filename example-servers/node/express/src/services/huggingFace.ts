@@ -30,7 +30,7 @@ export class HuggingFace {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.generated_text}});
+            res.json({text: result.generated_text});
           }
         });
       }
@@ -89,7 +89,7 @@ export class HuggingFace {
           } else {
             // Sends response back to Deep Chat using the Result format:
             // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: parseResult(result)}});
+            res.json({text: parseResult(result)});
           }
         });
       }

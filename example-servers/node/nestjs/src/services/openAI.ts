@@ -33,7 +33,7 @@ export class OpenAI {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.choices[0].message.content}};
+    return {text: response.data.choices[0].message.content};
   }
 
   async chatStream(body: Request['body'], res: Response) {
@@ -61,7 +61,7 @@ export class OpenAI {
           });
           // Sends response back to Deep Chat using the Result format:
           // https://deepchat.dev/docs/connect/#Result
-          res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
+          res.write(`data: ${JSON.stringify({text: delta})}\n\n`);
         }
       } catch (e) {
         console.error('Error when retrieving a stream chunk');
@@ -93,8 +93,6 @@ export class OpenAI {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {files: [{type: 'image', src: response.data.data[0].url}]},
-    };
+    return {files: [{type: 'image', src: response.data.data[0].url}]};
   }
 }

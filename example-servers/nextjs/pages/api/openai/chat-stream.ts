@@ -70,9 +70,7 @@ async function handler(req: NextRequest) {
       if (result.choices[0].delta?.content) {
         // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({result: {text: result.choices[0].delta.content}})}\n\n`)
-        );
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({text: result.choices[0].delta.content})}\n\n`));
       }
     },
   });

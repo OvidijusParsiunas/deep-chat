@@ -44,7 +44,7 @@ async function handler(req: NextRequest) {
       if (chunk) {
         // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
-        writer.write(encoder.encode(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`));
+        writer.write(encoder.encode(`data: ${JSON.stringify({text: `${chunk} `})}\n\n`));
         sendStream(writer, encoder, responseChunks, chunkIndex + 1);
       } else {
         writer.close();

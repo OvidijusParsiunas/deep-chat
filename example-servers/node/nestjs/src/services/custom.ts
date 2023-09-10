@@ -9,11 +9,7 @@ export class Custom {
     console.log(body);
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {
-        text: 'This is a respone from a NestJs server. Thankyou for your message!',
-      },
-    };
+    return {text: 'This is a respone from a NestJs server. Thankyou for your message!'};
   }
 
   async chatStream(body: Request['body'], res: Response) {
@@ -34,7 +30,7 @@ export class Custom {
       if (chunk) {
         // Sends response back to Deep Chat using the Result format:
         // https://deepchat.dev/docs/connect/#Result
-        res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
+        res.write(`data: ${JSON.stringify({text: `${chunk} `})}\n\n`);
         Custom.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
         res.end();
@@ -58,10 +54,6 @@ export class Custom {
     }
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {
-        text: 'This is a respone from a NestJs server. Thankyou for your message!',
-      },
-    };
+    return {text: 'This is a respone from a NestJs server. Thankyou for your message!'};
   }
 }

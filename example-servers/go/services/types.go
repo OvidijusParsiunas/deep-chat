@@ -12,15 +12,11 @@ type DeepChatRequestMessage struct {
 }
 
 type DeepChatTextResponse struct {
-	Result struct {
-		Text string `json:"text"`
-	} `json:"result"`
+	Text string `json:"text"`
 }
 
 type DeepChatFileResponse struct {
-	Result struct {
-		Files []File `json:"files"`
-	} `json:"result"`
+	Files []File `json:"files"`
 }
 
 type File struct {

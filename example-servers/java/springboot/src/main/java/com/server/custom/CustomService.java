@@ -47,7 +47,7 @@ public class CustomService {
       String chunk = responseChunks[chunkIndex];
       // Sends response back to Deep Chat using the Result format:
       // https://deepchat.dev/docs/connect/#Result
-      response.getWriter().write("data: " + "{\"result\": {\"text\": \"" + chunk + " \"}}\n\n");
+      response.getWriter().write("data: " + "{\"text\": \"" + chunk + " \"}\n\n");
       response.flushBuffer();
       try {
         Thread.sleep(70); // Introduce the desired delay in milliseconds

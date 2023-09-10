@@ -23,7 +23,7 @@ export class HuggingFace {
     );
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.generated_text}};
+    return {text: response.data.generated_text};
   }
 
   private static createConversationBody(messages: {text: string; role: string}[]) {
@@ -61,6 +61,6 @@ export class HuggingFace {
     });
     // Sends response back to Deep Chat using the Result format:
     // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: parseResult(response.data)}};
+    return {text: parseResult(response.data)};
   }
 }

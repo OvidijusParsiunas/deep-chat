@@ -19,8 +19,7 @@ class StabilityAI:
         result = json_response["artifacts"][0]["base64"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {
-            "files": [{"type": "image", "src": "data:image/png;base64," + result}]}}
+        return {"files": [{"type": "image", "src": "data:image/png;base64," + result}]}
 
     # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
     def image_to_image(self, request):
@@ -46,8 +45,7 @@ class StabilityAI:
         result = json_response["artifacts"][0]["base64"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {
-            "files": [{"type": "image", "src": "data:image/png;base64," + result}]}}
+        return {"files": [{"type": "image", "src": "data:image/png;base64," + result}]}
 
     # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
     def image_to_image_upscale(self, files):
@@ -68,5 +66,4 @@ class StabilityAI:
         result = json_response["artifacts"][0]["base64"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {
-            "files": [{"type": "image", "src": "data:image/png;base64," + result}]}}
+        return {"files": [{"type": "image", "src": "data:image/png;base64," + result}]}

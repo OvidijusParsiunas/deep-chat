@@ -3,13 +3,15 @@ package com.server.utils.types;
 import java.util.List;
 
 public class DeepChatFileResponse {
-  private DeepChatFileResultMessage result;
+  private List<DeepChatFile> files;
 
   public DeepChatFileResponse(List<DeepChatFile> files) {
-    result = new DeepChatFileResultMessage(files);
+    if (files != null) {
+      this.files = files;
+    }
   }
 
-  public DeepChatFileResultMessage getResult() {
-    return this.result;
+  public List<DeepChatFile> getFiles() {
+    return files;
   }
 }

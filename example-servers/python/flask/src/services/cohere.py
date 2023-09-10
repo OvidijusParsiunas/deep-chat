@@ -17,7 +17,7 @@ class Cohere:
             raise Exception(json_response["message"])
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {"text": json_response["text"]}}
+        return {"text": json_response["text"]}
 
     @staticmethod
     def create_chat_body(body):
@@ -49,7 +49,7 @@ class Cohere:
         result = json_response["generations"][0]["text"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {"text": result}}
+        return {"text": result}
     
     def summarize_text(self, body):
         headers = {
@@ -67,4 +67,4 @@ class Cohere:
         result = json_response["summary"]
         # Sends response back to Deep Chat using the Result format:
         # https://deepchat.dev/docs/connect/#Result
-        return {"result": {"text": result}}
+        return {"text": result}
