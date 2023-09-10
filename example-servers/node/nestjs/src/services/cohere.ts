@@ -17,8 +17,8 @@ export class Cohere {
         Authorization: 'Bearer ' + process.env.COHERE_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return {text: response.data.text};
   }
 
@@ -44,8 +44,8 @@ export class Cohere {
         Authorization: 'Bearer ' + process.env.COHERE_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return {text: response.data.generations?.[0].text};
   }
 
@@ -60,8 +60,8 @@ export class Cohere {
         Authorization: 'Bearer ' + process.env.COHERE_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return {text: response.data.summary};
   }
 }

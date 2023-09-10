@@ -4,7 +4,7 @@ import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from './requestUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {Demo} from '../demo/demo';
 
 type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
@@ -36,7 +36,7 @@ export class Stream {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response)
-            .then((textBody?: Result) => {
+            .then((textBody?: Response) => {
               if (textBody?.text === undefined) {
                 // strategy - do not to stop the stream on one message failure to give other messages a change to display
                 console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_RESPONSE}`);

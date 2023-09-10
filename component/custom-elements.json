@@ -1258,7 +1258,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -2203,14 +2203,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -2722,14 +2722,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -2860,7 +2860,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -4005,7 +4005,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -4585,7 +4585,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -5114,7 +5114,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -6135,14 +6135,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -6223,7 +6223,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -6789,7 +6789,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -7928,14 +7928,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -8589,14 +8589,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -8672,7 +8672,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -9838,14 +9838,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -9907,7 +9907,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -11028,14 +11028,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -11689,14 +11689,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -11779,7 +11779,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -12345,7 +12345,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -12952,7 +12952,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -13559,7 +13559,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -14381,7 +14381,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -14980,7 +14980,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -15557,7 +15557,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -16233,7 +16233,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -17178,14 +17178,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -17346,7 +17346,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -17983,7 +17983,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -18590,7 +18590,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -19192,7 +19192,7 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result>"
+                  "text": "Promise<Response>"
                 }
               },
               "parameters": [
@@ -19960,14 +19960,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ]
@@ -20439,14 +20439,14 @@
               "name": "extractResultData",
               "return": {
                 "type": {
-                  "text": "Promise<Result | {pollingInAnotherRequest: true}>"
+                  "text": "Promise<Response | {pollingInAnotherRequest: true}>"
                 }
               },
               "parameters": [
                 {
                   "name": "result",
                   "type": {
-                    "text": "any | Result"
+                    "text": "any | Response"
                   }
                 }
               ],
@@ -21818,7 +21818,7 @@
               "static": true,
               "return": {
                 "type": {
-                  "text": "Result"
+                  "text": "Response"
                 }
               },
               "parameters": [
@@ -22243,7 +22243,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n  INVALID_RESPONSE: getInvalidResponseMessage,\n  INVALID_STREAM_RESPONSE:\n    `Make sure the events are using the Result format: ` +\n    `https://deepchat.dev/docs/connect/#Result \\n` +\n    `You can also augment them using the responseInterceptor property: ` +\n    `https://deepchat.dev/docs/interceptors#responseInterceptor`,\n}"
+          "default": "{\n  INVALID_KEY: 'Invalid API Key',\n  CONNECTION_FAILED: 'Failed to connect',\n  INVALID_RESPONSE: getInvalidResponseMessage,\n  INVALID_STREAM_RESPONSE:\n    `Make sure the events are using the Response format: ` +\n    `https://deepchat.dev/docs/connect/#Response \\n` +\n    `You can also augment them using the responseInterceptor property: ` +\n    `https://deepchat.dev/docs/interceptors#responseInterceptor`,\n}"
         }
       ],
       "exports": [

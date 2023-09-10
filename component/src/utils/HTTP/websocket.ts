@@ -2,7 +2,7 @@ import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from './requestUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
@@ -51,7 +51,7 @@ export class Websocket {
     ws.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
-        const result: Result = JSON.parse(message.data);
+        const result: Response = JSON.parse(message.data);
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')

@@ -8,7 +8,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {StabilityAIIO} from './stabilityAIIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 // WORK - allow appropriate responses for invalid height etc
@@ -74,7 +74,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  override async extractResultData(result: StabilityAITextToImageResult): Promise<Result> {
+  override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
       return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};

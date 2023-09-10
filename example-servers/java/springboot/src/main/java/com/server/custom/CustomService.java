@@ -22,8 +22,8 @@ public class CustomService {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
     LOGGER.info("Received request body: {}", PrintObjectUtil.toJsonString(requestBody));
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose("This is a response from a Java server. Thank you for your message!");
   }
 
@@ -45,8 +45,8 @@ public class CustomService {
   private void sendStream(HttpServletResponse response, String[] responseChunks, int chunkIndex) throws IOException {
     if (chunkIndex < responseChunks.length) {
       String chunk = responseChunks[chunkIndex];
-      // Sends response back to Deep Chat using the Result format:
-      // https://deepchat.dev/docs/connect/#Result
+      // Sends response back to Deep Chat using the Response format:
+      // https://deepchat.dev/docs/connect/#Response
       response.getWriter().write("data: " + "{\"text\": \"" + chunk + " \"}\n\n");
       response.flushBuffer();
       try {
@@ -80,8 +80,8 @@ public class CustomService {
         }
       }
     }
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose("This is a response from a Java server. Thank you for your message!");
   }
 }

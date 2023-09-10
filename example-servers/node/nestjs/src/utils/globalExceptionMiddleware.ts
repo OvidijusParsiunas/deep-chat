@@ -8,8 +8,8 @@ export class GlobalExceptionMiddleware extends BaseExceptionFilter {
     console.log(exception.response);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     response.status(500).json({error: 'Service error'});
   }
 }

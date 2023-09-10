@@ -15,8 +15,8 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> globalExceptionHandler(Exception ex) {
     LOGGER.error("Exception:", ex);
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DeepChatErrorResponse("Server error"));
   }
 }

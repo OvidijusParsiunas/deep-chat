@@ -3,7 +3,7 @@ import {Cohere, CohereChatConfig} from '../../types/cohere';
 import {CohereChatResult} from '../../types/cohereResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
@@ -41,7 +41,7 @@ export class CohereChatIO extends CohereIO {
     HTTPRequest.request(this, body, messages);
   }
 
-  override async extractResultData(result: CohereChatResult): Promise<Result> {
+  override async extractResultData(result: CohereChatResult): Promise<Response> {
     if (result.message) throw result.message;
     return {text: result.text};
   }

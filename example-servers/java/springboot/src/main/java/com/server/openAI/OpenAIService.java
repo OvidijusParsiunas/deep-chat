@@ -57,8 +57,8 @@ public class OpenAIService {
       builder.toUriString(), HttpMethod.POST, requestEntity,OpenAIChatResult.class);
     OpenAIChatResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from OpenAI");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseBody.getChoices()[0].getMessage().getContent());
   }
 
@@ -96,8 +96,8 @@ public class OpenAIService {
             Map<String, Object> deltaObj = (Map<String, Object>) choice.getOrDefault("delta", Collections.emptyMap());
             delta.append(deltaObj.getOrDefault("content", ""));
           }
-          // Sends response back to Deep Chat using the Result format:
-          // https://deepchat.dev/docs/connect/#Result
+          // Sends response back to Deep Chat using the Response format:
+          // https://deepchat.dev/docs/connect/#Response
           return Flux.just(new DeepChatTextRespose(delta.toString()));
         } catch (JsonProcessingException e) {
           LOGGER.error("Error when processing a stream chunk: ", e);
@@ -141,8 +141,8 @@ public class OpenAIService {
 
     OpenAIImageResult responseData = responseEntity.getBody();
     if (responseData == null) throw new Exception("Unexpected response from OpenAI");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(responseData.getData()[0].getUrl(), "image")));
   }
 }

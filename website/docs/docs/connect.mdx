@@ -22,7 +22,7 @@ The outgoing Deep Chat request body is encapsulated in one of the following form
 
 <h3>Response message</h3>
 
-Response from the target server needs to use the [`Result`](#Result) JSON type.
+Response from the target server needs to use the [`Response`](#Response) JSON type.
 
 :::tip
 If you don't want / can't change the target server to handle the required object types, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
@@ -313,7 +313,7 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 <LineBreak></LineBreak>
 
-### `Result` {#Result}
+### `Response` {#Response}
 
 - Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile), `error?: string`}
 
@@ -333,7 +333,7 @@ This is used to establish a websocket connection with your server. Enable it by 
 as a `boolean` _true_ or as a string [connection protocol](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#creating_a_websocket_object)
 (or an array of strings for multiple protocols). <br />
 It is important to note that exchanged messages must be Stringified JSONs where Deep Chat will send its messages using the [Request message](connect) format
-and the server must send its messages using the [`Result`](#Result) format. Example messages: <br />
+and the server must send its messages using the [`Response`](#Response) format. Example messages: <br />
 Deep Chat message: <br />
 `'{"messages":[{"role":"user","text":"Message from Deep Chat"}]}'` <br />
 Server message: <br />

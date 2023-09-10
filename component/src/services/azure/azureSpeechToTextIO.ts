@@ -4,7 +4,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
@@ -50,7 +50,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     HTTPRequest.request(this, files[0], messages, false);
   }
 
-  override async extractResultData(result: AzureSpeechToTextResult): Promise<Result> {
+  override async extractResultData(result: AzureSpeechToTextResult): Promise<Response> {
     if (result.error) throw result.error;
     return {text: result.DisplayText || ''};
   }

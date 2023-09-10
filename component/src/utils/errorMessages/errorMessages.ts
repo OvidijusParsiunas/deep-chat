@@ -13,8 +13,8 @@ function getInvalidResponseMessage(result: object, messageType: string, isInterc
     : '';
   return (
     `${responseMessage + interceptorMessage}` +
-    `Make sure the ${messageType} message is using the Result format: ` +
-    'https://deepchat.dev/docs/connect/#Result ' +
+    `Make sure the ${messageType} message is using the Response format: ` +
+    'https://deepchat.dev/docs/connect/#Response ' +
     '\n You can also augment it using the responseInterceptor property: ' +
     'https://deepchat.dev/docs/interceptors#responseInterceptor'
   );
@@ -25,8 +25,8 @@ export const ErrorMessages = {
   CONNECTION_FAILED: 'Failed to connect',
   INVALID_RESPONSE: getInvalidResponseMessage,
   INVALID_STREAM_RESPONSE:
-    `Make sure the events are using the Result format: ` +
-    `https://deepchat.dev/docs/connect/#Result \n` +
+    `Make sure the events are using the Response format: ` +
+    `https://deepchat.dev/docs/connect/#Response \n` +
     `You can also augment them using the responseInterceptor property: ` +
     `https://deepchat.dev/docs/interceptors#responseInterceptor`,
 };

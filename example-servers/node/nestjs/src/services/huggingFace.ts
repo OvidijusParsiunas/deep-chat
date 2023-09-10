@@ -21,8 +21,8 @@ export class HuggingFace {
         },
       }
     );
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return {text: response.data.generated_text};
   }
 
@@ -59,8 +59,8 @@ export class HuggingFace {
         Authorization: 'Bearer ' + process.env.HUGGING_FACE_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return {text: parseResult(response.data)};
   }
 }

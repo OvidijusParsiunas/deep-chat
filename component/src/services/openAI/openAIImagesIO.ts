@@ -8,7 +8,7 @@ import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAIImagesIO extends DirectServiceIO {
@@ -98,7 +98,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: OpenAIImageResult): Promise<Result> {
+  override async extractResultData(result: OpenAIImageResult): Promise<Response> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
       if (imageData.url) return {src: imageData.url, type: 'image'};

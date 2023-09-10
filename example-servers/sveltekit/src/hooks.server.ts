@@ -3,7 +3,7 @@
 export async function handleError({error}) {
   console.error('API Error:', error);
   const message = (error as Error)?.message || 'error';
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
   return {error: message} as unknown as Error;
 }

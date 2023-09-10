@@ -3,7 +3,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {StreamHandlers} from '../../services/serviceIO';
 import {MessageContent} from '../../types/messages';
 import {DemoResponse} from '../../types/demo';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {Stream} from '../HTTP/stream';
 
 type Finish = () => void;
@@ -57,7 +57,7 @@ export class Demo {
     return customResponse;
   }
 
-  private static getResponse(messages: Messages): Result {
+  private static getResponse(messages: Messages): Response {
     return messages.customDemoResponse
       ? Demo.getCustomResponse(messages.customDemoResponse, messages.messages[messages.messages.length - 1])
       : {text: Demo.generateResponse(messages)};

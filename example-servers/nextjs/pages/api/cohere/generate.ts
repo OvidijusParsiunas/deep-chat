@@ -28,8 +28,8 @@ async function handler(req: NextRequest) {
 
   const cohereResult = (await result.json()) as CohereCompletionsResult;
   if (cohereResult.message) throw cohereResult.message;
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
   return NextResponse.json({text: cohereResult.generations[0].text});
 }
 

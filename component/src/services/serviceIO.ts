@@ -4,7 +4,7 @@ import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Request} from '../types/request';
-import {Result} from '../types/result';
+import {Response} from '../types/response';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
@@ -13,7 +13,7 @@ export interface RequestContents {
   files?: File[];
 }
 
-export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
+export type PollResult = Promise<InterfacesUnion<Response | {timeoutMS: number}>>;
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -85,7 +85,7 @@ export interface ServiceIO {
 
   callAPI(requestContents: RequestContents, messages: Messages): Promise<void>;
 
-  extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
+  extractResultData?(result: object): Promise<InterfacesUnion<Response | {pollingInAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 

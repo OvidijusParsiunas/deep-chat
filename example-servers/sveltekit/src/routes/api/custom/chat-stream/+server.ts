@@ -42,8 +42,8 @@ export const POST: RequestHandler = async ({request}) => {
     setTimeout(() => {
       const chunk = responseChunks[chunkIndex];
       if (chunk) {
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
+        // Sends response back to Deep Chat using the Response format:
+        // https://deepchat.dev/docs/connect/#Response
         writer.write(encoder.encode(`data: ${JSON.stringify({text: `${chunk} `})}\n\n`));
         sendStream(writer, encoder, responseChunks, chunkIndex + 1);
       } else {

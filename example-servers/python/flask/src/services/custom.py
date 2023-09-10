@@ -7,8 +7,8 @@ class Custom:
         # Text messages are stored inside request body using the Deep Chat JSON format:
         # https://deepchat.dev/docs/connect
         print(body)
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
         return {"text": "This is a respone from a Flask server. Thankyou for your message!"}
 
     def chat_stream(self, body):
@@ -55,6 +55,6 @@ class Custom:
             print("Text messages:")
             print(request.json)
 
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
         return {"text": "This is a respone from a Flask server. Thankyou for your message!"}

@@ -146,7 +146,7 @@ export default function ConnectToCustomAPI(props) {
           messages
         </a>{' '}
         and respond using the{' '}
-        <a href="https://deepchat.dev/docs/connect#Result" target="_blank">
+        <a href="https://deepchat.dev/docs/connect#Response" target="_blank">
           result
         </a>{' '}
         format.

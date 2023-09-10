@@ -10,8 +10,8 @@ export const POST: RequestHandler = async ({request}) => {
   // https://deepchat.dev/docs/connect
   const messageRequestBody = (await request.json()) as DeepChatTextRequestBody;
   console.log(messageRequestBody);
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
   return new Response(
     JSON.stringify({text: 'This is a respone from a SvelteKit edge server. Thankyou for your message!'}),
     {

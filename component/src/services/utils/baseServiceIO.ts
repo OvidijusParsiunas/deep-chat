@@ -9,7 +9,7 @@ import {Stream} from '../../utils/HTTP/stream';
 import {Request} from '../../types/request';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {
   KeyVerificationHandlers,
@@ -125,12 +125,12 @@ export class BaseServiceIO implements ServiceIO {
 
   // WORK - validation to say that the response should have text, files or error property, link to example
   // and responseInterceptor
-  async extractResultData(result: any | Result): Promise<Result | {pollingInAnotherRequest: true}> {
+  async extractResultData(result: any | Response): Promise<Response | {pollingInAnotherRequest: true}> {
     if (result.error) throw result.error;
     if (result.result) {
       // TO-DO - do not handle this in future versions
       console.error('The {result: ....} response object type is deprecated since version 1.3.0.');
-      console.error('Please change to using the new response object: https://deepchat.dev/docs/connect#Result');
+      console.error('Please change to using the new response object: https://deepchat.dev/docs/connect#Response');
       return result.result;
     }
     return result;

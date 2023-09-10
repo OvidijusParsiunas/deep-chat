@@ -50,8 +50,8 @@ public class StabilityAIService {
       builder.toUriString(), HttpMethod.POST, requestEntity,StabilityAIImageResult.class);
     StabilityAIImageResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Stability AI");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     String base64 = "data:image/png;base64," + responseBody.getArtifacts()[0].getBase64();
     return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(base64, "image")));
   }
@@ -84,8 +84,8 @@ public class StabilityAIService {
 
     StabilityAIImageResult responseBody = responseEntity.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Stability AI");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     String base64 = "data:image/png;base64," + responseBody.getArtifacts()[0].getBase64();
     return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(base64, "image")));
   }
@@ -114,8 +114,8 @@ public class StabilityAIService {
 
     StabilityAIImageResult responseBody = responseEntity.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Stability AI");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     String base64 = "data:image/png;base64," + responseBody.getArtifacts()[0].getBase64();
     return new DeepChatFileResponse(Arrays.asList(new DeepChatFile(base64, "image")));
   }

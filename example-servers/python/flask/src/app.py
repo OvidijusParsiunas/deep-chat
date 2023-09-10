@@ -19,8 +19,8 @@ cors = CORS(app)
 
 # ------------------ EXCEPTION HANDLERS ------------------
 
-# Sends response back to Deep Chat using the Result format:
-# https://deepchat.dev/docs/connect/#Result
+# Sends response back to Deep Chat using the Response format:
+# https://deepchat.dev/docs/connect/#Response
 @app.errorhandler(Exception)
 def handle_exception(e):
     print(e)

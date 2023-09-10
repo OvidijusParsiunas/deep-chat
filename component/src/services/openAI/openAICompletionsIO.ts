@@ -8,7 +8,7 @@ import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {OpenAI} from '../../types/openAI';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAICompletionsIO extends DirectServiceIO {
@@ -58,7 +58,7 @@ export class OpenAICompletionsIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: OpenAIConverseResult): Promise<Result> {
+  override async extractResultData(result: OpenAIConverseResult): Promise<Response> {
     if (result.error) throw result.error.message;
     return {text: result.choices[0]?.text || ''};
   }

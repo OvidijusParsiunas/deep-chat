@@ -28,8 +28,8 @@ func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) (error, boo
 }
 
 func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatTextResponse{
 		Text: text,
 	}
@@ -42,8 +42,8 @@ func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
 }
 
 func CreateImageResponse(w http.ResponseWriter, src string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatFileResponse{
 		Files: []File{{Type: "image", Src: src}},
 	}
@@ -69,8 +69,8 @@ func ErrorHandler(f func(w http.ResponseWriter, r *http.Request) error) http.Han
 }
 
 func createErrorResponse(w http.ResponseWriter, text string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatErrorResponse{
 		Error: text,
 	}

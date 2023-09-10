@@ -29,8 +29,8 @@ async function handler(req: NextRequest) {
 
   const openAIResult = (await result.json()) as OpenAIConverseResult;
   if (openAIResult.error) throw openAIResult.error.message;
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
   return NextResponse.json({text: openAIResult.choices[0].message.content});
 }
 

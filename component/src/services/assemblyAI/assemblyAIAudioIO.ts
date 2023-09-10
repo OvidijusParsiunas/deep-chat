@@ -4,7 +4,7 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {MessageContent} from '../../types/messages';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AssemblyAIAudioIO extends DirectServiceIO {
@@ -38,7 +38,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
     HTTPRequest.request(this, files[0], messages, false);
   }
 
-  override async extractResultData(result: AssemblyAIResult): Promise<Result> {
+  override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
     const key = this.requestSettings?.headers?.['Authorization'] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);

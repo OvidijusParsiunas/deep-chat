@@ -3,7 +3,7 @@ import {CohereSummarizationResult} from '../../types/cohereResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
@@ -27,7 +27,7 @@ export class CohereSummarizationIO extends CohereIO {
     HTTPRequest.request(this, body, messages);
   }
 
-  override async extractResultData(result: CohereSummarizationResult): Promise<Result> {
+  override async extractResultData(result: CohereSummarizationResult): Promise<Response> {
     if (result.message) throw result.message;
     return {text: result.summary || ''};
   }

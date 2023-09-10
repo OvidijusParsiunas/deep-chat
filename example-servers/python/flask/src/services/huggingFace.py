@@ -17,8 +17,8 @@ class HuggingFace:
         json_response = response.json()
         if "error" in json_response:
             raise Exception(json_response["error"])
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
         return {"text": json_response["generated_text"]}
 
     @staticmethod
@@ -44,8 +44,8 @@ class HuggingFace:
         json_response = response.json()
         if "error" in json_response:
             raise Exception(json_response["error"])
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
         return {"text": json_response[0]["label"]}
     
     # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
@@ -61,6 +61,6 @@ class HuggingFace:
         json_response = response.json()
         if "error" in json_response:
             raise Exception(json_response["error"])
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
         return {"text": json_response["text"]}

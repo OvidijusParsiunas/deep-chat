@@ -1,7 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {Result} from 'deep-chat/dist/types/result';
+import {Response} from 'deep-chat/dist/types/result';
 
-type CallbackFunc = (req: NextRequest, res: NextResponse) => Promise<NextResponse<Result>> | Promise<Response>;
+type CallbackFunc = (req: NextRequest, res: NextResponse) => Promise<NextResponse<Response>> | Promise<Response>;
 
 export default function errorHandler(callbacFunc: CallbackFunc) {
   return async (req: NextRequest, res: NextResponse) => {
@@ -9,8 +9,8 @@ export default function errorHandler(callbacFunc: CallbackFunc) {
       return await callbacFunc(req, res);
     } catch (error) {
       console.error('API Error:', error);
-      // Sends response back to Deep Chat using the Result format:
-      // https://deepchat.dev/docs/connect/#Result
+      // Sends response back to Deep Chat using the Response format:
+      // https://deepchat.dev/docs/connect/#Response
       return NextResponse.json({error}, {status: 500});
     }
   };

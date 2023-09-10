@@ -4,7 +4,7 @@ import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
-import {Result as MessageData} from '../../../types/result';
+import {Response as MessageData} from '../../../types/response';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';

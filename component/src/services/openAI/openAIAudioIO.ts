@@ -6,7 +6,7 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAIAudioIO extends DirectServiceIO {
@@ -89,7 +89,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  override async extractResultData(result: OpenAIAudioResult): Promise<Result> {
+  override async extractResultData(result: OpenAIAudioResult): Promise<Response> {
     if (result.error) throw result.error.message;
     return {text: result.text};
   }
