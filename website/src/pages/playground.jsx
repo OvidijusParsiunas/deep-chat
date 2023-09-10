@@ -38,19 +38,26 @@ export default function Playground() {
   const componentListRef = React.useRef(null);
 
   React.useEffect(() => {
+    window.addEventListener('beforeunload', recordConfig); // before leaving the website
     setTimeout(() => {
-      applyNewPlaygroundConfig(playgroundConfig);
+      if (localStorage.getItem('deep-chat-config')) overwriteDefaultConfig();
+      applyPlaygroundConfig(playgroundConfig);
       view.isBeingCreated = false;
-      Sortable.create(componentListRef.current, {animation: 450, handle: '.playground-chat-drag-handle'});
+      Sortable.create(componentListRef.current, sortableConfig);
       setHorizontalScroll(componentListRef.current);
     });
     return () => {
-      playgroundConfig.components = []; // removed so that it can be repopulated by individual components
+      window.removeEventListener('beforeunload', recordConfig);
+      recordConfig();
       chatComponents.splice(0, chatComponents.length);
       latestChatIndex.index = 0;
-      view.isBeingCreated = false;
+      view.isBeingCreated = true;
     };
   }, []);
+
+  const recordConfig = () => {
+    localStorage.setItem('deep-chat-config', JSON.stringify(playgroundConfig));
+  };
 
   function scrollToNewChat(index, wasCloned, elementRef) {
     if (view.isGrid) {
@@ -100,6 +107,7 @@ export default function Playground() {
     chatComponents.splice(index !== undefined ? index : chatComponents.length, 0, newComponent);
     refreshList((latestChatIndex.index += 1));
     if (view.isBeingCreated) return;
+    playgroundConfig.components.splice(index !== undefined ? index : chatComponents.length, 0, newConfig);
     const timeout = config ? 50 : 5; // cloning and auto scrolling in panorama does not work
     setTimeout(() => {
       scrollToNewChat(index, !!config?.connect, ref.current);
@@ -109,6 +117,10 @@ export default function Playground() {
   function removeComponent(componentToBeRemoved) {
     componentToBeRemoved.current.scaleOut();
     if (view.isGrid) componentToBeRemoved.current.reduceHeightWhenLastOnRow();
+    const componentIndex = playgroundConfig.components.findIndex(
+      (component) => component === componentToBeRemoved.current.config
+    );
+    playgroundConfig.components.splice(componentIndex, 1);
     setTimeout(() => {
       componentToBeRemoved.current.remove();
       setTimeout(() => {
@@ -130,7 +142,14 @@ export default function Playground() {
     view.isGrid = !view.isGrid;
   }
 
-  function applyNewPlaygroundConfig(newConfig) {
+  function overwriteDefaultConfig() {
+    Object.keys(playgroundConfig).forEach((key) => {
+      delete playgroundConfig[key];
+    });
+    Object.assign(playgroundConfig, JSON.parse(localStorage.getItem('deep-chat-config')));
+  }
+
+  function applyPlaygroundConfig(newConfig) {
     chatComponents.splice(0, chatComponents.length);
     refreshList((latestChatIndex.index += 1));
     newConfig.components.forEach((component) => {
@@ -155,13 +174,7 @@ export default function Playground() {
       <div>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
-          <HeaderButtons
-            isGrid={isGrid}
-            toggleLayout={toggleLayout}
-            chatComponents={chatComponents}
-            playgroundConfig={playgroundConfig}
-            applyNewPlaygroundConfig={applyNewPlaygroundConfig}
-          ></HeaderButtons>
+          <HeaderButtons isGrid={isGrid} toggleLayout={toggleLayout}></HeaderButtons>
         </div>
         <div>
           <div id="playground-chat-list-parent">
@@ -189,3 +202,14 @@ function setHorizontalScroll(componentList) {
     }
   });
 }
+
+const sortableConfig = {
+  animation: 450,
+  handle: '.playground-chat-drag-handle',
+  onEnd: (event) => {
+    if (event.oldIndex !== event.newIndex) {
+      let elementToMove = playgroundConfig.components.splice(event.oldIndex, 1)[0];
+      playgroundConfig.components.splice(event.newIndex, 0, elementToMove);
+    }
+  },
+};

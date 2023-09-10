@@ -81,7 +81,6 @@ const ChatWrapper = React.forwardRef(
       }); // in a timeout as otherwise if add button is spammed the animations will not show
       return () => {
         isMounted = false;
-        playgroundConfig.components.push(config);
       };
     }, []);
 

@@ -41,7 +41,7 @@ export default function ChatComponent({config}) {
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}
-          onMessagesCleared={clearMessages}
+          onClearMessages={clearMessages}
         ></DeepChatBrowser>
       ) : (
         <DeepChatBrowser
@@ -56,7 +56,7 @@ export default function ChatComponent({config}) {
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}
-          onMessagesCleared={clearMessages}
+          onClearMessages={clearMessages}
         ></DeepChatBrowser>
       )}
     </div>
