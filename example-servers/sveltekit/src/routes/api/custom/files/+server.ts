@@ -1,4 +1,3 @@
-import type {DeepChatTextRequestBody} from '../../../types/deepChatTextRequestBody';
 import type {RequestHandler} from '@sveltejs/kit';
 
 export const config = {
@@ -6,10 +5,20 @@ export const config = {
 };
 
 export const POST: RequestHandler = async ({request}) => {
-  // Text messages are stored inside request body using the Deep Chat JSON format:
+  // Files are stored inside a form using Deep Chat request FormData format:
   // https://deepchat.dev/docs/connect
-  const messageRequestBody = (await request.json()) as DeepChatTextRequestBody;
-  console.log(messageRequestBody);
+  const formData = await request.formData();
+  formData.forEach((data) => {
+    if (data instanceof File) {
+      console.log('File:');
+      console.log(data);
+    } else {
+      // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
+      // https://deepchat.dev/docs/connect
+      console.log('Message:');
+      console.log(data);
+    }
+  });
   // Sends response back to Deep Chat using the Response format:
   // https://deepchat.dev/docs/connect/#Response
   return new Response(

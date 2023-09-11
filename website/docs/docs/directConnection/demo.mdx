@@ -39,11 +39,7 @@ import Tabs from '@theme/Tabs';
 #### Base Example
 
 <ComponentContainer>
-  <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
-    introMessage={`Let's play Rock, Paper, Scissors! Make your guess and see who wins!`}
-    directConnection={{demo: true}}
-  ></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
@@ -84,7 +80,7 @@ import Tabs from '@theme/Tabs';
           else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
           else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
           else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-          else response = 'Guess either rock, paper or scissors';
+          else response = 'Guess either Rock, Paper or Scissors';
           return {text: response};
         },
       },
@@ -107,7 +103,7 @@ chatElementRef.directConnection = {
       else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
       else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
       else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-      else response = 'Guess either rock, paper or scissors';
+      else response = 'Guess either Rock, Paper or Scissors';
       return {text: response};
     },
   },
@@ -140,7 +136,7 @@ chatElementRef.directConnection = {
       else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
       else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
       else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-      else response = 'Guess either rock, paper or scissors';
+      else response = 'Guess either Rock, Paper or Scissors';
       return {text: response};
     },
   },
