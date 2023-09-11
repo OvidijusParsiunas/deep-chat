@@ -100,7 +100,17 @@
 }
 
 .playground-chat-clear-button {
-  padding-bottom: 2px;
+  width: 18px;
+  padding-bottom: 2.5px;
+  transform: scaleY(1.1);
+}
+
+.playground-chat-clear-button:hover {
+  transform: scale(1.01, 1.11);
+}
+
+.playground-chat-clear-button:active {
+  transform: scale(0.96, 1.06);
 }
 
 .playground-chat-clone-button {

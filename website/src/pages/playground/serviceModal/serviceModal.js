@@ -11,9 +11,8 @@ import React from 'react';
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
 
-// WORK - do not display api key
 // editingChatRef is used for displaying modal
-export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef}) {
+export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef, view}) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [activeService, setActiveService] = React.useState('Service');
   const [availableTypes, setAvailableTypes] = React.useState([]);
@@ -138,6 +137,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               requiredValue={requiredValue}
               setValue={changeRequiredValue.bind(this, setRequiredValue)}
               title="API Key:"
+              view={view}
             />
           )}
           {activeService === 'custom' && (

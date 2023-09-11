@@ -13,18 +13,35 @@ function onChange(event, setValue) {
   }
 }
 
-const Required = React.forwardRef(({title, requiredValue, setValue}, ref) => {
+// view is used to identify if visibility can be toggled by user
+const Required = React.forwardRef(({title, requiredValue, setValue, view}, ref) => {
+  const [isVisible, setIsVisible] = React.useState(!!view?.isKeyVisible);
+
   return (
     <div>
       <div id="playground-service-modal-service-type-label" className="playground-service-modal-input-label">
         {title}
       </div>
       <input
-        className="playground-service-modal-input"
+        className={`playground-service-modal-input ${view ? 'playground-service-modal-visibility-input' : ''}`}
         ref={ref}
         value={requiredValue}
         onChange={(event) => onChange(event, setValue)}
+        type={!view || isVisible ? 'text' : 'password'}
       ></input>
+      {view && (
+        <div id="visibility-icon-container">
+          <img
+            src={isVisible ? 'img/visible.svg' : 'img/notVisible.svg'}
+            className="visibility-icon"
+            onClick={() => {
+              const newState = !view.isKeyVisible;
+              view.isKeyVisible = newState;
+              setIsVisible(newState);
+            }}
+          ></img>
+        </div>
+      )}
     </div>
   );
 });

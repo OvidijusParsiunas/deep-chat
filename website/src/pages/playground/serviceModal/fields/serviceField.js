@@ -9,7 +9,6 @@ import Flash from '/img/flash.svg';
 import './serviceField.css';
 import React from 'react';
 
-// WORK - preload
 export default function Service({activeService, changeService}) {
   return (
     <div>

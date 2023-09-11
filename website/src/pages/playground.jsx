@@ -28,7 +28,7 @@ const modalCollapseStates = {optionalParams: true, code: true};
 const chatComponents = [];
 const latestChatIndex = {index: 0};
 // because components are not refreshed, they will not have access to the latest state, hence this is an alternative to reference it
-const view = {isGrid: true, isBeingCreated: true};
+const view = {isGrid: true, isBeingCreated: true, isKeyVisible: false};
 
 export default function Playground() {
   // this is a workaround to force component list render
@@ -52,6 +52,7 @@ export default function Playground() {
       chatComponents.splice(0, chatComponents.length);
       latestChatIndex.index = 0;
       view.isBeingCreated = true;
+      view.isKeyVisible = false;
     };
   }, []);
 
@@ -168,6 +169,7 @@ export default function Playground() {
           setEditingChatRef={setEditingChatRef}
           chatComponent={editingChatRef.current}
           collapseStates={modalCollapseStates}
+          view={view}
         />
       )}
       <Tooltip id="chat-wrapper-configuration-tooltip" />
