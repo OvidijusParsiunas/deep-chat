@@ -11,6 +11,7 @@ import React from 'react';
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
 
+// WORK - persist the API key when switching types
 // editingChatRef is used for displaying modal
 export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef, view}) {
   const [isVisible, setIsVisible] = React.useState(false);

@@ -4,6 +4,11 @@
   overflow: hidden !important;
 }
 
+.playground-panorama {
+  margin: auto;
+  padding-bottom: 50px;
+}
+
 #playground-title {
   font-size: 33px;
   text-align: center;
@@ -20,11 +25,22 @@
 }
 
 #playground-chat-list {
-  width: 1200px;
+  width: 88vw;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
   position: relative;
+}
+
+/* the css here is only active when screen is very wide */
+/* the reason why we don't use grid all the time is because it causes chat wrappers to arrange their own width with strange spacing */
+.playground-chat-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+.playground-chat-list-panorama {
+  display: flex;
 }
 
 #playground-chat-list:empty {
@@ -61,4 +77,80 @@
   padding-left: 10px;
   padding-right: 10px;
   z-index: 100;
+}
+
+@media (max-height: 800px) {
+  .playground-panorama {
+    padding-bottom: 60px;
+  }
+  .playground-panorama > #playground-title {
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-height: 755px) {
+  .playground-grid > #playground-title,
+  .playground-panorama > #playground-title {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-height: 730px) {
+  .playground-grid > #playground-title,
+  .playground-panorama > #playground-title {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-height: 700px) {
+  .playground-grid > #playground-title,
+  .playground-panorama > #playground-title {
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 2450px) {
+  #playground-chat-list {
+    width: 2000px;
+  }
+  .playground-chat-list-grid {
+    display: block;
+    grid-template-columns: unset;
+  }
+}
+
+@media (max-width: 2050px) {
+  #playground-chat-list {
+    width: 1600px;
+  }
+}
+
+@media (max-width: 1650px) {
+  #playground-chat-list {
+    width: 1200px;
+  }
+}
+
+@media (max-width: 1250px) {
+  #playground-chat-list {
+    width: 800px;
+  }
+}
+
+@media (max-width: 850px) {
+  #playground-chat-list {
+    width: 400px;
+    overflow: unset;
+  }
+  .playground-chat-list-panorama {
+    display: block;
+  }
+}
+
+@media (max-height: 730px) {
+  #playground-chat-list:empty {
+    height: 428px;
+  }
 }

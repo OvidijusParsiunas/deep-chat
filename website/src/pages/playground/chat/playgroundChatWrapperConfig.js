@@ -1,6 +1,7 @@
 import TooltipWrapper from '../tooltip/playgroundTooltipWrapper';
 import React from 'react';
 
+// TO-DO - settings toggle for the config to always be visible
 // prettier-ignore
 export default function PlaygroundChatWrapperConfig(
     {setEditingChatRef, cloneComponent, removeComponent, clearMessages, wrapperRef}) {

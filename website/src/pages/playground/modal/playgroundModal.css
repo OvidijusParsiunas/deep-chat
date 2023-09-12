@@ -89,3 +89,70 @@
 .playground-modal-submit-button:active {
   background-color: rgb(234, 243, 255);
 }
+
+@media (max-height: 1100px) {
+  .playground-modal {
+    margin-top: 30px;
+  }
+}
+
+@media (max-height: 880px) {
+  .playground-modal {
+    overflow: auto;
+    max-height: 700px;
+  }
+}
+
+@media (max-height: 770px) {
+  .playground-modal {
+    max-height: 630px;
+  }
+}
+
+@media (max-height: 700px) {
+  .playground-modal {
+    max-height: 560px;
+  }
+}
+
+@media (max-height: 630px) {
+  .playground-modal {
+    max-height: 490px;
+  }
+}
+
+@media (max-height: 560px) {
+  .playground-modal {
+    max-height: 420px;
+  }
+}
+
+@media (max-height: 490px) {
+  .playground-modal {
+    max-height: 350px;
+  }
+}
+
+@media (max-height: 420px) {
+  .playground-modal {
+    max-height: 280px;
+  }
+}
+
+@media (max-width: 520px) {
+  .playground-modal {
+    width: 400px;
+  }
+}
+
+@media (max-width: 410px) {
+  .playground-modal {
+    width: 350px;
+  }
+}
+
+@media (max-width: 350px) {
+  .playground-modal {
+    width: 300px;
+  }
+}

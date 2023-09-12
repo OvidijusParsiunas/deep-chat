@@ -38,3 +38,21 @@
   width: 23px;
   padding-bottom: 8px;
 }
+
+@media (max-height: 730px) {
+  #playground-header-buttons {
+    top: 85px;
+  }
+}
+
+@media (max-height: 700px) {
+  #playground-header-buttons {
+    top: 65px;
+  }
+}
+
+@media (max-width: 850px) {
+  #playground-view-button {
+    display: none;
+  }
+}

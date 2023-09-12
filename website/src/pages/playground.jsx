@@ -173,7 +173,7 @@ export default function Playground() {
         />
       )}
       <Tooltip id="chat-wrapper-configuration-tooltip" />
-      <div>
+      <div className={isGrid ? 'playground-grid' : 'playground-panorama'}>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
           <HeaderButtons isGrid={isGrid} toggleLayout={toggleLayout}></HeaderButtons>
@@ -183,13 +183,12 @@ export default function Playground() {
             <div
               ref={componentListRef}
               id="playground-chat-list"
-              // not using actual grid as dragging does not work due to drag using margins
-              style={{display: isGrid ? '' : 'flex'}}
+              className={isGrid ? 'playground-chat-list-grid' : 'playground-chat-list-panorama'}
             >
               {chatComponents}
             </div>
           </div>
-          <AddButton addComponent={addComponent} />
+          <AddButton isGrid={isGrid} addComponent={addComponent} />
         </div>
       </div>
     </Layout>
@@ -199,8 +198,11 @@ export default function Playground() {
 function setHorizontalScroll(componentList) {
   componentList.addEventListener('wheel', (e) => {
     if (!view.isGrid) {
-      e.preventDefault();
-      componentList.scrollLeft += e.deltaY;
+      // scroll only when there is overflow (useful when 1 element in column and no overflow)
+      if (componentList.scrollWidth > componentList.clientWidth) {
+        e.preventDefault();
+        componentList.scrollLeft += e.deltaY;
+      }
     }
   });
 }

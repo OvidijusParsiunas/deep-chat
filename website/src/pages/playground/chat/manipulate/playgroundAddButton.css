@@ -1,8 +1,16 @@
 #playground-add-button-container {
   width: 100%;
   text-align: center;
+}
+
+.playground-add-button-container-grid {
   margin-top: 10px;
+  /* required to have space when at end of a grid */
   margin-bottom: 50px;
+}
+
+.playground-add-button-container-panorama {
+  margin-top: 30px;
 }
 
 #playground-add-button {
@@ -29,4 +37,10 @@
 /* can't do image directly as it doesn't cover full button */
 #playground-add-button:hover > #playground-add-button-image {
   filter: brightness(0) saturate(100%) invert(28%) sepia(3%) saturate(0%) hue-rotate(180deg) brightness(92%) contrast(98%);
+}
+
+@media (max-height: 800px) {
+  .playground-add-button-container-panorama {
+    margin-top: 25px;
+  }
 }

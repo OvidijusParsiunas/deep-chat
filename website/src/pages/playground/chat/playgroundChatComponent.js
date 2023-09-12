@@ -37,7 +37,7 @@ export default function ChatComponent({config}) {
             borderColor: '#ededed',
             marginLeft: '10px',
             marginRight: '10px',
-            width: '20vw',
+            width: '302px',
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}
@@ -52,7 +52,7 @@ export default function ChatComponent({config}) {
             borderColor: '#ededed',
             marginLeft: '10px',
             marginRight: '10px',
-            width: '20vw',
+            width: '302px',
           }}
           initialMessages={config.messages}
           onNewMessage={newestMessages}

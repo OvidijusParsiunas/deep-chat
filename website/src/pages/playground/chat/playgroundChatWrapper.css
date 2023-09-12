@@ -124,3 +124,15 @@
   width: 17px;
   padding-bottom: 3.5px;
 }
+
+@media (max-height: 730px) {
+  .playground-chat-wrapper {
+    height: 428px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .playground-chat-config-buttons > * {
+    opacity: 1;
+  }
+}

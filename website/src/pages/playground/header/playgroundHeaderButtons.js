@@ -18,7 +18,7 @@ export default function HeaderButtons({isGrid, toggleLayout}) {
       {/* <Shield></Shield> */}
       {/* <ExportButton chatComponents={chatComponents} playgroundConfig={playgroundConfig}></ExportButton> */}
       {/* <UploadButton applyNewPlaygroundConfig={applyNewPlaygroundConfig}></UploadButton> */}
-      <div className="playground-header-button" onClick={layoutIconClick}>
+      <div id="playground-view-button" className="playground-header-button" onClick={layoutIconClick}>
         <TooltipWrapper text={isGridI ? 'Panorama view' : 'Grid view'}>
           <img src={isGridI ? 'img/layout-panorama.svg' : 'img/layout-grid.svg'} className="playground-button"></img>
         </TooltipWrapper>
