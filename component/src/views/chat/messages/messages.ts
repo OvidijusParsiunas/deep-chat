@@ -275,14 +275,20 @@ export class Messages {
     return undefined;
   }
 
+  private getLastMessageElement() {
+    return this.elementRef.children[this.elementRef.children.length - 1];
+  }
+
+  private getLastMessageBubbleElement() {
+    return this.getLastMessageElement()?.children?.[0]?.children?.[0];
+  }
+
   public isLastMessageError() {
-    return this.elementRef.children[this.elementRef.children.length - 1]?.children?.[0]?.children?.[0]?.classList.contains(
-      'error-message-text'
-    );
+    return this.getLastMessageBubbleElement()?.classList.contains('error-message-text');
   }
 
   public removeError() {
-    if (this.isLastMessageError()) this.elementRef.children[this.elementRef.children.length - 1].remove();
+    if (this.isLastMessageError()) this.getLastMessageElement().remove();
   }
 
   public addLoadingMessage() {
@@ -318,6 +324,7 @@ export class Messages {
   }
 
   public finaliseStreamedMessage() {
+    if (!this.getLastMessageBubbleElement().classList.contains('streamed-message')) return;
     this.messages[this.messages.length - 1].text = this._streamedText;
     this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);

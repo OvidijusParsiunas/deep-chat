@@ -79,7 +79,7 @@ export class Websocket {
 
   public static async sendWebsocket(ws: WebSocket, io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, error} = await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails);
+    const {body: interceptedBody, error} = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     if (error) return messages.addNewErrorMessage('service', error);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (io.requestSettings?.url === Demo.URL) {

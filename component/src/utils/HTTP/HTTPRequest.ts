@@ -15,11 +15,11 @@ export class HTTPRequest {
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails: ResponseDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders, error} =
-      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
     if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
     // WORK - will enable this later on
-    // if (io.requestSettings?.handler) return CustomRequest.request(io, interceptedBody, messages);
+    // if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {
@@ -83,7 +83,7 @@ export class HTTPRequest {
   public static async poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers, error} =
-      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     if (error) return HTTPRequest.onInterceptorError(messages, error);
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';

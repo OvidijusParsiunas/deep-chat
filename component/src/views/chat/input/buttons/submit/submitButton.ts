@@ -6,6 +6,7 @@ import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {StreamEvents} from '../../../../../types/handler';
 import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
@@ -20,6 +21,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
+  private readonly _stopClicked: StreamEvents['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
@@ -33,6 +35,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
+    this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
     this.attemptOverwriteLoadingStyle(deepChat);
     this.changeToSubmitIcon();
@@ -98,6 +101,7 @@ export class SubmitButton extends InputButton<Styles> {
       onOpen: this.changeToStopIcon.bind(this),
       onClose: this.changeToSubmitIcon.bind(this),
       abortStream: this._abortStream,
+      stopClicked: this._stopClicked,
     };
     const {stream} = this._serviceIO.deepChat;
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
@@ -145,9 +149,10 @@ export class SubmitButton extends InputButton<Styles> {
     if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 
-  // This will not stop the stream on the server side
   private stopStream() {
+    // This will not stop the stream on the server side
     this._abortStream.abort();
+    this._stopClicked.listener();
     this.changeToSubmitIcon();
   }
 

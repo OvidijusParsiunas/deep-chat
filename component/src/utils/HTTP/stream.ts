@@ -3,8 +3,8 @@ import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {Response as DResponse} from '../../types/response';
 import {RequestUtils} from './requestUtils';
-import {Response} from '../../types/response';
 import {Demo} from '../demo/demo';
 
 type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
@@ -14,9 +14,11 @@ export class Stream {
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders, error} =
-      (await RequestUtils.processResponseInterceptor(io.deepChat, requestDetails));
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     if (error) return Stream.onInterceptorError(messages, error, onClose);
+    // WORK - will enable this later on
+    // if (io.requestSettings?.streamHandler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
@@ -36,7 +38,7 @@ export class Stream {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response)
-            .then((textBody?: Response) => {
+            .then((textBody?: DResponse) => {
               if (textBody?.text === undefined) {
                 // strategy - do not to stop the stream on one message failure to give other messages a change to display
                 console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_RESPONSE}`);

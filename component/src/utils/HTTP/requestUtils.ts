@@ -42,7 +42,7 @@ export class RequestUtils {
     return response.blob();
   }
 
-  public static async processResponseInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResult {
+  public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResult {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};

@@ -3,8 +3,9 @@ import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSendin
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
-import {Request} from '../types/request';
+import {StreamEvents} from '../types/handler';
 import {Response} from '../types/response';
+import {Request} from '../types/request';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
@@ -23,6 +24,7 @@ export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
   abortStream: AbortController;
+  stopClicked: StreamEvents['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
   simulationInterim?: number;
 }
 
