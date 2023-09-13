@@ -17,11 +17,11 @@
 }
 
 .playground-modal-fade-in-background {
-  background-color: rgba(128, 128, 128, 0.438);
+  background-color: var(--playground-modal-fade-in-background);
 }
 
 .playground-modal-fade-out-background {
-  background-color: rgba(128, 128, 128, 0);
+  background-color: var(--playground-modal-fade-in-background-out);
 }
 
 .playground-modal {
@@ -30,14 +30,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 500px;
-  border: 1px solid rgb(192, 192, 192);
+  background-color: var(--playground-modal-background);
+  border: var(--playground-modal-border);
   border-radius: 7px;
   z-index: 2;
   text-align: left;
-  background-color: white;
   padding: 20px;
   padding-top: 10px;
   transition: 0.2s;
+}
+
+.playground-modal::-webkit-scrollbar {
+  width: 10px;
+}
+
+.playground-modal::-webkit-scrollbar-track {
+  background-color: var(--playground-modal-scrollbar-background);
+}
+
+.playground-modal::-webkit-scrollbar-thumb {
+  background-color: var(--playground-chat-list-scrollbar-thumb-background);
+  border-radius: 10px;
 }
 
 .playground-modal > div {
@@ -51,7 +64,7 @@
   font-size: 21px;
   display: flex;
   justify-content: center;
-  color: var(--start-header-color);
+  color: var(--playground-modal-title-color);
   padding-bottom: 5px;
 }
 
@@ -59,35 +72,36 @@
   width: 68px;
   height: 30px;
   font-size: 15px;
-  background-color: rgb(252, 252, 252);
   border-radius: 5px;
   margin-right: 8px;
   cursor: pointer;
 }
 
 .playground-modal-close-button {
-  border: 1px solid grey;
+  background-color: var(--playground-modal-close-background);
+  border: var(--playground-modal-close-border);
 }
 
 .playground-modal-close-button:hover {
-  background-color: rgb(244, 244, 244);
+  background-color: var(--playground-modal-close-background-hover);
 }
 
 .playground-modal-close-button:active {
-  background-color: rgb(236, 236, 236);
+  background-color: var(--playground-modal-close-background-active);
 }
 
 .playground-modal-submit-button {
-  color: #003a6b;
-  border: 1px solid #003a6b;
+  color: var(--playground-modal-submit-color);
+  border: var(--playground-modal-submit-border);
+  background-color: var(--playground-modal-submit-background);
 }
 
 .playground-modal-submit-button:hover {
-  background-color: rgb(245, 248, 250);
+  background-color: var(--playground-modal-submit-background-hover);
 }
 
 .playground-modal-submit-button:active {
-  background-color: rgb(234, 243, 255);
+  background-color: var(--playground-modal-submit-background-active);
 }
 
 @media (max-height: 1100px) {

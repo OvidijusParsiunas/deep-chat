@@ -9,10 +9,12 @@
   color: #333333;
   top: 1px;
   position: relative;
+  border: var(--playground-service-input-border);
+  color: var(--playground-service-input-color);
 }
 
 .playground-constructable-object-button {
-  background-color: rgb(252, 252, 252);
+  background-color: var(--playground-modal-close-background);
   margin-bottom: 3px;
   margin-right: 8px;
   font-size: 13px;
@@ -23,7 +25,11 @@
 }
 
 .playground-constructable-object-button:hover {
-  background-color: rgb(235, 235, 235);
+  background-color: var(--playground-modal-close-background-hover);
+}
+
+.playground-constructable-object-button:active {
+  background-color: var(--playground-modal-close-background-active);
 }
 
 .playground-constructable-object-add-button {

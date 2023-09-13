@@ -1,5 +1,6 @@
 import PlaygroundChatWrapperConfig from './playgroundChatWrapperConfig';
 import ChatWrapperText from './playgroundChatWrapperText';
+import {useColorMode} from '@docusaurus/theme-common';
 import Logo from './playgroundChatWrapperLogo';
 import './playgroundChatWrapper.css';
 import React from 'react';
@@ -62,6 +63,7 @@ const ChatWrapper = React.forwardRef(
     const [heightExpanded, setHeightExpanded] = React.useState(true);
     const [allowAnimation, setAllowAnimation] = React.useState(false);
     const descriptionRef = React.useRef(null);
+    const {colorMode} = useColorMode();
     // need to use state for input
     // tracked here as otherwise re-rendering component would re-render description
     const [description, setDescription] = React.useState(config.description);
@@ -83,6 +85,11 @@ const ChatWrapper = React.forwardRef(
         isMounted = false;
       };
     }, []);
+
+    // the reason why resetting here because the component does not update itself properly as styles overwrite each other
+    React.useEffect(() => {
+      setCounter(counter + 1);
+    }, [colorMode]);
 
     function setDescriptionText(text) {
       config.description = text;

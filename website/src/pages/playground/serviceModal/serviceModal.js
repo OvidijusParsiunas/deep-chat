@@ -12,8 +12,11 @@ import React from 'react';
 // images, audio, gifs, camera, speech-to-text, stream
 
 // WORK - persist the API key when switching types
+// WORK - hide the API key in code section
+// WORK - spam optional paramaters doesn't set dimensions
 // editingChatRef is used for displaying modal
 export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef, view}) {
+  const modalRef = React.useRef(null);
   const [isVisible, setIsVisible] = React.useState(false);
   const [activeService, setActiveService] = React.useState('Service');
   const [availableTypes, setAvailableTypes] = React.useState([]);
@@ -119,10 +122,13 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         }`}
         onClick={close}
       ></div>
-      <div className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
+      <div
+        ref={modalRef}
+        className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}
+      >
         <b className="playground-modal-title">Service Settings</b>
         <div className="playgroud-service-modal-form">
-          <Service activeService={activeService} changeService={changeService} />
+          <Service activeService={activeService} changeService={changeService} modalRef={modalRef} />
           {activeService !== 'demo' && activeService !== 'custom' && (
             <ServiceType
               availableTypes={availableTypes}

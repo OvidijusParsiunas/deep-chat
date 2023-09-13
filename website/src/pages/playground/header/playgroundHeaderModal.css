@@ -4,7 +4,7 @@
 
 .playground-header-modal-description {
   font-size: 17px;
-  color: rgb(58, 58, 58);
+  color: var(--playground-header-modal-text-color);
 }
 
 .playground-header-modal-buttons {

@@ -32,7 +32,7 @@
 
 .playground-chat-details {
   text-align: center;
-  padding-top: 17px;
+  padding-top: 16px;
 }
 
 .playground-chat-description {
@@ -61,11 +61,15 @@
   margin-right: 3px;
   padding-bottom: 1px;
   width: 22px;
-  filter: brightness(0) saturate(100%) invert(27%) sepia(0%) saturate(1%) hue-rotate(169deg) brightness(97%) contrast(97%);
+  filter: var(--playground-wrapper-drag-filter);
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+.playground-chat-drag-handle:hover {
+  filter: var(--playground-wrapper-drag-filter-hover);
 }
 
 .playground-chat-drag-handle:active {
@@ -73,29 +77,21 @@
   cursor: -webkit-grabbing;
 }
 
-.playground-chat-drag-handle:hover {
-  filter: brightness(0) saturate(100%) invert(0%) sepia(100%) saturate(7480%) hue-rotate(217deg) brightness(98%)
-    contrast(105%);
-}
-
 .playground-chat-config-button {
   cursor: pointer;
   margin-right: 8px;
   padding-bottom: 3px;
   width: 17px;
-  filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(308%) hue-rotate(283deg) brightness(96%)
-    contrast(93%);
+  filter: var(--playground-wrapper-button-filter);
 }
 
 .playground-chat-config-button:hover {
-  filter: brightness(0) saturate(100%) invert(11%) sepia(0%) saturate(592%) hue-rotate(309deg) brightness(98%)
-    contrast(94%);
+  filter: var(--playground-wrapper-button-filter-hover);
   transform: scale(1.01);
 }
 
 .playground-chat-config-button:active {
-  filter: brightness(0) saturate(100%) invert(0%) sepia(97%) saturate(7488%) hue-rotate(150deg) brightness(95%)
-    contrast(103%);
+  filter: var(--playground-wrapper-button-filter-active);
   transform: scale(0.96);
 }
 
@@ -119,15 +115,17 @@
 }
 
 .playground-chat-remove-button {
-  filter: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(827%) hue-rotate(226deg) brightness(93%)
-    contrast(92%);
+  filter: var(--playground-wrapper-remove-filter);
   width: 17px;
   padding-bottom: 3.5px;
 }
 
 @media (max-height: 730px) {
   .playground-chat-wrapper {
-    height: 428px;
+    height: 434px;
+  }
+  .playground-chat-details {
+    padding-top: 11px;
   }
 }
 

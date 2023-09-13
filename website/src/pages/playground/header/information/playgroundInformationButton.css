@@ -1,10 +1,9 @@
 #playground-information-icon {
   width: 21px;
   padding-bottom: 7.5px;
-  filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(962%) hue-rotate(52deg) brightness(99%) contrast(96%);
+  filter: var(--playground-information-filter);
 }
 
-#playground-information-icon:hover {
-  filter: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%) hue-rotate(284deg) brightness(102%)
-    contrast(97%);
+.playground-header-button:hover > a > #playground-information-icon {
+  filter: var(--playground-information-filter-hover);
 }

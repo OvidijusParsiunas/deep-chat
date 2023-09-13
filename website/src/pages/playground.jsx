@@ -160,7 +160,7 @@ export default function Playground() {
   }
 
   return (
-    <Layout title="Start" description="Deep Chat's official playground">
+    <Layout title="Playground" description="Deep Chat Playground">
       <Head>
         <html className="plugin-pages plugin-id-default playground" />
       </Head>
@@ -173,7 +173,7 @@ export default function Playground() {
         />
       )}
       <Tooltip id="chat-wrapper-configuration-tooltip" />
-      <div className={isGrid ? 'playground-grid' : 'playground-panorama'}>
+      <div id="playground" className={isGrid ? 'playground-grid' : 'playground-panorama'}>
         <div id="playground-title" className={'start-page-title-visible'}>
           <b>Playground</b>
           <HeaderButtons isGrid={isGrid} toggleLayout={toggleLayout}></HeaderButtons>

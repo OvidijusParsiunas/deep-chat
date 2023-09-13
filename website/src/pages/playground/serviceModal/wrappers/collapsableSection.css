@@ -1,9 +1,9 @@
 .playground-service-modal-collapsible-title {
   margin-top: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px solid rgb(235, 235, 235);
+  border-bottom: var(--playground-modal-collapsible-title-border);
   user-select: none;
-  color: #000f1f;
+  color: var(--playground-modal-collapsible-title-color);
 }
 
 .playground-service-modal-collapsible-title:hover {

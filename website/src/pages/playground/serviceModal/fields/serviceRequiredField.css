@@ -24,6 +24,5 @@
 }
 
 .visibility-icon:hover {
-  filter: brightness(0) saturate(100%) invert(41%) sepia(0%) saturate(275%) hue-rotate(155deg) brightness(97%)
-    contrast(91%);
+  filter: var(--playground-modal-visibility-filter-hover);
 }

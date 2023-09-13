@@ -13,7 +13,9 @@ function Icon({connect}) {
     return <Flash width="19" style={{paddingTop: '5px', marginRight: '6px', marginLeft: '-10px'}} />;
   }
   if (connect.openAI) {
-    return <img src={openAILogo} width="17" style={{paddingTop: '6px', marginRight: '8px'}} />;
+    return (
+      <img src={openAILogo} width="17" style={{paddingTop: '6px', marginRight: '8px'}} className="adaptive-logo-filter" />
+    );
   }
   if (connect.cohere) {
     return <img src={cohereLogo} width="26" style={{paddingTop: '1.5px', marginLeft: '-1px', marginRight: '3px'}} />;

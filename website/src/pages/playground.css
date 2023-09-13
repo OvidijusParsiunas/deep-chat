@@ -1,7 +1,5 @@
-/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
-
-.start > body {
-  overflow: hidden !important;
+.playground {
+  background: var(--playground-background);
 }
 
 .playground-panorama {
@@ -52,11 +50,11 @@
 }
 
 #playground-chat-list::-webkit-scrollbar-track {
-  background-color: rgb(247, 247, 247);
+  background-color: var(--playground-chat-list-scrollbar-background);
 }
 
 #playground-chat-list::-webkit-scrollbar-thumb {
-  background-color: rgb(208, 208, 208);
+  background-color: var(--playground-chat-list-scrollbar-thumb-background);
   border-radius: 10px;
 }
 

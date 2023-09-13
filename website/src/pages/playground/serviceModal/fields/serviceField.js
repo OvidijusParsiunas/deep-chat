@@ -9,7 +9,7 @@ import Flash from '/img/flash.svg';
 import './serviceField.css';
 import React from 'react';
 
-export default function Service({activeService, changeService}) {
+export default function Service({activeService, changeService, modalRef}) {
   return (
     <div>
       <a
@@ -26,6 +26,7 @@ export default function Service({activeService, changeService}) {
           defaultOption={services[activeService]}
           onChange={changeService}
           isImages={true}
+          modalRef={modalRef}
         />
       </div>
     </div>
@@ -62,12 +63,8 @@ const services = {
     icon: (
       <img
         src={openAILogo}
-        className="playground-service-modal-service-icon"
-        style={{
-          transform: 'scale(1.4)',
-          filter:
-            'brightness(0) saturate(100%) invert(16%) sepia(0%) saturate(575%) hue-rotate(163deg) brightness(100%) contrast(93%)',
-        }}
+        className="playground-service-modal-service-icon adaptive-openai-filter"
+        style={{transform: 'scale(1.4)'}}
       />
     ),
   },

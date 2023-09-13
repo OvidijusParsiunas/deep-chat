@@ -15,5 +15,5 @@
 }
 
 .playground-information-modal-icon {
-  filter: brightness(0) saturate(100%) invert(42%) sepia(0%) saturate(844%) hue-rotate(69deg) brightness(96%) contrast(91%);
+  filter: var(--playground-information-modal-filter);
 }

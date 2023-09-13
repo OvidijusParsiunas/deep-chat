@@ -9,19 +9,19 @@
   /* set to 1 in order to automatically use the largest field - must be above 0 for Safari */
   width: 1px;
   padding-right: 10px;
-  color: #04345c;
+  color: var(--playground-modal-label-color);
   cursor: pointer;
 }
 
 .playground-service-modal-input {
-  border: 1px solid grey;
+  border: var(--playground-service-input-border);
   border-radius: 4px;
   height: 25px;
   width: 200px;
   font-size: 15px;
   padding-left: 6px;
   padding-top: 1px;
-  color: #333333;
+  color: var(--playground-service-input-color);
   top: 1px;
   position: relative;
 }
