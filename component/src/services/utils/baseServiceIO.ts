@@ -34,7 +34,6 @@ export class BaseServiceIO implements ServiceIO {
   maxMessages?: number;
   private readonly _directServiceRequiresFiles: boolean;
   demo?: Demo;
-  websocket?: WebSocket;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
   streamHandlers: StreamHandlers = {} as StreamHandlers;
@@ -113,9 +112,9 @@ export class BaseServiceIO implements ServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (this.websocket) {
+    if (this.requestSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
-      Websocket.sendWebsocket(this.websocket, this, body, messages, false);
+      Websocket.sendWebsocket(this, body, messages, false);
     } else if (requestContents.files && !this._directServiceRequiresFiles) {
       this.callApiWithFiles(this.rawBody, messages, processedMessages, requestContents.files);
     } else {

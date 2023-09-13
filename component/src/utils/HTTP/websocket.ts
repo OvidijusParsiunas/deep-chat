@@ -1,8 +1,9 @@
+import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
-import {RequestUtils} from './requestUtils';
 import {Response} from '../../types/response';
+import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
@@ -18,15 +19,17 @@ export class Websocket {
     if (!document.body.contains(io.deepChat)) return; // check if element is still present
     const websocketConfig = io.requestSettings.websocket;
     if (!websocketConfig) return;
+    if (io.requestSettings.websocketHandler) return CustomHandler.websocket(io, messages);
     try {
       const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
       // this will throw an error when url doesn't start with 'ws:'
-      io.websocket = new WebSocket(io.requestSettings.url || '', protocols);
+      const websocket = new WebSocket(io.requestSettings.url || '', protocols);
+      io.websocket = websocket;
       io.websocket.onopen = () => {
         // TO-DO - when ability to disable submit button is set, instead of removing error message
         // reenable the submit button
         messages.removeError();
-        if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, io.websocket, messages);
+        if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, websocket, messages);
       };
       io.websocket.onerror = (event) => {
         console.error(event);
@@ -65,10 +68,6 @@ export class Websocket {
         RequestUtils.displayError(messages, error as object, 'Error in server message');
       }
     };
-    ws.onerror = (error) => {
-      console.error(error);
-      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
-    };
     ws.onclose = () => {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
@@ -77,10 +76,13 @@ export class Websocket {
     };
   }
 
-  public static async sendWebsocket(ws: WebSocket, io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+  public static async sendWebsocket(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+    const ws = io.websocket;
+    if (!ws || ws === 'pending') return;
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, error} = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     if (error) return messages.addNewErrorMessage('service', error);
+    if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (io.requestSettings?.url === Demo.URL) {
       return Demo.request(messages, io.completionsHandlers.onFinish, io.deepChat.responseInterceptor);
@@ -91,5 +93,19 @@ export class Websocket {
     } else {
       ws.send(JSON.stringify(processedBody));
     }
+  }
+
+  public static canSendMessage(websocket: ServiceIO['websocket']) {
+    if (!websocket) return true;
+    if (websocket === 'pending') return false;
+    if (Websocket.isWebSocket(websocket)) {
+      return websocket.readyState !== undefined && websocket.readyState === websocket.OPEN;
+    }
+    return websocket.isOpen;
+  }
+
+  // if false then it is the internal websocket handler
+  private static isWebSocket(websocket: WebSocket | IWebsocketHandler): websocket is WebSocket {
+    return (websocket as WebSocket).send !== undefined;
   }
 }

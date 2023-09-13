@@ -4,13 +4,13 @@ import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
-import {Response as MessageData} from '../../../types/response';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {CustomStyle} from '../../../types/styles';
+import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
 import {DeepChat} from '../../../deepChat';
@@ -202,7 +202,7 @@ export class Messages {
     return messageElements;
   }
 
-  public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
+  public addNewMessage(data: Response, isAI: boolean, update: boolean, isInitial = false) {
     if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
       if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(data.text, this._textToSpeech);
@@ -359,6 +359,7 @@ export class Messages {
     );
   }
 
+  // WORK - need to clear the messages array
   private clearMessages(isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
     this._messageElementRefs.forEach((message) => {

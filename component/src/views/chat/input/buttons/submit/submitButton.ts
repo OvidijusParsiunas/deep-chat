@@ -5,8 +5,9 @@ import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
+import {Websocket} from '../../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {StreamEvents} from '../../../../../types/handler';
+import {StreamSignals} from '../../../../../types/handler';
 import {TextInputEl} from '../../textInput/textInput';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
@@ -21,7 +22,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
-  private readonly _stopClicked: StreamEvents['stopClicked'];
+  private readonly _stopClicked: StreamSignals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
@@ -131,10 +132,7 @@ export class SubmitButton extends InputButton<Styles> {
       fileData = uploadedFilesData?.map((fileData) => fileData.file);
     }
     const submittedText = userText === '' ? undefined : userText;
-    if (this._isRequestInProgress) return;
-    const {websocket} = this._serviceIO;
-    if (websocket && (
-      websocket === 'pending' || websocket.readyState === undefined || websocket.readyState !== websocket.OPEN)) return;
+    if (this._isRequestInProgress || !Websocket.canSendMessage(this._serviceIO.websocket)) return;
     if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
       if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
     } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;

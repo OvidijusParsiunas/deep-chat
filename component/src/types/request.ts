@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Handler, StreamHandler} from './handler';
+import {Handler, StreamHandler, WebsocketHandler} from './handler';
 import {GenericObject} from './object';
 
 export interface Request {
@@ -10,4 +10,5 @@ export interface Request {
   websocket?: boolean | string | string[];
   handler?: Handler;
   streamHandler?: StreamHandler;
+  websocketHandler?: WebsocketHandler;
 }

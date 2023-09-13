@@ -1,9 +1,10 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
+import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
+import {StreamSignals} from '../types/handler';
 import {FILE_TYPES} from '../types/fileTypes';
-import {StreamEvents} from '../types/handler';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
 import {DeepChat} from '../deepChat';
@@ -24,7 +25,7 @@ export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
   abortStream: AbortController;
-  stopClicked: StreamEvents['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
+  stopClicked: StreamSignals['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
   simulationInterim?: number;
 }
 
@@ -54,7 +55,8 @@ export interface ServiceIO {
   url?: string;
 
   // 'pending' is used to signify that the websocket connection will need to be established
-  websocket?: WebSocket | 'pending';
+  // IWebsocketHandler contains logic for custom handler
+  websocket?: WebSocket | 'pending' | IWebsocketHandler;
 
   completionsHandlers: CompletionsHandlers;
 

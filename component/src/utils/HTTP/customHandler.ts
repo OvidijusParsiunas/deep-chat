@@ -3,30 +3,33 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {Response} from '../../types/response';
-import {RequestUtils} from './requestUtils';
 import {Stream} from './stream';
+
+export interface IWebsocketHandler {
+  isOpen: boolean;
+  newUserMessage: {listener: (text: string) => void};
+}
 
 export class CustomHandler {
   public static async request(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
-    io.requestSettings
-      .handler?.(body)
-      .then(async (result: Response) => {
-        if (!io.extractResultData) return; // this return should theoretically not execute
-        const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
-        const resultData = await io.extractResultData(finalResult);
-        if (!resultData || typeof resultData !== 'object')
-          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, resultData));
-        if (io.deepChat.stream && resultData.text) {
-          Stream.simulate(messages, io.streamHandlers, resultData.text);
-        } else {
-          messages.addNewMessage(resultData, true, true);
-          io.completionsHandlers.onFinish();
-        }
-      })
-      .catch((err) => {
-        RequestUtils.displayError(messages, err);
+    const onResponse = async (response: Response) => {
+      const result = (await io.deepChat.responseInterceptor?.(response)) || response;
+      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        messages.addNewErrorMessage('service', 'Error in server message');
         io.completionsHandlers.onFinish();
-      });
+      } else if (typeof result.error === 'string') {
+        console.error(result.error);
+        messages.addNewErrorMessage('service', result.error);
+        io.completionsHandlers.onFinish();
+      } else if (io.deepChat.stream && result.text) {
+        Stream.simulate(messages, io.streamHandlers, result.text);
+      } else {
+        messages.addNewMessage(result, true, true);
+        io.completionsHandlers.onFinish();
+      }
+    };
+    io.requestSettings.handler?.(body, {onResponse: onResponse});
   }
 
   public static async stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
@@ -45,9 +48,11 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const onResult = (result: {text?: string; error?: string}) => {
+    const onResponse = (result: {text?: string; error?: string}) => {
       if (!isHandlerActive) return;
-      if (result.error) {
+      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+        console.error(ErrorMessages.INVALID_RESPONSE(result, 'server', false));
+      } else if (result.error) {
         console.error(result.error);
         messages.finaliseStreamedMessage();
         io.streamHandlers.onClose();
@@ -62,6 +67,36 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    io.requestSettings.streamHandler?.(body, {onOpen, onResult, onClose, stopClicked: io.streamHandlers.stopClicked});
+    const signals = {onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked};
+    io.requestSettings.streamHandler?.(body, signals);
+  }
+
+  public static websocket(io: ServiceIO, messages: Messages) {
+    const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}};
+    io.websocket = internalConfig;
+    const onOpen = () => {
+      messages.removeError();
+      internalConfig.isOpen = true;
+    };
+    const onClose = () => {
+      internalConfig.isOpen = false;
+    };
+    const onResponse = async (response: {text?: string; error?: string}) => {
+      if (!internalConfig.isOpen) return;
+      const result = (await io.deepChat.responseInterceptor?.(response)) || response;
+      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        messages.addNewErrorMessage('service', 'Error in server message');
+      } else if (typeof result.error === 'string') {
+        console.error(result.error);
+        if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', result.error);
+      } else if (io.deepChat.stream) {
+        Stream.simulate(messages, io.streamHandlers, result.text);
+      } else {
+        messages.addNewMessage(result, true, true);
+      }
+    };
+    const signals = {onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage};
+    io.requestSettings.websocketHandler?.(undefined, signals);
   }
 }
