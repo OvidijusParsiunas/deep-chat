@@ -11,9 +11,6 @@ import React from 'react';
 // TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
 
-// WORK - persist the API key when switching types
-// WORK - hide the API key in code section
-// WORK - spam optional paramaters doesn't set dimensions
 // editingChatRef is used for displaying modal
 export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef, view}) {
   const modalRef = React.useRef(null);
@@ -96,14 +93,14 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
       setWebsocket(connect['custom'].websocket);
       if (connect['custom'].websocket) {
         setTimeout(() => {
-          const newConfig = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
-          setCode(getCodeStr(newConfig, true));
+          const newConnect = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
+          setCode(getCodeStr(newConnect, true, view));
         });
         return;
       }
-      return setCode(getCodeStr(connect, true));
+      return setCode(getCodeStr(connect, true, view));
     }
-    setCode(getCodeStr(connect, false));
+    setCode(getCodeStr(connect, false, view));
   };
 
   const close = () => {
@@ -115,7 +112,6 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
 
   return (
     <div>
-      {/* WORK - check if dirty before closing */}
       <div
         className={`playground-service-modal-background ${
           isVisible ? 'playground-modal-fade-in-background' : 'playground-modal-fade-out-background'
@@ -145,6 +141,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               setValue={changeRequiredValue.bind(this, setRequiredValue)}
               title="API Key:"
               view={view}
+              changeCode={changeCode}
             />
           )}
           {activeService === 'custom' && (
@@ -221,11 +218,24 @@ function changeFirstLetter(text, capitalize = true) {
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
-function getCodeStr(connect, isCustom) {
+function getCodeStr(connect, isCustom, view) {
   if (isCustom) {
     return `<deep-chat request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
   }
+  if (!view.isKeyVisible) {
+    connect = JSON.parse(JSON.stringify(connect));
+    const service = Object.keys(connect)[0];
+    if (connect[service].key) connect[service].key = createRedactString(connect[service].key.length);
+  }
   return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
+}
+
+function createRedactString(length) {
+  let string = '';
+  for (let i = 0; i < length; i++) {
+    string += '-';
+  }
+  return string;
 }
 
 function constructConnect(optionalParamsEl, activeService, activeType, requiredProp) {

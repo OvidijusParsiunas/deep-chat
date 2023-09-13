@@ -4,7 +4,8 @@ import React from 'react';
 export default function ExportModal({chatComponents, setIsModalDisplayed, playgroundConfig}) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isRedactionVisible, setRedactionVisible] = React.useState(false);
-  const [isRedactSelected, setIsRedactSelected] = React.useState(playgroundConfig.redactKeys);
+  // playgroundConfig.redactKeys - not present and needs to be added
+  const [isRedactSelected, setIsRedactSelected] = React.useState(false);
 
   React.useEffect(() => {
     setRedactCheckbox();
@@ -102,7 +103,7 @@ export default function ExportModal({chatComponents, setIsModalDisplayed, playgr
               onChange={() => {
                 const newState = !isRedactSelected;
                 setIsRedactSelected(newState);
-                playgroundConfig.redactKeys = newState;
+                // playgroundConfig.redactKeys = newState;
               }}
             />
             <div>Redact API Keys</div>

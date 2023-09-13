@@ -14,7 +14,7 @@ function onChange(event, setValue) {
 }
 
 // view is used to identify if visibility can be toggled by user
-const Required = React.forwardRef(({title, requiredValue, setValue, view}, ref) => {
+const Required = React.forwardRef(({title, requiredValue, setValue, view, changeCode}, ref) => {
   const [isVisible, setIsVisible] = React.useState(!!view?.isKeyVisible);
 
   return (
@@ -38,6 +38,7 @@ const Required = React.forwardRef(({title, requiredValue, setValue, view}, ref) 
               const newState = !view.isKeyVisible;
               view.isKeyVisible = newState;
               setIsVisible(newState);
+              changeCode();
             }}
           ></img>
         </div>

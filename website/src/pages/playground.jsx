@@ -11,17 +11,11 @@ import Sortable from 'sortablejs';
 import React from 'react';
 import './playground.css';
 
-// Styling of the butttons
-// Title based on current service
-// Connect to a service - insert key panel (info bubble that the key will not be shared)
 // Different shadow/bubble color depending on service used
-// Clear messages
-
 // Video to show off how it works
 
 // TO-DO - when the user is typing in one chat and hits tab - focus next
-// TO-DO - attempt to cache the configuration
-const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}], redactKeys: false};
+const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}]};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -156,7 +150,6 @@ export default function Playground() {
     newConfig.components.forEach((component) => {
       addComponent(component);
     });
-    playgroundConfig.redactKeys = newConfig.redactKeys;
   }
 
   return (
