@@ -42,7 +42,7 @@ export default function InformationModal({setIsModalDisplayed}) {
               id="playground-information-modal-shield"
               className="playground-information-modal-icon"
             ></img>
-            <div>Deep Chat does not record any data. Your session information remains in the safety of your browser.</div>
+            <div>The playground does not record any data. Your information remains in the safety of your browser.</div>
           </div>
           <div style={{marginBottom: 22}} className="playground-information-modal-item">
             <img
@@ -60,7 +60,11 @@ export default function InformationModal({setIsModalDisplayed}) {
           </div>
         </div>
         <div className="playground-header-modal-buttons">
-          <button className="playground-modal-button playground-modal-close-button" onClick={close}>
+          <button
+            id="playground-information-modal-close-button"
+            className="playground-modal-button playground-modal-close-button"
+            onClick={close}
+          >
             Close
           </button>
         </div>

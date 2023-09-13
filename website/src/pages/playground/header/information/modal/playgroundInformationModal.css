@@ -17,3 +17,7 @@
 .playground-information-modal-icon {
   filter: var(--playground-information-modal-filter);
 }
+
+#playground-information-modal-close-button {
+  margin-bottom: 1px;
+}
