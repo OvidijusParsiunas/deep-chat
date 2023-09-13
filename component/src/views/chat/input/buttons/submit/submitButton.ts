@@ -7,8 +7,8 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {Websocket} from '../../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {StreamSignals} from '../../../../../types/handler';
 import {TextInputEl} from '../../textInput/textInput';
+import {Signals} from '../../../../../types/handler';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
@@ -22,7 +22,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
-  private readonly _stopClicked: StreamSignals['stopClicked'];
+  private readonly _stopClicked: Signals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
@@ -150,7 +150,7 @@ export class SubmitButton extends InputButton<Styles> {
   private stopStream() {
     // This will not stop the stream on the server side
     this._abortStream.abort();
-    this._stopClicked.listener();
+    this._stopClicked?.listener();
     this.changeToSubmitIcon();
   }
 

@@ -3,10 +3,10 @@ import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSendin
 import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
-import {StreamSignals} from '../types/handler';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
+import {Signals} from '../types/handler';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
@@ -25,7 +25,7 @@ export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
   abortStream: AbortController;
-  stopClicked: StreamSignals['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
+  stopClicked: Signals['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
   simulationInterim?: number;
 }
 

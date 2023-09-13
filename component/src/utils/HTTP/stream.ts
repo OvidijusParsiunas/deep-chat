@@ -18,7 +18,7 @@ export class Stream {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     if (error) return Stream.onInterceptorError(messages, error, onClose);
     // WORK - will enable this later on
-    // if (io.requestSettings?.streamHandler) return CustomHandler.stream(io, interceptedBody, messages);
+    // if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {

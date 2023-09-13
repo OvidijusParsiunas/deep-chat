@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Handler, StreamHandler, WebsocketHandler} from './handler';
 import {GenericObject} from './object';
+import {Handler} from './handler';
 
 export interface Request {
   url?: string;
@@ -9,6 +9,4 @@ export interface Request {
   additionalBodyProps?: GenericObject<any>;
   websocket?: boolean | string | string[];
   handler?: Handler;
-  streamHandler?: StreamHandler;
-  websocketHandler?: WebsocketHandler;
 }

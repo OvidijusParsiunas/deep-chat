@@ -1,7 +1,7 @@
-import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
+import {IWebsocketHandler} from './customHandler';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -19,7 +19,8 @@ export class Websocket {
     if (!document.body.contains(io.deepChat)) return; // check if element is still present
     const websocketConfig = io.requestSettings.websocket;
     if (!websocketConfig) return;
-    if (io.requestSettings.websocketHandler) return CustomHandler.websocket(io, messages);
+    // WORK - will enable this later on
+    // if (io.requestSettings.handler) return CustomHandler.websocket(io, messages);
     try {
       const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
       // this will throw an error when url doesn't start with 'ws:'
