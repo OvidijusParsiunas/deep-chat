@@ -27,7 +27,7 @@ const TYPE_TO_LINK = {
   demo: 'https://deepchat.dev/docs/directConnection/demo',
   custom: 'https://deepchat.dev/docs/connect',
   openAI: {
-    chat: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
+    chat: 'https://platform.openai.com/docs/api-reference/chat/create',
     completions: 'https://deepchat.dev/docs/directConnection/OpenAI#Completions',
     images: 'https://deepchat.dev/docs/directConnection/OpenAI#Images',
     audio: 'https://deepchat.dev/docs/directConnection/OpenAI#Audio',

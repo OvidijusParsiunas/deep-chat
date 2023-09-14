@@ -42,7 +42,7 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
   return (
     <div style={{display: isDisplayed ? 'table-row' : 'none'}}>
       <a
-        href={'test'}
+        href={'https://platform.openai.com/docs/api-reference/chat/create#model'}
         target="_blank"
         id="playground-service-modal-service-label"
         className="playground-service-modal-input-label playground-service-modal-optional-parameter-input-label"

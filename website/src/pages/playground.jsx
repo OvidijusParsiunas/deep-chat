@@ -1,3 +1,4 @@
+import InformationModal from './playground/header/information/modal/playgroundInformationModal';
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
 import HeaderButtons from './playground/header/playgroundHeaderButtons';
 import ChatComponent from './playground/chat/playgroundChatComponent';
@@ -15,7 +16,7 @@ import './playground.css';
 // Video to show off how it works
 
 // TO-DO - when the user is typing in one chat and hits tab - focus next
-const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}]};
+const playgroundConfig = {components: [{connect: {demo: true}, messages: [], description: ''}], isFirstTime: true};
 const modalCollapseStates = {optionalParams: true, code: true};
 // state kept here as the chat components are not re-rendered when something happens in other components, hence
 // they do not have a reference to the latest state
@@ -29,14 +30,23 @@ export default function Playground() {
   const [, refreshList] = React.useState(-1);
   const [editingChatRef, setEditingChatRef] = React.useState(null);
   const [isGrid, setIsGrid] = React.useState(view.isGrid);
+  const [isIntroModalDisplayed, setIsIntroModalDisplayed] = React.useState(false);
+  const [isWaitingToCloseIntroModal, setIsWaitingToCloseIntroModal] = React.useState(false);
   const componentListRef = React.useRef(null);
 
   React.useEffect(() => {
     window.addEventListener('beforeunload', recordConfig); // before leaving the website
     setTimeout(() => {
       if (localStorage.getItem('deep-chat-config')) overwriteDefaultConfig();
-      applyPlaygroundConfig(playgroundConfig);
-      view.isBeingCreated = false;
+      if (playgroundConfig.isFirstTime) {
+        setTimeout(() => {
+          setIsIntroModalDisplayed(true);
+          setIsWaitingToCloseIntroModal(true);
+        }, 500);
+      } else {
+        applyPlaygroundConfig(playgroundConfig);
+        view.isBeingCreated = false;
+      }
       Sortable.create(componentListRef.current, sortableConfig);
       setHorizontalScroll(componentListRef.current);
     });
@@ -49,6 +59,16 @@ export default function Playground() {
       view.isKeyVisible = false;
     };
   }, []);
+
+  React.useEffect(() => {
+    if (isWaitingToCloseIntroModal) {
+      setTimeout(() => {
+        applyPlaygroundConfig(playgroundConfig);
+        view.isBeingCreated = false;
+        playgroundConfig.isFirstTime = false;
+      }, 400);
+    }
+  }, [isIntroModalDisplayed]);
 
   const recordConfig = () => {
     localStorage.setItem('deep-chat-config', JSON.stringify(playgroundConfig));
@@ -165,6 +185,7 @@ export default function Playground() {
           view={view}
         />
       )}
+      {isIntroModalDisplayed && <InformationModal setIsModalDisplayed={setIsIntroModalDisplayed} isIntro={true} />}
       <Tooltip id="chat-wrapper-configuration-tooltip" />
       <div id="playground" className={isGrid ? 'playground-grid' : 'playground-panorama'}>
         <div id="playground-title" className={'start-page-title-visible'}>

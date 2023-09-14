@@ -9,6 +9,8 @@ import './serviceModal.css';
 import React from 'react';
 
 // TO-DO
+// add a copy button when hovering over code
+// TO-DO
 // images, audio, gifs, camera, speech-to-text, stream
 
 // editingChatRef is used for displaying modal
@@ -225,17 +227,9 @@ function getCodeStr(connect, isCustom, view) {
   if (!view.isKeyVisible) {
     connect = JSON.parse(JSON.stringify(connect));
     const service = Object.keys(connect)[0];
-    if (connect[service].key) connect[service].key = createRedactString(connect[service].key.length);
+    if (connect[service].key) connect[service].key = '';
   }
   return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
-}
-
-function createRedactString(length) {
-  let string = '';
-  for (let i = 0; i < length; i++) {
-    string += '-';
-  }
-  return string;
 }
 
 function constructConnect(optionalParamsEl, activeService, activeType, requiredProp) {

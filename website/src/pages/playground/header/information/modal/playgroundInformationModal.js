@@ -1,7 +1,7 @@
 import './playgroundInformationModal.css';
 import React from 'react';
 
-export default function InformationModal({setIsModalDisplayed}) {
+export default function InformationModal({setIsModalDisplayed, isIntro}) {
   const [isVisible, setIsVisible] = React.useState(false);
 
   React.useEffect(() => {
@@ -33,16 +33,31 @@ export default function InformationModal({setIsModalDisplayed}) {
         }`}
         onClick={close}
       ></div>
-      <div className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}>
-        <b className="playground-modal-title playground-header-modal-title">Information</b>
+      <div
+        id="playground-information-modal"
+        className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'} ${
+          isIntro ? 'playground-intro-modal' : ''
+        }`}
+      >
+        <b className="playground-modal-title playground-header-modal-title">
+          {isIntro ? 'Welcome to the Playground' : 'Information'}
+        </b>
         <div className="playground-header-modal-description">
-          <div style={{marginBottom: 16}} className="playground-information-modal-item">
+          <div style={{marginBottom: 16, marginTop: 2}} className="playground-information-modal-item">
+            <img
+              src={'img/connect.svg'}
+              id="playground-information-modal-connect"
+              className="playground-information-modal-icon"
+            ></img>
+            <div>Create, configure and experiment with Deep Chat without have to write any code.</div>
+          </div>
+          <div style={{marginBottom: 18}} className="playground-information-modal-item">
             <img
               src={'img/shield.svg'}
               id="playground-information-modal-shield"
               className="playground-information-modal-icon"
             ></img>
-            <div>The playground does not record any data. Your information remains in the safety of your browser.</div>
+            <div>The playground does not record any data. All information remains in the safety of your browser.</div>
           </div>
           <div style={{marginBottom: 22}} className="playground-information-modal-item">
             <img
@@ -51,9 +66,9 @@ export default function InformationModal({setIsModalDisplayed}) {
               className="playground-information-modal-icon"
             ></img>
             <div>
-              Watch the playground tutorial video{' '}
+              Watch the playground tutorial{' '}
               <a href="WORK" target="_blank">
-                here
+                video
               </a>
               .
             </div>
@@ -65,7 +80,7 @@ export default function InformationModal({setIsModalDisplayed}) {
             className="playground-modal-button playground-modal-close-button"
             onClick={close}
           >
-            Close
+            {isIntro ? 'Start' : 'Close'}
           </button>
         </div>
       </div>
