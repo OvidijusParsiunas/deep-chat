@@ -359,7 +359,6 @@ export class Messages {
     );
   }
 
-  // WORK - need to clear the messages array
   private clearMessages(isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
     this._messageElementRefs.forEach((message) => {
@@ -375,6 +374,7 @@ export class Messages {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessage();
     }
+    this.messages.splice(0, this.messages.length);
     this._onClearMessages?.();
   }
 
