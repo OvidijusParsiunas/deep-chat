@@ -4,6 +4,7 @@ import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as DResponse} from '../../types/response';
+import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 
@@ -17,8 +18,7 @@ export class Stream {
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     if (error) return Stream.onInterceptorError(messages, error, onClose);
-    // WORK - will enable this later on
-    // if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
+    if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {

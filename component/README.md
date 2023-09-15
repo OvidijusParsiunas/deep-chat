@@ -50,9 +50,9 @@ Connecting to a service is simple, all you need to do is define its API details 
 <deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
-The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out [server template](http://localhost:3000/examples/servers) examples.
+The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out the [server template](https://deepchat.dev/examples/servers) examples.
 
-Alternatively, if you want to connect without changing the target service, use the [`requestInterceptor`](https://deepchat.dev/docs/interceptors#requestInterceptor) and [`responseInterceptor`](https://deepchat.dev/docs/interceptors#responseInterceptor) properties to augment the incoming and outgoing request details.
+Alternatively, if you want to connect without changing the target service, use the [`interceptor`](https://deepchat.dev/docs/interceptors) properties to augment the transferred objects or the [`handler`](https://deepchat.dev/docs/connect#Handler) function to control the request code.
 
 ### :electric_plug: Direct connection
 

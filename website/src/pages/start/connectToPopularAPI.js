@@ -168,7 +168,7 @@ export default function ConnectToPopularAPI(props) {
         Proxy service
       </div>
       <div className={`start-page-text start-page-small-text ${displayProxy ? 'start-page-main-details-visible' : ''}`}>
-        If your application is going live, use any of the example servers:
+        When your application is ready to go live, use any of these example servers:
       </div>
       <ProxyLogos displayProxyLogos={displayProxyLogos} itemsHoverable={itemsHoverable}></ProxyLogos>
       <div

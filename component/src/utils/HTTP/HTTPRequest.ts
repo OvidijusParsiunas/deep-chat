@@ -2,6 +2,7 @@ import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {ResponseDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
+import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
@@ -18,8 +19,7 @@ export class HTTPRequest {
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
     if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
-    // WORK - will enable this later on
-    // if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
+    if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {

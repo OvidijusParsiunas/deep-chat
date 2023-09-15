@@ -32,9 +32,11 @@ export class CustomHandler {
       }
       isHandlerActive = false;
     };
-    io.requestSettings.handler?.(body, {onResponse: onResponse});
+    const signals = CustomHandler.generateOptionalSignals();
+    io.requestSettings.handler?.(body, {...signals, onResponse});
   }
 
+  // prettier-ignore
   public static async stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
@@ -70,10 +72,12 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const signals = {onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked};
-    io.requestSettings.handler?.(body, signals);
+    const signals = CustomHandler.generateOptionalSignals();
+    io.requestSettings.handler?.(body,
+      {...signals, onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked});
   }
 
+  // prettier-ignore
   public static websocket(io: ServiceIO, messages: Messages) {
     const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}};
     io.websocket = internalConfig;
@@ -99,7 +103,12 @@ export class CustomHandler {
         messages.addNewMessage(result, true, true);
       }
     };
-    const signals = {onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage};
-    io.requestSettings.handler?.(undefined, signals);
+    const signals = CustomHandler.generateOptionalSignals();
+    io.requestSettings.handler?.(undefined,
+      {...signals, onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage});
+  }
+
+  private static generateOptionalSignals() {
+    return {onClose: () => {}, onOpen: () => {}, stopClicked: {listener: () => {}}, newUserMessage: {listener: () => {}}};
   }
 }

@@ -65,9 +65,9 @@ export default function ConnectToCustomAPI(props) {
   const [allowPointerEvents, setAllowPointerEvents] = React.useState(false);
   const [displayRequest, setDisplayRequest] = React.useState(false);
   const [displayRequirements, setDisplayRequirements] = React.useState(false);
-  const [displayOptionsTitle, setDisplayOptionsTitle] = React.useState(false);
+  const [displayAlternativesTitle, setDisplayAlternativesTitle] = React.useState(false);
   const [displayInterceptors, setDisplayInterceptors] = React.useState(false);
-  const [displayInteceptorsExamples, setDisplayInteceptorsExamples] = React.useState(false);
+  const [displayHandler, setDisplayHandler] = React.useState(false);
   const [displayServers, setDisplayServers] = React.useState(false);
   const [displayServerLogos, setDisplayServerLogos] = React.useState(false);
   const [displayNavigation, setDisplayNavigation] = React.useState(false);
@@ -93,11 +93,11 @@ export default function ConnectToCustomAPI(props) {
     setTimeout(() => {
       setDisplayRequirements(true);
       setTimeout(() => {
-        setDisplayOptionsTitle(true);
+        setDisplayAlternativesTitle(true);
         setTimeout(() => {
           setDisplayInterceptors(true);
           setTimeout(() => {
-            setDisplayInteceptorsExamples(true);
+            setDisplayHandler(true);
             setTimeout(() => {
               setDisplayServers(true);
               setTimeout(() => {
@@ -109,10 +109,10 @@ export default function ConnectToCustomAPI(props) {
                   }, 1000);
                 }, 1500);
               }, 1000);
-            }, 2400);
-          }, 1500);
-        }, 2400);
-      }, 4200);
+            }, 4500);
+          }, 1600);
+        }, 3500);
+      }, 4000);
     }, 3000);
   };
 
@@ -124,7 +124,7 @@ export default function ConnectToCustomAPI(props) {
       } ${allowPointerEvents ? 'start-page-main-pointer-events' : 'start-page-main-no-pointer-events'}`}
     >
       <div className={`start-page-text start-page-large-text ${displayRequest ? 'start-page-main-details-visible' : ''}`}>
-        1. Configure your connection settings using the{' '}
+        Configure your connection settings using the{' '}
         <a href="https://deepchat.dev/docs/interceptors" target="_blank">
           request
         </a>{' '}
@@ -139,62 +139,54 @@ export default function ConnectToCustomAPI(props) {
       </div>
       <div
         id="start-page-requirements"
-        className={`start-page-text start-page-large-text ${displayRequirements ? 'start-page-main-details-visible' : ''}`}
+        className={`start-page-text ${displayRequirements ? 'start-page-main-details-visible' : ''}`}
       >
-        The target service needs to handle request{' '}
+        The target service needs to be able to handle Deep Chat's{' '}
         <a href="https://deepchat.dev/docs/connect" target="_blank">
-          messages
+          request
         </a>{' '}
-        and respond using the{' '}
+        and{' '}
         <a href="https://deepchat.dev/docs/connect#Response" target="_blank">
-          result
+          response
         </a>{' '}
-        format.
+        formats.
       </div>
       <div
-        className={`start-page-text ${displayOptionsTitle ? 'start-page-main-details-visible' : ''}`}
+        className={`start-page-text ${displayAlternativesTitle ? 'start-page-main-details-visible' : ''}`}
         style={{marginTop: '20px'}}
       >
-        2. Choose one of the following options to complete your setup:
+        To avoid making changes to the service, use any of the following approaches:
       </div>
       <div></div>
       <div
-        className={`start-page-text start-page-connect-to-custom-padded-content ${
+        className={`start-page-text start-page-small-text start-page-connect-to-custom-padded-content ${
           displayInterceptors ? 'start-page-main-details-visible' : ''
         }`}
-        style={{marginTop: '20px'}}
+        style={{marginTop: '15px'}}
       >
-        - Use{' '}
+        - Add{' '}
         <a href="https://deepchat.dev/docs/interceptors" target="_blank">
           interceptor
         </a>{' '}
-        properties to avoid making changes to an existing server:
+        properties to augment the transferred objects.
       </div>
       <div
-        id="start-page-connect-to-custom-interceptor"
-        className="start-page-text start-page-small-text start-page-code start-page-main-details-visible start-page-connect-to-custom-padded-content"
-      >
-        <a
-          href="https://deepchat.dev/docs/interceptors#requestInterceptor"
-          target="_blank"
-          className={`interceptor-code ${displayInteceptorsExamples ? 'start-page-main-details-visible' : ''}`}
-        >
-          requestInterceptor
-        </a>{' '}
-        <a
-          href="https://deepchat.dev/docs/interceptors#responseInterceptor"
-          target="_blank"
-          className={`interceptor-code ${displayInteceptorsExamples ? 'start-page-main-details-visible' : ''}`}
-        >
-          responseInterceptor
-        </a>
-      </div>
-      <div
-        className={`start-page-text start-page-connect-to-custom-padded-content ${
-          displayServers ? 'start-page-main-details-visible' : ''
+        className={`start-page-text start-page-small-text start-page-connect-to-custom-padded-content ${
+          displayHandler ? 'start-page-main-details-visible' : ''
         }`}
+        style={{marginTop: '10px'}}
       >
-        - Create your own server using one of the following templates:
+        - Use a{' '}
+        <a href="https://deepchat.dev/docs/connect#Handler" target="_blank">
+          handler
+        </a>{' '}
+        function to control the request logic with your own code.
+      </div>
+      <div
+        style={{marginTop: '20px'}}
+        className={`start-page-text ${displayServers ? 'start-page-main-details-visible' : ''}`}
+      >
+        When creating a new server, use these example templates:
       </div>
       <ProxyLogos displayProxyLogos={displayServerLogos} itemsHoverable={itemsHoverable}></ProxyLogos>
       <div

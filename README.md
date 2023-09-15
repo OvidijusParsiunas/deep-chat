@@ -22,11 +22,10 @@
 
 ### :tada: Latest update
 
-<p align="center">
-    <img width="725" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/329d295d-0368-4447-ab54-b97b466b17ee" alt="Logo">
-</p>
+https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/9ca62962-10bd-4dff-9009-f31eab0b5bfa
 
-Stream here, stream there, stream anywhere! As well as providing native support for [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) - Deep Chat can now simulate a <b>stream-like</b> experience for regular text messages to help give that AI feel for your users without any extra effort. Check out the [`stream`](https://deepchat.dev/docs/connect#stream) property to find out more.
+We are introducing a new way to connect to services called the [`handler`](https://deepchat.dev/docs/connect#Handler) function! <br />
+Whilst Deep Chat can communicate with services right out of the box, its default functionality may not always be sufficient for all services. This is where the [`handler`](https://deepchat.dev/docs/connect#Handler) function comes into play as it allows developers to use their own code to control how the requests are made and connect with services their own way.
 
 ### :computer: Getting started
 
@@ -58,9 +57,9 @@ Connecting to a service is simple, all you need to do is define its API details 
 <deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
-The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out [server template](http://localhost:3000/examples/servers) examples.
+The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out the [server template](https://deepchat.dev/examples/servers) examples.
 
-Alternatively, if you want to connect without changing the target service, use the [`requestInterceptor`](https://deepchat.dev/docs/interceptors#requestInterceptor) and [`responseInterceptor`](https://deepchat.dev/docs/interceptors#responseInterceptor) properties to augment the incoming and outgoing request details.
+Alternatively, if you want to connect without changing the target service, use the [`interceptor`](https://deepchat.dev/docs/interceptors) properties to augment the transferred objects or the [`handler`](https://deepchat.dev/docs/connect#Handler) function to control the request code.
 
 ### :electric_plug: Direct connection
 
