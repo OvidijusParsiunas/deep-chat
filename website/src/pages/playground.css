@@ -79,9 +79,10 @@
 
 @media (max-height: 800px) {
   .playground-panorama {
-    padding-bottom: 60px;
+    padding-bottom: 0px;
   }
   .playground-panorama > #playground-title {
+    margin-top: -20px;
     margin-bottom: 50px;
   }
 }
@@ -141,6 +142,9 @@
   #playground-chat-list {
     width: 400px;
     overflow: unset;
+  }
+  .playground-panorama {
+    padding-bottom: 60px;
   }
   .playground-chat-list-panorama {
     display: block;

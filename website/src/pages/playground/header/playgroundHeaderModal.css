@@ -3,8 +3,14 @@
 }
 
 .playground-header-modal-description {
-  font-size: 16px;
+  font-size: 15.8px;
   color: var(--playground-header-modal-text-color);
+}
+
+@-moz-document url-prefix() {
+  .playground-header-modal-description {
+    font-size: 15px;
+  }
 }
 
 .playground-header-modal-buttons {

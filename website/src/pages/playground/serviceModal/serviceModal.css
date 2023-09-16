@@ -26,6 +26,12 @@
   position: relative;
 }
 
+@-moz-document url-prefix() {
+  .playground-service-modal-input {
+    padding-top: 0px;
+  }
+}
+
 .playground-modal-field-invalid {
   border: 1px solid red;
 }

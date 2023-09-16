@@ -30,6 +30,12 @@
   filter: var(--playground-header-button-filter);
 }
 
+@-moz-document url-prefix() {
+  .playground-header-button > a > img {
+    padding-bottom: 3.5px;
+  }
+}
+
 .playground-header-button:hover > a > img {
   filter: var(--playground-header-button-filter-hover);
 }

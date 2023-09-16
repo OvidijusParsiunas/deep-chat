@@ -155,18 +155,18 @@
 
 @media (max-width: 520px) {
   .playground-modal {
-    width: 400px;
+    width: 400px !important;
   }
 }
 
 @media (max-width: 410px) {
   .playground-modal {
-    width: 350px;
+    width: 350px !important;
   }
 }
 
 @media (max-width: 350px) {
   .playground-modal {
-    width: 300px;
+    width: 300px !important;
   }
 }

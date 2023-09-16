@@ -5,7 +5,9 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
   const [isVisible, setIsVisible] = React.useState(false);
 
   React.useEffect(() => {
-    setIsVisible(true);
+    setTimeout(() => {
+      setIsVisible(true);
+    }); // in a timeout as intro modal does not display animation in firefox+safari
     window.addEventListener('keydown', closeOnKeyPress);
     return () => {
       window.removeEventListener('keydown', closeOnKeyPress);
@@ -43,7 +45,7 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
           {isIntro ? 'Welcome to the Playground' : 'Information'}
         </b>
         <div className="playground-header-modal-description">
-          <div style={{marginBottom: 16, marginTop: 2}} className="playground-information-modal-item">
+          <div style={{marginBottom: 16, marginTop: 3}} className="playground-information-modal-item">
             <img
               src={'img/connect.svg'}
               id="playground-information-modal-connect"
