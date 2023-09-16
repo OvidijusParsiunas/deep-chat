@@ -50,6 +50,7 @@ export class MessageLimitUtils {
     } else {
       messages = MessageLimitUtils.getRequestMessages(requestContents, messages);
     }
+    messages = JSON.parse(JSON.stringify(messages));
     if (totalMessagesMaxCharLength === undefined) return messages;
     return MessageLimitUtils.getCharacterLimitMessages(messages, totalMessagesMaxCharLength);
   }

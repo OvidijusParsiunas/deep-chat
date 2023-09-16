@@ -220,7 +220,7 @@ export class Messages {
   }
 
   public sendClientUpdate(message: MessageContent, isInitial = false) {
-    this._onNewMessage?.(message, isInitial);
+    this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
   }
 
   // prettier-ignore

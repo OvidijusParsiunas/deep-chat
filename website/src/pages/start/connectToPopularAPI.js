@@ -119,29 +119,45 @@ export default function ConnectToPopularAPI(props) {
   const [fadeOutContent, setFadeOutContent] = React.useState(false);
 
   React.useEffect(() => {
-    setTimeout(() => {
+    const mountedState = {isMounted: true};
+    startAnimation(mountedState);
+    return () => {
+      mountedState.isMounted = false;
+    };
+  }, []);
+
+  // prettier-ignore
+  const startAnimation = (mountedState) => {
+    customTimeout(() => {
       setInitialDisplay(true);
-      setTimeout(() => {
+      customTimeout(() => {
         setAllowPointerEvents(true);
         setDisplayDirect(true);
-        setTimeout(() => {
+        customTimeout(() => {
           setDisplayDirectLogos(true);
-          setTimeout(() => {
+          customTimeout(() => {
             setDisplayProxy(true);
-            setTimeout(() => {
+            customTimeout(() => {
               setDisplayProxyLogos(true);
-              setTimeout(() => {
+              customTimeout(() => {
                 setDisplayNavigation(true);
-                setTimeout(() => {
+                customTimeout(() => {
                   setItemsHoverable(true);
-                }, 1000);
-              }, 1000);
-            }, 1000);
-          }, 1500);
-        }, 1000);
-      }, 1400);
-    }, 100);
-  }, []);
+                }, 1000, mountedState);
+              }, 1000, mountedState);
+            }, 1000, mountedState);
+          }, 1500, mountedState);
+        }, 1000, mountedState);
+      }, 1400, mountedState);
+    }, 100, mountedState);
+  }
+
+  function customTimeout(displayFunc, ms, mountedState) {
+    setTimeout(() => {
+      if (!mountedState.isMounted) return;
+      displayFunc();
+    }, ms);
+  }
 
   return (
     <div

@@ -15,6 +15,7 @@ export class CustomHandler {
     let isHandlerActive = true;
     const onResponse = async (response: Response) => {
       if (!isHandlerActive) return;
+      isHandlerActive = false; // need to set it here due to asynchronous code below
       const result = (await io.deepChat.responseInterceptor?.(response)) || response;
       if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
@@ -30,14 +31,13 @@ export class CustomHandler {
         messages.addNewMessage(result, true, true);
         io.completionsHandlers.onFinish();
       }
-      isHandlerActive = false;
     };
     const signals = CustomHandler.generateOptionalSignals();
     io.requestSettings.handler?.(body, {...signals, onResponse});
   }
 
   // prettier-ignore
-  public static async stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
+  public static stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
     let textElement: HTMLElement | null = null;

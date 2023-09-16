@@ -75,46 +75,59 @@ export default function ConnectToCustomAPI(props) {
   const [itemsHoverable, setItemsHoverable] = React.useState(false);
 
   React.useEffect(() => {
+    const mountedState = {isMounted: true};
     setTimeout(() => {
       if (props.keepHeight) {
-        startAnimation();
+        startAnimation(mountedState);
       } else {
         setInitialDisplay(true);
         setTimeout(() => {
-          startAnimation();
+          if (!mountedState.isMounted) return;
+          startAnimation(mountedState);
         }, 1400);
       }
     }, 100);
+    return () => {
+      mountedState.isMounted = false;
+    };
   }, []);
 
-  const startAnimation = () => {
+  // prettier-ignore
+  const startAnimation = (mountedState) => {
     setAllowPointerEvents(true);
     setDisplayRequest(true);
-    setTimeout(() => {
+    customTimeout(() => {
       setDisplayRequirements(true);
-      setTimeout(() => {
+      customTimeout(() => {
         setDisplayAlternativesTitle(true);
-        setTimeout(() => {
+        customTimeout(() => {
           setDisplayInterceptors(true);
-          setTimeout(() => {
+          customTimeout(() => {
             setDisplayHandler(true);
-            setTimeout(() => {
+            customTimeout(() => {
               setDisplayServers(true);
-              setTimeout(() => {
+              customTimeout(() => {
                 setDisplayServerLogos(true);
-                setTimeout(() => {
+                customTimeout(() => {
                   setDisplayNavigation(true);
-                  setTimeout(() => {
+                  customTimeout(() => {
                     setItemsHoverable(true);
-                  }, 1000);
-                }, 1500);
-              }, 1000);
-            }, 4500);
-          }, 1600);
-        }, 3500);
-      }, 4000);
-    }, 3000);
+                  }, 1000, mountedState);
+                }, 1500, mountedState);
+              }, 1000, mountedState);
+            }, 4400, mountedState);
+          }, 1500, mountedState);
+        }, 3500, mountedState);
+      }, 4000, mountedState);
+    }, 3000, mountedState);
   };
+
+  function customTimeout(displayFunc, ms, mountedState) {
+    setTimeout(() => {
+      if (!mountedState.isMounted) return;
+      displayFunc();
+    }, ms);
+  }
 
   return (
     <div
