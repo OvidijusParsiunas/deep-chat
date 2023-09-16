@@ -6,7 +6,7 @@ import React from 'react';
 // TO-DO - ability to stream chat and dark mode for stop button
 function processConnectObject(connect) {
   if (connect.demo) {
-    return {demo: {response: {result: {text: "Click the 'Configure' button below to connect to a service."}}}};
+    return {demo: {response: {text: "Click the 'Configure' button below to connect to a service."}}};
   }
   return connect;
 }

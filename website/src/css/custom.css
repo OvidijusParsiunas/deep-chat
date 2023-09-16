@@ -117,6 +117,7 @@
   --playground-modal-collapsible-title-color: #000f1f;
   --playground-modal-collapsible-title-border: 1px solid rgb(235, 235, 235);
   --playground-service-input-color: #333333;
+  --playground-service-input-background: white;
   --playground-service-input-border: 1px solid grey;
   --playground-modal-close-background: rgb(252, 252, 252);
   --playground-modal-close-background-hover: rgb(244, 244, 244);
@@ -222,6 +223,7 @@
   --playground-modal-collapsible-title-color: white;
   --playground-modal-collapsible-title-border: 1px solid rgb(160, 160, 160);
   --playground-service-input-color: rgb(241, 241, 241);
+  --playground-service-input-background: #3b3b3b;
   --playground-service-input-border: 1px solid #6d6d6d;
   --playground-modal-close-background: #5e5e5e;
   --playground-modal-close-background-hover: #626262;

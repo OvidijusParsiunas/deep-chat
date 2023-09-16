@@ -167,13 +167,13 @@ const darkStyles = {
     fontSize: '15px',
     top: '1px',
     cursor: 'pointer',
-    backgroundColor: '#3d3d3d',
+    backgroundColor: '#3b3b3b',
   }),
   menu: (baseStyles) => ({
     ...baseStyles,
     width: '200px',
     marginTop: '5px',
-    backgroundColor: '#3d3d3d',
+    backgroundColor: '#3b3b3b',
   }),
   option: (baseStyles, {isSelected, isFocused}) => ({
     ...baseStyles,

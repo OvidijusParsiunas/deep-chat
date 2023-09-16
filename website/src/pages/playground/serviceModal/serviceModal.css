@@ -24,6 +24,7 @@
   color: var(--playground-service-input-color);
   top: 1px;
   position: relative;
+  background-color: var(--playground-service-input-background);
 }
 
 @-moz-document url-prefix() {
