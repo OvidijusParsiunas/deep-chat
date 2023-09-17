@@ -136,6 +136,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               activeType={activeType}
               changeType={changeType}
               pseudoNames={pseudoNames}
+              modalRef={modalRef}
             />
           )}
           {activeService !== 'demo' && activeService !== 'custom' && (
@@ -146,6 +147,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               title="API Key:"
               view={view}
               changeCode={changeCode}
+              link={SERVICE_TYPE_TO_API_KEY_LINK[activeService]}
             />
           )}
           {activeService === 'custom' && (
@@ -183,6 +185,11 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               changeCode={changeCode}
               websocket={websocket}
               pseudoNames={pseudoNames}
+              links={
+                activeService === 'custom'
+                  ? OPTIONAL_PARAM_TO_LINK[activeService]
+                  : OPTIONAL_PARAM_TO_LINK[activeService]?.[activeType]
+              }
             />
           </CollapsableSection>
         )}
@@ -311,6 +318,10 @@ const pseudoNames = {
   ImageToImageUpscale: 'Image To Image Upscale',
 };
 
+// TO-DO - add default values
+// WORK - perphaps adjust pseudo names - e.g. system_prompt
+// TO-DO - string arrays end_sequences
+// WORK - required and links for them
 const SERVICE_MODAL_FORM_CONFIG = {
   demo: {demo: {}},
   custom: {
@@ -436,14 +447,12 @@ const SERVICE_MODAL_FORM_CONFIG = {
   },
   azure: {
     textToSpeech: {
-      region: 'string', // required
       lang: 'string',
       name: 'string',
       gender: 'string',
       outputFormat: 'string',
     },
     speechToText: {
-      region: 'string', // required
       lang: 'string',
     },
     summarization: {
@@ -504,5 +513,224 @@ const SERVICE_MODAL_FORM_CONFIG = {
   },
   assemblyAI: {
     audio: {},
+  },
+};
+
+const SERVICE_TYPE_TO_API_KEY_LINK = {
+  demo: '',
+  custom: '',
+  openAI: 'https://platform.openai.com/account/api-keys',
+  cohere: 'https://dashboard.cohere.ai/api-keys',
+  huggingFace: 'https://huggingface.co/settings/tokens',
+  azure:
+    'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal',
+  stabilityAI: 'https://platform.stability.ai/docs/getting-started/authentication',
+  assemblyAI: 'https://www.assemblyai.com/app/account',
+};
+
+const OPTIONAL_PARAM_TO_LINK = {
+  demo: {demo: ''},
+  custom: {
+    method: 'https://deepchat.dev/docs/connect#Request',
+    websocket: 'https://deepchat.dev/docs/connect#Websocket',
+    headers: 'https://deepchat.dev/docs/connect#Request',
+    additionalBodyProps: 'https://deepchat.dev/docs/connect#Request',
+  },
+  openAI: {
+    chat: {
+      model: 'https://platform.openai.com/docs/api-reference/chat/create#model',
+      max_tokens: 'https://platform.openai.com/docs/api-reference/chat/create#max_tokens',
+      temperature: 'https://platform.openai.com/docs/api-reference/chat/create#temperature',
+      top_p: 'https://platform.openai.com/docs/api-reference/chat/create#top_p',
+    },
+    completions: {
+      model: 'https://platform.openai.com/docs/api-reference/completions/create#model',
+      max_tokens: 'https://platform.openai.com/docs/api-reference/completions/create#max_tokens',
+      temperature: 'https://platform.openai.com/docs/api-reference/completions/create#temperature',
+      top_p: 'https://platform.openai.com/docs/api-reference/completions/create#top_p',
+    },
+    images: {
+      n: 'https://platform.openai.com/docs/api-reference/images/create#n',
+      size: 'https://platform.openai.com/docs/api-reference/images/create#size',
+      user: 'https://platform.openai.com/docs/api-reference/images/create#user',
+    },
+    audio: {
+      model: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#model',
+      temperature: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#temperature',
+      language: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#language',
+      type: 'https://platform.openai.com/docs/api-reference/audio',
+    },
+  },
+  cohere: {
+    chat: {
+      model: 'https://docs.cohere.com/docs/conversational-ai#parameters',
+      user_name: 'https://docs.cohere.com/docs/conversational-ai#parameters',
+      temperature: 'https://docs.cohere.com/docs/conversational-ai#parameters',
+      max_tokens: 'https://docs.cohere.com/docs/conversational-ai#parameters',
+    },
+    textGeneration: {
+      model: 'https://docs.cohere.com/reference/generate',
+      temperature: 'https://docs.cohere.com/reference/generate',
+      max_tokens: 'https://docs.cohere.com/reference/generate',
+      k: 'https://docs.cohere.com/reference/generate',
+      p: 'https://docs.cohere.com/reference/generate',
+      frequency_penalty: 'https://docs.cohere.com/reference/generate',
+      presence_penalty: 'https://docs.cohere.com/reference/generate',
+      truncate: 'https://docs.cohere.com/reference/generate',
+      logit_bias: 'https://docs.cohere.com/reference/generate',
+    },
+    summarization: {
+      model: 'https://docs.cohere.com/reference/summarize-2',
+      length: 'https://docs.cohere.com/reference/summarize-2',
+      format: 'https://docs.cohere.com/reference/summarize-2',
+      extractiveness: 'https://docs.cohere.com/reference/summarize-2',
+      temperature: 'https://docs.cohere.com/reference/summarize-2',
+      additional_command: 'https://docs.cohere.com/reference/summarize-2',
+    },
+  },
+  huggingFace: {
+    conversation: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+      parameters: {
+        min_length: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+        max_length: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+        top_k: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+        top_p: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+        temperature: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+        repetition_penalty: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+      },
+      options: {
+        use_cache: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+      },
+    },
+    textGeneration: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+      parameters: {
+        top_k: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+        top_p: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+        temperature: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+        repetition_penalty: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+        max_new_tokens: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+        do_sample: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+      },
+      options: {
+        use_cache: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+      },
+    },
+    summarization: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+      parameters: {
+        min_length: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+        max_length: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+        top_k: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+        top_p: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+        temperature: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+        repetition_penalty: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+      },
+      options: {
+        use_cache: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+      },
+    },
+    translation: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#translation-task',
+      options: {
+        use_cache: 'https://huggingface.co/docs/api-inference/detailed_parameters#translation-task',
+      },
+    },
+    fillMask: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#fill-mask-task',
+      options: {
+        use_cache: 'https://huggingface.co/docs/api-inference/detailed_parameters#fill-mask-task',
+      },
+    },
+    questionAnswer: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
+      context: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task', // required
+    },
+    audioSpeechRecognition: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task',
+    },
+    audioClassification: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#audio-classification-task',
+    },
+    imageClassification: {
+      model: 'https://huggingface.co/docs/api-inference/detailed_parameters#image-classification-task',
+    },
+  },
+  azure: {
+    textToSpeech: {
+      region:
+        'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#prebuilt-neural-voices', // required
+      lang: 'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/language-support?tabs=tts',
+      name: 'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/language-support?tabs=tts',
+      gender: 'https://deepchat.dev/docs/directConnection/Azure#TextToSpeech',
+      outputFormat:
+        'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#audio-outputs',
+    },
+    speechToText: {
+      region:
+        'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#prebuilt-neural-voices', // required
+      lang: 'https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt',
+    },
+    summarization: {
+      endpoint: 'https://deepchat.dev/docs/directConnection/Azure#Summarization', // required
+      language:
+        'https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.',
+    },
+    translation: {
+      region: 'https://deepchat.dev/docs/directConnection/Azure#Translation',
+      language:
+        'https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.',
+    },
+  },
+  stabilityAI: {
+    textToImage: {
+      height: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      width: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      engine_id: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      weight: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      cfg_scale: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      clip_guidance_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      samples: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      seed: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      steps: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      style_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+      sampler: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+    },
+    imageToImage: {
+      init_image_mode: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      image_strength: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      step_schedule_start: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      step_schedule_end: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      engine_id: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      weight: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      cfg_scale: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      clip_guidance_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      samples: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      seed: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      steps: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      style_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+      sampler: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+    },
+    imageToImageMasking: {
+      mask_source: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      engine_id: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      weight: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      cfg_scale: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      clip_guidance_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      samples: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      seed: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      steps: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      style_preset: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+      sampler: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+    },
+    imageToImageUpscale: {
+      engine_id: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage',
+      height: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage',
+      width: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage',
+    },
+  },
+  assemblyAI: {
+    audio: '',
   },
 };

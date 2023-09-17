@@ -14,14 +14,19 @@ function onChange(event, setValue) {
 }
 
 // view is used to identify if visibility can be toggled by user
-const Required = React.forwardRef(({title, requiredValue, setValue, view, changeCode}, ref) => {
+const Required = React.forwardRef(({title, requiredValue, setValue, view, changeCode, link}, ref) => {
   const [isVisible, setIsVisible] = React.useState(!!view?.isKeyVisible);
 
   return (
     <div>
-      <div id="playground-service-modal-service-type-label" className="playground-service-modal-input-label">
+      <a
+        href={link}
+        target="_blank"
+        id="playground-service-modal-service-type-label"
+        className="playground-service-modal-input-label"
+      >
         {title}
-      </div>
+      </a>
       <input
         className={`playground-service-modal-input ${view ? 'playground-service-modal-visibility-input' : ''}`}
         ref={ref}

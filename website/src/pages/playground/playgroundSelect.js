@@ -5,7 +5,7 @@ import './playgroundSelect.css';
 import React from 'react';
 
 function constructOption(optionText, pseudoNames) {
-  return {value: optionText, text: pseudoNames?.[text] || text};
+  return {value: optionText, text: pseudoNames?.[optionText] || optionText};
 }
 
 // prettier-ignore

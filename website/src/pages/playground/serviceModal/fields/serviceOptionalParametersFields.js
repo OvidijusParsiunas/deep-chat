@@ -38,11 +38,11 @@ function Input({parameter, configVal, changeCode}) {
 
 // toggling the display property instead of not rendering to allow extractOptionalParameterValues to pick it up
 // and let buildConfig to match it to the correct connect index
-function ParameterField({name, isDisplayed, parameter, configVal, changeCode, pseudoNames}) {
+function ParameterField({name, isDisplayed, parameter, configVal, changeCode, pseudoNames, link}) {
   return (
     <div style={{display: isDisplayed ? 'table-row' : 'none'}}>
       <a
-        href={'https://platform.openai.com/docs/api-reference/chat/create#model'}
+        href={link || ''}
         target="_blank"
         id="playground-service-modal-service-label"
         className="playground-service-modal-input-label playground-service-modal-optional-parameter-input-label"
@@ -58,38 +58,42 @@ function ParameterField({name, isDisplayed, parameter, configVal, changeCode, ps
   );
 }
 
-const OptionalParameters = React.forwardRef(({optionalParameters, connect, changeCode, websocket, pseudoNames}, ref) => {
-  return (
-    <div ref={ref} className="playgroud-service-modal-form">
-      {Object.keys(optionalParameters || {}).map((paramName, index) => {
-        return typeof optionalParameters[paramName] === 'object' && !Array.isArray(optionalParameters[paramName]) ? (
-          Object.keys(optionalParameters[paramName]).map((innerParamName, index) => {
-            return (
-              <ParameterField
-                key={index}
-                name={innerParamName}
-                isDisplayed={innerParamName === 'websocket' || !websocket}
-                parameter={optionalParameters[paramName][innerParamName]}
-                configVal={connect?.[paramName]?.[innerParamName]}
-                changeCode={changeCode}
-                pseudoNames={pseudoNames}
-              />
-            );
-          })
-        ) : (
-          <ParameterField
-            key={index}
-            name={paramName}
-            isDisplayed={paramName === 'websocket' || !websocket}
-            parameter={optionalParameters[paramName]}
-            configVal={connect?.[paramName]}
-            changeCode={changeCode}
-            pseudoNames={pseudoNames}
-          ></ParameterField>
-        );
-      })}
-    </div>
-  );
-});
+const OptionalParameters = React.forwardRef(
+  ({optionalParameters, connect, changeCode, websocket, pseudoNames, links}, ref) => {
+    return (
+      <div ref={ref} className="playgroud-service-modal-form">
+        {Object.keys(optionalParameters || {}).map((paramName, index) => {
+          return typeof optionalParameters[paramName] === 'object' && !Array.isArray(optionalParameters[paramName]) ? (
+            Object.keys(optionalParameters[paramName]).map((innerParamName, index) => {
+              return (
+                <ParameterField
+                  key={index}
+                  name={innerParamName}
+                  isDisplayed={innerParamName === 'websocket' || !websocket}
+                  parameter={optionalParameters[paramName][innerParamName]}
+                  configVal={connect?.[paramName]?.[innerParamName]}
+                  changeCode={changeCode}
+                  pseudoNames={pseudoNames}
+                  link={links?.[paramName][innerParamName]}
+                />
+              );
+            })
+          ) : (
+            <ParameterField
+              key={index}
+              name={paramName}
+              isDisplayed={paramName === 'websocket' || !websocket}
+              parameter={optionalParameters[paramName]}
+              configVal={connect?.[paramName]}
+              changeCode={changeCode}
+              pseudoNames={pseudoNames}
+              link={links?.[paramName]}
+            ></ParameterField>
+          );
+        })}
+      </div>
+    );
+  }
+);
 
 export default OptionalParameters;

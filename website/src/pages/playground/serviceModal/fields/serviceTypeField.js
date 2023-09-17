@@ -6,7 +6,7 @@ function changeFirstLetter(text, capitalize = true) {
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
-export default function ServiceType({availableTypes, activeService, activeType, changeType, pseudoNames}) {
+export default function ServiceType({availableTypes, activeService, activeType, changeType, pseudoNames, modalRef}) {
   return (
     <div>
       <a
@@ -22,6 +22,7 @@ export default function ServiceType({availableTypes, activeService, activeType, 
           defaultOption={changeFirstLetter(activeType, true)}
           onChange={changeType}
           pseudoNames={pseudoNames}
+          modalRef={modalRef}
         />
       </div>
     </div>
@@ -32,31 +33,43 @@ const TYPE_TO_LINK = {
   demo: 'https://deepchat.dev/docs/directConnection/demo',
   custom: 'https://deepchat.dev/docs/connect',
   openAI: {
-    chat: 'https://platform.openai.com/docs/api-reference/chat/create',
-    completions: 'https://deepchat.dev/docs/directConnection/OpenAI#Completions',
-    images: 'https://deepchat.dev/docs/directConnection/OpenAI#Images',
-    audio: 'https://deepchat.dev/docs/directConnection/OpenAI#Audio',
+    chat: 'https://platform.openai.com/docs/api-reference/chat',
+    completions: 'https://platform.openai.com/docs/api-reference/completions',
+    images: 'https://platform.openai.com/docs/api-reference/images',
+    audio: 'https://platform.openai.com/docs/api-reference/audio',
   },
   cohere: {
-    chat: 'https://deepchat.dev/docs/directConnection/Cohere#Chat',
-    textGeneration: 'https://deepchat.dev/docs/directConnection/Cohere#TextGeneration',
-    summarization: 'https://deepchat.dev/docs/directConnection/Cohere#Summarization',
+    chat: 'https://docs.cohere.com/docs/conversational-ai',
+    textGeneration: 'https://docs.cohere.com/docs/intro-text-generation',
+    summarization: 'https://docs.cohere.com/docs/summarize',
   },
   huggingFace: {
-    conversation: 'https://deepchat.dev/docs/directConnection/HuggingFace#Conversation',
-    // textGeneration: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig);
-    // summarization: true | (HuggingFaceModel & HuggingFaceSummarizationConfig);
-    // translation: true | (HuggingFaceModel & HuggingFaceTranslationConfig);
-    // fillMask: true | (HuggingFaceModel & HuggingFaceFillMaskConfig);
-    // questionAnswer: HuggingFaceModel & HuggingFaceQuestionAnswerConfig;
-    // audioSpeechRecognition: true | HuggingFaceModel;
-    // audioClassification: true | HuggingFaceModel;
-    // imageClassification: true | HuggingFaceModel;
+    conversation: 'https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task',
+    textGeneration: 'https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task',
+    summarization: 'https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task',
+    translation: 'https://huggingface.co/docs/api-inference/detailed_parameters#translation-task',
+    fillMask: 'https://huggingface.co/docs/api-inference/detailed_parameters#fill-mask-task',
+    questionAnswer: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
+    audioSpeechRecognition:
+      'https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task',
+    audioClassification: 'https://huggingface.co/docs/api-inference/detailed_parameters#audio-classification-task',
+    imageClassification: 'https://huggingface.co/docs/api-inference/detailed_parameters#image-classification-task',
   },
   azure: {
-    textToSpeech: 'https://deepchat.dev/docs/directConnection/Azure#TextToSpeech',
-    speechToText: 'https://deepchat.dev/docs/directConnection/Azure#SpeechToText',
-    summarization: 'https://deepchat.dev/docs/directConnection/Azure#Summarization',
-    translation: 'https://deepchat.dev/docs/directConnection/Azure#Translation',
+    textToSpeech:
+      'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#convert-text-to-speech',
+    speechToText: 'https://learn.microsoft.com/en-gb/azure/ai-services/speech-service/rest-speech-to-text',
+    summarization:
+      'https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/overview?tabs=document-summarization',
+    translation: 'https://learn.microsoft.com/en-gb/azure/ai-services/translator/reference/v3-0-reference',
+  },
+  stabilityAI: {
+    textToImage: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage',
+    imageToImage: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage',
+    imageToImageMasking: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking',
+    imageToImageUpscale: 'https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage',
+  },
+  assemblyAI: {
+    audio: 'https://www.assemblyai.com/docs/Models/speech_recognition',
   },
 };
