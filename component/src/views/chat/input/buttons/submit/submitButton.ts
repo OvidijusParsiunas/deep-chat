@@ -162,6 +162,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = false;
   }
 
+  // WORK - animation needs to be lowered
   private changeToLoadingIcon() {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);

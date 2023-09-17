@@ -225,10 +225,11 @@ export class Messages {
 
   // prettier-ignore
   private removeMessageOnError() {
-    const lastTextElement = this._messageElementRefs[this._messageElementRefs.length - 1]?.bubbleElement;
-    if ((lastTextElement?.classList.contains('streamed-message') && lastTextElement.textContent === '') ||
-        lastTextElement?.classList.contains('loading-message-text')) {
-      lastTextElement.remove();
+    const lastMessage = this._messageElementRefs[this._messageElementRefs.length - 1];
+    const lastMessageBubble = lastMessage?.bubbleElement;
+    if ((lastMessageBubble?.classList.contains('streamed-message') && lastMessageBubble.textContent === '') ||
+      lastMessageBubble?.classList.contains('loading-message-text')) {
+      lastMessage.outerContainer.remove();
       this._messageElementRefs.pop();
     }
   }
@@ -280,7 +281,9 @@ export class Messages {
   }
 
   private getLastMessageBubbleElement() {
-    return this.getLastMessageElement()?.children?.[0]?.children?.[0];
+    return Array.from(this.getLastMessageElement()?.children?.[0].children || []).find((element) => {
+      return element.classList.contains('message-bubble');
+    });
   }
 
   public isLastMessageError() {
@@ -324,7 +327,7 @@ export class Messages {
   }
 
   public finaliseStreamedMessage() {
-    if (!this.getLastMessageBubbleElement().classList.contains('streamed-message')) return;
+    if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
     this.messages[this.messages.length - 1].text = this._streamedText;
     this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
@@ -367,6 +370,14 @@ export class Messages {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
+      }
+    });
+    // this is a form of cleanup as this._messageElementRefs does not contain error messages
+    // and can only be deleted by direct search
+    Array.from(this.elementRef.children).forEach((messageElement) => {
+      const bubbleClasslist = messageElement.children[0]?.children[0];
+      if (bubbleClasslist?.classList.contains('error-message-text')) {
+        messageElement.remove();
       }
     });
     this._messageElementRefs = retainedElements;
