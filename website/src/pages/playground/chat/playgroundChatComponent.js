@@ -1,19 +1,19 @@
 import DeepChatBrowser from '../../../components/table/deepChatBrowser';
 import {useColorMode} from '@docusaurus/theme-common';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import './playgroundChatComponent.css';
 import React from 'react';
 
 // TO-DO - ability to stream chat and dark mode for stop button
 function processConnectObject(connect) {
-  if (connect.demo) {
+  if (connect?.demo) {
     return {demo: {response: {text: "Click the 'Configure' button below to connect to a service."}}};
   }
   return connect;
 }
 
-export default function ChatComponent({config}) {
+export default function ChatComponent({config, colorMode}) {
   const componentRef = React.createRef(null);
-  const {colorMode} = useColorMode();
 
   // updating messages here to keep track of them so that when user moves to a different page they can be added to config
   // to note componentRef.current will be undefined, hence need to keep track
@@ -26,64 +26,73 @@ export default function ChatComponent({config}) {
   }
 
   function clearMessages() {
-    config.messages.splice(0, config.messages.length);
-  }
-
-  // the updated is performed in the wrapper because resetting the component here does not update the component itself properly as styles overwrite each other
-  if (colorMode === 'dark') {
-    return (
-      <div ref={componentRef} className="playground-chat-component">
-        {config.connect.custom ? (
-          <DeepChatBrowser
-            request={config.connect.custom}
-            containerStyle={darkContainerStyle}
-            messageStyles={darkMessageStyles}
-            initialMessages={config.messages}
-            onNewMessage={newestMessages}
-            onClearMessages={clearMessages}
-            textInput={darkTextInput}
-            submitButtonStyles={darkButtonStyles}
-            auxiliaryStyle={darkAuxiliaryStyle}
-            introPanelStyle={darkPanelStyle}
-          ></DeepChatBrowser>
-        ) : (
-          <DeepChatBrowser
-            directConnection={processConnectObject(config.connect)}
-            containerStyle={darkContainerStyle}
-            messageStyles={darkMessageStyles}
-            initialMessages={config.messages}
-            onNewMessage={newestMessages}
-            onClearMessages={clearMessages}
-            textInput={darkTextInput}
-            submitButtonStyles={darkButtonStyles}
-            auxiliaryStyle={darkAuxiliaryStyle}
-            introPanelStyle={darkPanelStyle}
-          ></DeepChatBrowser>
-        )}
-      </div>
-    );
+    config?.messages.splice(0, config.messages.length);
   }
 
   return (
-    <div ref={componentRef} className="playground-chat-component">
-      {config.connect.custom ? (
-        <DeepChatBrowser
-          request={config.connect.custom}
-          containerStyle={lightContainerStyle}
-          initialMessages={config.messages}
-          onNewMessage={newestMessages}
-          onClearMessages={clearMessages}
-        ></DeepChatBrowser>
-      ) : (
-        <DeepChatBrowser
-          directConnection={processConnectObject(config.connect)}
-          containerStyle={lightContainerStyle}
-          initialMessages={config.messages}
-          onNewMessage={newestMessages}
-          onClearMessages={clearMessages}
-        ></DeepChatBrowser>
-      )}
-    </div>
+    <BrowserOnly>
+      {() => {
+        // colorMode tracked in in wrapper because component would otherwise
+        // not update properly as styles overwrite each other
+        const {colorMode} = useColorMode();
+
+        if (colorMode === 'dark') {
+          return (
+            <div ref={componentRef} className="playground-chat-component">
+              {config?.connect?.custom ? (
+                <DeepChatBrowser
+                  request={config.connect.custom}
+                  containerStyle={darkContainerStyle}
+                  messageStyles={darkMessageStyles}
+                  initialMessages={config.messages}
+                  onNewMessage={newestMessages}
+                  onClearMessages={clearMessages}
+                  textInput={darkTextInput}
+                  submitButtonStyles={darkButtonStyles}
+                  auxiliaryStyle={darkAuxiliaryStyle}
+                  introPanelStyle={darkPanelStyle}
+                ></DeepChatBrowser>
+              ) : (
+                <DeepChatBrowser
+                  directConnection={processConnectObject(config.connect)}
+                  containerStyle={darkContainerStyle}
+                  messageStyles={darkMessageStyles}
+                  initialMessages={config.messages}
+                  onNewMessage={newestMessages}
+                  onClearMessages={clearMessages}
+                  textInput={darkTextInput}
+                  submitButtonStyles={darkButtonStyles}
+                  auxiliaryStyle={darkAuxiliaryStyle}
+                  introPanelStyle={darkPanelStyle}
+                ></DeepChatBrowser>
+              )}
+            </div>
+          );
+        }
+
+        return (
+          <div ref={componentRef} className="playground-chat-component">
+            {config?.connect?.custom ? (
+              <DeepChatBrowser
+                request={config.connect.custom}
+                containerStyle={lightContainerStyle}
+                initialMessages={config.messages}
+                onNewMessage={newestMessages}
+                onClearMessages={clearMessages}
+              ></DeepChatBrowser>
+            ) : (
+              <DeepChatBrowser
+                directConnection={processConnectObject(config.connect)}
+                containerStyle={lightContainerStyle}
+                initialMessages={config.messages}
+                onNewMessage={newestMessages}
+                onClearMessages={clearMessages}
+              ></DeepChatBrowser>
+            )}
+          </div>
+        );
+      }}
+    </BrowserOnly>
   );
 }
 

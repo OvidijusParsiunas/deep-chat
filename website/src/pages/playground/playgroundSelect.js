@@ -1,4 +1,5 @@
 import {useColorMode} from '@docusaurus/theme-common';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import Select from 'react-select';
 import './playgroundSelect.css';
 import React from 'react';
@@ -20,14 +21,13 @@ function constructOption(optionText, pseudoNames) {
 export default function PlaygroundSelect(
     {options, defaultOption, onChange, passValueToChange, pseudoNames, isImages, modalRef}) {
   const [activeOption, setActiveOption] = React.useState(null);
-  const {colorMode} = useColorMode();
 
   React.useEffect(() => {
     isImages ? setActiveOption(defaultOption) : setActiveOption(constructOption(defaultOption, pseudoNames));
   }, [defaultOption]);
 
 
-  const commonOptions = isImages ? options : options.map((type) => constructOption(type, pseudoNames))
+  const commonOptions = isImages ? options : (options || []).map((type) => constructOption(type, pseudoNames))
   
   const commonOnChange = (e) => {
     if (passValueToChange === undefined || passValueToChange) {
@@ -68,35 +68,42 @@ export default function PlaygroundSelect(
     </div>
   )
 
-  if (colorMode === 'dark') {
-    return (
-      <Select
-        isSearchable={false}
-        value={activeOption}
-        className="playground-select"
-        styles={darkStyles}
-        options={commonOptions}
-        onChange={commonOnChange}
-        onMenuOpen={commonOnMenuOpen}
-        onMenuClose={commonOnMenuClose}
-        getOptionLabel={commonGetOptionLabel}
-      />
-    );
-  }
-
   return (
-    <Select
-      isSearchable={false}
-      value={activeOption}
-      className="playground-select"
-      styles={lightStyles}
-      options={commonOptions}
-      onChange={commonOnChange}
-      onMenuOpen={commonOnMenuOpen}
-      onMenuClose={commonOnMenuClose}
-      getOptionLabel={commonGetOptionLabel}
-    />
-  );
+    <BrowserOnly>
+    {() => {
+      const {colorMode} = useColorMode();
+      if (colorMode === 'dark') {
+        return (
+          <Select
+            isSearchable={false}
+            value={activeOption}
+            className="playground-select"
+            styles={darkStyles}
+            options={commonOptions}
+            onChange={commonOnChange}
+            onMenuOpen={commonOnMenuOpen}
+            onMenuClose={commonOnMenuClose}
+            getOptionLabel={commonGetOptionLabel}
+          />
+        );
+      }
+    
+      return (
+        <Select
+          isSearchable={false}
+          value={activeOption}
+          className="playground-select"
+          styles={lightStyles}
+          options={commonOptions}
+          onChange={commonOnChange}
+          onMenuOpen={commonOnMenuOpen}
+          onMenuClose={commonOnMenuClose}
+          getOptionLabel={commonGetOptionLabel}
+        />
+      );
+    }}
+    </BrowserOnly>
+  )
 }
 
 const sameStyles = {

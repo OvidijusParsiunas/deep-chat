@@ -1,6 +1,7 @@
 import PlaygroundChatWrapperConfig from './playgroundChatWrapperConfig';
 import ChatWrapperText from './playgroundChatWrapperText';
 import {useColorMode} from '@docusaurus/theme-common';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import Logo from './playgroundChatWrapperLogo';
 import './playgroundChatWrapper.css';
 import React from 'react';
@@ -63,7 +64,6 @@ const ChatWrapper = React.forwardRef(
     const [heightExpanded, setHeightExpanded] = React.useState(true);
     const [allowAnimation, setAllowAnimation] = React.useState(false);
     const descriptionRef = React.useRef(null);
-    const {colorMode} = useColorMode();
     // need to use state for input
     // tracked here as otherwise re-rendering component would re-render description
     const [description, setDescription] = React.useState(config.description);
@@ -86,11 +86,6 @@ const ChatWrapper = React.forwardRef(
       };
     }, []);
 
-    // the reason why resetting here because the component does not update itself properly as styles overwrite each other
-    React.useEffect(() => {
-      setCounter(counter + 1);
-    }, [colorMode]);
-
     function setDescriptionText(text) {
       config.description = text;
       setDescription(text);
@@ -101,35 +96,46 @@ const ChatWrapper = React.forwardRef(
     }
 
     return (
-      <div
-        key={counter}
-        ref={elementRef}
-        className={`playground-chat-wrapper ${allowAnimation ? 'playground-chat-animated' : ''} ${
-          scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
-        } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'} ${
-          heightExpanded ? '' : 'playground-chat-wrapper-height-shrunk'
-        }`}
-      >
-        {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}
-        {children}
-        <div className="playground-chat-details">
-          <div className="playground-chat-description">
-            <Logo connect={config.connect}></Logo>
-            <ChatWrapperText
-              ref={descriptionRef}
-              textValue={description}
-              setTextValue={setDescriptionText}
-            ></ChatWrapperText>
-          </div>
-          <PlaygroundChatWrapperConfig
-            setEditingChatRef={setEditingChatRef}
-            cloneComponent={cloneComponent}
-            removeComponent={removeComponent}
-            clearMessages={clearMessages}
-            wrapperRef={ref}
-          />
-        </div>
-      </div>
+      <BrowserOnly>
+        {() => {
+          // colorMode tracked and updated here because component would otherwise not update properly as styles overwrite each other
+          const {colorMode} = useColorMode();
+          React.useEffect(() => {
+            setCounter(counter + 1);
+          }, [colorMode]);
+          return (
+            <div
+              key={counter}
+              ref={elementRef}
+              className={`playground-chat-wrapper ${allowAnimation ? 'playground-chat-animated' : ''} ${
+                scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
+              } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'} ${
+                heightExpanded ? '' : 'playground-chat-wrapper-height-shrunk'
+              }`}
+            >
+              {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}
+              {children}
+              <div className="playground-chat-details">
+                <div className="playground-chat-description">
+                  <Logo connect={config.connect}></Logo>
+                  <ChatWrapperText
+                    ref={descriptionRef}
+                    textValue={description}
+                    setTextValue={setDescriptionText}
+                  ></ChatWrapperText>
+                </div>
+                <PlaygroundChatWrapperConfig
+                  setEditingChatRef={setEditingChatRef}
+                  cloneComponent={cloneComponent}
+                  removeComponent={removeComponent}
+                  clearMessages={clearMessages}
+                  wrapperRef={ref}
+                />
+              </div>
+            </div>
+          );
+        }}
+      </BrowserOnly>
     );
   }
 );
