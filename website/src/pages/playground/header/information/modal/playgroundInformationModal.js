@@ -41,21 +41,21 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
           isIntro ? 'playground-intro-modal' : ''
         }`}
       >
-        <b className="playground-modal-title playground-header-modal-title">
+        <div id="playground-information-modal-title" className="playground-modal-title playground-header-modal-title">
           {isIntro ? 'Welcome to the Playground' : 'Information'}
-        </b>
+        </div>
         <div className="playground-header-modal-description">
-          <div style={{marginBottom: 16, marginTop: 3}} className="playground-information-modal-item">
+          <div style={{marginBottom: 16}} className="playground-information-modal-item">
             <img
-              src={'img/connect.svg'}
+              src="img/connect.svg"
               id="playground-information-modal-connect"
               className="playground-information-modal-icon"
             ></img>
-            <div>Create, configure and experiment with Deep Chat without have to write any code.</div>
+            <div>Create, configure and experiment with Deep Chat components without writing any code.</div>
           </div>
           <div style={{marginBottom: 18}} className="playground-information-modal-item">
             <img
-              src={'img/shield.svg'}
+              src="img/shield.svg"
               id="playground-information-modal-shield"
               className="playground-information-modal-icon"
             ></img>
@@ -63,7 +63,7 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
           </div>
           <div style={{marginBottom: 22}} className="playground-information-modal-item">
             <img
-              src={'img/video.svg'}
+              src="img/video.svg"
               id="playground-information-modal-video"
               className="playground-information-modal-icon"
             ></img>

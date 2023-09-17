@@ -198,9 +198,9 @@
   --playground-wrapper-button-filter-active: brightness(0) saturate(100%) invert(100%) sepia(8%) saturate(358%)
     hue-rotate(250deg) brightness(112%) contrast(100%);
   --playground-add-background: #424242;
-  --playground-add-background-hover: rgb(91, 91, 91);
-  --playground-add-filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(730%) hue-rotate(143deg)
-    brightness(98%) contrast(98%);
+  --playground-add-background-hover: #4a4a4a;
+  --playground-add-filter: brightness(0) saturate(100%) invert(72%) sepia(8%) saturate(2%) hue-rotate(83deg)
+    brightness(100%) contrast(101%);
   --playground-add-filter-hover: brightness(0) saturate(100%) invert(80%) sepia(1%) saturate(4%) hue-rotate(261deg)
     brightness(92%) contrast(95%);
   --playground-header-button-filter: brightness(0) saturate(100%) invert(65%) sepia(56%) saturate(0%) hue-rotate(126deg)

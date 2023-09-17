@@ -58,28 +58,30 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     setActiveService(newService);
     const availableTypes = Object.keys(SERVICE_MODAL_FORM_CONFIG[newService]);
     setAvailableTypes(availableTypes);
-    setActiveType(newActiveType || availableTypes[0]);
+    const activeType = newActiveType || availableTypes[0];
+    setActiveType(activeType);
     if (newService === 'custom') {
       setRequiredValue(chatComponent.connect[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
       setRequiredValue(chatComponent.connect[newService]?.key || '');
-      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][availableTypes[0]]);
+      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][activeType]);
     }
     setTimeout(() => {
-      changeCode(newService, availableTypes[0]);
+      changeCode(newService, activeType);
       // 6 as otherwise when connect is custom and opening modal causes extractOptionalParameterValues to throw error
     }, 6);
   };
 
   const changeType = (newType) => {
-    setActiveType(newType);
+    const type = changeFirstLetter(newType, false);
+    setActiveType(type);
     setOptionalParameters(
       activeService === 'custom'
         ? SERVICE_MODAL_FORM_CONFIG[activeService]
-        : SERVICE_MODAL_FORM_CONFIG[activeService][newType]
+        : SERVICE_MODAL_FORM_CONFIG[activeService][type]
     );
-    setTimeout(() => changeCode(activeService, newType));
+    setTimeout(() => changeCode(activeService, type));
   };
 
   const changeRequiredValue = (setRequiredValue, newKey) => {
@@ -214,8 +216,6 @@ function parseNumber(inputString) {
   return null;
 }
 
-const pseudoNames = {textGeneration: 'Text Generation'};
-
 function changeFirstLetter(text, capitalize = true) {
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
@@ -253,11 +253,6 @@ function extractOptionalParameterValues(optionalParamsEl) {
   return Array.from(optionalParamsEl.children).map((element) => {
     const valueEl = element.children[1];
     let value = valueEl.value;
-    if (valueEl.classList.contains('playground-select')) {
-      const selectValue = valueEl.children[2].children[0].children[0].children[0].children[0].textContent.trim();
-      // connect methods (POST/GET/PUT) or strings with second letter as upper case don't need to be lower cased
-      value = selectValue.length > 1 && selectValue.charAt(1) === selectValue.charAt(1).toUpperCase() ? selectValue : selectValue.toLowerCase();
-    }
     if (value === 'true') return true;
     if (value === 'false') return false;
     const attemptedParseNumber = parseNumber(value);
@@ -300,8 +295,24 @@ function buildConnect(optionalParams, optionalParamsValues) {
   return connect;
 }
 
+// Service type names are uppercased in select
+const pseudoNames = {
+  TextGeneration: 'Text Generation',
+  FillMask: 'Fill Mask',
+  QuestionAnswer: 'Question Answer',
+  AudioSpeechRecognition: 'Speech Recognition',
+  AudioClassification: 'Audio Classification',
+  ImageClassification: 'Image Classification',
+  TextToSpeech: 'Text To Speech',
+  SpeechToText: 'Speech To Text',
+  TextToImage: 'Text To Image',
+  ImageToImage: 'Image To Image',
+  ImageToImageMasking: 'Image To Image Masking',
+  ImageToImageUpscale: 'Image To Image Upscale',
+};
+
 const SERVICE_MODAL_FORM_CONFIG = {
-  demo: {demo: {}}, // inserting demo key as a placeholder
+  demo: {demo: {}},
   custom: {
     method: ['POST', 'PUT', 'GET'],
     websocket: ['true', 'false'],
@@ -315,20 +326,50 @@ const SERVICE_MODAL_FORM_CONFIG = {
       temperature: 'number',
       top_p: 'number',
     },
-    completions: {},
-    images: {},
-    audio: {},
-  },
-  cohere: {
-    chat: {
+    completions: {
       model: 'string',
       max_tokens: 'number',
       temperature: 'number',
       top_p: 'number',
     },
-    textGeneration: {},
-    summarization: {},
-    audio: {},
+    images: {
+      n: 'number',
+      size: ['256x256', '512x512', '1024x1024'],
+      user: 'string',
+    },
+    audio: {
+      model: 'string',
+      temperature: 'number',
+      language: 'string',
+      type: ['transcription', 'translation'],
+    },
+  },
+  cohere: {
+    chat: {
+      model: 'string',
+      user_name: 'number',
+      temperature: 'number',
+      max_tokens: 'number',
+    },
+    textGeneration: {
+      model: ['command', 'base', 'base-light'],
+      temperature: 'number',
+      max_tokens: 'number',
+      k: 'number',
+      p: 'number',
+      frequency_penalty: 'number',
+      presence_penalty: 'number',
+      truncate: ['NONE', 'START', 'END'],
+      logit_bias: 'constructable object',
+    },
+    summarization: {
+      model: ['summarize-xlarge', 'summarize-medium'],
+      length: ['auto', 'short', 'medium', 'long'],
+      format: ['auto', 'paragraph', 'bullets'],
+      extractiveness: ['auto', 'low', 'medium', 'high'],
+      temperature: 'number',
+      additional_command: 'string',
+    },
   },
   huggingFace: {
     conversation: {
@@ -345,24 +386,123 @@ const SERVICE_MODAL_FORM_CONFIG = {
         use_cache: ['true', 'false'],
       },
     },
-    // textGeneration: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig);
-    // summarization: true | (HuggingFaceModel & HuggingFaceSummarizationConfig);
-    // translation: true | (HuggingFaceModel & HuggingFaceTranslationConfig);
-    // fillMask: true | (HuggingFaceModel & HuggingFaceFillMaskConfig);
-    // questionAnswer: HuggingFaceModel & HuggingFaceQuestionAnswerConfig;
-    // audioSpeechRecognition: true | HuggingFaceModel;
-    // audioClassification: true | HuggingFaceModel;
-    // imageClassification: true | HuggingFaceModel;
+    textGeneration: {
+      model: 'string',
+      parameters: {
+        top_k: 'number',
+        top_p: 'number',
+        temperature: 'number',
+        repetition_penalty: 'number',
+        max_new_tokens: 'number',
+        do_sample: ['true', 'false'],
+      },
+      options: {
+        use_cache: ['true', 'false'],
+      },
+    },
+    summarization: {
+      model: 'string',
+      parameters: {
+        min_length: 'number',
+        max_length: 'number',
+        top_k: 'number',
+        top_p: 'number',
+        temperature: 'number',
+        repetition_penalty: 'number',
+      },
+      options: {
+        use_cache: ['true', 'false'],
+      },
+    },
+    translation: {
+      model: 'string',
+      options: {
+        use_cache: ['true', 'false'],
+      },
+    },
+    fillMask: {
+      model: 'string',
+      options: {
+        use_cache: ['true', 'false'],
+      },
+    },
+    questionAnswer: {
+      model: 'string',
+      context: 'string', // required
+    },
+    audioSpeechRecognition: {model: 'string'},
+    audioClassification: {model: 'string'},
+    imageClassification: {model: 'string'},
   },
   azure: {
     textToSpeech: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
+      region: 'string', // required
+      lang: 'string',
+      name: 'string',
+      gender: 'string',
+      outputFormat: 'string',
     },
-    speechToText: {},
-    summarization: {},
-    translation: {},
+    speechToText: {
+      region: 'string', // required
+      lang: 'string',
+    },
+    summarization: {
+      endpoint: 'string', // required
+      language: 'string',
+    },
+    translation: {
+      region: 'string',
+      language: 'string',
+    },
+  },
+  stabilityAI: {
+    textToImage: {
+      height: 'number',
+      width: 'number',
+      engine_id: 'string',
+      weight: 'number',
+      cfg_scale: 'number',
+      clip_guidance_preset: ['FAST_BLUE', 'FAST_GREEN', 'NONE', 'SIMPLE', 'SLOW', 'SLOWER', 'SLOWEST'],
+      samples: 'number',
+      seed: 'number',
+      steps: 'number',
+      style_preset: 'string',
+      sampler: 'string',
+    },
+    imageToImage: {
+      init_image_mode: ['image_strength', 'step_schedule_*'],
+      image_strength: 'number',
+      step_schedule_start: 'number',
+      step_schedule_end: 'number',
+      engine_id: 'string',
+      weight: 'number',
+      cfg_scale: 'number',
+      clip_guidance_preset: ['FAST_BLUE', 'FAST_GREEN', 'NONE', 'SIMPLE', 'SLOW', 'SLOWER', 'SLOWEST'],
+      samples: 'number',
+      seed: 'number',
+      steps: 'number',
+      style_preset: 'string',
+      sampler: 'string',
+    },
+    imageToImageMasking: {
+      mask_source: ['MASK_IMAGE_WHITE', 'MASK_IMAGE_BLACK', 'INIT_IMAGE_ALPHA'],
+      engine_id: 'string',
+      weight: 'number',
+      cfg_scale: 'number',
+      clip_guidance_preset: ['FAST_BLUE', 'FAST_GREEN', 'NONE', 'SIMPLE', 'SLOW', 'SLOWER', 'SLOWEST'],
+      samples: 'number',
+      seed: 'number',
+      steps: 'number',
+      style_preset: 'string',
+      sampler: 'string',
+    },
+    imageToImageUpscale: {
+      engine_id: 'string',
+      height: 'number',
+      width: 'number',
+    },
+  },
+  assemblyAI: {
+    audio: {},
   },
 };

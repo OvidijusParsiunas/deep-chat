@@ -1,6 +1,11 @@
 import PlaygroundSelect from '../../playgroundSelect';
 import React from 'react';
 
+function changeFirstLetter(text, capitalize = true) {
+  if (typeof text === 'boolean') return text;
+  return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
+}
+
 export default function ServiceType({availableTypes, activeService, activeType, changeType, pseudoNames}) {
   return (
     <div>
@@ -13,8 +18,8 @@ export default function ServiceType({availableTypes, activeService, activeType, 
       </a>
       <div>
         <PlaygroundSelect
-          options={availableTypes}
-          defaultOption={activeType}
+          options={availableTypes.map((type) => changeFirstLetter(type, true))}
+          defaultOption={changeFirstLetter(activeType, true)}
           onChange={changeType}
           pseudoNames={pseudoNames}
         />

@@ -83,26 +83,27 @@
   padding-bottom: 3px;
   width: 17px;
   filter: var(--playground-wrapper-button-filter);
+  transform: scaleY(0.95);
 }
 
 .playground-chat-config-button:hover {
   filter: var(--playground-wrapper-button-filter-hover);
-  transform: scale(1.01);
+  transform: scale(1.01, 0.97);
 }
 
 .playground-chat-config-button:active {
   filter: var(--playground-wrapper-button-filter-active);
-  transform: scale(0.96);
+  transform: scale(0.96, 0.92);
 }
 
 .playground-chat-clear-button {
-  width: 18px;
-  padding-bottom: 2.5px;
-  transform: scaleY(1.1);
+  width: 18.5px;
+  padding-bottom: 2px;
+  transform: scale(0.98, 1.1);
 }
 
 .playground-chat-clear-button:hover {
-  transform: scale(1.01, 1.11);
+  transform: scale(1, 1.11);
 }
 
 .playground-chat-clear-button:active {
@@ -110,14 +111,14 @@
 }
 
 .playground-chat-clone-button {
-  width: 19px;
-  padding-bottom: 2px;
+  width: 18px;
+  padding-bottom: 2.7px;
 }
 
 .playground-chat-remove-button {
   filter: var(--playground-wrapper-remove-filter);
-  width: 17px;
-  padding-bottom: 3.5px;
+  width: 16px;
+  padding-bottom: 4px;
 }
 
 @media (max-height: 730px) {

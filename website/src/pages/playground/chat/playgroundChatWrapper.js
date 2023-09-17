@@ -167,54 +167,39 @@ const SERVICE_TO_NAME = {
   custom: 'Service',
   openAI: {
     chat: 'OpenAI: Chat',
-    completions: 'OpenAI - Completions',
-    images: 'OpenAI - Dalle 2',
-    audio: 'OpenAI - Whisper',
+    completions: 'OpenAI: Completions',
+    images: 'OpenAI: Dalle 2',
+    audio: 'OpenAI: Whisper',
   },
   cohere: {
-    chat: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-    },
-    textGeneration: {},
-    summarization: {},
-    audio: {},
+    chat: 'Cohere: Chat',
+    textGeneration: 'Cohere: Text Generation',
+    summarization: 'Cohere: Summarization',
   },
   huggingFace: {
-    conversation: {
-      model: 'string',
-      parameters: {
-        min_length: 'number',
-        max_length: 'number',
-        top_k: 'number',
-        top_p: 'number',
-        temperature: 'number',
-        repetition_penalty: 'number',
-      },
-      options: {
-        use_cache: ['true', 'false'],
-      },
-    },
-    // textGeneration: true | (HuggingFaceModel & HuggingFaceTextGenerationConfig);
-    // summarization: true | (HuggingFaceModel & HuggingFaceSummarizationConfig);
-    // translation: true | (HuggingFaceModel & HuggingFaceTranslationConfig);
-    // fillMask: true | (HuggingFaceModel & HuggingFaceFillMaskConfig);
-    // questionAnswer: HuggingFaceModel & HuggingFaceQuestionAnswerConfig;
-    // audioSpeechRecognition: true | HuggingFaceModel;
-    // audioClassification: true | HuggingFaceModel;
-    // imageClassification: true | HuggingFaceModel;
+    conversation: 'Hugging Face: Conversation',
+    textGeneration: 'Hugging Face: Text Generation',
+    summarization: 'Hugging Face: Summarization',
+    translation: 'Hugging Face: Translation',
+    fillMask: 'Hugging Face: Fill Mask',
+    questionAnswer: 'Hugging Face: Question Answer',
+    audioSpeechRecognition: 'Hugging Face: Speech Recognition',
+    audioClassification: 'Hugging Face: Audio Classification',
+    imageClassification: 'Hugging Face: Image Classification',
   },
   azure: {
-    textToSpeech: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-    },
-    speechToText: {},
-    summarization: {},
-    translation: {},
+    textToSpeech: 'Azure: Text To Speech',
+    speechToText: 'Azure: Speech To Text',
+    summarization: 'Azure: Summarization',
+    translation: 'Azure: Translation',
+  },
+  stabilityAI: {
+    textToImage: 'StabilityAI: Text To Image',
+    imageToImage: 'StabilityAI: Image To Image',
+    imageToImageMasking: 'StabilityAI: Image To Image Masking',
+    imageToImageUpscale: 'StabilityAI: Image To Image Upscale',
+  },
+  assemblyAI: {
+    audio: 'AssemblyAI: Audio',
   },
 };

@@ -17,7 +17,7 @@ function Icon({connect}) {
       return <img src={cohereLogo} width="26" style={{paddingTop: '1.5px', marginLeft: '-1px', marginRight: '3px'}} />;
     }
     if (connect.azure) {
-      return <img src={azureLogo} width="21" style={{paddingTop: '5px', marginRight: '6px'}} />;
+      return <img src={azureLogo} width="20.5" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
     }
     if (connect.huggingFace) {
       return <img src={huggingFaceLogo} width="24" style={{paddingTop: '2.5px', marginRight: '6px'}} />;
@@ -25,7 +25,7 @@ function Icon({connect}) {
     if (connect.stabilityAI) {
       return <img src={stabilityAILogo} width="19" style={{paddingTop: '4.8px', marginRight: '6px'}} />;
     }
-    if (connect.assemblyAILogo) {
+    if (connect.assemblyAI) {
       return <img src={assemblyAILogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
     }
     if (connect.openAI) {

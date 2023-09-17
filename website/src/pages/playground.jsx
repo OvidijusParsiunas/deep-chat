@@ -1,6 +1,7 @@
 import InformationModal from './playground/header/information/modal/playgroundInformationModal';
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
 import HeaderButtons from './playground/header/playgroundHeaderButtons';
+import PreloadPlaygroundImages from './preload/preloadPlaygroundImages';
 import ChatComponent from './playground/chat/playgroundChatComponent';
 import ChatWrapper from './playground/chat/playgroundChatWrapper';
 import ServiceModal from './playground/serviceModal/serviceModal';
@@ -177,6 +178,7 @@ export default function Playground() {
       <Head>
         <html className="plugin-pages plugin-id-default playground" />
       </Head>
+      <PreloadPlaygroundImages />
       {editingChatRef && (
         <ServiceModal
           setEditingChatRef={setEditingChatRef}
