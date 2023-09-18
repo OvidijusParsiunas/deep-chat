@@ -1,0 +1,14 @@
+#playground-service-modal-service-label {
+  position: relative;
+  bottom: -1px;
+}
+
+.playground-service-modal-service-icon {
+  width: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.adaptive-openai-filter {
+  filter: var(--playground-modal-openai-filter);
+}

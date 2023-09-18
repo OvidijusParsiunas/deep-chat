@@ -1,0 +1,21 @@
+.playground-header-modal-title {
+  margin-top: 2px !important;
+}
+
+.playground-header-modal-description {
+  font-size: 15.8px;
+  color: var(--playground-header-modal-text-color);
+}
+
+@-moz-document url-prefix() {
+  .playground-header-modal-description {
+    font-size: 15px;
+  }
+}
+
+.playground-header-modal-buttons {
+  margin-top: 15px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+}

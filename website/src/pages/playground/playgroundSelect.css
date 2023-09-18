@@ -1,0 +1,20 @@
+.playground-service-modal-select-option {
+  display: flex;
+  align-items: center;
+}
+
+.playground-service-modal-select-empty-option {
+  margin-top: -2px;
+}
+
+@media (max-width: 410px) {
+  .playground-select > div {
+    width: 160px;
+  }
+}
+
+@media (max-width: 350px) {
+  .playground-select > div {
+    width: 110px;
+  }
+}

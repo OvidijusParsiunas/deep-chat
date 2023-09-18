@@ -1,0 +1,26 @@
+.playground-service-modal-collapsible-title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: var(--playground-modal-collapsible-title-border);
+  user-select: none;
+  color: var(--playground-modal-collapsible-title-color);
+}
+
+.playground-service-modal-collapsible-title:hover {
+  font-weight: 500;
+}
+
+.playground-service-modal-collapsible-title-button {
+  width: 10px;
+  height: 10px;
+  float: left;
+  margin-right: 5px;
+  position: relative;
+  bottom: 1px;
+  cursor: pointer;
+}
+
+.playground-service-modal-collapsible-title-text {
+  font-weight: 400 !important;
+  cursor: pointer;
+}

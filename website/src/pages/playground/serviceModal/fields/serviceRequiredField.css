@@ -1,0 +1,28 @@
+#playground-service-modal-service-type-label {
+  position: relative;
+  bottom: -1px;
+}
+
+.playground-service-modal-visibility-input {
+  padding-right: 23px;
+}
+
+#visibility-icon-container {
+  position: relative;
+  float: right;
+  cursor: pointer;
+  user-select: none;
+  width: 20px;
+}
+
+.visibility-icon {
+  filter: brightness(0) saturate(100%) invert(88%) sepia(0%) saturate(441%) hue-rotate(31deg) brightness(91%) contrast(87%);
+  position: absolute;
+  top: 9px;
+  left: -18px;
+  width: 11.5px;
+}
+
+.visibility-icon:hover {
+  filter: var(--playground-modal-visibility-filter-hover);
+}

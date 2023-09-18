@@ -1,0 +1,55 @@
+.playgroud-service-modal-form > div {
+  height: 31px;
+  display: table-row;
+}
+
+.playground-service-modal-input-label {
+  display: table-cell;
+  white-space: nowrap;
+  /* set to 1 in order to automatically use the largest field - must be above 0 for Safari */
+  width: 1px;
+  padding-right: 10px;
+  color: var(--playground-modal-label-color);
+  cursor: pointer;
+}
+
+.playground-service-modal-input {
+  border: var(--playground-service-input-border);
+  border-radius: 4px;
+  height: 25px;
+  width: 200px;
+  font-size: 15px;
+  padding-left: 6px;
+  padding-top: 1px;
+  color: var(--playground-service-input-color);
+  top: 1px;
+  position: relative;
+  background-color: var(--playground-service-input-background);
+}
+
+@-moz-document url-prefix() {
+  .playground-service-modal-input {
+    padding-top: 0px;
+  }
+}
+
+.playground-modal-field-invalid {
+  border: 1px solid red;
+}
+
+/* this is used to produce a temporary brighter color when user clicks submit */
+.playground-modal-field-invalid-2 {
+  border: 1.5px solid red;
+}
+
+@media (max-width: 410px) {
+  .playground-service-modal-input {
+    width: 160px;
+  }
+}
+
+@media (max-width: 350px) {
+  .playground-service-modal-input {
+    width: 110px;
+  }
+}

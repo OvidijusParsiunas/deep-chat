@@ -1,0 +1,64 @@
+#playground-header-buttons {
+  position: absolute;
+  right: 20px;
+  top: 95px;
+  display: flex;
+}
+
+.playground-header-button {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 0rem 10px 0 rgba(44, 51, 73, 0.238);
+  margin-right: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: var(--playground-add-background);
+}
+
+.playground-header-button:hover {
+  background-color: var(--playground-add-background-hover);
+  box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.242);
+}
+
+.playground-header-button:active {
+  transform: scale(0.96);
+}
+
+.playground-header-button > a > img {
+  width: 25px;
+  padding-bottom: 6px;
+  filter: var(--playground-header-button-filter);
+}
+
+@-moz-document url-prefix() {
+  .playground-header-button > a > img {
+    padding-bottom: 3.5px;
+  }
+}
+
+.playground-header-button:hover > a > img {
+  filter: var(--playground-header-button-filter-hover);
+}
+
+.playground-file-button {
+  width: 23px;
+  padding-bottom: 8px;
+}
+
+@media (max-height: 730px) {
+  #playground-header-buttons {
+    top: 85px;
+  }
+}
+
+@media (max-height: 700px) {
+  #playground-header-buttons {
+    top: 65px;
+  }
+}
+
+@media (max-width: 850px) {
+  #playground-view-button {
+    display: none;
+  }
+}

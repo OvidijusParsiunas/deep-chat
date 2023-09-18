@@ -27,12 +27,12 @@
   --code-attr-name-color: #0076d0;
   --code-attr-value-color: #053466;
   --navbar-title-color: #003064;
-  --menu-link-active-color: #00448d;
-  --navbar-link-active-color: #034184;
+  --menu-link-color-active: #00448d;
+  --navbar-link-color-active: #034184;
   --tabs-item-color: #004c9c;
   --tabs-item-bottom-color: #005ca3;
   --table-of-contents-color: #0058b7;
-  --breadcrumbs-item-active-color: #004a98;
+  --breadcrumbs-item-color-active: #004a98;
   --homepage-background: linear-gradient(
     90deg,
     rgb(239, 242, 247) 0%,
@@ -68,7 +68,7 @@
   --media-background-color: rgb(239, 246, 255);
   --homepage-header-color: #003064;
   --start-header-color: #002e61;
-  --start-text-hover-color: #0d5297;
+  --start-text-color-hover: #0d5297;
   --start-text-code-color: #154b7a;
   --start-text-back-option-color: #2c2c2c;
   --speech-gradient-start-color: rgb(255, 255, 255);
@@ -77,6 +77,66 @@
   --explore-background-color-default: #3e79c0;
   --explore-background-color-hover: #336baf;
   --explore-background-color-click: #295e9f;
+  --playground-background: white;
+  --playground-wrapper-text-input-color: #1c1e21;
+  --playground-wrapper-drag-filter: brightness(0) saturate(100%) invert(27%) sepia(0%) saturate(1%) hue-rotate(169deg)
+    brightness(97%) contrast(97%);
+  --playground-wrapper-drag-filter-hover: brightness(0) saturate(100%) invert(11%) sepia(0%) saturate(592%)
+    hue-rotate(309deg) brightness(98%) contrast(94%);
+  --playground-wrapper-remove-filter: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(827%) hue-rotate(226deg)
+    brightness(93%) contrast(92%);
+  --playground-wrapper-button-filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(308%) hue-rotate(283deg)
+    brightness(96%) contrast(93%);
+  --playground-wrapper-button-filter-hover: brightness(0) saturate(100%) invert(11%) sepia(0%) saturate(592%)
+    hue-rotate(309deg) brightness(98%) contrast(94%);
+  --playground-wrapper-button-filter-active: brightness(0) saturate(100%) invert(0%) sepia(97%) saturate(7488%)
+    hue-rotate(150deg) brightness(95%) contrast(103%);
+  --playground-add-background: white;
+  --playground-add-background-hover: rgb(250, 250, 250);
+  --playground-add-filter: brightness(0) saturate(100%) invert(65%) sepia(1%) saturate(0%) hue-rotate(338deg)
+    brightness(92%) contrast(91%);
+  --playground-add-filter-hover: brightness(0) saturate(100%) invert(65%) sepia(1%) saturate(0%) hue-rotate(338deg)
+    brightness(92%) contrast(91%);
+  --playground-header-button-filter: brightness(0) saturate(100%) invert(66%) sepia(0%) saturate(0%) hue-rotate(37deg)
+    brightness(94%) contrast(94%);
+  --playground-header-button-filter-hover: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%)
+    hue-rotate(284deg) brightness(102%) contrast(97%);
+  --playground-information-filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(962%) hue-rotate(52deg)
+    brightness(99%) contrast(96%);
+  --playground-information-filter-hover: brightness(0) saturate(100%) invert(14%) sepia(0%) saturate(1246%)
+    hue-rotate(284deg) brightness(102%) contrast(97%);
+  --playground-modal-fade-in-background: rgba(128, 128, 128, 0.438);
+  --playground-modal-fade-in-background-out: rgba(128, 128, 128, 0);
+  --playground-chat-list-scrollbar-background: rgb(247, 247, 247);
+  --playground-chat-list-scrollbar-thumb-background: rgb(208, 208, 208);
+  --playground-modal-scrollbar-background: rgb(235, 235, 235);
+  --playground-modal-background: white;
+  --playground-modal-border: 1px solid rgb(192, 192, 192);
+  --playground-modal-title-color: #002e61;
+  --playground-modal-label-color: #04345c;
+  --playground-modal-collapsible-title-color: #000f1f;
+  --playground-modal-collapsible-title-border: 1px solid rgb(235, 235, 235);
+  --playground-service-input-color: #333333;
+  --playground-service-input-background: white;
+  --playground-service-input-border: 1px solid grey;
+  --playground-modal-close-background: rgb(252, 252, 252);
+  --playground-modal-close-background-hover: rgb(244, 244, 244);
+  --playground-modal-close-background-active: rgb(236, 236, 236);
+  --playground-modal-close-border: 1px solid grey;
+  --playground-modal-submit-background: rgb(252, 252, 252);
+  --playground-modal-submit-background-hover: rgb(245, 248, 250);
+  --playground-modal-submit-background-active: rgb(234, 243, 255);
+  --playground-modal-submit-color: #003a6b;
+  --playground-modal-submit-border: 1px solid #003a6b;
+  --playground-modal-code-background: #f6f7f8;
+  --playground-modal-code-color: '';
+  --playground-modal-visibility-filter-hover: brightness(0) saturate(100%) invert(41%) sepia(0%) saturate(275%)
+    hue-rotate(155deg) brightness(97%) contrast(91%);
+  --playground-modal-openai-filter: brightness(0) saturate(100%) invert(16%) sepia(0%) saturate(575%) hue-rotate(163deg)
+    brightness(100%) contrast(93%);
+  --playground-header-modal-text-color: rgb(58, 58, 58);
+  --playground-information-modal-filter: brightness(0) saturate(100%) invert(42%) sepia(0%) saturate(844%)
+    hue-rotate(69deg) brightness(96%) contrast(91%);
 }
 
 [data-theme='dark'] {
@@ -103,17 +163,17 @@
   --code-attr-name-color: white;
   --code-attr-value-color: white;
   --navbar-title-color: white;
-  --menu-link-active-color: #0980ff;
-  --navbar-link-active-color: #2487d3;
+  --menu-link-color-active: #0980ff;
+  --navbar-link-color-active: #2487d3;
   --tabs-item-color: #53a1f4;
   --tabs-item-bottom-color: #108be9;
   --table-of-contents-color: #298bf4;
-  --breadcrumbs-item-active-color: #1888ff;
+  --breadcrumbs-item-color-active: #1888ff;
   --media-background-color: #232323;
   --homepage-background: #232323;
   --homepage-header-color: white;
   --start-header-color: white;
-  --start-text-hover-color: #5da9f6;
+  --start-text-color-hover: #5da9f6;
   --start-text-code-color: #5da9f6;
   --start-text-back-option-color: white;
   --speech-gradient-start-color: rgba(57, 57, 57, 0);
@@ -123,6 +183,66 @@
   --explore-background-color-default: #5d5d5d;
   --explore-background-color-hover: #525252;
   --explore-background-color-click: #4a4a4a;
+  --playground-background: #1f1f1f;
+  --playground-wrapper-text-input-color: rgb(238, 238, 238);
+  --playground-wrapper-drag-filter: brightness(0) saturate(100%) invert(69%) sepia(85%) saturate(0%) hue-rotate(125deg)
+    brightness(97%) contrast(96%);
+  --playground-wrapper-drag-filter-hover: brightness(0) saturate(100%) invert(73%) sepia(67%) saturate(0%)
+    hue-rotate(180deg) brightness(101%) contrast(92%);
+  --playground-wrapper-remove-filter: brightness(0) saturate(100%) invert(69%) sepia(85%) saturate(0%) hue-rotate(125deg)
+    brightness(97%) contrast(96%);
+  --playground-wrapper-button-filter: brightness(0) saturate(100%) invert(69%) sepia(85%) saturate(0%) hue-rotate(125deg)
+    brightness(97%) contrast(96%);
+  --playground-wrapper-button-filter-hover: brightness(0) saturate(100%) invert(98%) sepia(0%) saturate(2259%)
+    hue-rotate(262deg) brightness(108%) contrast(89%);
+  --playground-wrapper-button-filter-active: brightness(0) saturate(100%) invert(100%) sepia(8%) saturate(358%)
+    hue-rotate(250deg) brightness(112%) contrast(100%);
+  --playground-add-background: #424242;
+  --playground-add-background-hover: #4a4a4a;
+  --playground-add-filter: brightness(0) saturate(100%) invert(72%) sepia(8%) saturate(2%) hue-rotate(83deg)
+    brightness(100%) contrast(101%);
+  --playground-add-filter-hover: brightness(0) saturate(100%) invert(80%) sepia(1%) saturate(4%) hue-rotate(261deg)
+    brightness(92%) contrast(95%);
+  --playground-header-button-filter: brightness(0) saturate(100%) invert(65%) sepia(56%) saturate(0%) hue-rotate(126deg)
+    brightness(102%) contrast(94%);
+  --playground-header-button-filter-hover: brightness(0) saturate(100%) invert(81%) sepia(0%) saturate(128%)
+    hue-rotate(321deg) brightness(108%) contrast(100%);
+  --playground-information-filter: brightness(0) saturate(100%) invert(69%) sepia(0%) saturate(6636%) hue-rotate(208deg)
+    brightness(99%) contrast(93%);
+  --playground-information-filter-hover: brightness(0) saturate(100%) invert(81%) sepia(0%) saturate(128%)
+    hue-rotate(321deg) brightness(108%) contrast(100%);
+  --playground-modal-fade-in-background: rgba(31, 31, 31, 0.66);
+  --playground-modal-fade-in-background-out: rgba(31, 31, 31, 0);
+  --playground-chat-list-scrollbar-background: #303030;
+  --playground-chat-list-scrollbar-thumb-background: grey;
+  --playground-modal-scrollbar-background: #525252;
+  --playground-modal-background: #474747;
+  --playground-modal-border: 1px solid #434343;
+  --playground-modal-title-color: #dbdbdb;
+  --playground-modal-label-color: #ececec;
+  --playground-modal-collapsible-title-color: white;
+  --playground-modal-collapsible-title-border: 1px solid rgb(160, 160, 160);
+  --playground-service-input-color: rgb(241, 241, 241);
+  --playground-service-input-background: #3b3b3b;
+  --playground-service-input-border: 1px solid #6d6d6d;
+  --playground-modal-close-background: #5e5e5e;
+  --playground-modal-close-background-hover: #626262;
+  --playground-modal-close-background-active: #595959;
+  --playground-modal-close-border: 1px solid #525252;
+  --playground-modal-submit-background: #656565;
+  --playground-modal-submit-background-hover: #6d6d6d;
+  --playground-modal-submit-background-active: #646464;
+  --playground-modal-submit-color: white;
+  --playground-modal-submit-border: 1px solid #454545;
+  --playground-modal-code-background: #3c3c3c;
+  --playground-modal-code-color: white;
+  --playground-modal-visibility-filter-hover: brightness(0) saturate(100%) invert(82%) sepia(46%) saturate(1%)
+    hue-rotate(297deg) brightness(101%) contrast(101%);
+  --playground-modal-openai-filter: brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(2286%) hue-rotate(212deg)
+    brightness(112%) contrast(85%);
+  --playground-header-modal-text-color: white;
+  --playground-information-modal-filter: brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(2286%)
+    hue-rotate(212deg) brightness(112%) contrast(85%);
 }
 
 .markdown > h1 {
@@ -161,11 +281,11 @@ img + h2 {
 
 .menu__link--active {
   background-color: #6161610d !important;
-  color: var(--menu-link-active-color) !important;
+  color: var(--menu-link-color-active) !important;
 }
 
 .navbar__link--active {
-  color: var(--navbar-link-active-color) !important;
+  color: var(--navbar-link-color-active) !important;
 }
 
 .tabs__item--active {
@@ -185,7 +305,7 @@ img + h2 {
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  color: var(--breadcrumbs-item-active-color) !important;
+  color: var(--breadcrumbs-item-color-active) !important;
 }
 
 .navbar__link--active:hover {

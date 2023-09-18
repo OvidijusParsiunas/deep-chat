@@ -12,7 +12,7 @@
 }
 
 #start-page-options > div > .start-page-text:hover {
-  color: var(--start-text-hover-color);
+  color: var(--start-text-color-hover);
   margin-left: 4px;
 }
 

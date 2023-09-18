@@ -141,7 +141,7 @@
 }
 
 .start-page-navigation:hover {
-  color: var(--start-text-hover-color);
+  color: var(--start-text-color-hover);
 }
 
 .start-page-navigation.start-page-navigation-hoverable {

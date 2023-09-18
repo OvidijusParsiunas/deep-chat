@@ -1,0 +1,65 @@
+#playground-information-modal {
+  padding-right: 18px;
+  padding-left: 20px;
+  width: 475px;
+  /* overwriting max-height as there is no need for it to be dynamic in this modal */
+  max-height: 560px !important;
+}
+
+#playground-information-modal-title {
+  font-weight: 600;
+}
+
+.playground-information-modal-item {
+  display: flex;
+}
+
+#playground-information-modal-connect {
+  width: 36px;
+  margin-right: 13px;
+}
+
+#playground-information-modal-shield {
+  width: 26px;
+  margin-right: 19px;
+  padding-bottom: 6px;
+  margin-left: 5px;
+}
+
+#playground-information-modal-video {
+  width: 27px;
+  padding-bottom: 1px;
+  margin-right: 17px;
+  margin-left: 6px;
+}
+
+.playground-information-modal-icon {
+  filter: var(--playground-information-modal-filter);
+  user-select: none;
+}
+
+#playground-information-modal-close-button {
+  margin-bottom: -2px;
+}
+
+.playground-intro-modal {
+  transition: 0.5s !important;
+}
+
+.playground-intro-modal > #playground-information-modal-title {
+  padding-top: 3px;
+}
+
+@media (max-width: 410px) {
+  #playground-information-modal {
+    padding-left: 20px;
+    padding-right: 30px;
+  }
+}
+
+@media (max-width: 380px) {
+  #playground-information-modal {
+    padding-left: 10px;
+    padding-right: 20px;
+  }
+}

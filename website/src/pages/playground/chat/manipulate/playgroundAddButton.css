@@ -1,0 +1,47 @@
+#playground-add-button-container {
+  width: 100%;
+  text-align: center;
+}
+
+.playground-add-button-container-grid {
+  margin-top: 10px;
+  /* required to have space when at end of a grid */
+  margin-bottom: 50px;
+}
+
+.playground-add-button-container-panorama {
+  margin-top: 30px;
+}
+
+#playground-add-button {
+  background-color: var(--playground-add-background);
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 0rem 12px 0 rgba(44, 51, 73, 0.1);
+}
+
+#playground-add-button:hover {
+  background-color: var(--playground-add-background-hover);
+  box-shadow: 0px 0rem 8px 0 rgba(44, 51, 73, 0.141);
+}
+
+#playground-add-button:active {
+  transform: scale(0.95);
+}
+
+#playground-add-button-image {
+  width: 31px;
+  padding-top: 9px;
+  filter: var(--playground-add-filter);
+}
+
+/* can't do image directly as it doesn't cover full button */
+#playground-add-button:hover > #playground-add-button-image {
+  filter: var(--playground-add-filter-hover);
+}
+
+@media (max-height: 800px) {
+  .playground-add-button-container-panorama {
+    margin-top: 25px;
+  }
+}

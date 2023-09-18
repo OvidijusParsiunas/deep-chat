@@ -1,0 +1,137 @@
+.playground-chat-wrapper {
+  float: left;
+  height: 440px;
+  min-width: 400px;
+}
+
+.playground-chat-wrapper-scale-shrunk {
+  transform: scale(0);
+  transition: 0.4s;
+}
+
+.playground-chat-wrapper-scale-expanded {
+  transform: scale(1);
+}
+
+.playground-chat-wrapper-width-shrunk {
+  width: 0px;
+  min-width: 0px;
+}
+
+.playground-chat-wrapper-width-expanded {
+  width: 400px;
+}
+
+.playground-chat-wrapper-height-shrunk {
+  height: 0px;
+}
+
+.playground-chat-animated {
+  transition: 0.5s;
+}
+
+.playground-chat-details {
+  text-align: center;
+  padding-top: 16px;
+}
+
+.playground-chat-description {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.playground-chat-config-buttons {
+  width: 100%;
+  padding-top: 1px;
+}
+
+.playground-chat-config-buttons > * {
+  opacity: 0;
+  transition: 0.15s;
+}
+
+.playground-chat-wrapper:hover > .playground-chat-details > .playground-chat-config-buttons > * {
+  opacity: 1;
+}
+
+.playground-chat-drag-handle {
+  cursor: grab;
+  cursor: -webkit-grab;
+  margin-right: 3px;
+  padding-bottom: 1px;
+  width: 22px;
+  filter: var(--playground-wrapper-drag-filter);
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.playground-chat-drag-handle:hover {
+  filter: var(--playground-wrapper-drag-filter-hover);
+}
+
+.playground-chat-drag-handle:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.playground-chat-config-button {
+  cursor: pointer;
+  margin-right: 8px;
+  padding-bottom: 3px;
+  width: 17px;
+  filter: var(--playground-wrapper-button-filter);
+  transform: scaleY(0.95);
+}
+
+.playground-chat-config-button:hover {
+  filter: var(--playground-wrapper-button-filter-hover);
+  transform: scale(1.01, 0.97);
+}
+
+.playground-chat-config-button:active {
+  filter: var(--playground-wrapper-button-filter-active);
+  transform: scale(0.96, 0.92);
+}
+
+.playground-chat-clear-button {
+  width: 18.5px;
+  padding-bottom: 2px;
+  transform: scale(0.98, 1.1);
+}
+
+.playground-chat-clear-button:hover {
+  transform: scale(1, 1.11);
+}
+
+.playground-chat-clear-button:active {
+  transform: scale(0.96, 1.06);
+}
+
+.playground-chat-clone-button {
+  width: 18px;
+  padding-bottom: 2.7px;
+}
+
+.playground-chat-remove-button {
+  filter: var(--playground-wrapper-remove-filter);
+  width: 16px;
+  padding-bottom: 4px;
+}
+
+@media (max-height: 730px) {
+  .playground-chat-wrapper {
+    height: 434px;
+  }
+  .playground-chat-details {
+    padding-top: 11px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .playground-chat-config-buttons > * {
+    opacity: 1;
+  }
+}
