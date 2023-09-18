@@ -1,10 +1,12 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
 import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
+import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FILE_TYPES} from '../types/fileTypes';
+import {Response} from '../types/response';
 import {Request} from '../types/request';
-import {Result} from '../types/result';
+import {Signals} from '../types/handler';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
@@ -13,7 +15,7 @@ export interface RequestContents {
   files?: File[];
 }
 
-export type PollResult = Promise<InterfacesUnion<Result | {timeoutMS: number}>>;
+export type PollResult = Promise<InterfacesUnion<Response | {timeoutMS: number}>>;
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -23,6 +25,8 @@ export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
   abortStream: AbortController;
+  stopClicked: Signals['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
+  simulationInterim?: number;
 }
 
 export interface KeyVerificationHandlers {
@@ -50,7 +54,13 @@ export interface ServiceIO {
 
   url?: string;
 
-  websocket?: WebSocket;
+  // 'pending' is used to signify that the websocket connection will need to be established
+  // IWebsocketHandler contains logic for custom handler
+  websocket?: WebSocket | 'pending' | IWebsocketHandler;
+
+  completionsHandlers: CompletionsHandlers;
+
+  streamHandlers: StreamHandlers;
 
   // overwrites textInput disabled property if not provided
   isTextInputDisabled?: boolean;
@@ -77,11 +87,9 @@ export interface ServiceIO {
 
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 
-  // prettier-ignore
-  callAPI(requestContents: RequestContents, messages: Messages,
-    completionsHandlers: CompletionsHandlers, streamHandlers: StreamHandlers): void;
+  callAPI(requestContents: RequestContents, messages: Messages): Promise<void>;
 
-  extractResultData?(result: object): Promise<InterfacesUnion<Result | {pollingInAnotherRequest: true}>>;
+  extractResultData?(result: object): Promise<InterfacesUnion<Response | {pollingInAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 

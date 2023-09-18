@@ -28,9 +28,9 @@ export class Cohere {
           if (result.message) {
             next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.text}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: result.text});
           }
         });
       }
@@ -76,9 +76,9 @@ export class Cohere {
           if (result.message) {
             next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.generations?.[0].text}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: result.generations?.[0].text});
           }
         });
       }
@@ -113,9 +113,9 @@ export class Cohere {
           if (result.message) {
             next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.summary}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: result.summary});
           }
         });
       }

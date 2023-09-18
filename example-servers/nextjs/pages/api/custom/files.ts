@@ -20,9 +20,9 @@ async function handler(req: NextRequest) {
       console.log(data);
     }
   });
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
-  return NextResponse.json({result: {text: 'This is a response from Next.js server. Thank you for your message!'}});
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
+  return NextResponse.json({text: 'This is a response from Next.js server. Thank you for your message!'});
 }
 
 export default errorHandler(handler);

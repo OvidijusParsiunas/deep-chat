@@ -2,16 +2,13 @@
 
 ![alt text](../assets/readme/banner-2.png)
 
-<b>Deep Chat</b> is a fully customizable chat based web component built with a focus on powering next generation AI services. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
+<b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with minimal to no effort. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
 The documentation website has been built using [Docusaurus 2](https://docusaurus.io/).
 
 ## :construction_worker: Local setup
 
 ```
-# Install node dependencies:
-$ npm install
-
 # Install node dependencies:
 $ npm install
 

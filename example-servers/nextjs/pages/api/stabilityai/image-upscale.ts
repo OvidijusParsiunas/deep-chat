@@ -27,10 +27,10 @@ async function handler(req: NextRequest) {
 
   const stabilityAIResult = (await result.json()) as StabilityAITextToImageResult;
   if (stabilityAIResult.message) throw stabilityAIResult.message;
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
   return NextResponse.json({
-    result: {files: [{type: 'image', src: `data:image/png;base64,${stabilityAIResult.artifacts[0].base64}`}]},
+    files: [{type: 'image', src: `data:image/png;base64,${stabilityAIResult.artifacts[0].base64}`}],
   });
 }
 

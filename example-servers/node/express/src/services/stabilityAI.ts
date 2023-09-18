@@ -29,9 +29,9 @@ export class StabilityAI {
           if (result.message) {
             next(result); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]});
           }
         });
       }
@@ -76,11 +76,9 @@ export class StabilityAI {
             if (result.message) {
               next(result); // forwarded to error handler middleware in ErrorUtils.handle
             } else {
-              // Sends response back to Deep Chat using the Result format:
-              // https://deepchat.dev/docs/connect/#Result
-              res.json({
-                result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]},
-              });
+              // Sends response back to Deep Chat using the Response format:
+              // https://deepchat.dev/docs/connect/#Response
+              res.json({files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]});
             }
           } catch (e) {
             next(e);
@@ -124,11 +122,9 @@ export class StabilityAI {
             if (result.message) {
               next(result); // forwarded to error handler middleware in ErrorUtils.handle
             } else {
-              // Sends response back to Deep Chat using the Result format:
-              // https://deepchat.dev/docs/connect/#Result
-              res.json({
-                result: {files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]},
-              });
+              // Sends response back to Deep Chat using the Response format:
+              // https://deepchat.dev/docs/connect/#Response
+              res.json({files: [{type: 'image', src: `data:image/png;base64,${result.artifacts[0].base64}`}]});
             }
           } catch (e) {
             next(e);

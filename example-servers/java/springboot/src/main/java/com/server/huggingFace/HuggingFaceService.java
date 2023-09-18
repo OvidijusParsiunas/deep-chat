@@ -47,8 +47,8 @@ public class HuggingFaceService {
 
     HuggingFaceConversationResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Hugging Face");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseBody.getGeneratedText());
   }
 
@@ -87,8 +87,8 @@ public class HuggingFaceService {
 
     HuggingFaceImageResultLabel[] responseData = responseEntity.getBody();
     if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseData[0].getLabel());
   }
 
@@ -110,8 +110,8 @@ public class HuggingFaceService {
 
     HugginFaceSpeechResult responseData = responseEntity.getBody();
     if (responseData == null) throw new Exception("Unexpected response from Hugging Face");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseData.getText());
   }
 }

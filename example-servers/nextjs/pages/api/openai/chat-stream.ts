@@ -68,11 +68,9 @@ async function handler(req: NextRequest) {
       }
       const result = JSON.parse(content) as OpenAIConverseResult;
       if (result.choices[0].delta?.content) {
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({result: {text: result.choices[0].delta.content}})}\n\n`)
-        );
+        // Sends response back to Deep Chat using the Response format:
+        // https://deepchat.dev/docs/connect/#Response
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({text: result.choices[0].delta.content})}\n\n`));
       }
     },
   });

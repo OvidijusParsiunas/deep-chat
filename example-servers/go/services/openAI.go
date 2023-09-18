@@ -70,14 +70,15 @@ func OpenAIChatStream(w http.ResponseWriter, r *http.Request) error {
 	resp, err := client.Do(req)
 	if err != nil { return err }
 
-	var resultData OpenAIChatResult
-	err = json.NewDecoder(resp.Body).Decode(&resultData)
-	if err != nil { return err }
-
-	if resultData.OpenAIError.Message != "" {
-    return errors.New(resultData.OpenAIError.Message)
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		var resultData OpenAIStreamResult
+		err = json.NewDecoder(resp.Body).Decode(&resultData)
+		if err != nil { return err }
+		if resultData.OpenAIError.Message != "" {
+			return errors.New(resultData.OpenAIError.Message)
+		}
 	}
-	
+
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()

@@ -1,7 +1,7 @@
 import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceFillMaskIO extends HuggingFaceIO {
@@ -18,7 +18,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
     super(deepChat, 'The goal of life is [MASK].', 'bert-base-uncased', config, apiKey);
   }
 
-  override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Response> {
     if (result.error) throw result.error;
     return {text: result[0].sequence || ''};
   }

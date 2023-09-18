@@ -1,6 +1,5 @@
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
@@ -8,7 +7,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {StabilityAIIO} from './stabilityAIIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class StabilityAITextToImageIO extends StabilityAIIO {
@@ -51,15 +50,13 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
     return bodyCopy;
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
-    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body, messages);
   }
 
-  override async extractResultData(result: StabilityAITextToImageResult): Promise<Result> {
+  override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
       return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};

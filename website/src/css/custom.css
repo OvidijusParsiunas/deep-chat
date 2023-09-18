@@ -484,7 +484,8 @@ html[data-theme='dark'] .header-github-link:before {
 /* JavaScript */
 .token + .property,
 .token + .keyword,
-.token + .string {
+.token + .string,
+.token + .boolean {
   color: var(--code-tag-color) !important;
 }
 

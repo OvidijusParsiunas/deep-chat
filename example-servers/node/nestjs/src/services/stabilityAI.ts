@@ -21,11 +21,9 @@ export class StabilityAI {
         },
       }
     );
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
-    };
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]};
   }
 
   // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
@@ -51,11 +49,9 @@ export class StabilityAI {
         },
       }
     );
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
-    };
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]};
   }
 
   // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
@@ -77,10 +73,8 @@ export class StabilityAI {
         },
       }
     );
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]},
-    };
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {files: [{type: 'image', src: `data:image/png;base64,${response.data.artifacts[0].base64}`}]};
   }
 }

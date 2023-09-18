@@ -14,7 +14,7 @@ export default function IndexPage() {
       <main className={styles.main}>
         <h1 id={styles.pageTitle}>
           Deep Chat test ground for{' '}
-          <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers">Example Servers</a>
+          <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/nextjs">NextJs</a>
         </h1>
         <h1>Server for a custom API</h1>
         <div className={styles.components}>

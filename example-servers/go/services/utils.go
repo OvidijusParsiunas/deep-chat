@@ -28,14 +28,10 @@ func ProcessIncomingRequest(w *http.ResponseWriter, r *http.Request) (error, boo
 }
 
 func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatTextResponse{
-		Result: struct {
-			Text string `json:"text"`
-		}{
-			Text: text,
-		},
+		Text: text,
 	}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
@@ -46,14 +42,10 @@ func CreateTextResponse(w http.ResponseWriter, text string) ([]byte, error) {
 }
 
 func CreateImageResponse(w http.ResponseWriter, src string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatFileResponse{
-		Result: struct {
-			Files []File `json:"files"`
-		}{
-			Files: []File{{Type: "image", Src: src}},
-		},
+		Files: []File{{Type: "image", Src: src}},
 	}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
@@ -77,8 +69,8 @@ func ErrorHandler(f func(w http.ResponseWriter, r *http.Request) error) http.Han
 }
 
 func createErrorResponse(w http.ResponseWriter, text string) ([]byte, error) {
-	// Create a response to Deep Chat using the Result format:
-	// https://deepchat.dev/docs/connect/#Result
+	// Create a response to Deep Chat using the Response format:
+	// https://deepchat.dev/docs/connect/#Response
 	response := DeepChatErrorResponse{
 		Error: text,
 	}

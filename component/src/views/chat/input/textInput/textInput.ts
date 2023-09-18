@@ -61,9 +61,7 @@ export class TextInputEl {
       inputElement.classList.add('text-input-disabled');
     } else {
       inputElement.contentEditable = 'true';
-      inputElement.onfocus = this.onFocus.bind(this);
-      inputElement.addEventListener('keydown', this.onKeydown.bind(this));
-      inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
+      this.addEventListeners(inputElement, textInput);
     }
     Object.assign(inputElement.style, textInput?.styles?.text);
     Object.assign(inputElement.style, textInput?.placeholder?.style);
@@ -88,7 +86,16 @@ export class TextInputEl {
     inputElement.contentEditable = isEditable ? 'true' : 'false';
   }
 
-  private onFocus() {
+  private addEventListeners(inputElement: HTMLElement, textInput?: TextInput) {
+    inputElement.onfocus = this.onFocus.bind(this, textInput?.styles?.focus);
+    if (textInput?.styles?.focus) {
+      inputElement.onblur = this.onBlur.bind(this, textInput.styles.focus, textInput?.styles?.container);
+    }
+    inputElement.addEventListener('keydown', this.onKeydown.bind(this));
+    inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
+  }
+
+  private onFocus(focusStyle?: CustomStyle) {
     if (Browser.IS_SAFARI) {
       // timeout used for a bug fix where the user clicks on placeholder text but cursor will not be there
       setTimeout(() => {
@@ -97,6 +104,12 @@ export class TextInputEl {
     } else {
       this.removeTextIfPlaceholder();
     }
+    Object.assign(this.elementRef.style, focusStyle);
+  }
+
+  private onBlur(focusStyle: CustomStyle, containerStyle?: CustomStyle) {
+    StyleUtils.unsetStyle(this.elementRef, focusStyle);
+    if (containerStyle) Object.assign(this.elementRef.style, containerStyle);
   }
 
   private static createContainerElement(containerStyle?: CustomStyle) {

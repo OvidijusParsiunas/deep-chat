@@ -3,7 +3,7 @@ import LiveData from './liveData';
 import React from 'react';
 
 // using child to prevent component re-render
-const EventText = React.forwardRef((_, ref) => {
+const EventText = React.forwardRef(({displayConsole}, ref) => {
   const [eventsText, setEventsText] = React.useState(['']);
   React.useImperativeHandle(ref, () => {
     const closureEventsText = [];
@@ -22,15 +22,17 @@ const EventText = React.forwardRef((_, ref) => {
       },
     };
   });
-  return (
+  return displayConsole ? (
     <div>
-      Latest transaction data:
+      Console:
       <LiveData data={eventsText}></LiveData>
     </div>
+  ) : (
+    <div></div>
   );
 });
 
-export default function ComponentContainerInterceptors({children, propertyName}) {
+export default function ComponentContainerInterceptors({children, propertyName, displayConsole}) {
   const containerRef = React.useRef(null);
   const eventTextRef = React.useRef(null);
 
@@ -55,7 +57,7 @@ export default function ComponentContainerInterceptors({children, propertyName})
         <ComponentContainer>{children}</ComponentContainer>
       </div>
       <div className="documentation-example-container method-example-container">
-        <EventText ref={eventTextRef}></EventText>
+        <EventText ref={eventTextRef} displayConsole={displayConsole}></EventText>
       </div>
     </div>
   );

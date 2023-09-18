@@ -3,8 +3,7 @@ import {CohereSummarizationResult} from '../../types/cohereResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {CompletionsHandlers} from '../serviceIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
@@ -22,13 +21,13 @@ export class CohereSummarizationIO extends CohereIO {
     return {text: mostRecentMessageText, ...bodyCopy};
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body, messages);
   }
 
-  override async extractResultData(result: CohereSummarizationResult): Promise<Result> {
+  override async extractResultData(result: CohereSummarizationResult): Promise<Response> {
     if (result.message) throw result.message;
     return {text: result.summary || ''};
   }

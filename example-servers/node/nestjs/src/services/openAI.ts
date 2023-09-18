@@ -31,9 +31,9 @@ export class OpenAI {
         Authorization: 'Bearer ' + process.env.OPENAI_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.choices[0].message.content}};
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {text: response.data.choices[0].message.content};
   }
 
   async chatStream(body: Request['body'], res: Response) {
@@ -59,9 +59,9 @@ export class OpenAI {
           result.choices.forEach((choice: {delta?: {content: string}}) => {
             delta += choice.delta?.content || '';
           });
-          // Sends response back to Deep Chat using the Result format:
-          // https://deepchat.dev/docs/connect/#Result
-          res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
+          // Sends response back to Deep Chat using the Response format:
+          // https://deepchat.dev/docs/connect/#Response
+          res.write(`data: ${JSON.stringify({text: delta})}\n\n`);
         }
       } catch (e) {
         console.error('Error when retrieving a stream chunk');
@@ -91,10 +91,8 @@ export class OpenAI {
         Authorization: 'Bearer ' + process.env.OPENAI_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {
-      result: {files: [{type: 'image', src: response.data.data[0].url}]},
-    };
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {files: [{type: 'image', src: response.data.data[0].url}]};
   }
 }

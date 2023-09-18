@@ -13,6 +13,8 @@ export class FileMessages {
     return FileMessageUtils.processContent(imageElement, imageElement.src);
   }
 
+  // WORK - should base64 images be clickable?
+  // WORK - image still does not scroll down when loaded
   public static async addNewImageMessage(messages: Messages, imageData: MessageFile, isAI: boolean, isInitial = false) {
     const image = FileMessages.createImage(imageData, messages.elementRef);
     const elements = messages.createNewMessageElement('', isAI);

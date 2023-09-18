@@ -45,6 +45,40 @@ chatElementRef.getMessages();
 
 <LineBreak></LineBreak>
 
+### `clearMessages` {#clearMessages}
+
+- Type: (`isReset?: boolean`) => `void`
+
+Clear all messages in the chat. By default - [`introPanel`](./introPanel) and [`introMessage`](./messages#introMessage) are displayed again, however you can pass
+a _false_ argument to prevent this.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'clearMessages'} displayResults={false}>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    directConnection={{demo: true}}
+    initialMessages={[
+      {text: 'What is 2 + 2?', role: 'user'},
+      {text: 'The result of 2 + 2 is 4.', role: 'ai'},
+      {text: 'Wrong, it is 5.', role: 'user'},
+      {text: 'You are correct, the result of 2 + 2 is 5.', role: 'ai'},
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.clearMessages();
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `submitUserMessage` {#submitUserMessage}
 
 - Type: (`text: string`) => `void`

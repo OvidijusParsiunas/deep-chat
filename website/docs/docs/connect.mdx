@@ -22,11 +22,11 @@ The outgoing Deep Chat request body is encapsulated in one of the following form
 
 <h3>Response message</h3>
 
-Response from the target server needs to use the [`Result`](#Result) JSON type.
+Response from the target server needs to use the [`Response`](#Response) JSON type.
 
 :::tip
-If you don't want / can't change the target server to handle the required object types, you can use the [`requestInterceptor`](interceptors/#requestInterceptor)
-and [`responseInterceptor`](interceptors/#responseInterceptor) properties to augment the incoming/outgoing message details.
+If you don't want / can't change the target server to handle the required object types, use the [`interceptor`](./interceptors) properties
+to augment the transferred objects or the [`handler`](#Handler) function to control the request code.
 :::
 
 <h3>Examples</h3>
@@ -39,6 +39,7 @@ import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import YoutubeLogo from '/img/youtube.png';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 
@@ -48,7 +49,7 @@ import Tabs from '@theme/Tabs';
 
 - Type: [`Request`](#Request)
 
-Configuration for the outgoing message HTTP requests.
+Configuration for the outgoing network requests to the target server.
 
 #### Example
 
@@ -102,13 +103,15 @@ Configuration for the outgoing message HTTP requests.
 
 ### `stream` {#stream}
 
-- Type: `boolean`
+- Type: `boolean` | {`simulation?: boolean | number`}
 
-If the target service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type, you
-can stream the response messages into the chat. This is only supported for text messages.
-Please see [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server.
+Used to stream text responses from the target service. <br />
+If the service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type,
+you can asynchronously stream the incoming events by setting this to _true_. See [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server. <br />
+Alternatively, use the `simulation` object property to facilitate a <b>stream-like</b> experience for regular responses (incl. [websocket](#Websocket)). You can also control
+the millisecond interim of each word's appearance by assigning it a number with the default being _70_.
 
-#### Example
+#### Stream Service Example
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -134,6 +137,43 @@ Please see [`examples`](https://deepchat.dev/examples/servers) on how to set thi
 
 <deep-chat
   stream="true"
+  directConnection='{"demo": true}'
+  containerStyle='{"borderRadius": "8px"}'
+  introMessage="The response message bubble will be populated gradually with text events."
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Regular Service Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    stream={{simulation: 150}}
+    directConnection={{demo: true}}
+    introMessage={`The response message bubble will be populated gradually with text events.`}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat stream='{"simulation": 150}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  stream='{"simulation": 150}'
   directConnection='{"demo": true}'
   containerStyle='{"borderRadius": "8px"}'
   introMessage="The response message bubble will be populated gradually with text events."
@@ -215,7 +255,8 @@ Types shared with other component properties:
   &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `additionalBodyProps?: {[string]: any}`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`websocket?: Websocket`](#Websocket) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`websocket?: Websocket`](#Websocket), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`handler?: Handler`](#Handler) <br />
   }
 
 - Default: _{ method: "POST" }_
@@ -274,14 +315,11 @@ Object used to configure the outgoing messages' HTTP request settings. <br />
 
 <LineBreak></LineBreak>
 
-### `Result` {#Result}
+### `Response` {#Response}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp `result?:` {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp `error?: string` <br />
-  }
+- Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile), `error?: string`}
 
-Object containing response information from the target service: <br />
+Object containing response information from the target service. It should have _one_ of these properties: <br />
 `text` is the content for a text message. <br />
 `files` is an array that encapsulates details on the response files. <br />
 `error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](./messages#errorMessages)
@@ -297,11 +335,11 @@ This is used to establish a websocket connection with your server. Enable it by 
 as a `boolean` _true_ or as a string [connection protocol](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#creating_a_websocket_object)
 (or an array of strings for multiple protocols). <br />
 It is important to note that exchanged messages must be Stringified JSONs where Deep Chat will send its messages using the [Request message](connect) format
-and the server must send its messages using the [`Result`](#Result) format. Example messages: <br />
+and the server must send its messages using the [`Response`](#Response) format. Example messages: <br />
 Deep Chat message: <br />
 `'{"messages":[{"role":"user","text":"Message from Deep Chat"}]}'` <br />
 Server message: <br />
-`'{"result":{"text":"Message from the server"}}'`
+`'{"text":"Message from the server"}'`
 
 #### Example
 
@@ -346,3 +384,145 @@ Check the [websocket server template](https://github.com/OvidijusParsiunas/deep-
 :::
 
 <LineBreak></LineBreak>
+
+### `Handler` {#Handler}
+
+- Type: (`body: any`, [`signals: Signals`](#Signals)) => `void`
+
+This function gives developers full control for making server requests using their own code. <br /> It is invoked when the user
+attempts to send a message and consists of two core arguments: <br />
+`body` is an object that contains the outgoing message details and uses the [`Request message`](./connect) type. <br />
+`signals` is a map of functions which are used to notify Deep Chat on the status of the request and its result. The available
+signal functions differ based on the type of connection you are establishing. See examples below.
+
+<a href="https://youtu.be/ySU7Tj99mbA?si=DDDIvf1s_5WBr9Pc">
+  <img src={YoutubeLogo} width="30" style={{float: 'left', marginRight: '10px', marginTop: '-2px'}} />
+  Video demo
+</a>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    request={{
+      handler: (body, signals) => {
+        signals.onResponse({text: 'Handler response'});
+      },
+    }}
+    containerStyle={{borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Basic">
+
+```js
+chatElementRef.request = {
+  handler: (body, signals) => {
+    try {
+      fetch('custom-url).then((response) => {
+        signals.onResponse({text: 'Handler response'}); // displays the response text message
+      })
+    } catch (e) {
+      signals.onResponse({error: 'Error'}); // displays an error message
+    }
+  }
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Stream">
+
+```js
+chatElementRef.stream = true;
+chatElementRef.request = {
+  handler: (body, signals) => {
+    try {
+      // this is PSEUDO CODE for creating a stream
+      fetchEventSource('custom-url', {
+        async onopen(response) {
+          if (response.ok) {
+            signals.onOpen(); // stops the loading bubble
+          } else {
+            signals.onResponse({error: 'error'}); // displays an error message
+          }
+        },
+        onmessage(message) {
+          signals.onResponse({text: message}); // adds text into the message bubble
+        },
+        onerror(message) {
+          signals.onResponse({error: message}); // displays an error message
+        },
+        onclose() {
+          signals.onClose(); // The stop button will be changed back to submit button
+        },
+      });
+      // triggered when the user clicks the stop button
+      signals.stopClicked.listener = () => {
+        // logic to stop your stream, such as creating an abortController
+      };
+    } catch (e) {
+      signals.onResponse({error: 'error'}); // displays an error message
+    }
+  },
+};
+```
+
+</TabItem>
+<TabItem value="ts" label="Websocket">
+
+```js
+// this handler is invoked when the component is loaded
+chatElementRef.request = {
+  websocket: true,
+  handler: (_, signals) => {
+    try {
+      const websocket = new WebSocket('custom-url');
+      websocket.onopen = () => {
+        signals.onOpen(); // enables the user to send messages
+      };
+      websocket.onmessage = (message) => {
+        const response = JSON.parse(message.data);
+        signals.onResponse(response); // displays a text message from the server
+      };
+      websocket.onclose = () => {
+        signals.onClose(); // stops the user from sending messages
+      };
+      websocket.onerror = () => {
+        // 'Connection error' is a special string that will also display in Deep Chat
+        signals.onResponse({error: 'Connection error'});
+      };
+      // triggered when the user sends a message
+      signals.newUserMessage.listener = (body) => {
+        websocket.send(JSON.stringify(body));
+      };
+    } catch (e) {
+      signals.onResponse({error: 'error'}); // displays an error message
+      signals.onClose(); // stops the user from sending messages
+    }
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+Error handling must be done within the `handler` function.
+:::
+
+<LineBreak></LineBreak>
+
+#### `Signals` {#Signals}
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;[`onResponse: (response: Response) => void`](#Response), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`onOpen: () => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`onClose: () => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`stopClicked: {listener: () => void}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`newUserMessage: {listener: (body: any) => void}` <br />
+  }
+
+Object containing functions that are used to notify the Deep Chat component about the status of the current request.
+The `stopClicked` and `newUserMessage` functions are triggered by Deep Chat itself and contain `listener` properties
+which can be assigned with custom functions to listen for when they are called (see the examples above).

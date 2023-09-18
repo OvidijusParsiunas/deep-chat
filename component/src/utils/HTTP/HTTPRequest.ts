@@ -1,22 +1,25 @@
-import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
-import {OpenAIConverseResult} from '../../types/openAIResult';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {ResponseDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
+import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
+import {Stream} from './stream';
 
 // prettier-ignore
 export type HandleVerificationResult = (
   result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
 
-type Finish = () => void;
-
 export class HTTPRequest {
-  public static request(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
-    const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} =
-      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+  // prettier-ignore
+  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+    const requestDetails: ResponseDetails = {body, headers: io.requestSettings?.headers};
+    const {body: interceptedBody, headers: interceptedHeaders, error} =
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
+    const {onFinish} = io.completionsHandlers;
+    if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
+    if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
     fetch(io.requestSettings?.url || io.url || '', {
@@ -28,15 +31,22 @@ export class HTTPRequest {
         responseValid = !!response.ok;
         return response;
       })
-      .then((response) => HTTPRequest.processResponseByType(response))
+      .then((response) => RequestUtils.processResponseByType(response))
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
-        const resultData = await io.extractResultData(io.deepChat.responseInterceptor?.(result) || result);
+        const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
+        const resultData = await io.extractResultData(finalResult);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
+        if (!resultData || typeof resultData !== 'object')
+          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.pollingInAnotherRequest) return;
-        messages.addNewMessage(resultData, true, true);
-        onFinish();
+        if (io.deepChat.stream && resultData.text) {
+          Stream.simulate(messages, io.streamHandlers, resultData.text);
+        } else {
+          messages.addNewMessage(resultData, true, true);
+          onFinish();
+        }
       })
       .catch((err) => {
         RequestUtils.displayError(messages, err);
@@ -44,69 +54,18 @@ export class HTTPRequest {
       });
   }
 
-  // TO-DO can potentially offer an option to simulate a stream where a response message can be streamed word by word;
-  // this can also be used for websockets
   // prettier-ignore
-  public static requestStream(io: ServiceIO, body: object, messages: Messages,
-      onOpen: () => void, onClose: () => void, abortStream: AbortController, stringifyBody = true) {
-    const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders} =
-      io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
-    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, onOpen, onClose);
-    let textElement: HTMLElement | null = null;
-    fetchEventSource(io.requestSettings?.url || io.url || '', {
-      method: io.requestSettings?.method || 'POST',
-      headers: interceptedHeaders,
-      body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
-      openWhenHidden: true, // keep stream open when browser tab not open
-      async onopen(response: Response) {
-        if (response.ok) {
-          textElement = messages.addNewStreamedMessage();
-          return onOpen();
-        }
-        const result = await HTTPRequest.processResponseByType(response);
-        throw result;
-      },
-      onmessage(message: EventSourceMessage) {
-        console.log(message);
-        if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
-          const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
-          io.extractResultData?.(response).then((text) => {
-            if (textElement) messages.updateStreamedMessage(text.text as string, textElement);            
-          });
-        }
-      },
-      onerror(err) {
-        onClose();
-        throw err; // need to throw otherwise stream will retry infinitely
-      },
-      onclose() {
-        messages.finaliseStreamedMessage();
-        onClose();
-      },
-      signal: abortStream.signal,
-    }).catch((err) => {
-      // allowing extractResultData to attempt extract error message and throw it
-      io.extractResultData?.(err).then(() => {
-        RequestUtils.displayError(messages, err);
-      }).catch((parsedError) => {
-        RequestUtils.displayError(messages, parsedError);
-      });
-    });
-  }
-
-  // prettier-ignore
-  public static executePollRequest(io: ServiceIO,
-      url: string, requestInit: RequestInit, messages: Messages, onFinish: Finish) {
+  public static executePollRequest(io: ServiceIO, url: string, requestInit: RequestInit, messages: Messages) {
     console.log('polling');
+    const {onFinish} = io.completionsHandlers;
     fetch(url, requestInit)
       .then((response) => response.json())
       .then(async (result: object) => {
         if (!io.extractPollResultData) return;
-        const resultData = await io.extractPollResultData(io.deepChat.responseInterceptor?.(result) || result);
+        const resultData = await io.extractPollResultData(await io.deepChat.responseInterceptor?.(result) || result);
         if (resultData.timeoutMS) {
           setTimeout(() => {
-            HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);            
+            HTTPRequest.executePollRequest(io, url, requestInit, messages);            
           }, resultData.timeoutMS);
         } else {
           console.log('finished polling');
@@ -120,14 +79,22 @@ export class HTTPRequest {
       });
   }
 
-  public static poll(io: ServiceIO, body: object, messages: Messages, onFinish: Finish, stringifyBody = true) {
+  // prettier-ignore
+  public static async poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers} = io.deepChat.requestInterceptor?.(requestDetails) || requestDetails;
+    const {body: interceptedBody, headers, error} =
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
+    if (error) return HTTPRequest.onInterceptorError(messages, error);
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit = {method, body: requestBody, headers};
-    HTTPRequest.executePollRequest(io, url, requestInit, messages, onFinish);
+    HTTPRequest.executePollRequest(io, url, requestInit, messages);
+  }
+
+  private static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
+    messages.addNewErrorMessage('service', error);
+    onFinish?.();
   }
 
   // prettier-ignore
@@ -137,7 +104,7 @@ export class HTTPRequest {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
     fetch(url, { method, headers, body: body || null })
-      .then((response) => HTTPRequest.processResponseByType(response))
+      .then((response) => RequestUtils.processResponseByType(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);
       })
@@ -145,17 +112,5 @@ export class HTTPRequest {
         onFail(ErrorMessages.CONNECTION_FAILED);
         console.error(err);
       });
-  }
-
-  private static processResponseByType(response: Response) {
-    const contentType = response.headers.get('content-type');
-    if (contentType?.includes('application/json')) {
-      return response.json();
-    }
-    // when no contentType - the response is returned primarily for azure summarization to allow examination of headers
-    if (contentType?.includes('text/plain') || !contentType) {
-      return response;
-    }
-    return response.blob();
   }
 }

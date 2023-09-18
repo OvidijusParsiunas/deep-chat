@@ -3,9 +3,8 @@ import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {CompletionsHandlers} from '../serviceIO';
 import {AzureUtils} from './utils/azureUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
@@ -33,13 +32,13 @@ export class AzureTranslationIO extends DirectServiceIO {
     return [{Text: mostRecentMessageText}];
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(pMessages);
-    HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish);
+    HTTPRequest.request(this, body as unknown as object, messages);
   }
 
-  override async extractResultData(result: AzureTranslationResult): Promise<Result> {
+  override async extractResultData(result: AzureTranslationResult): Promise<Response> {
     if (Array.isArray(result)) {
       return {text: result[0].translations?.[0].text || ''};
     }

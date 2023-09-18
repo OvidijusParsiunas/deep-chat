@@ -28,9 +28,9 @@ export class HuggingFace {
           if (result.error) {
             next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.generated_text}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: result.generated_text});
           }
         });
       }
@@ -87,9 +87,9 @@ export class HuggingFace {
           if (result.error) {
             next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: parseResult(result)}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: parseResult(result)});
           }
         });
       }

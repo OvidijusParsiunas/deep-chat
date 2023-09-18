@@ -29,16 +29,16 @@ function Logos(props) {
     >
       <div className="start-page-logo start-panel-logo">
         <a href="https://codesandbox.io/s/deep-chat-react-ythnyl?file=/src/App.tsx" target="_blank">
-          <img src={reactLogo} width="42" style={{paddingTop: 9}} />
+          <img src={reactLogo} width="41" style={{paddingTop: 10}} />
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
-        <a href="https://codesandbox.io/s/deep-chat-vue3-7y99jq?file=/src/App.vue" target="_blank">
-          <img src={vueLogo} width="39" style={{paddingTop: 10}} />
+        <a href="https://deepchat.dev/examples/frameworks/#vue" target="_blank">
+          <img src={vueLogo} width="38" style={{paddingTop: 10}} />
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
-        <a href="https://codesandbox.io/s/deep-chat-svelte-832jcc?file=/App.svelte" target="_blank">
+        <a href="https://deepchat.dev/examples/frameworks#svelte" target="_blank">
           <img src={svelteLogo} width="32" style={{paddingTop: 8}} />
         </a>
       </div>
@@ -79,34 +79,50 @@ export default function CreateComponent(props) {
   const [fadeOutContent, setFadeOutContent] = React.useState(false);
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setInitialDisplay(true);
-      setTimeout(() => {
-        setAllowPointerEvents(true);
-        setDisplayInstall(true);
-        setTimeout(() => {
-          setDisplayDefineMarkup(true);
-          setTimeout(() => {
-            setDisplayDone(true);
-            setTimeout(() => {
-              setDisplayExamplesTitle(true);
-              setTimeout(() => {
-                setDisplayLogos(true);
-                setTimeout(() => {
-                  setTimeout(() => {
-                    setDisplayNavigation(true);
-                    setTimeout(() => {
-                      setItemsHoverable(true);
-                    }, 300);
-                  }, 500);
-                }, 1000);
-              }, 800);
-            }, 2400);
-          }, 1800);
-        }, 1600);
-      }, 1400);
-    }, 100);
+    const mountedState = {isMounted: true};
+    startAnimation(mountedState);
+    return () => {
+      mountedState.isMounted = false;
+    };
   }, []);
+
+  // prettier-ignore
+  const startAnimation = (mountedState) => {
+      customTimeout(() => {
+        setInitialDisplay(true);
+        customTimeout(() => {
+          setAllowPointerEvents(true);
+          setDisplayInstall(true);
+          customTimeout(() => {
+            setDisplayDefineMarkup(true);
+            customTimeout(() => {
+              setDisplayDone(true);
+              customTimeout(() => {
+                setDisplayExamplesTitle(true);
+                customTimeout(() => {
+                  setDisplayLogos(true);
+                  customTimeout(() => {
+                    customTimeout(() => {
+                      setDisplayNavigation(true);
+                      customTimeout(() => {
+                        setItemsHoverable(true);
+                      }, 300, mountedState);
+                    }, 500, mountedState);
+                  }, 1000, mountedState);
+                }, 800, mountedState);
+              }, 2400, mountedState);
+            }, 1800, mountedState);
+          }, 1600, mountedState);
+        }, 1400, mountedState);
+      }, 100, mountedState);
+    }
+
+  function customTimeout(displayFunc, ms, mountedState) {
+    setTimeout(() => {
+      if (!mountedState.isMounted) return;
+      displayFunc();
+    }, ms);
+  }
 
   return (
     <div
@@ -151,7 +167,7 @@ export default function CreateComponent(props) {
         }`}
         onClick={() => navigate(setAllowPointerEvents, setFadeOutContent, setInitialDisplay, props.setOptionNumber, 3)}
       >
-        &#8594; Connect to a service
+        Connect to a service &#8594;
       </div>
     </div>
   );

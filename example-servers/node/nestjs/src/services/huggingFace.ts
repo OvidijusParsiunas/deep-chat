@@ -21,9 +21,9 @@ export class HuggingFace {
         },
       }
     );
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: response.data.generated_text}};
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {text: response.data.generated_text};
   }
 
   private static createConversationBody(messages: {text: string; role: string}[]) {
@@ -59,8 +59,8 @@ export class HuggingFace {
         Authorization: 'Bearer ' + process.env.HUGGING_FACE_API_KEY,
       },
     });
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    return {result: {text: parseResult(response.data)}};
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    return {text: parseResult(response.data)};
   }
 }

@@ -4,17 +4,17 @@ import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
-import {Result as MessageData} from '../../../types/result';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {CustomStyle} from '../../../types/styles';
+import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {FileMessages} from './fileMessages';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
-import {Demo} from '../../../types/demo';
 import {Remarkable} from 'remarkable';
 import {AvatarEl} from './avatar';
 import {Name} from './name';
@@ -35,19 +35,22 @@ export interface MessageElements {
 export class Messages {
   elementRef: HTMLElement;
   readonly messageStyles?: MessageStyles;
-  private readonly _messageElementRefs: MessageElements[] = [];
+  private _messageElementRefs: MessageElements[] = [];
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
+  private readonly _onClearMessages?: () => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly displayServiceErrorMessages?: boolean;
   private _remarkable: Remarkable;
   private _textToSpeech?: ProcessedTextToSpeechConfig;
   private _introPanel?: IntroPanel;
+  private _introMessage?: string;
   private _streamedText = '';
   messages: MessageContent[] = [];
+  customDemoResponse?: DemoResponse;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
@@ -58,6 +61,7 @@ export class Messages {
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
+    this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
@@ -65,6 +69,7 @@ export class Messages {
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
+    deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
@@ -81,6 +86,7 @@ export class Messages {
 
   private prepareDemo(demo: Demo) {
     if (typeof demo === 'object') {
+      if (demo.response) this.customDemoResponse = demo.response;
       if (demo.displayErrors) {
         if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
@@ -98,9 +104,12 @@ export class Messages {
     return container;
   }
 
-  private addIntroductoryMessage(introMessage: string) {
-    const elements = this.createAndAppendNewMessageElement(introMessage, true);
-    this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+  private addIntroductoryMessage(introMessage?: string) {
+    if (introMessage) this._introMessage = introMessage;
+    if (this._introMessage) {
+      const elements = this.createAndAppendNewMessageElement(this._introMessage, true);
+      this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+    }
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
@@ -193,7 +202,7 @@ export class Messages {
     return messageElements;
   }
 
-  public addNewMessage(data: MessageData, isAI: boolean, update: boolean, isInitial = false) {
+  public addNewMessage(data: Response, isAI: boolean, update: boolean, isInitial = false) {
     if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
       if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(data.text, this._textToSpeech);
@@ -211,15 +220,16 @@ export class Messages {
   }
 
   public sendClientUpdate(message: MessageContent, isInitial = false) {
-    this._onNewMessage?.(message, isInitial);
+    this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
   }
 
   // prettier-ignore
   private removeMessageOnError() {
-    const lastTextElement = this._messageElementRefs[this._messageElementRefs.length - 1]?.bubbleElement;
-    if ((lastTextElement?.classList.contains('streamed-message') && lastTextElement.textContent === '') ||
-        lastTextElement?.classList.contains('loading-message-text')) {
-      lastTextElement.remove();
+    const lastMessage = this._messageElementRefs[this._messageElementRefs.length - 1];
+    const lastMessageBubble = lastMessage?.bubbleElement;
+    if ((lastMessageBubble?.classList.contains('streamed-message') && lastMessageBubble.textContent === '') ||
+      lastMessageBubble?.classList.contains('loading-message-text')) {
+      lastMessage.outerContainer.remove();
       this._messageElementRefs.pop();
     }
   }
@@ -266,10 +276,22 @@ export class Messages {
     return undefined;
   }
 
+  private getLastMessageElement() {
+    return this.elementRef.children[this.elementRef.children.length - 1];
+  }
+
+  private getLastMessageBubbleElement() {
+    return Array.from(this.getLastMessageElement()?.children?.[0].children || []).find((element) => {
+      return element.classList.contains('message-bubble');
+    });
+  }
+
   public isLastMessageError() {
-    return this.elementRef.children[this.elementRef.children.length - 1]?.children?.[0]?.children?.[0]?.classList.contains(
-      'error-message-text'
-    );
+    return this.getLastMessageBubbleElement()?.classList.contains('error-message-text');
+  }
+
+  public removeError() {
+    if (this.isLastMessageError()) this.getLastMessageElement().remove();
   }
 
   public addLoadingMessage() {
@@ -305,6 +327,7 @@ export class Messages {
   }
 
   public finaliseStreamedMessage() {
+    if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
     this.messages[this.messages.length - 1].text = this._streamedText;
     this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
@@ -337,6 +360,33 @@ export class Messages {
         });
       })
     );
+  }
+
+  private clearMessages(isReset?: boolean) {
+    const retainedElements: MessageElements[] = [];
+    this._messageElementRefs.forEach((message) => {
+      const bubbleClasslist = message.bubbleElement.classList;
+      if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains('streamed-message')) {
+        retainedElements.push(message);
+      } else {
+        message.outerContainer.remove();
+      }
+    });
+    // this is a form of cleanup as this._messageElementRefs does not contain error messages
+    // and can only be deleted by direct search
+    Array.from(this.elementRef.children).forEach((messageElement) => {
+      const bubbleClasslist = messageElement.children[0]?.children[0];
+      if (bubbleClasslist?.classList.contains('error-message-text')) {
+        messageElement.remove();
+      }
+    });
+    this._messageElementRefs = retainedElements;
+    if (isReset !== false) {
+      if (this._introPanel?._elementRef) this._introPanel.display();
+      this.addIntroductoryMessage();
+    }
+    this.messages.splice(0, this.messages.length);
+    this._onClearMessages?.();
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it is downloads later

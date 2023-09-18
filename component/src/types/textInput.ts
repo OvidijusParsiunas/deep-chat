@@ -3,6 +3,7 @@ import {CustomStyle} from './styles';
 export interface TextInputStyles {
   text?: CustomStyle;
   container?: CustomStyle;
+  focus?: CustomStyle;
 }
 
 export interface Placeholder {

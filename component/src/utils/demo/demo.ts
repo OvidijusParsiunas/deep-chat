@@ -1,7 +1,10 @@
 import {ResponseInterceptor} from '../../types/interceptors';
 import {Messages} from '../../views/chat/messages/messages';
+import {StreamHandlers} from '../../services/serviceIO';
 import {MessageContent} from '../../types/messages';
-import {Result} from '../../types/result';
+import {DemoResponse} from '../../types/demo';
+import {Response} from '../../types/response';
+import {Stream} from '../HTTP/stream';
 
 type Finish = () => void;
 
@@ -49,37 +52,36 @@ export class Demo {
     return 'Wow, very cool files!';
   }
 
+  private static getCustomResponse(customResponse: DemoResponse, requestMessage: MessageContent) {
+    if (typeof customResponse === 'function') return customResponse(requestMessage);
+    return customResponse;
+  }
+
+  private static getResponse(messages: Messages): Response {
+    return messages.customDemoResponse
+      ? Demo.getCustomResponse(messages.customDemoResponse, messages.messages[messages.messages.length - 1])
+      : {text: Demo.generateResponse(messages)};
+  }
+
+  // timeout is used to simulate a timeout for a response to come back
   public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
-    const responseText = Demo.generateResponse(messages);
-    setTimeout(() => {
-      const message = {text: responseText};
-      const preprocessedMessage = responseInterceptor?.(message) || message;
-      messages.addNewMessage(preprocessedMessage as Result, true, true);
+    const response = Demo.getResponse(messages);
+    setTimeout(async () => {
+      const preprocessedResponse = (await responseInterceptor?.(response)) || response;
+      if (preprocessedResponse.error) {
+        messages.addNewErrorMessage('service', preprocessedResponse.error);
+      } else {
+        messages.addNewMessage(preprocessedResponse, true, true);
+      }
       onFinish();
     }, 400);
   }
 
-  public static requestStream(messages: Messages, onOpen: () => void, onClose: () => void) {
-    const responseText = Demo.generateResponse(messages).split(' ');
+  // timeout is used to simulate a timeout for a response to come back
+  public static requestStream(messages: Messages, sh: StreamHandlers) {
     setTimeout(() => {
-      const textElement = messages.addNewStreamedMessage();
-      onOpen();
-      Demo.populateMessages(textElement, responseText, messages, onClose);
+      const responseText = Demo.getResponse(messages)?.text;
+      Stream.simulate(messages, sh, responseText);
     }, 400);
-  }
-
-  // prettier-ignore
-  private static populateMessages(
-      textElement: HTMLElement, responseText: string[], messages: Messages, onClose: () => void, wordIndex = 0) {
-    setTimeout(() => {
-      const word = responseText[wordIndex];
-      if (word) {
-        messages.updateStreamedMessage(`${word} `, textElement);
-        Demo.populateMessages(textElement, responseText, messages, onClose, wordIndex + 1);
-      } else {
-        messages.finaliseStreamedMessage();
-        onClose();
-      }
-    }, 70);
   }
 }

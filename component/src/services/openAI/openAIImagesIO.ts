@@ -1,4 +1,3 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
@@ -9,7 +8,7 @@ import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAIImagesIO extends DirectServiceIO {
@@ -20,7 +19,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
 
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Images</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI DALL·E</b></div>
     <p><b>Insert text</b> to generate an image.</p>
     <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>
     <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should
@@ -70,8 +69,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, files: File[]) {
+  private callApiWithImage(messages: Messages, pMessages: MessageContent[], files: File[]) {
     let formData: FormData;
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     // if there is a mask image or text, call edit
@@ -85,24 +83,22 @@ export class OpenAIImagesIO extends DirectServiceIO {
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestUtils.temporarilyRemoveHeader(this.requestSettings,
-      HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
+      HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
-      this.callApiWithImage(messages, pMessages, completionsHandlers, files);
+      this.callApiWithImage(messages, pMessages, files);
     } else {
       if (!this.requestSettings) throw new Error('Request settings have not been set up');
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
       const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
-      HTTPRequest.request(this, body, messages, completionsHandlers.onFinish);
+      HTTPRequest.request(this, body, messages);
     }
   }
 
-  override async extractResultData(result: OpenAIImageResult): Promise<Result> {
+  override async extractResultData(result: OpenAIImageResult): Promise<Response> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
       if (imageData.url) return {src: imageData.url, type: 'image'};

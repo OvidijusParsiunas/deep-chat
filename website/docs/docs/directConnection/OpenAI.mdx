@@ -353,7 +353,7 @@ Types used in [`openAI`](#openAI) properties:
   }
 
 Object that is sent to Open AI's [`Chat`](https://platform.openai.com/docs/api-reference/chat/create) and [`Completions`](https://platform.openai.com/docs/api-reference/completions/create) API. <br />
-`model` is name of the model to be used by the API. Check out the model [endpoint compatibility table](https://platform.openai.com/docs/models/model-endpoint-compatibility). <br />
+`model` is the name of the model to be used by the API. Check out the model [endpoint compatibility table](https://platform.openai.com/docs/models/model-endpoint-compatibility). <br />
 `max_tokens` the maximum number of tokens to generate in the chat. See here for more [`info`](https://platform.openai.com/tokenizer). <br />
 `temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
 `top_p` is an alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. <br />

@@ -5,8 +5,10 @@ import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
+import {Websocket} from '../../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {TextInputEl} from '../../textInput/textInput';
+import {Signals} from '../../../../../types/handler';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
@@ -20,6 +22,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
+  private readonly _stopClicked: Signals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
@@ -33,9 +36,11 @@ export class SubmitButton extends InputButton<Styles> {
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
+    this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
     this.attemptOverwriteLoadingStyle(deepChat);
     this.changeToSubmitIcon();
+    this.assignHandlers();
   }
 
   // prettier-ignore
@@ -89,6 +94,22 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
+  private assignHandlers() {
+    this._serviceIO.completionsHandlers = {
+      onFinish: this.changeToSubmitIcon.bind(this),
+    };
+    this._serviceIO.streamHandlers = {
+      onOpen: this.changeToStopIcon.bind(this),
+      onClose: this.changeToSubmitIcon.bind(this),
+      abortStream: this._abortStream,
+      stopClicked: this._stopClicked,
+    };
+    const {stream} = this._serviceIO.deepChat;
+    if (typeof stream === 'object' && typeof stream.simulation === 'number') {
+      this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
+    }
+  }
+
   public submitFromInput() {
     if (this._inputElementRef.classList.contains('text-input-placeholder')) {
       this.submit(false, '');
@@ -100,6 +121,8 @@ export class SubmitButton extends InputButton<Styles> {
 
   // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
   // TO-DO - button should be disabled if websocket connection is not open
+  // TO-DO - should be disabled when websocket is connecting and option when loading history
+  // prettier-ignore
   public async submit(programmatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;
@@ -109,7 +132,7 @@ export class SubmitButton extends InputButton<Styles> {
       fileData = uploadedFilesData?.map((fileData) => fileData.file);
     }
     const submittedText = userText === '' ? undefined : userText;
-    if (this._isRequestInProgress) return;
+    if (this._isRequestInProgress || !Websocket.canSendMessage(this._serviceIO.websocket)) return;
     if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
       if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
     } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;
@@ -117,23 +140,17 @@ export class SubmitButton extends InputButton<Styles> {
     if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
     if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
     this._messages.addLoadingMessage();
-    if (!programmatic) TextInputEl.clear(this._inputElementRef);
-    const completionsHandlers = {
-      onFinish: this.changeToSubmitIcon.bind(this),
-    };
-    const streamHandlers = {
-      onOpen: this.changeToStopIcon.bind(this),
-      onClose: this.changeToSubmitIcon.bind(this),
-      abortStream: this._abortStream,
-    };
+    if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
+
     const requestContents = {text: submittedText, files: fileData};
-    this._serviceIO.callAPI(requestContents, this._messages, completionsHandlers, streamHandlers);
+    await this._serviceIO.callAPI(requestContents, this._messages);
     if (!programmatic) this._fileAttachments?.removeAllFiles();
   }
 
-  // This will not stop the stream on the server side
   private stopStream() {
+    // This will not stop the stream on the server side
     this._abortStream.abort();
+    this._stopClicked?.listener();
     this.changeToSubmitIcon();
   }
 
@@ -145,6 +162,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = false;
   }
 
+  // WORK - animation needs to be lowered
   private changeToLoadingIcon() {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);

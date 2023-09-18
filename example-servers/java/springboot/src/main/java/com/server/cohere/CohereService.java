@@ -44,8 +44,8 @@ public class CohereService {
 
     CohereChatResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Cohere");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseBody.getText());
   }
 
@@ -76,8 +76,8 @@ public class CohereService {
 
     CohereGenerateResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Cohere");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseBody.getGenerations()[0].getText());
   }
 
@@ -97,8 +97,8 @@ public class CohereService {
 
     CohereSummarizeResult responseBody = response.getBody();
     if (responseBody == null) throw new Exception("Unexpected response from Cohere");
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
     return new DeepChatTextRespose(responseBody.getSummary());
   }
 }

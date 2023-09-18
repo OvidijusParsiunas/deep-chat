@@ -3,10 +3,9 @@ import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageContent} from '../../types/messages';
-import {CompletionsHandlers} from '../serviceIO';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AzureTextToSpeechIO extends AzureSpeechIO {
@@ -46,13 +45,13 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     </speak>`;
   }
 
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[], completionsHandlers: CompletionsHandlers) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body as unknown as object, messages, completionsHandlers.onFinish, false);
+    HTTPRequest.request(this, body as unknown as object, messages, false);
   }
 
-  override async extractResultData(result: AzureTextToSpeechResult): Promise<Result> {
+  override async extractResultData(result: AzureTextToSpeechResult): Promise<Response> {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.readAsDataURL(result);

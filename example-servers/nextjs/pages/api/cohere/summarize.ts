@@ -28,9 +28,9 @@ async function handler(req: NextRequest) {
 
   const cohereResult = (await result.json()) as CohereSummarizationResult;
   if (cohereResult.message) throw cohereResult.message;
-  // Sends response back to Deep Chat using the Result format:
-  // https://deepchat.dev/docs/connect/#Result
-  return NextResponse.json({result: {text: cohereResult.summary}});
+  // Sends response back to Deep Chat using the Response format:
+  // https://deepchat.dev/docs/connect/#Response
+  return NextResponse.json({text: cohereResult.summary});
 }
 
 export default errorHandler(handler);

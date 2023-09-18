@@ -1,11 +1,10 @@
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {MessageContent} from '../../types/messages';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AssemblyAIAudioIO extends DirectServiceIO {
@@ -33,15 +32,13 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
     return !!files?.[0];
   }
 
-  // prettier-ignore
-  override callServiceAPI(messages: Messages, _: MessageContent[],
-      completionsHandlers: CompletionsHandlers, __: StreamHandlers, files?: File[]) {
+  override async callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    HTTPRequest.request(this, files[0], messages, completionsHandlers.onFinish, false);
+    HTTPRequest.request(this, files[0], messages, false);
   }
 
-  override async extractResultData(result: AssemblyAIResult): Promise<Result> {
+  override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
     const key = this.requestSettings?.headers?.['Authorization'] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);

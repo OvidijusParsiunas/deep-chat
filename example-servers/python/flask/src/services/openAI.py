@@ -35,9 +35,9 @@ class OpenAI:
         if "error" in json_response:
             raise Exception(json_response["error"]["message"])
         result = json_response["choices"][0]["message"]["content"]
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
-        return {"result": {"text": result}}
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
+        return {"text": result}
 
     def chat_stream(self, body):
         headers = {
@@ -71,9 +71,9 @@ class OpenAI:
                                 for choice in result["choices"]:
                                     delta += choice.get("delta",
                                                         {}).get("content", "")
-                                # Sends response back to Deep Chat using the Result format:
-                                # https://deepchat.dev/docs/connect/#Result
-                                yield "data: {}\n\n".format(json.dumps({"result": {"text": delta}}))
+                                # Sends response back to Deep Chat using the Response format:
+                                # https://deepchat.dev/docs/connect/#Response
+                                yield "data: {}\n\n".format(json.dumps({"text": delta}))
                                 accumulated_data = ""  # Reset the accumulated data
                             except json.JSONDecodeError:
                                 # Incomplete JSON string, continue accumulating lines
@@ -97,7 +97,6 @@ class OpenAI:
         json_response = response.json()
         if "error" in json_response:
             raise Exception(json_response["error"]["message"])
-        # Sends response back to Deep Chat using the Result format:
-        # https://deepchat.dev/docs/connect/#Result
-        return {"result": {
-            "files": [{"type": "image", "src": json_response["data"][0]["url"]}]}}
+        # Sends response back to Deep Chat using the Response format:
+        # https://deepchat.dev/docs/connect/#Response
+        return {"files": [{"type": "image", "src": json_response["data"][0]["url"]}]}

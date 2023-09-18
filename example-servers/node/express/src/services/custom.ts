@@ -5,9 +5,9 @@ export class Custom {
     // Text messages are stored inside request body using the Deep Chat JSON format:
     // https://deepchat.dev/docs/connect
     console.log(body);
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    res.json({text: 'This is a respone from ExpressJs server. Thankyou for your message!'});
   }
 
   public static async chatStream(body: Request['body'], res: Response) {
@@ -26,9 +26,9 @@ export class Custom {
     setTimeout(() => {
       const chunk = responseChunks[chunkIndex];
       if (chunk) {
-        // Sends response back to Deep Chat using the Result format:
-        // https://deepchat.dev/docs/connect/#Result
-        res.write(`data: ${JSON.stringify({result: {text: `${chunk} `}})}\n\n`);
+        // Sends response back to Deep Chat using the Response format:
+        // https://deepchat.dev/docs/connect/#Response
+        res.write(`data: ${JSON.stringify({text: `${chunk} `})}\n\n`);
         Custom.sendStream(res, responseChunks, chunkIndex + 1);
       } else {
         res.end();
@@ -50,8 +50,8 @@ export class Custom {
       // message objects are stored as strings and they will need to be parsed (JSON.parse) before processing
       console.log(req.body);
     }
-    // Sends response back to Deep Chat using the Result format:
-    // https://deepchat.dev/docs/connect/#Result
-    res.json({result: {text: 'This is a respone from ExpressJs server. Thankyou for your message!'}});
+    // Sends response back to Deep Chat using the Response format:
+    // https://deepchat.dev/docs/connect/#Response
+    res.json({text: 'This is a respone from ExpressJs server. Thankyou for your message!'});
   }
 }

@@ -8,6 +8,11 @@ export class FireEvents {
     deepChat.dispatchEvent(new CustomEvent('new-message', {detail: updateBody}));
   }
 
+  public static onClearMessages(deepChat: DeepChat) {
+    deepChat.onClearMessages();
+    deepChat.dispatchEvent(new CustomEvent('clear-messages'));
+  }
+
   public static onRender(deepChat: DeepChat) {
     deepChat.onComponentRender();
     deepChat.dispatchEvent(new CustomEvent('render'));

@@ -1,6 +1,5 @@
 import {StabilityAI, StabilityAIImageToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
-import {CompletionsHandlers, StreamHandlers} from '../serviceIO';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
@@ -9,9 +8,10 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {StabilityAIIO} from './stabilityAIIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
+// WORK - allow appropriate responses for invalid height etc
 export class StabilityAIImageToImageIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image';
   private readonly _imageWeight: number | undefined;
@@ -64,18 +64,17 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   }
 
   // prettier-ignore
-  override callServiceAPI(messages: Messages, pMessages: MessageContent[],
-      completionsHandlers: CompletionsHandlers, _: StreamHandlers, files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files) throw new Error('Image was not found');
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestUtils.temporarilyRemoveHeader(this.requestSettings,
-      HTTPRequest.request.bind(this, this, formData, messages, completionsHandlers.onFinish), false);
+      HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  override async extractResultData(result: StabilityAITextToImageResult): Promise<Result> {
+  override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
       return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};

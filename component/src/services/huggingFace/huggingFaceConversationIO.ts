@@ -2,7 +2,7 @@ import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContent} from '../../types/messages';
 import {HuggingFaceIO} from './huggingFaceIO';
-import {Result} from '../../types/result';
+import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceConversationIO extends HuggingFaceIO {
@@ -45,7 +45,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     } as unknown as {inputs: string};
   }
 
-  override async extractResultData(result: HuggingFaceConversationResult): Promise<Result> {
+  override async extractResultData(result: HuggingFaceConversationResult): Promise<Response> {
     if (result.error) throw result.error;
     return {text: result.generated_text || ''};
   }

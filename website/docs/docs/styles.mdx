@@ -282,14 +282,14 @@ Styling for the chat view's bottom area dedicated for text input and file button
 ### `textInput` {#textInput}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` {[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle)}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` {[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle), [`focus?: CustomStyle`](#CustomStyle)}, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` {`text?: string`, [`style?: CustomStyle`](#CustomStyle)}, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
   }
 
 Custom details for the chat's text input. <br />
-`styles` object defines the styling for the `text` element and its box `container`. <br />
+`styles` object defines the styling for the `text` element and its box `container`. The `focus` property is used to set the container style when it is focused. <br />
 `placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
 `style` can be used to customize it. <br />
 `characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
@@ -303,7 +303,8 @@ Custom details for the chat's text input. <br />
     textInput={{
       styles: {
         text: {color: 'black'},
-        container: {maxHeight: '50px', backgroundColor: '#f5f9ff', border: '1px solid #a2a2ff'},
+        container: {maxHeight: '50px', backgroundColor: '#f5f9ff'},
+        focus: {border: '2px solid #a2a2ff'},
       },
       placeholder: {text: 'Insert text here...', style: {color: '#4459a4'}},
       characterLimit: 10,
@@ -318,7 +319,11 @@ Custom details for the chat's text input. <br />
 ```html
 <deep-chat
   textInput='{
-    "styles": {"text": {"color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff", "border": "1px solid #a2a2ff"}},
+    "styles": {
+      "text": {"color": "black"},
+      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
+      "focus": {"border": "2px solid #a2a2ff"}
+    },
     "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
     "characterLimit": 10
   }'
@@ -333,7 +338,11 @@ Custom details for the chat's text input. <br />
 
 <deep-chat
   textInput='{
-    "styles": {"text": {"color": "black"}, "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff", "border": "1px solid #a2a2ff"}},
+    "styles": {
+      "text": {"color": "black"},
+      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
+      "focus": {"border": "2px solid #a2a2ff"}
+    },
     "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
     "characterLimit": 10
   }'
@@ -612,7 +621,7 @@ Due to the varying states, the styling is not automatically shared between one a
 <LineBreak></LineBreak>
 
 :::info
-When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to false and the `loading` property's `content` string for `text` or `svg` is not set,
+When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to _false_ and the `loading` property's `content` string for `text` or `svg` is not set,
 the submit button will have a loading animation.
 :::
 

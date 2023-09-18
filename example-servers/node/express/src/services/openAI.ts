@@ -40,9 +40,9 @@ export class OpenAI {
           if (result.error) {
             next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {text: result.choices[0].message.content}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({text: result.choices[0].message.content});
           }
         });
       }
@@ -82,9 +82,9 @@ export class OpenAI {
               result.choices.forEach((choice: {delta?: {content: string}}) => {
                 delta += choice.delta?.content || '';
               });
-              // Sends response back to Deep Chat using the Result format:
-              // https://deepchat.dev/docs/connect/#Result
-              res.write(`data: ${JSON.stringify({result: {text: delta}})}\n\n`);
+              // Sends response back to Deep Chat using the Response format:
+              // https://deepchat.dev/docs/connect/#Response
+              res.write(`data: ${JSON.stringify({text: delta})}\n\n`);
             }
           } catch (error) {
             console.error('Error when retrieving a stream chunk');
@@ -135,9 +135,9 @@ export class OpenAI {
           if (result.error) {
             next(result.error); // forwarded to error handler middleware in ErrorUtils.handle
           } else {
-            // Sends response back to Deep Chat using the Result format:
-            // https://deepchat.dev/docs/connect/#Result
-            res.json({result: {files: [{type: 'image', src: result.data[0].url}]}});
+            // Sends response back to Deep Chat using the Response format:
+            // https://deepchat.dev/docs/connect/#Response
+            res.json({files: [{type: 'image', src: result.data[0].url}]});
           }
         });
       }
