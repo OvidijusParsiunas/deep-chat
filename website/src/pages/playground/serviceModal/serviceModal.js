@@ -58,17 +58,18 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     setActiveService(newService);
     const availableTypes = Object.keys(SERVICE_MODAL_FORM_CONFIG[newService]);
     setAvailableTypes(availableTypes);
-    const activeType = newActiveType || availableTypes[0];
-    setActiveType(activeType);
+    const type = newActiveType || availableTypes[0];
+    setActiveType(type);
     if (newService === 'custom') {
       setRequiredValue(chatComponent.connect[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
       setRequiredValue(chatComponent.connect[newService]?.key || '');
-      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][activeType]);
+      resetRequiredValue2(newService, type);
+      setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService][type]);
     }
     setTimeout(() => {
-      changeCode(newService, activeType);
+      changeCode(newService, type);
       // 6 as otherwise when connect is custom and opening modal causes extractOptionalParameterValues to throw error
     }, 6);
   };
@@ -81,7 +82,15 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         ? SERVICE_MODAL_FORM_CONFIG[activeService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][type]
     );
+    resetRequiredValue2(activeService, type);
     setTimeout(() => changeCode(activeService, type));
+  };
+
+  const resetRequiredValue2 = (service, type) => {
+    const requiredParameter = REQUIRED_PARAMETERS[service]?.[type];
+    if (requiredParameter) {
+      setRequiredValue2(chatComponent.connect[service]?.[type]?.[requiredParameter] || '');
+    }
   };
 
   const changeRequiredValue = (setRequiredValue, newKey) => {
@@ -92,12 +101,12 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const changeCode = (serviceArg, newTypeArg) => {
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
-    const connect = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
+    const connect = constructConnect(optionalParamsRef.current, service, type);
     if (service === 'custom') {
       setWebsocket(connect['custom'].websocket);
       if (connect['custom'].websocket) {
         setTimeout(() => {
-          const newConnect = constructConnect(optionalParamsRef.current, service, type, requiredValueRef.current?.value);
+          const newConnect = constructConnect(optionalParamsRef.current, service, type);
           setCode(getCodeStr(newConnect, true, view));
         });
         return;
@@ -106,6 +115,27 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     }
     setCode(getCodeStr(connect, false, view));
   };
+
+  function constructConnect(optionalParamsEl, activeService, activeType) {
+    if (activeService === 'demo') return {demo: true};
+    const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
+    const optionalParams =
+      activeService === 'custom'
+        ? SERVICE_MODAL_FORM_CONFIG[activeService]
+        : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
+    const connect = buildConnect(optionalParams, optionalParamsValues);
+    const requiredParameter = REQUIRED_PARAMETERS[activeService]?.[activeType];
+    if (requiredParameter) {
+      const requiredSecondValue = requiredValue2Ref.current?.value;
+      connect[requiredParameter] = requiredSecondValue;
+    }
+    return {
+      [activeService]:
+        activeService === 'custom'
+          ? {url: requiredValueRef.current?.value || '', ...connect}
+          : {key: requiredValueRef.current?.value || '', [activeType]: Object.keys(connect).length > 0 ? connect : true},
+    };
+  }
 
   const close = () => {
     setIsVisible(false);
@@ -135,7 +165,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               activeService={activeService}
               activeType={activeType}
               changeType={changeType}
-              pseudoNames={pseudoNames}
+              pseudoNames={PSEUDO_NAMES}
               modalRef={modalRef}
             />
           )}
@@ -156,14 +186,16 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               requiredValue={requiredValue}
               setValue={changeRequiredValue.bind(this, setRequiredValue)}
               title="URL:"
+              link={'https://deepchat.dev/docs/connect#Request'}
             />
           )}
-          {activeService === 'azure' && (activeType === 'textToSpeech' || activeType === 'speechToText') && (
+          {REQUIRED_PARAMETERS[activeService]?.[activeType] && (
             <Required
               ref={requiredValue2Ref}
               requiredValue={requiredValue2}
               setValue={changeRequiredValue.bind(this, setRequiredValue2)}
-              title="Region:"
+              title={`${changeFirstLetter(REQUIRED_PARAMETERS[activeService][activeType])}:`}
+              link={REQUIRED_PARAMETERS_LINKS[activeService][activeType]}
             />
           )}
         </div>
@@ -184,7 +216,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               }
               changeCode={changeCode}
               websocket={websocket}
-              pseudoNames={pseudoNames}
+              pseudoNames={PSEUDO_NAMES}
               links={
                 activeService === 'custom'
                   ? OPTIONAL_PARAM_TO_LINK[activeService]
@@ -201,9 +233,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         <CloseButtons
           chatComponent={chatComponent}
           requiredFields={[requiredValueRef, requiredValue2Ref]}
-          constructConnect={() =>
-            constructConnect(optionalParamsRef.current, activeService, activeType, requiredValueRef.current?.value)
-          }
+          constructConnect={() => constructConnect(optionalParamsRef.current, activeService, activeType)}
           close={close}
           ref={submitButtonRef}
         />
@@ -237,22 +267,6 @@ function getCodeStr(connect, isCustom, view) {
     if (connect[service].key) connect[service].key = '';
   }
   return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
-}
-
-function constructConnect(optionalParamsEl, activeService, activeType, requiredProp) {
-  if (activeService === 'demo') return {demo: true};
-  const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
-  const optionalParams =
-    activeService === 'custom'
-      ? SERVICE_MODAL_FORM_CONFIG[activeService]
-      : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
-  const connect = buildConnect(optionalParams, optionalParamsValues);
-  return {
-    [activeService]:
-      activeService === 'custom'
-        ? {url: requiredProp, ...connect}
-        : {key: requiredProp, [activeType]: Object.keys(connect).length > 0 ? connect : true},
-  };
 }
 
 // prettier-ignore
@@ -302,8 +316,31 @@ function buildConnect(optionalParams, optionalParamsValues) {
   return connect;
 }
 
+// not including api keys
+const REQUIRED_PARAMETERS = {
+  azure: {
+    textToSpeech: 'region',
+    speechToText: 'region',
+    summarization: 'endpoint',
+  },
+  huggingFace: {
+    questionAnswer: 'context',
+  },
+};
+
+const REQUIRED_PARAMETERS_LINKS = {
+  azure: {
+    textToSpeech: 'https://deepchat.dev/docs/directConnection/Azure#TextToSpeech',
+    speechToText: 'https://deepchat.dev/docs/directConnection/Azure#SpeechToText',
+    summarization: 'https://deepchat.dev/docs/directConnection/Azure#Summarization',
+  },
+  huggingFace: {
+    questionAnswer: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
+  },
+};
+
 // Service type names are uppercased in select
-const pseudoNames = {
+const PSEUDO_NAMES = {
   TextGeneration: 'Text Generation',
   FillMask: 'Fill Mask',
   QuestionAnswer: 'Question Answer',
@@ -316,12 +353,11 @@ const pseudoNames = {
   ImageToImage: 'Image To Image',
   ImageToImageMasking: 'Image To Image Masking',
   ImageToImageUpscale: 'Image To Image Upscale',
+  systemPrompt: 'System_prompt',
 };
 
 // TO-DO - add default values
-// WORK - perphaps adjust pseudo names - e.g. system_prompt
 // TO-DO - string arrays end_sequences
-// WORK - required and links for them
 const SERVICE_MODAL_FORM_CONFIG = {
   demo: {demo: {}},
   custom: {
@@ -333,6 +369,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
   openAI: {
     chat: {
       model: 'string',
+      systemPrompt: 'string',
       max_tokens: 'number',
       temperature: 'number',
       top_p: 'number',
@@ -439,7 +476,6 @@ const SERVICE_MODAL_FORM_CONFIG = {
     },
     questionAnswer: {
       model: 'string',
-      context: 'string', // required
     },
     audioSpeechRecognition: {model: 'string'},
     audioClassification: {model: 'string'},
@@ -456,7 +492,6 @@ const SERVICE_MODAL_FORM_CONFIG = {
       lang: 'string',
     },
     summarization: {
-      endpoint: 'string', // required
       language: 'string',
     },
     translation: {
@@ -538,13 +573,14 @@ const OPTIONAL_PARAM_TO_LINK = {
   },
   openAI: {
     chat: {
-      model: 'https://platform.openai.com/docs/api-reference/chat/create#model',
+      systemPrompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
+      model: 'https://platform.openai.com/docs/api-reference/chat/object#model',
       max_tokens: 'https://platform.openai.com/docs/api-reference/chat/create#max_tokens',
       temperature: 'https://platform.openai.com/docs/api-reference/chat/create#temperature',
       top_p: 'https://platform.openai.com/docs/api-reference/chat/create#top_p',
     },
     completions: {
-      model: 'https://platform.openai.com/docs/api-reference/completions/create#model',
+      model: 'https://platform.openai.com/docs/api-reference/completions/object#model',
       max_tokens: 'https://platform.openai.com/docs/api-reference/completions/create#max_tokens',
       temperature: 'https://platform.openai.com/docs/api-reference/completions/create#temperature',
       top_p: 'https://platform.openai.com/docs/api-reference/completions/create#top_p',
@@ -645,7 +681,6 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
     questionAnswer: {
       model: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
-      context: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task', // required
     },
     audioSpeechRecognition: {
       model: 'https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task',
@@ -659,8 +694,6 @@ const OPTIONAL_PARAM_TO_LINK = {
   },
   azure: {
     textToSpeech: {
-      region:
-        'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#prebuilt-neural-voices', // required
       lang: 'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/language-support?tabs=tts',
       name: 'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/language-support?tabs=tts',
       gender: 'https://deepchat.dev/docs/directConnection/Azure#TextToSpeech',
@@ -668,12 +701,9 @@ const OPTIONAL_PARAM_TO_LINK = {
         'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#audio-outputs',
     },
     speechToText: {
-      region:
-        'https://learn.microsoft.com/en-GB/azure/ai-services/speech-service/rest-text-to-speech?tabs=streaming#prebuilt-neural-voices', // required
       lang: 'https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt',
     },
     summarization: {
-      endpoint: 'https://deepchat.dev/docs/directConnection/Azure#Summarization', // required
       language:
         'https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.',
     },

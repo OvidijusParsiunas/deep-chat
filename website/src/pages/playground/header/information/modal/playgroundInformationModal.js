@@ -68,11 +68,12 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
               className="playground-information-modal-icon"
             ></img>
             <div>
-              Watch the playground tutorial{' '}
+              {/* Watch the playground tutorial{' '}
               <a href="WORK" target="_blank">
                 video
               </a>
-              .
+              . */}
+              Demonstration video coming soon.
             </div>
           </div>
         </div>
