@@ -130,6 +130,12 @@
   }
 }
 
+@media (max-height: 670px) {
+  .playground-chat-wrapper {
+    height: 425px;
+  }
+}
+
 @media (max-width: 1100px) {
   .playground-chat-config-buttons > * {
     opacity: 1;

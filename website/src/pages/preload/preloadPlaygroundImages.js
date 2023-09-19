@@ -35,22 +35,22 @@ export default function PreloadPlaygroundImages() {
   return (
     <div>
       <div className="preload-image">
-        <img src="img/connect.svg" />
+        <img src="/img/connect.svg" />
       </div>
       <div className="preload-image">
-        <img src="img/shield.svg" />
+        <img src="/img/shield.svg" />
       </div>
       <div className="preload-image">
-        <img src="img/video.svg" />
+        <img src="/img/video.svg" />
       </div>
       <div className="preload-image">
-        <img src="img/layout-grid.svg" />
+        <img src="/img/layout-grid.svg" />
       </div>
       <div className="preload-image">
-        <img src="img/question.svg" />
+        <img src="/img/question.svg" />
       </div>
       <div className="preload-image">
-        <img src="img/plus.svg" />
+        <img src="/img/plus.svg" />
       </div>
       {displayServiceImages && (
         <div>
@@ -80,19 +80,19 @@ export default function PreloadPlaygroundImages() {
       {displayHiddenImages && (
         <div>
           <div className="preload-image">
-            <img src="img/layout-panorama.svg" />
+            <img src="/img/layout-panorama.svg" />
           </div>
           <div className="preload-image">
-            <img src="img/configure-2.svg" />
+            <img src="/img/configure-2.svg" />
           </div>
           <div className="preload-image">
-            <img src="img/clear-messages.svg" />
+            <img src="/img/clear-messages.svg" />
           </div>
           <div className="preload-image">
-            <img src="img/clone.svg" />
+            <img src="/img/clone.svg" />
           </div>
           <div className="preload-image">
-            <img src="img/bin.svg" />
+            <img src="/img/bin.svg" />
           </div>
         </div>
       )}

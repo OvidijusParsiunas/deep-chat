@@ -15,7 +15,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   private readonly _imageWeight: number | undefined;
   textInputPlaceholderText = 'Describe an image';
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI - Text to Image</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI: Text to Image</b></div>
     <p>Insert text to generate an image.</p>
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 

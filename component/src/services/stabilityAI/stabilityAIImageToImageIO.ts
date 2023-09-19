@@ -17,7 +17,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   private readonly _imageWeight: number | undefined;
   textInputPlaceholderText = 'Describe image changes';
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI - Image to Image</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI: Image to Image</b></div>
     <p>Upload an image to create a new one with the changes you have described.</p>
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 

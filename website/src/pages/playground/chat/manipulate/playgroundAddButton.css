@@ -45,3 +45,19 @@
     margin-top: 25px;
   }
 }
+
+@media (max-height: 700px) {
+  .playground-add-button-container-grid {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-height: 670px) {
+  .playground-add-button-container-grid {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .playground-add-button-container-panorama {
+    margin-top: 10px;
+  }
+}

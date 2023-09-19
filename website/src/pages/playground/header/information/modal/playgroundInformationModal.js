@@ -47,7 +47,7 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
         <div className="playground-header-modal-description">
           <div style={{marginBottom: 16}} className="playground-information-modal-item">
             <img
-              src="img/connect.svg"
+              src="/img/connect.svg"
               id="playground-information-modal-connect"
               className="playground-information-modal-icon"
             ></img>
@@ -55,25 +55,26 @@ export default function InformationModal({setIsModalDisplayed, isIntro}) {
           </div>
           <div style={{marginBottom: 18}} className="playground-information-modal-item">
             <img
-              src="img/shield.svg"
+              src="/img/shield.svg"
               id="playground-information-modal-shield"
               className="playground-information-modal-icon"
             ></img>
             <div>The playground does not record any data. All information remains in the safety of your browser.</div>
           </div>
           <div style={{marginBottom: 22}} className="playground-information-modal-item">
-            <img
-              src="img/video.svg"
-              id="playground-information-modal-video"
-              className="playground-information-modal-icon"
-            ></img>
+            <a href="https://youtu.be/bQDliqCQHbA" target="_blank">
+              <img
+                src="/img/video.svg"
+                id="playground-information-modal-video"
+                className="playground-information-modal-icon"
+              ></img>
+            </a>
             <div>
-              {/* Watch the playground tutorial{' '}
-              <a href="WORK" target="_blank">
+              Watch the playground tutorial{' '}
+              <a href="https://youtu.be/bQDliqCQHbA" target="_blank">
                 video
               </a>
-              . */}
-              Demonstration video coming soon.
+              .
             </div>
           </div>
         </div>

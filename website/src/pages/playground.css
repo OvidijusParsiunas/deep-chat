@@ -87,17 +87,19 @@
 }
 
 @media (max-height: 755px) {
-  .playground-grid > #playground-title,
-  .playground-panorama > #playground-title {
-    margin-bottom: 40px;
+  .playground-grid > #playground-title {
+    margin-top: 28px;
+    margin-bottom: 39px;
   }
 }
 
 @media (max-height: 730px) {
-  .playground-grid > #playground-title,
-  .playground-panorama > #playground-title {
-    margin-top: 20px;
-    margin-bottom: 30px;
+  .playground-grid > #playground-title {
+    margin-top: 17px;
+    margin-bottom: 26px;
+  }
+  #playground-chat-list:empty {
+    height: 428px;
   }
 }
 
@@ -105,7 +107,14 @@
   .playground-grid > #playground-title,
   .playground-panorama > #playground-title {
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-height: 670px) {
+  .playground-panorama > #playground-title {
+    margin-top: 0px;
+    margin-bottom: 10px;
   }
 }
 
@@ -147,11 +156,5 @@
   }
   .playground-chat-list-panorama {
     display: block;
-  }
-}
-
-@media (max-height: 730px) {
-  #playground-chat-list:empty {
-    height: 428px;
   }
 }
