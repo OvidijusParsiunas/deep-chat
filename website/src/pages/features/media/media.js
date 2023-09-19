@@ -30,7 +30,6 @@ function RightPanel() {
               user: {
                 bubble: {
                   maxWidth: '90%',
-                  backgroundColor: '#e4e6eb',
                   marginRight: '10px',
                 },
               },

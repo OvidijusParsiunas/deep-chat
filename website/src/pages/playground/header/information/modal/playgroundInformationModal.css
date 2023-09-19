@@ -4,6 +4,7 @@
   width: 475px;
   /* overwriting max-height as there is no need for it to be dynamic in this modal */
   max-height: 560px !important;
+  margin-top: 20px;
 }
 
 #playground-information-modal-title {
@@ -15,12 +16,12 @@
 }
 
 #playground-information-modal-connect {
-  width: 36px;
+  width: 57px;
   margin-right: 13px;
 }
 
 #playground-information-modal-shield {
-  width: 26px;
+  width: 45px;
   margin-right: 19px;
   padding-bottom: 6px;
   margin-left: 5px;
@@ -48,6 +49,12 @@
 
 .playground-intro-modal > #playground-information-modal-title {
   padding-top: 3px;
+}
+
+@media (max-height: 480px) {
+  #playground-information-modal {
+    margin-top: 30px;
+  }
 }
 
 @media (max-width: 410px) {

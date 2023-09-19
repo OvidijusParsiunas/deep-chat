@@ -104,12 +104,6 @@
   background-color: var(--playground-modal-submit-background-active);
 }
 
-@media (max-height: 1100px) {
-  .playground-modal {
-    margin-top: 30px;
-  }
-}
-
 @media (max-height: 880px) {
   .playground-modal {
     overflow: auto;

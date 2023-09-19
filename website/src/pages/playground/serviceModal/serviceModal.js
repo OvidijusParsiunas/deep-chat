@@ -153,6 +153,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         onClick={close}
       ></div>
       <div
+        id="playground-service-modal"
         ref={modalRef}
         className={`playground-modal ${isVisible ? 'playground-modal-fade-in' : 'playground-modal-fade-out'}`}
       >

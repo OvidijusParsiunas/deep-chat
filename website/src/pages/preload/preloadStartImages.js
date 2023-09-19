@@ -19,6 +19,7 @@ import goLogo from '/img/goLogo.png';
 import './preloadImages.css';
 import React from 'react';
 
+// SVGs file cannot be preloaded and should be inlined
 export default function PreloadStartImages() {
   const [displayServiceLogos, setDisplayFrameworkLogos] = React.useState(false);
   const [displayServerLogos, setDisplayServerLogos] = React.useState(false);

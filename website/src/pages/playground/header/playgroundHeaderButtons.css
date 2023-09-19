@@ -24,19 +24,13 @@
   transform: scale(0.96);
 }
 
-.playground-header-button > a > img {
+.playground-header-button > a > svg {
   width: 25px;
-  padding-bottom: 6px;
+  height: 100%;
   filter: var(--playground-header-button-filter);
 }
 
-@-moz-document url-prefix() {
-  .playground-header-button > a > img {
-    padding-bottom: 3.5px;
-  }
-}
-
-.playground-header-button:hover > a > img {
+.playground-header-button:hover > a > svg {
   filter: var(--playground-header-button-filter-hover);
 }
 

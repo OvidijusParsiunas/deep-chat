@@ -1,13 +1,6 @@
 #playground-information-icon {
   width: 21px;
-  padding-bottom: 7.5px;
   filter: var(--playground-information-filter);
-}
-
-@-moz-document url-prefix() {
-  #playground-information-icon {
-    padding-bottom: 5.5px;
-  }
 }
 
 .playground-header-button:hover > a > #playground-information-icon {

@@ -43,7 +43,7 @@ export default function Playground() {
         setTimeout(() => {
           setIsIntroModalDisplayed(true);
           setIsWaitingToCloseIntroModal(true);
-        }, 500);
+        }, 350);
       } else {
         applyPlaygroundConfig(playgroundConfig);
         view.isBeingCreated = false;
@@ -173,6 +173,19 @@ export default function Playground() {
     });
   }
 
+  const sortableConfig = {
+    animation: 450,
+    handle: '.playground-chat-drag-handle',
+    onEnd: (event) => {
+      if (event.oldIndex !== event.newIndex) {
+        const configToMove = playgroundConfig.components.splice(event.oldIndex, 1)[0];
+        playgroundConfig.components.splice(event.newIndex, 0, configToMove);
+        const componentToMove = chatComponents.splice(event.oldIndex, 1)[0];
+        chatComponents.splice(event.newIndex, 0, componentToMove);
+      }
+    },
+  };
+
   return (
     <Layout title="Playground" description="Deep Chat Playground">
       <Head>
@@ -222,14 +235,3 @@ function setHorizontalScroll(componentList) {
     }
   });
 }
-
-const sortableConfig = {
-  animation: 450,
-  handle: '.playground-chat-drag-handle',
-  onEnd: (event) => {
-    if (event.oldIndex !== event.newIndex) {
-      let elementToMove = playgroundConfig.components.splice(event.oldIndex, 1)[0];
-      playgroundConfig.components.splice(event.newIndex, 0, elementToMove);
-    }
-  },
-};

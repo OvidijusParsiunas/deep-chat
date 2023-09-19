@@ -118,7 +118,7 @@
 .playground-chat-remove-button {
   filter: var(--playground-wrapper-remove-filter);
   width: 16px;
-  padding-bottom: 4px;
+  padding-bottom: 4.5px;
 }
 
 @media (max-height: 730px) {

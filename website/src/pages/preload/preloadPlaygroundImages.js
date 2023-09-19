@@ -8,23 +8,17 @@ import Flash from '/img/flash.svg';
 import './preloadImages.css';
 import React from 'react';
 
+// SVGs file cannot be preloaded and should be inlined
 // If this still does not work - simply use: https://docusaurus.io/docs/api/docusaurus-config#headTags
 // this is an optimization approach to stop images rendering whilst they are being displayed
 export default function PreloadPlaygroundImages() {
   const [displayServiceImages, setDisplayServiceImages] = React.useState(false);
-  const [displayHiddenImages, setDisplayHiddenImages] = React.useState(false);
 
-  // executed sequentially from what is displayed first
   React.useEffect(() => {
     let isMounted = true;
     setTimeout(() => {
       if (isMounted) {
         setDisplayServiceImages(true);
-        setTimeout(() => {
-          if (isMounted) {
-            setDisplayHiddenImages(true);
-          }
-        }, 1000);
       }
     });
     return () => {
@@ -34,24 +28,6 @@ export default function PreloadPlaygroundImages() {
 
   return (
     <div>
-      <div className="preload-image">
-        <img src="/img/connect.svg" />
-      </div>
-      <div className="preload-image">
-        <img src="/img/shield.svg" />
-      </div>
-      <div className="preload-image">
-        <img src="/img/video.svg" />
-      </div>
-      <div className="preload-image">
-        <img src="/img/layout-grid.svg" />
-      </div>
-      <div className="preload-image">
-        <img src="/img/question.svg" />
-      </div>
-      <div className="preload-image">
-        <img src="/img/plus.svg" />
-      </div>
       {displayServiceImages && (
         <div>
           <div className="preload-image">
@@ -74,25 +50,6 @@ export default function PreloadPlaygroundImages() {
           </div>
           <div className="preload-image">
             <img src={assemblyAILogo} />
-          </div>
-        </div>
-      )}
-      {displayHiddenImages && (
-        <div>
-          <div className="preload-image">
-            <img src="/img/layout-panorama.svg" />
-          </div>
-          <div className="preload-image">
-            <img src="/img/configure-2.svg" />
-          </div>
-          <div className="preload-image">
-            <img src="/img/clear-messages.svg" />
-          </div>
-          <div className="preload-image">
-            <img src="/img/clone.svg" />
-          </div>
-          <div className="preload-image">
-            <img src="/img/bin.svg" />
           </div>
         </div>
       )}

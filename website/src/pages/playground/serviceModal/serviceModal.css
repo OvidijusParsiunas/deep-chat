@@ -42,6 +42,18 @@
   border: 1.5px solid red;
 }
 
+@media (max-height: 1100px) {
+  #playground-service-modal {
+    margin-top: 28px;
+  }
+}
+
+@media (max-height: 500px) {
+  #playground-service-modal {
+    margin-top: 30px;
+  }
+}
+
 @media (max-width: 410px) {
   .playground-service-modal-input {
     width: 160px;

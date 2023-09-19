@@ -83,8 +83,8 @@
     brightness(97%) contrast(97%);
   --playground-wrapper-drag-filter-hover: brightness(0) saturate(100%) invert(11%) sepia(0%) saturate(592%)
     hue-rotate(309deg) brightness(98%) contrast(94%);
-  --playground-wrapper-remove-filter: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(827%) hue-rotate(226deg)
-    brightness(93%) contrast(92%);
+  --playground-wrapper-remove-filter: brightness(0) saturate(100%) invert(49%) sepia(1%) saturate(100%) hue-rotate(34deg)
+    brightness(99%) contrast(91%);
   --playground-wrapper-button-filter: brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(308%) hue-rotate(283deg)
     brightness(96%) contrast(93%);
   --playground-wrapper-button-filter-hover: brightness(0) saturate(100%) invert(11%) sepia(0%) saturate(592%)
