@@ -21,11 +21,11 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
-    const {directConnection} = deepChat;
-    const apiKey = directConnection?.stabilityAI;
+    const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const apiKey = directConnectionCp?.stabilityAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 1}}};
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
-    const config = directConnection?.stabilityAI?.imageToImageUpscale as NonNullable<StabilityAI['imageToImageUpscale']>;
+    const config = directConnectionCp?.stabilityAI?.imageToImageUpscale as NonNullable<StabilityAI['imageToImageUpscale']>;
     if (typeof config === 'object') {
       if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/image-to-image/upscale`;
       StabilityAIImageToImageUpscaleIO.cleanConfig(config);

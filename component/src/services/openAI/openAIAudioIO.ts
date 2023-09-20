@@ -28,11 +28,12 @@ export class OpenAIAudioIO extends DirectServiceIO {
   private _service_url: string = OpenAIAudioIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const {directConnection, textInput} = deepChat;
-    const apiKey = directConnection?.openAI;
+    const {textInput} = deepChat;
+    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
     if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
-    const config = directConnection?.openAI?.audio as NonNullable<OpenAI['audio']>;
+    const config = directConnectionCopy?.openAI?.audio as NonNullable<OpenAI['audio']>;
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAIAudioIO.cleanConfig(config);

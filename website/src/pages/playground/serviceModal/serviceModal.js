@@ -354,7 +354,6 @@ const PSEUDO_NAMES = {
   ImageToImage: 'Image To Image',
   ImageToImageMasking: 'Image To Image Masking',
   ImageToImageUpscale: 'Image To Image Upscale',
-  systemPrompt: 'System_prompt',
 };
 
 // TO-DO - add default values
@@ -370,7 +369,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
   openAI: {
     chat: {
       model: 'string',
-      systemPrompt: 'string',
+      system_prompt: 'string',
       max_tokens: 'number',
       temperature: 'number',
       top_p: 'number',
@@ -401,7 +400,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
       max_tokens: 'number',
     },
     textGeneration: {
-      model: ['command', 'base', 'base-light'],
+      model: 'string',
       temperature: 'number',
       max_tokens: 'number',
       k: 'number',
@@ -412,7 +411,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
       logit_bias: 'constructable object',
     },
     summarization: {
-      model: ['summarize-xlarge', 'summarize-medium'],
+      model: 'string',
       length: ['auto', 'short', 'medium', 'long'],
       format: ['auto', 'paragraph', 'bullets'],
       extractiveness: ['auto', 'low', 'medium', 'high'],
@@ -574,7 +573,7 @@ const OPTIONAL_PARAM_TO_LINK = {
   },
   openAI: {
     chat: {
-      systemPrompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
+      system_prompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
       model: 'https://platform.openai.com/docs/api-reference/chat/object#model',
       max_tokens: 'https://platform.openai.com/docs/api-reference/chat/create#max_tokens',
       temperature: 'https://platform.openai.com/docs/api-reference/chat/create#temperature',

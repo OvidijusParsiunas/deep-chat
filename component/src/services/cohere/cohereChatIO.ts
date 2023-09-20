@@ -11,8 +11,9 @@ export class CohereChatIO extends CohereIO {
   private readonly username: string = 'USER';
 
   constructor(deepChat: DeepChat) {
-    const config = deepChat.directConnection?.cohere?.chat as Cohere['chat'];
-    const apiKey = deepChat.directConnection?.cohere;
+    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const config = directConnectionCopy.cohere?.chat as Cohere['chat'];
+    const apiKey = directConnectionCopy.cohere;
     super(deepChat, 'https://api.cohere.ai/v1/chat', 'Ask me anything!', config, apiKey);
     if (typeof config === 'object') {
       if (config.user_name) this.username = config.user_name;

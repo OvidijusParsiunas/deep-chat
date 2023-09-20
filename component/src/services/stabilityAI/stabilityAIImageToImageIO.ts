@@ -22,11 +22,11 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
-    const {directConnection} = deepChat;
-    const apiKey = directConnection?.stabilityAI;
+    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const apiKey = directConnectionCopy.stabilityAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 1}}};
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
-    const config = directConnection?.stabilityAI?.imageToImage as NonNullable<StabilityAI['imageToImage']>;
+    const config = directConnectionCopy.stabilityAI?.imageToImage as NonNullable<StabilityAI['imageToImage']>;
     if (typeof config === 'object') {
       if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/text-to-image`;
       if (config.weight !== undefined && config.weight !== null) this._imageWeight = config.weight;

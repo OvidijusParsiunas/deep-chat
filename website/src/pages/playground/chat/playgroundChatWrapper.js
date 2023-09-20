@@ -168,7 +168,7 @@ const SERVICE_TO_NAME = {
   openAI: {
     chat: 'OpenAI: Chat',
     completions: 'OpenAI: Completions',
-    images: 'OpenAI: Dalle 2',
+    images: 'OpenAI: Dalle',
     audio: 'OpenAI: Whisper',
   },
   cohere: {

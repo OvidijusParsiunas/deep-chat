@@ -23,11 +23,11 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
     <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
-    const {directConnection} = deepChat;
-    const apiKey = directConnection?.stabilityAI;
+    const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const apiKey = directConnectionCp?.stabilityAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
-    const config = directConnection?.stabilityAI?.imageToImageMasking as NonNullable<StabilityAI['imageToImageMasking']>;
+    const config = directConnectionCp?.stabilityAI?.imageToImageMasking as NonNullable<StabilityAI['imageToImageMasking']>;
     if (typeof config === 'object') {
       if (config.engine_id) this.url = `https://api.stability.ai/v1/generation/${config.engine_id}/image-to-image/masking`;
       if (config.weight !== undefined && config.weight !== null) this._imageWeight = config.weight;

@@ -22,11 +22,12 @@ export class OpenAIChatIO extends DirectServiceIO {
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
   constructor(deepChat: DeepChat) {
-    const apiKey = deepChat.directConnection?.openAI;
+    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const apiKey = directConnectionCopy.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    const config = deepChat.directConnection?.openAI?.chat; // can be undefined as this is the default service
+    const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
-      if (config.systemPrompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.systemPrompt);
+      if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }
@@ -34,12 +35,12 @@ export class OpenAIChatIO extends DirectServiceIO {
     this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
   }
 
-  public static generateSystemMessage(systemPrompt: string): SystemMessageInternal {
-    return {role: 'system', content: systemPrompt};
+  public static generateSystemMessage(system_prompt: string): SystemMessageInternal {
+    return {role: 'system', content: system_prompt};
   }
 
   private cleanConfig(config: OpenAIChat) {
-    delete config.systemPrompt;
+    delete config.system_prompt;
   }
 
   // prettier-ignore

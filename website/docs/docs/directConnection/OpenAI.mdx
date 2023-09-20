@@ -29,12 +29,12 @@ import Tabs from '@theme/Tabs';
 
 ### `Chat` {#Chat}
 
-- Type: `true` | {[`OpenAIConverse`](#OpenAIConverse), `systemPrompt?: string`}
-- Default: _{model: "gpt-3.5-turbo", systemPrompt: "You are a helpful assistant."}_
+- Type: `true` | {[`OpenAIConverse`](#OpenAIConverse), `system_prompt?: string`}
+- Default: _{model: "gpt-3.5-turbo", system_prompt: "You are a helpful assistant."}_
 
 Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-reference/chat/create) API. <br />
 `OpenAIConverse` object can be used to augment the [`request body`](https://platform.openai.com/docs/api-reference/chat/create). <br />
-`systemPrompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
+`system_prompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
 
 #### Example
 
@@ -45,7 +45,7 @@ Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-r
       directConnection={{
         openAI: {
           key: 'placeholder key',
-          chat: {max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
+          chat: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
         },
       }}
     ></DeepChatBrowser>
@@ -55,7 +55,7 @@ Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-r
       containerStyle={{borderRadius: '8px'}}
       directConnection={{
         openAI: {
-          chat: {max_tokens: 2000, systemPrompt: 'Assist me with anything you can'},
+          chat: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
         },
       }}
     ></DeepChatBrowser>
@@ -70,7 +70,7 @@ Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-r
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "chat": {"max_tokens": 2000, "systemPrompt": "Assist me with anything you can"}
+      "chat": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
     }
   }'
 ></deep-chat>
@@ -86,7 +86,7 @@ Connect to Open AI's [`chat completions`](https://platform.openai.com/docs/api-r
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "chat": {"max_tokens": 2000, "systemPrompt": "Assist me with anything you can"}
+      "chat": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
     }
   }'
   containerStyle='{"borderRadius": "8px"}'

@@ -72,7 +72,11 @@ const services = {
     value: 'huggingFace',
     text: 'Hugging Face',
     icon: (
-      <img src={huggingFaceLogo} className="playground-service-modal-service-icon" style={{transform: 'scale(1.7)'}} />
+      <img
+        src={huggingFaceLogo}
+        className="playground-service-modal-service-icon"
+        style={{transform: 'scale(1.7)', paddingTop: '0.2px'}}
+      />
     ),
   },
   cohere: {

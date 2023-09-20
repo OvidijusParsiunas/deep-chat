@@ -22,8 +22,8 @@ export interface OpenAIImages {
   user?: string;
 }
 
-// totalMessagesMaxCharLength must include systemPrompt length
-export type OpenAIChat = {systemPrompt?: string};
+// totalMessagesMaxCharLength must include system_prompt length
+export type OpenAIChat = {system_prompt?: string};
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions
