@@ -22,10 +22,11 @@
 
 ### :tada: Latest update
 
-https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/9ca62962-10bd-4dff-9009-f31eab0b5bfa
+<p align="center">
+    <img width="780" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
+</p>
 
-We are introducing a new way to connect to services called the [`handler`](https://deepchat.dev/docs/connect#Handler) function! <br />
-Whilst Deep Chat can communicate with services right out of the box, its default functionality may not always be sufficient for all services. This is where the [`handler`](https://deepchat.dev/docs/connect#Handler) function comes into play as it allows developers to use their own code to control how the requests are made and connect with services their own way.
+We are excited to release a new page in the Deep Chat website - the Playground. Here you will be able to create, configure and use Deep Chat components without needing to write any code. Check it out in the official [Playground page](https://deepchat.dev/playground) to get started!
 
 ### :computer: Getting started
 
