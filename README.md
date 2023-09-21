@@ -26,7 +26,7 @@
     <img width="780" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
 </p>
 
-We are excited to release a new page in the Deep Chat website - the Playground. Here you will be able to create, configure and use Deep Chat components without needing to write any code. Check it out in the official [Playground page](https://deepchat.dev/playground) to get started!
+We are excited to release a new addition to the Deep Chat website - the Playground. Here you will be able to create, configure and use Deep Chat components without needing to write any code. Check it out in the official [Playground page](https://deepchat.dev/playground) to get started!
 
 ### :computer: Getting started
 
