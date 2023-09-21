@@ -57,7 +57,7 @@ export class HuggingFace {
     HuggingFace.sendFile(req, res, url, parseResult, next);
   }
 
-  // You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
+  // You can use an example audio file here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
   public static async speechRecognition(req: Request, res: Response, next: NextFunction) {
     const url = 'https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self';
     const parseResult = (result: any) => result.text;

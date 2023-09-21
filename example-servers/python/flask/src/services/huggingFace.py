@@ -48,7 +48,7 @@ class HuggingFace:
         # https://deepchat.dev/docs/connect/#Response
         return {"text": json_response[0]["label"]}
     
-    # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
+    # You can use an example audio file here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-audio.m4a
     def speech_recognition(self, files):
         headers = {
             "Authorization": "Bearer " + os.getenv("HUGGING_FACE_API_KEY")

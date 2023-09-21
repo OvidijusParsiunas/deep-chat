@@ -1,4 +1,4 @@
-import huggingFaceLogo from '/img/huggingFaceLogo.png';
+import huggingFaceSmallLogo from '/img/huggingFaceSmallLogo.png';
 import stabilityAILogo from '/img/stabilityAILogo.png';
 import PlaygroundSelect from '../../playgroundSelect';
 import assemblyAILogo from '/img/assemblyAILogo.png';
@@ -73,9 +73,9 @@ const services = {
     text: 'Hugging Face',
     icon: (
       <img
-        src={huggingFaceLogo}
+        src={huggingFaceSmallLogo}
         className="playground-service-modal-service-icon"
-        style={{transform: 'scale(1.7)', paddingTop: '0.2px'}}
+        style={{transform: 'scale(1.4)', paddingTop: '0.2px'}}
       />
     ),
   },
