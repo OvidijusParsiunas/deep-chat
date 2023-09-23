@@ -1,8 +1,7 @@
-import {DeepChatOpenAITextRequestBody} from '../../../types/deepChatTextRequestBody';
-import {CohereChatResult} from 'deep-chat/dist/types/cohereResult';
-import {MessageContent} from 'deep-chat/dist/types/messages';
-import errorHandler from '../../../utils/errorHandler';
-import {NextRequest, NextResponse} from 'next/server';
+import type {DeepChatOpenAITextRequestBody} from '../../../types/deepChatTextRequestBody';
+import type {CohereChatResult} from 'deep-chat/dist/types/cohereResult';
+import type {MessageContent} from 'deep-chat/dist/types/messages';
+import type {RequestHandler} from '@sveltejs/kit';
 
 export const config = {
   runtime: 'edge',
@@ -10,8 +9,8 @@ export const config = {
 
 // Make sure to set the COHERE_API_KEY environment variable
 
-async function handler(req: NextRequest) {
-  const textRequestBody = (await req.json()) as DeepChatOpenAITextRequestBody;
+export const POST: RequestHandler = async ({request}) => {
+  const textRequestBody = (await request.json()) as DeepChatOpenAITextRequestBody;
   console.log(textRequestBody);
 
   const chatBody = createChatBody(textRequestBody.messages);
@@ -29,8 +28,12 @@ async function handler(req: NextRequest) {
   if (cohereResult.message) throw cohereResult.message;
   // Sends response back to Deep Chat using the Response format:
   // https://deepchat.dev/docs/connect/#Response
-  return NextResponse.json({text: cohereResult.text});
-}
+  return new Response(JSON.stringify({text: cohereResult.text}), {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
 
 function createChatBody(messages: MessageContent[]) {
   // Text messages are stored inside request body using the Deep Chat JSON format:
@@ -42,5 +45,3 @@ function createChatBody(messages: MessageContent[]) {
     }),
   };
 }
-
-export default errorHandler(handler);
