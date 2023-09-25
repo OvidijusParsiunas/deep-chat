@@ -2,7 +2,6 @@ import {StabilityAITextToImageResult} from 'deep-chat/dist/types/stabilityAIResu
 import {MessageContent} from 'deep-chat/dist/types/messages';
 import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
-import FormData from 'form-data';
 
 export const config = {
   runtime: 'edge',
@@ -17,12 +16,12 @@ async function handler(req: NextRequest) {
   const reqFormData = await req.formData();
   const file = reqFormData.get('files') as Blob;
   const imageToImageFormData = new FormData();
-  imageToImageFormData.append('init_image', file, (file as File).name);
+  imageToImageFormData.append('init_image', file);
   // When sending text along with files, it is stored inside the request body using the Deep Chat JSON format:
   // https://deepchat.dev/docs/connect
   const text = (JSON.parse(reqFormData.get('message1') as string) as MessageContent).text;
   imageToImageFormData.append('text_prompts[0][text]', text);
-  imageToImageFormData.append('text_prompts[0][weight]', 1);
+  imageToImageFormData.append('text_prompts[0][weight]', '1');
 
   const result = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image', {
     // Be careful not to overwrite Content-Type headers as the Boundary header will not be automatically set

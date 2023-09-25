@@ -1,7 +1,6 @@
 import {StabilityAITextToImageResult} from 'deep-chat/dist/types/stabilityAIResult';
 import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
-import FormData from 'form-data';
 
 export const config = {
   runtime: 'edge',
@@ -16,7 +15,7 @@ async function handler(req: NextRequest) {
   const reqFormData = await req.formData();
   const file = reqFormData.get('files') as Blob;
   const imageToImageFormData = new FormData();
-  imageToImageFormData.append('image', file, (file as File).name);
+  imageToImageFormData.append('image', file);
 
   const result = await fetch('https://api.stability.ai/v1/generation/esrgan-v1-x2plus/image-to-image/upscale', {
     // Be careful not to overwrite Content-Type headers as the Boundary header will not be automatically set

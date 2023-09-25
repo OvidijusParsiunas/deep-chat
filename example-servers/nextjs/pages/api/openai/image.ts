@@ -1,7 +1,6 @@
 import {OpenAIImageResult} from 'deep-chat/dist/types/openAIResult';
 import errorHandler from '../../../utils/errorHandler';
 import {NextRequest, NextResponse} from 'next/server';
-import FormData from 'form-data';
 
 export const config = {
   runtime: 'edge',
@@ -17,7 +16,7 @@ async function handler(req: NextRequest) {
   const reqFormData = await req.formData();
   const file = reqFormData.get('files') as Blob;
   const openAIFormData = new FormData();
-  openAIFormData.append('image', file, (file as File).name);
+  openAIFormData.append('image', file);
 
   const result = await fetch('https://api.openai.com/v1/images/variations', {
     // Be careful not to overwrite Content-Type headers as the Boundary header will not be automatically set

@@ -24,11 +24,11 @@ npm run dev
 
 If you want to use the proxy functions:
 
-<b>Local</b> - Replace their environment variables (`process.env.`) with the corresponding API key values. E.g. if you want to use the OpenAI Chat, replace [`process.env.OPENAI_API_KEY`](https://github.com/OvidijusParsiunas/deep-chat/blob/d2fdd06dabbf30f3bd318c37e37dce99650d60f3/example-servers/nextjs/pages/api/openai/chat.ts#L24) with a string value of the key.
+<b>Local</b> - Replace the environment variables (`process.env.`) in their server functions with the corresponding API key values. E.g. if you want to use the OpenAI Chat, replace [`process.env.OPENAI_API_KEY`](https://github.com/OvidijusParsiunas/deep-chat/blob/d2fdd06dabbf30f3bd318c37e37dce99650d60f3/example-servers/nextjs/pages/api/openai/chat.ts#L24) with a string value of the key.
 
 <b>Hosting Platform</b> - Add the environment variables to your deploy config. E.g. if you want to use the OpenAI Chat, add the `OPENAI_API_KEY` environment variable.
 
-\*You can also replace the environment variable syntax using the `$env/static/private` import - [more info](https://kit.svelte.dev/docs/adapter-vercel#environment-variables).
+\*You can also replace the environment variable syntax using the `$env/static/private` import - more info [here](https://kit.svelte.dev/docs/adapter-vercel#environment-variables).
 
 ### :globe_with_meridians: Hosting in Vercel
 

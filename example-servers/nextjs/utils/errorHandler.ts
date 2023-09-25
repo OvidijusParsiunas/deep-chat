@@ -1,5 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {Response} from 'deep-chat/dist/types/result';
 
 type CallbackFunc = (req: NextRequest, res: NextResponse) => Promise<NextResponse<Response>> | Promise<Response>;
 
