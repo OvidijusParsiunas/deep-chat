@@ -31,11 +31,16 @@ export class RemarkableConfig {
         xhtmlOut: false, // Use '/' to close single tags (<br />)
         breaks: false, // Convert '\n' in paragraphs into <br>
         langPrefix: 'language-', // CSS language prefix for fenced blocks
-        linkTarget: '', // set target to open link in
+        linkTarget: '_blank', // set target to open in a new tab
         typographer: true, // Enable smartypants and other sweet transforms
       });
     } else {
-      return new Remarkable();
+      return new Remarkable({
+        highlight: (str) => {
+          return str;
+        },
+        linkTarget: '_blank', // set target to open in a new tab
+      });
     }
   }
 }

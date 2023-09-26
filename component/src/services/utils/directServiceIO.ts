@@ -50,4 +50,8 @@ export class DirectServiceIO extends BaseServiceIO {
       this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
       keyVerificationHandlers.onLoad, handleVerificationResult, body);
   }
+
+  override isDirectConnection() {
+    return true;
+  }
 }

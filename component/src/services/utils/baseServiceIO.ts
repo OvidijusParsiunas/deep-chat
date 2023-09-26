@@ -6,10 +6,11 @@ import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {MessageContent} from '../../types/messages';
 import {Stream} from '../../utils/HTTP/stream';
+import {Demo as DemoT} from '../../types/demo';
+import {Response} from '../../types/response';
 import {Request} from '../../types/request';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
-import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {
   KeyVerificationHandlers,
@@ -33,12 +34,12 @@ export class BaseServiceIO implements ServiceIO {
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
   private readonly _directServiceRequiresFiles: boolean;
-  demo?: Demo;
+  demo?: DemoT;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
   streamHandlers: StreamHandlers = {} as StreamHandlers;
 
-  constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: Demo) {
+  constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: DemoT) {
     this.deepChat = deepChat;
     this.demo = demo;
     Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
@@ -133,5 +134,9 @@ export class BaseServiceIO implements ServiceIO {
       return result.result;
     }
     return result;
+  }
+
+  public isDirectConnection() {
+    return !!this.demo;
   }
 }

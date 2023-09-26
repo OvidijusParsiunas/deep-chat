@@ -109,10 +109,11 @@ export class ServiceIOFactory {
         }
         return new StabilityAITextToImageIO(deepChat);
       }
-      if (directConnection.demo && !request?.url) {
-        return new BaseServiceIO(deepChat, undefined, directConnection.demo);
-      }
     }
-    return new BaseServiceIO(deepChat);
+    if (request) {
+      return new BaseServiceIO(deepChat);
+    }
+    // when directConnection and request are not defined, we default to demo
+    return new BaseServiceIO(deepChat, undefined, directConnection?.demo || true);
   }
 }

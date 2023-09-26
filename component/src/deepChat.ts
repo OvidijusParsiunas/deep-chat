@@ -18,7 +18,6 @@ import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {DropupStyles} from './types/dropupStyles';
-import {ErrorView} from './views/error/errorView';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {TextInput} from './types/textInput';
@@ -28,6 +27,7 @@ import {Request} from './types/request';
 import {Avatars} from './types/avatars';
 import {Stream} from './types/stream';
 import {Names} from './types/names';
+import {Demo} from './types/demo';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
@@ -188,20 +188,17 @@ export class DeepChat extends InternalHTML {
     Object.assign(this._elementRef.style, this.containerStyle);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else if ((this._activeService instanceof DirectServiceIO && this._activeService.key)
-        || this.request?.url || this.request?.handler || this.directConnection?.demo) {
+    } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
+      // WORK - potentially refactor to not have to use childElement
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child
       this._childElement ??= this.children[0] as HTMLElement | undefined;
       ChatView.render(this, this._elementRef, this._activeService, this._childElement);
-    } else if (this._activeService instanceof DirectServiceIO) {
+    } else if (this._activeService instanceof DirectServiceIO) { // when direct service with no key
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
-      // when it is executed, meaning that if the user sets customService or key, this would first ppear and
+      // when it is executed, meaning that if the user sets customService or key, this would first appear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
       InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
-    } else {
-      // WORK - have the word request as a hyperlink
-      ErrorView.render(this._elementRef, 'Please define "request" with a "url"');
     }
     this._hasBeenRendered = true;
     FireEvents.onRender(this);

@@ -265,7 +265,7 @@ function getCodeStr(connect, isCustom, view) {
   if (!view.isKeyVisible) {
     connect = JSON.parse(JSON.stringify(connect));
     const service = Object.keys(connect)[0];
-    if (connect[service].key) connect[service].key = '';
+    if (connect[service].key) connect[service].key = 'hidden';
   }
   return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
 }

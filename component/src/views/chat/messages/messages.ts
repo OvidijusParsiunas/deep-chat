@@ -9,6 +9,7 @@ import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
+import {GuidanceMessages} from './guidanceMessages';
 import {CustomStyle} from '../../../types/styles';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
@@ -71,6 +72,7 @@ export class Messages {
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
+    GuidanceMessages.addSetupMessageIfNeeded(this, deepChat, serviceIO);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {

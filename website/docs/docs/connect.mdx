@@ -251,7 +251,7 @@ Types shared with other component properties:
 ### `Request` {#Request}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `additionalBodyProps?: {[string]: any}`, <br />
@@ -261,7 +261,7 @@ Types shared with other component properties:
 
 - Default: _{ method: "POST" }_
 
-Object used to configure the outgoing messages' HTTP request settings. <br />
+Object used to configure the outgoing messages request settings. It MUST have either `url` or `handler` defined. <br />
 `additionalBodyProps` is used to add additional key value properties to the outgoing message body. <br />
 `websocket` is used to establish a websocket connection instead of sending REST requests.
 
