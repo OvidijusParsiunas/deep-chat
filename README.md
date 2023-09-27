@@ -43,10 +43,8 @@ npm install deep-chat-react
 To test the component - simply add the following to your markup:
 
 ```
-<deep-chat directConnection='{"demo":true}'/>
+<deep-chat></deep-chat>
 ```
-
-The exact syntax for the above example will vary depending on the framework of your choice ([see here](https://deepchat.dev/examples/frameworks)).
 
 ### :zap: Connect
 

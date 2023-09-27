@@ -66,13 +66,13 @@ export class Messages {
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
+    GuidanceMessages.addSetupMessageIfNeeded(this, deepChat, serviceIO);
     if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
-    GuidanceMessages.addSetupMessageIfNeeded(this, deepChat, serviceIO);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {

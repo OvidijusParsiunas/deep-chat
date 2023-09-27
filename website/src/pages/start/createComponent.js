@@ -153,7 +153,7 @@ export default function CreateComponent(props) {
           displayDefineMarkup ? 'start-page-main-details-visible' : ''
         }`}
       >
-        {`<deep-chat directConnection='{"demo":true}'/>`}
+        {`<deep-chat></deep-chat>`}
       </div>
       <div className={`start-page-text ${displayDone ? 'start-page-main-details-visible' : ''}`}>All done!</div>
       <div className={`start-page-text ${displayExamplesTitle ? 'start-page-main-details-visible' : ''}`}>

@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>DeepChat Development</title>
+    <title>Deep Chat Development</title>
     <script type="module" src="src/deepChat.ts"></script>
     <!-- https://deepchat.dev/examples/externalModules -->
     <!-- Need this when using azure for speech to text -->
@@ -21,7 +21,8 @@
   <body>
     <!-- Attributes can be set as strings either directly on the element (directConnection) or via a `setAttribute` method on its reference (containerStyle).
       When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
-      to properties must not have external references and all regex values are properly escaped (See bottom).
+      to properties must not have external references and all regex values are properly escaped.
+      You can also pass values into the component via properties by using the element reference (initialMessages).
       -->
     <deep-chat id="chat-element" directConnection='{"demo": true}'></deep-chat>
     <script type="module">
@@ -31,9 +32,6 @@
         {role: 'user', text: 'Hey, how are you today?'},
         {role: 'ai', text: 'I am doing very well!'},
       ];
-      // Attributes can be set as strings either directly on the element (directConnection) or via a `setAttribute` method on its reference (containerStyle).
-      // When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
-      // to properties must not have external references and all regex values are properly escaped (See bottom).
       chatElement.setAttribute(
         'containerStyle',
         JSON.stringify({

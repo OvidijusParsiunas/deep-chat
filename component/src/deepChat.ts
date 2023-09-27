@@ -27,7 +27,6 @@ import {Request} from './types/request';
 import {Avatars} from './types/avatars';
 import {Stream} from './types/stream';
 import {Names} from './types/names';
-import {Demo} from './types/demo';
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
