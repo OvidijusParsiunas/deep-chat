@@ -29,7 +29,7 @@ npm install deep-chat-react
 To test the component - simply add the following to your markup:
 
 ```
-<DeepChat directConnection={{demo:true}}/>
+<DeepChat></DeepChat>
 ```
 
 Explore live examples for React and other frameworks [here](https://deepchat.dev/examples/frameworks).

@@ -18,7 +18,7 @@ function RightPanel() {
     <div id="media-panel-right" ref={chatElementRef} className="feature-panel">
       <OnVisibleAnimation beforeClass={'media-bottom'} afterClass={'media-top'} timeoutMS={0}>
         <DeepChatBrowser
-          directConnection={{demo: true}}
+          demo={true}
           containerStyle={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',

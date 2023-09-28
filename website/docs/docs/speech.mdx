@@ -50,7 +50,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={'Send a message to hear the response.'}
     containerStyle={{borderRadius: '8px'}}
     textToSpeech={{volume: 0.9}}
@@ -74,7 +74,7 @@ import Tabs from '@theme/Tabs';
   textToSpeech='{"volume": "0.9"}'
   introMessage="Send a message to hear the response."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -115,7 +115,7 @@ Transcribe your voice into text and control chat with commands.<br />
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={'Click the microphone to start transcribing your speech.'}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
@@ -156,7 +156,7 @@ Transcribe your voice into text and control chat with commands.<br />
   }'
   introMessage="Click the microphone to start transcribing your speech."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -200,7 +200,7 @@ for the full list.
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={'Click the microphone to start transcribing your speech.'}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{webSpeech: {language: 'en-US'}}}
@@ -224,7 +224,7 @@ for the full list.
   speechToText='{"webSpeech": {"language": "en-US"}}'
   introMessage="Click the microphone to start transcribing your speech."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -270,7 +270,7 @@ See [EXAMPLES](../examples/externalModules).
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={"Azure Speech To Text can't be used in this website as you need to set your credentials."}
     containerStyle={{borderRadius: '8px'}}
     errorMessages={{
@@ -325,7 +325,7 @@ See [EXAMPLES](../examples/externalModules).
   }'
   introMessage="Azure Speech To Text can't be used in this website as you need to set your credentials."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -354,7 +354,7 @@ please switch to using the `retrieveToken` property. Check out the example below
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={"Azure Speech To Text can't be used in this website as you need to set your region."}
     errorMessages={{
       overrides: {
@@ -405,7 +405,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={'Send a message to hear the response.'}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{textColor: {interim: 'green', final: 'blue'}}}
@@ -429,7 +429,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
   speechToText='{"textColor": {"interim": "green", "final": "blue"}}'
   introMessage="Send a message to hear the response."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -468,7 +468,7 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={"Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
@@ -529,7 +529,7 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
   }}}'
   introMessage="Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -550,7 +550,7 @@ and an additional `commandMode` property which sets the button styling when the 
 
 <ComponentContainer>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     introMessage={"Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
@@ -667,7 +667,7 @@ and an additional `commandMode` property which sets the button styling when the 
   }'
   introMessage="Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -689,7 +689,7 @@ to add the Speech SDK to your project and add your resource properties.
 
 <ComponentContainer innerDisplay={'flex'}>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     containerStyle={{marginRight: '30px'}}
     textToSpeech={true}
     speechToText={{
@@ -712,7 +712,7 @@ to add the Speech SDK to your project and add your resource properties.
     }}
   ></DeepChatBrowser>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     textToSpeech={true}
     speechToText={{
       azure: {
@@ -761,7 +761,7 @@ to add the Speech SDK to your project and add your resource properties.
       "overrides": {"speechToText": "Azure Speech To Text can not be used in this website as you need to set your credentials."}
     }'
     containerStyle='{"marginRight": "30px"}'
-    directConnection='{"demo": true}'
+    demo="true"
   ></deep-chat>
   <deep-chat
     speechToText='{
@@ -780,7 +780,7 @@ to add the Speech SDK to your project and add your resource properties.
     errorMessages='{
       "overrides": {"speechToText": "Azure Speech To Text can not be used in this website as you need to set your credentials."}
     }'
-    directConnection='{"demo": true}'
+    demo="true"
   ></deep-chat>
 </div>
 ```

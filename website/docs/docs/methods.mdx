@@ -30,7 +30,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerMethods propertyName={'getMessages'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -57,7 +57,7 @@ a _false_ argument to prevent this.
 <ComponentContainerMethods propertyName={'clearMessages'} displayResults={false}>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{demo: true}}
+    demo={true}
     initialMessages={[
       {text: 'What is 2 + 2?', role: 'user'},
       {text: 'The result of 2 + 2 is 4.', role: 'ai'},
@@ -88,7 +88,7 @@ Send a user message programmatically.
 #### Example
 
 <ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={'User message'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -112,7 +112,7 @@ Focuses the cursor on the text input.
 #### Example
 
 <ComponentContainerMethods propertyName={'focusInput'} displayResults={false}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -153,7 +153,7 @@ method to highlight the code with the loaded module.
         },
       },
     }}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainerHighlightMethod>
 

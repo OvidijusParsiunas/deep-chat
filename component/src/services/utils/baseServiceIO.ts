@@ -137,6 +137,6 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   public isDirectConnection() {
-    return !!this.demo;
+    return false;
   }
 }

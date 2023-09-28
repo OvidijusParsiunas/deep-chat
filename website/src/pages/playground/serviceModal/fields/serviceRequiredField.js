@@ -48,7 +48,7 @@ const Required = React.forwardRef(({title, requiredValue, setValue, view, change
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1200 1200"
-              enable-background="new 0 0 1200 1200"
+              enableBackground="new 0 0 1200 1200"
             >
               <path
                 id="path6686"
@@ -76,7 +76,7 @@ const Required = React.forwardRef(({title, requiredValue, setValue, view, change
               }}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1200 1200"
-              enable-background="new 0 0 1200 1200"
+              enableBackground="new 0 0 1200 1200"
             >
               <path
                 d="

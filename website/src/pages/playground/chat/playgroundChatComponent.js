@@ -4,12 +4,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import './playgroundChatComponent.css';
 import React from 'react';
 
-function processConnectObject(connect) {
-  if (connect?.demo) {
-    return {demo: {response: {text: "Click the 'Configure' button below to connect to a service."}}};
-  }
-  return connect;
-}
+const DEMO_RESPONSE = {response: {text: "Click the 'Configure' button below to connect to a service."}};
 
 export default function ChatComponent({config, colorMode}) {
   const componentRef = React.createRef(null);
@@ -51,9 +46,22 @@ export default function ChatComponent({config, colorMode}) {
                   auxiliaryStyle={darkAuxiliaryStyle}
                   introPanelStyle={darkPanelStyle}
                 ></DeepChatBrowser>
+              ) : config?.connect?.demo ? (
+                <DeepChatBrowser
+                  demo={DEMO_RESPONSE}
+                  containerStyle={darkContainerStyle}
+                  messageStyles={darkMessageStyles}
+                  initialMessages={config.messages}
+                  onNewMessage={newestMessages}
+                  onClearMessages={clearMessages}
+                  textInput={darkTextInput}
+                  submitButtonStyles={darkButtonStyles}
+                  auxiliaryStyle={darkAuxiliaryStyle}
+                  introPanelStyle={darkPanelStyle}
+                ></DeepChatBrowser>
               ) : (
                 <DeepChatBrowser
-                  directConnection={processConnectObject(config.connect)}
+                  directConnection={config.connect}
                   containerStyle={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
@@ -79,9 +87,17 @@ export default function ChatComponent({config, colorMode}) {
                 onNewMessage={newestMessages}
                 onClearMessages={clearMessages}
               ></DeepChatBrowser>
+            ) : config?.connect?.demo ? (
+              <DeepChatBrowser
+                demo={DEMO_RESPONSE}
+                containerStyle={lightContainerStyle}
+                initialMessages={config.messages}
+                onNewMessage={newestMessages}
+                onClearMessages={clearMessages}
+              ></DeepChatBrowser>
             ) : (
               <DeepChatBrowser
-                directConnection={processConnectObject(config.connect)}
+                directConnection={config.connect}
                 containerStyle={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}

@@ -18,7 +18,7 @@ function LeftPanel() {
   return (
     <div id="capture-files-left-panel" className="feature-panel">
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         introMessage={`Click the camera or the microphone button.`}
         initialMessages={[
           {file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'},

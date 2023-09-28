@@ -36,7 +36,7 @@ import Tabs from '@theme/Tabs';
     {"text": "What is the meaning of life?", "role": "user"},
     {"text": "This completely depends on the person.", "role": "ai"}
   ]'
-  directConnection='{"demo": true}'
+  demo="true"
   stream="true"
 ></deep-chat>
 ```
@@ -45,7 +45,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer minHeight={1}>
   <DeepChatBrowser
-    directConnection={{demo: true}}
+    demo={true}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},

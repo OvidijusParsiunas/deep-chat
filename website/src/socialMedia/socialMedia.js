@@ -95,7 +95,7 @@ const Logos = React.forwardRef((_, ref) => {
           boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
         }}
       >
-        <a href="docs/directConnection/AssemblyAI" target="_blank">
+        <a href="docs/directConnection/StabilityAI" target="_blank">
           <img src={stabilityAILogo} width="44" style={{marginTop: '6px'}} />
         </a>
       </div>
@@ -154,7 +154,7 @@ function Components() {
   return (
     <div id="customize-content">
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -172,7 +172,7 @@ function Components() {
         }}
       ></DeepChatBrowser>
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -256,7 +256,7 @@ function Components() {
         textInput={{placeholder: {text: `What's on your mind?`}}}
       ></DeepChatBrowser>
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         stream={true}
         containerStyle={{
           borderRadius: '10px',
@@ -312,7 +312,7 @@ function Components() {
         <IntroPanel></IntroPanel>
       </DeepChatBrowser>
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         containerStyle={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',

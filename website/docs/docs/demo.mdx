@@ -1,10 +1,10 @@
 ---
-sidebar_position: 7
+sidebar_position: 13
 ---
 
 # Demo
 
-The component uses this by default to demonstrate the component's capabilities without connecting to any APIs.
+This is used by default to demonstrate the component's capabilities without connecting to any APIs.
 
 ### `demo` {#demo}
 
@@ -40,14 +40,14 @@ import Tabs from '@theme/Tabs';
 #### Base Example
 
 <ComponentContainer>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} directConnection={{demo: true}}></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
 
 ```javascript
-<deep-chat directConnection='{"demo": true}'></deep-chat>
+<deep-chat demo="true"></deep-chat>
 ```
 
 </TabItem>
@@ -56,7 +56,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat directConnection='{"demo": true}' containerStyle='{"borderRadius": "8px"}'></deep-chat>
+<deep-chat demo="true" containerStyle='{"borderRadius": "8px"}'></deep-chat>
 ```
 
 </TabItem>
@@ -70,20 +70,18 @@ import Tabs from '@theme/Tabs';
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     introMessage={`Let's play Rock, Paper, Scissors! Make your guess and see who wins!`}
-    directConnection={{
-      demo: {
-        response: (message) => {
-          const options = ['rock', 'paper', 'scissors'];
-          const userOption = message.text?.toLocaleLowerCase();
-          const aiOption = options[Math.floor(Math.random() * 3)];
-          let response = `I guessed ${aiOption}. `;
-          if (userOption === aiOption) response += "It's a draw.";
-          else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
-          else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
-          else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-          else response = 'Guess either Rock, Paper or Scissors';
-          return {text: response};
-        },
+    demo={{
+      response: (message) => {
+        const options = ['rock', 'paper', 'scissors'];
+        const userOption = message.text?.toLocaleLowerCase();
+        const aiOption = options[Math.floor(Math.random() * 3)];
+        let response = `I guessed ${aiOption}. `;
+        if (userOption === aiOption) response += "It's a draw.";
+        else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
+        else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
+        else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
+        else response = 'Guess either Rock, Paper or Scissors';
+        return {text: response};
       },
     }}
   ></DeepChatBrowser>
@@ -93,20 +91,18 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Sample code">
 
 ```javascript
-chatElementRef.directConnection = {
-  demo: {
-    response: (message) => {
-      const options = ['rock', 'paper', 'scissors'];
-      const userOption = message.text?.toLocaleLowerCase();
-      const aiOption = options[Math.floor(Math.random() * 3)];
-      let response = `I guessed ${aiOption}. `;
-      if (userOption === aiOption) response += 'Draw';
-      else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
-      else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
-      else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-      else response = 'Guess either Rock, Paper or Scissors';
-      return {text: response};
-    },
+chatElementRef.demo = {
+  response: (message) => {
+    const options = ['rock', 'paper', 'scissors'];
+    const userOption = message.text?.toLocaleLowerCase();
+    const aiOption = options[Math.floor(Math.random() * 3)];
+    let response = `I guessed ${aiOption}. `;
+    if (userOption === aiOption) response += 'Draw';
+    else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
+    else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
+    else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
+    else response = 'Guess either Rock, Paper or Scissors';
+    return {text: response};
   },
 };
 ```
@@ -126,20 +122,18 @@ chatElementRef.directConnection = {
 <script>
 // ...other code
 const chatElementRef = document.getElementById('chat-element');
-chatElementRef.directConnection = {
-  demo: {
-    response: (message) => {
-      const options = ['rock', 'paper', 'scissors'];
-      const userOption = message.text?.toLocaleLowerCase();
-      const aiOption = options[Math.floor(Math.random() * 3)];
-      let response = `I guessed ${aiOption}. `;
-      if (userOption === aiOption) response += 'Draw';
-      else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
-      else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
-      else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
-      else response = 'Guess either Rock, Paper or Scissors';
-      return {text: response};
-    },
+chatElementRef.demo = {
+  response: (message) => {
+    const options = ['rock', 'paper', 'scissors'];
+    const userOption = message.text?.toLocaleLowerCase();
+    const aiOption = options[Math.floor(Math.random() * 3)];
+    let response = `I guessed ${aiOption}. `;
+    if (userOption === aiOption) response += 'Draw';
+    else if (userOption === 'rock') response += aiOption === 'paper' ? 'I win!' : 'You win!';
+    else if (userOption === 'paper') response += aiOption === 'scissors' ? 'I win!' : 'You win!';
+    else if (userOption === 'scissors') response += aiOption === 'rock' ? 'I win!' : 'You win!';
+    else response = 'Guess either Rock, Paper or Scissors';
+    return {text: response};
   },
 };
 ```
@@ -154,12 +148,10 @@ chatElementRef.directConnection = {
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{
-      demo: {
-        displayLoadingBubble: true,
-        displayFileAttachmentContainer: true,
-        displayErrors: {service: true},
-      },
+    demo={{
+      displayLoadingBubble: true,
+      displayFileAttachmentContainer: true,
+      displayErrors: {service: true},
     }}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -169,12 +161,10 @@ chatElementRef.directConnection = {
 
 ```html
 <deep-chat
-  directConnection='{
-    "demo": {
-      "displayLoadingBubble": true,
-      "displayFileAttachmentContainer": true,
-      "displayErrors": {"service": true}
-    }
+  demo='{
+    "displayLoadingBubble": true,
+    "displayFileAttachmentContainer": true,
+    "displayErrors": {"service": true}
   }'
 ></deep-chat>
 ```
@@ -186,12 +176,10 @@ chatElementRef.directConnection = {
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  directConnection='{
-    "demo": {
-      "displayLoadingBubble": true,
-      "displayFileAttachmentContainer": true,
-      "displayErrors": {"service": true}
-    }
+  demo='{
+    "displayLoadingBubble": true,
+    "displayFileAttachmentContainer": true,
+    "displayErrors": {"service": true}
   }'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>

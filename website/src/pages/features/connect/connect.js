@@ -18,7 +18,7 @@ function LeftPanel() {
   return (
     <div id="connect-left-panel" className="feature-panel">
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Where do I start?', role: 'user'},
           {text: 'Check Docs on how to install this component.', role: 'ai'},

@@ -24,10 +24,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser
-    containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '8px'}}
-    directConnection={{demo: true}}
-  ></DeepChatBrowser>
+  <DeepChatBrowser containerStyle={{backgroundColor: '#f7f7f7', borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
@@ -43,10 +40,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat
-  containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}'
-  directConnection='{"demo": true}'
-></deep-chat>
+<deep-chat containerStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}' demo="true"></deep-chat>
 ```
 
 </TabItem>
@@ -65,7 +59,7 @@ Object containing CSS styling properties for the element containing files attach
 <ComponentContainer>
   <DeepChatBrowser
     attachmentContainerStyle={{backgroundColor: '#b2e1ff57'}}
-    directConnection={{demo: {displayFileAttachmentContainer: true}}}
+    demo={{displayFileAttachmentContainer: true}}
     containerStyle={{borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -85,7 +79,7 @@ Object containing CSS styling properties for the element containing files attach
 
 <deep-chat
   attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'
-  directConnection='{"demo": {"displayFileAttachmentContainer": true}}'
+  demo='{"displayFileAttachmentContainer": true}'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 ```
@@ -144,7 +138,7 @@ Configuration for the dropup button and its menu element styles. <br />
         },
       },
     }}
-    directConnection={{demo: true}}
+    demo={true}
     audio={{button: {position: 'dropup-menu'}}}
     images={{button: {position: 'dropup-menu'}}}
   ></DeepChatBrowser>
@@ -225,7 +219,7 @@ Configuration for the dropup button and its menu element styles. <br />
       }
     }
   }'
-  directConnection='{"demo": true}'
+  demo="true"
   containerStyle='{"borderRadius": "8px"}'
   audio='{"button": {"position": "dropup-menu"}}'
   images='{"button": {"position": "dropup-menu"}}'
@@ -250,7 +244,7 @@ Styling for the chat view's bottom area dedicated for text input and file button
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     inputAreaStyle={{backgroundColor: '#ebf5ff'}}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -270,7 +264,7 @@ Styling for the chat view's bottom area dedicated for text input and file button
 <deep-chat
   inputAreaStyle='{"backgroundColor": "#ebf5ff"}'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -309,7 +303,7 @@ Custom details for the chat's text input. <br />
       placeholder: {text: 'Insert text here...', style: {color: '#4459a4'}},
       characterLimit: 10,
     }}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -347,7 +341,7 @@ Custom details for the chat's text input. <br />
     "characterLimit": 10
   }'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -362,7 +356,7 @@ Custom details for the chat's text input. <br />
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -392,7 +386,7 @@ Custom details for the chat's text input. <br />
       "text": "Text not allowed..."
   }}'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -440,7 +434,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
       },
       position: 'outside-right',
     }}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -500,7 +494,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
     "position": "outside-right"
   }'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -538,7 +532,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
         },
       },
     }}
-    directConnection={{demo: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -605,7 +599,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
     }
   }'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -639,7 +633,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{demo: true}}
+    demo={true}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -708,7 +702,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
     {"text": "As long as it makes you happy!", "role": "ai"}
   ]'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -757,7 +751,7 @@ Styling for a button inside the chat view. <br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{demo: true}}
+    demo={true}
     images={{
       button: {
         styles: {
@@ -813,7 +807,7 @@ Styling for a button inside the chat view. <br />
     }
   }'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
 ></deep-chat>
 ```
 
@@ -942,7 +936,7 @@ Styling for a button inside the chat view. <br />
 <deep-chat
   textInput='{"styles": {"text": {"paddingRight": "64px"}}}'
   containerStyle='{"borderRadius": "8px"}'
-  directConnection='{"demo": true}'
+  demo="true"
   submitButtonStyles='{
     "submit": {
       "container": {
@@ -1030,7 +1024,7 @@ Position for a button either _inside_ the [text input container](#textInput), _o
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    directConnection={{demo: true}}
+    demo={true}
     gifs={{button: {position: 'dropup-menu'}}}
     audio={{button: {position: 'dropup-menu'}}}
     camera={{button: {position: 'dropup-menu'}}}
@@ -1059,7 +1053,7 @@ Position for a button either _inside_ the [text input container](#textInput), _o
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  directConnection='{"demo": true}'
+  demo="true"
   containerStyle='{"borderRadius": "8px"}'
   gifs='{"button": {"position": "dropup-menu"}}'
   audio='{"button": {"position": "dropup-menu"}}'
@@ -1093,7 +1087,7 @@ Custom styling for the microphone button. <br />
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
     introMessage={`Use the microphone button to record audio.`}
-    directConnection={{demo: true}}
+    demo={true}
     microphone={{
       button: {
         default: {
@@ -1244,7 +1238,7 @@ Custom styling for the microphone button. <br />
       }
     }
   }'
-  directConnection='{"demo": true}'
+  demo="true"
   containerStyle='{"borderRadius": "8px"}'
   introMessage="Use the microphone button to record audio."
 ></deep-chat>

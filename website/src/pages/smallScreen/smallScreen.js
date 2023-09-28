@@ -6,7 +6,7 @@ export default function SmallScreenPanel() {
   return (
     <div id="small-screen-component">
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'What is Deep Chat?', role: 'user'},
           {text: 'A framework agnostic chat component.', role: 'ai'},

@@ -259,6 +259,9 @@ function changeFirstLetter(text, capitalize = true) {
 }
 
 function getCodeStr(connect, isCustom, view) {
+  if (connect.demo) {
+    return `<deep-chat demo="true"></deep-chat>`;
+  }
   if (isCustom) {
     return `<deep-chat request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
   }

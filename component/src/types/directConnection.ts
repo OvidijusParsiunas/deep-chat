@@ -5,7 +5,6 @@ import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
 import {OpenAI} from './openAI';
 import {Azure} from './azure';
-import {Demo} from './demo';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -14,5 +13,4 @@ export interface DirectConnection {
   cohere?: Cohere & APIKey;
   stabilityAI?: StabilityAI & APIKey;
   assemblyAI?: AssemblyAI & APIKey;
-  demo?: Demo;
 }

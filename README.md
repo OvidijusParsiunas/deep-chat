@@ -46,6 +46,8 @@ To test the component - simply add the following to your markup:
 <deep-chat></deep-chat>
 ```
 
+The exact syntax will vary depending on the framework of your choice ([see here](https://deepchat.dev/examples/frameworks)).
+
 ### :zap: Connect
 
 ![Connect](./assets/readme/connect.png)

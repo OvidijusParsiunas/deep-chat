@@ -9,10 +9,10 @@ import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
-import {GuidanceMessages} from './guidanceMessages';
 import {CustomStyle} from '../../../types/styles';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
+import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
@@ -65,8 +65,8 @@ export class Messages {
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
+    this.addSetupMessageIfNeeded(deepChat, serviceIO);
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
-    GuidanceMessages.addSetupMessageIfNeeded(this, deepChat, serviceIO);
     if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this.displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
@@ -104,6 +104,14 @@ export class Messages {
     const container = document.createElement('div');
     container.id = 'messages';
     return container;
+  }
+
+  private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
+    const text = SetupMessages.getText(deepChat, serviceIO);
+    if (text) {
+      const elements = this.createAndAppendNewMessageElement(text, true);
+      this.applyCustomStyles(elements, true, false);
+    }
   }
 
   private addIntroductoryMessage(introMessage?: string) {

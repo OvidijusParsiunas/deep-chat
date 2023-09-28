@@ -10,7 +10,7 @@ function ComponentsDark() {
     <div id="customize-content">
       <DeepChatBrowser
         stream={true}
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -102,7 +102,7 @@ function ComponentsDark() {
       ></DeepChatBrowser>
       <DeepChatBrowser
         stream={true}
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -202,7 +202,7 @@ function ComponentsDark() {
       ></DeepChatBrowser>
       <DeepChatBrowser
         stream={true}
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -316,7 +316,7 @@ function ComponentsLight() {
   return (
     <div id="customize-content">
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},
@@ -410,7 +410,7 @@ function ComponentsLight() {
         textInput={{placeholder: {text: `What's on your mind?`}}}
       ></DeepChatBrowser>
       <DeepChatBrowser
-        directConnection={{demo: true}}
+        demo={true}
         stream={true}
         containerStyle={{
           borderRadius: '10px',
@@ -460,7 +460,7 @@ function ComponentsLight() {
       </DeepChatBrowser>
       <DeepChatBrowser
         stream={true}
-        directConnection={{demo: true}}
+        demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, how about you?', role: 'ai'},

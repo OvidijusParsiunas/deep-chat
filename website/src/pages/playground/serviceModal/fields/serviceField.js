@@ -120,7 +120,7 @@ const services = {
 };
 
 const SERVICE_TO_LINK = {
-  demo: 'https://deepchat.dev/docs/directConnection/demo',
+  demo: 'https://deepchat.dev/docs/demo#demo',
   custom: 'https://deepchat.dev/docs/connect',
   openAI: 'https://openai.com/blog/openai-api',
   cohere: 'https://docs.cohere.com/docs',

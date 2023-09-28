@@ -81,7 +81,7 @@ function ComponentPanel() {
     <div id="start-panel-animation-content-container">
       <div id="start-panel-component" ref={component} className={'start-panel-component-center'}>
         <DeepChatBrowser
-          directConnection={{demo: true}}
+          demo={true}
           initialMessages={[
             {text: 'What is Deep Chat?', role: 'user'},
             {text: 'A framework agnostic chat component.', role: 'ai'},
