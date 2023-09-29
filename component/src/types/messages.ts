@@ -25,9 +25,13 @@ export interface MessageStyles {
   error?: MessageElementsStyles;
 }
 
-export type MessageContent = InterfacesUnion<{role: string; text: string} | {role: string; file: MessageFile}>;
+export type MessageContent = InterfacesUnion<
+  {role: string; text: string} | {role: string; file: MessageFile} | {role: string; html: string}
+>;
 
 export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boolean}) => void;
+
+export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 
 export interface ErrorMessageOverrides {
   default?: string;

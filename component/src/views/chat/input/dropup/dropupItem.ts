@@ -52,7 +52,7 @@ export class DropupItem {
     Object.assign(item.style, styles?.item?.default);
     DropupItem.populateItem(elementRef, item, dropupText, styles);
     item.classList.add('dropup-menu-item');
-    const statefulStyles = StyleUtils.generateStateful(
+    const statefulStyles = StyleUtils.processStateful(
       styles?.item || {}, {backgroundColor: '#f3f3f3'}, {backgroundColor: '#ebebeb'});
     DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
     return item;

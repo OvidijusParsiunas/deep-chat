@@ -5,10 +5,13 @@ import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {InterfacesUnion} from '../../../types/utilityTypes';
+import {HTMLClassUtilities} from '../../../types/html';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
+import {HTMLMessageUtils} from './htmlMessageUtils';
 import {CustomStyle} from '../../../types/styles';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
@@ -25,6 +28,7 @@ import {
   MessageRoleStyles,
   MessageContent,
   MessageStyles,
+  IntroMessage,
 } from '../../../types/messages';
 
 export interface MessageElements {
@@ -32,6 +36,8 @@ export interface MessageElements {
   innerContainer: HTMLElement;
   bubbleElement: HTMLElement;
 }
+
+type AcceptedContent = InterfacesUnion<{text: string} | {file: MessageFile} | {html: string}>;
 
 export class Messages {
   elementRef: HTMLElement;
@@ -48,8 +54,9 @@ export class Messages {
   private _remarkable: Remarkable;
   private _textToSpeech?: ProcessedTextToSpeechConfig;
   private _introPanel?: IntroPanel;
-  private _introMessage?: string;
+  private _introMessage?: IntroMessage;
   private _streamedText = '';
+  readonly _htmlClassUtilities: HTMLClassUtilities = {};
   messages: MessageContent[] = [];
   customDemoResponse?: DemoResponse;
 
@@ -61,6 +68,7 @@ export class Messages {
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
+    if (deepChat.htmlClassUtilities) this._htmlClassUtilities = deepChat.htmlClassUtilities;
     this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
@@ -114,21 +122,19 @@ export class Messages {
     }
   }
 
-  private addIntroductoryMessage(introMessage?: string) {
+  private addIntroductoryMessage(introMessage?: IntroMessage) {
     if (introMessage) this._introMessage = introMessage;
-    if (this._introMessage) {
-      const elements = this.createAndAppendNewMessageElement(this._introMessage, true);
+    if (this._introMessage?.text) {
+      const elements = this.createAndAppendNewMessageElement(this._introMessage.text, true);
       this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+    } else if (this._introMessage?.html) {
+      HTMLMessageUtils.addNewHTMLMessage(this, this._introMessage.html, true, false, true);
     }
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
     initialMessages.forEach((message) => {
-      if (message.text) {
-        this.addNewMessage({text: message.text}, message.role === 'ai', true, true);
-      } else if (message.file) {
-        this.addNewMessage({files: [message.file]}, message.role === 'ai', true, true);
-      }
+      this.addNewMessage(message, message.role === 'ai', true, true);
     });
     setTimeout(() => (this.elementRef.scrollTop = this.elementRef.scrollHeight));
   }
@@ -152,11 +158,12 @@ export class Messages {
     return {bubbleElement};
   }
 
-  public static createMessageContent(isAI: boolean, text?: string, file?: MessageFile): MessageContent {
-    if (file) {
-      return {role: isAI ? 'ai' : 'user', file};
-    }
-    return {role: isAI ? 'ai' : 'user', text: text || ''};
+  public static createMessageContent(isAI: boolean, content: AcceptedContent): MessageContent {
+    const role = isAI ? 'ai' : 'user';
+    const {text, file, html} = content;
+    if (file) return {role, file};
+    if (html) return {role, html};
+    return {role, text: text || ''};
   }
 
   private static createBaseElements(): MessageElements {
@@ -197,6 +204,7 @@ export class Messages {
     return messageElements;
   }
 
+  // makes sure the bubble has dimensions when there is no text
   private static editEmptyMessageElement(bubbleElement: HTMLElement) {
     bubbleElement.textContent = '.';
     bubbleElement.style.color = '#00000000';
@@ -205,7 +213,7 @@ export class Messages {
   private addNewTextMessage(text: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = this.createAndAppendNewMessageElement(text, isAI);
     this.applyCustomStyles(messageElements, isAI, false);
-    const messageContent = Messages.createMessageContent(isAI, text);
+    const messageContent = Messages.createMessageContent(isAI, {text});
     if (text.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
     this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, isInitial);
@@ -216,7 +224,7 @@ export class Messages {
     if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
       if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(data.text, this._textToSpeech);
-    } else if (data.files)
+    } else if (data.files) {
       data.files.forEach((fileData) => {
         // extra checks are used for 'any'
         if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
@@ -227,6 +235,9 @@ export class Messages {
           FileMessages.addNewAnyFileMessage(this, fileData, isAI, isInitial);
         }
       });
+    } else if (data.html) {
+      HTMLMessageUtils.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
+    }
   }
 
   public sendClientUpdate(message: MessageContent, isInitial = false) {
@@ -339,7 +350,7 @@ export class Messages {
   public finaliseStreamedMessage() {
     if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
     this.messages[this.messages.length - 1].text = this._streamedText;
-    this.sendClientUpdate(Messages.createMessageContent(true, this._streamedText), false);
+    this.sendClientUpdate(Messages.createMessageContent(true, {text: this._streamedText}), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
     this._streamedText = '';
   }

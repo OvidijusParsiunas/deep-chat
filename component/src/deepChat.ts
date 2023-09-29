@@ -1,5 +1,5 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages} from './types/messages';
+import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
@@ -18,6 +18,7 @@ import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {DropupStyles} from './types/dropupStyles';
+import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {TextInput} from './types/textInput';
@@ -77,8 +78,8 @@ export class DeepChat extends InternalHTML {
   @Property('array')
   initialMessages?: MessageContent[];
 
-  @Property('string')
-  introMessage?: string;
+  @Property('object')
+  introMessage?: IntroMessage;
 
   @Property('object')
   avatars?: Avatars;
@@ -124,6 +125,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   introPanelStyle?: CustomStyle;
+
+  @Property('object')
+  htmlClassUtilities?: HTMLClassUtilities;
 
   getMessages: () => MessageContent[] = () => [];
 
