@@ -20,6 +20,7 @@ export interface MessageStyles {
   image?: MessageRoleStyles;
   audio?: MessageRoleStyles;
   file?: MessageRoleStyles;
+  html?: MessageElementsStyles;
   intro?: MessageElementsStyles;
   loading?: MessageElementsStyles;
   error?: MessageElementsStyles;

@@ -128,7 +128,9 @@ export class Messages {
       const elements = this.createAndAppendNewMessageElement(this._introMessage.text, true);
       this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
     } else if (this._introMessage?.html) {
-      HTMLMessageUtils.addNewHTMLMessage(this, this._introMessage.html, true, false, true);
+      const element = HTMLMessageUtils.addNewHTMLMessage(this, this._introMessage.html, true, false, true);
+      this.applyCustomStyles(element, true, false, this.messageStyles?.html);
+      this.applyCustomStyles(element, true, false, this.messageStyles?.intro);
     }
   }
 
@@ -236,7 +238,8 @@ export class Messages {
         }
       });
     } else if (data.html) {
-      HTMLMessageUtils.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
+      const element = HTMLMessageUtils.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
+      this.applyCustomStyles(element, isAI, false, this.messageStyles?.html);
     }
   }
 

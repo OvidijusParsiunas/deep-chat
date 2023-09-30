@@ -8,7 +8,8 @@ export class HTMLMessageUtils {
     // const messageElements = this.createAndAppendNewMessageElement('', isAI);
     // this.applyCustomStyles(messageElements, isAI, false);
     const element = messages.createNewMessageElement('', isAI);
-    element.outerContainer.innerHTML = html;
+    element.bubbleElement.style.maxWidth = 'unset';
+    element.bubbleElement.innerHTML = html;
     messages.elementRef.appendChild(element.outerContainer);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
     const messageContent = Messages.createMessageContent(isAI, {html});
@@ -34,5 +35,6 @@ export class HTMLMessageUtils {
         }
       });
     });
+    return element;
   }
 }
