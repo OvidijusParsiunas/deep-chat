@@ -11,8 +11,8 @@ import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
-import {HTMLMessageUtils} from './htmlMessageUtils';
 import {CustomStyle} from '../../../types/styles';
+import {HTMLMessages} from './html/htmlMessages';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {SetupMessages} from './setupMessages';
@@ -59,6 +59,7 @@ export class Messages {
   readonly _htmlClassUtilities: HTMLClassUtilities = {};
   messages: MessageContent[] = [];
   customDemoResponse?: DemoResponse;
+  submitUserMessage?: (text: string) => void;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
@@ -87,6 +88,9 @@ export class Messages {
         this._textToSpeech = processedConfig;
       });
     }
+    setTimeout(() => {
+      this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available
+    });
   }
 
   private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
@@ -128,7 +132,7 @@ export class Messages {
       const elements = this.createAndAppendNewMessageElement(this._introMessage.text, true);
       this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
     } else if (this._introMessage?.html) {
-      const element = HTMLMessageUtils.addNewHTMLMessage(this, this._introMessage.html, true, false, true);
+      const element = HTMLMessages.addNewHTMLMessage(this, this._introMessage.html, true, false, true);
       this.applyCustomStyles(element, true, false, this.messageStyles?.html);
       this.applyCustomStyles(element, true, false, this.messageStyles?.intro);
     }
@@ -207,7 +211,7 @@ export class Messages {
   }
 
   // makes sure the bubble has dimensions when there is no text
-  private static editEmptyMessageElement(bubbleElement: HTMLElement) {
+  public static editEmptyMessageElement(bubbleElement: HTMLElement) {
     bubbleElement.textContent = '.';
     bubbleElement.style.color = '#00000000';
   }
@@ -237,8 +241,8 @@ export class Messages {
           FileMessages.addNewAnyFileMessage(this, fileData, isAI, isInitial);
         }
       });
-    } else if (data.html) {
-      const element = HTMLMessageUtils.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
+    } else if (data.html !== undefined && data.html !== null) {
+      const element = HTMLMessages.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
       this.applyCustomStyles(element, isAI, false, this.messageStyles?.html);
     }
   }

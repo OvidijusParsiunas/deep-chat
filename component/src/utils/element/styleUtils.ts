@@ -26,4 +26,14 @@ export class StyleUtils {
     const clickStyle = Object.assign(JSON.parse(JSON.stringify({...hoverStyle, ...defClick})), styles?.click);
     return {default: defaultStyle, hover: hoverStyle, click: clickStyle};
   }
+
+  public static mergeStatefulStyles(stylesArr: StatefulStyles[]): StatefulStyles {
+    const statefulStyles = {default: {}, hover: {}, click: {}};
+    stylesArr.forEach((styles) => {
+      statefulStyles.default = Object.assign(statefulStyles.default, styles.default);
+      statefulStyles.hover = Object.assign(statefulStyles.hover, styles.hover);
+      statefulStyles.click = Object.assign(statefulStyles.click, styles.click);
+    });
+    return statefulStyles;
+  }
 }
