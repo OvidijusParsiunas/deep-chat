@@ -12,6 +12,7 @@ export class FileMessageUtils {
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
     const messageContent = Messages.createMessageContent(isAI, {file: data});
     messages.messages.push(messageContent);
+    // WORK - should not be updating if update set to false
     messages.sendClientUpdate(messageContent, isInitial);
   }
 

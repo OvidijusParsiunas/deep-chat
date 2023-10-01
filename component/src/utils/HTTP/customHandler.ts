@@ -3,6 +3,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {Response} from '../../types/response';
+import {RequestUtils} from './requestUtils';
 import {Stream} from './stream';
 
 export interface IWebsocketHandler {
@@ -17,7 +18,7 @@ export class CustomHandler {
       if (!isHandlerActive) return;
       isHandlerActive = false; // need to set it here due to asynchronous code below
       const result = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+      if (!RequestUtils.validateResponseFormat(result)) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage('service', 'Error in server message');
         io.completionsHandlers.onFinish();
@@ -88,10 +89,10 @@ export class CustomHandler {
     const onClose = () => {
       internalConfig.isOpen = false;
     };
-    const onResponse = async (response: {text?: string; error?: string}) => {
+    const onResponse = async (response: Response) => {
       if (!internalConfig.isOpen) return;
       const result = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+      if (!RequestUtils.validateResponseFormat(result)) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage('service', 'Error in server message');
       } else if (typeof result.error === 'string') {

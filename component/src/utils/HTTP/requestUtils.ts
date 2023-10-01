@@ -1,4 +1,5 @@
 import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseT} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
 import {Request} from '../../types/request';
 import {DeepChat} from '../../deepChat';
@@ -47,5 +48,16 @@ export class RequestUtils {
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};
     return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
+  }
+
+  public static validateResponseFormat(response: ResponseT) {
+    return (
+      response &&
+      typeof response === 'object' &&
+      (typeof response.error === 'string' ||
+        typeof response.text === 'string' ||
+        typeof response.html === 'string' ||
+        typeof response.files === 'object')
+    );
   }
 }

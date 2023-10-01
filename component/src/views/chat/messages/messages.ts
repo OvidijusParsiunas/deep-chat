@@ -305,7 +305,7 @@ export class Messages {
   }
 
   private getLastMessageBubbleElement() {
-    return Array.from(this.getLastMessageElement()?.children?.[0].children || []).find((element) => {
+    return Array.from(this.getLastMessageElement()?.children?.[0]?.children || []).find((element) => {
       return element.classList.contains('message-bubble');
     });
   }
@@ -386,6 +386,7 @@ export class Messages {
     );
   }
 
+  // WORK - update all message classes to use deep-chat prefix
   private clearMessages(isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
     this._messageElementRefs.forEach((message) => {
