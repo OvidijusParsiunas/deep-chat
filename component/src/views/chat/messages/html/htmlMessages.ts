@@ -1,3 +1,4 @@
+import {HTMLDeepChatElements} from './htmlDeepChatElements';
 import {HTMLMessageUtils} from './htmlMessageUtils';
 import {Messages} from '../messages';
 
@@ -5,6 +6,12 @@ export class HTMLMessages {
   private static addElement(messages: Messages, outerElement: HTMLElement) {
     messages.elementRef.appendChild(outerElement);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
+  }
+
+  private static update(messages: Messages, html: string, isAI: boolean, update: boolean, isInitial = false) {
+    const messageContent = Messages.createMessageContent(isAI, {html});
+    if (!isInitial) messages.messages.push(messageContent);
+    if (update) messages.sendClientUpdate(messageContent, isInitial);
   }
 
   private static createElements(messages: Messages, html: string, isAI: boolean) {
@@ -18,9 +25,9 @@ export class HTMLMessages {
     const messageElements = HTMLMessages.createElements(messages, html, isAI);
     if (html.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
     HTMLMessageUtils.apply(messages, messageElements.outerContainer);
-    const messageContent = Messages.createMessageContent(isAI, {html});
-    if (!isInitial) messages.messages.push(messageContent);
-    if (update) messages.sendClientUpdate(messageContent, isInitial);
+    if (!HTMLDeepChatElements.isElementTemporary(messageElements)) {
+      HTMLMessages.update(messages, html, isAI, update, isInitial);
+    }
     HTMLMessages.addElement(messages, messageElements.outerContainer);
     return messageElements;
   }

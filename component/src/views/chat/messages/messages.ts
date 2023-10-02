@@ -3,6 +3,7 @@ import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {InterfacesUnion} from '../../../types/utilityTypes';
@@ -142,6 +143,7 @@ export class Messages {
     initialMessages.forEach((message) => {
       this.addNewMessage(message, message.role === 'ai', true, true);
     });
+    // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
     setTimeout(() => (this.elementRef.scrollTop = this.elementRef.scrollHeight));
   }
 
@@ -193,10 +195,17 @@ export class Messages {
     return messageElements;
   }
 
+  private static isTemporaryElement(elements: MessageElements) {
+    return (
+      elements?.bubbleElement.classList.contains('loading-message-text') ||
+      HTMLDeepChatElements.isElementTemporary(elements)
+    );
+  }
+
   public createNewMessageElement(text: string, isAI: boolean) {
     this._introPanel?.hide();
     const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (lastMessageElements?.bubbleElement.classList.contains('loading-message-text')) {
+    if (Messages.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
       this._messageElementRefs.pop();
     }
@@ -256,7 +265,7 @@ export class Messages {
     const lastMessage = this._messageElementRefs[this._messageElementRefs.length - 1];
     const lastMessageBubble = lastMessage?.bubbleElement;
     if ((lastMessageBubble?.classList.contains('streamed-message') && lastMessageBubble.textContent === '') ||
-      lastMessageBubble?.classList.contains('loading-message-text')) {
+        Messages.isTemporaryElement(lastMessage)) {
       lastMessage.outerContainer.remove();
       this._messageElementRefs.pop();
     }
@@ -339,7 +348,7 @@ export class Messages {
   public addNewStreamedMessage() {
     const {bubbleElement} = this.addNewTextMessage('', true, false);
     bubbleElement.classList.add('streamed-message');
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.elementRef.scrollTop = this.elementRef.scrollHeight; // need to scroll down completely
     return bubbleElement;
   }
 
