@@ -4,7 +4,7 @@ import {StatefulStyles} from '../../../../types/styles';
 import {MessageElements, Messages} from '../messages';
 import {HTMLMessageUtils} from './htmlMessageUtils';
 
-const DEEP_CHAT_TEMPORARY_ELEMENT = 'deep-chat-temporary-element';
+const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
 
 const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
   'deep-chat-suggestion-button': {
@@ -33,7 +33,7 @@ const DEEP_CHAT_ELEMENT_CLASSES = Object.keys(DEEP_CHAT_ELEMENTS);
 export class HTMLDeepChatElements {
   public static isElementTemporary(messageElements?: MessageElements) {
     if (!messageElements) return false;
-    return messageElements.bubbleElement.children[0].classList.contains(DEEP_CHAT_TEMPORARY_ELEMENT);
+    return messageElements.bubbleElement.children[0].classList.contains(DEEP_CHAT_TEMPORARY_MESSAGE);
   }
 
   public static doesElementContainDeepChatClass(element: HTMLElement) {

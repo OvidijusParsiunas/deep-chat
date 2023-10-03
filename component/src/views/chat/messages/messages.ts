@@ -239,7 +239,8 @@ export class Messages {
     if (data.text !== undefined && data.text !== null) {
       this.addNewTextMessage(data.text, isAI, update, isInitial);
       if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(data.text, this._textToSpeech);
-    } else if (data.files) {
+    }
+    if (data.files) {
       data.files.forEach((fileData) => {
         // extra checks are used for 'any'
         if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
@@ -250,7 +251,8 @@ export class Messages {
           FileMessages.addNewAnyFileMessage(this, fileData, isAI, isInitial);
         }
       });
-    } else if (data.html !== undefined && data.html !== null) {
+    }
+    if (data.html !== undefined && data.html !== null) {
       const element = HTMLMessages.addNewHTMLMessage(this, data.html, isAI, update, isInitial);
       this.applyCustomStyles(element, isAI, false, this.messageStyles?.html);
     }
