@@ -143,6 +143,8 @@ export class DeepChat extends InternalHTML {
 
   clearMessages: (isReset?: boolean) => void = () => {};
 
+  scrollToBottom: () => void = () => {};
+
   @Property('function')
   onNewMessage: OnNewMessage = () => {};
 

@@ -83,6 +83,7 @@ export class Messages {
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
+    deepChat.scrollToBottom = this.scrollToBottom.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -144,7 +145,7 @@ export class Messages {
       this.addNewMessage(message, message.role === 'ai', true, true);
     });
     // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
-    setTimeout(() => (this.elementRef.scrollTop = this.elementRef.scrollHeight));
+    setTimeout(() => this.scrollToBottom());
   }
 
   // prettier-ignore
@@ -215,7 +216,7 @@ export class Messages {
   private createAndAppendNewMessageElement(text: string, isAI: boolean) {
     const messageElements = this.createNewMessageElement(text, isAI);
     this.elementRef.appendChild(messageElements.outerContainer);
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.scrollToBottom();
     return messageElements;
   }
 
@@ -287,7 +288,7 @@ export class Messages {
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.scrollToBottom();
     if (this._textToSpeech) TextToSpeech.speak(text, this._textToSpeech);
     this._streamedText = '';
   }
@@ -344,13 +345,13 @@ export class Messages {
     this.applyCustomStyles(messageElements, true, false, this.messageStyles?.loading);
     LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    this.scrollToBottom();
   }
 
   public addNewStreamedMessage() {
     const {bubbleElement} = this.addNewTextMessage('', true, false);
     bubbleElement.classList.add('streamed-message');
-    this.elementRef.scrollTop = this.elementRef.scrollHeight; // need to scroll down completely
+    this.scrollToBottom(); // need to scroll down completely
     return bubbleElement;
   }
 
@@ -362,7 +363,7 @@ export class Messages {
     }
     this._streamedText += text;
     bubbleElement.innerHTML = this._remarkable.render(this._streamedText);
-    if (isScrollbarAtBottomOfElement) this.elementRef.scrollTop = this.elementRef.scrollHeight;
+    if (isScrollbarAtBottomOfElement) this.scrollToBottom();
   }
 
   public finaliseStreamedMessage() {
@@ -427,6 +428,10 @@ export class Messages {
     }
     this.messages.splice(0, this.messages.length);
     this._onClearMessages?.();
+  }
+
+  private scrollToBottom() {
+    this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it is downloads later
