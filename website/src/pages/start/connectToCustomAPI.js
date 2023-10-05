@@ -138,7 +138,7 @@ export default function ConnectToCustomAPI(props) {
     >
       <div className={`start-page-text start-page-large-text ${displayRequest ? 'start-page-main-details-visible' : ''}`}>
         Configure your connection settings using the{' '}
-        <a href="https://deepchat.dev/docs/interceptors" target="_blank">
+        <a href="https://deepchat.dev/docs/connect#request" target="_blank">
           request
         </a>{' '}
         property:
