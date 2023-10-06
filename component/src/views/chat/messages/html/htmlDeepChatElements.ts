@@ -5,9 +5,10 @@ import {MessageElements, Messages} from '../messages';
 import {HTMLMessageUtils} from './htmlMessageUtils';
 
 const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
+const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
 
 const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
-  'deep-chat-suggestion-button': {
+  'deep-chat-button': {
     styles: {
       default: {
         backgroundColor: 'white',
@@ -31,6 +32,15 @@ const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
 const DEEP_CHAT_ELEMENT_CLASSES = Object.keys(DEEP_CHAT_ELEMENTS);
 
 export class HTMLDeepChatElements {
+  private static applySuggestionEvent(messages: Messages, element: Element) {
+    // needs to be in a timeout for submitMessage to be available
+    setTimeout(() => {
+      element.addEventListener('click', () => {
+        messages.submitUserMessage?.(element.textContent?.trim() || '');
+      });
+    });
+  }
+
   public static isElementTemporary(messageElements?: MessageElements) {
     if (!messageElements) return false;
     return messageElements.bubbleElement.children[0].classList.contains(DEEP_CHAT_TEMPORARY_MESSAGE);
@@ -40,23 +50,11 @@ export class HTMLDeepChatElements {
     return DEEP_CHAT_ELEMENT_CLASSES.find((className) => element.classList.contains(className));
   }
 
-  private static applyCustomSuggestionEvent(messages: Messages, element: Element) {
-    // needs to be in a timeout for submitMessage to be available
-    setTimeout(() => {
-      element.addEventListener('click', () => {
-        messages.submitUserMessage?.(element.textContent?.trim() || '');
-      });
-    });
-  }
-
-  private static applyEvents(messages: Messages, element: Element, className: string) {
+  private static applyEvents(element: Element, className: string) {
     const events = DEEP_CHAT_ELEMENTS[className].events;
     Object.keys(events || []).forEach((eventType) => {
       element.addEventListener(eventType, events?.[eventType as keyof GlobalEventHandlersEventMap] as () => void);
     });
-    if (className === 'deep-chat-suggestion-button') {
-      HTMLDeepChatElements.applyCustomSuggestionEvent(messages, element);
-    }
   }
 
   private static getProcessedStyles(utilities: HTMLClassUtilities, element: Element, className: string) {
@@ -79,8 +77,10 @@ export class HTMLDeepChatElements {
       Array.from(elements || []).forEach((element) => {
         const styles = HTMLDeepChatElements.getProcessedStyles(utilities, element, className);
         HTMLMessageUtils.applyStylesToElement(element as HTMLElement, styles);
-        HTMLDeepChatElements.applyEvents(messages, element, className);
+        HTMLDeepChatElements.applyEvents(element, className);
       });
     });
+    const suggestionElements = element.getElementsByClassName(DEEP_CHAT_SUGGESTION_BUTTON);
+    Array.from(suggestionElements).forEach((element) => HTMLDeepChatElements.applySuggestionEvent(messages, element));
   }
 }
