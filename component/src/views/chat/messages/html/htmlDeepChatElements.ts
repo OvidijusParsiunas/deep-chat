@@ -66,7 +66,11 @@ export class HTMLDeepChatElements {
       return styles;
     }, []);
     const deepChatStyles = DEEP_CHAT_ELEMENTS[className].styles;
-    if (deepChatStyles) customStyles.unshift(deepChatStyles); // add it to the front to be primary
+    if (deepChatStyles) {
+      const stylesCp = JSON.parse(JSON.stringify(deepChatStyles));
+      if (stylesCp.default) StyleUtils.overwriteDefaultWithAlreadyApplied(stylesCp, element as HTMLElement);
+      customStyles.unshift(stylesCp); // add it to the front to be primary
+    }
     const mergedStyles = StyleUtils.mergeStatefulStyles(customStyles);
     return StyleUtils.processStateful(mergedStyles, {}, {});
   }
