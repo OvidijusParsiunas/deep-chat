@@ -36,4 +36,15 @@ export class StyleUtils {
     });
     return statefulStyles;
   }
+
+  public static overwriteDefaultWithAlreadyApplied(styles: StatefulStyles, element: HTMLElement) {
+    Object.keys(styles.default || []).forEach((key) => {
+      const styleKey = key as keyof CSSStyleDeclaration;
+      if (element.style[styleKey]) {
+        if (styles.default?.[styleKey]) {
+          (styles.default as GenericObject)[key] = element.style[styleKey] as string;
+        }
+      }
+    });
+  }
 }

@@ -142,7 +142,11 @@ export class Messages {
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
     initialMessages.forEach((message) => {
-      this.addNewMessage(message, message.role === 'ai', true, true);
+      if (message.file) {
+        this.addNewMessage({files: [message.file]}, message.role === 'ai', true, true);
+      } else {
+        this.addNewMessage(message, message.role === 'ai', true, true);
+      }
     });
     // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
     setTimeout(() => this.scrollToBottom());
