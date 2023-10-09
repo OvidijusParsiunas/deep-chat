@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 import azureCredentials from '/img/azure-credentials.png';
@@ -51,7 +51,7 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={'Send a message to hear the response.'}
+    introMessage={{text: 'Send a message to hear the response.'}}
     containerStyle={{borderRadius: '8px'}}
     textToSpeech={{volume: 0.9}}
   ></DeepChatBrowser>
@@ -72,7 +72,7 @@ import Tabs from '@theme/Tabs';
 
 <deep-chat
   textToSpeech='{"volume": "0.9"}'
-  introMessage="Send a message to hear the response."
+  introMessage='{"text": "Send a message to hear the response."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -116,7 +116,7 @@ Transcribe your voice into text and control chat with commands.<br />
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={'Click the microphone to start transcribing your speech.'}
+    introMessage={{text: 'Click the microphone to start transcribing your speech.'}}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
       webSpeech: true,
@@ -154,7 +154,7 @@ Transcribe your voice into text and control chat with commands.<br />
     "commands": {"resume": "resume", "settings": {"commandMode": "hello"}},
     "button": {"position": "outside-left"}
   }'
-  introMessage="Click the microphone to start transcribing your speech."
+  introMessage='{"text": "Click the microphone to start transcribing your speech."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -201,7 +201,7 @@ for the full list.
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={'Click the microphone to start transcribing your speech.'}
+    introMessage={{text: 'Click the microphone to start transcribing your speech.'}}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{webSpeech: {language: 'en-US'}}}
   ></DeepChatBrowser>
@@ -222,7 +222,7 @@ for the full list.
 
 <deep-chat
   speechToText='{"webSpeech": {"language": "en-US"}}'
-  introMessage="Click the microphone to start transcribing your speech."
+  introMessage='{"text": "Click the microphone to start transcribing your speech."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -271,7 +271,7 @@ See [EXAMPLES](../examples/externalModules).
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={"Azure Speech To Text can't be used in this website as you need to set your credentials."}
+    introMessage={{text: "Azure Speech To Text can't be used in this website as you need to set your credentials."}}
     containerStyle={{borderRadius: '8px'}}
     errorMessages={{
       overrides: {
@@ -323,7 +323,7 @@ See [EXAMPLES](../examples/externalModules).
   errorMessages='{
     "overrides": {"speechToText": "Azure Speech To Text can not be used in this website as you need to set your credentials."}
   }'
-  introMessage="Azure Speech To Text can't be used in this website as you need to set your credentials."
+  introMessage='{"text": "Azure Speech To Text can't be used in this website as you need to set your credentials."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -355,7 +355,7 @@ please switch to using the `retrieveToken` property. Check out the example below
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={"Azure Speech To Text can't be used in this website as you need to set your region."}
+    introMessage={{text: "Azure Speech To Text can't be used in this website as you need to set your region."}}
     errorMessages={{
       overrides: {
         speechToText: 'Azure Speech To Text can not be used in this website as you need to set your region.',
@@ -406,7 +406,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={'Send a message to hear the response.'}
+    introMessage={{text: 'Send a message to hear the response.'}}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{textColor: {interim: 'green', final: 'blue'}}}
   ></DeepChatBrowser>
@@ -427,7 +427,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
 
 <deep-chat
   speechToText='{"textColor": {"interim": "green", "final": "blue"}}'
-  introMessage="Send a message to hear the response."
+  introMessage='{"text": "Send a message to hear the response."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -469,7 +469,9 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={"Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."}
+    introMessage={{
+      text: 'Click the microphone to start transcribing your speech. Command mode activation phrase is `command`.',
+    }}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
       commands: {
@@ -527,7 +529,7 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
         "substrings": true,
         "caseSensitive": false
   }}}'
-  introMessage="Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."
+  introMessage='{"text": "Click the microphone to start transcribing your speech. Command mode activation phrase is `command`."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -551,7 +553,9 @@ and an additional `commandMode` property which sets the button styling when the 
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={"Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."}
+    introMessage={{
+      text: 'Click the microphone to start transcribing your speech. Command mode activation phrase is `command`.',
+    }}
     containerStyle={{borderRadius: '8px'}}
     speechToText={{
       button: {
@@ -665,7 +669,7 @@ and an additional `commandMode` property which sets the button styling when the 
       "commandMode": "command"
     }
   }'
-  introMessage="Click the microphone to start transcribing your speech. Command mode activation phrase is 'command'."
+  introMessage='{"text": "Click the microphone to start transcribing your speech. Command mode activation phrase is `command`."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>

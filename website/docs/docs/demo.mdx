@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 12
 ---
 
 # Demo
@@ -69,7 +69,7 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Let's play Rock, Paper, Scissors! Make your guess and see who wins!`}
+    introMessage={{text: 'Rock, Paper, Scissors! Make your guess and see who wins!'}}
     demo={{
       response: (message) => {
         const options = ['rock', 'paper', 'scissors'];
@@ -115,7 +115,7 @@ chatElementRef.demo = {
 
 <deep-chat
   id="chat-element"
-  introMessage="Let's play Rock, Paper, Scissors! Make your guess and see who wins!"
+  introMessage='{"text": "Rock, Paper, Scissors! Make your guess and see who wins!"}'
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
 

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 7
 ---
 
 # Files
@@ -31,7 +31,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the image button or drop a file to attach it to the next outgoing message.'}}
     initialMessages={[{file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'}]}
     demo={true}
     images={true}
@@ -55,7 +55,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   images="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the image button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the image button or drop a file to attach it to the next outgoing message."}'
   initialMessages='[{"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -75,7 +75,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the GIF button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the GIF button or drop a file to attach it to the next outgoing message.'}}
     initialMessages={[{file: {src: '/img/example-gif.gif', type: 'image'}, role: 'user'}]}
     demo={true}
     gifs={true}
@@ -99,7 +99,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   gifs="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the GIF button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the GIF button or drop a file to attach it to the next outgoing message."}'
   initialMessages='[{"file": {"src": "path-to-file.gif", "type": "image"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -119,7 +119,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    introMessage={{text: 'Use the camera button to open up a modal for capturing photos.'}}
     initialMessages={[{file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'}]}
     demo={true}
     camera={true}
@@ -143,7 +143,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
   camera="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the camera button to open up a modal for capturing photos."
+  introMessage='{"text": "Use the camera button to open up a modal for capturing photos."}'
   initialMessages='[{"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -163,7 +163,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the audio button or drop a file to attach it to the next outgoing message.'}}
     initialMessages={[{file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'}]}
     demo={true}
     audio={true}
@@ -187,7 +187,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   audio="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the audio button or drop a file to attach it to the next outgoing message."}'
   initialMessages='[{"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -207,7 +207,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the microphone button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the microphone button or drop a file to attach it to the next outgoing message.'}}
     initialMessages={[{file: {src: '/audio/jeff.mp3', type: 'audio'}, role: 'user'}]}
     demo={true}
     microphone={true}
@@ -231,7 +231,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
   microphone="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the microphone button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the microphone button or drop a file to attach it to the next outgoing message."}'
   initialMessages='[{"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -251,7 +251,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the file button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the file button or drop a file to attach it to the next outgoing message.'}}
     initialMessages={[{file: {src: '/text/text.txt', name: 'text-file.txt', type: 'file'}, role: 'user'}]}
     demo={true}
     mixedFiles={true}
@@ -275,7 +275,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   mixedFiles="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the file button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the file button or drop a file to attach it to the next outgoing message."}'
   initialMessages='[{"file": {"src": "path-to-file.txt", "name": "text-file.txt", "type": "file"}, "role": "user"}]'
 ></deep-chat>
 ```
@@ -299,7 +299,7 @@ _".png,.jpg"_ in [`images`](./files#images) are the only file types allowed, a d
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={'Drag and drop a file to observe the result.'}
+    introMessage={{text: 'Drag and drop a file to observe the result.'}}
     dragAndDrop={{backgroundColor: '#80ff704d', border: '5px dashed #52c360'}}
     mixedFiles={true}
     demo={true}
@@ -324,7 +324,7 @@ _".png,.jpg"_ in [`images`](./files#images) are the only file types allowed, a d
   mixedFiles="true"
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Drag and drop a file to observe the result."
+  introMessage='{"text": "Drag and drop a file to observe the result."}'
 ></deep-chat>
 ```
 
@@ -349,7 +349,7 @@ Object used to configure the ability for the component to send files. <br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the audio button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the audio button or drop a file to attach it to the next outgoing message.'}}
     demo={true}
     audio={{
       request: {url: 'https://customapi.com/audio'},
@@ -386,7 +386,7 @@ Object used to configure the ability for the component to send files. <br />
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the audio button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the audio button or drop a file to attach it to the next outgoing message."}'
 ></deep-chat>
 ```
 
@@ -421,7 +421,7 @@ use this value to verify the dropped files. <br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the image button or drop a file to attach it to the next outgoing message.`}
+    introMessage={{text: 'Use the image button or drop a file to attach it to the next outgoing message.'}}
     demo={true}
     images={{
       files: {
@@ -449,7 +449,7 @@ use this value to verify the dropped files. <br />
   images='{"files": {"maxNumberOfFiles": 2, "acceptedFormats": ".jpg,.png"}}'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the image button or drop a file to attach it to the next outgoing message."
+  introMessage='{"text": "Use the image button or drop a file to attach it to the next outgoing message."}'
 ></deep-chat>
 ```
 
@@ -473,7 +473,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Click the image button to open up the modal.`}
+    introMessage={{text: 'Click the image button to open up the modal.'}}
     demo={true}
     images={{
       files: {
@@ -525,7 +525,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Click the image button to open up the modal."
+  introMessage='{"text": "Click the image button to open up the modal."}'
 ></deep-chat>
 ```
 
@@ -552,7 +552,7 @@ Configuration for capturing images using a web camera and handling the resultant
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    introMessage={{text: 'Use the camera button to open up a modal for capturing photos.'}}
     demo={true}
     camera={{
       request: {url: 'https://customapi.com/image-from-camera'},
@@ -592,7 +592,7 @@ Configuration for capturing images using a web camera and handling the resultant
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the camera button to open up a modal for capturing photos."
+  introMessage='{"text": "Use the camera button to open up a modal for capturing photos."}'
 ></deep-chat>
 ```
 
@@ -628,7 +628,7 @@ the `acceptedFormats` property, it will override this one.<br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the camera button to open up a modal for capturing photos.`}
+    introMessage={{text: 'Use the camera button to open up a modal for capturing photos.'}}
     demo={true}
     camera={{
       files: {
@@ -674,7 +674,7 @@ the `acceptedFormats` property, it will override this one.<br />
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the camera button to open up a modal for capturing photos."
+  introMessage='{"text": "Use the camera button to open up a modal for capturing photos."}'
 ></deep-chat>
 ```
 
@@ -699,7 +699,7 @@ Configuration for recording audio using a microphone and handling the resultant 
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the microphone button to record audio.`}
+    introMessage={{text: 'Use the microphone button to record audio.'}}
     demo={true}
     microphone={{
       request: {url: 'https://customapi.com/audio-from-microphone'},
@@ -736,7 +736,7 @@ Configuration for recording audio using a microphone and handling the resultant 
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the microphone button to record audio."
+  introMessage='{"text": "Use the microphone button to record audio."}'
 ></deep-chat>
 ```
 
@@ -772,7 +772,7 @@ the `acceptedFormats` property, it will override this one.<br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the microphone button to record audio.`}
+    introMessage={{text: 'Use the microphone button to record audio.'}}
     demo={true}
     microphone={{
       files: {
@@ -818,7 +818,7 @@ the `acceptedFormats` property, it will override this one.<br />
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the microphone button to record audio."
+  introMessage='{"text": "Use the microphone button to record audio."}'
 ></deep-chat>
 ```
 

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 9
 ---
 
 # Methods
@@ -96,6 +96,43 @@ Send a user message programmatically.
 
 ```html
 chatElementRef.submitUserMessage("User message");
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `scrollToBottom` {#scrollToBottom}
+
+- Type: `() => void`
+
+Moves the chat's scrollbar to the bottom.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'scrollToBottom'} displayResults={false}>
+  <DeepChatBrowser
+    containerStyle={{borderRadius: '8px'}}
+    initialMessages={[
+      {
+        role: 'user',
+        text: 'So close it has no boundaries. A blinking cursor pulses in the electric darkness like a heart coursing with phosphorous light, burning beneath the derma of black-neon glass. A PHONE begins to RING, we hear it as though we were making the call.  The cursor continues to throb, relentlessly patient, until... Hello? Data now slashes across the screen, information flashing faster than we read.',
+      },
+      {
+        role: 'ai',
+        text: "Scroll to the top and click the 'Call Method' button below the chat.",
+      },
+    ]}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.scrollToBottom();
 ```
 
 </TabItem>

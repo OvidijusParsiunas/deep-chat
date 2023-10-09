@@ -1,0 +1,928 @@
+---
+sidebar_position: 2
+---
+
+# HTML
+
+You can insert and render your own code inside chat message bubbles using the `html` property. <br />
+If you want to use your code for an introduction panel - check out [`Intro Panel`](../introPanel) instead.
+
+### Getting started {#Getting Started}
+
+The `html` property can be used in server [Response](../connect#Response)s and is stored inside the chat using the [MessageContent](../messages#MessageContent) format.
+Here is an example using [`initialMessages`](../messages#initialMessages):
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+<BrowserOnly>{() => require('@site/src/components/externalModules/externalModules').importHighlight()}</BrowserOnly>
+<BrowserOnly>{() => require('@site/src/components/webComponent/exampleWebComponent').add()}</BrowserOnly>
+<BrowserOnly>
+  {() => {
+    require('active-table-react').DeepChat;
+  }}
+</BrowserOnly>
+<BrowserOnly>
+  {() => {
+    require('@google-web-components/google-chart');
+  }}
+</BrowserOnly>
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[{html: '<button>Button</button>', role: 'user'}]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat initialMessages='[{"html": "<button>Button</button>", "role": "user"}]'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  initialMessages='[{"html": "<button>Button</button>", "role": "user"}]'
+  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `htmlClassUtilities` {#htmlClassUtilities}
+
+- Type: {<br />
+  &nbsp;&nbsp;[`className: string`]: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`events?: {[eventType: string]?: (event) => void}`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](./styles/#StatefulStyles) <br />
+  }}
+
+Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) and your html is rendered inside it - the resulting elements will not be able to access the CSS and JavaScript
+in your app. To help with this, you can use this object to declare reusable styling and bind your app's functions to the elements via their class names. <br />
+`events` is an object that accepts properties with keys that use any of the ones in [GlobalEventHandlersEventMap](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html) (same as the string
+that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts a function as the value. <br />
+`styles` defines the styles applied to the element for different mouse states. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    htmlClassUtilities={{
+      ['custom-button']: {
+        events: {
+          mousedown: (event) => {
+            event.target.innerText = 'clicked';
+          },
+          mouseenter: (event) => {
+            event.target.innerText = 'hovered';
+          },
+        },
+        styles: {
+          default: {padding: '3px 8px', cursor: 'pointer'},
+          hover: {backgroundColor: 'yellow'},
+        },
+      },
+      ['ai-button']: {
+        styles: {
+          default: {color: 'green'},
+        },
+      },
+    }}
+    initialMessages={[
+      {html: '<button class="custom-button">Hello</button>', role: 'user'},
+      {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+    ]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.htmlClassUtilities = {
+  ['custom-button']: {
+    events: {
+      mousedown: (event) => (event.target.innerText = 'clicked'),
+      mouseenter: (event) => (event.target.innerText = 'hovered'),
+    },
+    styles: {
+      default: {padding: '3px 8px', cursor: 'pointer'},
+      hover: {backgroundColor: 'yellow'},
+    },
+  },
+  ['ai-button']: {
+    styles: {
+      default: {color: 'green'},
+    },
+  },
+};
+chatElementRef.initialMessages = [
+  {html: '<button class="custom-button">Hello</button>', role: 'user'},
+  {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+];
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.htmlClassUtilities = {
+  ['custom-button']: {
+    events: {
+      mousedown: (event) => (event.target.innerText = 'clicked'),
+      mouseenter: (event) => (event.target.innerText = 'hovered'),
+    },
+    styles: {
+      default: {padding: '3px 8px', cursor: 'pointer'},
+      hover: {backgroundColor: 'yellow'},
+    },
+  },
+  ['ai-button']: {
+    styles: {
+      default: {color: 'green'},
+    },
+  },
+};
+chatElementRef.initialMessages = [
+  {html: '<button class="custom-button">Hello</button>', role: 'user'},
+  {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+];
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+### Deep Chat Classes {#deepChatClasses}
+
+Deep Chat comes with a pre-defined set of classes that can be used to add styling/functionality to your elements. <br />
+`deep-chat-button` - applies default button styling. <br />
+`deep-chat-suggestion-button` - when clicked sends the text that is inside the button as a new user message. <br />
+`deep-chat-temporary-message` - removes the message when a new one is added to the chat. This class needs to be applied
+to the parent-most element in the `html` string. This message is also not tracked in state. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    initialMessages={[
+      {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
+      {
+        html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>',
+        role: 'user',
+      },
+    ]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
+  {html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>', role: 'user'},
+];
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
+  {html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>', role: 'user'},
+];
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+If you have suggestions for new classes that you think would be useful, please raise an [issue](https://github.com/OvidijusParsiunas/deep-chat/issues) on GitHub.
+:::
+
+<LineBreak></LineBreak>
+
+### Bubble Style {#bubbleStyle}
+
+To unset/change the message bubble styling, use the `html` property in the [messageStyles](./styles#messageStyles) object.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[{html: '<button>User button</button>', role: 'user'}]}
+    messageStyles={{html: {shared: {bubble: {backgroundColor: 'unset'}}}}}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat messageStyles='{"html": {"shared": {"bubble": {"backgroundColor": "unset"}}}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{"html": {"shared": {"bubble": {"backgroundColor": "unset"}}}}'
+  initialMessages='[{"html": "<button>User button</button>", "role": "user"}]'
+  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### Custom Elements {#customElements}
+
+If the `html` string includes your own custom tags (e.g. `<custom-element>`), they cannot be for the components in your framework
+and must instead be for [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+or [shadow DOM elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM)
+([web components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)). <br />
+To create new web components - use any of the following approaches:
+
+- Most frameworks include a way to convert their components into shadow elements/web components. Please refer to their documentation for more information.
+- You can also create new web components in your app using basic JavaScript - refer to [this guide](https://javascript.plainenglish.io/introduction-to-web-components-in-javascript-create-a-hello-world-web-component-e624874ec3b1).
+- Web components can ultimately be created in any way you desire using any framework outside of your project and imported the same ways as you do
+  `deep-chat`. To note, this approach may require you to first import or use them in your app's code in order for your bundler to register them.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[{html: '<custom-element/>', role: 'user'}]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```txt
+// This is a simple way to create web components via JavaScript, refer to all possibilities above
+
+// JavaScript
+class CustomElement extends HTMLElement {
+  constructor() {
+    super();
+    this.textContent = 'This is a Custom Element';
+  }
+}
+
+customElements.define('custom-element', CustomElement);
+
+// HTML
+<deep-chat initialMessages='[{"html": "<custom-element/>", "role": "user"}]'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```txt
+// This is a simple way to create web components via JavaScript, refer to all possibilities above
+
+// JavaScript
+class CustomElement extends HTMLElement {
+  constructor() {
+    super();
+    this.textContent = 'This is a Custom Element';
+  }
+}
+
+customElements.define('custom-element', CustomElement);
+
+// HTML
+<deep-chat
+  initialMessages='[{"html": "<custom-element/>", "role": "user"}]'
+  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+When passing values into your custom element, you need to pass them as [attributes](https://www.w3schools.com/html/html_attributes.asp) (they must be stringified). E.g.
+`{"html": "<custom-element count="0" name="jeff"></custom-element>"}`
+:::
+
+:::info
+If you are experiencing problems with embedding your custom elements inside the chat, you can always raise an [issue](https://github.com/OvidijusParsiunas/deep-chat/issues) on GitHub.
+When you do please provide us with either a [sandbox](https://codesandbox.io/) example or sufficient information to enable us to replicate the problem.
+:::
+
+<LineBreak></LineBreak>
+
+## Examples {#moreExamples}
+
+<h3>Suggestion buttons</h3>
+
+Basic suggestion buttons using [Deep Chat Classes](#deepChatClasses).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {text: 'How are you doing?', role: 'user'},
+      {text: 'Good, how may I help?', role: 'ai'},
+      {
+        html: `
+          <div class="deep-chat-temporary-message">
+            <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 5px">What do shrimps eat?</button>
+            <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">Can a shrimp fry rice?</button>
+            <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">What is a pistol shrimp?</button>
+          </div>`,
+        role: 'ai',
+      },
+    ]}
+    messageStyles={{html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px'}}}}}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {
+    html: `
+      <div class="deep-chat-temporary-message">
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 5px">What do shrimps eat?</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">Can a shrimp fry rice?</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">What is a pistol shrimp?</button>
+      </div>`,
+    role: 'ai',
+  },
+];
+
+chatElementRef.messageStyles = {html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px'}}}};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'How are you doing?', role: 'user'},
+  {text: 'Good, how may I help?', role: 'ai'},
+  {
+    html: `
+      <div class="deep-chat-temporary-message">
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 5px">What do shrimps eat?</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">Can a shrimp fry rice?</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="margin-top: 6px">What is a pistol shrimp?</button>
+      </div>`,
+    role: 'ai',
+  },
+];
+
+chatElementRef.messageStyles = {html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px'}}}};
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+<h3>Controlled responses</h3>
+
+Preset user responses which can be used to give feedback, follow a conversation path or control a service.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {text: 'Can I monitor your diet?', role: 'ai'},
+      {text: 'Yes', role: 'user'},
+      {text: 'Have you drank water?', role: 'ai'},
+      {
+        html: `
+          <div class="deep-chat-temporary-message">
+            <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid green">Yes</button>
+            <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid #d80000">No</button>
+          </div>`,
+        role: 'user',
+      },
+    ]}
+    messageStyles={{
+      html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px', width: '100%', textAlign: 'right'}}},
+    }}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    textInput={{disabled: true, placeholder: {text: 'Use buttons to respond'}}}
+    submitButtonStyles={{submit: {container: {default: {opacity: 0}}}}}
+    demo={{
+      response: {
+        text: 'What about now?',
+        html: `
+          <div class="deep-chat-temporary-message">
+            <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid green">Yes</button>
+            <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid #d80000">No</button>
+          </div>`,
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {
+    html: `
+      <div class="deep-chat-temporary-message">
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid green">Yes</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid #d80000">No</button>
+      </div>`,
+    role: 'user',
+  },
+];
+
+chatElementRef.messageStyles = {
+  html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px', width: '100%', textAlign: 'right'}}},
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'Can I monitor your diet?', role: 'ai'},
+  {text: 'Yes', role: 'user'},
+  {text: 'Have you drank water?', role: 'ai'},
+  {
+    html: `
+      <div class="deep-chat-temporary-message">
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid green">Yes</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid #d80000">No</button>
+      </div>`,
+    role: 'user',
+  },
+];
+
+chatElementRef.messageStyles = {
+  html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px', width: '100%', textAlign: 'right'}}},
+};
+
+chatElementRef.textInput = {disabled: true, placeholder: {text: 'Use buttons to respond'}};
+
+chatElementRef.submitButtonStyles = {submit: {container: {default: {opacity: 0}}}};
+
+chatElementRef.demo = {
+  response: {
+    text: 'What about now?',
+    html: `
+      <div class="deep-chat-temporary-message">
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid green">Yes</button>
+        <button class="deep-chat-button deep-chat-suggestion-button" style="border: 1px solid #d80000">No</button>
+      </div>`,
+  },
+};
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+<h3>Feedback</h3>
+
+Add feedback buttons to response messages.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {text: 'What is mitochondria?', role: 'user'},
+      {
+        html: `<div class="feedback">
+            <div class="feedback-text">The powerhouse of a cell.</div>
+            <img class="feedback-icon feedback-icon-positive" src="/img/thumbsUp.svg">
+            <img class="feedback-icon feedback-icon-negative" src="/img/thumbsUp.svg">
+          </div>`,
+        role: 'ai',
+      },
+      {text: 'What kind of dog should I get?', role: 'user'},
+      {
+        html: `<div class="feedback">
+            <div class="feedback-text">A labrador.</div>
+            <img class="feedback-icon feedback-icon-positive" src="/img/thumbsUp.svg">
+            <img class="feedback-icon feedback-icon-negative" src="/img/thumbsUp.svg">
+          </div>`,
+        role: 'ai',
+      },
+    ]}
+    messageStyles={{
+      default: {
+        shared: {bubble: {maxWidth: '95%', width: '100%', marginTop: '10px'}},
+      },
+      loading: {
+        bubble: {width: '1em'},
+      },
+    }}
+    htmlClassUtilities={{
+      feedback: {styles: {default: {display: 'flex'}}},
+      'feedback-text': {styles: {default: {width: 'calc(100% - 42px)', paddingTop: '2px'}}},
+      'feedback-icon': {
+        styles: {
+          default: {width: '20px', height: '20px', cursor: 'pointer', borderRadius: '5px'},
+          hover: {backgroundColor: '#d1d1d1'},
+        },
+      },
+      'feedback-icon-positive': {
+        events: {
+          click: () => {
+            console.log('positive response');
+          },
+        },
+      },
+      'feedback-icon-negative': {
+        events: {
+          click: () => {
+            console.log('negative response');
+          },
+        },
+        styles: {default: {transform: 'rotate(180deg)', marginLeft: '3px'}},
+      },
+    }}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    demo={{
+      response: {
+        html: `
+          <div class="feedback">
+            <div class="feedback-text">Example response.</div>
+            <img class="feedback-icon feedback-icon-positive" src="/img/thumbsUp.svg">
+            <img class="feedback-icon feedback-icon-negative" src="/img/thumbsUp.svg">
+          </div>`,
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {
+    html: `<div class="feedback">
+        <div class="feedback-text">The powerhouse of a cell.</div>
+        <img class="feedback-icon feedback-icon-positive" src="path-to-svg.svg">
+        <img class="feedback-icon feedback-icon-negative" src="path-to-svg.svg">
+      </div>`,
+    role: 'ai',
+  },
+  {
+    html: `<div class="feedback">
+      <div class="feedback-text">A labrador.</div>
+      <img class="feedback-icon feedback-icon-positive" src="path-to-svg.svg">
+      <img class="feedback-icon feedback-icon-negative" src="path-to-svg.svg">
+    </div>`,
+    role: 'ai',
+  },
+];
+
+chatElementRef.messageStyles = {
+  default: {shared: {bubble: {maxWidth: '95%', width: '100%', marginTop: '10px'}}},
+};
+
+chatElementRef.htmlClassUtilities = {
+  feedback: {styles: {default: {display: 'flex'}}},
+  'feedback-text': {styles: {default: {width: 'calc(100% - 42px)', paddingTop: '2px'}}},
+  'feedback-icon': {
+    styles: {
+      default: {width: '20px', height: '20px', cursor: 'pointer', borderRadius: '5px'},
+      hover: {backgroundColor: '#d1d1d1'},
+    },
+  },
+  'feedback-icon-positive': {events: {click: () => console.log('positive response')}},
+  'feedback-icon-negative': {
+    events: {click: () => console.log('negative response')},
+    styles: {default: {transform: 'rotate(180deg)', marginLeft: '3px'}},
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'What is mitochondria?', role: 'user'},
+  {
+    html: `<div class="feedback">
+        <div class="feedback-text">The powerhouse of a cell.</div>
+        <img class="feedback-icon feedback-icon-positive" src="path-to-svg.svg">
+        <img class="feedback-icon feedback-icon-negative" src="path-to-svg.svg">
+      </div>`,
+    role: 'ai',
+  },
+  {text: 'What kind of dog should I get?', role: 'user'},
+  {
+    html: `<div class="feedback">
+      <div class="feedback-text">A labrador.</div>
+      <img class="feedback-icon feedback-icon-positive" src="path-to-svg.svg">
+      <img class="feedback-icon feedback-icon-negative" src="path-to-svg.svg">
+    </div>`,
+    role: 'ai',
+  },
+];
+
+chatElementRef.messageStyles = {
+  default: {shared: {bubble: {maxWidth: '95%', width: '100%', marginTop: '10px'}}},
+  loading: {bubble: {width: '1em'}},
+};
+
+chatElementRef.htmlClassUtilities = {
+  feedback: {styles: {default: {display: 'flex'}}},
+  'feedback-text': {styles: {default: {width: 'calc(100% - 42px)', paddingTop: '2px'}}},
+  'feedback-icon': {
+    styles: {
+      default: {width: '20px', height: '20px', cursor: 'pointer', borderRadius: '5px'},
+      hover: {backgroundColor: '#d1d1d1'},
+    },
+  },
+  'feedback-icon-positive': {events: {click: () => console.log('positive response')}},
+  'feedback-icon-negative': {
+    events: {click: () => console.log('negative response')},
+    styles: {default: {transform: 'rotate(180deg)', marginLeft: '3px'}},
+  },
+};
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = {
+  response: {
+    html: `
+      <div class="feedback">
+        <div class="feedback-text">Example response.</div>
+        <img class="feedback-icon feedback-icon-positive" src="path-to-svg.svg">
+        <img class="feedback-icon feedback-icon-negative" src="path-to-svg.svg">
+      </div>`,
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+<h3>Custom Element - Table</h3>
+
+Add an interactive table component (e.g. using [Active Table](https://activetable.io/)).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {text: 'Generate a table with info about planets', role: 'user'},
+      {
+        html: `
+          <div>
+            <div style="margin-bottom: 10px">Here is a simple example:</div>
+            <active-table
+              content='[["Planet", "Mass"], ["Earth", 5.97], ["Mars", 0.642], ["Jupiter", 1898]]'
+              cellStyle='{"width": "80px"}'
+              displayAddNewRow="false"
+              displayAddNewColumn="false">
+            </active-table>
+          </div>`,
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    demo={{
+      response: {
+        html: `
+          <active-table content='[["Planet", "Mass", "Moons"], ["Saturn", 82, 1], ["Neptune", 14, 2], ["Mercury", 0.33, 0]]' cellStyle='{"width": "75px"}' displayAddNewRow="false" displayAddNewColumn="false"></active-table>`,
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is a simple example:</div>
+        <active-table
+          content='[["Planet", "Mass"], ["Earth", 5.97], ["Mars", 0.642], ["Jupiter", 1898]]'
+          cellStyle='{"width": "80px"}'
+          displayAddNewRow="false"
+          displayAddNewColumn="false">
+        </active-table>
+      </div>`,
+    role: 'ai',
+  },
+];
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'Generate a table with info about planets', role: 'user'},
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is a simple example:</div>
+        <active-table
+          content='[["Planet", "Mass"], ["Earth", 5.97], ["Mars", 0.642], ["Jupiter", 1898]]'
+          cellStyle='{"width": "75px"}'
+          displayAddNewRow="false"
+          displayAddNewColumn="false">
+        </active-table>
+      </div>`,
+    role: 'ai',
+  },
+];
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = {
+  response: {
+    html: `
+      <active-table
+          content='[["Planet", "Mass", "Moons"], ["Saturn", 82, 1], ["Neptune", 14, 2], ["Mercury", 0.33, 0]]'
+          cellStyle='{"width": "80px"}'
+          displayAddNewRow="false"
+          displayAddNewColumn="false">
+        </active-table>`,
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+<h3>Custom Element - Chart</h3>
+
+Add a chart component (e.g. using [Google Chart](https://developers.google.com/chart)).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {
+        html: `
+          <div>
+            <div style="margin-bottom: 10px">Here is an example chart:</div>
+            <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]' options='{"legend": "none"}'></google-chart>
+          </div>
+          `,
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    demo={{
+      response: {
+        html: `
+          <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]' options='{"legend": "none"}'></google-chart>`,
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'Can you give me an example chart', role: 'user'},
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is an example chart:</div>
+        <google-chart
+          style="width: 220px; height: 200px"
+          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
+          options='{"legend": "none"}'>
+        </google-chart>
+      </div>
+      `,
+    role: 'ai',
+  },
+];
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'Can you give me an example chart', role: 'user'},
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is an example chart:</div>
+        <google-chart
+          style="width: 220px; height: 200px"
+          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
+          options='{"legend": "none"}'>
+        </google-chart>
+      </div>
+      `,
+    role: 'ai',
+  },
+];
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = {
+  response: {
+    html: `
+      <google-chart
+        style="width: 220px; height: 200px"
+        data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]'
+        options='{"legend": "none"}'>
+      </google-chart>`,
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

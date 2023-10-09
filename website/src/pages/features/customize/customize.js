@@ -454,7 +454,7 @@ function ComponentsLight() {
           },
         }}
         messageStyles={{default: {user: {bubble: {backgroundColor: '#3da0ec'}}}}}
-        textInput={{placeholder: {text: `How may I assist you?`}}}
+        textInput={{placeholder: {text: 'How may I assist you?'}}}
       >
         <IntroPanel></IntroPanel>
       </DeepChatBrowser>

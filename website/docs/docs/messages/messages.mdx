@@ -10,7 +10,7 @@ Properties related to messages.
 
 - Type: [`MessageContent[]`](#MessageContent)
 
-Messages that are pre-populated when the chat loads up. This is useful for displaying previous messages and continuing a conversation.
+Messages that are pre-populated when the chat loads up. This is useful for displaying previous messages.
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -30,7 +30,7 @@ import Tabs from '@theme/Tabs';
     initialMessages={[
       {text: 'Show me a modern city', role: 'user'},
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
-      {text: `Whats on your mind?`, role: 'user'},
+      {text: 'Whats on your mind?', role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
     containerStyle={{height: '370px', borderRadius: '8px'}}
@@ -76,18 +76,19 @@ import Tabs from '@theme/Tabs';
 
 ### `introMessage` {#introMessage}
 
-- Type: `string`
+- Type: {`text?: string`, `html?: string`}
 
 Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](#initialMessages) as it will not trigger
-the [`onNewMessage`](./events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](./methods#getMessages) method is called and
-is not taken into consideration when calculating [`requestBodyLimits`](./connect#requestBodyLimits).
+the [`onNewMessage`](../events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](../methods#getMessages) method is called and
+is not taken into consideration when calculating [`requestBodyLimits`](../connect#requestBodyLimits). <br />
+`html` is used to render custom code - [more info](./html).
 
 #### Example
 
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Hi I am your assistant, ask me anything!`}
+    introMessage={{text: 'Hi I am your assistant, ask me anything!'}}
     demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -96,7 +97,7 @@ is not taken into consideration when calculating [`requestBodyLimits`](./connect
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat introMessage="Hi I am your assistant, ask me anything!"></deep-chat>
+<deep-chat introMessage='{"text": "Hi I am your assistant, ask me anything!"}'></deep-chat>
 ```
 
 </TabItem>
@@ -106,7 +107,7 @@ is not taken into consideration when calculating [`requestBodyLimits`](./connect
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  introMessage="Hi I am your assistant, ask me anything!"
+  introMessage='{"text": "Hi I am your assistant, ask me anything!"}'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
 ></deep-chat>
@@ -403,7 +404,7 @@ will automatically have a loading animation.
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={'Send a new message to observe a response with no loading bubble.'}
+    introMessage={{text: 'Send a new message to observe a response with no loading bubble.'}}
     displayLoadingBubble={false}
     demo={true}
   ></DeepChatBrowser>
@@ -424,7 +425,7 @@ will automatically have a loading animation.
 
 <deep-chat
   displayLoadingBubble="false"
-  introMessage="Send a new message to observe a response with no loading bubble."
+  introMessage='{"text": "Send a new message to observe a response with no loading bubble."}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
@@ -450,7 +451,7 @@ will automatically have a loading animation.
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
 `overrides` is used to overwrite the error message text based on what has caused it: `default` is used for any kind of error, `service`
-is for communication with the target service and `speechToText` is when there is a problem using the [`speechToText`](./speech#speechToText) functionality. <br />
+is for communication with the target service and `speechToText` is when there is a problem using the [`speechToText`](../speech#speechToText) functionality. <br />
 
 #### Example
 
@@ -515,10 +516,10 @@ Shared object property types related to messages:
 
 - Type: <br />
   &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `text: string`} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), [`file: MessageFile`](#MessageFile)}
+  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), [`file: MessageFile`](#MessageFile)} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `html: string`}
 
-Object format used to encapsulate each message within the chat. It uses EITHER ONE of the object types above where `text`
-or `file` property is defined. <br />
+Object format used to encapsulate a message within the chat. One of the above is used for each message. <br />
 The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly.
 This is useful for displaying code snippets, paragraphs etc. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
 
@@ -663,7 +664,7 @@ Type of a file stored inside a message. _"any"_ is the default type.
 
 By default, messages containing code will be rendered with white text in a dark background.
 In order to highlight the code, you will need to add an external module called [`highligtjs`](https://www.npmjs.com/package/highlight.js?activeTab=readme).
-Check out external module [EXAMPLES](../examples/externalModules) to find multiple ways of how you can add it to your project.
+Check out external module [EXAMPLES](../../examples/externalModules) to find multiple ways of how you can add it to your project.
 
 #### Example
 

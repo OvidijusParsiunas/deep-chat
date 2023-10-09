@@ -107,7 +107,7 @@ Configuration for the dropup button and its menu element styles. <br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={'Open the dropup by clicking the + button on bottom left of the input.'}
+    introMessage={{text: 'Open the dropup by clicking the + button on bottom left of the input.'}}
     dropupStyles={{
       button: {
         styles: {
@@ -223,7 +223,7 @@ Configuration for the dropup button and its menu element styles. <br />
   containerStyle='{"borderRadius": "8px"}'
   audio='{"button": {"position": "dropup-menu"}}'
   images='{"button": {"position": "dropup-menu"}}'
-  introMessage="Open the dropup by clicking the + button on bottom left of the input."
+  introMessage='{"text": "Open the dropup by clicking the + button on bottom left of the input."}'
 ></deep-chat>
 ```
 
@@ -1086,7 +1086,7 @@ Custom styling for the microphone button. <br />
 <ComponentContainer>
   <DeepChatBrowser
     containerStyle={{borderRadius: '8px'}}
-    introMessage={`Use the microphone button to record audio.`}
+    introMessage={{text: 'Use the microphone button to record audio.'}}
     demo={true}
     microphone={{
       button: {
@@ -1240,7 +1240,7 @@ Custom styling for the microphone button. <br />
   }'
   demo="true"
   containerStyle='{"borderRadius": "8px"}'
-  introMessage="Use the microphone button to record audio."
+  introMessage='{"text": "Use the microphone button to record audio."}'
 ></deep-chat>
 ```
 

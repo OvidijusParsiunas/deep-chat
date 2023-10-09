@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 1
 ---
 
-# Message Styles
+# Styles
 
 Properties related to message styling.
 
@@ -22,6 +22,7 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; [`image?: MessageRoleStyles`](#MessageRoleStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: MessageRoleStyles`](#MessageRoleStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`file?: MessageRoleStyles`](#MessageRoleStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`html?: MessageRoleStyles`](#MessageRoleStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`intro?: MessageElementsStyles`](#MessageElementsStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: MessageElementsStyles`](#MessageElementsStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`error?: MessageElementsStyles`](#MessageElementsStyles) <br />
@@ -31,8 +32,9 @@ Object defining the styling for various message types. <br />
 `default` is applied to all message types. <br />
 `image` is applied to messages that contain an image. <br />
 `audio` is applied to messages that contain an audio player. <br />
-`file` is applied to messages that contain a file attachment icon. <br />
-`intro` is applied to the [`introMessage`](./messages#introMessage). <br />
+`file` is applied to messages that contain a file attachment. <br />
+`html` is applied to messages that contain custom elements - [more info](./html). <br />
+`intro` is applied to the [`introMessage`](../messages#introMessage). <br />
 `loading` is applied to the loading bubble. <br />
 `error` is applied to error messages. <br />
 
@@ -125,10 +127,10 @@ Object defining the styling for various message roles. <br />
 ### `MessageElementsStyles` {#MessageElementsStyles}
 
 - Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`outerContainer?: CustomStyle`](./styles#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`innerContainer?: CustomStyle`](./styles#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`bubble?: CustomStyle`](./styles#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`media?: CustomStyle`](./styles#CustomStyle) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`outerContainer?: CustomStyle`](../styles#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`innerContainer?: CustomStyle`](../styles#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`bubble?: CustomStyle`](../styles#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`media?: CustomStyle`](../styles#CustomStyle) <br />
   }
 
 Object defining the styling for various elements that encompass a message. <br />
@@ -332,7 +334,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
         bubble: {backgroundColor: '#475cc7', color: 'white', fontSize: '16px'},
       },
     }}
-    introMessage={`Hi I'm an AiAssistant, ask me anything!`}
+    introMessage={{text: 'Hi I am an AiAssistant, ask me anything!'}}
     demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -360,7 +362,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
       "bubble": {"backgroundColor": "#475cc7", "color": "white", "fontSize": "16px"}
     }
   }'
-  introMessage="Hi I'm an AiAssistant, ask me anything!"
+  introMessage='{"text": "Hi I am an AiAssistant, ask me anything!"}'
   containerStyle='{"borderRadius": "8px"}'
   demo="true"
 ></deep-chat>
