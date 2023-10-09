@@ -23,10 +23,10 @@
 ### :tada: Latest update
 
 <p align="center">
-    <img width="780" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
+    <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5ba04d84-1efb-424a-8718-ba160011cafe" alt="Messages HTML">
 </p>
 
-We are excited to release a new addition to the Deep Chat website - the Playground. Here you will be able to create, configure and use Deep Chat components without needing to write any code. Check it out in the official [Playground page](https://deepchat.dev/playground) to get started!
+Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API.
 
 ### :computer: Getting started
 
@@ -114,6 +114,14 @@ Setting up your own server has never been easier with the following [server temp
 | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/express" target="_blank"><img src="./website/static/img/expressLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/nestjs" target="_blank"><img src="./website/static/img/nestLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/python/flask" target="_blank"><img src="./website/static/img/flaskLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/java/springboot" target="_blank"><img src="./website/static/img/springBootLogo.png" width="50"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/go" target="_blank"><img src="./website/static/img/goLogo.png" width="40"/></a> | <div align="center"><a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/sveltekit" target="_blank" ><img src="./website/static/img/svelteLogo.png" width="45"/></a></div> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/nextjs" target="_blank"><img src="./website/static/img/nextLogo.png" width="55"/></a> |
 
 All examples are ready to be deployed on a hosting platform such as [Vercel](https://vercel.com/).
+
+### :joystick: Playground
+
+<p align="center">
+    <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
+</p>
+
+Create, configure and use Deep Chat components without writing any code in our official [Playground](https://deepchat.dev/playground)!
 
 ## :heart: Contributions
 
