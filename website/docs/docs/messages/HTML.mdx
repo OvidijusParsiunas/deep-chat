@@ -10,7 +10,7 @@ If you want to use your code for an introduction panel - check out [`Intro Panel
 ### Getting started {#Getting Started}
 
 The `html` property can be used in server [Response](../connect#Response)s and is stored inside the chat using the [MessageContent](../messages#MessageContent) format.
-Here is an example using [`initialMessages`](../messages#initialMessages):
+Here is an example for [`initialMessages`](../messages#initialMessages):
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -734,6 +734,100 @@ chatElementRef.demo = {
 
 <LineBreak></LineBreak>
 
+<h3>Custom Element - Chart</h3>
+
+Add a chart component (e.g. using [Google Chart](https://developers.google.com/chart)).
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    initialMessages={[
+      {text: 'Can you give me an example chart', role: 'user'},
+      {
+        html: `
+          <div>
+            <div style="margin-bottom: 10px">Here is an example chart:</div>
+            <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]' options='{"legend": "none"}'></google-chart>
+          </div>
+          `,
+        role: 'ai',
+      },
+    ]}
+    containerStyle={{height: '370px', borderRadius: '8px'}}
+    demo={{
+      response: {
+        html: `
+          <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]' options='{"legend": "none"}'></google-chart>`,
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is an example chart:</div>
+        <google-chart
+          style="width: 220px; height: 200px"
+          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
+          options='{"legend": "none"}'>
+        </google-chart>
+      </div>
+      `,
+    role: 'ai',
+  },
+];
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.initialMessages = [
+  {text: 'Can you give me an example chart', role: 'user'},
+  {
+    html: `
+      <div>
+        <div style="margin-bottom: 10px">Here is an example chart:</div>
+        <google-chart
+          style="width: 220px; height: 200px"
+          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
+          options='{"legend": "none"}'>
+        </google-chart>
+      </div>
+      `,
+    role: 'ai',
+  },
+];
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = {
+  response: {
+    html: `
+      <google-chart
+        style="width: 220px; height: 200px"
+        data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]'
+        options='{"legend": "none"}'>
+      </google-chart>`,
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 <h3>Custom Element - Table</h3>
 
 Add an interactive table component (e.g. using [Active Table](https://activetable.io/)).
@@ -824,100 +918,6 @@ chatElementRef.demo = {
           displayAddNewRow="false"
           displayAddNewColumn="false">
         </active-table>`,
-  },
-};
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-<h3>Custom Element - Chart</h3>
-
-Add a chart component (e.g. using [Google Chart](https://developers.google.com/chart)).
-
-<ComponentContainer>
-  <DeepChatBrowser
-    demo={true}
-    initialMessages={[
-      {
-        html: `
-          <div>
-            <div style="margin-bottom: 10px">Here is an example chart:</div>
-            <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]' options='{"legend": "none"}'></google-chart>
-          </div>
-          `,
-        role: 'ai',
-      },
-    ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
-    demo={{
-      response: {
-        html: `
-          <google-chart style="width: 220px; height: 200px" data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]' options='{"legend": "none"}'></google-chart>`,
-      },
-    }}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```js
-// using JavaScript for a simplified example
-
-chatElementRef.initialMessages = [
-  {text: 'Can you give me an example chart', role: 'user'},
-  {
-    html: `
-      <div>
-        <div style="margin-bottom: 10px">Here is an example chart:</div>
-        <google-chart
-          style="width: 220px; height: 200px"
-          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
-          options='{"legend": "none"}'>
-        </google-chart>
-      </div>
-      `,
-    role: 'ai',
-  },
-];
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```js
-// using JavaScript for a simplified example
-
-chatElementRef.initialMessages = [
-  {text: 'Can you give me an example chart', role: 'user'},
-  {
-    html: `
-      <div>
-        <div style="margin-bottom: 10px">Here is an example chart:</div>
-        <google-chart
-          style="width: 220px; height: 200px"
-          data='[["Planet", "Score"], ["Earth", 50], ["Moon", 100], ["Saturn", 80]]'
-          options='{"legend": "none"}'>
-        </google-chart>
-      </div>
-      `,
-    role: 'ai',
-  },
-];
-
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
-
-chatElementRef.demo = {
-  response: {
-    html: `
-      <google-chart
-        style="width: 220px; height: 200px"
-        data='[["Planet", "Score"], ["Mars", 80], ["Mercury", 100], ["Venus", 50]]'
-        options='{"legend": "none"}'>
-      </google-chart>`,
   },
 };
 ```

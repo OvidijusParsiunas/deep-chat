@@ -19,6 +19,7 @@ import {Avatars} from '../../../types/avatars';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
 import {DeepChat} from '../../../deepChat';
+import {HTMLUtils} from './html/htmlUtils';
 import {Names} from '../../../types/names';
 import {Remarkable} from 'remarkable';
 import {AvatarEl} from './avatar';
@@ -381,7 +382,10 @@ export class Messages {
   private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
     if (childElement || introPanelMarkUp) {
       this._introPanel = new IntroPanel(childElement, introPanelMarkUp, introPanelStyle);
-      if (this._introPanel._elementRef) this.elementRef.appendChild(this._introPanel._elementRef);
+      if (this._introPanel._elementRef) {
+        HTMLUtils.apply(this, this._introPanel._elementRef);
+        this.elementRef.appendChild(this._introPanel._elementRef);
+      }
     }
   }
 

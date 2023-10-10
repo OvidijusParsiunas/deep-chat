@@ -5,7 +5,7 @@ import {HTMLDeepChatElements} from './htmlDeepChatElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {Messages} from '../messages';
 
-export class HTMLMessageUtils {
+export class HTMLUtils {
   public static applyStylesToElement(element: HTMLElement, styles: StatefulStyles) {
     const statefulStyles = StyleUtils.processStateful(styles, {}, {});
     StatefulEvents.add(element, statefulStyles);
@@ -21,10 +21,10 @@ export class HTMLMessageUtils {
 
   private static applyClassUtilitiesToElement(element: HTMLElement, classUtility: HTMLClassUtility) {
     const {events, styles} = classUtility;
-    if (events) HTMLMessageUtils.applyEventsToElement(element, events);
+    if (events) HTMLUtils.applyEventsToElement(element, events);
     // if deep chat class then style was already applied
     if (styles && !HTMLDeepChatElements.doesElementContainDeepChatClass(element)) {
-      HTMLMessageUtils.applyStylesToElement(element, styles);
+      HTMLUtils.applyStylesToElement(element, styles);
     }
   }
 
@@ -33,14 +33,14 @@ export class HTMLMessageUtils {
       const elements = element.getElementsByClassName(className);
       (Array.from(elements) as HTMLElement[]).forEach((element) => {
         if (utilities[className as string]) {
-          HTMLMessageUtils.applyClassUtilitiesToElement(element, utilities[className as string]);
+          HTMLUtils.applyClassUtilitiesToElement(element, utilities[className as string]);
         }
       });
     });
   }
 
-  public static apply(messages: Messages, outerElement: HTMLElement) {
-    HTMLDeepChatElements.applyDeepChatUtilities(messages, messages._htmlClassUtilities, outerElement);
-    HTMLMessageUtils.applyCustomClassUtilities(messages._htmlClassUtilities, outerElement);
+  public static apply(messages: Messages, outmostElement: HTMLElement) {
+    HTMLDeepChatElements.applyDeepChatUtilities(messages, messages._htmlClassUtilities, outmostElement);
+    HTMLUtils.applyCustomClassUtilities(messages._htmlClassUtilities, outmostElement);
   }
 }

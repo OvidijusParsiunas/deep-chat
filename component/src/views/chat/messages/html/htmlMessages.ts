@@ -1,5 +1,5 @@
 import {HTMLDeepChatElements} from './htmlDeepChatElements';
-import {HTMLMessageUtils} from './htmlMessageUtils';
+import {HTMLUtils} from './htmlUtils';
 import {Messages} from '../messages';
 
 export class HTMLMessages {
@@ -24,7 +24,7 @@ export class HTMLMessages {
   public static addNewHTMLMessage(messages: Messages, html: string, isAI: boolean, update: boolean, isInitial = false) {
     const messageElements = HTMLMessages.createElements(messages, html, isAI);
     if (html.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
-    HTMLMessageUtils.apply(messages, messageElements.outerContainer);
+    HTMLUtils.apply(messages, messageElements.outerContainer);
     if (!HTMLDeepChatElements.isElementTemporary(messageElements)) {
       HTMLMessages.update(messages, html, isAI, update, isInitial);
     }

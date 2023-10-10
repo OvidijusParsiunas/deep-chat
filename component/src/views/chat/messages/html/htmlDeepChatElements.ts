@@ -2,7 +2,7 @@ import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
 import {MessageElements, Messages} from '../messages';
-import {HTMLMessageUtils} from './htmlMessageUtils';
+import {HTMLUtils} from './htmlUtils';
 
 const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
 const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
@@ -80,7 +80,7 @@ export class HTMLDeepChatElements {
       const elements = element.getElementsByClassName(className);
       Array.from(elements || []).forEach((element) => {
         const styles = HTMLDeepChatElements.getProcessedStyles(utilities, element, className);
-        HTMLMessageUtils.applyStylesToElement(element as HTMLElement, styles);
+        HTMLUtils.applyStylesToElement(element as HTMLElement, styles);
         HTMLDeepChatElements.applyEvents(element, className);
       });
     });
