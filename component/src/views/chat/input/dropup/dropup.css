@@ -35,10 +35,6 @@
   position: relative;
 }
 
-.dropup-menu-item > * {
-  pointer-events: none;
-}
-
 .dropup-menu-item:first-child {
   padding-top: 0.49em;
   border-top-left-radius: inherit;
