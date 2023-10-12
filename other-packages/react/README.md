@@ -14,7 +14,7 @@
 - Record audio via microphone
 - Speech To Text for message input
 - Text To Speech to hear message responses
-- Support for MarkDown to help structure text and render code
+- Support for MarkDown and custom elements to help structure text and render code
 - Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
 - Support for all major ui frameworks/libraries

@@ -14,7 +14,7 @@
 - Record audio via microphone
 - Speech To Text for message input
 - Text To Speech to hear message responses
-- Support for MarkDown to help structure text and render code
+- Support for MarkDown and custom elements to help structure text and render code
 - Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
 - Support for all major ui frameworks/libraries
@@ -121,7 +121,7 @@ All examples are ready to be deployed on a hosting platform such as [Vercel](htt
     <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
 </p>
 
-Create, configure and use Deep Chat components without writing any code in our official [Playground](https://deepchat.dev/playground)!
+Create, configure and use Deep Chat components without writing any code in the official [Playground](https://deepchat.dev/playground)!
 
 ## :heart: Contributions
 

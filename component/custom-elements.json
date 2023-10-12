@@ -22647,15 +22647,15 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "styles",
+                  "name": "element",
                   "type": {
-                    "text": "StatefulStyles"
+                    "text": "HTMLElement"
                   }
                 },
                 {
-                  "name": "event",
+                  "name": "styles",
                   "type": {
-                    "text": "MouseEvent"
+                    "text": "StatefulStyles"
                   }
                 }
               ]
@@ -22667,15 +22667,15 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "styles",
+                  "name": "element",
                   "type": {
-                    "text": "StatefulStyles"
+                    "text": "HTMLElement"
                   }
                 },
                 {
-                  "name": "event",
+                  "name": "styles",
                   "type": {
-                    "text": "MouseEvent"
+                    "text": "StatefulStyles"
                   }
                 }
               ]
@@ -22687,15 +22687,15 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "styles",
+                  "name": "element",
                   "type": {
-                    "text": "StatefulStyles"
+                    "text": "HTMLElement"
                   }
                 },
                 {
-                  "name": "event",
+                  "name": "styles",
                   "type": {
-                    "text": "MouseEvent"
+                    "text": "StatefulStyles"
                   }
                 }
               ]
@@ -22707,15 +22707,15 @@
               "static": true,
               "parameters": [
                 {
-                  "name": "styles",
+                  "name": "element",
                   "type": {
-                    "text": "StatefulStyles"
+                    "text": "HTMLElement"
                   }
                 },
                 {
-                  "name": "event",
+                  "name": "styles",
                   "type": {
-                    "text": "MouseEvent"
+                    "text": "StatefulStyles"
                   }
                 }
               ]
@@ -25993,6 +25993,446 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/buttonCSS.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonCSS",
+          "members": [
+            {
+              "kind": "method",
+              "name": "unsetAllCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetActionCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementsCSS",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setElementCssUpToState",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                },
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "keyof StatefulStyles"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonCSS",
+          "declaration": {
+            "name": "ButtonCSS",
+            "module": "src/views/chat/input/buttons/buttonCSS.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CustomButtonInnerElements",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createTextElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "string",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isText",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createCustomElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "processElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "element",
+                  "optional": true,
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createSpecificStateElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ButtonInnerElements<T>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "parentEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "states",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStateStyles<T>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CustomButtonInnerElements",
+          "declaration": {
+            "name": "CustomButtonInnerElements",
+            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/inputButton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InputButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement"
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}"
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position"
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText"
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
+                  }
+                },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InputButton",
+          "declaration": {
+            "name": "InputButton",
+            "module": "src/views/chat/input/buttons/inputButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/dropup/dropup.ts",
       "declarations": [
         {
@@ -26676,446 +27116,6 @@
           "declaration": {
             "name": "DropupMenu",
             "module": "src/views/chat/input/dropup/dropupMenu.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/buttonCSS.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ButtonCSS",
-          "members": [
-            {
-              "kind": "method",
-              "name": "unsetAllCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetActionCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementsCSS",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setElementCssUpToState",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                },
-                {
-                  "name": "style",
-                  "type": {
-                    "text": "keyof StatefulStyles"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ButtonCSS",
-          "declaration": {
-            "name": "ButtonCSS",
-            "module": "src/views/chat/input/buttons/buttonCSS.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/customButtonInnerElements.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CustomButtonInnerElements",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createTextElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "string",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isText",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createCustomElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "processElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "element",
-                  "optional": true,
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createSpecificStateElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "state",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ButtonInnerElements<T>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "parentEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "states",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStateStyles<T>"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CustomButtonInnerElements",
-          "declaration": {
-            "name": "CustomButtonInnerElements",
-            "module": "src/views/chat/input/buttons/customButtonInnerElements.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/inputButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InputButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement"
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}"
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position"
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText"
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InputButton",
-          "declaration": {
-            "name": "InputButton",
-            "module": "src/views/chat/input/buttons/inputButton.ts"
           }
         }
       ]
@@ -27858,129 +27858,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/messages/html/htmlMessageUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "HTMLMessageUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "applyStylesToElement",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "styles",
-                  "type": {
-                    "text": "StatefulStyles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "applyEventsToElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "events",
-                  "type": {
-                    "text": "EventToFunction"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "applyClassUtilitiesToElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "classUtility",
-                  "type": {
-                    "text": "HTMLClassUtility"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "applyCustomClassUtilities",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "utilities",
-                  "type": {
-                    "text": "HTMLClassUtilities"
-                  }
-                },
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "apply",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "outerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "HTMLMessageUtils",
-          "declaration": {
-            "name": "HTMLMessageUtils",
-            "module": "src/views/chat/messages/html/htmlMessageUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/messages/html/htmlMessages.ts",
       "declarations": [
         {
@@ -28122,6 +27999,158 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/messages/html/htmlUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "HTMLUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "applyStylesToElement",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "type": {
+                    "text": "StatefulStyles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyEventsToElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "events",
+                  "type": {
+                    "text": "EventToFunction"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyClassUtilitiesToElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "classUtility",
+                  "type": {
+                    "text": "HTMLClassUtility"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "applyCustomClassUtilities",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "utilities",
+                  "type": {
+                    "text": "HTMLClassUtilities"
+                  }
+                },
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "apply",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "outmostElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "HTMLUtils",
+          "declaration": {
+            "name": "HTMLUtils",
+            "module": "src/views/chat/messages/html/htmlUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RemarkableConfig",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createNew",
+              "privacy": "public",
+              "static": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RemarkableConfig",
+          "declaration": {
+            "name": "RemarkableConfig",
+            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/messages/textToSpeech/textToSpeech.ts",
       "declarations": [
         {
@@ -28189,35 +28218,6 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/messages/remarkable/remarkableConfig.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RemarkableConfig",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createNew",
-              "privacy": "public",
-              "static": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RemarkableConfig",
-          "declaration": {
-            "name": "RemarkableConfig",
-            "module": "src/views/chat/messages/remarkable/remarkableConfig.ts"
           }
         }
       ]

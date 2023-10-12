@@ -4,13 +4,13 @@ sidebar_position: 8
 
 # Intro Panel
 
-This is an overlay panel that is displayed in the center of the chat.
+This is an initial overlay panel that is displayed in the center of the chat.
 
 ### How To
 
-All you need to do is insert your desired markup between the element tags and the component will render it inside the intro panel.
-The original style and events will be preserved to allow you to customize it the way you want it.
+Insert your markup between the Deep Chat element tags and the component will render it inside the intro panel.
 
+import ComponentSuggestionButtons from '@site/src/components/table/componentSuggestionButtons';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -113,12 +113,115 @@ to _"none"_ and it will automatically be set to _"block"_ once it is ready (this
 attribute/property and not in a [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors)).
 :::
 
+## Style and Events {#stylingAndEvents}
+
+Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) - the intro panel will not have access
+to the CSS classes and JavaScript in your app. To get around this, we recommend using the [`htmlClassUtilities`](./messages/HTML#htmlClassUtilities) property
+which will allow you to define reusable styling and bind functions to your app's state.
+
+#### Example
+
+<ComponentSuggestionButtons></ComponentSuggestionButtons>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```text
+// Markup
+
+<deep-chat id="chat-element">
+  <div style="display: none">
+    <div class="custom-button">
+      <div class="custom-button-text">"Explain quantum computing"</div>
+    </div>
+    <div class="custom-button" style="margin-top: 15px">
+      <div class="custom-button-text">"Creative ideas for a birthday"</div>
+    </div>
+    <div class="custom-button" style="margin-top: 15px">
+      <div class="custom-button-text">"Hello World in JavaScript"</div>
+    </div>
+  </div>
+</deep-chat>
+
+// using JavaScript for a simplified example
+
+const chatElementRef = document.getElementById('chat-element');
+
+chatElementRef.htmlClassUtilities = {
+  ['custom-button']: {
+    events: {
+      click: (event) => {
+        const text = event.target.children[0].innerText;
+        chatElementRef.submitUserMessage(text.substring(1, text.length - 1));
+      },
+    },
+    styles: {
+      default: {backgroundColor: '#f2f2f2', borderRadius: '10px', padding: '10px', cursor: 'pointer', textAlign: 'center'},
+      hover: {backgroundColor: '#ebebeb'},
+      click: {backgroundColor: '#e4e4e4'},
+    },
+  },
+  ['custom-button-text']: {styles: {default: {pointerEvents: 'none'}}},
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```text
+// Markup
+
+<deep-chat id="chat-element">
+  <div style="display: none">
+    <div class="custom-button">
+      <div class="custom-button-text">"Explain quantum computing"</div>
+    </div>
+    <div class="custom-button" style="margin-top: 15px">
+      <div class="custom-button-text">"Creative ideas for a birthday"</div>
+    </div>
+    <div class="custom-button" style="margin-top: 15px">
+      <div class="custom-button-text">"Hello World in JavaScript"</div>
+    </div>
+  </div>
+</deep-chat>
+
+// using JavaScript for a simplified example
+
+const chatElementRef = document.getElementById('chat-element');
+
+chatElementRef.htmlClassUtilities = {
+  ['custom-button']: {
+    events: {
+      click: (event) => {
+        const text = event.target.children[0].innerText;
+        chatElementRef.submitUserMessage(text.substring(1, text.length - 1));
+      },
+    },
+    styles: {
+      default: {backgroundColor: '#f2f2f2', borderRadius: '10px', padding: '10px', cursor: 'pointer', textAlign: 'center'},
+      hover: {backgroundColor: '#ebebeb'},
+      click: {backgroundColor: '#e4e4e4'},
+    },
+  },
+  ['custom-button-text']: {styles: {default: {pointerEvents: 'none'}}},
+};
+
+chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `introPanelStyle` {#introPanelStyle}
 
 - Type: [`CustomStyle`](./styles#CustomStyle)
 
-Some presets for the services available in [`directConnection`](./directConnection) use an intro panel. This object is used to change its style.
-If you are using a custom intro panel (example above), it will instead be applied to that.
+Controls the intro panel's parent-most element's style. This is most useful for changing the base styling of the automatically generated intro panels when using
+services in the [`directConnection`](./directConnection) property.
 
 #### Example
 
@@ -159,171 +262,7 @@ If you are using a custom intro panel (example above), it will instead be applie
 <LineBreak></LineBreak>
 
 :::tip
-To remove a default panel - add empty markup tags: `<deep-chat><div></div></deep-chat>` .
+To remove an automatically generated panel - add empty `div` tags: `<deep-chat><div></div></deep-chat>` .
 :::
-
-<LineBreak></LineBreak>
-
-## More Examples
-
-<h3>Grey sections</h3>
-
-<ComponentContainer>
-  <DeepChatBrowser demo={true}>
-    <div style={{display: 'none'}}>
-      <div
-        style={{
-          width: '250px',
-          borderRadius: '10px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: '-10px',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: '#f2f2f2',
-            borderRadius: '10px',
-            padding: '10px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>"Explain quantum computing in simple terms"</div>
-        </div>
-        <div
-          style={{
-            backgroundColor: '#f2f2f2',
-            borderRadius: '10px',
-            padding: '10px',
-            marginTop: '15px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>Allows user to provide follow-up corrections</div>
-        </div>
-        <div
-          style={{
-            backgroundColor: '#f2f2f2',
-            borderRadius: '10px',
-            padding: '10px',
-            marginTop: '15px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>May occasionally generate incorrect information</div>
-        </div>
-      </div>
-    </div>
-  </DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat>
-  <div
-    style="
-      width: 250px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: -10px;
-      display: none;
-    "
-  >
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px">
-      <div style="font-size: 14px; line-height: 20px">Explain quantum computing in simple terms</div>
-    </div>
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
-      <div style="font-size: 14px; line-height: 20px">Allows user to provide follow-up corrections</div>
-    </div>
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
-      <div style="font-size: 14px; line-height: 20px">May occasionally generate incorrect information</div>
-    </div>
-  </div>
-</deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat demo="true" containerStyle='{"borderRadius": "8px"}'>
-  <div
-    style="
-      width: 250px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: -10px;
-      display: none;
-    "
-  >
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px">
-      <div style="font-size: 14px; line-height: 20px">Explain quantum computing in simple terms</div>
-    </div>
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
-      <div style="font-size: 14px; line-height: 20px">Allows user to provide follow-up corrections</div>
-    </div>
-    <div style="background-color: #f2f2f2; border-radius: 10px; padding: 10px; margin-top: 15px">
-      <div style="font-size: 14px; line-height: 20px">May occasionally generate incorrect information</div>
-    </div>
-  </div>
-</deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-<h3>Logo</h3>
-
-<ComponentContainer>
-  <DeepChatBrowser demo={true}>
-    <div style={{width: '200px', textAlign: 'center', display: 'none'}}>
-      <img src="/img/deep-chat-favicon-large.svg" style={{width: '110px'}} />
-      <div style={{marginTop: '5px', marginBottom: '8px', fontSize: '38px', color: '#003064'}}>
-        <b>Deep Chat</b>
-      </div>
-    </div>
-  </DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat>
-  <div style="width: 200px; text-align: center; display: none">
-    <img src="path-to-image.png" style="width: 110px" />
-    <div style="margin-top: 5px; margin-bottom: 8px; font-size: 38px; color: #003064">
-      <b>Deep Chat</b>
-    </div>
-  </div>
-</deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat demo="true" containerStyle='{"borderRadius": "8px"}'>
-  <div style="width: 200px; text-align: center; display: none">
-    <img src="path-to-image.png" style="width: 110px" />
-    <div style="margin-top: 5px; margin-bottom: 8px; font-size: 38px; color: #003064">
-      <b>Deep Chat</b>
-    </div>
-  </div>
-</deep-chat>
-```
-
-</TabItem>
-</Tabs>
 
 <LineBreak></LineBreak>

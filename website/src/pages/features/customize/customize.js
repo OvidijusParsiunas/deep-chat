@@ -268,44 +268,15 @@ function ComponentsDark() {
 function IntroPanel() {
   return (
     <div style={{display: 'none'}}>
-      <div
-        style={{
-          width: '250px',
-          borderRadius: '10px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: '-10px',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: '#eef6ff',
-            borderRadius: '10px',
-            padding: '10px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>"Explain quantum computing in simple terms"</div>
+      <div className="custom-container">
+        <div className="custom-button">
+          <div className="custom-button-text">"Explain quantum computing in simple terms"</div>
         </div>
-        <div
-          style={{
-            backgroundColor: '#eef6ff',
-            borderRadius: '10px',
-            padding: '10px',
-            marginTop: '15px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>Allows user to provide follow-up corrections</div>
+        <div className="custom-button" style={{marginTop: 15}}>
+          <div className="custom-button-text">"Suggest fun activities to do indoors with my dog"</div>
         </div>
-        <div
-          style={{
-            backgroundColor: '#eef6ff',
-            borderRadius: '10px',
-            padding: '10px',
-            marginTop: '15px',
-          }}
-        >
-          <div style={{fontSize: '14px', lineHeight: '20px'}}>May occasionally generate incorrect information</div>
+        <div className="custom-button" style={{marginTop: 15}}>
+          <div className="custom-button-text">"Recommend a dish to impress a a picky eater"</div>
         </div>
       </div>
     </div>
@@ -313,8 +284,9 @@ function IntroPanel() {
 }
 
 function ComponentsLight() {
+  const ref = React.createRef(null);
   return (
-    <div id="customize-content">
+    <div id="customize-content" ref={ref}>
       <DeepChatBrowser
         demo={true}
         initialMessages={[
@@ -454,6 +426,46 @@ function ComponentsLight() {
           },
         }}
         messageStyles={{default: {user: {bubble: {backgroundColor: '#3da0ec'}}}}}
+        htmlClassUtilities={{
+          ['custom-container']: {
+            styles: {
+              default: {
+                width: '245px',
+                marginTop: '-10px',
+              },
+            },
+          },
+          ['custom-button']: {
+            events: {
+              click: (event) => {
+                const component = ref.current?.children[1];
+                if (component) {
+                  const text = event.target.children[0].innerText;
+                  component.submitUserMessage(text.substring(1, text.length - 1));
+                }
+              },
+            },
+            styles: {
+              default: {
+                backgroundColor: '#eef6ff',
+                borderRadius: '10px',
+                padding: '10px',
+                cursor: 'pointer',
+              },
+              hover: {backgroundColor: '#e4f1ff'},
+              click: {backgroundColor: '#d9ecff'},
+            },
+          },
+          ['custom-button-text']: {
+            styles: {
+              default: {
+                pointerEvents: 'none',
+                fontSize: '14px',
+                lineHeight: '20px',
+              },
+            },
+          },
+        }}
         textInput={{placeholder: {text: 'How may I assist you?'}}}
       >
         <IntroPanel></IntroPanel>
