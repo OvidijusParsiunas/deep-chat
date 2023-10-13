@@ -12,12 +12,5 @@
 }
 
 #container {
-  height: 350px;
-  width: 320px;
-  border: 1px solid #cacaca;
-  font-family: 'Inter', sans-serif, Avenir, Helvetica, Arial;
-  font-size: 0.9rem;
-  background-color: white;
-  position: relative;
-  overflow: hidden;
+  height: 100%;
 }

@@ -47,4 +47,11 @@ export class StyleUtils {
       }
     });
   }
+
+  public static applyToStyleIfNotDefined(cssDeclaration: CSSStyleDeclaration, source: CustomStyle) {
+    for (const key in source) {
+      const value = source[key];
+      if (cssDeclaration[key] === '' && value) cssDeclaration[key] = value;
+    }
+  }
 }
