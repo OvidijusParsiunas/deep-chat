@@ -9,7 +9,6 @@ export class WebComponentStyleUtils {
     fontSize: '0.9rem',
     backgroundColor: 'white',
     position: 'relative',
-    overflow: 'hidden',
   };
 
   public static apply(style: string, shadowRoot: ShadowRoot | null) {
