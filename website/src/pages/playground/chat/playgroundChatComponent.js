@@ -36,7 +36,7 @@ export default function ChatComponent({config, colorMode}) {
               {config?.connect?.custom ? (
                 <DeepChatBrowser
                   request={config.connect.custom}
-                  containerStyle={darkContainerStyle}
+                  style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
                   onNewMessage={newestMessages}
@@ -49,7 +49,7 @@ export default function ChatComponent({config, colorMode}) {
               ) : config?.connect?.demo ? (
                 <DeepChatBrowser
                   demo={DEMO_RESPONSE}
-                  containerStyle={darkContainerStyle}
+                  style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
                   onNewMessage={newestMessages}
@@ -62,7 +62,7 @@ export default function ChatComponent({config, colorMode}) {
               ) : (
                 <DeepChatBrowser
                   directConnection={config.connect}
-                  containerStyle={darkContainerStyle}
+                  style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
                   onNewMessage={newestMessages}
@@ -82,7 +82,7 @@ export default function ChatComponent({config, colorMode}) {
             {config?.connect?.custom ? (
               <DeepChatBrowser
                 request={config.connect.custom}
-                containerStyle={lightContainerStyle}
+                style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
                 onClearMessages={clearMessages}
@@ -90,7 +90,7 @@ export default function ChatComponent({config, colorMode}) {
             ) : config?.connect?.demo ? (
               <DeepChatBrowser
                 demo={DEMO_RESPONSE}
-                containerStyle={lightContainerStyle}
+                style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
                 onClearMessages={clearMessages}
@@ -98,7 +98,7 @@ export default function ChatComponent({config, colorMode}) {
             ) : (
               <DeepChatBrowser
                 directConnection={config.connect}
-                containerStyle={lightContainerStyle}
+                style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
                 onClearMessages={clearMessages}
@@ -114,7 +114,7 @@ export default function ChatComponent({config, colorMode}) {
 const darkContainerStyle = {
   borderRadius: '10px',
   boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-  borderColor: '#ededed',
+  border: '1px solid #ededed',
   marginLeft: '10px',
   border: 'unset',
   marginRight: '10px',
@@ -199,7 +199,7 @@ const darkPanelStyle = {backgroundColor: '#4f4f4f', color: 'white', border: 'uns
 const lightContainerStyle = {
   borderRadius: '10px',
   boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-  borderColor: '#ededed',
+  border: '1px solid #ededed',
   marginLeft: '10px',
   marginRight: '10px',
   width: '302px',

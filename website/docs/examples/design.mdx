@@ -33,7 +33,7 @@ import Tabs from '@theme/Tabs';
         role: 'ai',
       },
     ]}
-    containerStyle={{borderRadius: '10px'}}
+    style={{borderRadius: '10px'}}
     messageStyles={{
       default: {
         shared: {bubble: {maxWidth: '100%', backgroundColor: 'unset', marginTop: '10px', marginBottom: '10px'}},
@@ -123,7 +123,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{"borderRadius": "10px"}'
+  style="border-radius: 10px"
   messageStyles='{
     "default": {
       "shared": {
@@ -212,9 +212,9 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
-      borderColor: '#dcdcdc',
+      border: '1px solid #dcdcdc',
       backgroundColor: '#f3f6fc',
     }}
     textInput={{
@@ -294,7 +294,7 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{"borderRadius": "10px", "borderColor": "#dcdcdc", "backgroundColor": "#f3f6fc"}'
+  style="border-radius: 10px; border-color: #dcdcdc; background-color: #f3f6fc"
   textInput='{
     "styles": {
       "container": {"borderRadius": "20px", "border": "1px solid #969696", "boxShadow": "unset", "width": "78%", "marginLeft": "-15px"},
@@ -388,9 +388,9 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
-      borderColor: '#e4e4e4',
+      border: '1px solid #e4e4e4',
       background:
         'linear-gradient(90deg, rgb(239, 242, 247) 0%, 7.60286%, rgb(237, 240, 249) 15.2057%, 20.7513%, rgb(235, 239, 248) 26.297%, 27.6386%, rgb(235, 239, 248) 28.9803%, 38.2826%, rgb(231, 237, 249) 47.585%, 48.1216%, rgb(230, 236, 250) 48.6583%, 53.1306%, rgb(228, 236, 249) 57.6029%, 61.5385%, rgb(227, 234, 250) 65.4741%, 68.7835%, rgb(222, 234, 250) 72.093%, 75.7603%, rgb(219, 230, 248) 79.4275%, 82.8265%, rgb(216, 229, 248) 86.2254%, 87.8354%, rgb(213, 228, 249) 89.4454%, 91.8605%, rgb(210, 226, 249) 94.2755%, 95.4383%, rgb(209, 225, 248) 96.6011%, 98.3005%, rgb(208, 224, 247) 100%)',
     }}
@@ -483,12 +483,7 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "borderColor": "#e4e4e4",
-    "background":
-      "linear-gradient(90deg, rgb(239, 242, 247) 0%, 7.60286%, rgb(237, 240, 249) 15.2057%, 20.7513%, rgb(235, 239, 248) 26.297%, 27.6386%, rgb(235, 239, 248) 28.9803%, 38.2826%, rgb(231, 237, 249) 47.585%, 48.1216%, rgb(230, 236, 250) 48.6583%, 53.1306%, rgb(228, 236, 249) 57.6029%, 61.5385%, rgb(227, 234, 250) 65.4741%, 68.7835%, rgb(222, 234, 250) 72.093%, 75.7603%, rgb(219, 230, 248) 79.4275%, 82.8265%, rgb(216, 229, 248) 86.2254%, 87.8354%, rgb(213, 228, 249) 89.4454%, 91.8605%, rgb(210, 226, 249) 94.2755%, 95.4383%, rgb(209, 225, 248) 96.6011%, 98.3005%, rgb(208, 224, 247) 100%)"
-  }'
+  style="border-radius: 10px; border-color: #e4e4e4; background: linear-gradient(90deg, rgb(239, 242, 247) 0%, 7.60286%, rgb(237, 240, 249) 15.2057%, 20.7513%, rgb(235, 239, 248) 26.297%, 27.6386%, rgb(235, 239, 248) 28.9803%, 38.2826%, rgb(231, 237, 249) 47.585%, 48.1216%, rgb(230, 236, 250) 48.6583%, 53.1306%, rgb(228, 236, 249) 57.6029%, 61.5385%, rgb(227, 234, 250) 65.4741%, 68.7835%, rgb(222, 234, 250) 72.093%, 75.7603%, rgb(219, 230, 248) 79.4275%, 82.8265%, rgb(216, 229, 248) 86.2254%, 87.8354%, rgb(213, 228, 249) 89.4454%, 91.8605%, rgb(210, 226, 249) 94.2755%, 95.4383%, rgb(209, 225, 248) 96.6011%, 98.3005%, rgb(208, 224, 247) 100%)"
   textInput='{
     "styles": {
       "container": {
@@ -600,7 +595,7 @@ A blue color theme that uses a background image.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       border: 'unset',
       backgroundImage: "url('/img/blue-background.jpg')",
@@ -655,11 +650,7 @@ A blue color theme that uses a background image.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "border": "unset",
-    "backgroundImage": "url(\"path-to-image.jpg\")"
-  }'
+  style="border-radius: 10px; border: unset; background-image: url('path-to-image.jpg')"
   messageStyles='{
     "default": {
       "user": {
@@ -734,7 +725,7 @@ A blue and purple theme that uses an image background.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       border: 'unset',
       backgroundImage: "url('/img/lofi-background.webp')",
@@ -832,11 +823,7 @@ A blue and purple theme that uses an image background.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "border": "unset",
-    "backgroundImage": "url(\"path-to-image.jpg\")"
-  }'
+  style="border-radius: 10px; border: unset; background-image: url('path-to-image.jpg')"
   messageStyles='{
     "default": {
       "user": {
@@ -949,7 +936,7 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
         role: 'ai',
       },
     ]}
-    containerStyle={{borderRadius: '10px'}}
+    style={{borderRadius: '10px'}}
     messageStyles={{default: {user: {bubble: {backgroundColor: '#ff2020'}}}}}
     submitButtonStyles={{
       submit: {
@@ -1046,7 +1033,7 @@ A violet color theme that uses a squared border styling approach.
         role: 'ai',
       },
     ]}
-    containerStyle={{borderRadius: '10px'}}
+    style={{borderRadius: '10px'}}
     messageStyles={{default: {shared: {bubble: {borderRadius: '0px'}}, user: {bubble: {backgroundColor: '#6c00ff'}}}}}
     submitButtonStyles={{
       position: 'outside-right',
@@ -1108,7 +1095,7 @@ A violet color theme that uses a squared border styling approach.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{"borderRadius": "10px"}'
+  style="border-radius: 10px"
   messageStyles='{
     "default": {
       "shared": {"bubble": {"borderRadius": "0px"}},
@@ -1197,7 +1184,7 @@ Dark blue color variation that is suitable for a dark screen mode.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       border: 'unset',
       backgroundColor: '#292929',
@@ -1287,11 +1274,7 @@ Dark blue color variation that is suitable for a dark screen mode.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "border": "unset",
-    "backgroundColor": "#292929"
-  }'
+  style="border-radius: 10px; border: unset; background-color: #292929"
   messageStyles='{
     "default": {
       "ai": {"bubble": {"backgroundColor": "#545454", "color": "white"}}
@@ -1390,7 +1373,7 @@ Dark orange color variation that is suitable for a dark screen mode.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       border: 'unset',
       backgroundColor: '#292929',
@@ -1486,11 +1469,7 @@ Dark orange color variation that is suitable for a dark screen mode.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "border": "unset",
-    "backgroundColor": "#292929"
-  }'
+  style="border-radius: 10px; border: unset; background-color: #292929"
   messageStyles='{
     "default": {
       "ai": {
@@ -1604,7 +1583,7 @@ A simple text input area that covers the full width of the chat component.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
     }}
     textInput={{
@@ -1648,7 +1627,7 @@ A simple text input area that covers the full width of the chat component.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{"borderRadius": "10px"}'
+  style="border-radius: 10px"
   textInput='{
     "styles": {
       "container": {

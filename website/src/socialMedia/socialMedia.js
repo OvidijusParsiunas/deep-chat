@@ -164,10 +164,10 @@ function Components() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
           width: '300px',
         }}
       ></DeepChatBrowser>
@@ -182,10 +182,10 @@ function Components() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
           width: '300px',
         }}
         messageStyles={{
@@ -258,10 +258,10 @@ function Components() {
       <DeepChatBrowser
         demo={true}
         stream={true}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
           width: '300px',
         }}
         names={true}
@@ -313,10 +313,10 @@ function Components() {
       </DeepChatBrowser>
       <DeepChatBrowser
         demo={true}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
         }}
         messageStyles={{
           default: {

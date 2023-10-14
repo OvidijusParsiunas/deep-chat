@@ -33,7 +33,7 @@ import Tabs from '@theme/Tabs';
       {text: 'Whats on your mind?', role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -64,7 +64,7 @@ import Tabs from '@theme/Tabs';
     {"text": "Whats on your mind?", "role": "user"},
     {"text": "Peace and tranquility", "role": "ai"}
   ]'
-  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -87,7 +87,7 @@ is not taken into consideration when calculating [`requestBodyLimits`](../connec
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introMessage={{text: 'Hi I am your assistant, ask me anything!'}}
     demo={true}
   ></DeepChatBrowser>
@@ -109,7 +109,7 @@ is not taken into consideration when calculating [`requestBodyLimits`](../connec
 <deep-chat
   introMessage='{"text": "Hi I am your assistant, ask me anything!"}'
   demo="true"
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -129,7 +129,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -168,7 +168,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
       "role": "ai"
     }
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -198,7 +198,7 @@ This object is used to configure avatars that are displayed beside messages. <br
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -248,7 +248,7 @@ This object is used to configure avatars that are displayed beside messages. <br
       "role": "ai"
     }
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -269,7 +269,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -308,7 +308,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
       "role": "ai"
     }
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -335,7 +335,7 @@ This object is used to configure names that are displayed beside messages. <br /
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
@@ -382,7 +382,7 @@ This object is used to configure names that are displayed beside messages. <br /
       "role": "ai"
     }
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -403,7 +403,7 @@ will automatically have a loading animation.
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introMessage={{text: 'Send a new message to observe a response with no loading bubble.'}}
     displayLoadingBubble={false}
     demo={true}
@@ -426,7 +426,7 @@ will automatically have a loading animation.
 <deep-chat
   displayLoadingBubble="false"
   introMessage='{"text": "Send a new message to observe a response with no loading bubble."}'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -457,7 +457,7 @@ is for communication with the target service and `speechToText` is when there is
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     demo={{displayErrors: {default: true, service: true, speechToText: true}}}
     errorMessages={{
       overrides: {
@@ -498,7 +498,7 @@ is for communication with the target service and `speechToText` is when there is
       "speechToText": "Speech to text microphone error!"
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo='{"displayErrors": {"default": true, "service": true, "speechToText": true}}'
 ></deep-chat>
 ```
@@ -527,7 +527,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {file: {src: '/img/bird-2.jpeg', type: 'image'}, role: 'user'},
       {
@@ -562,7 +562,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
     {"file": {"src": "path-to-image.jpeg", "type": "image"}, "role": "user"},
     {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -595,7 +595,7 @@ however you can help it by setting the `type`.
 
 <ComponentContainer minHeight={535}>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px', height: '480px'}}
+    style={{borderRadius: '8px', height: '480px'}}
     initialMessages={[
       {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
       {file: {src: '/img/example-gif-1.gif', type: 'image'}, role: 'user'},
@@ -636,7 +636,7 @@ however you can help it by setting the `type`.
     {"file": {"name": "placeholder.exe"}, "role": "user"},
     {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
   ]'
-  containerStyle='{"borderRadius": "8px", "height": "480px"}'
+  style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -670,7 +670,7 @@ Check out external module [EXAMPLES](../../examples/externalModules) to find mul
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
@@ -722,7 +722,7 @@ Check out external module [EXAMPLES](../../examples/externalModules) to find mul
       }
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
 ></deep-chat>
 ````

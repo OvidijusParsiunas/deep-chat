@@ -5,7 +5,7 @@ sidebar_position: 1
 # Sticky
 
 Example to help you stick the component to any side of the screen - furthering a chat-like experience to your users. The core method to achieve this is to
-set the [`containerStyle`](../../docs/styles#containerStyle) property with _position: "fixed"_ and defining the side you want to component to sit on e.g. _right: "7%"_.
+set the [`style`](../../docs/styles#style) property with _position: fixed_ and defining the side you want to component to sit on e.g. _right: 7%_.
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -23,13 +23,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "position": "fixed",
-    "bottom": "0px",
-    "right": "7%",
-    "zIndex": "1"
-  }'
+  style="border-radius: 10px; position: fixed; bottom: 0px; right: 7%; z-index: 1"
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
@@ -56,7 +50,7 @@ import Tabs from '@theme/Tabs';
       },
     ]}
     stream={true}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       position: 'fixed',
       bottom: '0px',

@@ -37,7 +37,7 @@ import Tabs from '@theme/Tabs';
   <DeepChatBrowser
     demo={true}
     initialMessages={[{html: '<button>Button</button>', role: 'user'}]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -56,7 +56,7 @@ import Tabs from '@theme/Tabs';
 
 <deep-chat
   initialMessages='[{"html": "<button>Button</button>", "role": "user"}]'
-  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -110,7 +110,7 @@ that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts
       {html: '<button class="custom-button">Hello</button>', role: 'user'},
       {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
     ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -170,7 +170,7 @@ chatElementRef.initialMessages = [
   {html: '<button class="custom-button">Hello</button>', role: 'user'},
   {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
 ];
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 chatElementRef.demo = true;
 ```
 
@@ -196,7 +196,7 @@ to the parent-most element in the `html` string. This message is also not tracke
         role: 'user',
       },
     ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
     demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -223,7 +223,7 @@ chatElementRef.initialMessages = [
   {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
   {html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>', role: 'user'},
 ];
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 chatElementRef.demo = true;
 ```
 
@@ -247,7 +247,7 @@ To unset/change the message bubble styling, use the `html` property in the [mess
     demo={true}
     initialMessages={[{html: '<button>User button</button>', role: 'user'}]}
     messageStyles={{html: {shared: {bubble: {backgroundColor: 'unset'}}}}}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -267,7 +267,7 @@ To unset/change the message bubble styling, use the `html` property in the [mess
 <deep-chat
   messageStyles='{"html": {"shared": {"bubble": {"backgroundColor": "unset"}}}}'
   initialMessages='[{"html": "<button>User button</button>", "role": "user"}]'
-  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -296,7 +296,7 @@ To create new web components - use any of the following approaches:
   <DeepChatBrowser
     demo={true}
     initialMessages={[{html: '<custom-element/>', role: 'user'}]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -339,7 +339,7 @@ customElements.define('custom-element', CustomElement);
 // HTML
 <deep-chat
   initialMessages='[{"html": "<custom-element/>", "role": "user"}]'
-  containerStyle='{"height": "370px", "borderRadius": "8px"}'
+  style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
 ```
@@ -382,7 +382,7 @@ Basic suggestion buttons using [Deep Chat Classes](#deepChatClasses).
       },
     ]}
     messageStyles={{html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px'}}}}}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -429,7 +429,7 @@ chatElementRef.initialMessages = [
 
 chatElementRef.messageStyles = {html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px'}}}};
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 
 chatElementRef.demo = true;
 ```
@@ -462,7 +462,7 @@ Preset user responses which can be used to give feedback, follow a conversation 
     messageStyles={{
       html: {shared: {bubble: {backgroundColor: 'unset', padding: '0px', width: '100%', textAlign: 'right'}}},
     }}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
     textInput={{disabled: true, placeholder: {text: 'Use buttons to respond'}}}
     submitButtonStyles={{submit: {container: {default: {opacity: 0}}}}}
     demo={{
@@ -539,7 +539,7 @@ chatElementRef.demo = {
   },
 };
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 ```
 
 </TabItem>
@@ -607,7 +607,7 @@ Add feedback buttons to response messages.
         styles: {default: {transform: 'rotate(180deg)', marginLeft: '3px'}},
       },
     }}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
     demo={{
       response: {
         html: `
@@ -715,7 +715,7 @@ chatElementRef.htmlClassUtilities = {
   },
 };
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 
 chatElementRef.demo = {
   response: {
@@ -753,7 +753,7 @@ Add a chart component (e.g. using [Google Chart](https://developers.google.com/c
         role: 'ai',
       },
     ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
     demo={{
       response: {
         html: `
@@ -809,7 +809,7 @@ chatElementRef.initialMessages = [
   },
 ];
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 
 chatElementRef.demo = {
   response: {
@@ -851,7 +851,7 @@ Add an interactive table component (e.g. using [Active Table](https://activetabl
         role: 'ai',
       },
     ]}
-    containerStyle={{height: '370px', borderRadius: '8px'}}
+    style={{height: '370px', borderRadius: '8px'}}
     demo={{
       response: {
         html: `
@@ -907,7 +907,7 @@ chatElementRef.initialMessages = [
   },
 ];
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 
 chatElementRef.demo = {
   response: {

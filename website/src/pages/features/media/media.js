@@ -19,10 +19,10 @@ function RightPanel() {
       <OnVisibleAnimation beforeClass={'media-bottom'} afterClass={'media-top'} timeoutMS={0}>
         <DeepChatBrowser
           demo={true}
-          containerStyle={{
+          style={{
             borderRadius: '10px',
             boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-            borderColor: '#ededed',
+            border: '1px solid #ededed',
             height: '400px',
           }}
           messageStyles={{

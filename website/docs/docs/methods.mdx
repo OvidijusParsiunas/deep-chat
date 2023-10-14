@@ -30,7 +30,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerMethods propertyName={'getMessages'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -56,7 +56,7 @@ a _false_ argument to prevent this.
 
 <ComponentContainerMethods propertyName={'clearMessages'} displayResults={false}>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     demo={true}
     initialMessages={[
       {text: 'What is 2 + 2?', role: 'user'},
@@ -88,7 +88,7 @@ Send a user message programmatically.
 #### Example
 
 <ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={'User message'}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -113,7 +113,7 @@ Moves the chat's scrollbar to the bottom.
 
 <ComponentContainerMethods propertyName={'scrollToBottom'} displayResults={false}>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {
         role: 'user',
@@ -149,7 +149,7 @@ Focuses the cursor on the text input.
 #### Example
 
 <ComponentContainerMethods propertyName={'focusInput'} displayResults={false}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
 <Tabs>
@@ -176,7 +176,7 @@ method to highlight the code with the loaded module.
 
 <ComponentContainerHighlightMethod displayResults={false}>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     initialMessages={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',

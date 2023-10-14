@@ -20,7 +20,7 @@ function ComponentsDark() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           border: 'unset',
           backgroundColor: '#292929',
@@ -112,7 +112,7 @@ function ComponentsDark() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           border: 'unset',
           backgroundImage: "url('/img/lofi-background.webp')",
@@ -212,7 +212,7 @@ function ComponentsDark() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           border: 'unset',
           backgroundImage: "url('/img/blue-background.jpg')",
@@ -298,10 +298,10 @@ function ComponentsLight() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
         }}
         messageStyles={{
           default: {
@@ -384,10 +384,10 @@ function ComponentsLight() {
       <DeepChatBrowser
         demo={true}
         stream={true}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
         }}
         names={true}
         submitButtonStyles={{
@@ -482,10 +482,10 @@ function ComponentsLight() {
             role: 'ai',
           },
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
           backgroundColor: '#f1f6ff',
         }}
         textInput={{

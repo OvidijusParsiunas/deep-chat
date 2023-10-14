@@ -40,7 +40,7 @@ export default function ComponentSuggestionButtons() {
               },
             },
           }}
-          containerStyle={{height: '370px', borderRadius: '8px'}}
+          style={{height: '370px', borderRadius: '8px'}}
         >
           <div style={{display: 'none'}}>
             <div className="custom-button">

@@ -8,6 +8,10 @@
   margin-top: 60px;
 }
 
+#connect-left-panel {
+  padding-right: 30px;
+}
+
 #connect-left-panel deep-chat {
   margin-left: auto;
   margin-right: 300px;

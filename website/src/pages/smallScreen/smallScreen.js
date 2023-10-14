@@ -13,10 +13,10 @@ export default function SmallScreenPanel() {
           {text: 'What exactly can it be used for?', role: 'user'},
           {text: 'Add it to your website to connect to AI APIs.', role: 'ai'},
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
+          border: '1px solid #ededed',
           zIndex: 10,
         }}
         stream="true"

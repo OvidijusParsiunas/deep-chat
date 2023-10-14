@@ -23,7 +23,7 @@ import Tabs from '@theme/Tabs';
 #### Example
 
 <ComponentContainer>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}>
     <div
       style={{
         width: '200px',
@@ -79,7 +79,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat demo="true" containerStyle='{"borderRadius": "8px"}'>
+<deep-chat demo="true" style="border-radius: 8px">
   <div
     style="
       width: 200px;
@@ -171,7 +171,7 @@ chatElementRef.htmlClassUtilities = {
 ```text
 // Markup
 
-<deep-chat id="chat-element">
+<deep-chat id="chat-element" style="height: 370px; border-radius: 8px">
   <div style="display: none">
     <div class="custom-button">
       <div class="custom-button-text">"Explain quantum computing"</div>
@@ -206,8 +206,6 @@ chatElementRef.htmlClassUtilities = {
   ['custom-button-text']: {styles: {default: {pointerEvents: 'none'}}},
 };
 
-chatElementRef.containerStyle = {height: '370px', borderRadius: '8px'};
-
 chatElementRef.demo = true;
 ```
 
@@ -227,7 +225,7 @@ services in the [`directConnection`](./directConnection) property.
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introPanelStyle={{backgroundColor: '#fffeec'}}
     directConnection={{openAI: {audio: true, key: 'placeholder-key'}}}
   ></DeepChatBrowser>
@@ -251,7 +249,7 @@ services in the [`directConnection`](./directConnection) property.
 
 <deep-chat
   introPanelStyle='{"backgroundColor": "#fffeec"}'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   directConnection='{"openAI": {"audio": true, "key": "placeholder-key"}}'
 ></deep-chat>
 ```

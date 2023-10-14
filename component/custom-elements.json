@@ -62,13 +62,6 @@
             },
             {
               "kind": "field",
-              "name": "containerStyle",
-              "type": {
-                "text": "CustomStyle | undefined"
-              }
-            },
-            {
-              "kind": "field",
               "name": "attachmentContainerStyle",
               "type": {
                 "text": "CustomStyle | undefined"
@@ -1164,582 +1157,6 @@
       "path": "src/types/validateMessageBeforeSending.ts",
       "declarations": [],
       "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AssemblyAIAudioIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'AssemblyAI API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getKeyLink",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://www.assemblyai.com/app/account'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "introPanelMarkUp",
-              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.assemblyai.com/v2/upload'"
-            },
-            {
-              "kind": "field",
-              "name": "isTextInputDisabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "textInputPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Upload an audio file'"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['Authentication', 'Invalid']"
-            },
-            {
-              "kind": "method",
-              "name": "canFileSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "_",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "_",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Response>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "AssemblyAIResult"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateMessageBeforeSending"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildRequestSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "requestSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Request"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isDirectConnection",
-              "privacy": "public",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "requestSettings",
-              "type": {
-                "text": "Request"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateConfigKey",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_directServiceRequiresFiles",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "DemoT | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "DirectServiceIO",
-            "module": "/src/services/utils/directServiceIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AssemblyAIAudioIO",
-          "declaration": {
-            "name": "AssemblyAIAudioIO",
-            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
-          }
-        }
-      ]
     },
     {
       "kind": "javascript-module",
@@ -5052,6 +4469,582 @@
           "declaration": {
             "name": "AzureTranslationIO",
             "module": "src/services/azure/azureTranslationIO.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/assemblyAI/assemblyAIAudioIO.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIAudioIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'AssemblyAI API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getKeyLink",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://www.assemblyai.com/app/account'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "introPanelMarkUp",
+              "default": "`\n    <div style=\"width: 100%; text-align: center; margin-left: -10px\"><b>AssemblyAI Audio</b></div>\n    <p><b>Upload an audio file</b> to transcribe it into text.\n    <p>\n      Click <a href=\"https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started\">here</a> for more info.\n    </p>`"
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.assemblyai.com/v2/upload'"
+            },
+            {
+              "kind": "field",
+              "name": "isTextInputDisabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "textInputPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Upload an audio file'"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['Authentication', 'Invalid']"
+            },
+            {
+              "kind": "method",
+              "name": "canFileSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "_",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "_",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Response>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "AssemblyAIResult"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateMessageBeforeSending"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildRequestSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "requestSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Request"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isDirectConnection",
+              "privacy": "public",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "requestSettings",
+              "type": {
+                "text": "Request"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateConfigKey",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_directServiceRequiresFiles",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "DemoT | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContent[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "DirectServiceIO",
+            "module": "/src/services/utils/directServiceIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIAudioIO",
+          "declaration": {
+            "name": "AssemblyAIAudioIO",
+            "module": "src/services/assemblyAI/assemblyAIAudioIO.ts"
           }
         }
       ]
@@ -20852,581 +20845,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/chatView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ChatView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "panel",
-                  "optional": true,
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ChatView",
-          "declaration": {
-            "name": "ChatView",
-            "module": "src/views/chat/chatView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/error/errorView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ErrorView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ErrorView",
-          "declaration": {
-            "name": "ErrorView",
-            "module": "src/views/error/errorView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/insertKeyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InsertKeyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createCautionText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpLink",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createFailText",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createHelpTextContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "link",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onFail",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addVerificationEvents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputEl",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "startEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "failTextEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createStartButton",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "onInputFocus",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "FocusEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInput",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "placeholderText",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "InsertKeyView",
-          "declaration": {
-            "name": "InsertKeyView",
-            "module": "src/views/insertKey/insertKeyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/insertKey/visibilityIcon.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "VisibilityIcon",
-          "members": [
-            {
-              "kind": "field",
-              "name": "VISIBLE_ICON_ID",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "'visible-icon'"
-            },
-            {
-              "kind": "method",
-              "name": "changeVisibility",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                },
-                {
-                  "name": "visibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "notVisibleIcon",
-                  "type": {
-                    "text": "SVGGraphicsElement"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIconElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "iconString",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "id",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "inputElement",
-                  "type": {
-                    "text": "HTMLInputElement"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "VisibilityIcon",
-          "declaration": {
-            "name": "VisibilityIcon",
-            "module": "src/views/insertKey/visibilityIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ValidateKeyPropertyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "startElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ValidateKeyPropertyView",
-          "declaration": {
-            "name": "ValidateKeyPropertyView",
-            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/HTTP/HTTPRequest.ts",
       "declarations": [
         {
@@ -22892,6 +22310,26 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "applyToStyleIfNotDefined",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "cssDeclaration",
+                  "type": {
+                    "text": "CSSStyleDeclaration"
+                  }
+                },
+                {
+                  "name": "source",
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -23028,6 +22466,63 @@
           "declaration": {
             "name": "FILE_TYPE_BUTTON_ICONS",
             "module": "src/utils/fileTypes/fileTypeButtonIcons.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/legacy/legacy.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Legacy",
+          "members": [
+            {
+              "kind": "method",
+              "name": "checkForContainerStyles",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleResponseProperty",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "any | Response"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Legacy",
+          "declaration": {
+            "name": "Legacy",
+            "module": "src/utils/legacy/legacy.ts"
           }
         }
       ]
@@ -23208,6 +22703,16 @@
           "name": "WebComponentStyleUtils",
           "members": [
             {
+              "kind": "field",
+              "name": "DEFAULT_COMPONENT_STYLE",
+              "type": {
+                "text": "object"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "{\n    height: '350px',\n    width: '320px',\n    border: '1px solid #cacaca',\n    fontFamily: `'Inter', sans-serif, Avenir, Helvetica, Arial`,\n    fontSize: '0.9rem',\n    backgroundColor: 'white',\n    position: 'relative',\n    overflow: 'hidden',\n  }"
+            },
+            {
               "kind": "method",
               "name": "apply",
               "privacy": "public",
@@ -23266,6 +22771,20 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "applyDefaultStyleToComponent",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "style",
+                  "type": {
+                    "text": "CSSStyleDeclaration"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -23283,89 +22802,72 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
+      "path": "src/views/chat/chatView.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "AssemblyAIUtils",
+          "name": "ChatView",
           "members": [
             {
               "kind": "method",
-              "name": "poll",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "api_token",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "audio_url",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
+              "name": "createElements",
               "privacy": "private",
               "static": true,
               "parameters": [
                 {
-                  "name": "result",
+                  "name": "deepChat",
                   "type": {
-                    "text": "object"
+                    "text": "DeepChat"
                   }
                 },
                 {
-                  "name": "key",
+                  "name": "serviceIO",
                   "type": {
-                    "text": "string"
+                    "text": "ServiceIO"
                   }
                 },
                 {
-                  "name": "onSuccess",
+                  "name": "panel",
+                  "optional": true,
                   "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
+                    "text": "HTMLElement"
                   }
                 }
               ]
             },
             {
               "kind": "method",
-              "name": "buildKeyVerificationDetails",
+              "name": "render",
               "privacy": "public",
               "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "panel",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
                 }
-              }
+              ]
             }
           ]
         }
@@ -23373,10 +22875,502 @@
       "exports": [
         {
           "kind": "js",
-          "name": "AssemblyAIUtils",
+          "name": "ChatView",
           "declaration": {
-            "name": "AssemblyAIUtils",
-            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
+            "name": "ChatView",
+            "module": "src/views/chat/chatView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/error/errorView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ErrorView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ErrorView",
+          "declaration": {
+            "name": "ErrorView",
+            "module": "src/views/error/errorView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/insertKeyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InsertKeyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createCautionText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpLink",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createFailText",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createHelpTextContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "link",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFail",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addVerificationEvents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputEl",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "startEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "failTextEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createStartButton",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "onInputFocus",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "FocusEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInput",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "placeholderText",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "InsertKeyView",
+          "declaration": {
+            "name": "InsertKeyView",
+            "module": "src/views/insertKey/insertKeyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/insertKey/visibilityIcon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VisibilityIcon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "VISIBLE_ICON_ID",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "'visible-icon'"
+            },
+            {
+              "kind": "method",
+              "name": "changeVisibility",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                },
+                {
+                  "name": "visibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "notVisibleIcon",
+                  "type": {
+                    "text": "SVGGraphicsElement"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIconElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "iconString",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputElement",
+                  "type": {
+                    "text": "HTMLInputElement"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VisibilityIcon",
+          "declaration": {
+            "name": "VisibilityIcon",
+            "module": "src/views/insertKey/visibilityIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ValidateKeyPropertyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "startElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ValidateKeyPropertyView",
+          "declaration": {
+            "name": "ValidateKeyPropertyView",
+            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
           }
         }
       ]
@@ -23622,6 +23616,106 @@
           "declaration": {
             "name": "AzureUtils",
             "module": "src/services/azure/utils/azureUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AssemblyAIUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "poll",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "api_token",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "audio_url",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AssemblyAIUtils",
+          "declaration": {
+            "name": "AssemblyAIUtils",
+            "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
           }
         }
       ]
@@ -27122,6 +27216,173 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsTypes",
+              "type": {
+                "text": "FileAttachmentsType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addType",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachmentsT"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAttachmentContainer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleContainerDisplay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "display",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllFileData"
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholders"
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "fileAttachmentTypes",
+                  "type": {
+                    "text": "FileAttachmentsType[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToAnyType",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAllFiles"
+            },
+            {
+              "kind": "method",
+              "name": "getNumberOfTypes"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachments",
+          "declaration": {
+            "name": "FileAttachments",
+            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NewFileName",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getFileName",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "prefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "extension",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "NewFileName",
+          "declaration": {
+            "name": "NewFileName",
+            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/input/textInput/focusUtils.ts",
       "declarations": [
         {
@@ -27541,173 +27802,6 @@
           "declaration": {
             "name": "TextInputEl",
             "module": "src/views/chat/input/textInput/textInput.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsTypes",
-              "type": {
-                "text": "FileAttachmentsType[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addType",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachmentsT"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAttachmentContainer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "toggleContainerDisplay",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "display",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getAllFileData"
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholders"
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToType",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "fileAttachmentTypes",
-                  "type": {
-                    "text": "FileAttachmentsType[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToAnyType",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAllFiles"
-            },
-            {
-              "kind": "method",
-              "name": "getNumberOfTypes"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachments",
-          "declaration": {
-            "name": "FileAttachments",
-            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "NewFileName",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "prefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "extension",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "NewFileName",
-          "declaration": {
-            "name": "NewFileName",
-            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
           }
         }
       ]

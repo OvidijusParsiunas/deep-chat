@@ -32,7 +32,7 @@ import Tabs from '@theme/Tabs';
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       width: '96vw',
       height: 'calc(100vh - 70px)',
@@ -62,12 +62,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "width": "96vw",
-    "height": "calc(100vh - 70px)",
-    "paddingTop": "10px"
-  }'
+  style="border-radius: 10px; width: 96vw; height: calc(100vh - 70px); padding-top: 10px"
   messageStyles='{"default": {"shared": {"innerContainer": {"fontSize": "1rem", "width": "95%"}}}}'
   inputAreaStyle='{"fontSize": "1rem"}'
   initialMessages='[
@@ -102,7 +97,7 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       width: '96vw',
       height: 'calc(100vh - 70px)',
@@ -203,12 +198,7 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "width": "96vw",
-    "height": "calc(100vh - 70px)",
-    "paddingTop": "10px"
-  }'
+  style="border-radius: 10px; width: 96vw; height: calc(100vh - 70px); padding-top: 10px"
   messageStyles='{
     "default": {
       "shared": {
@@ -283,8 +273,8 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
 
 ### Simple {#simple}
 
-If you want to automatically scale the inner chat's elements relative to the font-size, you can simply add the desired _fontSize_
-inside the [`containerStyle`](../../docs/styles#containerStyle) property.
+If you want to automatically scale the inner chat's elements relative to the font-size, you can simply add the desired _font-size_
+inside the [`style`](../../docs/styles#style) property.
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -298,7 +288,7 @@ inside the [`containerStyle`](../../docs/styles#containerStyle) property.
         role: 'ai',
       },
     ]}
-    containerStyle={{
+    style={{
       borderRadius: '10px',
       width: '96vw',
       height: 'calc(100vh - 70px)',
@@ -316,13 +306,7 @@ inside the [`containerStyle`](../../docs/styles#containerStyle) property.
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
 
 <deep-chat
-  containerStyle='{
-    "borderRadius": "10px",
-    "width": "96vw",
-    "height": "calc(100vh - 70px)",
-    "fontSize": "1.37rem",
-    "paddingTop": "10px"
-  }'
+  style="border-radius: 10px; width: 96vw; height: calc(100vh - 70px); font-size: 1.37rem; padding-top: 10px"
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},

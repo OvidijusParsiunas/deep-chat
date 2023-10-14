@@ -24,12 +24,10 @@ function LeftPanel() {
           {file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'},
           {file: {src: '/audio/jeff.mp3', type: 'audio'}, role: 'ai'},
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
-          marginLeft: '30px',
-          marginRight: '30px',
+          border: '1px solid #ededed',
         }}
         camera={{button: {styles: {container: {default: {marginRight: '2px'}}}}}}
         microphone={{button: {styles: {container: {default: {marginLeft: '4px'}}}}}}

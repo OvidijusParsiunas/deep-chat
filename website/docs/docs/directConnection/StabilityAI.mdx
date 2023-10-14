@@ -47,7 +47,7 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           key: 'placeholder key',
@@ -58,7 +58,7 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           textToImage: {engine_id: 'stable-diffusion-v1-5', height: 640, samples: 1},
@@ -95,7 +95,7 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
       "textToImage": {"engine_id": "stable-diffusion-v1-5", "height": 640, "samples": 1}
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -136,7 +136,7 @@ values will result in more influence from the diffusion steps. (0 to 1)
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           key: 'placeholder key',
@@ -147,7 +147,7 @@ values will result in more influence from the diffusion steps. (0 to 1)
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           imageToImage: {engine_id: 'stable-diffusion-v1-5', init_image_mode: 'image_strength', samples: 1},
@@ -184,7 +184,7 @@ values will result in more influence from the diffusion steps. (0 to 1)
       "imageToImage": {"engine_id": "stable-diffusion-v1-5", "width": 1024, "height": 1024, "samples": 1}
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -214,7 +214,7 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           key: 'placeholder key',
@@ -225,7 +225,7 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           imageToImageMasking: {mask_source: 'MASK_IMAGE_WHITE', samples: 1},
@@ -262,7 +262,7 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
       "imageToImageMasking": {"mask_source": "MASK_IMAGE_WHITE", "samples": 1}
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -286,7 +286,7 @@ Minimum dimension number is 512. <br />
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           key: 'placeholder key',
@@ -297,7 +297,7 @@ Minimum dimension number is 512. <br />
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           imageToImageUpscale: {width: 1000},
@@ -334,7 +334,7 @@ Minimum dimension number is 512. <br />
       "imageToImageUpscale": {"width": 1000}
     }
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -385,7 +385,7 @@ Object that is used to define the target engine and other image processing param
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           key: 'placeholder key',
@@ -396,7 +396,7 @@ Object that is used to define the target engine and other image processing param
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
-      containerStyle={{borderRadius: '8px'}}
+      style={{borderRadius: '8px'}}
       directConnection={{
         stabilityAI: {
           textToImage: {engine_id: 'stable-diffusion-v1-5', weight: 1, style_preset: 'fantasy-art', samples: 2},
@@ -439,7 +439,7 @@ Object that is used to define the target engine and other image processing param
         "style_preset": "fantasy-art",
         "samples": 2
   }}}'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 

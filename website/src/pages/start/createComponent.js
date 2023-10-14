@@ -28,7 +28,7 @@ function Logos(props) {
       }`}
     >
       <div className="start-page-logo start-panel-logo">
-        <a href="https://codesandbox.io/s/deep-chat-react-ythnyl?file=/src/App.tsx" target="_blank">
+        <a href="https://codesandbox.io/s/deep-chat-react-vwh8ls?file=/src/App.tsx" target="_blank">
           <img src={reactLogo} width="41" style={{paddingTop: 10}} />
         </a>
       </div>

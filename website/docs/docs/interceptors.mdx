@@ -25,7 +25,7 @@ import Tabs from '@theme/Tabs';
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
 <ComponentContainerInterceptors propertyName={'requestInterceptor'} displayConsole={true}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -96,7 +96,7 @@ This property is not enabled for [`server-sent`](https://developer.mozilla.org/e
 #### Example
 
 <ComponentContainerInterceptors propertyName={'responseInterceptor'} displayConsole={true}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>
@@ -153,7 +153,7 @@ The method must return a boolean value with either _true_ or _false_ for whether
 #### Example
 
 <ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'} displayConsole={false}>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true} mixedFiles={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true} mixedFiles={true}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
 <Tabs>

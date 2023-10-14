@@ -25,12 +25,10 @@ function LeftPanel() {
           {text: 'Can it connect to my custom API?', role: 'user'},
           {text: 'It sure can! Check the Service section in Docs.', role: 'ai'},
         ]}
-        containerStyle={{
+        style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
-          borderColor: '#ededed',
-          marginLeft: '30px',
-          marginRight: '30px',
+          border: '1px solid #ededed',
         }}
         messageStyles={{
           default: {

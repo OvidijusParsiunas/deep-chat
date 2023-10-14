@@ -40,7 +40,7 @@ import Tabs from '@theme/Tabs';
 #### Base Example
 
 <ComponentContainer>
-  <DeepChatBrowser containerStyle={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
@@ -56,7 +56,7 @@ import Tabs from '@theme/Tabs';
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat demo="true" containerStyle='{"borderRadius": "8px"}'></deep-chat>
+<deep-chat demo="true" style="border-radius: 8px"></deep-chat>
 ```
 
 </TabItem>
@@ -68,7 +68,7 @@ import Tabs from '@theme/Tabs';
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introMessage={{text: 'Rock, Paper, Scissors! Make your guess and see who wins!'}}
     demo={{
       response: (message) => {
@@ -116,7 +116,7 @@ chatElementRef.demo = {
 <deep-chat
   id="chat-element"
   introMessage='{"text": "Rock, Paper, Scissors! Make your guess and see who wins!"}'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 
 <script>
@@ -147,7 +147,7 @@ chatElementRef.demo = {
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     demo={{
       displayLoadingBubble: true,
       displayFileAttachmentContainer: true,
@@ -181,7 +181,7 @@ chatElementRef.demo = {
     "displayFileAttachmentContainer": true,
     "displayErrors": {"service": true}
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 

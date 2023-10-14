@@ -19,7 +19,7 @@
     </style>
   </head>
   <body>
-    <!-- Attributes can be set as strings either directly on the element (demo/textInput) or via a `setAttribute` method on its reference (containerStyle).
+    <!-- Attributes can be set as strings either directly on the element (demo/textInput) or via a `setAttribute` method on its reference (introMessage).
       When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
       to properties must not have external references and all regex values are properly escaped.
       You can also pass values into the component via properties by using the element reference (initialMessages).
@@ -33,9 +33,9 @@
         {role: 'ai', text: 'I am doing very well!'},
       ];
       chatElement.setAttribute(
-        'containerStyle',
+        'introMessage',
         JSON.stringify({
-          border: '1px solid black',
+          text: 'You are now running deep chat locally.',
         })
       );
     </script>

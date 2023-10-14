@@ -55,7 +55,7 @@ Configuration for the outgoing network requests to the target server.
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     request={{
       url: 'https://customapi.com/message',
       method: 'POST',
@@ -92,7 +92,7 @@ Configuration for the outgoing network requests to the target server.
     "headers": {"customName": "customHeaderValue"},
     "additionalBodyProps": {"field": "value"}
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -115,7 +115,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     stream={true}
     demo={true}
     introMessage={{text: 'The response message bubble will be populated gradually with text events.'}}
@@ -138,7 +138,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 <deep-chat
   stream="true"
   demo="true"
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   introMessage='{"text": The response message bubble will be populated gradually with text events."}'
 ></deep-chat>
 ```
@@ -152,7 +152,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     stream={{simulation: 150}}
     demo={true}
     introMessage={{text: 'The response message bubble will be populated gradually with text events.'}}
@@ -175,7 +175,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 <deep-chat
   stream='{"simulation": 150}'
   demo="true"
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   introMessage='{"text": The response message bubble will be populated gradually with text events."}'
 ></deep-chat>
 ```
@@ -200,7 +200,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introMessage={{text: 'Observe the data that is going to be sent below.'}}
     requestBodyLimits={{
       totalMessagesMaxCharLength: 20,
@@ -233,7 +233,7 @@ These limits do not include the [`introMessage`](./messages#introMessage).
     "totalMessagesMaxCharLength": 20,
     "maxMessages": 2
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   demo="true"
   introMessage='{"text": Observe the data that is going to be sent below."}'
 ></deep-chat>
@@ -269,7 +269,7 @@ Object used to configure the outgoing messages request settings. It MUST have ei
 
 <ComponentContainer>
   <DeepChatBrowser
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     request={{
       url: 'https://customapi.com/message',
       method: 'POST',
@@ -306,7 +306,7 @@ Object used to configure the outgoing messages request settings. It MUST have ei
     "headers": {"customName": "customHeaderValue"},
     "additionalBodyProps": {"customBodyField": "customBodyValue"}
   }'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
 ></deep-chat>
 ```
 
@@ -350,7 +350,7 @@ Server message: <br />
       url: 'wss://customapi.com',
       websocket: true,
     }}
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
     introMessage='{"text": Chat will attempt to establish a websocket connection as soon as the component loads up."}'
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -370,7 +370,7 @@ Server message: <br />
 
 <deep-chat
   request='{"url": "ws://customapi.com", "websocket": true}'
-  containerStyle='{"borderRadius": "8px"}'
+  style="border-radius: 8px"
   introMessage='{"text": Chat will attempt to establish a websocket connection as soon as the component loads up."}'
 ></deep-chat>
 ```
@@ -410,7 +410,7 @@ signal functions differ based on the type of connection you are establishing. Se
         signals.onResponse({text: 'Handler response'});
       },
     }}
-    containerStyle={{borderRadius: '8px'}}
+    style={{borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
