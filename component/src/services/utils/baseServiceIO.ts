@@ -5,6 +5,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {MessageContent} from '../../types/messages';
+import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
 import {Demo as DemoT} from '../../types/demo';
 import {Response} from '../../types/response';
@@ -127,12 +128,7 @@ export class BaseServiceIO implements ServiceIO {
   // and responseInterceptor
   async extractResultData(result: any | Response): Promise<Response | {pollingInAnotherRequest: true}> {
     if (result.error) throw result.error;
-    if (result.result) {
-      // TO-DO - do not handle this in future versions
-      console.error('The {result: ....} response object type is deprecated since version 1.3.0.');
-      console.error('Please change to using the new response object: https://deepchat.dev/docs/connect#Response');
-      return result.result;
-    }
+    if (result.result) return Legacy.handleResponseProperty(result);
     return result;
   }
 

@@ -21,6 +21,7 @@ import {DropupStyles} from './types/dropupStyles';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
+import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
@@ -193,6 +194,7 @@ export class DeepChat extends InternalHTML {
       this._auxiliaryStyleApplied = true;
     }
     WebComponentStyleUtils.applyDefaultStyleToComponent(this.style);
+    Legacy.checkForContainerStyles(this, this._elementRef);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
