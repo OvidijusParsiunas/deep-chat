@@ -13,4 +13,5 @@
 
 #container {
   height: inherit;
+  overflow: hidden;
 }
