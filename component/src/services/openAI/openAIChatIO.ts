@@ -31,7 +31,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }
-    if (this.maxMessages === undefined) this.maxMessages = -1;
+    this.maxMessages ??= -1;
     this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
   }
 

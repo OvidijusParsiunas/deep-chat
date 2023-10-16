@@ -115,7 +115,7 @@ Setting up your own server has never been easier with the following [server temp
 
 All examples are ready to be deployed on a hosting platform such as [Vercel](https://vercel.com/).
 
-### :joystick: Playground
+## :joystick: Playground
 
 <p align="center">
     <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">

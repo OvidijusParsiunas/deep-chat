@@ -11,7 +11,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     const config = deepChat.directConnection?.huggingFace?.conversation;
     const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat, 'Ask me anything!', 'facebook/blenderbot-400M-distill', config, apiKey);
-    if (this.maxMessages === undefined) this.maxMessages = -1;
+    this.maxMessages ??= -1;
   }
 
   // prettier-ignore
