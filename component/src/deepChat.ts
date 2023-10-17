@@ -37,6 +37,7 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   directConnection?: DirectConnection;
 
+  // WORK - rename request to connect?
   @Property('object')
   request?: Request;
 
@@ -132,10 +133,7 @@ export class DeepChat extends InternalHTML {
   submitUserMessage: (text: string) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
-  // WORK - refactor to be one line
-  focusInput: () => void = () => {
-    FocusUtils.focusFromParentElement(this._elementRef);
-  };
+  focusInput: () => void = () => FocusUtils.focusFromParentElement(this._elementRef);
 
   refreshMessages: () => void = () => {};
 
