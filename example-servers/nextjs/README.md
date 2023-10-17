@@ -28,7 +28,9 @@ If you want to use the proxy functions:
 
 <b>Local</b> - Replace the environment variables (`process.env.`) in the route handler functions with the corresponding API key values. E.g. if you want to use the OpenAI Chat, replace [`process.env.OPENAI_API_KEY`](https://github.com/OvidijusParsiunas/deep-chat/blob/d2fdd06dabbf30f3bd318c37e37dce99650d60f3/example-servers/nextjs/pages/api/openai/chat.ts#L24) with a string value of the key.
 
-<b>Hosting Platform</b> - Add the environment variables to your deploy config. E.g. if you want to use the OpenAI Chat, add the `OPENAI_API_KEY` environment variable.
+<b>Hosting Platform</b> - Add the environment variables to your deploy config. E.g. if you want to use the OpenAI Chat, add the `OPENAI_API_KEY` environment variable. 
+
+To do this you can create an `.env.local` file in the root of the `nextjs` folder and define the corresponding environment variables. E.g. if you want to use OpenAI API, define the `OPENAI_API_KEY` variable. See the `.env.example` file.
 
 ### :wrench: Improvements
 
