@@ -40,7 +40,7 @@ export class HTMLUtils {
   }
 
   public static apply(messages: Messages, outmostElement: HTMLElement) {
-    HTMLDeepChatElements.applyDeepChatUtilities(messages, messages._htmlClassUtilities, outmostElement);
-    HTMLUtils.applyCustomClassUtilities(messages._htmlClassUtilities, outmostElement);
+    HTMLDeepChatElements.applyDeepChatUtilities(messages, messages.htmlClassUtilities, outmostElement);
+    HTMLUtils.applyCustomClassUtilities(messages.htmlClassUtilities, outmostElement);
   }
 }

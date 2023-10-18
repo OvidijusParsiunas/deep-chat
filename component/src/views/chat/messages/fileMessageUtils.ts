@@ -1,19 +1,13 @@
-import {MessageFile} from '../../../types/messageFile';
 import {MessageStyles} from '../../../types/messages';
 import {MessageElements, Messages} from './messages';
 
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
 
-  // prettier-ignore
-  public static updateMessages(messages: Messages, elements: MessageElements, data: MessageFile,
-      styles: keyof MessageStyles, isAI: boolean, isInitial = false) {
+  public static addMessage(messages: Messages, elements: MessageElements, styles: keyof MessageStyles, isAI: boolean) {
+    messages.elementRef.appendChild(elements.outerContainer);
     messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles]);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
-    const messageContent = Messages.createMessageContent(isAI, {file: data});
-    messages.messages.push(messageContent);
-    // WORK - should not be updating if update set to false
-    messages.sendClientUpdate(messageContent, isInitial);
   }
 
   private static wrapInLink(element: HTMLElement, url: string) {

@@ -7,6 +7,7 @@ import {HuggingFaceIO} from './huggingFaceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
+// can sometimes get a (Service Unavailable) error which can be ignored when polling as another request will be made
 export class HuggingFaceFileIO extends HuggingFaceIO {
   isTextInputDisabled = true;
 

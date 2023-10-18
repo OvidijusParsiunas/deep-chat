@@ -461,6 +461,54 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/serviceIO.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/serviceIOFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ServiceIOFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ServiceIO"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ServiceIOFactory",
+          "declaration": {
+            "name": "ServiceIOFactory",
+            "module": "src/services/serviceIOFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/icons/audioIcon.ts",
       "declarations": [
         {
@@ -812,54 +860,6 @@
           "declaration": {
             "name": "VISIBLE_ICON_STRING",
             "module": "src/icons/visibleIcon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/serviceIO.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/serviceIOFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ServiceIOFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ServiceIO"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ServiceIOFactory",
-          "declaration": {
-            "name": "ServiceIOFactory",
-            "module": "src/services/serviceIOFactory.ts"
           }
         }
       ]
@@ -5144,6 +5144,18 @@
             },
             {
               "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "default": "-1",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
               "name": "insertKeyPlaceholderText",
               "type": {
                 "text": "string"
@@ -5448,17 +5460,6 @@
             {
               "kind": "field",
               "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
               "type": {
                 "text": "number | undefined"
               },
@@ -8690,6 +8691,18 @@
             },
             {
               "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "default": "-1",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
               "name": "insertKeyPlaceholderText",
               "type": {
                 "text": "string"
@@ -9046,17 +9059,6 @@
             {
               "kind": "field",
               "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
               "type": {
                 "text": "number | undefined"
               },
@@ -14320,12 +14322,6 @@
                   "type": {
                     "text": "MessageContent[]"
                   }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
                 }
               ]
             },
@@ -14978,6 +14974,18 @@
             },
             {
               "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "default": "-1",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
               "name": "model"
             },
             {
@@ -15226,17 +15234,6 @@
             {
               "kind": "field",
               "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
               "type": {
                 "text": "number | undefined"
               },
@@ -20464,26 +20461,6 @@
             },
             {
               "kind": "method",
-              "name": "getRequestMessages",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContent[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "getMaxMessages",
               "privacy": "private",
               "static": true,
@@ -20508,12 +20485,6 @@
               "privacy": "public",
               "static": true,
               "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
                 {
                   "name": "messages",
                   "type": {
@@ -21818,20 +21789,6 @@
             },
             {
               "kind": "method",
-              "name": "generateResponseForOneMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "requestMessage",
-                  "type": {
-                    "text": "MessageContent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "generateResponse",
               "privacy": "private",
               "static": true,
@@ -22472,6 +22429,48 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/utils/svg/svgIconUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SVGIconUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createSVGElement",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "SVGGraphicsElement"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "svgString",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SVGIconUtils",
+          "declaration": {
+            "name": "SVGIconUtils",
+            "module": "src/utils/svg/svgIconUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/legacy/legacy.ts",
       "declarations": [
         {
@@ -22512,6 +22511,20 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "processInitialMessageFile",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "MessageContent"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -22523,48 +22536,6 @@
           "declaration": {
             "name": "Legacy",
             "module": "src/utils/legacy/legacy.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/svg/svgIconUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SVGIconUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "createSVGElement",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "SVGGraphicsElement"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "svgString",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SVGIconUtils",
-          "declaration": {
-            "name": "SVGIconUtils",
-            "module": "src/utils/svg/svgIconUtils.ts"
           }
         }
       ]
@@ -23308,75 +23279,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ValidateKeyPropertyView",
-          "members": [
-            {
-              "kind": "method",
-              "name": "onLoad",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "startElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElements",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "changeToChat",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ValidateKeyPropertyView",
-          "declaration": {
-            "name": "ValidateKeyPropertyView",
-            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/services/assemblyAI/utils/assemblyAIUtils.ts",
       "declarations": [
         {
@@ -23471,6 +23373,155 @@
           "declaration": {
             "name": "AssemblyAIUtils",
             "module": "src/services/assemblyAI/utils/assemblyAIUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/validateKeyProperty/validateKeyPropertyView.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ValidateKeyPropertyView",
+          "members": [
+            {
+              "kind": "method",
+              "name": "onLoad",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "startElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElements",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "changeToChat",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ValidateKeyPropertyView",
+          "declaration": {
+            "name": "ValidateKeyPropertyView",
+            "module": "src/views/validateKeyProperty/validateKeyPropertyView.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereUtils",
+          "declaration": {
+            "name": "CohereUtils",
+            "module": "src/services/cohere/utils/cohereUtils.ts"
           }
         }
       ]
@@ -23716,86 +23767,6 @@
           "declaration": {
             "name": "AzureUtils",
             "module": "src/services/azure/utils/azureUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/utils/cohereUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereUtils",
-          "declaration": {
-            "name": "CohereUtils",
-            "module": "src/services/cohere/utils/cohereUtils.ts"
           }
         }
       ]
@@ -24419,6 +24390,95 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/views/chat/input/buttonContainers/buttonContainers.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ButtonContainers",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "add",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "inputContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getContainerIndex",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "ButtonPosition"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addButton",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "buttonContainers",
+                  "type": {
+                    "text": "ButtonContainersT"
+                  }
+                },
+                {
+                  "name": "elementRef",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "position",
+                  "type": {
+                    "text": "ButtonPosition"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ButtonContainers",
+          "declaration": {
+            "name": "ButtonContainers",
+            "module": "src/views/chat/input/buttonContainers/buttonContainers.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/messages/avatar.ts",
       "declarations": [
         {
@@ -24587,7 +24647,7 @@
             },
             {
               "kind": "method",
-              "name": "updateMessages",
+              "name": "addMessage",
               "privacy": "public",
               "static": true,
               "parameters": [
@@ -24604,12 +24664,6 @@
                   }
                 },
                 {
-                  "name": "data",
-                  "type": {
-                    "text": "MessageFile"
-                  }
-                },
-                {
                   "name": "styles",
                   "type": {
                     "text": "keyof MessageStyles"
@@ -24620,10 +24674,6 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             },
@@ -24748,7 +24798,7 @@
             {
               "kind": "method",
               "name": "addNewImageMessage",
-              "privacy": "public",
+              "privacy": "private",
               "static": true,
               "parameters": [
                 {
@@ -24768,10 +24818,6 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             },
@@ -24798,7 +24844,7 @@
             {
               "kind": "method",
               "name": "addNewAudioMessage",
-              "privacy": "public",
+              "privacy": "private",
               "static": true,
               "parameters": [
                 {
@@ -24818,10 +24864,6 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             },
@@ -24842,7 +24884,7 @@
             {
               "kind": "method",
               "name": "addNewAnyFileMessage",
-              "privacy": "public",
+              "privacy": "private",
               "static": true,
               "parameters": [
                 {
@@ -24862,10 +24904,32 @@
                   "type": {
                     "text": "boolean"
                   }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addMessages",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
                 },
                 {
-                  "name": "isInitial",
-                  "default": "false"
+                  "name": "files",
+                  "type": {
+                    "text": "MessageFiles"
+                  }
+                },
+                {
+                  "name": "isAI",
+                  "type": {
+                    "text": "boolean"
+                  }
                 }
               ]
             }
@@ -25199,11 +25263,20 @@
             },
             {
               "kind": "field",
-              "name": "displayServiceErrorMessages",
+              "name": "_displayServiceErrorMessages",
               "type": {
                 "text": "boolean | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_textElementsToText",
+              "type": {
+                "text": "[MessageElements, string][]"
+              },
+              "privacy": "private",
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -25248,7 +25321,7 @@
             },
             {
               "kind": "field",
-              "name": "_htmlClassUtilities",
+              "name": "htmlClassUtilities",
               "type": {
                 "text": "HTMLClassUtilities"
               },
@@ -25421,7 +25494,7 @@
             {
               "kind": "method",
               "name": "createMessageContent",
-              "privacy": "public",
+              "privacy": "private",
               "static": true,
               "return": {
                 "type": {
@@ -25438,7 +25511,7 @@
                 {
                   "name": "content",
                   "type": {
-                    "text": "AcceptedContent"
+                    "text": "Response"
                   }
                 }
               ]
@@ -25555,16 +25628,6 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "update",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             },
@@ -25586,9 +25649,20 @@
                   }
                 },
                 {
-                  "name": "update",
+                  "name": "isInitial",
+                  "default": "false"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateStateOnMessage",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "messageContent",
                   "type": {
-                    "text": "boolean"
+                    "text": "MessageContent"
                   }
                 },
                 {
@@ -25600,7 +25674,7 @@
             {
               "kind": "method",
               "name": "sendClientUpdate",
-              "privacy": "public",
+              "privacy": "private",
               "parameters": [
                 {
                   "name": "message",
@@ -25763,6 +25837,7 @@
             {
               "kind": "method",
               "name": "addMultipleFiles",
+              "privacy": "public",
               "parameters": [
                 {
                   "name": "filesData",
@@ -25998,75 +26073,153 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/buttonContainers/buttonContainers.ts",
+      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "ButtonContainers",
+          "name": "FileAttachments",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsTypes",
+              "type": {
+                "text": "FileAttachmentsType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addType",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachmentsT"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAttachmentContainer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "toggleContainerDisplay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "display",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllFileData"
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholders"
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToType",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "fileAttachmentTypes",
+                  "type": {
+                    "text": "FileAttachmentsType[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFilesToAnyType",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAllFiles"
+            },
+            {
+              "kind": "method",
+              "name": "getNumberOfTypes"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachments",
+          "declaration": {
+            "name": "FileAttachments",
+            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "NewFileName",
           "members": [
             {
               "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "add",
+              "name": "getFileName",
               "privacy": "public",
               "static": true,
               "parameters": [
                 {
-                  "name": "inputContainer",
+                  "name": "prefix",
                   "type": {
-                    "text": "HTMLElement"
+                    "text": "string"
                   }
                 },
                 {
-                  "name": "buttonContainers",
+                  "name": "extension",
                   "type": {
-                    "text": "ButtonContainersT"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getContainerIndex",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "position",
-                  "type": {
-                    "text": "ButtonPosition"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addButton",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "buttonContainers",
-                  "type": {
-                    "text": "ButtonContainersT"
-                  }
-                },
-                {
-                  "name": "elementRef",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "position",
-                  "type": {
-                    "text": "ButtonPosition"
+                    "text": "string"
                   }
                 }
               ]
@@ -26077,10 +26230,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ButtonContainers",
+          "name": "NewFileName",
           "declaration": {
-            "name": "ButtonContainers",
-            "module": "src/views/chat/input/buttonContainers/buttonContainers.ts"
+            "name": "NewFileName",
+            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
           }
         }
       ]
@@ -26521,173 +26674,6 @@
           "declaration": {
             "name": "InputButton",
             "module": "src/views/chat/input/buttons/inputButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachments.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachments",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsTypes",
-              "type": {
-                "text": "FileAttachmentsType[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addType",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachmentsT"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAttachmentContainer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "toggleContainerDisplay",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "display",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getAllFileData"
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholders"
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToType",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "fileAttachmentTypes",
-                  "type": {
-                    "text": "FileAttachmentsType[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFilesToAnyType",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAllFiles"
-            },
-            {
-              "kind": "method",
-              "name": "getNumberOfTypes"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachments",
-          "declaration": {
-            "name": "FileAttachments",
-            "module": "src/views/chat/input/fileAttachments/fileAttachments.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/newFileName.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "NewFileName",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "prefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "extension",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "NewFileName",
-          "declaration": {
-            "name": "NewFileName",
-            "module": "src/views/chat/input/fileAttachments/newFileName.ts"
           }
         }
       ]
@@ -27981,42 +27967,6 @@
             },
             {
               "kind": "method",
-              "name": "update",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "html",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isAI",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "update",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "createElements",
               "privacy": "private",
               "static": true,
@@ -28064,16 +28014,6 @@
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "update",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "isInitial",
-                  "default": "false"
                 }
               ]
             }
@@ -28312,6 +28252,1789 @@
           "declaration": {
             "name": "TextToSpeech",
             "module": "src/views/chat/messages/textToSpeech/textToSpeech.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/dragAndDrop/dragAndDrop.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "DragAndDrop",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachments",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "dnd",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean | CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createElement",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "dnd",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean | CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addEvents",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileDropElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "containerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachments",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "uploadFile",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileAttachments",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "DragEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "display",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileDropElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileDropElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isEnabled",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileAttachments",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "dragAndDrop",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean | CustomStyle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "DragAndDrop",
+          "declaration": {
+            "name": "DragAndDrop",
+            "module": "src/views/chat/input/fileAttachments/dragAndDrop/dragAndDrop.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AudioFileAttachmentType",
+          "members": [
+            {
+              "kind": "field",
+              "name": "stopPlaceholderCallback",
+              "type": {
+                "text": "() => Promise<void> | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_activePlaceholderTimer",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_activePlaceholderAttachment",
+              "type": {
+                "text": "AttachmentObject | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "TIMER_LIMIT_S",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "static": true,
+              "default": "5999"
+            },
+            {
+              "kind": "method",
+              "name": "createAudioContainer",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "addAudioElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "oldContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAudioAttachment",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createTimer",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createPlaceholderAudioAttachment",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addPlaceholderAudioAttachmentEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "stop",
+                  "type": {
+                    "text": "SVGElement"
+                  }
+                },
+                {
+                  "name": "textContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addPlaceholderAttachment",
+              "parameters": [
+                {
+                  "name": "stopCallback",
+                  "type": {
+                    "text": "() => Promise<void>"
+                  }
+                },
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholderAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removePlaceholderAttachment"
+            },
+            {
+              "kind": "method",
+              "name": "clearTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "stopAttachmentPlayback",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentContainerEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_attachments",
+              "type": {
+                "text": "AttachmentObject[]"
+              },
+              "privacy": "private",
+              "default": "[]",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_fileCountLimit",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "99",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_toggleContainerDisplay",
+              "type": {
+                "text": "(display: boolean) => void"
+              },
+              "privacy": "private",
+              "default": "toggleContainer",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsContainerRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "container",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_acceptedFormat",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "attemptAddFile",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isFileTypeValid",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "accept",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addAttachmentBasedOnType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createImageAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createAnyFileAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addFileAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileType",
+                  "type": {
+                    "text": "MessageFileType"
+                  }
+                },
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createRemoveAttachmentButton",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "removeAttachment",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getFiles",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "removeAllAttachments",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FileAttachmentsType",
+            "module": "/src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AudioFileAttachmentType",
+          "declaration": {
+            "name": "AudioFileAttachmentType",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachmentTypeFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "toggleContainer",
+                  "type": {
+                    "text": "(display: boolean) => void"
+                  }
+                },
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachmentTypeFactory",
+          "declaration": {
+            "name": "FileAttachmentTypeFactory",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachmentsType",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_attachments",
+              "type": {
+                "text": "AttachmentObject[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_fileCountLimit",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "99"
+            },
+            {
+              "kind": "field",
+              "name": "_toggleContainerDisplay",
+              "type": {
+                "text": "(display: boolean) => void"
+              },
+              "privacy": "private",
+              "default": "toggleContainer"
+            },
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsContainerRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "container"
+            },
+            {
+              "kind": "field",
+              "name": "_acceptedFormat",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "method",
+              "name": "attemptAddFile",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isFileTypeValid",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "accept",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addAttachmentBasedOnType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createImageAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAnyFileAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFileAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileType",
+                  "type": {
+                    "text": "MessageFileType"
+                  }
+                },
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createRemoveAttachmentButton",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAttachment",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFiles"
+            },
+            {
+              "kind": "method",
+              "name": "removeAllAttachments"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachmentsType",
+          "declaration": {
+            "name": "FileAttachmentsType",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/modal/cameraModal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CameraModal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_dataURL",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_stopped",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_captureButton",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "captureButton"
+            },
+            {
+              "kind": "field",
+              "name": "_submitButton",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "default": "submitButton"
+            },
+            {
+              "kind": "field",
+              "name": "_canvas",
+              "type": {
+                "text": "HTMLCanvasElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_captureIcon",
+              "type": {
+                "text": "SVGGraphicsElement"
+              },
+              "privacy": "private",
+              "default": "this._captureButton.children[0]"
+            },
+            {
+              "kind": "field",
+              "name": "_refreshIcon",
+              "type": {
+                "text": "SVGGraphicsElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_mediaStream",
+              "type": {
+                "text": "MediaStream | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_format",
+              "type": {
+                "text": "'image/png' | 'image/jpeg'"
+              },
+              "privacy": "private",
+              "default": "'image/png'"
+            },
+            {
+              "kind": "field",
+              "name": "_newFilePrefix",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_dimensions",
+              "type": {
+                "text": "CameraDimensions | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "addButtonsAndTheirEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "fileAttachmentsType",
+                  "type": {
+                    "text": "FileAttachmentsType"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addButtonEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "captureButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "closeButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "submitButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachmentsType",
+                  "type": {
+                    "text": "FileAttachmentsType"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "stop",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "start"
+            },
+            {
+              "kind": "method",
+              "name": "capture",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getFile",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateCanvas",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "video",
+                  "type": {
+                    "text": "HTMLVideoElement"
+                  }
+                },
+                {
+                  "name": "canvas",
+                  "type": {
+                    "text": "HTMLCanvasElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "openCameraModal",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "cameraModal",
+                  "type": {
+                    "text": "CameraModal"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createCameraModalFunc",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "viewContainerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileAttachmentsType",
+                  "type": {
+                    "text": "FileAttachmentsType"
+                  }
+                },
+                {
+                  "name": "modalContainerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                },
+                {
+                  "name": "cameraFiles",
+                  "optional": true,
+                  "type": {
+                    "text": "CameraFiles"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "extensionCloseCallback",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "MODAL_CLOSE_TIMEOUT_MS",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "190",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_contentRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_backgroundPanelRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_buttonPanel",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isOpen",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "content",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createModalContent",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "contentClasses",
+                  "type": {
+                    "text": "string[]"
+                  }
+                },
+                {
+                  "name": "backgroundColor",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createButtonPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "backgroundColor",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createDarkBackgroundPanel",
+              "privacy": "private",
+              "static": true,
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addButtons",
+              "parameters": [
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createTextButton",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createSVGButton",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "svgString",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "close",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "displayModalElements",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "openTextModal",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textHTML",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addCloseButton",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isSVG",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "callback",
+                  "optional": true,
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createTextModalFunc",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "viewContainerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileIO",
+                  "type": {
+                    "text": "FileServiceIO"
+                  }
+                },
+                {
+                  "name": "closeCallback",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addWindowEvents",
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "Modal",
+                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "Modal",
+            "module": "/src/views/chat/input/fileAttachments/modal/modal"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CameraModal",
+          "declaration": {
+            "name": "CameraModal",
+            "module": "src/views/chat/input/fileAttachments/modal/cameraModal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/modal/modal.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Modal",
+          "members": [
+            {
+              "kind": "field",
+              "name": "MODAL_CLOSE_TIMEOUT_MS",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "static": true,
+              "default": "190"
+            },
+            {
+              "kind": "field",
+              "name": "_contentRef",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_backgroundPanelRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_buttonPanel",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "extensionCloseCallback",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isOpen"
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "content",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "containerStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createModalContent",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "contentClasses",
+                  "type": {
+                    "text": "string[]"
+                  }
+                },
+                {
+                  "name": "backgroundColor",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createButtonPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "backgroundColor",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createDarkBackgroundPanel",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "addButtons",
+              "parameters": [
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createTextButton",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createSVGButton",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "svgString",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "close"
+            },
+            {
+              "kind": "method",
+              "name": "displayModalElements"
+            },
+            {
+              "kind": "method",
+              "name": "openTextModal",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "textHTML",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addCloseButton",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "isSVG",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "callback",
+                  "optional": true,
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createTextModalFunc",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "viewContainerElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileIO",
+                  "type": {
+                    "text": "FileServiceIO"
+                  }
+                },
+                {
+                  "name": "closeCallback",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addWindowEvents",
+              "privacy": "private"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Modal",
+          "declaration": {
+            "name": "Modal",
+            "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
           }
         }
       ]
@@ -30200,449 +31923,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/submit/submitButton.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SubmitButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_isRequestInProgress",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_isLoadingActive",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_serviceIO",
-              "type": {
-                "text": "ServiceIO"
-              },
-              "privacy": "private",
-              "default": "serviceIO"
-            },
-            {
-              "kind": "field",
-              "name": "_messages",
-              "type": {
-                "text": "Messages"
-              },
-              "privacy": "private",
-              "default": "messages"
-            },
-            {
-              "kind": "field",
-              "name": "_inputElementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "inputElementRef"
-            },
-            {
-              "kind": "field",
-              "name": "_abortStream",
-              "type": {
-                "text": "AbortController"
-              },
-              "privacy": "private",
-              "default": "new AbortController()"
-            },
-            {
-              "kind": "field",
-              "name": "_stopClicked",
-              "type": {
-                "text": "Signals['stopClicked']"
-              },
-              "privacy": "private",
-              "default": "{listener: () => {}}"
-            },
-            {
-              "kind": "field",
-              "name": "_innerElements",
-              "type": {
-                "text": "DefinedButtonInnerElements<Styles>"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachments",
-              "type": {
-                "text": "FileAttachments"
-              },
-              "privacy": "private",
-              "default": "fileAttachments"
-            },
-            {
-              "kind": "field",
-              "name": "_isSVGLoadingIconOverriden",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createInnerElements",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createButtonContainerElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createSubmitIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createLoadingIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "createStopIconElement",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "attemptOverwriteLoadingStyle",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "assignHandlers",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "submitFromInput",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "submit",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "programmatic",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "userText",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "stopStream",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToStopIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToLoadingIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "changeToSubmitIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "default": "buttonElement",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_mouseState",
-              "type": {
-                "text": "MouseState"
-              },
-              "privacy": "protected",
-              "default": "{state: 'default'}",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_customStyles",
-              "type": {
-                "text": "T | undefined"
-              },
-              "privacy": "protected",
-              "default": "customStyles",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "ButtonPositionT | undefined"
-              },
-              "default": "position",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "dropupText",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "dropupText",
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseLeave",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseEnter",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseUp",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buttonMouseDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customStyles",
-                  "optional": true,
-                  "type": {
-                    "text": "ButtonStyles"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "unsetCustomStateStyles",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "unsetTypes",
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "reapplyStateStyle",
-              "privacy": "public",
-              "parameters": [
-                {
-                  "name": "setType",
-                  "type": {
-                    "text": "keyof T"
-                  }
-                },
-                {
-                  "name": "unsetTypes",
-                  "optional": true,
-                  "type": {
-                    "text": "(keyof T)[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "InputButton",
-                "module": "src/views/chat/input/buttons/inputButton.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "InputButton",
-            "module": "/src/views/chat/input/buttons/inputButton"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SubmitButton",
-          "declaration": {
-            "name": "SubmitButton",
-            "module": "src/views/chat/input/buttons/submit/submitButton.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SubmitButtonStateStyle",
-          "members": [
-            {
-              "kind": "method",
-              "name": "resetSubmit",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "submitButton",
-                  "type": {
-                    "text": "SubmitButton"
-                  }
-                },
-                {
-                  "name": "wasLoading",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SubmitButtonStateStyle",
-          "declaration": {
-            "name": "SubmitButtonStateStyle",
-            "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/buttons/uploadFile/uploadFileButton.ts",
       "declarations": [
         {
@@ -31040,969 +32320,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/dragAndDrop/dragAndDrop.ts",
+      "path": "src/views/chat/input/buttons/submit/submitButton.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "DragAndDrop",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileAttachments",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "dnd",
-                  "optional": true,
-                  "type": {
-                    "text": "boolean | CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createElement",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "dnd",
-                  "optional": true,
-                  "type": {
-                    "text": "boolean | CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addEvents",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileDropElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "containerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileAttachments",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "uploadFile",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileAttachments",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "DragEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "display",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileDropElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileDropElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isEnabled",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileAttachments",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "dragAndDrop",
-                  "optional": true,
-                  "type": {
-                    "text": "boolean | CustomStyle"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "DragAndDrop",
-          "declaration": {
-            "name": "DragAndDrop",
-            "module": "src/views/chat/input/fileAttachments/dragAndDrop/dragAndDrop.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AudioFileAttachmentType",
+          "name": "SubmitButton",
           "members": [
             {
               "kind": "field",
-              "name": "stopPlaceholderCallback",
-              "type": {
-                "text": "() => Promise<void> | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_activePlaceholderTimer",
-              "type": {
-                "text": "number | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_activePlaceholderAttachment",
-              "type": {
-                "text": "AttachmentObject | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "TIMER_LIMIT_S",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "static": true,
-              "default": "5999"
-            },
-            {
-              "kind": "method",
-              "name": "createAudioContainer",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "addAudioElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "oldContainer",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAudioAttachment",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createTimer",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createPlaceholderAudioAttachment",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addPlaceholderAudioAttachmentEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "stop",
-                  "type": {
-                    "text": "SVGElement"
-                  }
-                },
-                {
-                  "name": "textContainer",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addPlaceholderAttachment",
-              "parameters": [
-                {
-                  "name": "stopCallback",
-                  "type": {
-                    "text": "() => Promise<void>"
-                  }
-                },
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholderAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removePlaceholderAttachment"
-            },
-            {
-              "kind": "method",
-              "name": "clearTimer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "stopAttachmentPlayback",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentContainerEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "_attachments",
-              "type": {
-                "text": "AttachmentObject[]"
-              },
-              "privacy": "private",
-              "default": "[]",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_fileCountLimit",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "99",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_toggleContainerDisplay",
-              "type": {
-                "text": "(display: boolean) => void"
-              },
-              "privacy": "private",
-              "default": "toggleContainer",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsContainerRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "container",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_acceptedFormat",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "attemptAddFile",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isFileTypeValid",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "accept",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addAttachmentBasedOnType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createImageAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "src",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createAnyFileAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addFileAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileType",
-                  "type": {
-                    "text": "MessageFileType"
-                  }
-                },
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createRemoveAttachmentButton",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "removeAttachment",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getFiles",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "removeAllAttachments",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "FileAttachmentsType",
-            "module": "/src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AudioFileAttachmentType",
-          "declaration": {
-            "name": "AudioFileAttachmentType",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachmentTypeFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "toggleContainer",
-                  "type": {
-                    "text": "(display: boolean) => void"
-                  }
-                },
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachmentTypeFactory",
-          "declaration": {
-            "name": "FileAttachmentTypeFactory",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachmentsType",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_attachments",
-              "type": {
-                "text": "AttachmentObject[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "_fileCountLimit",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "99"
-            },
-            {
-              "kind": "field",
-              "name": "_toggleContainerDisplay",
-              "type": {
-                "text": "(display: boolean) => void"
-              },
-              "privacy": "private",
-              "default": "toggleContainer"
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsContainerRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "default": "container"
-            },
-            {
-              "kind": "field",
-              "name": "_acceptedFormat",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "method",
-              "name": "attemptAddFile",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isFileTypeValid",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "accept",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addAttachmentBasedOnType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createImageAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "src",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAnyFileAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFileAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileType",
-                  "type": {
-                    "text": "MessageFileType"
-                  }
-                },
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createRemoveAttachmentButton",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAttachment",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFiles"
-            },
-            {
-              "kind": "method",
-              "name": "removeAllAttachments"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachmentsType",
-          "declaration": {
-            "name": "FileAttachmentsType",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/modal/cameraModal.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CameraModal",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_dataURL",
-              "type": {
-                "text": "string | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_stopped",
+              "name": "_isRequestInProgress",
               "type": {
                 "text": "boolean"
               },
@@ -32011,801 +32338,434 @@
             },
             {
               "kind": "field",
-              "name": "_captureButton",
+              "name": "_isLoadingActive",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_serviceIO",
+              "type": {
+                "text": "ServiceIO"
+              },
+              "privacy": "private",
+              "default": "serviceIO"
+            },
+            {
+              "kind": "field",
+              "name": "_messages",
+              "type": {
+                "text": "Messages"
+              },
+              "privacy": "private",
+              "default": "messages"
+            },
+            {
+              "kind": "field",
+              "name": "_inputElementRef",
               "type": {
                 "text": "HTMLElement"
               },
               "privacy": "private",
-              "default": "captureButton"
+              "default": "inputElementRef"
             },
             {
               "kind": "field",
-              "name": "_submitButton",
+              "name": "_abortStream",
               "type": {
-                "text": "HTMLElement"
+                "text": "AbortController"
               },
               "privacy": "private",
-              "default": "submitButton"
+              "default": "new AbortController()"
             },
             {
               "kind": "field",
-              "name": "_canvas",
+              "name": "_stopClicked",
               "type": {
-                "text": "HTMLCanvasElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_captureIcon",
-              "type": {
-                "text": "SVGGraphicsElement"
+                "text": "Signals['stopClicked']"
               },
               "privacy": "private",
-              "default": "this._captureButton.children[0]"
+              "default": "{listener: () => {}}"
             },
             {
               "kind": "field",
-              "name": "_refreshIcon",
+              "name": "_innerElements",
               "type": {
-                "text": "SVGGraphicsElement"
+                "text": "DefinedButtonInnerElements<Styles>"
               },
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "_mediaStream",
+              "name": "_fileAttachments",
               "type": {
-                "text": "MediaStream | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_format",
-              "type": {
-                "text": "'image/png' | 'image/jpeg'"
+                "text": "FileAttachments"
               },
               "privacy": "private",
-              "default": "'image/png'"
+              "default": "fileAttachments"
             },
             {
               "kind": "field",
-              "name": "_newFilePrefix",
+              "name": "_isSVGLoadingIconOverriden",
               "type": {
-                "text": "string | undefined"
+                "text": "boolean"
               },
-              "privacy": "private"
+              "privacy": "private",
+              "default": "false"
             },
             {
-              "kind": "field",
-              "name": "_dimensions",
-              "type": {
-                "text": "CameraDimensions | undefined"
-              },
+              "kind": "method",
+              "name": "createInnerElements",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "addButtonsAndTheirEvents",
+              "name": "createButtonContainerElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createSubmitIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createLoadingIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "createStopIconElement",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "attemptOverwriteLoadingStyle",
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "fileAttachmentsType",
+                  "name": "deepChat",
                   "type": {
-                    "text": "FileAttachmentsType"
+                    "text": "DeepChat"
                   }
                 }
               ]
             },
             {
               "kind": "method",
-              "name": "addButtonEvents",
+              "name": "assignHandlers",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "submitFromInput",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "submit",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "programmatic",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "userText",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addNewMessages",
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "captureButton",
+                  "name": "userText",
                   "type": {
-                    "text": "HTMLElement"
+                    "text": "string"
                   }
                 },
                 {
-                  "name": "closeButton",
+                  "name": "uploadedFilesData",
+                  "optional": true,
                   "type": {
-                    "text": "HTMLElement"
+                    "text": "{file: File; type: MessageFileType}[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "stopStream",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToStopIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToLoadingIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeToSubmitIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "elementRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "buttonElement",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_mouseState",
+              "type": {
+                "text": "MouseState"
+              },
+              "privacy": "protected",
+              "default": "{state: 'default'}",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_customStyles",
+              "type": {
+                "text": "T | undefined"
+              },
+              "privacy": "protected",
+              "default": "customStyles",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "ButtonPositionT | undefined"
+              },
+              "default": "position",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dropupText",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "dropupText",
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseLeave",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseEnter",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseUp",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buttonMouseDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customStyles",
+                  "optional": true,
+                  "type": {
+                    "text": "ButtonStyles"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unsetCustomStateStyles",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "unsetTypes",
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reapplyStateStyle",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "setType",
+                  "type": {
+                    "text": "keyof T"
                   }
                 },
+                {
+                  "name": "unsetTypes",
+                  "optional": true,
+                  "type": {
+                    "text": "(keyof T)[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "InputButton",
+                "module": "src/views/chat/input/buttons/inputButton.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "InputButton",
+            "module": "/src/views/chat/input/buttons/inputButton"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SubmitButton",
+          "declaration": {
+            "name": "SubmitButton",
+            "module": "src/views/chat/input/buttons/submit/submitButton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SubmitButtonStateStyle",
+          "members": [
+            {
+              "kind": "method",
+              "name": "resetSubmit",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
                 {
                   "name": "submitButton",
                   "type": {
-                    "text": "HTMLElement"
+                    "text": "SubmitButton"
                   }
                 },
                 {
-                  "name": "fileAttachmentsType",
-                  "type": {
-                    "text": "FileAttachmentsType"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "stop",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "start"
-            },
-            {
-              "kind": "method",
-              "name": "capture",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getFile",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updateCanvas",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "video",
-                  "type": {
-                    "text": "HTMLVideoElement"
-                  }
-                },
-                {
-                  "name": "canvas",
-                  "type": {
-                    "text": "HTMLCanvasElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "openCameraModal",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "cameraModal",
-                  "type": {
-                    "text": "CameraModal"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createCameraModalFunc",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "viewContainerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileAttachmentsType",
-                  "type": {
-                    "text": "FileAttachmentsType"
-                  }
-                },
-                {
-                  "name": "modalContainerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                },
-                {
-                  "name": "cameraFiles",
-                  "optional": true,
-                  "type": {
-                    "text": "CameraFiles"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "extensionCloseCallback",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "MODAL_CLOSE_TIMEOUT_MS",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "190",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_contentRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_backgroundPanelRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_buttonPanel",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_isOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isOpen",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "content",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createModalContent",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "contentClasses",
-                  "type": {
-                    "text": "string[]"
-                  }
-                },
-                {
-                  "name": "backgroundColor",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createButtonPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "backgroundColor",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createDarkBackgroundPanel",
-              "privacy": "private",
-              "static": true,
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addButtons",
-              "parameters": [
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createTextButton",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createSVGButton",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "svgString",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "close",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "displayModalElements",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "openTextModal",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textHTML",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addCloseButton",
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isSVG",
+                  "name": "wasLoading",
                   "type": {
                     "text": "boolean"
                   }
-                },
-                {
-                  "name": "callback",
-                  "optional": true,
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createTextModalFunc",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "viewContainerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileIO",
-                  "type": {
-                    "text": "FileServiceIO"
-                  }
-                },
-                {
-                  "name": "closeCallback",
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addWindowEvents",
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "Modal",
-                "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "Modal",
-            "module": "/src/views/chat/input/fileAttachments/modal/modal"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CameraModal",
-          "declaration": {
-            "name": "CameraModal",
-            "module": "src/views/chat/input/fileAttachments/modal/cameraModal.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/modal/modal.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Modal",
-          "members": [
-            {
-              "kind": "field",
-              "name": "MODAL_CLOSE_TIMEOUT_MS",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "public",
-              "static": true,
-              "default": "190"
-            },
-            {
-              "kind": "field",
-              "name": "_contentRef",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_backgroundPanelRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_buttonPanel",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_isOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "extensionCloseCallback",
-              "type": {
-                "text": "() => void | undefined"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isOpen"
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "content",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "containerStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
                 }
               ]
-            },
-            {
-              "kind": "method",
-              "name": "createModalContent",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "contentClasses",
-                  "type": {
-                    "text": "string[]"
-                  }
-                },
-                {
-                  "name": "backgroundColor",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createButtonPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "backgroundColor",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createDarkBackgroundPanel",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "addButtons",
-              "parameters": [
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createTextButton",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createSVGButton",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "svgString",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "close"
-            },
-            {
-              "kind": "method",
-              "name": "displayModalElements"
-            },
-            {
-              "kind": "method",
-              "name": "openTextModal",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "textHTML",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addCloseButton",
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "isSVG",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "callback",
-                  "optional": true,
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createTextModalFunc",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "viewContainerElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileIO",
-                  "type": {
-                    "text": "FileServiceIO"
-                  }
-                },
-                {
-                  "name": "closeCallback",
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addWindowEvents",
-              "privacy": "private"
             }
           ]
         }
@@ -32813,10 +32773,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "Modal",
+          "name": "SubmitButtonStateStyle",
           "declaration": {
-            "name": "Modal",
-            "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+            "name": "SubmitButtonStateStyle",
+            "module": "src/views/chat/input/buttons/submit/submitButtonStateStyle.ts"
           }
         }
       ]

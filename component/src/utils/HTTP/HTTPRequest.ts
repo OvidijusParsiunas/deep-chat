@@ -44,7 +44,7 @@ export class HTTPRequest {
         if (io.deepChat.stream && resultData.text) {
           Stream.simulate(messages, io.streamHandlers, resultData.text);
         } else {
-          messages.addNewMessage(resultData, true, true);
+          messages.addNewMessage(resultData, true);
           onFinish();
         }
       })
@@ -69,7 +69,7 @@ export class HTTPRequest {
           }, resultData.timeoutMS);
         } else {
           console.log('finished polling');
-          messages.addNewMessage(resultData, true, true);
+          messages.addNewMessage(resultData, true);
           onFinish();
         }
       })

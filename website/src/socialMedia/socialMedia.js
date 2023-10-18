@@ -361,8 +361,8 @@ function Components() {
           },
         }}
         initialMessages={[
-          {file: {src: '/img/bird.jpeg', type: 'image'}, role: 'ai'},
-          {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'ai'},
+          {files: [{src: '/img/bird.jpeg', type: 'image'}], role: 'ai'},
+          {files: [{src: '/audio/cantinaBand.wav', type: 'audio'}], role: 'ai'},
           {text: '```java\nconsole.log("hello world");\n```', role: 'ai'},
         ]}
         images={true}

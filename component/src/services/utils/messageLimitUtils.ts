@@ -1,5 +1,4 @@
 import {MessageContent} from '../../types/messages';
-import {RequestContents} from '../serviceIO';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContent[], limit: number) {
@@ -18,23 +17,6 @@ export class MessageLimitUtils {
     return messages.slice(Math.max(i, 0));
   }
 
-  private static getRequestMessages(requestContents: RequestContents, messages: MessageContent[]) {
-    const requestMessages = [];
-    let numberOfFilesToFind = requestContents.files?.length || 0;
-    let searchingForText = !!requestContents.text;
-    for (let i = messages.length - 1; i >= 0; i -= 1) {
-      const message = messages[i];
-      requestMessages.push(message);
-      if (message.file) {
-        numberOfFilesToFind -= 1;
-      } else if (message.text) {
-        searchingForText = false;
-      }
-      if (numberOfFilesToFind === 0 && !searchingForText) break;
-    }
-    return requestMessages;
-  }
-
   private static getMaxMessages(messages: MessageContent[], maxMessages: number) {
     return messages.slice(Math.max(messages.length - maxMessages, 0));
   }
@@ -43,12 +25,11 @@ export class MessageLimitUtils {
   // if maxMessages is not defined we send all messages
   // if maxMessages above 0 we send that number
   // if maxMessages 0 or below we send only what is in the request
-  public static processMessages(requestContents: RequestContents, messages: MessageContent[],
-      maxMessages?: number, totalMessagesMaxCharLength?: number) {
+  public static processMessages(messages: MessageContent[], maxMessages?: number, totalMessagesMaxCharLength?: number) {
     if (maxMessages !== undefined) {
       if (maxMessages > 0) messages = MessageLimitUtils.getMaxMessages(messages, maxMessages);
     } else {
-      messages = MessageLimitUtils.getRequestMessages(requestContents, messages);
+      messages = [messages[messages.length - 1]]; // last message
     }
     messages = JSON.parse(JSON.stringify(messages));
     if (totalMessagesMaxCharLength === undefined) return messages;

@@ -58,8 +58,8 @@ function RightPanel() {
             },
           }}
           initialMessages={[
-            {file: {src: '/img/bird.jpeg', type: 'image'}, role: 'user'},
-            {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
+            {files: [{src: '/img/bird.jpeg', type: 'image'}], role: 'user'},
+            {files: [{src: '/audio/cantinaBand.wav', type: 'audio'}], role: 'user'},
             {text: '```java\nconsole.log("hello world");\n```', role: 'ai'},
           ]}
           images={true}

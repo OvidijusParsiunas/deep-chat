@@ -40,6 +40,10 @@
   margin-right: auto;
 }
 
+.html-message {
+  max-width: unset;
+}
+
 .error-message-text {
   margin-left: auto;
   margin-right: auto;

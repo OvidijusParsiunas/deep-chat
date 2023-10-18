@@ -29,7 +29,7 @@ import Tabs from '@theme/Tabs';
     demo={true}
     initialMessages={[
       {text: 'Show me a modern city', role: 'user'},
-      {file: {src: '/img/city.jpeg', type: 'image'}, role: 'ai'},
+      {files: [{src: '/img/city.jpeg', type: 'image'}], role: 'ai'},
       {text: 'Whats on your mind?', role: 'user'},
       {text: 'Peace and tranquility', role: 'ai'},
     ]}
@@ -44,7 +44,7 @@ import Tabs from '@theme/Tabs';
 <deep-chat
   initialMessages='[
     {"text": "Show me a modern city", "role": "user"},
-    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "ai"},
+    {"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "ai"},
     {"text": "Whats on your mind?", "role": "user"},
     {"text": "Peace and tranquility", "role": "ai"}
   ]'
@@ -60,7 +60,7 @@ import Tabs from '@theme/Tabs';
 <deep-chat
   initialMessages='[
     {"text": "Show me a modern city", "role": "user"},
-    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "ai"},
+    {"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "ai"},
     {"text": "Whats on your mind?", "role": "user"},
     {"text": "Peace and tranquility", "role": "ai"}
   ]'
@@ -514,14 +514,11 @@ Shared object property types related to messages:
 
 ### `MessageContent` {#MessageContent}
 
-- Type: <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `text: string`} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), [`file: MessageFile`](#MessageFile)} <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; | {[`role: MessageRole`](#MessageRole), `html: string`}
+- Type: {[`role: MessageRole`](#MessageRole), `text?: string`, [`files?: MessageFile[]`](#MessageFile), [`html?: string`](./HTML)}
 
-Object format used to encapsulate a message within the chat. One of the above is used for each message. <br />
-The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly.
-This is useful for displaying code snippets, paragraphs etc. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
+Object format used to encapsulate a message within the chat. The `role` property is required whilst other properties are defined/combined depending
+on what is being transferred in the message. <br />
+The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly. This is useful for displaying code snippets, paragraphs etc. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
 
 #### Example
 
@@ -529,7 +526,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     initialMessages={[
-      {file: {src: '/img/bird-2.jpeg', type: 'image'}, role: 'user'},
+      {files: [{src: '/img/bird-2.jpeg', type: 'image'}], role: 'user'},
       {
         text: 'This is a nice image of a yellow bird on a branch.',
         role: 'ai',
@@ -545,7 +542,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 ```html
 <deep-chat
   initialMessages='[
-    {"file": {"src": "path-to-image.jpeg", "type": "image"}, "role": "user"},
+    {"files": [{"src": "path-to-image.jpeg", "type": "image"}], "role": "user"},
     {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
 ></deep-chat>
@@ -559,7 +556,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 
 <deep-chat
   initialMessages='[
-    {"file": {"src": "path-to-image.jpeg", "type": "image"}, "role": "user"},
+    {"files": [{"src": "path-to-image.jpeg", "type": "image"}], "role": "user"},
     {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
   style="border-radius: 8px"
@@ -576,7 +573,7 @@ This is useful for displaying code snippets, paragraphs etc. See this [playgroun
 
 - Type: `"ai"` | `"user"`
 
-Entity that the message is from.
+Entity that the message was sent from.
 
 <LineBreak></LineBreak>
 
@@ -585,7 +582,7 @@ Entity that the message is from.
 - Type: {`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType)} <br />
 - Default: _{name: "file", type: "any"}_
 
-Format that defines the details for a single file. <br />
+Format that defines the details of a file. <br />
 `name` is used to display the file name inside the message bubble (if not image/gif/audio). <br />
 `src` is either the _url_ path to the file location or the base64 encoding as a string (make sure to use the correct type prefix e.g: _"data:(type);base64,"_).<br />
 The component will automatically try to infer the file type from the `src` property so that it can render its media correctly,
@@ -597,11 +594,16 @@ however you can help it by setting the `type`.
   <DeepChatBrowser
     style={{borderRadius: '8px', height: '480px'}}
     initialMessages={[
-      {file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'},
-      {file: {src: '/img/example-gif-1.gif', type: 'image'}, role: 'user'},
-      {file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'},
-      {file: {name: 'placeholder.exe'}, role: 'user'},
-      {file: {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'}, role: 'user'},
+      {
+        role: 'user',
+        files: [
+          {src: '/img/city.jpeg', type: 'image'},
+          {src: '/img/example-gif-1.gif', type: 'image'},
+          {src: '/audio/cantinaBand.wav', type: 'audio'},
+          {name: 'placeholder.exe'},
+          {src: '/text/text.txt', name: 'hello-world.txt', type: 'file'},
+        ],
+      },
     ]}
     demo={true}
   ></DeepChatBrowser>
@@ -613,12 +615,13 @@ however you can help it by setting the `type`.
 ```html
 <deep-chat
   initialMessages='[
-    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
-    {"file": {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"}, "role": "user"},
-    {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
-    {"file": {"name": "placeholder.exe"}, "role": "user"},
-    {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
-  ]'
+    {"role": "user", "files": [
+        {"src": "path-to-file.jpeg", "type": "image"},
+        {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"},
+        {"src": "path-to-file.wav", "type": "audio"},
+        {"name": "placeholder.exe"},
+        {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}
+  ]}]'
 ></deep-chat>
 ```
 
@@ -630,12 +633,13 @@ however you can help it by setting the `type`.
 
 <deep-chat
   initialMessages='[
-    {"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"},
-    {"file": {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"}, "role": "user"},
-    {"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"},
-    {"file": {"name": "placeholder.exe"}, "role": "user"},
-    {"file": {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}, "role": "user"}
-  ]'
+    {"role": "user", "files": [
+        {"src": "path-to-file.jpeg", "type": "image"},
+        {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"},
+        {"src": "path-to-file.wav", "type": "audio"},
+        {"name": "placeholder.exe"},
+        {"src": "path-to-file", "name": "hello-world.txt", "type": "file"}
+  ]}]'
   style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>

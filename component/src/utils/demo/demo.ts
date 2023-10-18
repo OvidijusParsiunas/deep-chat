@@ -11,16 +11,21 @@ type Finish = () => void;
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
 
-  private static generateResponseForOneMessage(requestMessage: MessageContent) {
-    if (requestMessage.file) {
-      if (requestMessage.file.type === 'image') {
+  private static generateResponse(messages: Messages) {
+    const requestMessage = messages.messages[messages.messages.length - 1];
+    if (requestMessage.files && requestMessage.files.length > 0) {
+      if (requestMessage.files.length > 1) {
+        return 'These are interesting files!';
+      }
+      const file = requestMessage.files[0];
+      if (file.src && file.src.startsWith('data:image/gif')) {
+        return 'That is a nice gif!';
+      }
+      if (file.type === 'image') {
         return 'That is a nice image!';
       }
-      if (requestMessage.file.type === 'audio') {
+      if (file.type === 'audio') {
         return 'I like the sound of that!';
-      }
-      if (requestMessage.file.type === 'gif') {
-        return 'That is a nice gif!';
       }
       return 'That is an interesting file!';
     }
@@ -33,23 +38,6 @@ export class Demo {
       }
     }
     return 'Hi there! This is a demo response!';
-  }
-
-  private static generateResponse(messages: Messages) {
-    const requestMessages: MessageContent[] = [];
-    for (let i = messages.messages.length - 1; i >= 0; i -= 1) {
-      if (messages.messages[i].role === 'ai') break;
-      requestMessages.push(messages.messages[i]);
-    }
-    if (requestMessages.length === 1) {
-      return Demo.generateResponseForOneMessage(messages.messages[messages.messages.length - 1]);
-    }
-    const textMessageIndex = messages.messages.findIndex((message) => message.text);
-    if (textMessageIndex !== -1) requestMessages.splice(textMessageIndex, 1);
-    if (requestMessages.length === 1) {
-      return Demo.generateResponseForOneMessage(messages.messages[messages.messages.length - 1]);
-    }
-    return 'Wow, very cool files!';
   }
 
   private static getCustomResponse(customResponse: DemoResponse, requestMessage: MessageContent) {
@@ -71,7 +59,7 @@ export class Demo {
       if (preprocessedResponse.error) {
         messages.addNewErrorMessage('service', preprocessedResponse.error);
       } else {
-        messages.addNewMessage(preprocessedResponse, true, true);
+        messages.addNewMessage(preprocessedResponse, true);
       }
       onFinish();
     }, 400);

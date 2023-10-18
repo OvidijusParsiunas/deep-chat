@@ -26,9 +26,7 @@ export interface MessageStyles {
   error?: MessageElementsStyles;
 }
 
-export type MessageContent = InterfacesUnion<
-  {role: string; text: string} | {role: string; file: MessageFile} | {role: string; html: string}
->;
+export type MessageContent = {role: string; text?: string; files?: MessageFile[]; html?: string};
 
 export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boolean}) => void;
 

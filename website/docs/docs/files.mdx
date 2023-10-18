@@ -32,7 +32,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the image button or drop a file to attach it to the next outgoing message.'}}
-    initialMessages={[{file: {src: '/img/city.jpeg', type: 'image'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/img/city.jpeg', type: 'image'}], role: 'user'}]}
     demo={true}
     images={true}
   ></DeepChatBrowser>
@@ -56,7 +56,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the image button or drop a file to attach it to the next outgoing message."}'
-  initialMessages='[{"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "user"}]'
 ></deep-chat>
 ```
 
@@ -76,7 +76,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the GIF button or drop a file to attach it to the next outgoing message.'}}
-    initialMessages={[{file: {src: '/img/example-gif.gif', type: 'image'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/img/example-gif.gif', type: 'image'}], role: 'user'}]}
     demo={true}
     gifs={true}
   ></DeepChatBrowser>
@@ -100,7 +100,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the GIF button or drop a file to attach it to the next outgoing message."}'
-  initialMessages='[{"file": {"src": "path-to-file.gif", "type": "image"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.gif", "type": "image"}], "role": "user"}]'
 ></deep-chat>
 ```
 
@@ -120,7 +120,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the camera button to open up a modal for capturing photos.'}}
-    initialMessages={[{file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/img/cat.jpg', type: 'image'}], role: 'user'}]}
     demo={true}
     camera={true}
   ></DeepChatBrowser>
@@ -144,7 +144,7 @@ This property can be set with a boolean _true_ or configured with a [`CameraFile
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the camera button to open up a modal for capturing photos."}'
-  initialMessages='[{"file": {"src": "path-to-file.jpeg", "type": "image"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "user"}]'
 ></deep-chat>
 ```
 
@@ -164,7 +164,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the audio button or drop a file to attach it to the next outgoing message.'}}
-    initialMessages={[{file: {src: '/audio/cantinaBand.wav', type: 'audio'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/audio/cantinaBand.wav', type: 'audio'}], role: 'user'}]}
     demo={true}
     audio={true}
   ></DeepChatBrowser>
@@ -188,7 +188,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the audio button or drop a file to attach it to the next outgoing message."}'
-  initialMessages='[{"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.wav", "type": "audio"}], "role": "user"}]'
 ></deep-chat>
 ```
 
@@ -208,7 +208,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the microphone button or drop a file to attach it to the next outgoing message.'}}
-    initialMessages={[{file: {src: '/audio/jeff.mp3', type: 'audio'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/audio/jeff.mp3', type: 'audio'}], role: 'user'}]}
     demo={true}
     microphone={true}
   ></DeepChatBrowser>
@@ -232,7 +232,7 @@ This property can be set with a boolean _true_ or configured with a [`Microphone
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the microphone button or drop a file to attach it to the next outgoing message."}'
-  initialMessages='[{"file": {"src": "path-to-file.wav", "type": "audio"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.wav", "type": "audio"}], "role": "user"}]'
 ></deep-chat>
 ```
 
@@ -252,7 +252,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     introMessage={{text: 'Use the file button or drop a file to attach it to the next outgoing message.'}}
-    initialMessages={[{file: {src: '/text/text.txt', name: 'text-file.txt', type: 'file'}, role: 'user'}]}
+    initialMessages={[{files: [{src: '/text/text.txt', name: 'text-file.txt', type: 'file'}], role: 'user'}]}
     demo={true}
     mixedFiles={true}
   ></DeepChatBrowser>
@@ -276,7 +276,7 @@ This property can be set with a boolean _true_ or configured with a [`FilesServi
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": "Use the file button or drop a file to attach it to the next outgoing message."}'
-  initialMessages='[{"file": {"src": "path-to-file.txt", "name": "text-file.txt", "type": "file"}, "role": "user"}]'
+  initialMessages='[{"files": [{"src": "path-to-file.txt", "name": "text-file.txt", "type": "file"}], "role": "user"}]'
 ></deep-chat>
 ```
 

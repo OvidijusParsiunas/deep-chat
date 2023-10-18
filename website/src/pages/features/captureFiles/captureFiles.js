@@ -21,8 +21,8 @@ function LeftPanel() {
         demo={true}
         introMessage={`Click the camera or the microphone button.`}
         initialMessages={[
-          {file: {src: '/img/cat.jpg', type: 'image'}, role: 'user'},
-          {file: {src: '/audio/jeff.mp3', type: 'audio'}, role: 'ai'},
+          {files: [{src: '/img/cat.jpg', type: 'image'}], role: 'user'},
+          {files: [{src: '/audio/jeff.mp3', type: 'audio'}], role: 'ai'},
         ]}
         style={{
           borderRadius: '10px',

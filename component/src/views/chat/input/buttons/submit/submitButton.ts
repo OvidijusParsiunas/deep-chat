@@ -4,9 +4,11 @@ import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
+import {MessageFileType} from '../../../../../types/messageFile';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {Websocket} from '../../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {Response} from '../../../../../types/response';
 import {TextInputEl} from '../../textInput/textInput';
 import {Signals} from '../../../../../types/handler';
 import {Messages} from '../../../messages/messages';
@@ -137,14 +139,20 @@ export class SubmitButton extends InputButton<Styles> {
       if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
     } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;
     this.changeToLoadingIcon();
-    if (userText !== '') this._messages.addNewMessage({text: userText}, false, true);
-    if (uploadedFilesData) await this._messages.addMultipleFiles(uploadedFilesData);
+    await this.addNewMessages(userText, uploadedFilesData);
     this._messages.addLoadingMessage();
     if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
 
     const requestContents = {text: submittedText, files: fileData};
     await this._serviceIO.callAPI(requestContents, this._messages);
     if (!programmatic) this._fileAttachments?.removeAllFiles();
+  }
+
+  private async addNewMessages(userText: string, uploadedFilesData?: {file: File; type: MessageFileType}[]) {
+    const data: Response = {};
+    if (userText !== '') data.text = userText;
+    if (uploadedFilesData) data.files = await this._messages.addMultipleFiles(uploadedFilesData);
+    if (Object.keys(data).length > 0) this._messages.addNewMessage(data, false);
   }
 
   private stopStream() {

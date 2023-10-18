@@ -29,7 +29,7 @@ export class CustomHandler {
       } else if (io.deepChat.stream && result.text) {
         Stream.simulate(messages, io.streamHandlers, result.text);
       } else {
-        messages.addNewMessage(result, true, true);
+        messages.addNewMessage(result, true);
         io.completionsHandlers.onFinish();
       }
     };
@@ -101,7 +101,7 @@ export class CustomHandler {
       } else if (io.deepChat.stream) {
         Stream.simulate(messages, io.streamHandlers, result.text);
       } else {
-        messages.addNewMessage(result, true, true);
+        messages.addNewMessage(result, true);
       }
     };
     const signals = CustomHandler.generateOptionalSignals();

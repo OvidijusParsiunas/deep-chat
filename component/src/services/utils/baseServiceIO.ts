@@ -61,12 +61,17 @@ export class BaseServiceIO implements ServiceIO {
 
   private static createCustomFormDataBody(body: any, messages: MessageContent[], files: File[]) {
     const formData = new FormData();
-    files.forEach((file) => formData.append(`files`, file));
+    files.forEach((file) => formData.append('files', file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
     let textMessageIndex = 0;
-    messages.forEach((message) => {
-      if (message.text) formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
+    messages.slice(0, messages.length - 1).forEach((message) => {
+      formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
     });
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.text) {
+      delete lastMessage.files; // no need to have files prop as we are sending the message
+      formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(lastMessage));
+    }
     return formData;
   }
 
@@ -100,6 +105,7 @@ export class BaseServiceIO implements ServiceIO {
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
+  // WORK - when a file is sent - but the user is using the stream property the response back is not streamed
   async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
@@ -113,7 +119,7 @@ export class BaseServiceIO implements ServiceIO {
   async callAPI(requestContents: RequestContents, messages: Messages) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
-      requestContents, messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
+      messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
     if (this.requestSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
       Websocket.sendWebsocket(this, body, messages, false);

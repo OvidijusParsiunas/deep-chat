@@ -4,7 +4,6 @@ import {HuggingFace} from '../../types/huggingFace';
 import {PollResult} from '../serviceIO';
 import {DeepChat} from '../../deepChat';
 
-// WORK - handle error when polling
 export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
   // prettier-ignore
   constructor(deepChat: DeepChat) {

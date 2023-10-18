@@ -7,6 +7,7 @@ import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
+// WORK - problem when sending back html that does not have tags - {html: 'hello'}
 export class Websocket {
   public static setup(io: ServiceIO) {
     if (io.requestSettings.url !== Demo.URL) {
@@ -62,7 +63,7 @@ export class Websocket {
         if (io.deepChat.stream && resultData.text) {
           Stream.simulate(messages, io.streamHandlers, resultData.text);
         } else {
-          messages.addNewMessage(resultData, true, true);
+          messages.addNewMessage(resultData, true);
         }
       } catch (error) {
         RequestUtils.displayError(messages, error as object, 'Error in server message');

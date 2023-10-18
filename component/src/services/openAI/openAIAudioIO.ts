@@ -68,9 +68,9 @@ export class OpenAIAudioIO extends DirectServiceIO {
     return formData;
   }
 
-  private preprocessBody(body: OpenAIAudio, messages: MessageContent[], files: File[]) {
+  private preprocessBody(body: OpenAIAudio, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const lastMessage = messages[messages.length - files.length + 1]?.text?.trim();
+    const lastMessage = messages[messages.length - 1]?.text?.trim();
     if (lastMessage && lastMessage !== '') {
       const processedMessage = lastMessage.substring(0, this._maxCharLength);
       bodyCopy.prompt = processedMessage;
@@ -83,7 +83,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     this.url = this.requestSettings.url || this._service_url;
-    const body = this.preprocessBody(this.rawBody, pMessages, files);
+    const body = this.preprocessBody(this.rawBody, pMessages);
     const formData = OpenAIAudioIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestUtils.temporarilyRemoveHeader(this.requestSettings,

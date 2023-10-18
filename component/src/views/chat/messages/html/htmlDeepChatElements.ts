@@ -43,7 +43,7 @@ export class HTMLDeepChatElements {
 
   public static isElementTemporary(messageElements?: MessageElements) {
     if (!messageElements) return false;
-    return messageElements.bubbleElement.children[0].classList.contains(DEEP_CHAT_TEMPORARY_MESSAGE);
+    return messageElements.bubbleElement.children[0]?.classList.contains(DEEP_CHAT_TEMPORARY_MESSAGE);
   }
 
   public static doesElementContainDeepChatClass(element: HTMLElement) {
