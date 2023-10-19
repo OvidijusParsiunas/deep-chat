@@ -225,13 +225,17 @@ export default function Playground() {
 }
 
 function setHorizontalScroll(componentList) {
-  componentList.addEventListener('wheel', (e) => {
-    if (!view.isGrid) {
-      // scroll only when there is overflow (useful when 1 element in column and no overflow)
-      if (componentList.scrollWidth > componentList.clientWidth) {
-        e.preventDefault();
-        componentList.scrollLeft += e.deltaY;
+  componentList.addEventListener(
+    'wheel',
+    (e) => {
+      if (!view.isGrid) {
+        // scroll only when there is overflow (useful when 1 element in column and no overflow)
+        if (componentList.scrollWidth > componentList.clientWidth) {
+          e.preventDefault();
+          componentList.scrollLeft += e.deltaY;
+        }
       }
-    }
-  });
+    },
+    {passive: false}
+  );
 }

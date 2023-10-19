@@ -6,7 +6,7 @@ import React from 'react';
 
 const DEMO_RESPONSE = {response: {text: "Click the 'Configure' button below to connect to a service."}};
 
-export default function ChatComponent({config, colorMode}) {
+export default function ChatComponent({config}) {
   const componentRef = React.createRef(null);
 
   // updating messages here to keep track of them so that when user moves to a different page they can be added to config
