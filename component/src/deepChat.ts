@@ -37,7 +37,6 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   directConnection?: DirectConnection;
 
-  // WORK - rename request to connect?
   @Property('object')
   request?: Request;
 

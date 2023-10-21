@@ -71,7 +71,7 @@ export class FileMessages {
     files.forEach((fileData) => {
       if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
         FileMessages.addNewAudioMessage(messages, fileData, isAI);
-      } else if (fileData.type === 'image' || fileData.type === 'gif' || fileData.src?.startsWith('data:image')) {
+      } else if (fileData.type === 'image' || fileData.src?.startsWith('data:image')) {
         FileMessages.addNewImageMessage(messages, fileData, isAI);
       } else {
         // WORK - should there be a check to see if it is image
