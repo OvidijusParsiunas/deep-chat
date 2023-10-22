@@ -10,6 +10,7 @@ import {Tooltip} from 'react-tooltip';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
 import Sortable from 'sortablejs';
+import hljs from 'highlight.js';
 import React from 'react';
 import './playground.css';
 
@@ -62,6 +63,7 @@ export default function Playground() {
   }, []);
 
   React.useEffect(() => {
+    window.hljs = hljs;
     if (isWaitingToCloseIntroModal) {
       setTimeout(() => {
         applyPlaygroundConfig(playgroundConfig);
