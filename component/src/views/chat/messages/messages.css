@@ -10,9 +10,9 @@
 
 .inner-message-container {
   display: flex;
-  width: 90%;
   margin-left: auto;
   margin-right: auto;
+  width: calc(97% - 18px);
   max-width: 100%;
 }
 
