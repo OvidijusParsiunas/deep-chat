@@ -43,7 +43,6 @@ import Tabs from '@theme/Tabs';
         shared: {
           innerContainer: {
             fontSize: '1rem',
-            width: '95%',
           },
         },
       },
@@ -63,7 +62,7 @@ import Tabs from '@theme/Tabs';
 
 <deep-chat
   style="border-radius: 10px; width: 96vw; height: calc(100vh - 70px); padding-top: 10px"
-  messageStyles='{"default": {"shared": {"innerContainer": {"fontSize": "1rem", "width": "95%"}}}}'
+  messageStyles='{"default": {"shared": {"innerContainer": {"fontSize": "1rem"}}}}'
   inputAreaStyle='{"fontSize": "1rem"}'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
@@ -106,7 +105,6 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
     messageStyles={{
       default: {
         shared: {
-          innerContainer: {width: '95%'},
           bubble: {maxWidth: '100%', backgroundColor: 'unset', marginTop: '10px', marginBottom: '10px', fontSize: '1rem'},
         },
         user: {bubble: {marginLeft: '0px', color: 'black'}},
@@ -202,7 +200,6 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
   messageStyles='{
     "default": {
       "shared": {
-        "innerContainer": {"width": "95%"},
         "bubble": {
           "maxWidth": "100%", "backgroundColor": "unset", "marginTop": "10px", "marginBottom": "10px", "fontSize": "1rem"}},
       "user": {
