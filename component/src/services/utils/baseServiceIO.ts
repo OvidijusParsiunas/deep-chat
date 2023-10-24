@@ -87,6 +87,16 @@ export class BaseServiceIO implements ServiceIO {
     return this.fileTypes.mixedFiles;
   }
 
+  private async request(body: any, messages: Messages) {
+    // use actual stream if demo or when simulation prop not set
+    const {stream} = this.deepChat;
+    if (stream && (this.demo || typeof stream !== 'object' || !stream.simulation)) {
+      await Stream.request(this, body, messages);
+    } else {
+      await HTTPRequest.request(this, body, messages, false);
+    }
+  }
+
   async callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
@@ -95,23 +105,16 @@ export class BaseServiceIO implements ServiceIO {
       this.requestSettings.headers['Content-Type'] ??= 'application/json';
       tempHeaderSet = true;
     }
-    // use actual stream if demo or when simulation prop not set
-    const {stream} = this.deepChat;
-    if (stream && (this.demo || typeof stream !== 'object' || !stream.simulation)) {
-      await Stream.request(this, body, messages);
-    } else {
-      await HTTPRequest.request(this, body, messages);
-    }
+    this.request(body, messages);
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
-  // WORK - when a file is sent - but the user is using the stream property the response back is not streamed
   async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);
     this.requestSettings = fileIO?.request || this.requestSettings;
-    await HTTPRequest.request(this, formData, messages, false);
+    this.request(formData, messages);
     this.requestSettings = previousRequestSettings;
   }
 
