@@ -87,14 +87,13 @@ export class BaseServiceIO implements ServiceIO {
     return this.fileTypes.mixedFiles;
   }
 
-  private async request(body: any, messages: Messages) {
+  private async request(body: any, messages: Messages, stringifyBody = true) {
     // use actual stream if demo or when simulation prop not set
     const {stream} = this.deepChat;
     if (stream && (this.demo || typeof stream !== 'object' || !stream.simulation)) {
-      await Stream.request(this, body, messages);
-    } else {
-      await HTTPRequest.request(this, body, messages, false);
+      return Stream.request(this, body, messages);
     }
+    return HTTPRequest.request(this, body, messages, stringifyBody);
   }
 
   async callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
@@ -105,7 +104,7 @@ export class BaseServiceIO implements ServiceIO {
       this.requestSettings.headers['Content-Type'] ??= 'application/json';
       tempHeaderSet = true;
     }
-    this.request(body, messages);
+    await this.request(body, messages);
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
@@ -114,7 +113,7 @@ export class BaseServiceIO implements ServiceIO {
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);
     this.requestSettings = fileIO?.request || this.requestSettings;
-    this.request(formData, messages);
+    await this.request(formData, messages, false);
     this.requestSettings = previousRequestSettings;
   }
 
