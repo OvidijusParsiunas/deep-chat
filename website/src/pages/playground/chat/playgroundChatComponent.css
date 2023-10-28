@@ -2,3 +2,16 @@
   display: flex;
   justify-content: center;
 }
+
+.playground-chat-list-expanded > .playground-chat-wrapper > .playground-chat-component {
+  height: calc(100vh - 150px);
+}
+
+.playground-chat-list-expanded > .playground-chat-wrapper:first-child > .playground-chat-component {
+  height: calc(100vh - 205px);
+}
+
+.playground-chat-list-expanded > .playground-chat-wrapper > .playground-chat-component > deep-chat {
+  height: 100% !important;
+  width: 100% !important;
+}

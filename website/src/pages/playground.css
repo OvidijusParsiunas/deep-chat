@@ -1,5 +1,6 @@
 .playground {
   background: var(--playground-background);
+  overflow-x: hidden !important;
 }
 
 .playground-panorama {
@@ -14,6 +15,8 @@
   color: var(--start-header-color);
   margin-top: 30px;
   margin-bottom: 60px;
+  position: relative;
+  width: 100vw;
 }
 
 #playground-chat-list-parent {
@@ -40,8 +43,17 @@
   display: flex;
 }
 
+.playground-chat-list-expanded {
+  display: grid;
+  width: 90vw !important;
+}
+
 #playground-chat-list:empty {
   height: 440px;
+}
+
+.playground-chat-list-expanded:empty {
+  height: 20vw !important;
 }
 
 #playground-chat-list::-webkit-scrollbar {
@@ -76,6 +88,15 @@
   z-index: 100;
 }
 
+.playground-expanded > #playground-title {
+  margin-top: 0px !important;
+  margin-bottom: 10px !important;
+}
+
+.playground-expanded > #playground-title > b {
+  opacity: 0;
+}
+
 @media (max-height: 800px) {
   .playground-panorama {
     padding-bottom: 0px;
@@ -105,13 +126,6 @@
 
 @media (max-height: 700px) {
   .playground-grid > #playground-title,
-  .playground-panorama > #playground-title {
-    margin-top: 0px;
-    margin-bottom: 25px;
-  }
-}
-
-@media (max-height: 670px) {
   .playground-panorama > #playground-title {
     margin-top: 0px;
     margin-bottom: 10px;
@@ -152,7 +166,7 @@
     overflow: unset;
   }
   .playground-panorama {
-    padding-bottom: 60px;
+    padding-bottom: 5px;
   }
   .playground-chat-list-panorama {
     display: block;

@@ -20,6 +20,9 @@ const ChatWrapper = React.forwardRef(
       scaleOut() {
         setScaleExpanded(false); // shrunk already has animation
       },
+      reduceHeight(isOnlyComponent) {
+        if (!isOnlyComponent) setHeightExpanded(false);
+      },
       reduceHeightWhenLastOnRow() {
         const previousSibling = elementRef.current.previousSibling;
         if (!elementRef.current.nextSibling && previousSibling) {
@@ -110,7 +113,7 @@ const ChatWrapper = React.forwardRef(
               className={`playground-chat-wrapper ${allowAnimation ? 'playground-chat-animated' : ''} ${
                 scaleExpanded ? 'playground-chat-wrapper-scale-expanded' : 'playground-chat-wrapper-scale-shrunk'
               } ${widthExpanded ? 'playground-chat-wrapper-width-expanded' : 'playground-chat-wrapper-width-shrunk'} ${
-                heightExpanded ? '' : 'playground-chat-wrapper-height-shrunk'
+                heightExpanded ? 'playground-chat-wrapper-height-expanded' : 'playground-chat-wrapper-height-shrunk'
               }`}
             >
               {/* The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children */}

@@ -1,8 +1,12 @@
 #playground-header-buttons {
   position: absolute;
-  right: 20px;
-  top: 95px;
+  right: 24px;
+  top: 4px;
   display: flex;
+}
+
+.playground-expanded > #playground-title > #playground-header-buttons {
+  top: 6px;
 }
 
 .playground-header-button {
@@ -39,20 +43,14 @@
   padding-bottom: 8px;
 }
 
-@media (max-height: 730px) {
-  #playground-header-buttons {
-    top: 85px;
-  }
-}
-
-@media (max-height: 700px) {
-  #playground-header-buttons {
-    top: 65px;
-  }
-}
-
 @media (max-width: 850px) {
   #playground-view-button {
     display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  #playground-header-buttons {
+    top: 6px;
   }
 }

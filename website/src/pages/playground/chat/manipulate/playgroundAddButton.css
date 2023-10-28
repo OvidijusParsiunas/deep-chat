@@ -6,11 +6,16 @@
 .playground-add-button-container-grid {
   margin-top: 10px;
   /* required to have space when at end of a grid */
-  margin-bottom: 50px;
+  margin-bottom: 49px;
 }
 
 .playground-add-button-container-panorama {
   margin-top: 30px;
+}
+
+.playground-add-button-container-expanded {
+  margin-top: 7px;
+  margin-bottom: 25px;
 }
 
 #playground-add-button {

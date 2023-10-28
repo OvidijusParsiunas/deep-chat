@@ -26,6 +26,19 @@
   height: 0px;
 }
 
+.playground-chat-list-expanded > .playground-chat-wrapper {
+  width: unset;
+  height: 0px;
+}
+
+.playground-chat-list-expanded > .playground-chat-wrapper-height-expanded {
+  height: calc(100vh - 62px);
+}
+
+.playground-chat-list-expanded > .playground-chat-wrapper-height-expanded:first-child {
+  height: calc(100vh - 116px);
+}
+
 .playground-chat-animated {
   transition: 0.5s;
 }
