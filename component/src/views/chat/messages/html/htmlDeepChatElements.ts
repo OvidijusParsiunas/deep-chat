@@ -6,6 +6,7 @@ import {HTMLUtils} from './htmlUtils';
 
 const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
 const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
+const DEEP_CHAT_UPDATE_MESSAGE = 'deep-chat-update-message';
 
 const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
   'deep-chat-button': {
@@ -39,6 +40,12 @@ export class HTMLDeepChatElements {
         messages.submitUserMessage?.(element.textContent?.trim() || '');
       });
     });
+  }
+
+  public static isUpdateMessage(html: string) {
+    const testElement = document.createElement('div');
+    testElement.innerHTML = html;
+    return testElement.children[0]?.classList.contains(DEEP_CHAT_UPDATE_MESSAGE);
   }
 
   public static isElementTemporary(messageElements?: MessageElements) {

@@ -18,6 +18,7 @@ import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
+import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {HTMLUtils} from './html/htmlUtils';
 import {Names} from '../../../types/names';
@@ -134,7 +135,7 @@ export class Messages {
       const elements = this.createAndAppendNewMessageElement(this._introMessage.text, true);
       this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
     } else if (this._introMessage?.html) {
-      const elements = HTMLMessages.addNewHTMLMessage(this, this._introMessage.html, true);
+      const elements = HTMLMessages.add(this, this._introMessage.html, true, this._messageElementRefs);
       this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
     }
   }
@@ -142,16 +143,16 @@ export class Messages {
   private populateInitialMessages(initialMessages: MessageContent[]) {
     initialMessages.forEach((message) => {
       Legacy.processInitialMessageFile(message);
-      this.addNewMessage(message, message.role === 'ai', true);
+      this.addNewMessage(message, message.role === MessageUtils.AI_ROLE, true);
     });
     // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
     setTimeout(() => this.scrollToBottom());
   }
 
   // prettier-ignore
-  public applyCustomStyles(elements: MessageElements, isAI: boolean, media: boolean,
+  public applyCustomStyles(elements: MessageElements | undefined, isAI: boolean, media: boolean,
       otherStyles?: MessageRoleStyles | MessageElementsStyles) {
-    if (this.messageStyles) {
+    if (elements && this.messageStyles) {
       MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, isAI, media, otherStyles);
     }
   }
@@ -168,7 +169,7 @@ export class Messages {
   }
 
   private static createMessageContent(isAI: boolean, content: Response): MessageContent {
-    const messageContent: MessageContent = {role: isAI ? 'ai' : 'user'};
+    const messageContent: MessageContent = {role: MessageUtils.getRole(isAI)};
     const {text, files, html} = content;
     if (text) messageContent.text = text;
     if (files) messageContent.files = files;
@@ -238,6 +239,7 @@ export class Messages {
 
   // this should not be activated by streamed messages
   public addNewMessage(data: Response, isAI: boolean, isInitial = false) {
+    let isNewMessage = true;
     const message = Messages.createMessageContent(isAI, data);
     if (message.text !== undefined && data.text !== null) {
       this.addNewTextMessage(message.text, isAI);
@@ -247,14 +249,15 @@ export class Messages {
       FileMessages.addMessages(this, message.files, isAI);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.addNewHTMLMessage(this, message.html, isAI);
+      const elements = HTMLMessages.add(this, message.html, isAI, this._messageElementRefs);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+      isNewMessage = !!elements;
     }
-    this.updateStateOnMessage(message, isInitial);
+    this.updateStateOnMessage(message, isNewMessage, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContent, isInitial = false) {
-    this.messages.push(messageContent);
+  private updateStateOnMessage(messageContent: MessageContent, isNewMessage: boolean, isInitial = false) {
+    if (isNewMessage) this.messages.push(messageContent);
     this.sendClientUpdate(messageContent, isInitial);
   }
 
