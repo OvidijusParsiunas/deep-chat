@@ -123,7 +123,7 @@ All examples are ready to be deployed on a hosting platform such as [Vercel](htt
 
 Create, configure and use Deep Chat components without writing any code in the official [Playground](https://deepchat.dev/playground)!
 
-:tada: Update - <b>Expanded View</b>
+:tada: Recent update - <b>Expanded View</b>
 
 <p align="center">
     <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/6b78907c-c4c2-44de-b4c7-d73c1e887fa8" alt="Expanded View">

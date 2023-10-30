@@ -7,6 +7,6 @@ export class TypeConverters {
     boolean: (value: string) => value === 'true',
     object: (value: string) => JSON.parse(value),
     array: (value: string) => JSON.parse(value),
-    function: (value: string) => eval(value),
+    function: (value: string) => new Function(`return ${value}`)(),
   };
 }

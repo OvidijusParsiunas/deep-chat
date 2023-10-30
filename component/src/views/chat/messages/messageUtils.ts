@@ -27,10 +27,16 @@ export class MessageUtils {
     return undefined;
   }
 
-  public static getLastMessageByRole(messages: MessageContent[], isAI: boolean) {
+  public static getLastMessage(messages: MessageContent[], isAI: boolean, content?: keyof Omit<MessageContent, 'role'>) {
     const role = MessageUtils.getRole(isAI);
     for (let i = messages.length - 1; i >= 0; i -= 1) {
-      if (messages[i].role === role) return messages[i];
+      if (messages[i].role === role) {
+        if (content) {
+          if (messages[i][content]) return messages[i];
+        } else {
+          return messages[i];
+        }
+      }
     }
     return undefined;
   }

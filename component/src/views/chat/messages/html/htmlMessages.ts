@@ -22,15 +22,17 @@ export class HTMLMessages {
   private static updateLastAIMessage(messages: MessageContent[], html: string, messagesElements: MessageElements[]) {
     const lastElems = MessageUtils.getLastElementsByClass(
       messagesElements, ['ai-message-text', 'html-message'], ['loading-message-text']);
+    if (!lastElems) return false;
     if (lastElems) lastElems.bubbleElement.innerHTML = html;
-    const lastMessage = MessageUtils.getLastMessageByRole(messages, true);
+    const lastMessage = MessageUtils.getLastMessage(messages, true, 'html');
     if (lastMessage) lastMessage.html = html;
-    return undefined;
+    return true;
   }
 
   public static add(messages: Messages, html: string, isAI: boolean, messagesElements: MessageElements[]) {
     if (HTMLDeepChatElements.isUpdateMessage(html)) {
-      return HTMLMessages.updateLastAIMessage(messages.messages, html, messagesElements);
+      const wasUpdated = HTMLMessages.updateLastAIMessage(messages.messages, html, messagesElements);
+      if (wasUpdated) return undefined;
     }
     const messageElements = HTMLMessages.createElements(messages, html, isAI);
     if (html.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
