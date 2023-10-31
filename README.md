@@ -20,13 +20,19 @@
 - Support for all major ui frameworks/libraries
 - Everything is customizable!
 
-### :tada: Latest update
+### :tada: Latest updates
+
+Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API:
 
 <p align="center">
     <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5ba04d84-1efb-424a-8718-ba160011cafe" alt="Messages HTML">
 </p>
 
-Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API.
+Create an AI status message bubble for [websockets](https://deepchat.dev/docs/connect#Websocket) using the ["deep-chat-update-message"](https://deepchat.dev/docs/messages/HTML#example-for-deep-chat-update-message) class. Checkout [Deep Chat Classes](https://deepchat.dev/docs/messages/HTML#deepChatClasses) for more:
+
+<p align="center">
+    <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/06626313-f4d1-4d6f-849b-be603ebe7497" alt="Update Message">
+</p>
 
 ### :computer: Getting started
 

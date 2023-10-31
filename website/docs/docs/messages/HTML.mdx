@@ -15,6 +15,7 @@ Here is an example for [`initialMessages`](../messages#initialMessages):
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
+import WebSocket from '/img/update-websocket-message.gif';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
@@ -184,8 +185,11 @@ Deep Chat comes with a pre-defined set of classes that can be used to add stylin
 `deep-chat-suggestion-button` - when clicked sends the text that is inside the button as a new user message. <br />
 `deep-chat-temporary-message` - removes the message when a new one is added to the chat. This class needs to be applied
 to the parent-most element in the `html` string. This message is also not tracked in state. <br />
+`deep-chat-update-message` - used in [websockets](../connect#Websocket) to allow the server to update the last AI `html` message.
+This class needs to be applied to the parent-most element in the `html` string. When tracking state, we recommend calling
+the [getMessages](../methods#getMessages) method when the [onNewMessage](../events#onNewMessage) event is triggered. <br />
 
-#### Example
+#### Basic Example
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -233,6 +237,42 @@ chatElementRef.demo = true;
 :::info
 If you have suggestions for new classes that you think would be useful, please raise an [issue](https://github.com/OvidijusParsiunas/deep-chat/issues) on GitHub.
 :::
+
+<LineBreak></LineBreak>
+
+#### Example for `deep-chat-update-message`
+
+This example uses a GIF as it needs a live [websocket](../connect#Websocket) connection.
+
+<img src={WebSocket} style={{marginLeft: 'auto', marginRight: 'auto', display: 'flex'}} />
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```text
+Messages from the websocket server:
+1: {html: '<div class="deep-chat-update-message">Downloading...</div>'}
+2: {html: '<div class="deep-chat-update-message">Loading...</div>'}
+3: {html: '<div class="deep-chat-update-message">Processing...</div>'}
+4: {html: '<div class="deep-chat-update-message">Ready...</div>'}
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```text
+Component configuration:
+<deep-chat request='{"url": "ws://customapi.com", "websocket": true}'></deep-chat>
+
+Messages from the websocket server:
+1: {html: '<div class="deep-chat-update-message">Downloading...</div>'}
+2: {html: '<div class="deep-chat-update-message">Loading...</div>'}
+3: {html: '<div class="deep-chat-update-message">Processing...</div>'}
+4: {html: '<div class="deep-chat-update-message">Ready...</div>'}
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
