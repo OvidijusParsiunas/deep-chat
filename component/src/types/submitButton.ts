@@ -4,5 +4,6 @@ export interface SubmitButtonStyles {
   submit?: ButtonStyles;
   loading?: ButtonStyles;
   stop?: ButtonStyles;
+  disabled?: ButtonStyles;
   position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
 }

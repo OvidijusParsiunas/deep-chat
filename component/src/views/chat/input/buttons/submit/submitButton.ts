@@ -25,13 +25,14 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _stopClicked: Signals['stopClicked'];
-  private readonly _innerElements: DefinedButtonInnerElements<Styles>;
+  private readonly _innerElements: Omit<DefinedButtonInnerElements<Styles>, 'disabled'>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
 
   // prettier-ignore
   constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments) {
+    SubmitButtonStateStyle.prepare(deepChat);
     super(SubmitButton.createButtonContainerElement(), deepChat.submitButtonStyles?.position, deepChat.submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
@@ -188,5 +189,11 @@ export class SubmitButton extends InputButton<Styles> {
     this.elementRef.onclick = this.submitFromInput.bind(this);
     this._isRequestInProgress = false;
     this._isLoadingActive = false;
+  }
+
+  private changeToDisabledIcon() {
+    if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
+    this.reapplyStateStyle('disabled', ['submit']);
+    this.elementRef.onclick = () => {};
   }
 }
