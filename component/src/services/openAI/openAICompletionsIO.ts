@@ -34,9 +34,10 @@ export class OpenAICompletionsIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private preprocessBody(body: OpenAIConverseBodyInternal, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const mostRecentMessageText = messages[messages.length - 1].text;
+    const textMessages = pMessages.filter((message) => message.text);
+    const mostRecentMessageText = textMessages[textMessages.length - 1].text;
     if (!mostRecentMessageText) return;
     const processedMessage = mostRecentMessageText.substring(0, this._maxCharLength);
     // Completions with no max_tokens behave weirdly and do not give full responses

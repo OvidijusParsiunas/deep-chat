@@ -35,7 +35,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
   }
 
-  public static generateSystemMessage(system_prompt: string): SystemMessageInternal {
+  private static generateSystemMessage(system_prompt: string): SystemMessageInternal {
     return {role: 'system', content: system_prompt};
   }
 
@@ -47,7 +47,8 @@ export class OpenAIChatIO extends DirectServiceIO {
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
+    const textMessages = pMessages.filter((message) => message.text);
+    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(textMessages,
         totalMessagesMaxCharLength - this._systemMessage.content.length)
       .map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];

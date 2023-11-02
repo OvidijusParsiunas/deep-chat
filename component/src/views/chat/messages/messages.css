@@ -24,6 +24,7 @@
   border-radius: 10px;
   padding: 0.42em 0.55em;
   height: fit-content;
+  line-height: 1.26em;
 }
 
 .user-message-text {
@@ -63,9 +64,9 @@
   padding-right: 0.75em;
 }
 
-.message-bubble > p {
-  line-height: 1.26em;
-}
+/* .message-bubble > p {
+  line-height: inherit;
+} */
 
 .message-bubble > p:first-child {
   margin-top: 0px;

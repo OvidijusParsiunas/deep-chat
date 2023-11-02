@@ -47,6 +47,7 @@ export class ServiceIOFactory {
       if (directConnection.assemblyAI) {
         return new AssemblyAIAudioIO(deepChat);
       }
+      // WORK - update chat to be the default
       if (directConnection.cohere) {
         if (directConnection.cohere.chat) {
           return new CohereChatIO(deepChat);

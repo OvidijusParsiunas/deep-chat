@@ -29,9 +29,10 @@ export class CohereChatIO extends CohereIO {
 
   private preprocessBody(body: CohereChatConfig, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    bodyCopy.query = pMessages[pMessages.length - 1].text;
-    bodyCopy.chat_history = pMessages
-      .slice(0, pMessages.length - 1)
+    const textMessages = pMessages.filter((message) => message.text);
+    bodyCopy.query = textMessages[textMessages.length - 1].text;
+    bodyCopy.chat_history = textMessages
+      .slice(0, textMessages.length - 1)
       .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'CHATBOT' : this.username}));
     return bodyCopy;
   }

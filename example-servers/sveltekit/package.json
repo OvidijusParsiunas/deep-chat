@@ -21,7 +21,7 @@
   },
   "type": "module",
   "dependencies": {
-    "deep-chat": "^1.3.22",
+    "deep-chat": "^1.3.23",
     "eventsource-parser": "^1.0.0"
   }
 }

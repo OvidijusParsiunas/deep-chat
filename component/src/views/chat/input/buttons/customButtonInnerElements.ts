@@ -13,8 +13,8 @@ export class CustomButtonInnerElements {
     return isText ? CustomButtonInnerElements.createTextElement(string) : SVGIconUtils.createSVGElement(string);
   }
 
-  private static createCustomElement<T>(customStyles: ButtonStateStyles<T>, state: keyof T) {
-    const stateStyle = customStyles[state];
+  public static createCustomElement<T>(state: keyof T, customStyles?: ButtonStateStyles<T>) {
+    const stateStyle = customStyles?.[state];
     if (stateStyle?.text?.content) return CustomButtonInnerElements.createElement(stateStyle?.text?.content, true);
     if (stateStyle?.svg?.content) return CustomButtonInnerElements.createElement(stateStyle?.svg?.content, false);
     return;
@@ -31,7 +31,7 @@ export class CustomButtonInnerElements {
   public static createSpecificStateElement<T>(
       parentEl: HTMLElement, state: keyof T, customStyles?: ButtonStateStyles<T>) {
     let element: HTMLDivElement | SVGGraphicsElement | undefined;
-    if (customStyles) element = CustomButtonInnerElements.createCustomElement(customStyles, state);
+    if (customStyles) element = CustomButtonInnerElements.createCustomElement(state, customStyles);
     CustomButtonInnerElements.processElement(parentEl, element);
     return element;
   }
@@ -50,7 +50,7 @@ export class CustomButtonInnerElements {
     returnObj[states[0]] = initialStateEl;
     let lastStateEl = initialStateEl;
     states.slice(1).forEach((state) => {
-      lastStateEl = CustomButtonInnerElements.createCustomElement<T>(styles, state) || lastStateEl;
+      lastStateEl = CustomButtonInnerElements.createCustomElement<T>(state, styles) || lastStateEl;
       returnObj[state] = lastStateEl;
     });
     return returnObj;

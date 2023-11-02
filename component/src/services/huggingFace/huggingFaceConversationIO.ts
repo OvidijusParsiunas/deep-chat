@@ -16,8 +16,9 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
 
   // prettier-ignore
   private processMessages(messages: MessageContent[]) {
-    const mostRecentMessageText = messages[messages.length - 1].text;
-    const previousMessages = messages.slice(0, messages.length - 1);
+    const textMessages = messages.filter((message) => message.text);
+    const mostRecentMessageText = textMessages[textMessages.length - 1].text;
+    const previousMessages = textMessages.slice(0, textMessages.length - 1);
     if (!mostRecentMessageText) return;
     const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
     const generated_responses = previousMessages

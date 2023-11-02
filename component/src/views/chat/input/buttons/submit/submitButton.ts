@@ -1,4 +1,3 @@
-import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
@@ -14,6 +13,11 @@ import {Signals} from '../../../../../types/handler';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
+import {
+  DefinedButtonInnerElements,
+  DefinedButtonStateStyles,
+  ButtonInnerElement,
+} from '../../../../../types/buttonInternal';
 
 type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
 
@@ -25,7 +29,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _inputElementRef: HTMLElement;
   private readonly _abortStream: AbortController;
   private readonly _stopClicked: Signals['stopClicked'];
-  private readonly _innerElements: Omit<DefinedButtonInnerElements<Styles>, 'disabled'>;
+  private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
 
@@ -50,10 +54,12 @@ export class SubmitButton extends InputButton<Styles> {
   private createInnerElements() {
     const {submit, loading, stop} = CustomButtonInnerElements.create<Styles>(
       this.elementRef, ['submit', 'loading', 'stop'], this._customStyles);
+    const submitElement = submit || SubmitButton.createSubmitIconElement();
     return {
-      submit: submit || SubmitButton.createSubmitIconElement(),
+      submit: submitElement,
       loading: loading || SubmitButton.createLoadingIconElement(),
       stop: stop || SubmitButton.createStopIconElement(),
+      disabled: this.createDisabledIconElement(submitElement),
     };
   }
 
@@ -79,6 +85,11 @@ export class SubmitButton extends InputButton<Styles> {
     const stopIconElement = document.createElement('div');
     stopIconElement.id = 'stop-icon';
     return stopIconElement;
+  }
+
+  private createDisabledIconElement(submitElement: ButtonInnerElement) {
+    const element = CustomButtonInnerElements.createCustomElement('disabled', this._customStyles);
+    return element || (submitElement.cloneNode(true) as ButtonInnerElement);
   }
 
   // prettier-ignore
@@ -191,9 +202,10 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = false;
   }
 
-  private changeToDisabledIcon() {
-    if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
-    this.reapplyStateStyle('disabled', ['submit']);
-    this.elementRef.onclick = () => {};
-  }
+  // private changeToDisabledIcon() {
+  //   if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
+  //   this.elementRef.replaceChildren(this._innerElements.disabled);
+  //   this.reapplyStateStyle('disabled', ['submit']);
+  //   this.elementRef.onclick = () => {};
+  // }
 }
