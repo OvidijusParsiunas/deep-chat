@@ -6,9 +6,11 @@ import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {DirectServiceIO} from './services/utils/directServiceIO';
+import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {ServiceIOFactory} from './services/serviceIOFactory';
+import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
@@ -160,7 +162,11 @@ export class DeepChat extends InternalHTML {
 
   _childElement?: HTMLElement;
 
+  _validationHandler?: ValidationHandler;
+
   // TO-DO - key view style
+  @Property('object')
+  _insertKeyViewStyles?: InsertKeyViewStyles;
 
   constructor() {
     super();

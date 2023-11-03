@@ -1,3 +1,4 @@
+import {ValidationHandler} from '../../../../../types/validationHandler';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
@@ -32,6 +33,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private _isSVGLoadingIconOverriden = false;
+  private _validationHandler?: ValidationHandler;
 
   // prettier-ignore
   constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
@@ -46,8 +48,11 @@ export class SubmitButton extends InputButton<Styles> {
     this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
     this.attemptOverwriteLoadingStyle(deepChat);
-    this.changeToSubmitIcon();
-    this.assignHandlers();
+    setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
+      this._validationHandler = deepChat._validationHandler;
+      this.assignHandlers(this._validationHandler as ValidationHandler);
+      this._validationHandler?.();
+    });
   }
 
   // prettier-ignore
@@ -108,13 +113,13 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
-  private assignHandlers() {
+  private assignHandlers(validationHandler: ValidationHandler) {
     this._serviceIO.completionsHandlers = {
-      onFinish: this.changeToSubmitIcon.bind(this),
+      onFinish: validationHandler.bind(this),
     };
     this._serviceIO.streamHandlers = {
       onOpen: this.changeToStopIcon.bind(this),
-      onClose: this.changeToSubmitIcon.bind(this),
+      onClose: validationHandler.bind(this),
       abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
@@ -133,7 +138,6 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
-  // TO-DO - button should be disabled if validateMessageBeforeSending is not valid
   // TO-DO - button should be disabled if websocket connection is not open
   // TO-DO - should be disabled when websocket is connecting and option when loading history
   // prettier-ignore
@@ -147,9 +151,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
     const submittedText = userText === '' ? undefined : userText;
     if (this._isRequestInProgress || !Websocket.canSendMessage(this._serviceIO.websocket)) return;
-    if (this._serviceIO.deepChat?.validateMessageBeforeSending) {
-      if (!this._serviceIO.deepChat.validateMessageBeforeSending(submittedText, fileData)) return;
-    } else if (!this._serviceIO.canSendMessage(submittedText, fileData)) return;
+    if (await this._validationHandler?.(programmatic) === false) return;
     this.changeToLoadingIcon();
     await this.addNewMessages(userText, uploadedFilesData);
     this._messages.addLoadingMessage();
@@ -171,7 +173,6 @@ export class SubmitButton extends InputButton<Styles> {
     // This will not stop the stream on the server side
     this._abortStream.abort();
     this._stopClicked?.listener();
-    this.changeToSubmitIcon();
   }
 
   private changeToStopIcon() {
@@ -193,7 +194,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = true;
   }
 
-  private changeToSubmitIcon() {
+  public changeToSubmitIcon() {
     this.elementRef.classList.remove('loading-button');
     this.elementRef.replaceChildren(this._innerElements.submit);
     SubmitButtonStateStyle.resetSubmit(this, this._isLoadingActive);
@@ -202,10 +203,10 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = false;
   }
 
-  // private changeToDisabledIcon() {
-  //   if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
-  //   this.elementRef.replaceChildren(this._innerElements.disabled);
-  //   this.reapplyStateStyle('disabled', ['submit']);
-  //   this.elementRef.onclick = () => {};
-  // }
+  public changeToDisabledIcon() {
+    if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
+    this.elementRef.replaceChildren(this._innerElements.disabled);
+    this.reapplyStateStyle('disabled', ['submit']);
+    this.elementRef.onclick = () => {};
+  }
 }

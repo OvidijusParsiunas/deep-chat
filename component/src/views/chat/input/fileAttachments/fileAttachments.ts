@@ -4,6 +4,7 @@ import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachment
 import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
 import {ServiceFileTypes} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
+import {DeepChat} from '../../../../deepChat';
 import {Demo} from '../../../../types/demo';
 
 export class FileAttachments {
@@ -19,9 +20,9 @@ export class FileAttachments {
   }
 
   // prettier-ignore
-  addType(files: FileAttachmentsT, type: keyof ServiceFileTypes) {
+  addType(deepChat: DeepChat, files: FileAttachmentsT, type: keyof ServiceFileTypes) {
     const fileAttachmentsType = FileAttachmentTypeFactory.create(
-      files, this.toggleContainerDisplay.bind(this), this.elementRef, type);
+      deepChat, files, this.toggleContainerDisplay.bind(this), this.elementRef, type);
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }
@@ -66,7 +67,7 @@ export class FileAttachments {
     });
   }
 
-  public addFilesToAnyType(files: File[]) {
+  addFilesToAnyType(files: File[]) {
     FileAttachments.addFilesToType(files, this._fileAttachmentsTypes);
   }
 

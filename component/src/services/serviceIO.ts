@@ -1,5 +1,4 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
-import {ValidateMessageBeforeSending} from '../types/validateMessageBeforeSending';
 import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
@@ -83,7 +82,7 @@ export interface ServiceIO {
   // service errors via prefixes
   permittedErrorPrefixes?: CustomErrors;
 
-  canSendMessage: ValidateMessageBeforeSending;
+  canSendMessage: (text?: string, files?: File[], isProgrammatic?: boolean) => boolean;
 
   verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers): void;
 

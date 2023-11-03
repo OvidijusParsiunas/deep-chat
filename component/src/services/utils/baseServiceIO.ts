@@ -53,7 +53,8 @@ export class BaseServiceIO implements ServiceIO {
     if (this.requestSettings.websocket) Websocket.setup(this);
   }
 
-  private static canSendMessage(text?: string, files?: File[]) {
+  private static canSendMessage(text?: string, files?: File[], isProgrammatic?: boolean) {
+    if (isProgrammatic) return true;
     return !!(text && text.trim() !== '') || !!(files && files.length > 0);
   }
 

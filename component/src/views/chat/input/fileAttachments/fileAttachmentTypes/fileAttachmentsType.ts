@@ -1,7 +1,9 @@
+import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {AudioFileAttachmentType} from './audioFileAttachmentType';
 import {MessageFileType} from '../../../../../types/messageFile';
 import {Browser} from '../../../../../utils/browser/browser';
+import {DeepChat} from '../../../../../deepChat';
 
 export interface AttachmentObject {
   file: File;
@@ -16,12 +18,17 @@ export class FileAttachmentsType {
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
   private readonly _acceptedFormat: string = '';
+  private _validationHandler?: ValidationHandler;
 
-  constructor(fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void, container: HTMLElement) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void,
+      container: HTMLElement) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
     this._toggleContainerDisplay = toggleContainer;
     this._fileAttachmentsContainerRef = container;
     if (fileAttachments.acceptedFormats) this._acceptedFormat = fileAttachments.acceptedFormats;
+     // in a timeout as deepChat._validationHandler initialised later
+    setTimeout(() => {this._validationHandler = deepChat._validationHandler;});
   }
 
   attemptAddFile(file: File, fileReaderResult: string) {
@@ -105,6 +112,7 @@ export class FileAttachmentsType {
     this._toggleContainerDisplay(true);
     this._attachments.push(attachmentObject);
     this._fileAttachmentsContainerRef.scrollTop = this._fileAttachmentsContainerRef.scrollHeight;
+    this._validationHandler?.();
     return attachmentObject;
   }
 
@@ -133,6 +141,7 @@ export class FileAttachmentsType {
     AudioFileAttachmentType.stopAttachmentPlayback(containerElement);
     containerElement.remove();
     this._toggleContainerDisplay(false);
+    this._validationHandler?.();
   }
 
   getFiles() {

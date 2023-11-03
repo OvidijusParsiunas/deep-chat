@@ -27,7 +27,7 @@ export class InsertKeyView {
     return failElement;
   }
 
-  private static createHelpTextContainer(link?: string) {
+  private static createHelpTextContainer(link?: string, displayCaution = true) {
     const helpTextContainerElement = document.createElement('div');
     helpTextContainerElement.id = 'insert-key-help-text-container';
     const helpTextContentsElement = document.createElement('div');
@@ -38,8 +38,10 @@ export class InsertKeyView {
       const helpLinkElement = InsertKeyView.createHelpLink(link);
       helpTextContentsElement.appendChild(helpLinkElement);
     }
-    const cautionTextElement = InsertKeyView.createCautionText();
-    helpTextContentsElement.appendChild(cautionTextElement);
+    if (displayCaution === true) {
+      const cautionTextElement = InsertKeyView.createCautionText();
+      helpTextContentsElement.appendChild(cautionTextElement);
+    }
     helpTextContainerElement.appendChild(helpTextContentsElement);
     return {helpTextContainerElement, failTextElement};
   }
@@ -103,6 +105,7 @@ export class InsertKeyView {
     return inputContainer;
   }
 
+  // prettier-ignore
   private static createContents(changeToChat: () => void, serviceIO: ServiceIO) {
     const contentsElement = document.createElement('div');
     contentsElement.id = 'insert-key-contents';
@@ -112,7 +115,8 @@ export class InsertKeyView {
     inputContainerElement.appendChild(iconContainerElement);
     contentsElement.appendChild(inputContainerElement);
     const startButton = InsertKeyView.createStartButton();
-    const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer(serviceIO.getKeyLink);
+    const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer(
+      serviceIO.getKeyLink, serviceIO.deepChat._insertKeyViewStyles?.displayCautionText);
     contentsElement.appendChild(startButton);
     contentsElement.appendChild(helpTextContainerElement);
     InsertKeyView.addVerificationEvents(inputElement, startButton, failTextElement, changeToChat, serviceIO);

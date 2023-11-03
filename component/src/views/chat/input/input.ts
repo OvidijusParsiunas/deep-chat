@@ -31,7 +31,7 @@ export class Input {
   // prettier-ignore
   constructor(deepChat: DeepChat, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
     this.elementRef = Input.createPanelElement(deepChat.inputAreaStyle);
-    const textInput = new TextInputEl(serviceIO, deepChat.textInput);
+    const textInput = new TextInputEl(deepChat, serviceIO);
     const buttons: Buttons = {};
     const fileAttachments = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
     if (deepChat.speechToText && !buttons.microphone) {
@@ -39,6 +39,7 @@ export class Input {
     }
     const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
+    Input.attachValidationHandler(deepChat, serviceIO, textInput, fileAttachments, submitButton);
     deepChat.submitUserMessage = submitButton.submit.bind(submitButton, true);
     buttons.submit = {button: submitButton};
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, deepChat.dropupStyles);
@@ -55,13 +56,13 @@ export class Input {
   private createFileUploadComponents(
       deepChat: DeepChat, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
     const fileAttachments = new FileAttachments(this.elementRef, deepChat.attachmentContainerStyle, serviceIO.demo);
-    Input.createUploadButtons(serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
+    Input.createUploadButtons(deepChat, serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
     if (serviceIO.camera?.files) {
-      const cameraType = buttons.images?.fileType || fileAttachments.addType(serviceIO.camera.files, 'images');
+      const cameraType = buttons.images?.fileType || fileAttachments.addType(deepChat, serviceIO.camera.files, 'images');
       buttons.camera = {button: new CameraButton(containerElement, cameraType, serviceIO.camera)};
     }
     if (serviceIO.recordAudio?.files) {
-      const audioType = buttons.audio?.fileType || fileAttachments.addType(serviceIO.recordAudio.files, 'audio');
+      const audioType = buttons.audio?.fileType || fileAttachments.addType(deepChat, serviceIO.recordAudio.files, 'audio');
       buttons.microphone = {button: new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio)};
     }
     if (DragAndDrop.isEnabled(fileAttachments, deepChat.dragAndDrop)) {
@@ -71,13 +72,13 @@ export class Input {
   }
 
   // prettier-ignore
-  private static createUploadButtons(
+  private static createUploadButtons(deepChat: DeepChat,
       fileTypes: ServiceFileTypes, fileAtt: FileAttachments, containerEl: HTMLElement, buttons: Buttons) {
     Object.keys(fileTypes).forEach((key) => {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
       if (fileService.files) {
-        const fileAttachmentsType = fileAtt.addType(fileService.files, fileType);
+        const fileAttachmentsType = fileAtt.addType(deepChat, fileService.files, fileType);
         const {id, svgString, dropupText} = FILE_TYPE_BUTTON_ICONS[fileType];
         const button = new UploadFileButton(containerEl, fileAttachmentsType, fileService, id, svgString, dropupText);
         buttons[fileType] = {button, fileType: fileAttachmentsType};
@@ -93,5 +94,28 @@ export class Input {
     const positions = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
     InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, positions);
     ButtonContainers.add(panel, buttonContainers);
+  }
+
+  // prettier-ignore
+  private static attachValidationHandler(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
+      fileAttachments: FileAttachments, submitButton: SubmitButton) {
+    deepChat._validationHandler = async (isProgrammatic = false) => {
+      const validation = deepChat.validateMessageBeforeSending || serviceIO.canSendMessage;
+      if (validation) {
+        const inputElement = textInput.inputElementRef;
+        const text = inputElement.classList.contains('text-input-placeholder') ? '' : inputElement.textContent;
+        await fileAttachments.completePlaceholders();
+        const uploadedFilesData = fileAttachments.getAllFileData();
+        const fileData = uploadedFilesData?.map((fileData) => fileData.file);
+        const isValid = validation(text as string, fileData, isProgrammatic);
+        if (isValid) {
+          submitButton.changeToSubmitIcon();
+        } else {
+          submitButton.changeToDisabledIcon();
+        }
+        return isValid;
+      }
+      return null;
+    };
   }
 }

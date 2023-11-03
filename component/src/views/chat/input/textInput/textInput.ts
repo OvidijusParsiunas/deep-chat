@@ -4,8 +4,9 @@ import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {TextInput} from '../../../../types/textInput';
 import {CustomStyle} from '../../../../types/styles';
+import {TextInputEvents} from './textInputEvents';
+import {DeepChat} from '../../../../deepChat';
 import {PasteUtils} from './pasteUtils';
-import {InputLimit} from './inputLimit';
 
 // TO-DO state for focused (like input)
 export class TextInputEl {
@@ -15,13 +16,16 @@ export class TextInputEl {
   private readonly _config: TextInput;
   submit?: () => void;
 
-  constructor(serviceIO: ServiceIO, textInput?: TextInput) {
-    const processedConfig = TextInputEl.processConfig(serviceIO, textInput);
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO) {
+    const processedConfig = TextInputEl.processConfig(serviceIO, deepChat.textInput);
     this.elementRef = TextInputEl.createContainerElement(processedConfig?.styles?.container);
     this.inputElementRef = this.createInputElement(processedConfig);
     this._config = processedConfig;
     this.elementRef.appendChild(this.inputElementRef);
-    if (textInput?.characterLimit) InputLimit.add(this.inputElementRef, textInput?.characterLimit);
+    setTimeout(() => {
+      // in a timeout as deepChat._validationHandler initialised later
+      TextInputEvents.add(this.inputElementRef, deepChat.textInput?.characterLimit, deepChat._validationHandler);
+    });
   }
 
   private static processConfig(serviceIO: ServiceIO, textInput?: TextInput) {

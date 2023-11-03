@@ -1,16 +1,20 @@
+import {ValidationHandler} from '../../../../types/validationHandler';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FocusUtils} from './focusUtils';
 
-export class InputLimit {
+export class TextInputEvents {
   // prettier-ignore
   private static readonly PERMITTED_KEYS = new Set<string>([
     KEYBOARD_KEY.BACKSPACE, KEYBOARD_KEY.DELETE, KEYBOARD_KEY.ARROW_RIGHT, KEYBOARD_KEY.ARROW_LEFT,
     KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER
   ]);
 
-  public static add(inputElement: HTMLElement, characterLimit: number) {
-    inputElement.addEventListener('keydown', InputLimit.onKeyDown.bind(this, characterLimit));
-    inputElement.oninput = InputLimit.onInput.bind(this, characterLimit);
+  // WORK - check why rendered twice as addEventListeners will be called twice
+  public static add(inputElement: HTMLElement, characterLimit?: number, validationHandler?: ValidationHandler) {
+    if (characterLimit !== undefined) {
+      inputElement.addEventListener('keydown', TextInputEvents.onKeyDown.bind(this, characterLimit));
+    }
+    inputElement.oninput = TextInputEvents.onInput.bind(this, characterLimit, validationHandler);
   }
 
   // preventing insertion early for a nicer UX
@@ -19,7 +23,7 @@ export class InputLimit {
     const inputElement = event.target as HTMLElement;
     const textContent = inputElement.textContent;
     if (textContent && textContent.length >= characterLimit
-        && !InputLimit.PERMITTED_KEYS.has(event.key) && !InputLimit.isKeyCombinationPermitted(event)) {
+        && !TextInputEvents.PERMITTED_KEYS.has(event.key) && !TextInputEvents.isKeyCombinationPermitted(event)) {
       event.preventDefault();
     }
   }
@@ -32,12 +36,15 @@ export class InputLimit {
   }
 
   // removing text characters after paste or other events
-  private static onInput(characterLimit: number, event: Event) {
+  // prettier-ignore
+  private static onInput(characterLimit: number | undefined, validate: ValidationHandler | undefined, event: Event) {
     const inputElement = event.target as HTMLElement;
     const textContent = inputElement.textContent;
-    if (textContent && textContent.length > characterLimit) {
+    if (!textContent) return;
+    if (characterLimit !== undefined && textContent.length > characterLimit) {
       inputElement.textContent = textContent.substring(0, characterLimit);
       FocusUtils.focusEndOfInput(inputElement);
     }
+    validate?.();
   }
 }

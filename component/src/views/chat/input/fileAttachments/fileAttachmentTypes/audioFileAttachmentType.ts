@@ -5,6 +5,7 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {PLAY_ICON_STRING} from '../../../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../../../icons/stopIcon';
 import {Browser} from '../../../../../utils/browser/browser';
+import {DeepChat} from '../../../../../deepChat';
 
 export class AudioFileAttachmentType extends FileAttachmentsType {
   stopPlaceholderCallback?: () => Promise<void>;
@@ -12,8 +13,10 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
   private _activePlaceholderAttachment?: AttachmentObject;
   private static readonly TIMER_LIMIT_S = 5999;
 
-  constructor(fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void, container: HTMLElement) {
-    super(fileAttachments, toggleContainer, container);
+  // prettier-ignore
+  constructor(deepChat: DeepChat, fileAttachments: FileAttachments,
+      toggleContainer: (display: boolean) => void, container: HTMLElement) {
+    super(deepChat, fileAttachments, toggleContainer, container);
   }
 
   private static createAudioContainer() {
