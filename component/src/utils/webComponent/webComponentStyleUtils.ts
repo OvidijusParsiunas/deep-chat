@@ -1,7 +1,7 @@
 import {StyleUtils} from '../element/styleUtils';
 
 export class WebComponentStyleUtils {
-  private static readonly DEFAULT_COMPONENT_STYLE = {
+  private static readonly DEFAULT_COMPONENT_STYLE: Partial<CSSStyleDeclaration> = {
     height: '350px',
     width: '320px',
     border: '1px solid #cacaca',
@@ -9,6 +9,10 @@ export class WebComponentStyleUtils {
     fontSize: '0.9rem',
     backgroundColor: 'white',
     position: 'relative',
+    // this is used to prevent inputAreaStyle background color from going beyond the container's rounded border
+    // it will cause issues if there are elements that are meant to be outside of the chat component and in
+    // that instance they should overwrite this
+    overflow: 'hidden',
   };
 
   public static apply(style: string, shadowRoot: ShadowRoot | null) {

@@ -1,5 +1,6 @@
+import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
-import {DeepChat} from '../../../../../deepChat';
+import {ButtonStyles} from '../../../../../types/button';
 import {SubmitButton} from './submitButton';
 
 export class SubmitButtonStateStyle {
@@ -13,19 +14,20 @@ export class SubmitButtonStateStyle {
   }
 
   // prettier-ignore
-  public static prepare(deepChat: DeepChat) {
-    deepChat.submitButtonStyles ??= {};
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles, ['submit'], {});
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles, ['disabled'], {});
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles.submit,
-      ['container', 'default', 'backgroundColor'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles.disabled,
-      ['container', 'default', 'backgroundColor'], 'white');
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles.submit,
-      ['svg', 'styles', 'default', 'filter'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(deepChat.submitButtonStyles.disabled,
-      ['svg', 'styles', 'default', 'filter'],
+  public static process(submitButtonStyles?: SubmitButtonStyles) {
+    if (submitButtonStyles?.alwaysEnabled) return submitButtonStyles;
+    const styles = JSON.parse(JSON.stringify(submitButtonStyles || {})) as SubmitButtonStyles;
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', 'default', 'backgroundColor'], '');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', 'default', 'backgroundColor'], 'unset');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', 'default', 'filter'], '');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles.disabled, ['svg', 'styles', 'default', 'filter'],
       'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(5564%)' +
       ' hue-rotate(207deg) brightness(100%) contrast(97%)');
+    const disabledStyles = JSON.parse(JSON.stringify(styles.disabled)) as ButtonStyles;
+    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['container', 'default']);
+    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['text', 'styles', 'default']);
+    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['svg', 'styles', 'default']);
+    styles.disabled = disabledStyles;
+    return styles;
   }
 }

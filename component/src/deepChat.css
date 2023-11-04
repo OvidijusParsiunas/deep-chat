@@ -13,5 +13,7 @@
 
 #container {
   height: inherit;
+  /* this is required for text input container not to go beyond its boundaries when typing a long word */
+  width: inherit;
   overflow: hidden;
 }

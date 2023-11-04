@@ -38,8 +38,8 @@ export class SubmitButton extends InputButton<Styles> {
   // prettier-ignore
   constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments) {
-    SubmitButtonStateStyle.prepare(deepChat);
-    super(SubmitButton.createButtonContainerElement(), deepChat.submitButtonStyles?.position, deepChat.submitButtonStyles);
+    const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
+    super(SubmitButton.createButtonContainerElement(), submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
     this._inputElementRef = inputElementRef;
     this._fileAttachments = fileAttachments;
@@ -47,7 +47,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._abortStream = new AbortController();
     this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
-    this._alwaysEnabled = !!deepChat.submitButtonStyles?.alwaysEnabled;
+    this._alwaysEnabled = !!submitButtonStyles?.alwaysEnabled;
     deepChat.changeSubmitButtonState = this.changeSubmitButtonState.bind(this, serviceIO);
     this.attemptOverwriteLoadingStyle(deepChat);
     setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
@@ -140,7 +140,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
-  // TO-DO - should be disabled loading history
+  // TO-DO - should be disabled when loading history
   // prettier-ignore
   public async submit(isProgrammatic: boolean, userText: string) {
     let uploadedFilesData;

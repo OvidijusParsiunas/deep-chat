@@ -9,7 +9,6 @@ export class TextInputEvents {
     KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER
   ]);
 
-  // WORK - check why rendered twice as addEventListeners will be called twice
   public static add(inputElement: HTMLElement, characterLimit?: number, validationHandler?: ValidationHandler) {
     if (characterLimit !== undefined) {
       inputElement.addEventListener('keydown', TextInputEvents.onKeyDown.bind(this, characterLimit));
