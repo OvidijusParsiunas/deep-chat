@@ -27,10 +27,9 @@ export class Websocket {
       const websocket = new WebSocket(io.requestSettings.url || '', protocols);
       io.websocket = websocket;
       io.websocket.onopen = () => {
-        // TO-DO - when ability to disable submit button is set, instead of removing error message
-        // reenable the submit button
         messages.removeError();
         if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, websocket, messages);
+        io.deepChat._validationHandler?.();
       };
       io.websocket.onerror = (event) => {
         console.error(event);
@@ -43,6 +42,7 @@ export class Websocket {
   }
 
   private static retryConnection(io: ServiceIO, messages: Messages) {
+    io.deepChat._validationHandler?.();
     if (!document.body.contains(io.deepChat)) return; // check if element is still present
     io.websocket = 'pending';
     if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');

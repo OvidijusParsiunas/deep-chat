@@ -6,7 +6,6 @@ import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MessageFileType} from '../../../../../types/messageFile';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
-import {Websocket} from '../../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {Response} from '../../../../../types/response';
 import {TextInputEl} from '../../textInput/textInput';
@@ -138,28 +137,25 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
-  // TO-DO - button should be disabled if websocket connection is not open
-  // TO-DO - should be disabled when websocket is connecting and option when loading history
+  // TO-DO - should be disabled loading history
   // prettier-ignore
-  public async submit(programmatic: boolean, userText: string) {
+  public async submit(isProgrammatic: boolean, userText: string) {
     let uploadedFilesData;
     let fileData;
-    if (!programmatic) {
+    if (!isProgrammatic) {
       await this._fileAttachments.completePlaceholders();
       uploadedFilesData = this._fileAttachments.getAllFileData();
       fileData = uploadedFilesData?.map((fileData) => fileData.file);
     }
-    const submittedText = userText === '' ? undefined : userText;
-    if (this._isRequestInProgress || !Websocket.canSendMessage(this._serviceIO.websocket)) return;
-    if (await this._validationHandler?.(programmatic) === false) return;
+    if (this._isRequestInProgress || await this._validationHandler?.(isProgrammatic) === false) return;
     this.changeToLoadingIcon();
     await this.addNewMessages(userText, uploadedFilesData);
     this._messages.addLoadingMessage();
-    if (!programmatic) TextInputEl.clear(this._inputElementRef); // used when uploading a file and placeholder text present
+    if (!isProgrammatic) TextInputEl.clear(this._inputElementRef); // when uploading a file and placeholder text present
 
-    const requestContents = {text: submittedText, files: fileData};
+    const requestContents = {text: userText === '' ? undefined : userText, files: fileData};
     await this._serviceIO.callAPI(requestContents, this._messages);
-    if (!programmatic) this._fileAttachments?.removeAllFiles();
+    if (!isProgrammatic) this._fileAttachments?.removeAllFiles();
   }
 
   private async addNewMessages(userText: string, uploadedFilesData?: {file: File; type: MessageFileType}[]) {

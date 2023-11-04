@@ -9,6 +9,7 @@ import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
 import {ButtonContainers} from './buttonContainers/buttonContainers';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {ValidationHandler} from './validation/validationHandler';
 import {SpeechToText} from './buttons/microphone/speechToText';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {SubmitButton} from './buttons/submit/submitButton';
@@ -39,7 +40,7 @@ export class Input {
     }
     const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
-    Input.attachValidationHandler(deepChat, serviceIO, textInput, fileAttachments, submitButton);
+    ValidationHandler.attach(deepChat, serviceIO, textInput, fileAttachments, submitButton);
     deepChat.submitUserMessage = submitButton.submit.bind(submitButton, true);
     buttons.submit = {button: submitButton};
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, deepChat.dropupStyles);
@@ -94,28 +95,5 @@ export class Input {
     const positions = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
     InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, positions);
     ButtonContainers.add(panel, buttonContainers);
-  }
-
-  // prettier-ignore
-  private static attachValidationHandler(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
-      fileAttachments: FileAttachments, submitButton: SubmitButton) {
-    deepChat._validationHandler = async (isProgrammatic = false) => {
-      const validation = deepChat.validateMessageBeforeSending || serviceIO.canSendMessage;
-      if (validation) {
-        const inputElement = textInput.inputElementRef;
-        const text = inputElement.classList.contains('text-input-placeholder') ? '' : inputElement.textContent;
-        await fileAttachments.completePlaceholders();
-        const uploadedFilesData = fileAttachments.getAllFileData();
-        const fileData = uploadedFilesData?.map((fileData) => fileData.file);
-        const isValid = validation(text as string, fileData, isProgrammatic);
-        if (isValid) {
-          submitButton.changeToSubmitIcon();
-        } else {
-          submitButton.changeToDisabledIcon();
-        }
-        return isValid;
-      }
-      return null;
-    };
   }
 }
