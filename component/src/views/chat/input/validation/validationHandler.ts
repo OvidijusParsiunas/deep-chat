@@ -2,6 +2,7 @@ import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {SubmitButton} from '../buttons/submit/submitButton';
 import {Websocket} from '../../../../utils/HTTP/websocket';
 import {ServiceIO} from '../../../../services/serviceIO';
+import {Legacy} from '../../../../utils/legacy/legacy';
 import {TextInputEl} from '../textInput/textInput';
 import {DeepChat} from '../../../../deepChat';
 
@@ -36,9 +37,11 @@ export class ValidationHandler {
   // prettier-ignore
   public static attach(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
       fileAttachments: FileAttachments, submitButton: SubmitButton) {
+    const validateInput = deepChat.validateInput || Legacy.processValidateInput(deepChat);
     deepChat._validationHandler = async (isProgrammatic = false) => {
+      if (serviceIO.isSubmitProgrammaticallyDisabled === true) return false;
       if (!ValidationHandler.validateWebsocket(serviceIO, submitButton)) return false;
-      const validation = deepChat.validateMessageBeforeSending || serviceIO.canSendMessage;
+      const validation = validateInput || serviceIO.canSendMessage;
       if (validation) {
         return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton, isProgrammatic);
       }

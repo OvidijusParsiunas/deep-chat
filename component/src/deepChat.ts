@@ -2,7 +2,7 @@ import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConf
 import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
-import {ValidateMessageBeforeSending} from './types/validateMessageBeforeSending';
+import {ChangeSubmitButtonState, SubmitButtonStyles} from './types/submitButton';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {DirectServiceIO} from './services/utils/directServiceIO';
@@ -14,11 +14,11 @@ import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
-import {SubmitButtonStyles} from './types/submitButton';
 import {SpeechToTextConfig} from './types/microphone';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
+import {ValidateInput} from './types/validateInput';
 import {DropupStyles} from './types/dropupStyles';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
@@ -55,7 +55,7 @@ export class DeepChat extends InternalHTML {
   responseInterceptor?: ResponseInterceptor;
 
   @Property('function')
-  validateMessageBeforeSending?: ValidateMessageBeforeSending;
+  validateInput?: ValidateInput;
 
   @Property('object')
   attachmentContainerStyle?: CustomStyle;
@@ -141,6 +141,8 @@ export class DeepChat extends InternalHTML {
   clearMessages: (isReset?: boolean) => void = () => {};
 
   scrollToBottom: () => void = () => {};
+
+  changeSubmitButtonState: ChangeSubmitButtonState = () => {};
 
   @Property('function')
   onNewMessage: OnNewMessage = () => {};

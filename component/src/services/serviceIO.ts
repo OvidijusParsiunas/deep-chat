@@ -97,4 +97,6 @@ export interface ServiceIO {
   deepChat: DeepChat; // this is used for interceptors as the user may pass them much later after component is initiated
 
   isDirectConnection(): boolean;
+
+  isSubmitProgrammaticallyDisabled?: boolean;
 }

@@ -6,4 +6,7 @@ export interface SubmitButtonStyles {
   stop?: ButtonStyles;
   disabled?: ButtonStyles;
   position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
+  alwaysEnabled?: boolean;
 }
+
+export type ChangeSubmitButtonState = (isEnabled: boolean) => void;

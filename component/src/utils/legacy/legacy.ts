@@ -1,3 +1,4 @@
+import {ValidateInput} from '../../types/validateInput';
 import {MessageContent} from '../../types/messages';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
@@ -31,5 +32,15 @@ export class Legacy {
       console.error('Please change to using the files array property: https://deepchat.dev/docs/messages/#MessageContent');
       message.files = [file];
     }
+  }
+
+  public static processValidateInput(deepChat: DeepChat) {
+    const validate = (deepChat as DeepChat & {validateMessageBeforeSending?: ValidateInput}).validateMessageBeforeSending;
+    if (validate) {
+      console.error('The validateMessageBeforeSending property is deprecated since version 1.3.24.');
+      console.error('Please change to using validateInput: https://deepchat.dev/docs/interceptors#validateInput');
+      return validate;
+    }
+    return undefined;
   }
 }

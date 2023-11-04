@@ -1,7 +1,7 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
-import {ValidateMessageBeforeSending} from '../../types/validateMessageBeforeSending';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {MessageContent} from '../../types/messages';
@@ -27,7 +27,7 @@ export class BaseServiceIO implements ServiceIO {
   readonly rawBody: any = {};
   deepChat: DeepChat;
   validateConfigKey = false;
-  canSendMessage: ValidateMessageBeforeSending = BaseServiceIO.canSendMessage;
+  canSendMessage: ValidateInput = BaseServiceIO.canSendMessage;
   requestSettings: Request = {};
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;

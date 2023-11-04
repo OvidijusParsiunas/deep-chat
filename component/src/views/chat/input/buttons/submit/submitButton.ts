@@ -19,7 +19,7 @@ import {
   ButtonInnerElement,
 } from '../../../../../types/buttonInternal';
 
-type Styles = DefinedButtonStateStyles<SubmitButtonStyles>;
+type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled'>;
 
 export class SubmitButton extends InputButton<Styles> {
   private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
@@ -31,6 +31,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _stopClicked: Signals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
+  private readonly _alwaysEnabled: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
 
@@ -46,6 +47,8 @@ export class SubmitButton extends InputButton<Styles> {
     this._abortStream = new AbortController();
     this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
+    this._alwaysEnabled = !!deepChat.submitButtonStyles?.alwaysEnabled;
+    deepChat.changeSubmitButtonState = this.changeSubmitButtonState.bind(this, serviceIO);
     this.attemptOverwriteLoadingStyle(deepChat);
     setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
       this._validationHandler = deepChat._validationHandler;
@@ -199,10 +202,22 @@ export class SubmitButton extends InputButton<Styles> {
     this._isLoadingActive = false;
   }
 
-  public changeToDisabledIcon() {
-    if (this._isRequestInProgress || this._isLoadingActive) this.changeToSubmitIcon();
-    this.elementRef.replaceChildren(this._innerElements.disabled);
-    this.reapplyStateStyle('disabled', ['submit']);
-    this.elementRef.onclick = () => {};
+  public changeToDisabledIcon(isProgrammatic = false) {
+    const isAllowed = isProgrammatic ? true : !this._alwaysEnabled;
+    if (this._isRequestInProgress || this._isLoadingActive || !isAllowed) this.changeToSubmitIcon();
+    if (isAllowed) {
+      this.elementRef.replaceChildren(this._innerElements.disabled);
+      this.reapplyStateStyle('disabled', ['submit']);
+      this.elementRef.onclick = () => {};
+    }
+  }
+
+  private changeSubmitButtonState(serviceIO: ServiceIO, isEnabled: boolean) {
+    serviceIO.isSubmitProgrammaticallyDisabled = !isEnabled;
+    if (isEnabled) {
+      this.changeToSubmitIcon();
+    } else {
+      this.changeToDisabledIcon(true);
+    }
   }
 }

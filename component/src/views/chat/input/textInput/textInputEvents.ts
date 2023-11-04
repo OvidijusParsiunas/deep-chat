@@ -35,12 +35,9 @@ export class TextInputEvents {
     return false;
   }
 
-  // removing text characters after paste or other events
-  // prettier-ignore
   private static onInput(characterLimit: number | undefined, validate: ValidationHandler | undefined, event: Event) {
     const inputElement = event.target as HTMLElement;
-    const textContent = inputElement.textContent;
-    if (!textContent) return;
+    const textContent = inputElement.textContent || '';
     if (characterLimit !== undefined && textContent.length > characterLimit) {
       inputElement.textContent = textContent.substring(0, characterLimit);
       FocusUtils.focusEndOfInput(inputElement);
