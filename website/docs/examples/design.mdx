@@ -87,6 +87,9 @@ import Tabs from '@theme/Tabs';
         },
       },
       loading: {
+        container: {
+          default: {backgroundColor: 'white'},
+        },
         svg: {
           styles: {
             default: {
@@ -99,10 +102,15 @@ import Tabs from '@theme/Tabs';
       stop: {
         container: {
           default: {backgroundColor: 'white'},
+          hover: {backgroundColor: '#dadada52'},
         },
         svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <rect width="24" height="24" rx="4" ry="4" /> </svg>',
           styles: {
             default: {
+              width: '0.95em',
+              marginTop: '0.32em',
               filter:
                 'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
             },
@@ -162,6 +170,7 @@ import Tabs from '@theme/Tabs';
       }
     },
     "loading": {
+      "container": {"default": {"backgroundColor": "white"}},
       "svg": {
         "styles": {
           "default": {"filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
@@ -169,10 +178,17 @@ import Tabs from '@theme/Tabs';
       }
     },
     "stop": {
-      "container": {"default": {"backgroundColor": "white"}},
+      "container": {
+        "default": {"backgroundColor": "white"},
+        "hover": {"backgroundColor": "#dadada52"}
+      },
       "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"24\" height=\"24\" rx=\"4\" ry=\"4\" /> </svg>",
         "styles": {
-          "default": {"filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
+          "default": {
+            "width": "0.95em",
+            "marginTop": "0.32em",
+            "filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
         }
       }
     }
@@ -271,14 +287,24 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
         },
       },
       loading: {
-        container: {
-          default: {backgroundColor: '#f3f6fc'},
-        },
         svg: {
           styles: {
             default: {
               filter:
                 'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
+            },
+          },
+        },
+      },
+      stop: {
+        container: {
+          hover: {backgroundColor: '#ededed'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(0%) hue-rotate(348deg) brightness(96%) contrast(93%)',
             },
           },
         },
@@ -343,13 +369,20 @@ set the [`avatars`](../docs/messages#avatars) property to _true_.
       }
     },
     "loading": {
-      "container": {
-        "default": {"backgroundColor": "#f3f6fc"}
-      },
       "svg": {
         "styles": {
           "default": {
             "filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"
+          }
+        }
+      }
+    },
+    "stop": {
+      "container": {"hover": {"backgroundColor": "#ededed"}},
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(0%) hue-rotate(348deg) brightness(96%) contrast(93%)"
           }
         }
       }
@@ -455,9 +488,6 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
         },
       },
       loading: {
-        container: {
-          default: {backgroundColor: 'unset'},
-        },
         svg: {
           styles: {
             default: {
@@ -469,7 +499,15 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
       },
       stop: {
         container: {
-          default: {backgroundColor: 'unset'},
+          hover: {backgroundColor: '#ededed94'},
+        },
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
+            },
+          },
         },
       },
     }}
@@ -544,9 +582,6 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
       }
     },
     "loading": {
-      "container": {
-        "default": {"backgroundColor": "unset"}
-      },
       "svg": {
         "styles": {
           "default": {
@@ -557,8 +592,13 @@ Simulation of the styling used in [Bing Chat](https://www.bing.com/search?q=Bing
       }
     },
     "stop": {
-      "container": {
-        "default": {"backgroundColor": "unset"}
+      "container": {"hover": {"backgroundColor": "#ededed94"}},
+      "svg": {
+        "styles": {
+          "default": {
+            "filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"
+          }
+        }
       }
     }
   }'
@@ -615,13 +655,6 @@ A blue color theme that uses a background image.
           },
         },
       },
-      loading: {
-        container: {
-          default: {
-            backgroundColor: 'unset',
-          },
-        },
-      },
     }}
     textInput={{
       styles: {
@@ -664,13 +697,6 @@ A blue color theme that uses a background image.
           "default": {
             "filter": "brightness(0) saturate(100%) invert(60%) sepia(79%) saturate(643%) hue-rotate(185deg) brightness(102%) contrast(100%)"
           }
-        }
-      }
-    },
-    "loading": {
-      "container": {
-        "default": {
-          "backgroundColor": "unset"
         }
       }
     }
@@ -769,36 +795,6 @@ A blue and purple theme that uses an image background.
           },
         },
       },
-      loading: {
-        container: {
-          default: {
-            backgroundColor: 'unset',
-          },
-        },
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
-            },
-          },
-        },
-      },
-      stop: {
-        container: {
-          default: {
-            backgroundColor: 'unset',
-          },
-        },
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
-            },
-          },
-        },
-      },
     }}
     auxiliaryStyle="
     ::-webkit-scrollbar {
@@ -853,34 +849,6 @@ A blue and purple theme that uses an image background.
   }'
   submitButtonStyles='{
     "submit": {
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)"
-          }
-        }
-      }
-    },
-    "loading": {
-      "container": {
-        "default": {
-          "backgroundColor": "unset"
-        }
-      },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)"
-          }
-        }
-      }
-    },
-    "stop": {
-      "container": {
-        "default": {
-          "backgroundColor": "unset"
-        }
-      },
       "svg": {
         "styles": {
           "default": {
@@ -1056,15 +1024,21 @@ A violet color theme that uses a squared border styling approach.
       loading: {
         container: {
           default: {backgroundColor: '#afafaf'},
-          hover: {backgroundColor: '#afafaf'},
-          click: {backgroundColor: '#afafaf'},
         },
       },
       stop: {
         container: {
+          default: {backgroundColor: '#919191'},
+          hover: {backgroundColor: '#8c8c8c'},
+          click: {backgroundColor: '#818181'},
+        },
+        text: {
+          content: 'Stop',
+        },
+      },
+      disabled: {
+        container: {
           default: {backgroundColor: '#afafaf'},
-          hover: {backgroundColor: '#afafaf'},
-          click: {backgroundColor: '#afafaf'},
         },
       },
     }}
@@ -1132,20 +1106,16 @@ A violet color theme that uses a squared border styling approach.
         "styles": {"default": {"color": "white", "height": "1.78em", "width": "3em", "fontSize": "0.95em"}}
       }
     },
-    "loading": {
-      "container": {
-        "default": {"backgroundColor": "#afafaf"},
-        "hover": {"backgroundColor": "#afafaf"},
-        "click": {"backgroundColor": "#afafaf"}
-      }
-    },
+    "loading": {"container": {"default": {"backgroundColor": "#afafaf"}}},
     "stop": {
       "container": {
-        "default": {"backgroundColor": "#afafaf"},
-        "hover": {"backgroundColor": "#afafaf"},
-        "click": {"backgroundColor": "#afafaf"}
-      }
-    }
+        "default": {"backgroundColor": "#919191"},
+        "hover": {"backgroundColor": "#8c8c8c"},
+        "click": {"backgroundColor": "#818181"}
+      },
+      "text": {"content": "Stop"}
+    },
+    "disabled": {"container": {"default": {"backgroundColor": "#afafaf"}}}
   }'
   auxiliaryStyle="
     ::-webkit-scrollbar-thumb {
@@ -1225,31 +1195,6 @@ Dark blue color variation that is suitable for a dark screen mode.
           },
         },
       },
-      loading: {
-        container: {
-          default: {
-            backgroundColor: 'unset',
-          },
-        },
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-            },
-          },
-        },
-      },
-      stop: {
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-            },
-          },
-        },
-      },
     }}
     auxiliaryStyle="
     ::-webkit-scrollbar {
@@ -1298,27 +1243,6 @@ Dark blue color variation that is suitable for a dark screen mode.
       "container": {
         "default": {"bottom": "0.7rem"}
       },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)"
-          }
-        }
-      }
-    },
-    "loading": {
-      "container": {
-        "default": {"backgroundColor": "unset"}
-      },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)"
-          }
-        }
-      }
-    },
-    "stop": {
       "svg": {
         "styles": {
           "default": {
@@ -1420,31 +1344,6 @@ Dark orange color variation that is suitable for a dark screen mode.
           },
         },
       },
-      loading: {
-        container: {
-          default: {
-            backgroundColor: 'unset',
-          },
-        },
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)',
-            },
-          },
-        },
-      },
-      stop: {
-        svg: {
-          styles: {
-            default: {
-              filter:
-                'brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)',
-            },
-          },
-        },
-      },
     }}
     auxiliaryStyle="
     ::-webkit-scrollbar {
@@ -1506,29 +1405,6 @@ Dark orange color variation that is suitable for a dark screen mode.
           "bottom": "0.7rem"
         }
       },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)"
-          }
-        }
-      }
-    },
-    "loading": {
-      "container": {
-        "default": {
-          "backgroundColor": "unset"
-        }
-      },
-      "svg": {
-        "styles": {
-          "default": {
-            "filter": "brightness(0) saturate(100%) invert(38%) sepia(100%) saturate(577%) hue-rotate(343deg) brightness(100%) contrast(103%)"
-          }
-        }
-      }
-    },
-    "stop": {
       "svg": {
         "styles": {
           "default": {

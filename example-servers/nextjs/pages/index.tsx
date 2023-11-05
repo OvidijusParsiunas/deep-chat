@@ -55,7 +55,7 @@ export default function IndexPage() {
             microphone={true}
             mixedFiles={true}
             textInput={{placeholder: {text: 'Send a file!'}}}
-            validateMessageBeforeSending={(_?: string, files?: File[]) => {
+            validateInput={(_?: string, files?: File[]) => {
               return files && files.length > 0;
             }}
           />
@@ -184,7 +184,7 @@ export default function IndexPage() {
             images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
             textInput={{placeholder: {text: 'Describe the desired changes'}}}
             errorMessages={{displayServiceErrorMessages: true}}
-            validateMessageBeforeSending={(text?: string, files?: File[]) => {
+            validateInput={(text?: string, files?: File[]) => {
               return !!text && text?.trim() !== '' && files && files.length > 0;
             }}
           />

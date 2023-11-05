@@ -60,7 +60,7 @@
         microphone={true}
         mixedFiles={true}
         textInput={{placeholder: {text: 'Send a file!'}}}
-        validateMessageBeforeSending={(/** @type {any} */ _, /** @type {string | any[]} */ files) => {
+        validateInput={(/** @type {any} */ _, /** @type {string | any[]} */ files) => {
           return files && files.length > 0;
         }}
       />
@@ -181,7 +181,7 @@
         images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
         textInput={{placeholder: {text: 'Describe the desired changes'}}}
         errorMessages={{displayServiceErrorMessages: true}}
-        validateMessageBeforeSending={(/** @type {string} */ text, /** @type {File[]} */ files) => {
+        validateInput={(/** @type {string} */ text, /** @type {File[]} */ files) => {
           return !!text && text?.trim() !== '' && files && files.length > 0;
         }}
       />

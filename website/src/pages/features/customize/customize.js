@@ -46,37 +46,13 @@ function ComponentsDark() {
           placeholder: {text: 'Insert your question here...', style: {color: '#bcbcbc'}},
         }}
         submitButtonStyles={{
+          alwaysEnabled: true,
           submit: {
             container: {
               default: {
                 bottom: '0.7rem',
               },
             },
-            svg: {
-              styles: {
-                default: {
-                  filter:
-                    'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-                },
-              },
-            },
-          },
-          loading: {
-            container: {
-              default: {
-                backgroundColor: 'unset',
-              },
-            },
-            svg: {
-              styles: {
-                default: {
-                  filter:
-                    'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-                },
-              },
-            },
-          },
-          stop: {
             svg: {
               styles: {
                 default: {
@@ -146,37 +122,8 @@ function ComponentsDark() {
           },
         }}
         submitButtonStyles={{
+          alwaysEnabled: true,
           submit: {
-            svg: {
-              styles: {
-                default: {
-                  filter:
-                    'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
-                },
-              },
-            },
-          },
-          loading: {
-            container: {
-              default: {
-                backgroundColor: 'unset',
-              },
-            },
-            svg: {
-              styles: {
-                default: {
-                  filter:
-                    'brightness(0) saturate(100%) invert(26%) sepia(95%) saturate(6989%) hue-rotate(288deg) brightness(107%) contrast(122%)',
-                },
-              },
-            },
-          },
-          stop: {
-            container: {
-              default: {
-                backgroundColor: 'unset',
-              },
-            },
             svg: {
               styles: {
                 default: {
@@ -225,6 +172,7 @@ function ComponentsDark() {
           },
         }}
         submitButtonStyles={{
+          alwaysEnabled: true,
           submit: {
             svg: {
               styles: {
@@ -232,13 +180,6 @@ function ComponentsDark() {
                   filter:
                     'brightness(0) saturate(100%) invert(60%) sepia(79%) saturate(643%) hue-rotate(185deg) brightness(102%) contrast(100%)',
                 },
-              },
-            },
-          },
-          loading: {
-            container: {
-              default: {
-                backgroundColor: 'unset',
               },
             },
           },
@@ -330,6 +271,7 @@ function ComponentsLight() {
           },
         }}
         submitButtonStyles={{
+          alwaysEnabled: true,
           submit: {
             container: {
               default: {
@@ -356,6 +298,9 @@ function ComponentsLight() {
             },
           },
           loading: {
+            container: {
+              default: {backgroundColor: 'white'},
+            },
             svg: {
               styles: {
                 default: {
@@ -368,10 +313,15 @@ function ComponentsLight() {
           stop: {
             container: {
               default: {backgroundColor: 'white'},
+              hover: {backgroundColor: '#dadada52'},
             },
             svg: {
+              content:
+                '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <rect width="24" height="24" rx="4" ry="4" /> </svg>',
               styles: {
                 default: {
+                  width: '0.95em',
+                  marginTop: '0.32em',
                   filter:
                     'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
                 },
@@ -391,6 +341,7 @@ function ComponentsLight() {
         }}
         names={true}
         submitButtonStyles={{
+          alwaysEnabled: true,
           submit: {
             container: {
               default: {backgroundColor: '#42a4ff'},
@@ -404,24 +355,20 @@ function ComponentsLight() {
           },
           loading: {
             container: {
-              default: {backgroundColor: '#42a4ff'},
               hover: {backgroundColor: '#2b8ee9'},
               click: {backgroundColor: '#2280d8'},
             },
             text: {
               content: 'Loading',
-              styles: {default: {color: 'white'}},
             },
           },
           stop: {
             container: {
-              default: {backgroundColor: '#42a4ff'},
               hover: {backgroundColor: '#2b8ee9'},
               click: {backgroundColor: '#2280d8'},
             },
             text: {
               content: 'Stop',
-              styles: {default: {color: 'white'}},
             },
           },
         }}
@@ -522,6 +469,7 @@ function ComponentsLight() {
           },
         }}
         submitButtonStyles={{
+          alwaysEnabled: true,
           position: 'outside-right',
           submit: {
             container: {
@@ -542,14 +490,24 @@ function ComponentsLight() {
             },
           },
           loading: {
-            container: {
-              default: {backgroundColor: '#f3f6fc'},
-            },
             svg: {
               styles: {
                 default: {
                   filter:
                     'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
+                },
+              },
+            },
+          },
+          stop: {
+            container: {
+              hover: {backgroundColor: '#ededed'},
+            },
+            svg: {
+              styles: {
+                default: {
+                  filter:
+                    'brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(0%) hue-rotate(348deg) brightness(96%) contrast(93%)',
                 },
               },
             },

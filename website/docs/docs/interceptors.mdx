@@ -142,17 +142,16 @@ chatElementRef.responseInterceptor = (response) => {
 
 <LineBreak></LineBreak>
 
-### `validateMessageBeforeSending` {#validateMessageBeforeSending}
+### `validateInput` {#validateInput}
 
 - Type: (`text?: string`, `files?: File[]`) => `boolean`
 
-Triggered before a message is sent out in order to validate if it should be sent out to the target service. <br />
-`text` argument is the text content of the message and `files` is an array that contains any files that are to be sent out along with the message. <br />
-The method must return a boolean value with either _true_ or _false_ for whether the message should be sent.
+Triggered when the user changes input `text` or `files` that are going to be sent to the target service. <br />
+The method must return a boolean value with either _true_ or _false_ for whether the input contents are valid.
 
 #### Example
 
-<ComponentContainerInterceptors propertyName={'validateMessageBeforeSending'} displayConsole={false}>
+<ComponentContainerInterceptors propertyName={'validateInput'} displayConsole={false}>
   <DeepChatBrowser style={{borderRadius: '8px'}} demo={true} mixedFiles={true}></DeepChatBrowser>
 </ComponentContainerInterceptors>
 
@@ -160,8 +159,8 @@ The method must return a boolean value with either _true_ or _false_ for whether
 <TabItem value="js" label="Code">
 
 ```js
-chatElementRef.validateMessageBeforeSending = (text, files) => {
-  return text ? true : false;
+chatElementRef.validateInput = (text, files) => {
+  return text || files.length > 0;
 };
 ```
 

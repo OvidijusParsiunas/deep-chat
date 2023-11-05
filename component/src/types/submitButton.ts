@@ -9,4 +9,4 @@ export interface SubmitButtonStyles {
   alwaysEnabled?: boolean;
 }
 
-export type ChangeSubmitButtonState = (isEnabled: boolean) => void;
+export type DisableSubmitButton = (isActive?: boolean) => void;

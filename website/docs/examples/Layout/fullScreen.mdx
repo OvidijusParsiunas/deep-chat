@@ -157,6 +157,9 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
         },
       },
       loading: {
+        container: {
+          default: {backgroundColor: 'white'},
+        },
         svg: {
           styles: {
             default: {
@@ -169,10 +172,15 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
       stop: {
         container: {
           default: {backgroundColor: 'white'},
+          hover: {backgroundColor: '#dadada52'},
         },
         svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <rect width="24" height="24" rx="4" ry="4" /> </svg>',
           styles: {
             default: {
+              width: '0.95em',
+              marginTop: '0.32em',
               filter:
                 'brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)',
             },
@@ -235,6 +243,7 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
       }
     },
     "loading": {
+      "container": {"default": {"backgroundColor": "white"}},
       "svg": {
         "styles": {
           "default": {"filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
@@ -242,10 +251,17 @@ This example uses a design similar to [ChatGPT](https://chat.openai.com/).
       }
     },
     "stop": {
-      "container": {"default": {"backgroundColor": "white"}},
+      "container": {
+        "default": {"backgroundColor": "white"},
+        "hover": {"backgroundColor": "#dadada52"}
+      },
       "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"24\" height=\"24\" rx=\"4\" ry=\"4\" /> </svg>",
         "styles": {
-          "default": {"filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
+          "default": {
+            "width": "0.95em",
+            "marginTop": "0.32em",
+            "filter": "brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%) contrast(96%)"}
         }
       }
     }

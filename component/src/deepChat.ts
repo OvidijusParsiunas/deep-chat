@@ -2,7 +2,7 @@ import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConf
 import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
-import {ChangeSubmitButtonState, SubmitButtonStyles} from './types/submitButton';
+import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {DirectServiceIO} from './services/utils/directServiceIO';
@@ -142,7 +142,7 @@ export class DeepChat extends InternalHTML {
 
   scrollToBottom: () => void = () => {};
 
-  changeSubmitButtonState: ChangeSubmitButtonState = () => {};
+  disableSubmitButton: DisableSubmitButton = () => {};
 
   @Property('function')
   onNewMessage: OnNewMessage = () => {};

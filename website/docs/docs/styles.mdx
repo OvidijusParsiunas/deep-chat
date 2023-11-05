@@ -398,13 +398,19 @@ Custom details for the chat's text input. <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`submit?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`stop?: ButtonStyles`](#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`disabled?: ButtonStyles`](#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `alwaysEnabled?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition) <br />
   }
 
 Custom styling for the submit button. <br />
-`submit` is the default button state and `loading` is displayed when waiting for a message response. `stop` is displayed
-when a response message is being [`streamed`](./connect#stream). <br />
-`position` is used to set the button position within the input area.
+`submit` state is displayed when the user's input is valid and can be sent. <br />
+`loading` is used when waiting for a message response from the target server. <br />
+`stop` is used when a message response is being [`streamed`](./connect#stream). <br />
+`disabled` is used when the user's input cannot be sent (see [`validateInput`](./interceptors#validateInput)) or the [websocket](./connect#Websocket) connection is not live.
+You can also set this state manually by calling the [`disableSubmitButton`](./methods#disableSubmitButton) method. <br />
+`alwaysEnabled` prevents the `disabled` button state from being used. <br />
+`position` sets the button position within the input area. <br />
 
 #### SVG Example
 
@@ -412,6 +418,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     submitButtonStyles={{
+      alwaysEnabled: true,
       submit: {
         container: {
           default: {
@@ -443,9 +450,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {
-          "backgroundColor": "#e3f0ff"
-        },
+        "default": {"backgroundColor": "#e3f0ff"},
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
@@ -458,6 +463,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
         }
       }
     },
+    "alwaysEnabled": true,
     "position": "outside-right"
   }'
 ></deep-chat>
@@ -473,9 +479,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {
-          "backgroundColor": "#e3f0ff"
-        },
+        "default": {"backgroundColor": "#e3f0ff"},
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
@@ -488,6 +492,7 @@ when a response message is being [`streamed`](./connect#stream). <br />
         }
       }
     },
+    "alwaysEnabled": true,
     "position": "outside-right"
   }'
   style="border-radius: 8px"
@@ -502,11 +507,15 @@ when a response message is being [`streamed`](./connect#stream). <br />
 
 #### Text Example
 
+It is important to note that the `submit` state's `default` properties are automatically copied into the other states,
+however `hover` and `submit` need to be defined.
+
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     textInput={{styles: {text: {paddingRight: '70px'}}}}
     submitButtonStyles={{
+      alwaysEnabled: true,
       submit: {
         container: {
           default: {backgroundColor: '#e3f0ff', width: '60px'},
@@ -524,11 +533,16 @@ when a response message is being [`streamed`](./connect#stream). <br />
         },
       },
       stop: {
+        container: {
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
         text: {
           content: 'Stop',
         },
       },
     }}
+    stream={true}
     demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -550,16 +564,15 @@ when a response message is being [`streamed`](./connect#stream). <br />
         "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
       }
     },
-    "loading": {
-      "text": {
-        "content": "Loading"
-      }
-    },
+    "loading": {"text": {"content": "Loading"}},
     "stop": {
-      "text": {
-        "content": "Stop"
-      }
-    }
+      "container": {
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {"content": "Stop"}
+    },
+    "alwaysEnabled": true
   }'
 ></deep-chat>
 ```
@@ -584,14 +597,77 @@ when a response message is being [`streamed`](./connect#stream). <br />
         "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
       }
     },
-    "loading": {
-      "text": {
-        "content": "Loading"
-      }
-    },
+    "loading": {"text": {"content": "Loading"}},
     "stop": {
-      "text": {
-        "content": "Stop"
+      "container": {
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {"content": "Stop"}
+    },
+    "alwaysEnabled": true
+  }'
+  style="border-radius: 8px"
+  stream="true"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Disabled example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    submitButtonStyles={{
+      disabled: {
+        container: {default: {cursor: 'auto'}},
+        svg: {
+          content: `<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" d="M5.781 4.414a7 7 0 019.62 10.039l-9.62-10.04zm-1.408 1.42a7 7 0 009.549 9.964L4.373 5.836zM10 1a9 9 0 100 18 9 9 0 000-18z"/> </svg>`,
+          styles: {
+            default: {paddingTop: '2.4px', paddingleft: '2px'},
+          },
+        },
+      },
+    }}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  submitButtonStyles='{
+    "disabled": {
+      "container": {"default": {"cursor": "auto"}},
+      "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 25 25\" xmlns=\"http://www.w3.org/2000/svg\"> <path fill-rule=\"evenodd\" d=\"M5.781 4.414a7 7 0 019.62 10.039l-9.62-10.04zm-1.408 1.42a7 7 0 009.549 9.964L4.373 5.836zM10 1a9 9 0 100 18 9 9 0 000-18z\"/> </svg>",
+        "styles": {"default": {"paddingTop": "2.4px", "paddingLeft": "2px"}}
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  submitButtonStyles='{
+    "disabled": {
+      "container": {"default": {"cursor": "auto"}},
+      "svg": {
+        "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?> <svg viewBox=\"0 0 25 25\" xmlns=\"http://www.w3.org/2000/svg\"> <path fill-rule=\"evenodd\" d=\"M5.781 4.414a7 7 0 019.62 10.039l-9.62-10.04zm-1.408 1.42a7 7 0 009.549 9.964L4.373 5.836zM10 1a9 9 0 100 18 9 9 0 000-18z\"/> </svg>",
+        "styles": {"default": {"paddingTop": "2.4px", "paddingLeft": "2px"}}
       }
     }
   }'
@@ -602,12 +678,6 @@ when a response message is being [`streamed`](./connect#stream). <br />
 
 </TabItem>
 </Tabs>
-
-<LineBreak></LineBreak>
-
-:::info
-Due to the varying states, the styling is not automatically shared between one another.
-:::
 
 <LineBreak></LineBreak>
 
@@ -844,6 +914,7 @@ Styling for a button inside the chat view. <br />
           styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
         },
       },
+      alwaysEnabled: true,
     }}
     directConnection={{
       demo: true,
@@ -945,7 +1016,8 @@ Styling for a button inside the chat view. <br />
         "content": "Send",
         "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
       }
-    }
+    },
+    "alwaysEnabled": true
   }'
   images='{
     "button": {
@@ -1141,12 +1213,8 @@ Custom styling for the microphone button. <br />
     "button": {
       "default": {
         "container": {
-          "hover": {
-            "backgroundColor": "#7fbded69"
-          },
-          "click": {
-            "backgroundColor": "#4babf669"
-          }
+          "hover": {"backgroundColor": "#7fbded69"},
+          "click": {"backgroundColor": "#4babf669"}
         },
         "svg": {
           "styles": {
@@ -1163,12 +1231,8 @@ Custom styling for the microphone button. <br />
       },
       "active": {
         "container": {
-          "hover": {
-            "backgroundColor": "#ffd07c70"
-          },
-          "click": {
-            "backgroundColor": "#ecb85c70"
-          }
+          "hover": {"backgroundColor": "#ffd07c70"},
+          "click": {"backgroundColor": "#ecb85c70"}
         },
         "svg": {
           "styles": {
@@ -1195,12 +1259,8 @@ Custom styling for the microphone button. <br />
     "button": {
       "default": {
         "container": {
-          "hover": {
-            "backgroundColor": "#7fbded69"
-          },
-          "click": {
-            "backgroundColor": "#4babf669"
-          }
+          "hover": {"backgroundColor": "#7fbded69"},
+          "click": {"backgroundColor": "#4babf669"}
         },
         "svg": {
           "styles": {
@@ -1217,12 +1277,8 @@ Custom styling for the microphone button. <br />
       },
       "active": {
         "container": {
-          "hover": {
-            "backgroundColor": "#ffd07c70"
-          },
-          "click": {
-            "backgroundColor": "#ecb85c70"
-          }
+          "hover": {"backgroundColor": "#ffd07c70"},
+          "click": {"backgroundColor": "#ecb85c70"}
         },
         "svg": {
           "styles": {

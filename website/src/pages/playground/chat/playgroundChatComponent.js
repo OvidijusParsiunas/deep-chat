@@ -156,29 +156,6 @@ const darkButtonStyles = {
       },
     },
   },
-  loading: {
-    container: {
-      default: {backgroundColor: 'unset'},
-    },
-    svg: {
-      styles: {
-        default: {
-          filter:
-            'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-        },
-      },
-    },
-  },
-  stop: {
-    svg: {
-      styles: {
-        default: {
-          filter:
-            'brightness(0) saturate(100%) invert(70%) sepia(52%) saturate(5617%) hue-rotate(185deg) brightness(101%) contrast(101%)',
-        },
-      },
-    },
-  },
 };
 
 const darkAuxiliaryStyle = `

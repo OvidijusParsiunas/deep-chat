@@ -12,7 +12,7 @@ Make sure the Deep Chat component has been fully rendered on the DOM before usin
 
 ### `getMessages` {#getMessages}
 
-- Type: [`() => MessageContent[]`](./messages#MessageContent)
+- Type: [`() => MessageContent[]`](/docs/messages#MessageContent)
 
 Returns details of messages inside the chat.
 
@@ -157,6 +157,32 @@ Focuses the cursor on the text input.
 
 ```html
 chatElementRef.focusInput();
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `disableSubmitButton` {#disableSubmitButton}
+
+- Type: (`isActive?: boolean`) => `void`
+
+By default the [`submitButton`](./styles#submitButtonStyles) automatically enables and disables itself based on the user's input
+or the [websocket](./connect#Websocket) connection. This method overrides this behaviour and allows you to disable it manually.
+To reset back to automatic behaviour - call this method again with a boolean _false_ argument.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'disableSubmitButton'} displayResults={false}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.disableSubmitButton();
 ```
 
 </TabItem>

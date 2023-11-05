@@ -504,7 +504,7 @@ Preset user responses which can be used to give feedback, follow a conversation 
     }}
     style={{height: '370px', borderRadius: '8px'}}
     textInput={{disabled: true, placeholder: {text: 'Use buttons to respond'}}}
-    submitButtonStyles={{submit: {container: {default: {opacity: 0}}}}}
+    submitButtonStyles={{disabled: {container: {default: {opacity: 0, cursor: 'auto'}}}}}
     demo={{
       response: {
         text: 'What about now?',
@@ -566,7 +566,7 @@ chatElementRef.messageStyles = {
 
 chatElementRef.textInput = {disabled: true, placeholder: {text: 'Use buttons to respond'}};
 
-chatElementRef.submitButtonStyles = {submit: {container: {default: {opacity: 0}}}};
+chatElementRef.submitButtonStyles = {disabled: {container: {default: {opacity: 0, cursor: 'auto'}}}};
 
 chatElementRef.demo = {
   response: {
