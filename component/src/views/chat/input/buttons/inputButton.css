@@ -25,16 +25,11 @@
 }
 
 .loading-button {
-  background-color: white;
   cursor: auto;
 }
 
 .loading-button:hover {
-  background-color: white;
-}
-
-.loading-button:active {
-  background-color: white;
+  background-color: unset;
 }
 
 .text-button {

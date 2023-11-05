@@ -22,8 +22,9 @@ import {
 type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled'>;
 
 export class SubmitButton extends InputButton<Styles> {
-  private _isRequestInProgress = false; // used for stopping multiple Enter key submissions
-  private _isLoadingActive = false;
+  private static readonly SUBMIT_CLASS = 'submit-button';
+  private static readonly LOADING_CLASS = 'loading-button';
+  private static readonly DISABLED_CLASS = 'disabled-button';
   private readonly _serviceIO: ServiceIO;
   private readonly _messages: Messages;
   private readonly _inputElementRef: HTMLElement;
@@ -34,6 +35,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _alwaysEnabled: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
+  readonly status = {requestInProgress: false, loadingActive: false};
 
   // prettier-ignore
   constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
@@ -117,11 +119,11 @@ export class SubmitButton extends InputButton<Styles> {
 
   private assignHandlers(validationHandler: ValidationHandler) {
     this._serviceIO.completionsHandlers = {
-      onFinish: validationHandler.bind(this),
+      onFinish: this.resetSubmit.bind(this, validationHandler),
     };
     this._serviceIO.streamHandlers = {
       onOpen: this.changeToStopIcon.bind(this),
-      onClose: validationHandler.bind(this),
+      onClose: this.resetSubmit.bind(this, validationHandler),
       abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
@@ -129,6 +131,12 @@ export class SubmitButton extends InputButton<Styles> {
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
       this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
     }
+  }
+
+  private resetSubmit(validationHandler: ValidationHandler) {
+    this.status.requestInProgress = false;
+    this.status.loadingActive = false;
+    validationHandler();
   }
 
   public submitFromInput() {
@@ -150,7 +158,7 @@ export class SubmitButton extends InputButton<Styles> {
       uploadedFilesData = this._fileAttachments.getAllFileData();
       fileData = uploadedFilesData?.map((fileData) => fileData.file);
     }
-    if (this._isRequestInProgress || await this._validationHandler?.(isProgrammatic) === false) return;
+    if (await this._validationHandler?.(isProgrammatic) === false) return;
     this.changeToLoadingIcon();
     await this.addNewMessages(userText, uploadedFilesData);
     this._messages.addLoadingMessage();
@@ -175,37 +183,42 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private changeToStopIcon() {
-    this.elementRef.classList.remove('loading-button');
+    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS);
     this.elementRef.replaceChildren(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);
     this.elementRef.onclick = this.stopStream.bind(this);
-    this._isLoadingActive = false;
+    this.status.loadingActive = false;
   }
 
   // WORK - animation needs to be lowered
   private changeToLoadingIcon() {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
-    this.elementRef.classList.add('loading-button');
+    this.elementRef.classList.remove(SubmitButton.SUBMIT_CLASS, SubmitButton.DISABLED_CLASS);
+    this.elementRef.classList.add(SubmitButton.LOADING_CLASS);
     this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};
-    this._isRequestInProgress = true;
-    this._isLoadingActive = true;
+    this.status.requestInProgress = true;
+    this.status.loadingActive = true;
   }
 
+  // called every time when user triggers an input via ValidationHandler - hence use class to check if not already present
   public changeToSubmitIcon() {
-    this.elementRef.classList.remove('loading-button');
+    if (this.elementRef.classList.contains(SubmitButton.SUBMIT_CLASS)) return;
+    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS);
+    this.elementRef.classList.add(SubmitButton.SUBMIT_CLASS);
     this.elementRef.replaceChildren(this._innerElements.submit);
-    SubmitButtonStateStyle.resetSubmit(this, this._isLoadingActive);
+    SubmitButtonStateStyle.resetSubmit(this, this.status.loadingActive);
     this.elementRef.onclick = this.submitFromInput.bind(this);
-    this._isRequestInProgress = false;
-    this._isLoadingActive = false;
   }
 
+  // called every time when user triggers an input via ValidationHandler - hence use class to check if not already present
   public changeToDisabledIcon(isProgrammatic = false) {
-    const isAllowed = isProgrammatic ? true : !this._alwaysEnabled;
-    if (this._isRequestInProgress || this._isLoadingActive || !isAllowed) this.changeToSubmitIcon();
-    if (isAllowed) {
+    if (this._alwaysEnabled && !isProgrammatic) {
+      this.changeToSubmitIcon();
+    } else if (!this.elementRef.classList.contains(SubmitButton.DISABLED_CLASS)) {
+      this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.SUBMIT_CLASS);
+      this.elementRef.classList.add(SubmitButton.DISABLED_CLASS);
       this.elementRef.replaceChildren(this._innerElements.disabled);
       this.reapplyStateStyle('disabled', ['submit']);
       this.elementRef.onclick = () => {};
@@ -214,6 +227,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private changeSubmitButtonState(serviceIO: ServiceIO, isEnabled: boolean) {
     serviceIO.isSubmitProgrammaticallyDisabled = !isEnabled;
+    if (this.status.requestInProgress || this.status.loadingActive) return;
     if (isEnabled) {
       this.changeToSubmitIcon();
     } else {

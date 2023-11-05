@@ -13,21 +13,32 @@ export class SubmitButtonStateStyle {
     submitButton.reapplyStateStyle('submit');
   }
 
+  private static overwriteDefaultStyleWithSubmit(styles: SubmitButtonStyles, style: keyof SubmitButtonStyles) {
+    if (!styles.submit) return;
+    const newStyle = JSON.parse(JSON.stringify(styles[style] || {})) as ButtonStyles;
+    ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['container', 'default']);
+    ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['text', 'styles', 'default']);
+    ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['svg', 'styles', 'default']);
+    (styles[style] as ButtonStyles) = newStyle;
+  }
+
   // prettier-ignore
-  public static process(submitButtonStyles?: SubmitButtonStyles) {
-    if (submitButtonStyles?.alwaysEnabled) return submitButtonStyles;
-    const styles = JSON.parse(JSON.stringify(submitButtonStyles || {})) as SubmitButtonStyles;
+  private static setUpDisabledButton(styles: SubmitButtonStyles) {
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', 'default', 'backgroundColor'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', 'default', 'backgroundColor'], 'unset');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', 'default', 'filter'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.disabled, ['svg', 'styles', 'default', 'filter'],
       'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(5564%)' +
       ' hue-rotate(207deg) brightness(100%) contrast(97%)');
-    const disabledStyles = JSON.parse(JSON.stringify(styles.disabled)) as ButtonStyles;
-    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['container', 'default']);
-    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['text', 'styles', 'default']);
-    ObjectUtils.overwritePropertyObjectFromAnother(disabledStyles, styles.submit, ['svg', 'styles', 'default']);
-    styles.disabled = disabledStyles;
+    SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'disabled');
+  }
+
+  public static process(submitButtonStyles?: SubmitButtonStyles) {
+    const styles = JSON.parse(JSON.stringify(submitButtonStyles || {})) as SubmitButtonStyles;
+    SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'loading');
+    SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'stop');
+    if (submitButtonStyles?.alwaysEnabled) return styles;
+    SubmitButtonStateStyle.setUpDisabledButton(styles);
     return styles;
   }
 }

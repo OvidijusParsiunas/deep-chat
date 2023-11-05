@@ -39,6 +39,7 @@ export class ValidationHandler {
       fileAttachments: FileAttachments, submitButton: SubmitButton) {
     const validateInput = deepChat.validateInput || Legacy.processValidateInput(deepChat);
     deepChat._validationHandler = async (isProgrammatic = false) => {
+      if (submitButton.status.loadingActive || submitButton.status.requestInProgress) return false;
       if (serviceIO.isSubmitProgrammaticallyDisabled === true) return false;
       if (!ValidationHandler.validateWebsocket(serviceIO, submitButton)) return false;
       const validation = validateInput || serviceIO.canSendMessage;
