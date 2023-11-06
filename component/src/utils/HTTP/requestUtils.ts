@@ -1,8 +1,14 @@
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseT} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
+import {ServiceIO} from '../../services/serviceIO';
+import {GenericObject} from '../../types/object';
 import {Request} from '../../types/request';
 import {DeepChat} from '../../deepChat';
+
+// this is mostly used for calling the request again for OpenAI API function calls
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FetchFunc = (body: any) => Promise<Response>;
 
 type InterceptorResult = Promise<RequestDetails & {error?: string}>;
 
@@ -29,6 +35,15 @@ export class RequestUtils {
       return messages.addNewErrorMessage('service', JSON.stringify(err));
     }
     messages.addNewErrorMessage('service', err);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
+    return fetch(io.requestSettings?.url || io.url || '', {
+      method: io.requestSettings?.method || 'POST',
+      headers: headers,
+      body: stringifyBody ? JSON.stringify(body) : body,
+    });
   }
 
   public static processResponseByType(response: Response) {

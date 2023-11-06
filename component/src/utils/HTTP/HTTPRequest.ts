@@ -1,6 +1,6 @@
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
-import {ResponseDetails} from '../../types/interceptors';
+import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
@@ -14,20 +14,16 @@ export type HandleVerificationResult = (
 export class HTTPRequest {
   // prettier-ignore
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
-    const requestDetails: ResponseDetails = {body, headers: io.requestSettings?.headers};
-    const {body: interceptedBody, headers: interceptedHeaders, error} =
+    const requestDetails: RequestDetails = {body, headers: io.requestSettings?.headers};
+    const {body: interceptedBody, headers, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
     if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
     if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
     let responseValid = true;
-    fetch(io.requestSettings?.url || io.url || '', {
-      method: io.requestSettings?.method || 'POST',
-      headers: interceptedHeaders,
-      body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
-    })
-      .then((response) => {
+    const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
+    fetchFunc(interceptedBody).then((response) => {
         responseValid = !!response.ok;
         return response;
       })
@@ -35,7 +31,7 @@ export class HTTPRequest {
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
-        const resultData = await io.extractResultData(finalResult);
+        const resultData = await io.extractResultData(finalResult, fetchFunc);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
         if (!resultData || typeof resultData !== 'object')

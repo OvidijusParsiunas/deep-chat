@@ -412,6 +412,19 @@ You can also set this state manually by calling the [`disableSubmitButton`](./me
 `alwaysEnabled` prevents the `disabled` button state from being used. <br />
 `position` sets the button position within the input area. <br />
 
+<LineBreak></LineBreak>
+
+:::info
+The `loading`, `stop` and `disabled` styles will automatically inherit your `submit` style `default` state values.
+:::
+
+:::info
+When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to _false_ and the `loading` property's `content` string for `text` or `svg` is not set,
+the submit button will have a loading animation.
+:::
+
+<LineBreak></LineBreak>
+
 #### SVG Example
 
 <ComponentContainer>
@@ -678,13 +691,6 @@ however `hover` and `submit` need to be defined.
 
 </TabItem>
 </Tabs>
-
-<LineBreak></LineBreak>
-
-:::info
-When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to _false_ and the `loading` property's `content` string for `text` or `svg` is not set,
-the submit button will have a loading animation.
-:::
 
 <LineBreak></LineBreak>
 

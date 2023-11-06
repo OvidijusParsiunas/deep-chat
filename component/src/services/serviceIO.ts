@@ -2,6 +2,7 @@ import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConf
 import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
+import {FetchFunc} from '../utils/HTTP/requestUtils';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
@@ -88,7 +89,10 @@ export interface ServiceIO {
 
   callAPI(requestContents: RequestContents, messages: Messages): Promise<void>;
 
-  extractResultData?(result: object): Promise<InterfacesUnion<Response | {pollingInAnotherRequest: true}>>;
+  extractResultData?(
+    result: object,
+    fetch?: FetchFunc
+  ): Promise<InterfacesUnion<Response | {pollingInAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 

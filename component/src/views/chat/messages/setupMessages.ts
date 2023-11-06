@@ -15,6 +15,13 @@ export class SetupMessages {
         return `Please define a valid service inside
           the [directConnection](https://deepchat.dev/docs/directConnection/#directConnection) object.`;
       }
+      const openAIChat = deepChat.directConnection.openAI?.chat;
+      if (typeof openAIChat === 'object' && openAIChat.tools && !openAIChat.function_handler) {
+        return (
+          'Please define a `function_handler` property inside' +
+          ` the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
+        );
+      }
     } else if (deepChat.request) {
       if (!deepChat.request.url && !deepChat.request.handler) {
         return (

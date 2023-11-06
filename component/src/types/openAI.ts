@@ -1,7 +1,17 @@
-export interface OpenAIMessage {
-  role: 'user' | 'system' | 'ai';
-  content: string;
+import {InterfacesUnion} from './utilityTypes';
+
+export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
+
+export interface ToolAPI {
+  tool_calls?: ToolCalls;
+  tool_call_id?: string;
+  name?: string;
 }
+
+export type OpenAIMessage = {
+  role: 'user' | 'system' | 'ai' | 'tool';
+  content: string;
+} & ToolAPI;
 
 export type OpenAIAudioType = {
   type?: 'transcription' | 'translation';
@@ -22,8 +32,21 @@ export interface OpenAIImages {
   user?: string;
 }
 
+export type FunctionHandlerResponse = InterfacesUnion<
+  {text?: string} | {tool_call_id: string; name: string; content: string}[]
+>;
+
+export type FunctionHandler = (toolCalls: ToolCalls) => FunctionHandlerResponse | Promise<FunctionHandlerResponse>;
+
+export interface OpenAIToolsAPI {
+  // parameters use the JSON Schema type
+  tools?: {type: 'function'; function: {name: string; description?: string; parameters: object}}[];
+  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
+  function_handler?: FunctionHandler;
+}
+
 // totalMessagesMaxCharLength must include system_prompt length
-export type OpenAIChat = {system_prompt?: string};
+export type OpenAIChat = {system_prompt?: string} & OpenAIToolsAPI;
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions
