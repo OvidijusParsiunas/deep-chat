@@ -1,4 +1,5 @@
-import {OpenAIConverse, OpenAIMessage} from './openAI';
+import {OpenAIMessage} from './openAIResult';
+import {OpenAIConverse} from './openAI';
 
 export interface SystemMessageInternal {
   role: 'system';

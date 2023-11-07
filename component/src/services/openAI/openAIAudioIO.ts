@@ -1,9 +1,9 @@
-import {OpenAI, OpenAIAudio, OpenAIAudioType} from '../../types/openAI';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {OpenAI, OpenAIAudio} from '../../types/openAI';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
@@ -20,7 +20,7 @@ export class OpenAIAudioIO extends DirectServiceIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Whisper</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio
       processing.
-    <p>Click <a href="https://platform.openai.com/docs/api-reference/audio/create">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.openai.com/docs/guides/speech-to-text">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Invalid'];
@@ -48,14 +48,14 @@ export class OpenAIAudioIO extends DirectServiceIO {
     return !!files?.[0];
   }
 
-  private processConfig(config?: OpenAIAudio & OpenAIAudioType) {
+  private processConfig(config?: OpenAIAudio) {
     if (config?.type && config.type === 'translation') {
       this._service_url = OpenAIAudioIO.AUDIO_TRANSLATIONS_URL;
       delete config.language; // not used for translations
     }
   }
 
-  private static cleanConfig(config: OpenAIAudioType) {
+  private static cleanConfig(config: OpenAIAudio) {
     delete config.type;
   }
 

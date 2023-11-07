@@ -1,9 +1,9 @@
-import {FunctionHandler, OpenAIChat, OpenAIConverse, OpenAIMessage, OpenAIToolsAPI} from '../../types/openAI';
+import {FunctionHandler, OpenAIChat, OpenAIConverse, OpenAIToolsAPI} from '../../types/openAI';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
+import {OpenAIConverseResult, OpenAIMessage} from '../../types/openAIResult';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
 import {DirectConnection} from '../../types/directConnection';
-import {OpenAIConverseResult} from '../../types/openAIResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseT} from '../../types/response';
@@ -99,12 +99,21 @@ export class OpenAIChatIO extends DirectServiceIO {
       );
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
-    const handlerResponse = await this._functionHandler?.(message.tool_calls);
+    const functions = message.tool_calls.map((call) => {
+      return {name: call.function.name, arguments: call.function.arguments};
+    });
+    const handlerResponse = await this._functionHandler?.(functions);
     if (handlerResponse.text) return {text: handlerResponse.text};
     bodyCp.messages.push(message);
     if (Array.isArray(handlerResponse)) {
-      handlerResponse.forEach((resp) => {
-        bodyCp?.messages.push({role: 'tool', ...resp});
+      handlerResponse.forEach((resp, index) => {
+        const toolCall = message.tool_calls?.[index];
+        bodyCp?.messages.push({
+          role: 'tool',
+          tool_call_id: toolCall?.id,
+          name: toolCall?.function.name,
+          content: resp.response,
+        });
       });
       delete bodyCp.tools;
       delete bodyCp.tool_choice;

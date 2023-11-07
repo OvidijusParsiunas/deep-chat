@@ -1,27 +1,19 @@
 import {InterfacesUnion} from './utilityTypes';
 
-export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
-
-export interface ToolAPI {
-  tool_calls?: ToolCalls;
-  tool_call_id?: string;
-  name?: string;
-}
-
-export type OpenAIMessage = {
-  role: 'user' | 'system' | 'ai' | 'tool';
-  content: string;
-} & ToolAPI;
-
-export type OpenAIAudioType = {
-  type?: 'transcription' | 'translation';
+// https://platform.openai.com/docs/api-reference/audio/createSpeech
+export type OpenAISpeech = {
+  model?: string;
+  voice?: string;
+  speed?: number;
 };
 
+// https://platform.openai.com/docs/api-reference/audio/createTranscription
 // https://platform.openai.com/docs/api-reference/audio/create
 export type OpenAIAudio = {
-  model?: 'whisper-1';
+  model?: string;
   temperature?: number;
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
+  type?: 'transcription' | 'translation';
 };
 
 // https://platform.openai.com/docs/api-reference/images
@@ -32,11 +24,13 @@ export interface OpenAIImages {
   user?: string;
 }
 
-export type FunctionHandlerResponse = InterfacesUnion<
-  {text?: string} | {tool_call_id: string; name: string; content: string}[]
->;
+export type FunctionHandlerResponse = InterfacesUnion<{text?: string} | {response: string}[]>;
 
-export type FunctionHandler = (toolCalls: ToolCalls) => FunctionHandlerResponse | Promise<FunctionHandlerResponse>;
+export type FunctionsDetails = {name: string; arguments: string}[];
+
+export type FunctionHandler = (
+  functionsDetails: FunctionsDetails
+) => FunctionHandlerResponse | Promise<FunctionHandlerResponse>;
 
 export interface OpenAIToolsAPI {
   // parameters use the JSON Schema type
@@ -61,5 +55,6 @@ export interface OpenAI {
   chat?: true | (OpenAIConverse & OpenAIChat);
   completions?: true | OpenAIConverse;
   images?: true | OpenAIImages;
-  audio?: true | (OpenAIAudio & OpenAIAudioType);
+  audio?: true | OpenAIAudio;
+  textToSpeech?: true | OpenAISpeech;
 }

@@ -13,6 +13,7 @@ import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
 import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
+import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
 import {AzureSummarizationIO} from './azure/azureSummarizationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
@@ -41,6 +42,9 @@ export class ServiceIOFactory {
         }
         if (directConnection.openAI.completions) {
           return new OpenAICompletionsIO(deepChat);
+        }
+        if (directConnection.openAI.textToSpeech) {
+          return new OpenAITextToSpeechIO(deepChat);
         }
         return new OpenAIChatIO(deepChat);
       }

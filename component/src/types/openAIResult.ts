@@ -1,5 +1,17 @@
 import {InterfacesUnion} from './utilityTypes';
-import {OpenAIMessage} from './openAI';
+
+export interface ToolAPI {
+  tool_calls?: {function: {name: string; arguments: string}; id: string}[];
+  tool_call_id?: string;
+  name?: string;
+}
+
+export type OpenAIMessage = {
+  role: 'user' | 'system' | 'ai' | 'tool';
+  content: string;
+} & ToolAPI;
+
+export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};
 
 // text for completion request & stream
 // message for chat completion request

@@ -1,0 +1,71 @@
+import {OpenAITextToSpeechResult} from '../../types/openAIResult';
+import {DirectConnection} from '../../types/directConnection';
+import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {OpenAI, OpenAIAudio} from '../../types/openAI';
+import {MessageContent} from '../../types/messages';
+import {OpenAIUtils} from './utils/openAIUtils';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
+
+export class OpenAITextToSpeechIO extends DirectServiceIO {
+  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override getKeyLink = 'https://platform.openai.com/account/api-keys';
+  url = 'https://api.openai.com/v1/audio/speech';
+  permittedErrorPrefixes = ['Invalid'];
+  private static readonly DEFAULT_MODEL = 'tts-1';
+  private static readonly DEFAULT_VOIDE = 'alloy';
+  private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
+  textInputPlaceholderText: string;
+
+  introPanelMarkUp = `
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Text To Speech</b></div>
+    <p>Generate an audio file based on your text input.</p>
+    <p>Click <a href="https://platform.openai.com/docs/guides/text-to-speech">here</a> for more information.</p>`;
+
+  constructor(deepChat: DeepChat) {
+    const {textInput} = deepChat;
+    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const apiKey = directConnectionCopy?.openAI;
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
+    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
+    const config = directConnectionCopy?.openAI?.textToSpeech as NonNullable<OpenAI['textToSpeech']>;
+    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    this.rawBody.model ??= OpenAITextToSpeechIO.DEFAULT_MODEL;
+    this.rawBody.voice ??= OpenAITextToSpeechIO.DEFAULT_VOIDE;
+    this.textInputPlaceholderText = 'Insert text to generate audio';
+    this.rawBody.response_format = 'mp3';
+  }
+
+  private preprocessBody(body: OpenAIAudio, messages: MessageContent[]) {
+    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const lastMessage = messages[messages.length - 1]?.text?.trim();
+    if (lastMessage && lastMessage !== '') {
+      const processedMessage = lastMessage.substring(0, this._maxCharLength);
+      bodyCopy.input = processedMessage;
+    }
+    return bodyCopy;
+  }
+
+  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    this.url = this.requestSettings.url || this.url;
+    const body = this.preprocessBody(this.rawBody, pMessages);
+    HTTPRequest.request(this, body, messages);
+  }
+
+  override async extractResultData(result: OpenAITextToSpeechResult): Promise<Response> {
+    if (result instanceof Blob) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(result);
+        reader.onload = (event) => {
+          resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
+        };
+      });
+    }
+    if (result.error) throw result.error.message;
+    return {error: 'error'}; // this should theoritaclly not get called but here for typescript
+  }
+}
