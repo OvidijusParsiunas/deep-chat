@@ -31,7 +31,7 @@ export class HTTPRequest {
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
-        const resultData = await io.extractResultData(finalResult, fetchFunc);
+        const resultData = await io.extractResultData(finalResult, fetchFunc, interceptedBody);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
         if (!resultData || typeof resultData !== 'object')

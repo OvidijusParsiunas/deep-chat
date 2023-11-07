@@ -14,13 +14,14 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 
+type ToolsAPIBody = Required<OpenAIConverseBodyInternal> & OpenAIToolsAPI;
+
 // chat is a form of completions
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
-  private _latestBodyCp?: Required<OpenAIConverseBodyInternal> & OpenAIToolsAPI;
   private readonly _functionHandler?: FunctionHandler;
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
@@ -59,7 +60,6 @@ export class OpenAIChatIO extends DirectServiceIO {
         totalMessagesMaxCharLength - this._systemMessage.content.length)
       .map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
-    this._latestBodyCp = bodyCopy;
     return bodyCopy;
   }
 
@@ -74,38 +74,41 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: OpenAIConverseResult, fetchFunc?: FetchFunc): Promise<ResponseT> {
+  // prettier-ignore
+  override async extractResultData(result: OpenAIConverseResult,
+      fetchFunc?: FetchFunc, prevBody?: ToolsAPIBody): Promise<ResponseT> {
     if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
       return {text: result.choices[0].delta.content || ''};
     }
     if (result.choices[0].message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleTools(result.choices[0].message, fetchFunc);
+        return this.handleTools(result.choices[0].message, fetchFunc, prevBody);
       }
       return {text: result.choices[0].message.content};
     }
     return {text: ''};
   }
 
-  private async handleTools(message: OpenAIMessage, fetchFunc?: FetchFunc): Promise<ResponseT> {
-    // tool_calls, requestFunc and _latestBody should theoretically already be defined
-    if (!message.tool_calls || !fetchFunc || !this._latestBodyCp || !this._functionHandler) {
+  private async handleTools(message: OpenAIMessage, fetchFunc?: FetchFunc, prevBody?: ToolsAPIBody): Promise<ResponseT> {
+    // tool_calls, requestFunc and prevBody should theoretically be defined
+    if (!message.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
       throw Error(
         'Please define the `function_handler` property inside' +
           ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
       );
     }
+    const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const handlerResponse = await this._functionHandler?.(message.tool_calls);
     if (handlerResponse.text) return {text: handlerResponse.text};
-    this._latestBodyCp.messages.push(message);
+    bodyCp.messages.push(message);
     if (Array.isArray(handlerResponse)) {
       handlerResponse.forEach((resp) => {
-        this._latestBodyCp?.messages.push({role: 'tool', ...resp});
+        bodyCp?.messages.push({role: 'tool', ...resp});
       });
-      delete this._latestBodyCp.tools;
-      delete this._latestBodyCp.tool_choice;
-      const result = await fetchFunc?.(this._latestBodyCp).then((resp) => RequestUtils.processResponseByType(resp));
+      delete bodyCp.tools;
+      delete bodyCp.tool_choice;
+      const result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
       if (result.error) throw result.error.message;
       return {text: result.choices[0].message.content || ''};
     }
