@@ -14,6 +14,7 @@ import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
 import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
 import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
+import {OpenAISpeechToTextIO} from './openAI/openAISpeechToTextIO';
 import {AzureSummarizationIO} from './azure/azureSummarizationIO';
 import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
@@ -21,7 +22,6 @@ import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
-import {OpenAIAudioIO} from './openAI/openAIAudioIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
@@ -37,14 +37,14 @@ export class ServiceIOFactory {
         if (directConnection.openAI.images) {
           return new OpenAIImagesIO(deepChat);
         }
-        if (directConnection.openAI.audio) {
-          return new OpenAIAudioIO(deepChat);
-        }
-        if (directConnection.openAI.completions) {
-          return new OpenAICompletionsIO(deepChat);
+        if (directConnection.openAI.speechToText) {
+          return new OpenAISpeechToTextIO(deepChat);
         }
         if (directConnection.openAI.textToSpeech) {
           return new OpenAITextToSpeechIO(deepChat);
+        }
+        if (directConnection.openAI.completions) {
+          return new OpenAICompletionsIO(deepChat);
         }
         return new OpenAIChatIO(deepChat);
       }

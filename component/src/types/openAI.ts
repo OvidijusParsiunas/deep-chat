@@ -1,15 +1,16 @@
 import {InterfacesUnion} from './utilityTypes';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
-export type OpenAISpeech = {
+export type OpenAITextToSpeech = {
   model?: string;
   voice?: string;
   speed?: number;
 };
 
+// https://platform.openai.com/docs/guides/speech-to-text
 // https://platform.openai.com/docs/api-reference/audio/createTranscription
 // https://platform.openai.com/docs/api-reference/audio/create
-export type OpenAIAudio = {
+export type OpenAISpeechToText = {
   model?: string;
   temperature?: number;
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
@@ -55,6 +56,6 @@ export interface OpenAI {
   chat?: true | (OpenAIConverse & OpenAIChat);
   completions?: true | OpenAIConverse;
   images?: true | OpenAIImages;
-  audio?: true | OpenAIAudio;
-  textToSpeech?: true | OpenAISpeech;
+  speechToText?: true | OpenAISpeechToText;
+  textToSpeech?: true | OpenAITextToSpeech;
 }

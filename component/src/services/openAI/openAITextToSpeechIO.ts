@@ -1,9 +1,9 @@
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
+import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {OpenAI, OpenAIAudio} from '../../types/openAI';
 import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
@@ -20,7 +20,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   textInputPlaceholderText: string;
 
   introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI Text To Speech</b></div>
+    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI : Text To Speech</b></div>
     <p>Generate an audio file based on your text input.</p>
     <p>Click <a href="https://platform.openai.com/docs/guides/text-to-speech">here</a> for more information.</p>`;
 
@@ -38,7 +38,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     this.rawBody.response_format = 'mp3';
   }
 
-  private preprocessBody(body: OpenAIAudio, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAITextToSpeech, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const lastMessage = messages[messages.length - 1]?.text?.trim();
     if (lastMessage && lastMessage !== '') {
