@@ -10,10 +10,10 @@ import hljsLogo from '/img/hljsLogo.png';
 To keep Deep Chat as lightweight as possible, some of its functionality requires the use of external modules.
 The component has been set up to recognise them by using the `window` object:
 
-| Functionality                                                                           | Module                                                                                                                                                                                                          | Window             |
-| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Higlighting [code](../docs/messages#code-messages)                                      | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`      |
-| [Speech to text](../docs/speech#speechToText) with [Azure](../docs/speech#AzureOptions) | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
+| Functionality                                                                       | Module                                                                                                                                                                                                          | Window             |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Higlighting [code](/docs/messages#code-messages)                                    | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`      |
+| [Speech to text](/docs/speech#speechToText) with [Azure](/docs/speech#AzureOptions) | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
 
 ## Implementation
 
@@ -39,10 +39,10 @@ Here are some simple approaches you can use to add these modules to your project
   <br />
   <br />
 
-  | Module                                                                         | URL                                                                                                                                                                                                                              |
-  | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import("highlight.js").then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.[refreshMessages](../docs/methods#refreshMessages)(); <br /> }); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import('microsoft-cognitiveservices-speech-sdk').then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.SpeechSDK = module; <br /> });                                                                                        |
+  | Module                                                                         | URL                                                                                                                                                                                                                            |
+  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import("highlight.js").then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> }); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import('microsoft-cognitiveservices-speech-sdk').then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.SpeechSDK = module; <br /> });                                                                                      |
 
   <br />
 
@@ -54,10 +54,10 @@ Here are some simple approaches you can use to add these modules to your project
   <br />
   <br />
 
-  | Module                                                                         | URL                                                                                                                                                                                                                                                                                                      |
-  | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](../docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                                                            |
+  | Module                                                                         | URL                                                                                                                                                                                                                                                                                                    |
+  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                                                          |
 
   <br />
 
@@ -69,10 +69,10 @@ Here are some simple approaches you can use to add these modules to your project
   <br />
   <br />
 
-  | Module                                                                         | URL                                                                                                                                                                                                                                           |
-  | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](../docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'speech.js'; <br /> document.body.appendChild(script);                                                                                                                   |
+  | Module                                                                         | URL                                                                                                                                                                                                                                         |
+  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'speech.js'; <br /> document.body.appendChild(script);                                                                                                                 |
 
   <br />
 
@@ -92,7 +92,7 @@ declare global {
 
 ## Examples
 
-React project that uses a package bundler - should work similarly for other [Frameworks](./frameworks):
+React project that uses a package bundler - should work similarly for other [Frameworks](/examples/frameworks):
 
 [Click for Live Example](https://stackblitz.com/edit/stackblitz-starters-cebqwu?file=src%2FApp.tsx)
 

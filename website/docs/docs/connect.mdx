@@ -14,18 +14,18 @@ and respond using the formats described below.
 The outgoing Deep Chat request body is encapsulated in one of the following formats:
 
 - When sending **text** based messages only, the request body will have the following JSON type: <br />
-  {[`messages: MessageContent[]`](./messages/#MessageContent)} <br />
+  {[`messages: MessageContent[]`](/docs/messages/#MessageContent)} <br />
 
 - When sending messages that contain **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
   where files are set inside an array property called _"files"_ and each text message is stored inside a _"message{index}"_ property with a corresponding index: <br />
-  {`files: File[]`, [`message1: MessageContent`](./messages/#MessageContent), [`message2: MessageContent`](./messages/#MessageContent)... } <br />
+  {`files: File[]`, [`message1: MessageContent`](/docs/messages/#MessageContent), [`message2: MessageContent`](/docs/messages/#MessageContent)... } <br />
 
 <h3>Response message</h3>
 
 Response from the target server needs to use the [`Response`](#Response) JSON type.
 
 :::tip
-If you don't want / can't change the target server to handle the required object types, use the [`interceptor`](./interceptors) properties
+If you don't want / can't change the target server to handle the required object types, use the [`interceptor`](/docs/interceptors) properties
 to augment the transferred objects or the [`handler`](#Handler) function to control the request code.
 :::
 
@@ -190,7 +190,7 @@ Used to limit the content that is going to be included in the outgoing requests.
 if it is _2_ - it will also include the message before the latest one (from AI or the user) and so on... If the number is _0_ or below - the request will include all messages in the chat. If
 it is _undefined_, the request will only include the input text/files. <br />
 `totalMessagesMaxCharLength` is the total maximum number of text characters sent in the request counting from the most recent message. <br />
-These limits do not include the [`introMessage`](./messages#introMessage).
+These limits do not include the [`introMessage`](/docs/messages#introMessage).
 
 #### Example
 
@@ -313,13 +313,13 @@ Object used to configure the outgoing messages request settings. It MUST have ei
 
 ### `Response` {#Response}
 
-- Type: {`text?: string`, [`files?: MessageFile[]`](./messages#MessageFile), `html?: string`, `error?: string`}
+- Type: {`text?: string`, [`files?: MessageFile[]`](/docs/messages#MessageFile), `html?: string`, `error?: string`}
 
 Object containing response information from the target service. It should have _one_ of these properties: <br />
 `text` is the content for a text message. <br />
 `files` is an array that encapsulates details on the response files. <br />
-`html` is a string that defines the markup for [message elements](./messages/HTML). <br />
-`error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](./messages#errorMessages)
+`html` is a string that defines the markup for [message elements](/docs/messages/HTML). <br />
+`error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](/docs/messages#errorMessages)
 is set to _true_, this message will be displayed in the chat inside the error bubble. <br />
 
 <LineBreak></LineBreak>
@@ -382,7 +382,7 @@ Check the [websocket server template](https://github.com/OvidijusParsiunas/deep-
 
 :::tip
 You can create a status message bubble that would be refreshed with new messages from the server.
-This is achieved via the use of the `"deep-chat-update-message"` class. Checkout an [example](./messages/HTML#example-for-deep-chat-update-message) in [Deep Chat Classes](./messages/HTML#deepChatClasses).
+This is achieved via the use of the `"deep-chat-update-message"` class. Checkout an [example](/docs/messages/HTML#example-for-deep-chat-update-message) in [Deep Chat Classes](/docs/messages/HTML#deepChatClasses).
 :::
 
 <LineBreak></LineBreak>
@@ -393,7 +393,7 @@ This is achieved via the use of the `"deep-chat-update-message"` class. Checkout
 
 This function gives developers full control for making server requests using their own code. <br /> It is invoked when the user
 attempts to send a message and consists of two core arguments: <br />
-`body` is an object that contains the outgoing message details and uses the [`Request message`](./connect) type. <br />
+`body` is an object that contains the outgoing message details and uses the [`Request message`](/docs/connect) type. <br />
 `signals` is a map of functions which are used to notify Deep Chat on the status of the request and its result. The available
 signal functions differ based on the type of connection you are establishing. See examples below.
 

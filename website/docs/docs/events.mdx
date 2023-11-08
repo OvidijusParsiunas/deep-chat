@@ -10,11 +10,11 @@ Events can be observed in two ways, either by assigning a function to a property
 
 - Function: (`newMessage: Body`) => `void`
 - Event: `new-message`
-- Body: {[`message: MessageContent`](./messages#MessageContent), `isInitial: boolean`}
+- Body: {[`message: MessageContent`](/docs/messages#MessageContent), `isInitial: boolean`}
 
 Triggered when a message is sent from the user and recieved from the target service. <br />
 `message` encompasses all of the message contents. <br />
-`isInitial` is used to determine whether if the message is from the prepopulated [`initialMessages`](./messages#initialMessages) property.
+`isInitial` is used to determine whether if the message is from the prepopulated [`initialMessages`](/docs/messages#initialMessages) property.
 
 #### Example
 
@@ -59,7 +59,7 @@ chatElementRef.addEventListener('new-message', (message) => { console.log(messag
 - Function: () => `void`
 - Event: `clear-messages`
 
-Triggered when the [`clearMessages`](./methods#clearMessages) method has been executed. The core purpose of this is to help track messages state.
+Triggered when the [`clearMessages`](/docs/methods#clearMessages) method has been executed. The core purpose of this is to help track messages state.
 
 #### Example
 

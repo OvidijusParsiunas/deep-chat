@@ -49,7 +49,7 @@ chatElementRef.getMessages();
 
 - Type: (`isReset?: boolean`) => `void`
 
-Clear all messages in the chat. By default - [`introPanel`](./introPanel) and [`introMessage`](./messages#introMessage) are displayed again, however you can pass
+Clear all messages in the chat. By default - [`introPanel`](/docs/introPanel) and [`introMessage`](/docs/messages#introMessage) are displayed again, however you can pass
 a _false_ argument to prevent this.
 
 #### Example
@@ -168,8 +168,8 @@ chatElementRef.focusInput();
 
 - Type: (`isActive?: boolean`) => `void`
 
-By default the [`submitButton`](./styles#submitButtonStyles) automatically enables and disables itself based on the user's input
-or the [websocket](./connect#Websocket) connection. This method overrides this behaviour and allows you to disable it manually.
+By default the [`submitButton`](/docs/styles#submitButtonStyles) automatically enables and disables itself based on the user's input
+or the [websocket](/docs/connect#Websocket) connection. This method overrides this behaviour and allows you to disable it manually.
 To reset back to automatic behaviour - call this method again with a boolean _false_ argument.
 
 #### Example
@@ -194,8 +194,8 @@ chatElementRef.disableSubmitButton();
 
 - Type: `() => void`
 
-If your messages contain [Code](./messages/#code-messages) and you are using the [`higlight.js`](https://www.npmjs.com/package/highlight.js?activeTab=readme) module to highlight them
-(as per [external module](../examples/externalModules) guidelines), sometimes the module may load after the messages have been rendered, leaving the code without a highlight. In such instances, you can use this
+If your messages contain [Code](/docs/messages/#code-messages) and you are using the [`higlight.js`](https://www.npmjs.com/package/highlight.js?activeTab=readme) module to highlight them
+(as per [external module](/examples/externalModules) guidelines), sometimes the module may load after the messages have been rendered, leaving the code without a highlight. In such instances, you can use this
 method to highlight the code with the loaded module.
 
 #### Example

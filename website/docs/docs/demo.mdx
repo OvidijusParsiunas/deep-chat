@@ -9,7 +9,7 @@ This is used by default to demonstrate the component's capabilities without conn
 ### `demo` {#demo}
 
 - Type: `true` | { <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `response?:` [`Response`](./connect#Response) | ([`message: MessageContent`](./messages/#MessageContent)) => [`Response`](./connect#Response), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `response?:` [`Response`](/docs/connect#Response) | ([`message: MessageContent`](/docs/messages/#MessageContent)) => [`Response`](/docs/connect#Response), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayLoadingBubble?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayFileAttachmentContainer?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayErrors?: {`<br />
@@ -19,13 +19,13 @@ This is used by default to demonstrate the component's capabilities without conn
   }}
 
 Set this to _true_ or define any of the other object properties to remove the initial setup guidance message. <br />
-`response` is used to override the default demo response with a custom one. It can either be a [`Response`](./connect#Response) object or a function that returns
-a [`Response`](./connect#Response) object. <br />
+`response` is used to override the default demo response with a custom one. It can either be a [`Response`](/docs/connect#Response) object or a function that returns
+a [`Response`](/docs/connect#Response) object. <br />
 The following properties are used to toggle elements to showcase their design without making any user actions: <br />
 `displayLoadingBubble` is used to display the loading bubble. <br />
 `displayFileAttachmentContainer` is used to display the element that encapsulates all of the files to be sent on the next message. <br />
 `displayErrors` is used to display error messages; for the component via `default`, an API error via `service` and a speech to text issue via `speechToText`.
-This is mainly used to showcase the override capabilities in [`errorMessages`](./messages#errorMessages). <br />
+This is mainly used to showcase the override capabilities in [`errorMessages`](/docs/messages#errorMessages). <br />
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';

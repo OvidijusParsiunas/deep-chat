@@ -406,9 +406,9 @@ Custom details for the chat's text input. <br />
 Custom styling for the submit button. <br />
 `submit` state is displayed when the user's input is valid and can be sent. <br />
 `loading` is used when waiting for a message response from the target server. <br />
-`stop` is used when a message response is being [`streamed`](./connect#stream). <br />
-`disabled` is used when the user's input cannot be sent (see [`validateInput`](./interceptors#validateInput)) or the [websocket](./connect#Websocket) connection is not live.
-You can also set this state manually by calling the [`disableSubmitButton`](./methods#disableSubmitButton) method. <br />
+`stop` is used when a message response is being [`streamed`](/docs/connect#stream). <br />
+`disabled` is used when the user's input cannot be sent (see [`validateInput`](/docs/interceptors#validateInput)) or the [websocket](/docs/connect#Websocket) connection is not live.
+You can also set this state manually by calling the [`disableSubmitButton`](/docs/methods#disableSubmitButton) method. <br />
 `alwaysEnabled` prevents the `disabled` button state from being used. <br />
 `position` sets the button position within the input area. <br />
 
@@ -419,7 +419,7 @@ The `loading`, `stop` and `disabled` styles will automatically inherit your `sub
 :::
 
 :::info
-When [displayLoadingBubble](./messages/#displayLoadingBubble) is set to _false_ and the `loading` property's `content` string for `text` or `svg` is not set,
+When [displayLoadingBubble](/docs/messages/#displayLoadingBubble) is set to _false_ and the `loading` property's `content` string for `text` or `svg` is not set,
 the submit button will have a loading animation.
 :::
 

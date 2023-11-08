@@ -5,12 +5,12 @@ sidebar_position: 2
 # HTML
 
 You can insert and render your own code inside chat message bubbles using the `html` property. <br />
-If you want to use your code for an introduction panel - check out [`Intro Panel`](../introPanel) instead.
+If you want to use your code for an introduction panel - check out [`Intro Panel`](/docs/introPanel) instead.
 
 ### Getting started {#Getting Started}
 
-The `html` property can be used in server [Response](../connect#Response)s and is stored inside the chat using the [MessageContent](../messages#MessageContent) format.
-Here is an example for [`initialMessages`](../messages#initialMessages):
+The `html` property can be used in server [Response](/docs/connect#Response)s and is stored inside the chat using the [MessageContent](/docs/messages#MessageContent) format.
+Here is an example for [`initialMessages`](/docs/messages#initialMessages):
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -72,7 +72,7 @@ import Tabs from '@theme/Tabs';
 - Type: {<br />
   &nbsp;&nbsp;[`className: string`]: { <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`events?: {[eventType: string]?: (event) => void}`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](./styles/#StatefulStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](/docs/styles/#StatefulStyles) <br />
   }}
 
 Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) and your html is rendered inside it - the resulting elements will not be able to access the CSS and JavaScript
@@ -185,9 +185,9 @@ Deep Chat comes with a pre-defined set of classes that can be used to add stylin
 `deep-chat-suggestion-button` - when clicked sends the text that is inside the button as a new user message. <br />
 `deep-chat-temporary-message` - removes the message when a new one is added to the chat. This class needs to be applied
 to the parent-most element in the `html` string. This message is also not tracked in state. <br />
-`deep-chat-update-message` - used in [websockets](../connect#Websocket) to allow the server to update the last AI `html` message.
+`deep-chat-update-message` - used in [websockets](/docs/connect#Websocket) to allow the server to update the last AI `html` message.
 This class needs to be applied to the parent-most element in the `html` string. When tracking state, we recommend calling
-the [getMessages](../methods#getMessages) method when the [onNewMessage](../events#onNewMessage) event is triggered. <br />
+the [getMessages](/docs/methods#getMessages) method when the [onNewMessage](/docs/events#onNewMessage) event is triggered. <br />
 
 #### Basic Example
 
@@ -242,7 +242,7 @@ If you have suggestions for new classes that you think would be useful, please r
 
 #### Example for `deep-chat-update-message`
 
-This example uses a GIF as it needs a live [websocket](../connect#Websocket) connection.
+This example uses a GIF as it needs a live [websocket](/docs/connect#Websocket) connection.
 
 <img src={WebSocket} style={{marginLeft: 'auto', marginRight: 'auto', display: 'flex'}} />
 
@@ -278,7 +278,7 @@ Messages from the websocket server:
 
 ### Bubble Style {#bubbleStyle}
 
-To unset/change the message bubble styling, use the `html` property in the [messageStyles](./styles#messageStyles) object.
+To unset/change the message bubble styling, use the `html` property in the [messageStyles](/docs/styles#messageStyles) object.
 
 #### Example
 
