@@ -3,6 +3,7 @@ import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/ope
 import {OpenAIConverseResult, OpenAIMessage} from '../../types/openAIResult';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
@@ -15,6 +16,8 @@ import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 
 type ToolsAPIBody = Required<OpenAIConverseBodyInternal> & OpenAIToolsAPI;
+
+type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
 // chat is a form of completions
 export class OpenAIChatIO extends DirectServiceIO {
@@ -29,7 +32,8 @@ export class OpenAIChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
+    const imageFiles = deepChat.images ? {images: {files: {maxNumberOfFiles: 10}}} : {};
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, imageFiles);
     const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
@@ -51,14 +55,29 @@ export class OpenAIChatIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
+  private static getContent(message: MessageContent) {
+    if (message.files && message.files.length > 0) {
+      const content: ImageContent = message.files.map((file) => {
+        return {type: 'image_url', image_url: {url: file.src}};
+      });
+      if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', text: message.text});
+      return content;
+    }
+    return message.text;
+  }
+
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
-    const textMessages = pMessages.filter((message) => message.text);
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(textMessages,
+    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         totalMessagesMaxCharLength - this._systemMessage.content.length)
-      .map((message) => ({content: message.text, role: message.role === 'ai' ? 'assistant' : 'user'}));
+      .map((message) => {
+        return {content: OpenAIChatIO.getContent(message),
+          role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user'};});
+    if (pMessages.find((message) => message.files && message.files.length > 0)) {
+      bodyCopy.max_tokens ??= 300; // AI otherwise does not return full responses - remove when this behaviour changes
+    }
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
   }

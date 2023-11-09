@@ -3,7 +3,7 @@ import {InputButtonStyleAdjustments} from './buttons/styleAdjustments/inputButto
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
 import {InputButtonPositions} from './buttons/styleAdjustments/inputButtonPositions';
-import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/fileTypes/fileTypeButtonIcons';
+import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/files/fileTypeButtonIcons';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
 import {ButtonContainers} from './buttonContainers/buttonContainers';
