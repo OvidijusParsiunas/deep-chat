@@ -82,7 +82,7 @@ export class Messages {
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
-    deepChat.clearMessages = this.clearMessages.bind(this);
+    deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = this.scrollToBottom.bind(this);
     if (demo) this.prepareDemo(demo);
@@ -411,7 +411,7 @@ export class Messages {
   }
 
   // WORK - update all message classes to use deep-chat prefix
-  private clearMessages(isReset?: boolean) {
+  private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
     this._messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
@@ -437,6 +437,7 @@ export class Messages {
     this.messages.splice(0, this.messages.length);
     this._textElementsToText.splice(0, this._textElementsToText.length);
     this._onClearMessages?.();
+    delete serviceIO.sessionId;
   }
 
   private scrollToBottom() {

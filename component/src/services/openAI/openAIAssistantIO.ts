@@ -27,7 +27,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private readonly _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect'];
   private messages?: Messages;
-  private thread_id?: string;
   private run_id?: string;
   private searchedForThreadId = false;
 
@@ -66,9 +65,9 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
     this.requestSettings.method = 'POST';
-    if (this.thread_id) {
+    if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
-      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.thread_id}/messages`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
       const body = this.processMessages([pMessages[pMessages.length - 1]])[0];
       HTTPRequest.request(this, body, messages);
     } else {
@@ -82,7 +81,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   private searchPreviousMessagesForThreadId(messages: MessageContent[]) {
     const messageWithSession = messages.find((message) => message.sessionId);
-    if (messageWithSession) this.thread_id = messageWithSession.sessionId;
+    if (messageWithSession) this.sessionId = messageWithSession.sessionId;
     this.searchedForThreadId = true;
   }
 
@@ -90,20 +89,20 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (result.error) throw result.error.message;
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
-    const url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.thread_id}/runs/${this.run_id}`;
+    const url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}`;
     const requestInit = {method: 'GET', headers: this.requestSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
   }
 
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
-    if (this.thread_id) {
+    if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.thread_id}/runs`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs`;
       const runObj = await this.directFetch(JSON.parse(JSON.stringify(this.rawBody)));
       this.run_id = runObj.id;
     } else {
-      this.thread_id = result.thread_id;
+      this.sessionId = result.thread_id;
       this.run_id = result.id;
     }
   }
@@ -115,7 +114,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
       const threadMessages = (await this.directFetch({}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
-      return {text: lastMessage.content[0].text.value, sessionId: this.thread_id};
+      return {text: lastMessage.content[0].text.value, sessionId: this.sessionId};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) return await this.handleTools(toolCalls);
@@ -137,7 +136,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
-    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.thread_id}/runs/${this.run_id}/submit_tool_outputs`;
+    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs`;
     await this.directFetch({tool_outputs});
     return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
   }

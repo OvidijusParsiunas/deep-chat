@@ -104,4 +104,6 @@ export interface ServiceIO {
   isDirectConnection(): boolean;
 
   isSubmitProgrammaticallyDisabled?: boolean;
+
+  sessionId?: string;
 }

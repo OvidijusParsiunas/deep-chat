@@ -11,6 +11,7 @@ export class DirectServiceIO extends BaseServiceIO {
   key?: string;
   insertKeyPlaceholderText = 'API Key';
   getKeyLink = '';
+  sessionId?: string;
   private readonly keyVerificationDetails: KeyVerificationDetails;
   private readonly buildHeadersFunc: BuildHeadersFunc;
 
