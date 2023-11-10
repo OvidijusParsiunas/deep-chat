@@ -135,7 +135,7 @@ export class BaseServiceIO implements ServiceIO {
 
   // WORK - validation to say that the response should have text, files or error property, link to example
   // and responseInterceptor
-  async extractResultData(result: any | Response): Promise<Response | {pollingInAnotherRequest: true}> {
+  async extractResultData(result: any | Response): Promise<Response | {makingAnotherRequest: true}> {
     if (result.error) throw result.error;
     if (result.result) return Legacy.handleResponseProperty(result);
     return result;

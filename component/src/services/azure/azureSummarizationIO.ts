@@ -54,14 +54,14 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     this.messages = messages;
   }
 
-  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{pollingInAnotherRequest: true}> {
+  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{makingAnotherRequest: true}> {
     if (result.error) throw result.error.message;
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
       const requestInit = {method: 'GET', headers: this.requestSettings?.headers as GenericObject<string>};
       HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
-    return {pollingInAnotherRequest: true};
+    return {makingAnotherRequest: true};
   }
 
   async extractPollResultData(result: AzureSummarizationResult): PollResult {

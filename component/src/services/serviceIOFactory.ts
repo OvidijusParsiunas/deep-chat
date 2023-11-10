@@ -21,6 +21,7 @@ import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
+import {OpenAIAssistantIO} from './openAI/openAIAssistantIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
@@ -42,6 +43,9 @@ export class ServiceIOFactory {
         }
         if (directConnection.openAI.textToSpeech) {
           return new OpenAITextToSpeechIO(deepChat);
+        }
+        if (directConnection.openAI.assistant) {
+          return new OpenAIAssistantIO(deepChat);
         }
         if (directConnection.openAI.completions) {
           return new OpenAICompletionsIO(deepChat);

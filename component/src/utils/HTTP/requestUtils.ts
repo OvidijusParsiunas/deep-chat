@@ -39,11 +39,9 @@ export class RequestUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
-    return fetch(io.requestSettings?.url || io.url || '', {
-      method: io.requestSettings?.method || 'POST',
-      headers: headers,
-      body: stringifyBody ? JSON.stringify(body) : body,
-    });
+    const requestContent: RequestInit = {method: io.requestSettings?.method || 'POST', headers};
+    if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
+    return fetch(io.requestSettings?.url || io.url || '', requestContent);
   }
 
   public static processResponseByType(response: Response) {

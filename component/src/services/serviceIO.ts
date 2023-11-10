@@ -93,7 +93,7 @@ export interface ServiceIO {
     result: object,
     fetch?: FetchFunc,
     previousBody?: object
-  ): Promise<InterfacesUnion<Response | {pollingInAnotherRequest: true}>>;
+  ): Promise<InterfacesUnion<Response | {makingAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 

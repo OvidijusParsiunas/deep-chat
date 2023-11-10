@@ -5,4 +5,5 @@ export interface Response {
   files?: MessageFiles;
   html?: string;
   error?: string;
+  sessionId?: string;
 }

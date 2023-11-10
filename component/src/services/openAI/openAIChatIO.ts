@@ -1,4 +1,4 @@
-import {FunctionHandler, OpenAIChat, OpenAIConverse, OpenAIToolsAPI} from '../../types/openAI';
+import {FunctionHandler, OpenAIChat, OpenAIConverse, OpenAIFunctionsAPI} from '../../types/openAI';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {OpenAIConverseResult, OpenAIMessage} from '../../types/openAIResult';
 import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
@@ -15,7 +15,7 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 
-type ToolsAPIBody = Required<OpenAIConverseBodyInternal> & OpenAIToolsAPI;
+type ToolsAPIBody = Required<OpenAIConverseBodyInternal> & OpenAIFunctionsAPI;
 
 type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 

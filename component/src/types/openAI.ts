@@ -25,23 +25,32 @@ export interface OpenAIImages {
   user?: string;
 }
 
-export type FunctionHandlerResponse = InterfacesUnion<{text?: string} | {response: string}[]>;
-
 export type FunctionsDetails = {name: string; arguments: string}[];
+
+export type AssistantFunctionHandlerResponse = string[] | Promise<string[]>;
+
+export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
+
+export type FunctionHandlerResponse = InterfacesUnion<{response: string}[] | {text?: string}>;
 
 export type FunctionHandler = (
   functionsDetails: FunctionsDetails
 ) => FunctionHandlerResponse | Promise<FunctionHandlerResponse>;
 
-export interface OpenAIToolsAPI {
+export interface OpenAIFunctionsAPI {
   // parameters use the JSON Schema type
   tools?: {type: 'function'; function: {name: string; description?: string; parameters: object}}[];
   tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
   function_handler?: FunctionHandler;
 }
 
+export interface OpenAIAssistant {
+  assistant_id: string;
+  function_handler?: AssistantFunctionHandler;
+}
+
 // totalMessagesMaxCharLength must include system_prompt length
-export type OpenAIChat = {system_prompt?: string} & OpenAIToolsAPI;
+export type OpenAIChat = {system_prompt?: string} & OpenAIFunctionsAPI;
 
 // https://platform.openai.com/docs/api-reference/chat/create
 // https://platform.openai.com/docs/api-reference/completions
@@ -54,8 +63,10 @@ export interface OpenAIConverse {
 
 export interface OpenAI {
   chat?: true | (OpenAIConverse & OpenAIChat);
-  completions?: true | OpenAIConverse;
+  assistant?: OpenAIAssistant;
   images?: true | OpenAIImages;
   speechToText?: true | OpenAISpeechToText;
   textToSpeech?: true | OpenAITextToSpeech;
+  // perhaps remove
+  completions?: true | OpenAIConverse;
 }

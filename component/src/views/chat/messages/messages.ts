@@ -170,11 +170,12 @@ export class Messages {
 
   private static createMessageContent(isAI: boolean, content: Response): MessageContent {
     const messageContent: MessageContent = {role: MessageUtils.getRole(isAI)};
-    const {text, files, html} = content;
+    const {text, files, html, sessionId} = content;
     if (text) messageContent.text = text;
     if (files) messageContent.files = files;
     if (html) messageContent.html = html;
     if (Object.keys(messageContent).length === 1) messageContent.text = '';
+    if (sessionId) messageContent.sessionId = sessionId;
     return messageContent;
   }
 

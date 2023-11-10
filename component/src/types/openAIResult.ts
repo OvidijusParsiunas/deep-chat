@@ -1,7 +1,33 @@
 import {InterfacesUnion} from './utilityTypes';
 
+// when executing either create new message (only thread_id will be present)
+// https://platform.openai.com/docs/api-reference/messages/createMessage
+// or when creating and running together
+// https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
+export interface OpenAIAssistantInitReqResult {
+  id: string; // run id
+  thread_id: string;
+  error?: {code: string; message: string};
+}
+
+export interface OpenAIAssistantMessagesResult {
+  data: {content: {text: {value: string}}[]}[];
+}
+
+export interface OpenAIRunResult {
+  status: string;
+  thread_id: string;
+  required_action?: {
+    submit_tool_outputs?: {
+      tool_calls?: ToolCalls;
+    };
+  };
+}
+
+export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
+
 export interface ToolAPI {
-  tool_calls?: {function: {name: string; arguments: string}; id: string}[];
+  tool_calls?: ToolCalls;
   tool_call_id?: string;
   name?: string;
 }

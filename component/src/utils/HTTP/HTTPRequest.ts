@@ -36,7 +36,7 @@ export class HTTPRequest {
         if (!responseValid) throw result;
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
-        if (resultData.pollingInAnotherRequest) return;
+        if (resultData.makingAnotherRequest) return;
         if (io.deepChat.stream && resultData.text) {
           Stream.simulate(messages, io.streamHandlers, resultData.text);
         } else {
@@ -50,7 +50,6 @@ export class HTTPRequest {
       });
   }
 
-  // prettier-ignore
   public static executePollRequest(io: ServiceIO, url: string, requestInit: RequestInit, messages: Messages) {
     console.log('polling');
     const {onFinish} = io.completionsHandlers;
@@ -58,10 +57,10 @@ export class HTTPRequest {
       .then((response) => response.json())
       .then(async (result: object) => {
         if (!io.extractPollResultData) return;
-        const resultData = await io.extractPollResultData(await io.deepChat.responseInterceptor?.(result) || result);
+        const resultData = await io.extractPollResultData((await io.deepChat.responseInterceptor?.(result)) || result);
         if (resultData.timeoutMS) {
           setTimeout(() => {
-            HTTPRequest.executePollRequest(io, url, requestInit, messages);            
+            HTTPRequest.executePollRequest(io, url, requestInit, messages);
           }, resultData.timeoutMS);
         } else {
           console.log('finished polling');
