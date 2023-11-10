@@ -18,8 +18,15 @@ export class SetupMessages {
       const openAIChat = deepChat.directConnection.openAI?.chat;
       if (typeof openAIChat === 'object' && openAIChat.tools && !openAIChat.function_handler) {
         return (
-          'Please define a `function_handler` property inside' +
-          ` the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
+          'Please define the `function_handler` property inside' +
+          ` the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
+        );
+      }
+      const openAIAssistant = deepChat.directConnection.openAI?.assistant;
+      if (typeof openAIAssistant === 'boolean' || (openAIAssistant && !openAIAssistant.assistant_id)) {
+        return (
+          'Please define the `assistant_id` property inside' +
+          ` the openAI [assistant](https://deepchat.dev/docs/directConnection/openAI#Assistant) object.`
         );
       }
     } else if (deepChat.request) {
