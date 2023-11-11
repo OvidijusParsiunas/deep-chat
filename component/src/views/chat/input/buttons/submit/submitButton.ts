@@ -173,6 +173,7 @@ export class SubmitButton extends InputButton<Styles> {
     const data: Response = {};
     if (userText !== '') data.text = userText;
     if (uploadedFilesData) data.files = await this._messages.addMultipleFiles(uploadedFilesData);
+    if (this._serviceIO.sessionId) data.sessionId = this._serviceIO.sessionId;
     if (Object.keys(data).length > 0) this._messages.addNewMessage(data, false);
   }
 

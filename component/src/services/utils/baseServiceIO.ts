@@ -34,7 +34,6 @@ export class BaseServiceIO implements ServiceIO {
   recordAudio?: MicrophoneFilesServiceConfig;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
-  private readonly _directServiceRequiresFiles: boolean;
   demo?: DemoT;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
@@ -49,7 +48,6 @@ export class BaseServiceIO implements ServiceIO {
     SetFileTypes.set(deepChat, this, existingFileTypes);
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
-    this._directServiceRequiresFiles = !!existingFileTypes && Object.keys(existingFileTypes).length > 0;
     if (this.requestSettings.websocket) Websocket.setup(this);
   }
 
@@ -126,7 +124,7 @@ export class BaseServiceIO implements ServiceIO {
     if (this.requestSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
       Websocket.sendWebsocket(this, body, messages, false);
-    } else if (requestContents.files && !this._directServiceRequiresFiles) {
+    } else if (requestContents.files && !this.isDirectConnection()) {
       this.callApiWithFiles(this.rawBody, messages, processedMessages, requestContents.files);
     } else {
       this.callServiceAPI(messages, processedMessages, requestContents.files);

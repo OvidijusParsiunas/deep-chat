@@ -17,13 +17,20 @@ export class RequestUtils {
 
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
   // prettier-ignore
-  public static async temporarilyRemoveHeader(requestSettings: Request | undefined,
-      request: (stringifyBody?: boolean) => Promise<void>, stringifyBody: boolean) {
+  public static async tempRemoveContentHeader(requestSettings: Request | undefined,
+      request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
     if (!requestSettings?.headers) throw new Error('Request settings have not been set up');
-    const previousHeader = requestSettings.headers[RequestUtils.CONTENT_TYPE];
+    const previousContetType = requestSettings.headers[RequestUtils.CONTENT_TYPE];
     delete requestSettings.headers[RequestUtils.CONTENT_TYPE];
-    await request(stringifyBody);
-    requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousHeader;
+    let result;
+    try {
+      result = await request(stringifyBody);
+    } catch (e) {
+      requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+      throw e;
+    }
+    requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+    return result;
   }
 
   public static displayError(messages: Messages, err: object, defMessage = 'Service error, please try again.') {

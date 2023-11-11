@@ -86,7 +86,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
     const body = this.preprocessBody(this.rawBody, pMessages);
     const formData = OpenAISpeechToTextIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestUtils.temporarilyRemoveHeader(this.requestSettings,
+    RequestUtils.tempRemoveContentHeader(this.requestSettings,
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 

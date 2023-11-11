@@ -32,8 +32,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-    const imageFiles = deepChat.images ? {images: {files: {maxNumberOfFiles: 10}}} : {};
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, imageFiles);
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
