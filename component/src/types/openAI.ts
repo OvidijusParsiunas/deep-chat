@@ -31,42 +31,38 @@ export type AssistantFunctionHandlerResponse = string[] | Promise<string[]>;
 
 export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
 
-export type FunctionHandlerResponse = InterfacesUnion<{response: string}[] | {text?: string}>;
-
-export type FunctionHandler = (
-  functionsDetails: FunctionsDetails
-) => FunctionHandlerResponse | Promise<FunctionHandlerResponse>;
-
-export interface OpenAIFunctionsAPI {
-  // parameters use the JSON Schema type
-  tools?: {type: 'function'; function: {name: string; description?: string; parameters: object}}[];
-  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
-  function_handler?: FunctionHandler;
-}
-
+// https://platform.openai.com/docs/api-reference/assistants
 export interface OpenAIAssistant {
   assistant_id: string;
   function_handler?: AssistantFunctionHandler;
 }
 
-// totalMessagesMaxCharLength must include system_prompt length
-export type OpenAIChat = {system_prompt?: string} & OpenAIFunctionsAPI;
+export type ChatFunctionHandlerResponse = InterfacesUnion<{response: string}[] | {text: string}>;
 
-// https://platform.openai.com/docs/api-reference/chat/create
-// https://platform.openai.com/docs/api-reference/completions
-export interface OpenAIConverse {
+export type ChatFunctionHandler = (
+  functionsDetails: FunctionsDetails
+) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse>;
+
+export interface OpenAIChatFunctions {
+  // parameters use the JSON Schema type
+  tools?: {type: 'function' | 'object'; function: {name: string; description?: string; parameters: object}}[];
+  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
+  function_handler?: ChatFunctionHandler;
+}
+
+// https://platform.openai.com/docs/api-reference/chat
+export type OpenAIChat = {
+  system_prompt?: string;
   model?: string;
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
-}
+} & OpenAIChatFunctions;
 
 export interface OpenAI {
-  chat?: true | (OpenAIConverse & OpenAIChat);
+  chat?: true | OpenAIChat;
   assistant?: OpenAIAssistant;
   images?: true | OpenAIImages;
-  speechToText?: true | OpenAISpeechToText;
   textToSpeech?: true | OpenAITextToSpeech;
-  // perhaps remove
-  completions?: true | OpenAIConverse;
+  speechToText?: true | OpenAISpeechToText;
 }

@@ -1,9 +1,8 @@
-import {FunctionHandler, OpenAIChat, OpenAIConverse, OpenAIFunctionsAPI} from '../../types/openAI';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {OpenAIConverseResult, OpenAIMessage} from '../../types/openAIResult';
-import {OpenAIConverseBaseBody} from './utils/openAIConverseBaseBody';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
+import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {Messages} from '../../views/chat/messages/messages';
@@ -15,17 +14,14 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 
-type ToolsAPIBody = Required<OpenAIConverseBodyInternal> & OpenAIFunctionsAPI;
-
 type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
-// chat is a form of completions
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
-  private readonly _functionHandler?: FunctionHandler;
+  private readonly _functionHandler?: ChatFunctionHandler;
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
@@ -42,14 +38,14 @@ export class OpenAIChatIO extends DirectServiceIO {
       Object.assign(this.rawBody, config);
     }
     this.maxMessages ??= -1;
-    this.rawBody.model ??= OpenAIConverseBaseBody.GPT_CHAT_TURBO_MODEL;
+    this.rawBody.model ??= 'gpt-3.5-turbo';
   }
 
   private static generateSystemMessage(system_prompt: string): SystemMessageInternal {
     return {role: 'system', content: system_prompt};
   }
 
-  private cleanConfig(config: OpenAIConverse & OpenAIChat) {
+  private cleanConfig(config: OpenAIChat) {
     delete config.system_prompt;
     delete config.function_handler;
   }
@@ -75,7 +71,7 @@ export class OpenAIChatIO extends DirectServiceIO {
         return {content: OpenAIChatIO.getContent(message),
           role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user'};});
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
-      bodyCopy.max_tokens ??= 300; // AI otherwise does not return full responses - remove when this behaviour changes
+      bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
     }
     bodyCopy.messages = [this._systemMessage, ...processedMessages];
     return bodyCopy;
@@ -94,7 +90,7 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   // prettier-ignore
   override async extractResultData(result: OpenAIConverseResult,
-      fetchFunc?: FetchFunc, prevBody?: ToolsAPIBody): Promise<ResponseT> {
+      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseT> {
     if (result.error) throw result.error.message;
     if (result.choices[0].delta) {
       return {text: result.choices[0].delta.content || ''};
@@ -108,7 +104,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {text: ''};
   }
 
-  private async handleTools(message: OpenAIMessage, fetchFunc?: FetchFunc, prevBody?: ToolsAPIBody): Promise<ResponseT> {
+  private async handleTools(message: OpenAIMessage, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseT> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
     if (!message.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
       throw Error(

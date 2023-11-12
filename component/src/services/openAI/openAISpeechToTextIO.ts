@@ -24,6 +24,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Invalid'];
+  textInputPlaceholderText = 'Upload an audio file';
   private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   private _service_url: string = OpenAISpeechToTextIO.AUDIO_TRANSCRIPTIONS_URL;
 

@@ -16,7 +16,6 @@ import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
 import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
 import {OpenAISpeechToTextIO} from './openAI/openAISpeechToTextIO';
 import {AzureSummarizationIO} from './azure/azureSummarizationIO';
-import {OpenAICompletionsIO} from './openAI/openAICompletionsIO';
 import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
@@ -46,9 +45,6 @@ export class ServiceIOFactory {
         }
         if (directConnection.openAI.assistant) {
           return new OpenAIAssistantIO(deepChat);
-        }
-        if (directConnection.openAI.completions) {
-          return new OpenAICompletionsIO(deepChat);
         }
         return new OpenAIChatIO(deepChat);
       }
