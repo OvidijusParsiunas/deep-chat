@@ -2,6 +2,7 @@ import {MessageContent} from '../../types/messages';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContent[], limit: number) {
+    if (limit === -1) return messages;
     let totalCharacters = 0;
     let i = messages.length - 1;
     for (i; i >= 0; i -= 1) {

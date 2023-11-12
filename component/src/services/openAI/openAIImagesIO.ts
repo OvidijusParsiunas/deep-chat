@@ -28,14 +28,12 @@ export class OpenAIImagesIO extends DirectServiceIO {
 
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Incorrect', 'Invalid input image'];
-  private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
 
   constructor(deepChat: DeepChat) {
-    const {directConnection, textInput} = deepChat;
+    const {directConnection} = deepChat;
     const apiKey = directConnection?.openAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
-    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
@@ -61,10 +59,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenAIImages, lastMessage?: string) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    if (lastMessage && lastMessage !== '') {
-      const processedMessage = lastMessage.substring(0, this._maxCharLength);
-      bodyCopy.prompt = processedMessage;
-    }
+    if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }
 

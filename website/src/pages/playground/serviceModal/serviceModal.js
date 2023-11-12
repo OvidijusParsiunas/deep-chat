@@ -103,8 +103,9 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     const type = newTypeArg || activeType;
     const connect = constructConnect(optionalParamsRef.current, service, type);
     if (service === 'custom') {
-      setWebsocket(connect['custom'].websocket);
-      if (connect['custom'].websocket) {
+      const websocketValue = connect['custom'].websocket === 'true';
+      setWebsocket(websocketValue);
+      if (websocketValue) {
         setTimeout(() => {
           const newConnect = constructConnect(optionalParamsRef.current, service, type);
           setCode(getCodeStr(newConnect, true, view));
@@ -113,7 +114,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
       }
       return setCode(getCodeStr(connect, true, view));
     }
-    setCode(getCodeStr(connect, false, view));
+    setCode(getCodeStr(connect, false, view, type));
   };
 
   function constructConnect(optionalParamsEl, activeService, activeType) {
@@ -258,30 +259,52 @@ function changeFirstLetter(text, capitalize = true) {
   return text.charAt(0)[capitalize ? 'toUpperCase' : 'toLowerCase']() + text.slice(1);
 }
 
-function getCodeStr(connect, isCustom, view) {
+function extractFiles(connect) {
+  const substringIndexStart = 'allow'.length;
+  return Object.keys(connect)
+    .filter((key) => !!key.toLowerCase().startsWith('allow'))
+    .reduce((currValue, key) => {
+      const fileType = changeFirstLetter(key.substring(substringIndexStart), false);
+      const attribute = ` ${fileType}="${connect[key]}"\n`;
+      delete connect[key];
+      return currValue + attribute;
+    }, '\n');
+}
+
+function getCodeStr(connect, isCustom, view, type) {
   if (connect.demo) {
     return `<deep-chat demo="true"></deep-chat>`;
   }
+  let files = '';
   if (isCustom) {
-    return `<deep-chat request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
+    const extractedFiles = extractFiles(connect['custom']);
+    if (extractedFiles.length > 1) files = extractedFiles;
+    return `<deep-chat${files} request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
   }
+  const service = Object.keys(connect)[0];
   if (!view.isKeyVisible) {
     connect = JSON.parse(JSON.stringify(connect));
-    const service = Object.keys(connect)[0];
     if (connect[service].key) connect[service].key = 'hidden';
   }
-  return `<deep-chat directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
+  if (typeof connect[service][type] === 'object') {
+    const extractedFiles = extractFiles(connect[service][type]);
+    if (extractedFiles.length > 1) files = extractedFiles;
+    if (Object.keys(connect[service][type]).length === 0) connect[service][type] = true;
+  }
+  return `<deep-chat${files} directConnection='${JSON.stringify(connect, null, 2)}'></deep-chat>`;
 }
 
-// prettier-ignore
 function extractOptionalParameterValues(optionalParamsEl) {
   return Array.from(optionalParamsEl.children).map((element) => {
     const valueEl = element.children[1];
-    let value = valueEl.value;
-    if (value === 'true') return true;
-    if (value === 'false') return false;
-    const attemptedParseNumber = parseNumber(value);
+    const attemptedParseNumber = parseNumber(valueEl.value);
     if (attemptedParseNumber !== null) return attemptedParseNumber;
+    if (valueEl.classList.contains('playground-select')) {
+      const selectedValue = valueEl.children[2].children[0].children[0].children[0].children[0].innerText.trim();
+      if (selectedValue === 'true') return true;
+      if (selectedValue === 'false') return false;
+      return selectedValue.length > 0 ? selectedValue : undefined;
+    }
     if (valueEl.classList.contains('playgroud-service-modal-form')) {
       const object = Array.from(valueEl.children || []).reduce((currentObject, propertyElement) => {
         if (propertyElement?.tagName === 'DIV') {
@@ -293,7 +316,7 @@ function extractOptionalParameterValues(optionalParamsEl) {
       }, {});
       if (Object.keys(object).length > 0) return object;
     }
-    return value;
+    return valueEl.value;
   });
 }
 
@@ -330,6 +353,9 @@ const REQUIRED_PARAMETERS = {
   huggingFace: {
     questionAnswer: 'context',
   },
+  openAI: {
+    assistant: 'assistant_id',
+  },
 };
 
 const REQUIRED_PARAMETERS_LINKS = {
@@ -340,6 +366,9 @@ const REQUIRED_PARAMETERS_LINKS = {
   },
   huggingFace: {
     questionAnswer: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
+  },
+  openAI: {
+    assistant: 'https://platform.openai.com/docs/api-reference/assistants',
   },
 };
 
@@ -357,6 +386,12 @@ const PSEUDO_NAMES = {
   ImageToImage: 'Image To Image',
   ImageToImageMasking: 'Image To Image Masking',
   ImageToImageUpscale: 'Image To Image Upscale',
+  allowImages: 'Allow Images',
+  allowGifs: 'Allow Gifs',
+  allowCamera: 'Allow Camera',
+  allowAudio: 'Allow Audio',
+  allowMicrophone: 'Allow Microphone',
+  allowMixedFiles: 'Allow Mixed Files',
 };
 
 // TO-DO - add default values
@@ -368,6 +403,12 @@ const SERVICE_MODAL_FORM_CONFIG = {
     websocket: ['true', 'false'],
     headers: 'constructable object',
     additionalBodyProps: 'constructable object',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
+    allowGifs: ['true', 'false'],
+    allowAudio: ['true', 'false'],
+    allowMicrophone: ['true', 'false'],
+    allowMixedFiles: ['true', 'false'],
   },
   openAI: {
     chat: {
@@ -376,19 +417,23 @@ const SERVICE_MODAL_FORM_CONFIG = {
       max_tokens: 'number',
       temperature: 'number',
       top_p: 'number',
+      allowImages: ['true', 'false'],
+      allowCamera: ['true', 'false'],
     },
-    completions: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
+    assistant: {
+      allowMixedFiles: ['true', 'false'],
     },
     images: {
       n: 'number',
       size: ['256x256', '512x512', '1024x1024'],
       user: 'string',
     },
-    audio: {
+    textToSpeech: {
+      model: 'string',
+      voice: 'string',
+      speed: 'number',
+    },
+    speechToText: {
       model: 'string',
       temperature: 'number',
       language: 'string',
@@ -582,18 +627,20 @@ const OPTIONAL_PARAM_TO_LINK = {
       temperature: 'https://platform.openai.com/docs/api-reference/chat/create#temperature',
       top_p: 'https://platform.openai.com/docs/api-reference/chat/create#top_p',
     },
-    completions: {
-      model: 'https://platform.openai.com/docs/api-reference/completions/object#model',
-      max_tokens: 'https://platform.openai.com/docs/api-reference/completions/create#max_tokens',
-      temperature: 'https://platform.openai.com/docs/api-reference/completions/create#temperature',
-      top_p: 'https://platform.openai.com/docs/api-reference/completions/create#top_p',
+    assistant: {
+      assistant_id: 'https://platform.openai.com/docs/api-reference/assistants',
     },
     images: {
       n: 'https://platform.openai.com/docs/api-reference/images/create#n',
       size: 'https://platform.openai.com/docs/api-reference/images/create#size',
       user: 'https://platform.openai.com/docs/api-reference/images/create#user',
     },
-    audio: {
+    textToSpeech: {
+      model: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-model',
+      voice: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-voice',
+      speed: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-speed',
+    },
+    speechToText: {
       model: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#model',
       temperature: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#temperature',
       language: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#language',

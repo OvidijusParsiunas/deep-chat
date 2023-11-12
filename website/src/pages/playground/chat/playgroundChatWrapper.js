@@ -170,9 +170,10 @@ const SERVICE_TO_NAME = {
   custom: 'Service',
   openAI: {
     chat: 'OpenAI: Chat',
-    completions: 'OpenAI: Completions',
+    assistant: 'OpenAI: Assistant',
     images: 'OpenAI: Dalle',
-    audio: 'OpenAI: Whisper',
+    textToSpeech: 'OpenAI: Text To Speech',
+    speechToText: 'OpenAI: Speech To Text',
   },
   cohere: {
     chat: 'Cohere: Chat',

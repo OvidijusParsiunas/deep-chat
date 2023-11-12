@@ -486,6 +486,8 @@ html[data-theme='dark'] .header-github-link:before {
 .token + .keyword,
 .token + .string,
 .token + .number,
+.token + .parameter,
+.token + .dom,
 .token + .boolean,
 .template-string {
   color: var(--code-tag-color) !important;

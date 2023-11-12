@@ -25,15 +25,12 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Invalid'];
   textInputPlaceholderText = 'Upload an audio file';
-  private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   private _service_url: string = OpenAISpeechToTextIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const {textInput} = deepChat;
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
-    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     const config = directConnectionCopy?.openAI?.audio as NonNullable<OpenAI['speechToText']>;
     if (typeof config === 'object') {
       this.processConfig(config);
@@ -72,10 +69,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   private preprocessBody(body: OpenAISpeechToText, messages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const lastMessage = messages[messages.length - 1]?.text?.trim();
-    if (lastMessage && lastMessage !== '') {
-      const processedMessage = lastMessage.substring(0, this._maxCharLength);
-      bodyCopy.prompt = processedMessage;
-    }
+    if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }
 

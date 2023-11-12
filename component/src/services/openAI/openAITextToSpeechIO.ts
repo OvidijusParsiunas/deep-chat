@@ -16,7 +16,6 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Invalid'];
   private static readonly DEFAULT_MODEL = 'tts-1';
   private static readonly DEFAULT_VOIDE = 'alloy';
-  private readonly _maxCharLength: number = OpenAIUtils.FILE_MAX_CHAR_LENGTH;
   textInputPlaceholderText: string;
 
   introPanelMarkUp = `
@@ -25,11 +24,9 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/text-to-speech">here</a> for more information.</p>`;
 
   constructor(deepChat: DeepChat) {
-    const {textInput} = deepChat;
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    if (textInput?.characterLimit) this._maxCharLength = textInput.characterLimit;
     const config = directConnectionCopy?.openAI?.textToSpeech as NonNullable<OpenAI['textToSpeech']>;
     if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.rawBody.model ??= OpenAITextToSpeechIO.DEFAULT_MODEL;
@@ -42,8 +39,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const lastMessage = messages[messages.length - 1]?.text?.trim();
     if (lastMessage && lastMessage !== '') {
-      const processedMessage = lastMessage.substring(0, this._maxCharLength);
-      bodyCopy.input = processedMessage;
+      bodyCopy.input = lastMessage;
     }
     return bodyCopy;
   }

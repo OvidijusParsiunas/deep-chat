@@ -8,6 +8,7 @@ function changeFirstLetter(text, capitalize = true) {
 }
 
 function SelectInput({parameter, configVal, changeCode}) {
+  if (typeof configVal === 'boolean') configVal = String(configVal);
   return (
     <PlaygroundSelect
       options={['', ...parameter]}

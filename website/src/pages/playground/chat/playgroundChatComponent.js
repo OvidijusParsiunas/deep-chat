@@ -23,6 +23,17 @@ export default function ChatComponent({config}) {
     config?.messages.splice(0, config.messages.length);
   }
 
+  function getBoolean(object, name) {
+    if (object[name]) {
+      return object[name];
+    }
+    const firstKey = Object.keys(object)[0] === 'key' ? Object.keys(object)[1] : Object.keys(object)[0];
+    if (typeof object[firstKey] === 'object') {
+      return getBoolean(object[firstKey], name);
+    }
+    return false;
+  }
+
   return (
     <BrowserOnly>
       {() => {
@@ -36,6 +47,12 @@ export default function ChatComponent({config}) {
               {config?.connect?.custom ? (
                 <DeepChatBrowser
                   request={config.connect.custom}
+                  images={getBoolean(config.connect, 'allowImages')}
+                  camera={getBoolean(config.connect, 'allowCamera')}
+                  gifs={getBoolean(config.connect, 'allowGifs')}
+                  audio={getBoolean(config.connect, 'allowAudio')}
+                  microphone={getBoolean(config.connect, 'allowMicrophone')}
+                  mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
@@ -62,6 +79,12 @@ export default function ChatComponent({config}) {
               ) : (
                 <DeepChatBrowser
                   directConnection={config.connect}
+                  images={getBoolean(config.connect, 'allowImages')}
+                  camera={getBoolean(config.connect, 'allowCamera')}
+                  gifs={getBoolean(config.connect, 'allowGifs')}
+                  audio={getBoolean(config.connect, 'allowAudio')}
+                  microphone={getBoolean(config.connect, 'allowMicrophone')}
+                  mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
@@ -82,6 +105,12 @@ export default function ChatComponent({config}) {
             {config?.connect?.custom ? (
               <DeepChatBrowser
                 request={config.connect.custom}
+                images={getBoolean(config.connect, 'allowImages')}
+                camera={getBoolean(config.connect, 'allowCamera')}
+                gifs={getBoolean(config.connect, 'allowGifs')}
+                audio={getBoolean(config.connect, 'allowAudio')}
+                microphone={getBoolean(config.connect, 'allowMicrophone')}
+                mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
@@ -98,6 +127,12 @@ export default function ChatComponent({config}) {
             ) : (
               <DeepChatBrowser
                 directConnection={config.connect}
+                images={getBoolean(config.connect, 'allowImages')}
+                camera={getBoolean(config.connect, 'allowCamera')}
+                gifs={getBoolean(config.connect, 'allowGifs')}
+                audio={getBoolean(config.connect, 'allowAudio')}
+                microphone={getBoolean(config.connect, 'allowMicrophone')}
+                mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}

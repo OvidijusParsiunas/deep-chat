@@ -35,9 +35,10 @@ const TYPE_TO_LINK = {
   custom: 'https://deepchat.dev/docs/connect',
   openAI: {
     chat: 'https://platform.openai.com/docs/api-reference/chat',
-    completions: 'https://platform.openai.com/docs/api-reference/completions',
+    assistant: 'https://platform.openai.com/docs/api-reference/assistants',
     images: 'https://platform.openai.com/docs/api-reference/images',
-    audio: 'https://platform.openai.com/docs/api-reference/audio',
+    textToSpeech: 'https://platform.openai.com/docs/api-reference/audio/createSpeech',
+    speechToText: 'https://platform.openai.com/docs/api-reference/audio/createTranscription',
   },
   cohere: {
     chat: 'https://docs.cohere.com/docs/conversational-ai',

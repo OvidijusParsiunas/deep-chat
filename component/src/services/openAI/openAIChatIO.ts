@@ -64,9 +64,8 @@ export class OpenAIChatIO extends DirectServiceIO {
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        totalMessagesMaxCharLength - this._systemMessage.content.length)
+        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
       .map((message) => {
         return {content: OpenAIChatIO.getContent(message),
           role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user'};});

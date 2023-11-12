@@ -6,10 +6,6 @@ import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
 
 export class OpenAIUtils {
-  // 13352 roughly adds up to 3,804 tokens just to be safe
-  public static readonly CONVERSE_MAX_CHAR_LENGTH: number = 13352;
-  public static readonly FILE_MAX_CHAR_LENGTH: number = 1000;
-
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,

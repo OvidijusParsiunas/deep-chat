@@ -45,7 +45,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   }
 
   private processMessages(pMessages: MessageContent[], file_ids?: string[]) {
-    const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || OpenAIUtils.CONVERSE_MAX_CHAR_LENGTH;
+    const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
     return MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength).map((message) => {
       return {content: message.text || '', role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user', file_ids};
     });
