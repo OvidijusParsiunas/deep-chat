@@ -22,16 +22,16 @@
 
 ### :tada: Latest updates
 
+The OpenAI API has been upgraded with new features! Check out Deep Chat's [OpenAI](https://deepchat.dev/docs/directConnection/OpenAI) documentation and try it out in the [Playground](https://deepchat.dev/playground):
+
+<p align="center">
+    <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/a43b43c1-20e1-4949-bdfc-2910d78fd3fb" alt="OpenAI New Features">
+</p>
+
 Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API:
 
 <p align="center">
     <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5ba04d84-1efb-424a-8718-ba160011cafe" alt="Messages HTML">
-</p>
-
-Create an AI status message bubble for [websockets](https://deepchat.dev/docs/connect#Websocket) using the ["deep-chat-update-message"](https://deepchat.dev/docs/messages/HTML#example-for-deep-chat-update-message) class. Checkout [Deep Chat Classes](https://deepchat.dev/docs/messages/HTML#deepChatClasses) for more:
-
-<p align="center">
-    <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/06626313-f4d1-4d6f-849b-be603ebe7497" alt="Update Message">
 </p>
 
 ### :computer: Getting started
