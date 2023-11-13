@@ -22,10 +22,10 @@
 
 ### :tada: Latest updates
 
-The OpenAI API has been upgraded with new features! Check out Deep Chat's [OpenAI](https://deepchat.dev/docs/directConnection/OpenAI) documentation and try it out in the [Playground](https://deepchat.dev/playground):
+The OpenAI API has been upgraded with GPT-4 Vision, Assistants, Text to Speech, Function Calling and much more! Check out Deep Chat's [OpenAI](https://deepchat.dev/docs/directConnection/OpenAI) documentation and try it out in the [Playground](https://deepchat.dev/playground):
 
 <p align="center">
-    <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/a43b43c1-20e1-4949-bdfc-2910d78fd3fb" alt="OpenAI New Features">
+    <img width="730" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/a43b43c1-20e1-4949-bdfc-2910d78fd3fb" alt="OpenAI New Features">
 </p>
 
 Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API:
