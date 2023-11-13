@@ -3,10 +3,10 @@ import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {DeepChat} from '../../deepChat';
 import {PollResult} from '../serviceIO';
@@ -44,21 +44,21 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
   }
 
-  private processMessages(pMessages: MessageContent[], file_ids?: string[]) {
+  private processMessages(pMessages: MessageContentI[], file_ids?: string[]) {
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
     return MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength).map((message) => {
-      return {content: message.text || '', role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user', file_ids};
+      return {content: message.text || '', role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant', file_ids};
     });
   }
 
-  private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContent[], file_ids?: string[]) {
+  private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], file_ids?: string[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = this.processMessages(pMessages, file_ids);
     bodyCopy.thread = {messages: processedMessages};
     return bodyCopy;
   }
 
-  private callService(messages: Messages, pMessages: MessageContent[], file_ids?: string[]) {
+  private callService(messages: Messages, pMessages: MessageContentI[], file_ids?: string[]) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
@@ -73,7 +73,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.messages = messages;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
@@ -82,9 +82,9 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.callService(messages, pMessages, file_ids);
   }
 
-  private searchPreviousMessagesForThreadId(messages: MessageContent[]) {
-    const messageWithSession = messages.find((message) => message.sessionId);
-    if (messageWithSession) this.sessionId = messageWithSession.sessionId;
+  private searchPreviousMessagesForThreadId(messages: MessageContentI[]) {
+    const messageWithSession = messages.find((message) => message._sessionId);
+    if (messageWithSession) this.sessionId = messageWithSession._sessionId;
     this.searchedForThreadId = true;
   }
 
@@ -108,7 +108,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.sessionId = result.thread_id;
       this.run_id = result.id;
       // updates the user sent message with the session id (the message event sent did not have this id)
-      if (this.messages) this.messages.messages[this.messages.messages.length - 1].sessionId = this.sessionId;
+      if (this.messages) this.messages.messages[this.messages.messages.length - 1]._sessionId = this.sessionId;
     }
   }
 
@@ -119,7 +119,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
       const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
-      return {text: lastMessage.content[0].text.value, sessionId: this.sessionId};
+      return {text: lastMessage.content[0].text.value, _sessionId: this.sessionId};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) return await this.handleTools(toolCalls);

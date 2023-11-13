@@ -63,7 +63,7 @@ export class Websocket {
         if (io.deepChat.stream && resultData.text) {
           Stream.simulate(messages, io.streamHandlers, resultData.text);
         } else {
-          messages.addNewMessage(resultData, true);
+          messages.addNewMessage(resultData);
         }
       } catch (error) {
         RequestUtils.displayError(messages, error as object, 'Error in server message');

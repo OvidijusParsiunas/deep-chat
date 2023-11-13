@@ -6,10 +6,6 @@ export interface Name {
   position?: 'left' | 'right';
 }
 
-export interface CustomNames {
-  default?: Name;
-  ai?: Name;
-  user?: Name;
-}
+export type CustomNames = {default?: Name; ai?: Name; user?: Name} & {[name: string]: Name};
 
 export type Names = true | CustomNames;

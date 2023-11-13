@@ -1,11 +1,11 @@
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
-import {MessageContent} from '../../types/messages';
 import {StabilityAIIO} from './stabilityAIIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -50,7 +50,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
     return bodyCopy;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
     HTTPRequest.request(this, body, messages);

@@ -9,11 +9,11 @@ export interface MessageElementsStyles {
   media?: CustomStyle;
 }
 
-export interface MessageRoleStyles {
+export type MessageRoleStyles = {
   shared?: MessageElementsStyles;
   user?: MessageElementsStyles;
   ai?: MessageElementsStyles;
-}
+} & {[role: string]: MessageElementsStyles};
 
 export interface MessageStyles {
   default?: MessageRoleStyles;
@@ -26,7 +26,7 @@ export interface MessageStyles {
   error?: MessageElementsStyles;
 }
 
-export type MessageContent = {role: string; text?: string; files?: MessageFile[]; html?: string; sessionId?: string};
+export type MessageContent = {role?: string; text?: string; files?: MessageFile[]; html?: string; _sessionId?: string};
 
 export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boolean}) => void;
 

@@ -1,6 +1,6 @@
 import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
-import {MessageContent} from '../../types/messages';
+import {MessageContentI} from '../../types/messagesInternal';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -17,7 +17,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
     this.context = config.context;
   }
 
-  override preprocessBody(_: HuggingFaceQuestionAnswerConfig, messages: MessageContent[]) {
+  override preprocessBody(_: HuggingFaceQuestionAnswerConfig, messages: MessageContentI[]) {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     return {

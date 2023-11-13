@@ -2,6 +2,7 @@ import {MessageElementsStyles, MessageRoleStyles, MessageStyles} from '../../../
 import {OverrideTypes} from '../../../types/utilityTypes';
 import {GenericObject} from '../../../types/object';
 import {CustomStyle} from '../../../types/styles';
+import {MessageUtils} from './messageUtils';
 import {MessageElements} from './messages';
 
 export class MessageStyleUtils {
@@ -17,13 +18,14 @@ export class MessageStyleUtils {
     }
   }
 
-  private static applySideStyles(elements: MessageElements, isAI: boolean, media: boolean, styles?: MessageRoleStyles) {
+  private static applySideStyles(elements: MessageElements, role: string, media: boolean, styles?: MessageRoleStyles) {
     if (!styles) return;
     MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.shared);
-    if (isAI) {
-      MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.ai);
-    } else {
+    if (role === MessageUtils.USER_ROLE) {
       MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.user);
+    } else {
+      MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.ai);
+      MessageStyleUtils.applyCustomStylesToElements(elements, media, styles[role]);
     }
   }
 
@@ -37,11 +39,11 @@ export class MessageStyleUtils {
 
   // prettier-ignore
   public static applyCustomStyles(messageStyles: MessageStyles,
-      elements: MessageElements, isAI: boolean, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
+      elements: MessageElements, role: string, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (otherStyles && messageStyles.default !== otherStyles) {
       if (MessageStyleUtils.isMessageSideStyles(otherStyles)) {
-        MessageStyleUtils.applySideStyles(elements, isAI, media, messageStyles.default);
-        MessageStyleUtils.applySideStyles(elements, isAI, media, otherStyles);
+        MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
+        MessageStyleUtils.applySideStyles(elements, role, media, otherStyles);
       } else {
         // do not apply sides when not side related
         MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles.default?.shared);
@@ -49,7 +51,7 @@ export class MessageStyleUtils {
       }
     } else {
       // just apply the default for all sides
-      MessageStyleUtils.applySideStyles(elements, isAI, media, messageStyles.default);
+      MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
     }
   }
 

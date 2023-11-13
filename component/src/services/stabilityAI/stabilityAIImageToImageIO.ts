@@ -1,12 +1,12 @@
 import {StabilityAI, StabilityAIImageToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
-import {MessageContent} from '../../types/messages';
 import {StabilityAIIO} from './stabilityAIIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -64,7 +64,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   }
 
   // prettier-ignore
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     if (!files) throw new Error('Image was not found');
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();

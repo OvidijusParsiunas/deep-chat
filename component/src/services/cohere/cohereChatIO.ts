@@ -1,8 +1,8 @@
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Cohere, CohereChatConfig} from '../../types/cohere';
 import {CohereChatResult} from '../../types/cohereResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
@@ -27,7 +27,7 @@ export class CohereChatIO extends CohereIO {
     delete config.user_name;
   }
 
-  private preprocessBody(body: CohereChatConfig, pMessages: MessageContent[]) {
+  private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
     bodyCopy.query = textMessages[textMessages.length - 1].text;
@@ -37,7 +37,7 @@ export class CohereChatIO extends CohereIO {
     return bodyCopy;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body, messages);

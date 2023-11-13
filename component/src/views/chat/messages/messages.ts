@@ -4,6 +4,7 @@ import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
+import {MessageContentI} from '../../../types/messagesInternal';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {HTMLClassUtilities} from '../../../types/html';
@@ -47,7 +48,7 @@ export class Messages {
   private readonly _avatars?: Avatars;
   private readonly _names?: Names;
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
-  private readonly _onNewMessage?: (message: MessageContent, isInitial: boolean) => void;
+  private readonly _onNewMessage?: (message: MessageContentI, isInitial: boolean) => void;
   private readonly _onClearMessages?: () => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
@@ -59,7 +60,7 @@ export class Messages {
   private _introMessage?: IntroMessage;
   private _streamedText = '';
   readonly htmlClassUtilities: HTMLClassUtilities = {};
-  messages: MessageContent[] = [];
+  messages: MessageContentI[] = [];
   customDemoResponse?: DemoResponse;
   submitUserMessage?: (text: string) => void;
 
@@ -124,59 +125,56 @@ export class Messages {
   private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
     const text = SetupMessages.getText(deepChat, serviceIO);
     if (text) {
-      const elements = this.createAndAppendNewMessageElement(text, true);
-      this.applyCustomStyles(elements, true, false);
+      const elements = this.createAndAppendNewMessageElement(text, MessageUtils.AI_ROLE);
+      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false);
     }
   }
 
   private addIntroductoryMessage(introMessage?: IntroMessage) {
     if (introMessage) this._introMessage = introMessage;
     if (this._introMessage?.text) {
-      const elements = this.createAndAppendNewMessageElement(this._introMessage.text, true);
-      this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+      const elements = this.createAndAppendNewMessageElement(this._introMessage.text, MessageUtils.AI_ROLE);
+      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
     } else if (this._introMessage?.html) {
-      const elements = HTMLMessages.add(this, this._introMessage.html, true, this._messageElementRefs);
-      this.applyCustomStyles(elements, true, false, this.messageStyles?.intro);
+      const elements = HTMLMessages.add(this, this._introMessage.html, MessageUtils.AI_ROLE, this._messageElementRefs);
+      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
     }
   }
 
   private populateInitialMessages(initialMessages: MessageContent[]) {
     initialMessages.forEach((message) => {
       Legacy.processInitialMessageFile(message);
-      this.addNewMessage(message, message.role === MessageUtils.AI_ROLE, true);
+      this.addNewMessage(message, true);
     });
     // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
     setTimeout(() => this.scrollToBottom());
   }
 
   // prettier-ignore
-  public applyCustomStyles(elements: MessageElements | undefined, isAI: boolean, media: boolean,
+  public applyCustomStyles(elements: MessageElements | undefined, role: string, media: boolean,
       otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (elements && this.messageStyles) {
-      MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, isAI, media, otherStyles);
+      MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, role, media, otherStyles);
     }
   }
 
-  private addInnerContainerElements(bubbleElement: HTMLElement, text: string, isAI: boolean) {
-    bubbleElement.classList.add('message-bubble', isAI ? 'ai-message-text' : 'user-message-text');
+  // prettier-ignore
+  private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
+    bubbleElement.classList.add('message-bubble',
+      role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
     bubbleElement.innerHTML = this._remarkable.render(text);
     // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
     // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
     if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
-    if (this._avatars) AvatarEl.add(bubbleElement, isAI, this._avatars);
-    if (this._names) Name.add(bubbleElement, isAI, this._names);
+    if (this._avatars) AvatarEl.add(bubbleElement, role, this._avatars);
+    if (this._names) Name.add(bubbleElement, role, this._names);
     return {bubbleElement};
   }
 
-  private static createMessageContent(isAI: boolean, content: Response): MessageContent {
-    const messageContent: MessageContent = {role: MessageUtils.getRole(isAI)};
-    const {text, files, html, sessionId} = content;
-    if (text) messageContent.text = text;
-    if (files) messageContent.files = files;
-    if (html) messageContent.html = html;
-    if (Object.keys(messageContent).length === 1) messageContent.text = '';
-    if (sessionId) messageContent.sessionId = sessionId;
-    return messageContent;
+  private static processMessageContent(content: Response): MessageContentI {
+    if (!content.text && !content.files && !content.html) content.text = '';
+    content.role ??= MessageUtils.AI_ROLE;
+    return content as MessageContentI;
   }
 
   private static createBaseElements(): MessageElements {
@@ -191,11 +189,11 @@ export class Messages {
     return {outerContainer, innerContainer, bubbleElement};
   }
 
-  private createMessageElements(text: string, isAI: boolean) {
+  private createMessageElements(text: string, role: string) {
     const messageElements = Messages.createBaseElements();
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
-    this.addInnerContainerElements(bubbleElement, text, isAI);
+    this.addInnerContainerElements(bubbleElement, text, role);
     this._messageElementRefs.push(messageElements);
     return messageElements;
   }
@@ -207,18 +205,18 @@ export class Messages {
     );
   }
 
-  public createNewMessageElement(text: string, isAI: boolean) {
+  public createNewMessageElement(text: string, role: string) {
     this._introPanel?.hide();
     const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
     if (Messages.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
       this._messageElementRefs.pop();
     }
-    return this.createMessageElements(text, isAI);
+    return this.createMessageElements(text, role);
   }
 
-  private createAndAppendNewMessageElement(text: string, isAI: boolean) {
-    const messageElements = this.createNewMessageElement(text, isAI);
+  private createAndAppendNewMessageElement(text: string, role: string) {
+    const messageElements = this.createNewMessageElement(text, role);
     this.elementRef.appendChild(messageElements.outerContainer);
     this.scrollToBottom();
     return messageElements;
@@ -230,39 +228,41 @@ export class Messages {
     bubbleElement.style.color = '#00000000';
   }
 
-  private addNewTextMessage(text: string, isAI: boolean) {
-    const messageElements = this.createAndAppendNewMessageElement(text, isAI);
-    this.applyCustomStyles(messageElements, isAI, false);
+  private addNewTextMessage(text: string, role: string) {
+    const messageElements = this.createAndAppendNewMessageElement(text, role);
+    this.applyCustomStyles(messageElements, role, false);
     if (text.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
     this._textElementsToText.push([messageElements, text]);
     return messageElements;
   }
 
   // this should not be activated by streamed messages
-  public addNewMessage(data: Response, isAI: boolean, isInitial = false) {
+  public addNewMessage(data: Response, isInitial = false) {
     let isNewMessage = true;
-    const message = Messages.createMessageContent(isAI, data);
+    const message = Messages.processMessageContent(data);
     if (message.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(message.text, isAI);
-      if (!isInitial && this._textToSpeech && isAI) TextToSpeech.speak(message.text, this._textToSpeech);
+      this.addNewTextMessage(message.text, message.role);
+      if (!isInitial && this._textToSpeech && message.role !== MessageUtils.USER_ROLE) {
+        TextToSpeech.speak(message.text, this._textToSpeech);
+      }
     }
     if (message.files && Array.isArray(message.files)) {
-      FileMessages.addMessages(this, message.files, isAI);
+      FileMessages.addMessages(this, message.files, message.role);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, isAI, this._messageElementRefs);
+      const elements = HTMLMessages.add(this, message.html, message.role, this._messageElementRefs);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
       isNewMessage = !!elements;
     }
     this.updateStateOnMessage(message, isNewMessage, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContent, isNewMessage: boolean, isInitial = false) {
+  private updateStateOnMessage(messageContent: MessageContentI, isNewMessage: boolean, isInitial = false) {
     if (isNewMessage) this.messages.push(messageContent);
     this.sendClientUpdate(messageContent, isInitial);
   }
 
-  private sendClientUpdate(message: MessageContent, isInitial = false) {
+  private sendClientUpdate(message: MessageContentI, isInitial = false) {
     this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
   }
 
@@ -339,21 +339,21 @@ export class Messages {
 
   public addLoadingMessage() {
     if (!this._displayLoadingMessage) return;
-    const messageElements = this.createMessageElements('', true);
+    const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
     const {outerContainer, bubbleElement} = messageElements;
     bubbleElement.classList.add('loading-message-text');
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('dots-flashing');
     bubbleElement.appendChild(dotsElement);
-    this.applyCustomStyles(messageElements, true, false, this.messageStyles?.loading);
+    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading);
     LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
     this.scrollToBottom();
   }
 
   public addNewStreamedMessage() {
-    const {bubbleElement} = this.addNewTextMessage('', true);
-    const messageContent = Messages.createMessageContent(true, {text: ''});
+    const {bubbleElement} = this.addNewTextMessage('', MessageUtils.AI_ROLE);
+    const messageContent = Messages.processMessageContent({text: ''});
     this.messages.push(messageContent);
     bubbleElement.classList.add('streamed-message');
     this.scrollToBottom(); // need to scroll down completely
@@ -376,7 +376,7 @@ export class Messages {
     if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
     this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedText;
     this.messages[this.messages.length - 1].text = this._streamedText;
-    this.sendClientUpdate(Messages.createMessageContent(true, {text: this._streamedText}), false);
+    this.sendClientUpdate(Messages.processMessageContent({text: this._streamedText}), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
     this._streamedText = '';
   }

@@ -11,15 +11,6 @@ export interface Avatar {
   styles?: AvatarStyles;
 }
 
-export interface CustomAvatars {
-  default?: Avatar;
-  user?: Avatar;
-  ai?: Avatar;
-}
-
-// WORK - allow multiple different avatars for different users
-// export type CustomAvatars = {
-//   [name: string]: Avatar;
-// } & {default?: Avatar; user?: Avatar; ai?: Avatar};
+export type CustomAvatars = {default?: Avatar; user?: Avatar; ai?: Avatar} & {[name: string]: Avatar};
 
 export type Avatars = true | CustomAvatars;

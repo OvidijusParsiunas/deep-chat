@@ -1,9 +1,9 @@
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -39,7 +39,7 @@ export class HuggingFaceIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContent[], _?: File[]) {
+  preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContentI[], _?: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
       & {options?: {wait_for_model?: boolean}});
     const mostRecentMessageText = messages[messages.length - 1].text;
@@ -49,7 +49,7 @@ export class HuggingFaceIO extends DirectServiceIO {
     return {inputs: mostRecentMessageText, ...bodyCopy};
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
     HTTPRequest.request(this, body, messages);

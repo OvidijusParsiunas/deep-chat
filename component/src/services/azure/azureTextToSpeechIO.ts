@@ -1,8 +1,8 @@
 import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
 import {AzureTextToSpeechResult} from '../../types/azureResult';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
@@ -35,7 +35,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
   }
 
-  preprocessBody(body: AzureTextToSpeechConfig, messages: MessageContent[]) {
+  preprocessBody(body: AzureTextToSpeechConfig, messages: MessageContentI[]) {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     return `<speak version='1.0' xml:lang='${body.lang}'>
@@ -45,7 +45,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     </speak>`;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as unknown as object, messages, false);

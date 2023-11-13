@@ -1,7 +1,8 @@
+import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {ResponseInterceptor} from '../../types/interceptors';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {StreamHandlers} from '../../services/serviceIO';
-import {MessageContent} from '../../types/messages';
 import {DemoResponse} from '../../types/demo';
 import {Response} from '../../types/response';
 import {Stream} from '../HTTP/stream';
@@ -40,7 +41,7 @@ export class Demo {
     return 'Hi there! This is a demo response!';
   }
 
-  private static getCustomResponse(customResponse: DemoResponse, requestMessage: MessageContent) {
+  private static getCustomResponse(customResponse: DemoResponse, requestMessage: MessageContentI) {
     if (typeof customResponse === 'function') return customResponse(requestMessage);
     return customResponse;
   }
@@ -59,7 +60,8 @@ export class Demo {
       if (preprocessedResponse.error) {
         messages.addNewErrorMessage('service', preprocessedResponse.error);
       } else {
-        messages.addNewMessage(preprocessedResponse, true);
+        preprocessedResponse.role ??= MessageUtils.AI_ROLE;
+        messages.addNewMessage(preprocessedResponse);
       }
       onFinish();
     }, 400);

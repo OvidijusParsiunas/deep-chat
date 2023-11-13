@@ -1,8 +1,8 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
 import {AzureUtils} from './utils/azureUtils';
@@ -26,7 +26,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
   }
 
-  preprocessBody(body: RawBody, messages: MessageContent[]) {
+  preprocessBody(body: RawBody, messages: MessageContentI[]) {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     return {
@@ -47,7 +47,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     };
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as object, messages);

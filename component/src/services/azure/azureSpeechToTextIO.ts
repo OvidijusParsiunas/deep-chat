@@ -1,7 +1,7 @@
 import {AzureSpeechToTextResult} from '../../types/azureResult';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
@@ -39,7 +39,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     return !!files?.[0];
   }
 
-  override async callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     if (this.requestSettings?.headers) {

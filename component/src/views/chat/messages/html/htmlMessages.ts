@@ -1,5 +1,5 @@
+import {MessageContentI} from '../../../../types/messagesInternal';
 import {HTMLDeepChatElements} from './htmlDeepChatElements';
-import {MessageContent} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
 import {MessageUtils} from '../messageUtils';
 import {HTMLUtils} from './htmlUtils';
@@ -10,8 +10,8 @@ export class HTMLMessages {
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  private static createElements(messages: Messages, html: string, isAI: boolean) {
-    const messageElements = messages.createNewMessageElement('', isAI);
+  private static createElements(messages: Messages, html: string, role: string) {
+    const messageElements = messages.createNewMessageElement('', role);
     messageElements.bubbleElement.classList.add('html-message');
     messageElements.bubbleElement.innerHTML = html;
     return messageElements;
@@ -19,7 +19,7 @@ export class HTMLMessages {
 
   // test when last element contains no html but text, should text be removed?
   // prettier-ignore
-  private static updateLastAIMessage(messages: MessageContent[], html: string, messagesElements: MessageElements[]) {
+  private static updateLastAIMessage(messages: MessageContentI[], html: string, messagesElements: MessageElements[]) {
     const lastElems = MessageUtils.getLastElementsByClass(
       messagesElements, ['ai-message-text', 'html-message'], ['loading-message-text']);
     if (!lastElems) return false;
@@ -29,15 +29,15 @@ export class HTMLMessages {
     return true;
   }
 
-  public static add(messages: Messages, html: string, isAI: boolean, messagesElements: MessageElements[]) {
+  public static add(messages: Messages, html: string, role: string, messagesElements: MessageElements[]) {
     if (HTMLDeepChatElements.isUpdateMessage(html)) {
       const wasUpdated = HTMLMessages.updateLastAIMessage(messages.messages, html, messagesElements);
       if (wasUpdated) return undefined;
     }
-    const messageElements = HTMLMessages.createElements(messages, html, isAI);
+    const messageElements = HTMLMessages.createElements(messages, html, role);
     if (html.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
     HTMLUtils.apply(messages, messageElements.outerContainer);
-    messages.applyCustomStyles(messageElements, isAI, false, messages.messageStyles?.html);
+    messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
     HTMLMessages.addElement(messages, messageElements.outerContainer);
     return messageElements;
   }

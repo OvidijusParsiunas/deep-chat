@@ -7,6 +7,7 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MessageFileType} from '../../../../../types/messageFile';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {MessageUtils} from '../../../messages/messageUtils';
 import {Response} from '../../../../../types/response';
 import {TextInputEl} from '../../textInput/textInput';
 import {Signals} from '../../../../../types/handler';
@@ -170,11 +171,11 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private async addNewMessages(userText: string, uploadedFilesData?: {file: File; type: MessageFileType}[]) {
-    const data: Response = {};
+    const data: Response = {role: MessageUtils.USER_ROLE};
     if (userText !== '') data.text = userText;
     if (uploadedFilesData) data.files = await this._messages.addMultipleFiles(uploadedFilesData);
-    if (this._serviceIO.sessionId) data.sessionId = this._serviceIO.sessionId;
-    if (Object.keys(data).length > 0) this._messages.addNewMessage(data, false);
+    if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;
+    if (Object.keys(data).length > 0) this._messages.addNewMessage(data);
   }
 
   private stopStream() {

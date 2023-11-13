@@ -1,13 +1,10 @@
+import {MessageContentI} from '../../../types/messagesInternal';
 import {MessageContent} from '../../../types/messages';
 import {MessageElements} from './messages';
 
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
   public static readonly USER_ROLE = 'user';
-
-  public static getRole(isAI: boolean) {
-    return isAI ? MessageUtils.AI_ROLE : MessageUtils.USER_ROLE;
-  }
 
   public static getLastElementsByClass(messagesElements: MessageElements[], classes: string[], avoidedClasses?: string[]) {
     for (let i = messagesElements.length - 1; i >= 0; i -= 1) {
@@ -27,10 +24,12 @@ export class MessageUtils {
     return undefined;
   }
 
-  public static getLastMessage(messages: MessageContent[], isAI: boolean, content?: keyof Omit<MessageContent, 'role'>) {
-    const role = MessageUtils.getRole(isAI);
+  public static getLastMessage(messages: MessageContentI[], isAI: boolean, content?: keyof Omit<MessageContent, 'role'>) {
+    const isRoleFunc = isAI
+      ? (role: string) => role !== MessageUtils.USER_ROLE
+      : (role: string) => role === MessageUtils.USER_ROLE;
     for (let i = messages.length - 1; i >= 0; i -= 1) {
-      if (messages[i].role === role) {
+      if (isRoleFunc(messages[i].role)) {
         if (content) {
           if (messages[i][content]) return messages[i];
         } else {

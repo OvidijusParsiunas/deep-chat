@@ -1,9 +1,9 @@
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AssemblyAIUtils} from './utils/assemblyAIUtils';
-import {MessageContent} from '../../types/messages';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
@@ -32,7 +32,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
     return !!files?.[0];
   }
 
-  override async callServiceAPI(messages: Messages, _: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     HTTPRequest.request(this, files[0], messages, false);

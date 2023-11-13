@@ -4,9 +4,9 @@ import {MessageElements, Messages} from './messages';
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
 
-  public static addMessage(messages: Messages, elements: MessageElements, styles: keyof MessageStyles, isAI: boolean) {
+  public static addMessage(messages: Messages, elements: MessageElements, styles: keyof MessageStyles, role: string) {
     messages.elementRef.appendChild(elements.outerContainer);
-    messages.applyCustomStyles(elements, isAI, true, messages.messageStyles?.[styles]);
+    messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 

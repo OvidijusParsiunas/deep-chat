@@ -5,11 +5,11 @@ import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseT} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
@@ -50,7 +50,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
-  private static getContent(message: MessageContent) {
+  private static getContent(message: MessageContentI) {
     if (message.files && message.files.length > 0) {
       const content: ImageContent = message.files.map((file) => {
         return {type: 'image_url', image_url: {url: file.src}};
@@ -62,13 +62,13 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContent[]) {
+  private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
       .map((message) => {
         return {content: OpenAIChatIO.getContent(message),
-          role: message.role === MessageUtils.AI_ROLE ? 'assistant' : 'user'};});
+          role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
       bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
     }
@@ -76,7 +76,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     return bodyCopy;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     if (this.deepChat.stream || body.stream) {

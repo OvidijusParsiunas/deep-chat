@@ -1,10 +1,10 @@
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -35,7 +35,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     this.rawBody.response_format = 'mp3';
   }
 
-  private preprocessBody(body: OpenAITextToSpeech, messages: MessageContent[]) {
+  private preprocessBody(body: OpenAITextToSpeech, messages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const lastMessage = messages[messages.length - 1]?.text?.trim();
     if (lastMessage && lastMessage !== '') {
@@ -44,7 +44,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     return bodyCopy;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     this.url = this.requestSettings.url || this.url;
     const body = this.preprocessBody(this.rawBody, pMessages);

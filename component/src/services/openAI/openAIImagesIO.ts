@@ -1,4 +1,5 @@
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIImageResult} from '../../types/openAIResult';
@@ -6,7 +7,6 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAI, OpenAIImages} from '../../types/openAI';
 import {MessageFiles} from '../../types/messageFile';
-import {MessageContent} from '../../types/messages';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -64,7 +64,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private callApiWithImage(messages: Messages, pMessages: MessageContent[], files: File[]) {
+  private callApiWithImage(messages: Messages, pMessages: MessageContentI[], files: File[]) {
     let formData: FormData;
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     // if there is a mask image or text, call edit
@@ -81,7 +81,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContent[], files?: File[]) {
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
       this.callApiWithImage(messages, pMessages, files);

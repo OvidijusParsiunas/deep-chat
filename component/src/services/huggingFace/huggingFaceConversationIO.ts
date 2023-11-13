@@ -1,6 +1,6 @@
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
-import {MessageContent} from '../../types/messages';
+import {MessageContentI} from '../../types/messagesInternal';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -15,7 +15,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
   }
 
   // prettier-ignore
-  private processMessages(messages: MessageContent[]) {
+  private processMessages(messages: MessageContentI[]) {
     const textMessages = messages.filter((message) => message.text);
     const mostRecentMessageText = textMessages[textMessages.length - 1].text;
     const previousMessages = textMessages.slice(0, textMessages.length - 1);
@@ -28,7 +28,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
   }
 
   // prettier-ignore
-  override preprocessBody(body: HuggingFaceQuestionAnswerConfig, messages: MessageContent[]) {
+  override preprocessBody(body: HuggingFaceQuestionAnswerConfig, messages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as HuggingFaceQuestionAnswerConfig & {
       options?: {wait_for_model?: boolean};
     };

@@ -1,7 +1,7 @@
-import {MessageContent} from '../../types/messages';
+import {MessageContentI} from '../../types/messagesInternal';
 
 export class MessageLimitUtils {
-  public static getCharacterLimitMessages(messages: MessageContent[], limit: number) {
+  public static getCharacterLimitMessages(messages: MessageContentI[], limit: number) {
     if (limit === -1) return messages;
     let totalCharacters = 0;
     let i = messages.length - 1;
@@ -18,7 +18,7 @@ export class MessageLimitUtils {
     return messages.slice(Math.max(i, 0));
   }
 
-  private static getMaxMessages(messages: MessageContent[], maxMessages: number) {
+  private static getMaxMessages(messages: MessageContentI[], maxMessages: number) {
     return messages.slice(Math.max(messages.length - maxMessages, 0));
   }
 
@@ -26,7 +26,7 @@ export class MessageLimitUtils {
   // if maxMessages is not defined we send all messages
   // if maxMessages above 0 we send that number
   // if maxMessages 0 or below we send only what is in the request
-  public static processMessages(messages: MessageContent[], maxMessages?: number, totalMessagesMaxCharLength?: number) {
+  public static processMessages(messages: MessageContentI[], maxMessages?: number, totalMessagesMaxCharLength?: number) {
     if (maxMessages !== undefined) {
       if (maxMessages > 0) messages = MessageLimitUtils.getMaxMessages(messages, maxMessages);
     } else {

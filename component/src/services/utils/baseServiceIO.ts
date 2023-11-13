@@ -1,10 +1,10 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
-import {MessageContent} from '../../types/messages';
 import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
 import {Demo as DemoT} from '../../types/demo';
@@ -58,7 +58,7 @@ export class BaseServiceIO implements ServiceIO {
 
   verifyKey(_key: string, _keyVerificationHandlers: KeyVerificationHandlers) {}
 
-  private static createCustomFormDataBody(body: any, messages: MessageContent[], files: File[]) {
+  private static createCustomFormDataBody(body: any, messages: MessageContentI[], files: File[]) {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
@@ -95,7 +95,7 @@ export class BaseServiceIO implements ServiceIO {
     return HTTPRequest.request(this, body, messages, stringifyBody);
   }
 
-  async callServiceAPI(messages: Messages, pMessages: MessageContent[], _?: File[]) {
+  async callServiceAPI(messages: Messages, pMessages: MessageContentI[], _?: File[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
     if (!this.requestSettings.headers?.['Content-Type']) {
@@ -107,7 +107,7 @@ export class BaseServiceIO implements ServiceIO {
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
-  async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContent[], files: File[]) {
+  async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContentI[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);

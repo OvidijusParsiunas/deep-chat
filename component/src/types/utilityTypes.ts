@@ -14,3 +14,5 @@ type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) exten
 export type InterfacesUnion<Interfaces> = BuildUniqueInterfaces<UnionToIntersection<Interfaces>, Interfaces>;
 
 export type OverrideTypes<T, U> = {[P in keyof T]: U};
+
+export type PropsRequired<T, K extends keyof T> = T & {[P in K]-?: T[P]};
