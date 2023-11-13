@@ -30,6 +30,7 @@ const Required = React.forwardRef(({title, requiredValue, setValue, view, change
       <input
         className={`playground-service-modal-input ${view ? 'playground-service-modal-visibility-input' : ''}`}
         ref={ref}
+        spellCheck={false}
         value={requiredValue}
         onChange={(event) => onChange(event, setValue)}
         type={!view || isVisible ? 'text' : 'password'}
