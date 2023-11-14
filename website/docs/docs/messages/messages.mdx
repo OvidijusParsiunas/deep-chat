@@ -81,7 +81,8 @@ import Tabs from '@theme/Tabs';
 Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](#initialMessages) as it will not trigger
 the [`onNewMessage`](/docs/events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](/docs/methods#getMessages) method is called and
 is not taken into consideration when calculating [`requestBodyLimits`](/docs/connect#requestBodyLimits). <br />
-`html` is used to render custom code - [more info](/docs/messages/HTML).
+`html` is used to render [custom code](/docs/messages/HTML) and can be coupled with a [`deep-chat-temporary-message`](/docs/messages/HTML#deepChatClasses)
+class to make this message disappear after a new one is added.
 
 #### Example
 

@@ -75,7 +75,8 @@ export class Stream {
 
   public static simulate(messages: Messages, sh: StreamHandlers, result: DResponse) {
     const simulationSH = sh as unknown as SimulationSH;
-    const responseText = result.text?.split(' ') || [];
+    // .filter(Boolean) removes '' entries in the array as they stop the simulation
+    const responseText = result.text?.split(' ').filter(Boolean) || [];
     const textElement = messages.addNewStreamedMessage(result.role);
     sh.onOpen();
     Stream.populateMessages(textElement, responseText, messages, simulationSH);

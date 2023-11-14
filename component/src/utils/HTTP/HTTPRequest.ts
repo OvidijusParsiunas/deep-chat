@@ -64,8 +64,12 @@ export class HTTPRequest {
           }, resultData.timeoutMS);
         } else {
           console.log('finished polling');
-          messages.addNewMessage(resultData);
-          onFinish();
+          if (io.deepChat.stream && resultData.text) {
+            Stream.simulate(messages, io.streamHandlers, resultData);
+          } else {
+            messages.addNewMessage(resultData);
+            onFinish();
+          }
         }
       })
       .catch((err) => {
