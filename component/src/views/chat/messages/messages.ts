@@ -218,7 +218,7 @@ export class Messages {
   private createAndAppendNewMessageElement(text: string, role: string) {
     const messageElements = this.createNewMessageElement(text, role);
     this.elementRef.appendChild(messageElements.outerContainer);
-    this.scrollToBottom();
+    setTimeout(() => this.scrollToBottom()); // timeout neeed when bubble font is large
     return messageElements;
   }
 
@@ -351,8 +351,8 @@ export class Messages {
     this.scrollToBottom();
   }
 
-  public addNewStreamedMessage() {
-    const {bubbleElement} = this.addNewTextMessage('', MessageUtils.AI_ROLE);
+  public addNewStreamedMessage(role?: string) {
+    const {bubbleElement} = this.addNewTextMessage('', role || MessageUtils.AI_ROLE);
     const messageContent = Messages.processMessageContent({text: ''});
     this.messages.push(messageContent);
     bubbleElement.classList.add('streamed-message');

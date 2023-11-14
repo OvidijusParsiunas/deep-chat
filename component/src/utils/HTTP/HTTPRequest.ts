@@ -38,7 +38,7 @@ export class HTTPRequest {
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.makingAnotherRequest) return;
         if (io.deepChat.stream && resultData.text) {
-          Stream.simulate(messages, io.streamHandlers, resultData.text);
+          Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
           messages.addNewMessage(resultData);
           onFinish();

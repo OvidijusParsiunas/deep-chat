@@ -182,10 +182,11 @@ export class SubmitButton extends InputButton<Styles> {
     // This will not stop the stream on the server side
     this._abortStream.abort();
     this._stopClicked?.listener();
+    if (this._validationHandler) this.resetSubmit(this._validationHandler);
   }
 
   private changeToStopIcon() {
-    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS);
+    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
     this.elementRef.replaceChildren(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);
     this.elementRef.onclick = this.stopStream.bind(this);

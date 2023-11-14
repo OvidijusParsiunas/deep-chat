@@ -27,7 +27,7 @@ export class CustomHandler {
         messages.addNewErrorMessage('service', result.error);
         io.completionsHandlers.onFinish();
       } else if (io.deepChat.stream && result.text) {
-        Stream.simulate(messages, io.streamHandlers, result.text);
+        Stream.simulate(messages, io.streamHandlers, result);
       } else {
         messages.addNewMessage(result);
         io.completionsHandlers.onFinish();
@@ -99,7 +99,7 @@ export class CustomHandler {
         console.error(result.error);
         if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', result.error);
       } else if (io.deepChat.stream) {
-        Stream.simulate(messages, io.streamHandlers, result.text);
+        Stream.simulate(messages, io.streamHandlers, result);
       } else {
         messages.addNewMessage(result);
       }

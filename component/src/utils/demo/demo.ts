@@ -70,8 +70,8 @@ export class Demo {
   // timeout is used to simulate a timeout for a response to come back
   public static requestStream(messages: Messages, sh: StreamHandlers) {
     setTimeout(() => {
-      const responseText = Demo.getResponse(messages)?.text;
-      Stream.simulate(messages, sh, responseText);
+      const response = Demo.getResponse(messages);
+      Stream.simulate(messages, sh, response);
     }, 400);
   }
 }

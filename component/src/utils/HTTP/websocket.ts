@@ -61,7 +61,7 @@ export class Websocket {
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
         if (io.deepChat.stream && resultData.text) {
-          Stream.simulate(messages, io.streamHandlers, resultData.text);
+          Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
           messages.addNewMessage(resultData);
         }
@@ -73,6 +73,7 @@ export class Websocket {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+      if (io.deepChat.stream) io.streamHandlers.abortStream.abort();
       Websocket.createConnection(io, messages);
     };
   }
@@ -93,6 +94,7 @@ export class Websocket {
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     } else {
       ws.send(JSON.stringify(processedBody));
+      io.completionsHandlers.onFinish();
     }
   }
 

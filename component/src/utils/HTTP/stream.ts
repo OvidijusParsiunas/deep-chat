@@ -73,10 +73,10 @@ export class Stream {
     onFinish?.();
   }
 
-  public static simulate(messages: Messages, sh: StreamHandlers, text?: string) {
+  public static simulate(messages: Messages, sh: StreamHandlers, result: DResponse) {
     const simulationSH = sh as unknown as SimulationSH;
-    const responseText = text?.split(' ') || [];
-    const textElement = messages.addNewStreamedMessage();
+    const responseText = result.text?.split(' ') || [];
+    const textElement = messages.addNewStreamedMessage(result.role);
     sh.onOpen();
     Stream.populateMessages(textElement, responseText, messages, simulationSH);
   }
@@ -90,7 +90,9 @@ export class Stream {
       const timeout = setTimeout(() => {
         Stream.populateMessages(textEl, responseText, messages, sh, wordIndex + 1);
       }, sh.simulationInterim || 70);
-      sh.abortStream.abort = () => Stream.abort(timeout, messages, sh.onClose);
+      sh.abortStream.abort = () => {
+        Stream.abort(timeout, messages, sh.onClose);
+      };
     } else {
       messages.finaliseStreamedMessage();
       sh.onClose();
