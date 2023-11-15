@@ -49,13 +49,15 @@ Shared property types for the [`messageStyles`](#messageStyles) object:
 - Type: {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`shared?: MessageElementsStyles`](#MessageElementsStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`user?: MessageElementsStyles`](#MessageElementsStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`ai?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`ai?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`[custom]?: MessageElementsStyles`](#MessageElementsStyles) <br />
   }
 
 Object defining the styling for various message roles. <br />
 `shared` is applied to all message roles. <br />
 `user` is applied to messages from the user. <br />
-`ai` is applied to messages returned from the ai service. <br />
+`ai` is applied to messages returned from the target service. <br />
+`custom` roles (e.g. `"bob"`) use `ai` styling, but they can have additional styling. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -65,6 +67,7 @@ Object defining the styling for various message roles. <br />
         shared: {bubble: {color: 'white'}},
         ai: {bubble: {backgroundColor: '#3cbe3c'}},
         user: {bubble: {backgroundColor: '#6767ff'}},
+        bob: {bubble: {backgroundColor: '#ffa500'}},
       },
     }}
     initialMessages={[
@@ -72,6 +75,10 @@ Object defining the styling for various message roles. <br />
       {
         text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
         role: 'ai',
+      },
+      {
+        text: 'We dont laugh because we feel good, we feel good because we laugh.',
+        role: 'bob',
       },
     ]}
     demo={true}
@@ -87,7 +94,8 @@ Object defining the styling for various message roles. <br />
     "default": {
       "shared": {"bubble": {"color": "white"}},
       "ai": {"bubble": {"backgroundColor": "#3cbe3c"}},
-      "user": {"bubble": {"backgroundColor": "#6767ff"}}
+      "user": {"bubble": {"backgroundColor": "#6767ff"}},
+      "bob": {"bubble": {"backgroundColor": "#ffa500"}}
     }
   }'
 ></deep-chat>
@@ -104,7 +112,8 @@ Object defining the styling for various message roles. <br />
     "default": {
       "shared": {"bubble": {"color": "white"}},
       "ai": {"bubble": {"backgroundColor": "#3cbe3c"}},
-      "user": {"bubble": {"backgroundColor": "#6767ff"}}
+      "user": {"bubble": {"backgroundColor": "#6767ff"}},
+      "bob": {"bubble": {"backgroundColor": "#ffa500"}}
     }
   }'
   initialMessages='[
@@ -112,6 +121,10 @@ Object defining the styling for various message roles. <br />
     {
       "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
       "role": "ai"
+    },
+    {
+      "text": "We dont laugh because we feel good, we feel good because we laugh.",
+      "role": "bob"
     }
   ]'
   style="border-radius: 8px"

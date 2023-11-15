@@ -313,14 +313,21 @@ Object used to configure the outgoing messages request settings. It MUST have ei
 
 ### `Response` {#Response}
 
-- Type: {`text?: string`, [`files?: MessageFile[]`](/docs/messages#MessageFile), `html?: string`, `error?: string`}
+- Type: {[`MessageContent`](/docs/messages/#MessageContent), `error?: string`}
 
-Object containing response information from the target service. It should have _one_ of these properties: <br />
+Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with an additional optional `error` property: <br />
 `text` is the content for a text message. <br />
 `files` is an array that encapsulates details on the response files. <br />
 `html` is a string that defines the markup for [message elements](/docs/messages/HTML). <br />
 `error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](/docs/messages#errorMessages)
-is set to _true_, this message will be displayed in the chat inside the error bubble. <br />
+is set to _true_, the same message will be displayed in the chat's error bubble. <br />
+
+#### Examples:
+
+Simple - `{text: "Simple response"}` <br />
+Mixed - `{files: [{name: 'file.txt'}], html: "<div>Custom Element</div>"}` <br />
+Custom role - `{role: "bob", text: "Message from bob"}` <br />
+Error - `{error: "Service Error"}` <br />
 
 <LineBreak></LineBreak>
 

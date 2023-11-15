@@ -121,10 +121,11 @@ class to make this message disappear after a new one is added.
 
 ### `avatars` {#avatars}
 
-- Type: `true` | {[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar)}
+- Type: `true` | {[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar), [`[custom]?: Avatar`](#Avatar)}
 
 Add avatars beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Avatar`](#Avatar) properties. The `default` property is applied to both roles.
+or by defining an object with [`Avatar`](#Avatar) properties. The `default` property is applied to all roles.
+`custom` roles (e.g. `"bob"`) use `ai` styling by default. <br />
 
 #### Example
 
@@ -201,17 +202,23 @@ This object is used to configure avatars that are displayed beside messages. <br
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     initialMessages={[
-      {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
       {text: 'What is the meaning of life?', role: 'user'},
       {
         text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
         role: 'ai',
       },
+      {
+        text: 'We dont laugh because we feel good, we feel good because we laugh.',
+        role: 'bob',
+      },
     ]}
     avatars={{
       default: {styles: {avatar: {height: '30px', width: '30px'}, container: {marginTop: '8px'}}},
       ai: {src: '/img/ai-brain.svg', styles: {avatar: {marginLeft: '-3px'}}},
+      bob: {
+        src: '/img/bob.png',
+        styles: {avatar: {borderRadius: '15px', filter: 'brightness(1.3)'}},
+      },
     }}
     demo={true}
   ></DeepChatBrowser>
@@ -224,7 +231,8 @@ This object is used to configure avatars that are displayed beside messages. <br
 <deep-chat
   avatars='{
     "default": {"styles": {"avatar": {"height": "30px", "width": "30px"}, "container": {"marginTop": "8px"}}},
-    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}}
+    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}},
+    "bob": {"src": "path-to-file.png", "styles": {"avatar": {"borderRadius": "15px"}}}
   }'
 ></deep-chat>
 ```
@@ -238,15 +246,18 @@ This object is used to configure avatars that are displayed beside messages. <br
 <deep-chat
   avatars='{
     "default": {"styles": {"avatar": {"height": "30px", "width": "30px"}, "container": {"marginTop": "8px"}}},
-    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}}
+    "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}},
+    "bob": {"src": "path-to-file.png", "styles": {"avatar": {"borderRadius": "15px"}}}
   }'
   initialMessages='[
-    {"text": "Hey, how are you?", "role": "user"},
-    {"text": "I am doing great, how about you?", "role": "ai"},
     {"text": "What is the meaning of life?", "role": "user"},
     {
       "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
       "role": "ai"
+    },
+    {
+      "text": "We dont laugh because we feel good, we feel good because we laugh.",
+      "role": "bob"
     }
   ]'
   style="border-radius: 8px"
@@ -261,10 +272,11 @@ This object is used to configure avatars that are displayed beside messages. <br
 
 ### `names` {#names}
 
-- Type: `true` | {[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name)}
+- Type: `true` | {[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name), [`[custom]?: Name`](#Name)}
 
 Add names beside messages. You can enable this by setting the value to _true_
-or by defining an object with [`Name`](#Name) properties. The `default` property is applied to both roles. <br />
+or by defining an object with [`Name`](#Name) properties. The `default` property is applied to all roles.
+`custom` roles (e.g. `"bob"`) use `ai` styling by default. <br />
 
 #### Example
 
@@ -273,11 +285,11 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
     style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
-      {text: 'What is the meaning of life?', role: 'user'},
+      {text: 'I am doing great!', role: 'ai'},
+      {text: 'Motivate me', role: 'user'},
       {
-        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
-        role: 'ai',
+        text: 'Talent is a pursued interest. Anything you’re willing to practice, you can do.',
+        role: 'Bob',
       },
     ]}
     demo={true}
@@ -302,11 +314,11 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
   names="true"
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
-    {"text": "I am doing great, how about you?", "role": "ai"},
-    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "I am doing great!", "role": "ai"},
+    {"text": "Motivate me", "role": "user"},
     {
-      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
-      "role": "ai"
+      "text": "Talent is a pursued interest. Anything you’re willing to practice, you can do.",
+      "role": "Bob"
     }
   ]'
   style="border-radius: 8px"
@@ -339,15 +351,20 @@ This object is used to configure names that are displayed beside messages. <br /
     style={{borderRadius: '8px'}}
     initialMessages={[
       {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
-      {text: 'What is the meaning of life?', role: 'user'},
+      {text: 'I am doing great!', role: 'ai'},
+      {text: 'Motivate me', role: 'user'},
       {
-        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
-        role: 'ai',
+        text: 'Talent is a pursued interest. Anything you’re willing to practice, you can do.',
+        role: 'Bob',
       },
     ]}
     demo={true}
-    names={{default: {style: {fontSize: '18px', marginTop: '14px'}}, ai: {text: 'You'}, user: {text: 'Me'}}}
+    names={{
+      default: {style: {fontSize: '18px', marginTop: '14px', width: '32px'}},
+      ai: {text: 'You'},
+      user: {text: 'Me'},
+      Bob: {style: {color: 'green'}},
+    }}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -357,9 +374,10 @@ This object is used to configure names that are displayed beside messages. <br /
 ```html
 <deep-chat
   names='{
-    "default": {"style": {"fontSize": "18px", "marginTop": "14px"}},
+    "default": {"style": {"fontSize": "18px", "marginTop": "14px", "width": "32px"}},
     "ai": {"text": "You"},
-    "user": {"text": "Me"}}'
+    "user": {"text": "Me"},
+    "Bob": {"style": {"color": "green"}}}'
 ></deep-chat>
 ```
 
@@ -371,16 +389,17 @@ This object is used to configure names that are displayed beside messages. <br /
 
 <deep-chat
   names='{
-    "default": {"style": {"fontSize": "18px", "marginTop": "14px"}},
+    "default": {"style": {"fontSize": "18px", "marginTop": "14px", "width": "32px"}},
     "ai": {"text": "You"},
-    "user": {"text": "Me"}}'
+    "user": {"text": "Me"},
+    "Bob": {"style": {"color": "green"}}}'
   initialMessages='[
     {"text": "Hey, how are you?", "role": "user"},
-    {"text": "I am doing great, how about you?", "role": "ai"},
-    {"text": "What is the meaning of life?", "role": "user"},
+    {"text": "I am doing great!", "role": "ai"},
+    {"text": "Motivate me", "role": "user"},
     {
-      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
-      "role": "ai"
+      "text": "Talent is a pursued interest. Anything you’re willing to practice, you can do.",
+      "role": "Bob"
     }
   ]'
   style="border-radius: 8px"
@@ -515,11 +534,14 @@ Shared object property types related to messages:
 
 ### `MessageContent` {#MessageContent}
 
-- Type: {[`role: MessageRole`](#MessageRole), `text?: string`, [`files?: MessageFile[]`](#MessageFile), [`html?: string`](/docs/messages/HTML)}
+- Type: {[`role?: MessageRole`](#MessageRole), `text?: string`, [`files?: MessageFile[]`](#MessageFile), [`html?: string`](/docs/messages/HTML)}
 
-Object format used to encapsulate a message within the chat. The `role` property is required whilst other properties are defined/combined depending
-on what is being transferred in the message. <br />
-The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly. This is useful for displaying code snippets, paragraphs etc. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
+Object format used to encapsulate a message within the chat. <br />
+`role` defines the message sender. If not set it is automatically regarded as _"ai"_. <br />
+`text` is string content for a textual message. It uses [Markdown](https://www.markdownguide.org/basic-syntax/) syntax to render the message accordingly which is useful for displaying code snippets,
+paragraphs and more. See this [playground](https://jonschlinkert.github.io/remarkable/demo/) for reference. <br />
+`files` is an array that encapsulates details on the response files. <br />
+`html` is a string that defines the markup for [message elements](/docs/messages/HTML). <br />
 
 #### Example
 
@@ -572,9 +594,13 @@ The `text` string uses [Markdown](https://www.markdownguide.org/basic-syntax/) s
 
 ### `MessageRole` {#MessageRole}
 
-- Type: `"ai"` | `"user"`
+- Type: `"ai"` | `"user"` | `[custom]`
 
-Entity that the message was sent from.
+Message sender. <br />
+`"user"` represents messages sent out from the chat and `"ai"` are messages received from a service. <br />
+You can also use _custom_ roles which represent other entities such as agents (`"ai-1"`/`"ai-2"`)
+or users in a group chat (`"bob"`/`"ross"`). You can style them using [`messageStyles`](/docs/messages/styles#messageStyles),
+[`avatars`](/docs/messages/#avatars) and [`names`](/docs/messages/#names) properties.
 
 <LineBreak></LineBreak>
 
