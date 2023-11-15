@@ -24,7 +24,10 @@ export class Name {
     if (role === MessageUtils.USER_ROLE) {
       return names.user?.text || names.default?.text || 'User';
     }
-    return names[role]?.text || names.ai?.text || names.default?.text || 'AI';
+    if (role === MessageUtils.AI_ROLE) {
+      return names.ai?.text || names.default?.text || 'AI';
+    }
+    return names[role]?.text || names.default?.text || role;
   }
 
   private static createName(role: string, names: CustomNames) {
