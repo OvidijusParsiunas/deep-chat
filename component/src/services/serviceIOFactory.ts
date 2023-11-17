@@ -25,13 +25,17 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
+import {WebModel} from '../webModel/webModel';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
   public static create(deepChat: DeepChat): ServiceIO {
-    const {directConnection, request, demo} = deepChat;
+    const {directConnection, request, demo, _webModel} = deepChat;
+    if (_webModel) {
+      return new WebModel(deepChat);
+    }
     if (directConnection) {
       if (directConnection.openAI) {
         if (directConnection.openAI.images) {

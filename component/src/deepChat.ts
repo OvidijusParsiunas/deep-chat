@@ -156,6 +156,8 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   demo?: Demo;
 
+  _webModel = false;
+
   _hasBeenRendered = false;
 
   _auxiliaryStyleApplied = false;

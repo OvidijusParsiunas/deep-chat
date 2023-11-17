@@ -123,10 +123,12 @@ All examples are ready to be deployed on a hosting platform such as [Vercel](htt
 
 ## :tv: Tutorials
 
-Demo videos ara available on [Youtube](https://www.youtube.com/@ovi-il4rg/videos):
+Demo videos ara available on [YouTube](https://www.youtube.com/@ovi-il4rg/videos):
 
 <p align="center">
-    <img width="1000" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/29cc292b-5964-4f06-ba39-6ae3f8585944" alt="Videos">
+    <a href="https://www.youtube.com/@ovi-il4rg/videos">
+        <img width="1000" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/29cc292b-5964-4f06-ba39-6ae3f8585944" alt="Videos">
+    </a>
 </p>
 
 ## :joystick: Playground
