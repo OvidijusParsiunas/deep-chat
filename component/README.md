@@ -107,6 +107,14 @@ Setting up your own server has never been easier with the following [server temp
 
 All examples are ready to be deployed on a hosting platform such as [Vercel](https://vercel.com/).
 
+## :tv: Tutorials
+
+Demo videos ara available on [Youtube](https://www.youtube.com/@ovi-il4rg/videos):
+
+<p align="center">
+    <img width="1000" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/29cc292b-5964-4f06-ba39-6ae3f8585944" alt="Videos">
+</p>
+
 ## :construction_worker: To create your own Deep Chat component
 
 ```
