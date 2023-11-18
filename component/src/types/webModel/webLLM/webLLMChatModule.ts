@@ -12,24 +12,9 @@ export declare class ChatModule implements ChatInterface {
   runtimeStatsText(): Promise<string>;
   resetChat(): Promise<void>;
   unload(): Promise<void>;
-  /**
-   * @returns Whether the generation stopped.
-   */
   stopped(): boolean;
-  /**
-   * Get the current generated response.
-   *
-   * @returns The current output message.
-   */
   getMessage(): string;
-  /**
-   * Run a prefill step with a given input.
-   * @param input The input prompt.
-   */
   prefill(input: string): Promise<void>;
-  /**
-   * Run a decode step to decode the next token.
-   */
   decode(): Promise<void>;
   private readonly getPipeline;
   private readonly asyncLoadTokenizer;

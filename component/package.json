@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Customizable chat component for AI APIs",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",

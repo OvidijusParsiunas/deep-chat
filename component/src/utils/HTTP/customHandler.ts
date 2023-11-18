@@ -41,10 +41,9 @@ export class CustomHandler {
   public static stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
-    let textElement: HTMLElement | null = null;
     const onOpen = () => {
       if (isOpen || !isHandlerActive) return;
-      textElement = messages.addNewStreamedMessage();
+      messages.addNewStreamedMessage();
       io.streamHandlers.onOpen();
       isOpen = true;
     };
@@ -64,8 +63,8 @@ export class CustomHandler {
         io.streamHandlers.onClose();
         messages.addNewErrorMessage('service', result.error);
         isHandlerActive = false;
-      } else if (result.text && textElement) {
-        messages.updateStreamedMessage(result.text, textElement);
+      } else if (result.text) {
+        messages.updateStreamedMessage(result.text);
       }
     };
     io.streamHandlers.abortStream.abort = () => {

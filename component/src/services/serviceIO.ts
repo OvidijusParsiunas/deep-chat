@@ -3,6 +3,7 @@ import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FetchFunc} from '../utils/HTTP/requestUtils';
+import {ResponseI} from '../types/responseInternal';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
@@ -101,7 +102,11 @@ export interface ServiceIO {
 
   deepChat: DeepChat; // this is used for interceptors as the user may pass them much later after component is initiated
 
+  addMessage?(data: ResponseI): void;
+
   isDirectConnection(): boolean;
+
+  isWebModel(): boolean;
 
   isSubmitProgrammaticallyDisabled?: boolean;
 

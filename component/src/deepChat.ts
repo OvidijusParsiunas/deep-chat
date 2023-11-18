@@ -19,6 +19,7 @@ import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {ValidateInput} from './types/validateInput';
+import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
@@ -159,7 +160,7 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   demo?: Demo;
 
-  _webModel = false;
+  _webModel: WebModel = false;
 
   _hasBeenRendered = false;
 

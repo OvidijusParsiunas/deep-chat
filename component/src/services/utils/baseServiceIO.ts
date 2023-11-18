@@ -3,6 +3,7 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ValidateInput} from '../../types/validateInput';
+import {ResponseI} from '../../types/responseInternal';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {Legacy} from '../../utils/legacy/legacy';
@@ -34,6 +35,7 @@ export class BaseServiceIO implements ServiceIO {
   recordAudio?: MicrophoneFilesServiceConfig;
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
+  addMessage?: (data: ResponseI) => void;
   demo?: DemoT;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
@@ -140,6 +142,10 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   public isDirectConnection() {
+    return false;
+  }
+
+  public isWebModel() {
     return false;
   }
 }

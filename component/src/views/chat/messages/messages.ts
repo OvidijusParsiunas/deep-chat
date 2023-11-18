@@ -7,6 +7,7 @@ import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {MessageContentI} from '../../../types/messagesInternal';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {ResponseI} from '../../../types/responseInternal';
 import {HTMLClassUtilities} from '../../../types/html';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
@@ -86,6 +87,7 @@ export class Messages {
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = this.scrollToBottom.bind(this);
+    serviceIO.addMessage = this.addNewMessage.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -237,7 +239,7 @@ export class Messages {
   }
 
   // this should not be activated by streamed messages
-  public addNewMessage(data: Response, isInitial = false) {
+  public addNewMessage(data: ResponseI, isInitial = false) {
     let isNewMessage = true;
     const message = Messages.processMessageContent(data);
     if (message.text !== undefined && data.text !== null) {
@@ -254,12 +256,12 @@ export class Messages {
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
       isNewMessage = !!elements;
     }
-    this.updateStateOnMessage(message, isNewMessage, isInitial);
+    this.updateStateOnMessage(message, isNewMessage, data.sendUpdate, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, isNewMessage: boolean, isInitial = false) {
+  private updateStateOnMessage(messageContent: MessageContentI, isNewMessage: boolean, update = true, initial = false) {
     if (isNewMessage) this.messages.push(messageContent);
-    this.sendClientUpdate(messageContent, isInitial);
+    if (update) this.sendClientUpdate(messageContent, initial);
   }
 
   private sendClientUpdate(message: MessageContentI, isInitial = false) {
