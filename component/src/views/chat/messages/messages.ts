@@ -357,19 +357,23 @@ export class Messages {
     this.messages.push(messageContent);
     bubbleElement.classList.add('streamed-message');
     this.scrollToBottom(); // need to scroll down completely
-    return bubbleElement;
   }
 
-  public updateStreamedMessage(text: string, bubbleElement: HTMLElement) {
+  public updateStreamedMessage(text: string, isIncrement = true) {
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
+    const {bubbleElement} = this._messageElementRefs[this._messageElementRefs.length - 1];
     if (text.trim().length !== 0) {
       const defaultColor = this.messageStyles?.default;
       bubbleElement.style.color = defaultColor?.ai?.bubble?.color || defaultColor?.shared?.bubble?.color || '';
     }
-    this._streamedText += text;
+    this._streamedText = isIncrement ? this._streamedText + text : text;
     this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedText;
     bubbleElement.innerHTML = this._remarkable.render(this._streamedText);
     if (isScrollbarAtBottomOfElement) this.scrollToBottom();
+  }
+
+  public isStreamingText() {
+    return !!this._streamedText;
   }
 
   public finaliseStreamedMessage() {

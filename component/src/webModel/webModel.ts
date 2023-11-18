@@ -29,7 +29,7 @@ export class WebModel extends BaseServiceIO {
   constructor(deepChat: DeepChat) {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
-    // WORk - handle error
+    // WORK - handle error
     if (!window.webLLM) return;
     const webLLM = window.webLLM;
     const useWebWorker = config.use_web_worker;
@@ -65,17 +65,29 @@ export class WebModel extends BaseServiceIO {
     this.chatLoaded = true;
   }
 
-  private static callbackUpdateResponse(_: number, msg: string) {
-    console.log(msg);
+  private static callbackUpdateResponse(messages: Messages, _: number, msg: string) {
+    if (!messages.isStreamingText()) messages.addNewStreamedMessage();
+    messages.updateStreamedMessage(msg, false);
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], __?: File[]) {
     if (!this.chat || !this.chatLoaded) return;
     const message = pMessages[pMessages.length - 1].text as string;
     try {
-      const output = await this.chat.generate(message, WebModel.callbackUpdateResponse, 0);
-      messages.addNewMessage({text: output});
-      this.completionsHandlers.onFinish();
+      if (this.deepChat.stream) {
+        this.streamHandlers.abortStream.abort = () => {
+          this.chat?.interruptGenerate();
+        };
+        this.streamHandlers.onOpen();
+        await this.chat.generate(message, WebModel.callbackUpdateResponse.bind(this, messages));
+        if (!messages.isStreamingText()) messages.addNewStreamedMessage(); // needed when early abort clicked
+        messages.finaliseStreamedMessage();
+        this.streamHandlers.onClose();
+      } else {
+        const output = await this.chat.generate(message, undefined, 0); // anything but 1 will not stream
+        messages.addNewMessage({text: output});
+        this.completionsHandlers.onFinish();
+      }
     } catch (err) {
       console.error('error');
       await this.unloadChat();

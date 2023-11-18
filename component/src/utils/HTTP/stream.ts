@@ -20,7 +20,6 @@ export class Stream {
     if (error) return Stream.onInterceptorError(messages, error, onClose);
     if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
-    let textElement: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -28,7 +27,7 @@ export class Stream {
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {
-          textElement = messages.addNewStreamedMessage();
+          messages.addNewStreamedMessage();
           return onOpen();
         }
         const result = await RequestUtils.processResponseByType(response);
@@ -42,7 +41,9 @@ export class Stream {
               if (textBody?.text === undefined) {
                 // strategy - do not to stop the stream on one message failure to give other messages a change to display
                 console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_RESPONSE}`);
-              } else if (textElement) messages.updateStreamedMessage(textBody.text, textElement);
+              } else {
+                messages.updateStreamedMessage(textBody.text);
+              }
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
@@ -77,19 +78,18 @@ export class Stream {
     const simulationSH = sh as unknown as SimulationSH;
     // .filter(Boolean) removes '' entries in the array as they stop the simulation
     const responseText = result.text?.split(' ').filter(Boolean) || [];
-    const textElement = messages.addNewStreamedMessage(result.role);
+    messages.addNewStreamedMessage(result.role);
     sh.onOpen();
-    Stream.populateMessages(textElement, responseText, messages, simulationSH);
+    Stream.populateMessages(responseText, messages, simulationSH);
   }
 
   // prettier-ignore
-  private static populateMessages(
-      textEl: HTMLElement, responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
+  private static populateMessages(responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
     const word = responseText[wordIndex];
     if (word) {
-      messages.updateStreamedMessage(`${word} `, textEl);
+      messages.updateStreamedMessage(`${word} `);
       const timeout = setTimeout(() => {
-        Stream.populateMessages(textEl, responseText, messages, sh, wordIndex + 1);
+        Stream.populateMessages(responseText, messages, sh, wordIndex + 1);
       }, sh.simulationInterim || 70);
       sh.abortStream.abort = () => {
         Stream.abort(timeout, messages, sh.onClose);
