@@ -550,3 +550,12 @@ h1 + h2 {
 body.DocSearch--active {
   overflow: auto !important;
 }
+
+.youtube-icon {
+  width: 30px;
+  float: left;
+  margin-right: 10px;
+  margin-top: -2px;
+  filter: brightness(0) saturate(100%) invert(60%) sepia(65%) saturate(421%) hue-rotate(179deg) brightness(90%)
+    contrast(96%);
+}

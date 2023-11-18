@@ -61,8 +61,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.9.5",
     "vite": "^4.1.4",
-    "vite-plugin-dts": "^2.0.2",
-    "@mlc-ai/web-llm": "latest"
+    "vite-plugin-dts": "^2.0.2"
   },
   "customElements": "custom-elements.json",
   "files": [

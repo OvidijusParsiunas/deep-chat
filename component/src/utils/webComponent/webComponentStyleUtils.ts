@@ -1,4 +1,5 @@
 import {StyleUtils} from '../element/styleUtils';
+import {CustomStyle} from '../../types/styles';
 
 export class WebComponentStyleUtils {
   private static readonly DEFAULT_COMPONENT_STYLE: Partial<CSSStyleDeclaration> = {
@@ -37,7 +38,8 @@ export class WebComponentStyleUtils {
     shadowRoot.appendChild(stylesDocument);
   }
 
-  public static applyDefaultStyleToComponent(style: CSSStyleDeclaration) {
+  public static applyDefaultStyleToComponent(style: CSSStyleDeclaration, chatStyle?: CustomStyle) {
+    if (chatStyle) StyleUtils.applyToStyleIfNotDefined(style, chatStyle);
     StyleUtils.applyToStyleIfNotDefined(style, WebComponentStyleUtils.DEFAULT_COMPONENT_STYLE);
   }
 }

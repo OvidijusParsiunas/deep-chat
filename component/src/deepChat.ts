@@ -58,6 +58,9 @@ export class DeepChat extends InternalHTML {
   validateInput?: ValidateInput;
 
   @Property('object')
+  chatStyle?: CustomStyle;
+
+  @Property('object')
   attachmentContainerStyle?: CustomStyle;
 
   @Property('object')
@@ -200,7 +203,7 @@ export class DeepChat extends InternalHTML {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
-    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style);
+    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle);
     Legacy.checkForContainerStyles(this, this._elementRef);
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
