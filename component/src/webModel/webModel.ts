@@ -18,43 +18,55 @@ declare global {
 // currently does not support adding an existing conversation - see if a custom implementation can be used:
 // https://github.com/mlc-ai/web-llm/issues?q=conversation
 // WORK
-// create a type library to prevent build time warnings e.g:
-// [plugin:vite:resolve] Module "perf_hooks" has been externalized for browser compatibility, imported by
-// "/Users/ovidijusparsiunas/Desktop/ai-chat/component/node_modules/@mlc-ai/web-llm/lib/index.js".
-// See http://vitejs.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+// create a separate library to faciliate webworkers.
 export class WebModel extends BaseServiceIO {
-  private readonly chat?: WebLLM.ChatInterface;
-  // private readonly localChat: WebLLM.ChatInterface;
+  private static chat?: WebLLM.ChatInterface;
   private static readonly DOWNLOAD_BUTTON_CLASS = 'deep-chat-download-button';
-  private readonly _selectedModel: string = 'Llama-2-7b-chat-hf-q4f32_1';
+  private static readonly GENERIC_ERROR =
+    'ERROR. Your browser may not support this model. ' +
+    'Please check the following setup [instructions](https://webllm.mlc.ai/#instructions).';
+  private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
+  private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
+  private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
   private _isModelLoaded = false;
   private _isModelLoading = false;
   private _loadOnFirstMessage = false;
+  permittedErrorPrefixes = [WebModel.MULTIPLE_MODELS_ERROR, WebModel.WEB_LLM_NOT_FOUND_ERROR, WebModel.GENERIC_ERROR];
+  private readonly webModel: WebModelT = false;
 
   constructor(deepChat: DeepChat) {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
-    // WORK - handle error
-    if (!window.webLLM) return;
-    const webLLM = window.webLLM;
-    const useWebWorker = config.use_web_worker;
-    const chat = useWebWorker
-      ? new webLLM.ChatWorkerClient(new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'}))
-      : new webLLM.ChatModule();
-    // this.localChat = new window.webLLM.ChatRestModule();
-    this.chat = chat;
+    this.webModel = deepChat._webModel;
+    if (deepChat.shadowRoot) this.findModelInWindow(deepChat.shadowRoot);
     this.canSendMessage = this.canSubmit.bind(this);
-    setTimeout(() => {
-      // in timeout for this.addMessage to be set
-      const isMessageSet = this.addInitialMessage(chat, deepChat);
-      this.configureLoad(chat, isMessageSet, deepChat._webModel);
-    });
   }
 
-  private addInitialMessage(chat: WebLLM.ChatInterface, deepChat: DeepChat) {
-    const {_webModel} = deepChat;
-    const initialMessage = typeof _webModel === 'object' ? _webModel.initialMessage : undefined;
-    if (!_webModel || initialMessage?.displayed === false) return false;
+  private findModelInWindow(shadowRoot: ShadowRoot, seconds = 0) {
+    if (window.webLLM) {
+      setTimeout(() => {
+        // in timeout for this.addMessage to be set
+        const wasMessageSet = this.addInitialMessage(shadowRoot);
+        this.configureInit(wasMessageSet);
+      });
+    } else if (seconds > 5) {
+      this.addMessage?.({error: WebModel.WEB_LLM_NOT_FOUND_ERROR, sendUpdate: false});
+      console.error(
+        'The WebLLM module is either not in the project or not been attached to the window object. ' +
+          'Please see the following guide:'
+      );
+      // WORK
+      console.error('Hello World');
+    } else {
+      setTimeout(() => {
+        this.findModelInWindow(shadowRoot, seconds + 1);
+      }, 1000);
+    }
+  }
+
+  private addInitialMessage(shadowRoot: ShadowRoot) {
+    const initialMessage = typeof this.webModel === 'object' ? this.webModel.initialMessage : undefined;
+    if (!this.webModel || initialMessage?.displayed === false) return false;
     const downloadClass = initialMessage?.downloadClass || WebModel.DOWNLOAD_BUTTON_CLASS;
     const text = `
       Download a web model that will run entirely on your browser.
@@ -62,53 +74,92 @@ export class WebModel extends BaseServiceIO {
         class="${downloadClass} deep-chat-button">Download</button>`;
     const html = initialMessage?.html || `<div class="deep-chat-update-message">${text}</div>`;
     this.addMessage?.({role: MessageUtils.AI_ROLE, html, sendUpdate: false});
-    const button = deepChat.shadowRoot?.children[0]?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
-    if (button) button.onclick = this.loadModel.bind(this, chat);
+    const button = shadowRoot.children[0]?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
+    if (button) button.onclick = this.init.bind(this);
     return true;
   }
 
-  private canSubmit(text?: string) {
-    if (!text?.trim() || this._isModelLoading) return false;
-    if (this._loadOnFirstMessage) return true;
-    return !!this._isModelLoaded;
-  }
-
-  private async configureLoad(chat: WebLLM.ChatInterface, isMessageSet: boolean, webModel?: WebModelT) {
-    if (webModel && typeof webModel !== 'boolean' && webModel.load) {
-      if (webModel.load.onInit) {
-        this.loadModel(chat);
+  private async configureInit(wasMessageSet: boolean) {
+    if (this.webModel && typeof this.webModel !== 'boolean' && this.webModel.load) {
+      if (this.webModel.load.onInit) {
+        this.init();
         return;
       }
-      if (webModel.load.onMessage) {
+      if (this.webModel.load.onMessage) {
         this._loadOnFirstMessage = true;
         return;
       }
     }
-    if (!isMessageSet) this.loadModel(chat);
+    if (!wasMessageSet) this.init();
   }
 
-  // prettier-ignore
+  private async init() {
+    const chat = this.attemptToCreateChat();
+    if (chat) this.loadModel(chat);
+  }
+
+  private attemptToCreateChat() {
+    if (WebModel.chat) {
+      this.addMessage?.({error: WebModel.MULTIPLE_MODELS_ERROR, sendUpdate: false});
+      console.error(WebModel.MULTIPLE_MODELS_ERROR);
+      return;
+    }
+    if (this._isModelLoaded || this._isModelLoading) return;
+    return config.use_web_worker
+      ? new window.webLLM.ChatWorkerClient(new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'}))
+      : new window.webLLM.ChatModule();
+  }
+
+  private getConfig() {
+    let model = WebModel.DEFAULT_MODEL;
+    if (this.webModel && typeof this.webModel !== 'boolean') {
+      if (this.webModel.model) model = this.webModel.model;
+      const newConfig = JSON.parse(JSON.stringify(config)) as typeof config;
+      if (this.webModel.modelUrl) {
+        const modelConfig = newConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
+        if (modelConfig) modelConfig.model_url = this.webModel.modelUrl;
+      }
+      if (this.webModel.wasmUrl) {
+        const modelKey = model as keyof typeof newConfig.model_lib_map;
+        const wasm = newConfig.model_lib_map[modelKey];
+        if (wasm) newConfig.model_lib_map[modelKey] = `${this.webModel.wasmUrl}${model}-webgpu.wasm`;
+      }
+      return {model, pConfig: newConfig};
+    }
+    return {model, pConfig: config};
+  }
+
   private async loadModel(chat: WebLLM.ChatInterface) {
-    // const hasIt = await window.webLLM.hasModelInCache(this.selectedModel, config);
-    // console.log(hasIt);
-    if (this._isModelLoaded) return;
+    WebModel.chat = chat;
+    // await window.webLLM.hasModelInCache(this.selectedModel, config); can potentially reuse this in the future
     this._isModelLoading = true;
     const initProgressCallback = (report: WebLLM.InitProgressReport) => {
       this.addMessage?.({html: `<div class="deep-chat-update-message">${report.text}</div>`, sendUpdate: false});
     };
-    chat.setInitProgressCallback(initProgressCallback);
-
+    WebModel.chat.setInitProgressCallback(initProgressCallback);
     try {
-      await chat.reload(this._selectedModel, {conv_config: {system: 'keep responses to one sentence'}}, config);
+      const {model, pConfig} = this.getConfig();
+      await WebModel.chat.reload(model, {conv_config: {system: 'keep responses to one sentence'}}, pConfig);
     } catch (err) {
-      console.error('initialzitaion error');
-      console.log(err);
-      this.unloadChat();
+      this.unloadChat(err as string);
       return;
     }
-    this.addMessage?.({html: `<div class="deep-chat-update-message">Model loaded</div>`, sendUpdate: false});
+    this.addMessage?.({html: '<div class="deep-chat-update-message">Model loaded</div>', sendUpdate: false});
     this._isModelLoaded = true;
     this._isModelLoading = false;
+  }
+
+  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
+    const text = pMessages[pMessages.length - 1].text as string;
+    try {
+      if (this.deepChat.stream) {
+        this.streamResp(messages, text, chat);
+      } else {
+        this.immediateResp(messages, text, chat);
+      }
+    } catch (err) {
+      this.unloadChat(err as string);
+    }
   }
 
   private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
@@ -133,37 +184,33 @@ export class WebModel extends BaseServiceIO {
     this.streamHandlers.onClose();
   }
 
-  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
-    const text = pMessages[pMessages.length - 1].text as string;
-    try {
-      if (this.deepChat.stream) {
-        this.streamResp(messages, text, chat);
-      } else {
-        this.immediateResp(messages, text, chat);
-      }
-    } catch (err) {
-      console.error('error');
-      await this.unloadChat();
-    }
+  private canSubmit(text?: string) {
+    if (!text?.trim() || this._isModelLoading) return false;
+    if (this._loadOnFirstMessage) return true;
+    return !!this._isModelLoaded;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], __?: File[]) {
-    if (!this.chat || this._isModelLoading) return;
+  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this._isModelLoaded) {
       if (this._loadOnFirstMessage) {
-        await this.loadModel(this.chat);
+        await this.init();
       } else {
         return;
       }
     }
+    if (!WebModel.chat || this._isModelLoading) return;
     messages.addLoadingMessage();
-    this.generateResp(messages, pMessages, this.chat);
+    this.generateResp(messages, pMessages, WebModel.chat);
   }
 
-  private async unloadChat() {
-    if (!this.chat) return;
-    await this.chat.unload();
+  private async unloadChat(err: string) {
+    this.addMessage?.({error: WebModel.GENERIC_ERROR, sendUpdate: false});
+    console.error(err);
     this._isModelLoaded = false;
+    this._isModelLoading = false;
+    if (!WebModel.chat) return;
+    await WebModel.chat.unload();
+    WebModel.chat = undefined;
   }
 
   override isWebModel() {

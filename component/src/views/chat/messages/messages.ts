@@ -87,7 +87,7 @@ export class Messages {
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = this.scrollToBottom.bind(this);
-    serviceIO.addMessage = this.addNewMessage.bind(this);
+    serviceIO.addMessage = this.addIOMessage.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -287,7 +287,7 @@ export class Messages {
     bubbleElement.classList.add('error-message-text');
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
-    bubbleElement.innerHTML = text;
+    bubbleElement.innerHTML = this._remarkable.render(text);
     const fontElementStyles = MessageStyleUtils.extractParticularSharedStyles(['fontSize', 'fontFamily'],
       this.messageStyles?.default);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
@@ -414,6 +414,14 @@ export class Messages {
         });
       })
     );
+  }
+
+  private addIOMessage(data: ResponseI) {
+    if (data.error) {
+      this.addNewErrorMessage('service', data.error);
+    } else {
+      this.addNewMessage(data);
+    }
   }
 
   // WORK - update all message classes to use deep-chat prefix
