@@ -24,12 +24,13 @@ export class SetFileTypes {
         if (files.maxNumberOfFiles) fileConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
       }
       fileConfig.button = button;
-      if (request && (request.headers || request.method || request.url
-          || requestSettings.headers || requestSettings.method || requestSettings.url)) {
+      if (request && (request.headers || request.method || request.url || request.credentials
+          || requestSettings.headers || requestSettings.method || requestSettings.url || requestSettings.credentials)) {
         fileConfig.request = {
-          headers: request?.headers || requestSettings.headers,
-          method: request?.method || requestSettings.method,
           url: request?.url || requestSettings.url,
+          method: request?.method || requestSettings.method,
+          headers: request?.headers || requestSettings.headers,
+          credentials: request?.credentials || requestSettings.credentials,
         };
       }
     }

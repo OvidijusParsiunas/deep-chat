@@ -79,7 +79,8 @@ export class OpenAIChatIO extends DirectServiceIO {
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    if (this.deepChat.stream || body.stream) {
+    const stream = this.deepChat.stream;
+    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {

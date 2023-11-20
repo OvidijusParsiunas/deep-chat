@@ -173,10 +173,16 @@ export class Messages {
     return {bubbleElement};
   }
 
-  private static processMessageContent(content: Response): MessageContentI {
-    if (!content.text && !content.files && !content.html) content.text = '';
-    content.role ??= MessageUtils.AI_ROLE;
-    return content as MessageContentI;
+  private static createMessageContent(content: Response): MessageContentI {
+    // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
+    const {text, files, html, _sessionId, role} = content;
+    const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
+    if (text) messageContent.text = text;
+    if (files) messageContent.files = files;
+    if (html) messageContent.html = html;
+    if (!text && !files && !html) messageContent.text = '';
+    if (_sessionId) messageContent._sessionId = _sessionId;
+    return messageContent;
   }
 
   private static createBaseElements(): MessageElements {
@@ -241,7 +247,7 @@ export class Messages {
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isInitial = false) {
     let isNewMessage = true;
-    const message = Messages.processMessageContent(data);
+    const message = Messages.createMessageContent(data);
     if (message.text !== undefined && data.text !== null) {
       this.addNewTextMessage(message.text, message.role);
       if (!isInitial && this._textToSpeech && message.role !== MessageUtils.USER_ROLE) {
@@ -355,7 +361,7 @@ export class Messages {
 
   public addNewStreamedMessage(role?: string) {
     const {bubbleElement} = this.addNewTextMessage('', role || MessageUtils.AI_ROLE);
-    const messageContent = Messages.processMessageContent({text: ''});
+    const messageContent = Messages.createMessageContent({text: ''});
     this.messages.push(messageContent);
     bubbleElement.classList.add('streamed-message');
     this.scrollToBottom(); // need to scroll down completely
@@ -382,7 +388,7 @@ export class Messages {
     if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
     this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedText;
     this.messages[this.messages.length - 1].text = this._streamedText;
-    this.sendClientUpdate(Messages.processMessageContent({text: this._streamedText}), false);
+    this.sendClientUpdate(Messages.createMessageContent({text: this._streamedText}), false);
     if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
     this._streamedText = '';
   }

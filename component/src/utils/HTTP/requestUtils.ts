@@ -48,6 +48,7 @@ export class RequestUtils {
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
     const requestContent: RequestInit = {method: io.requestSettings?.method || 'POST', headers};
     if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
+    if (io.requestSettings.credentials) requestContent.credentials = io.requestSettings.credentials;
     return fetch(io.requestSettings?.url || io.url || '', requestContent);
   }
 

@@ -23,6 +23,7 @@ export class Stream {
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
+      credentials: io.requestSettings?.credentials,
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
