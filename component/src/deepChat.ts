@@ -1,5 +1,5 @@
+import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage, UserContent} from './types/messages';
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
@@ -135,7 +135,7 @@ export class DeepChat extends InternalHTML {
 
   getMessages: () => MessageContent[] = () => [];
 
-  submitUserMessage: (text: string) => void = () =>
+  submitUserMessage: (content: UserContent) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
   focusInput: () => void = () => FocusUtils.focusFromParentElement(this._elementRef);

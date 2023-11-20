@@ -60,11 +60,19 @@ export class FileAttachmentsType {
     return false;
   }
 
+  public static getTypeFromBlob(file: File): MessageFileType {
+    const {type} = file;
+    if (type.startsWith('image')) return 'image';
+    if (type.startsWith('audio')) return 'audio';
+    return 'any';
+  }
+
   private addAttachmentBasedOnType(file: File, fileReaderResult: string, removable: boolean) {
-    if (file.type.startsWith('image')) {
+    const imageType = FileAttachmentsType.getTypeFromBlob(file);
+    if (imageType === 'image') {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
       this.addFileAttachment(file, 'image', imageAttachment, removable);
-    } else if (file.type.startsWith('audio')) {
+    } else if (imageType === 'audio') {
       const audioAttachment = AudioFileAttachmentType.createAudioAttachment(fileReaderResult);
       this.addFileAttachment(file, 'audio', audioAttachment, removable);
     } else {

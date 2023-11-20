@@ -37,7 +37,7 @@ export class HTMLDeepChatElements {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
       element.addEventListener('click', () => {
-        messages.submitUserMessage?.(element.textContent?.trim() || '');
+        messages.submitUserMessage?.({text: element.textContent?.trim() || ''});
       });
     });
   }

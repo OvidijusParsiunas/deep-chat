@@ -1,13 +1,16 @@
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {MessageFileType} from '../../../../../types/messageFile';
+import {UserContentI} from '../../../../../types/messagesInternal';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {MessageUtils} from '../../../messages/messageUtils';
+import {UserContent} from '../../../../../types/messages';
+import {Legacy} from '../../../../../utils/legacy/legacy';
 import {Response} from '../../../../../types/response';
 import {TextInputEl} from '../../textInput/textInput';
 import {Signals} from '../../../../../types/handler';
@@ -140,40 +143,46 @@ export class SubmitButton extends InputButton<Styles> {
     validationHandler();
   }
 
-  public submitFromInput() {
+  public async submitFromInput() {
+    await this._fileAttachments.completePlaceholders();
+    const uploadedFilesData = this._fileAttachments.getAllFileData();
     if (this._inputElementRef.classList.contains('text-input-placeholder')) {
-      this.submit(false, '');
+      this.attemptSubmit({text: '', files: uploadedFilesData});
     } else {
       const inputText = this._inputElementRef.textContent?.trim() as string;
-      this.submit(false, inputText);
+      this.attemptSubmit({text: inputText, files: uploadedFilesData});
     }
+  }
+
+  public async programmaticSubmit(content: UserContent) {
+    if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
+    const newContent: UserContentI = {text: content.text};
+    if (content.files) {
+      newContent.files = Array.from(content.files).map((file) => {
+        return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
+      });
+    }
+    // in timeout to prevent adding multiple messages before validation+file addition finishes
+    setTimeout(() => this.attemptSubmit(newContent, true));
   }
 
   // TO-DO - should be disabled when loading history
-  // prettier-ignore
-  public async submit(isProgrammatic: boolean, userText: string) {
-    let uploadedFilesData;
-    let fileData;
-    if (!isProgrammatic) {
-      await this._fileAttachments.completePlaceholders();
-      uploadedFilesData = this._fileAttachments.getAllFileData();
-      fileData = uploadedFilesData?.map((fileData) => fileData.file);
-    }
-    if (await this._validationHandler?.(isProgrammatic) === false) return;
+  public async attemptSubmit(content: UserContentI, isProgrammatic = false) {
+    if ((await this._validationHandler?.(isProgrammatic ? content : undefined)) === false) return;
     this.changeToLoadingIcon();
-    await this.addNewMessages(userText, uploadedFilesData);
+    await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    if (!isProgrammatic) TextInputEl.clear(this._inputElementRef); // when uploading a file and placeholder text present
-
-    const requestContents = {text: userText === '' ? undefined : userText, files: fileData};
+    TextInputEl.clear(this._inputElementRef); // when uploading a file and placeholder text present
+    const filesData = content.files?.map((fileData) => fileData.file);
+    const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
-    if (!isProgrammatic) this._fileAttachments?.removeAllFiles();
+    this._fileAttachments?.removeAllFiles();
   }
 
-  private async addNewMessages(userText: string, uploadedFilesData?: {file: File; type: MessageFileType}[]) {
+  private async addNewMessage({text, files}: UserContentI) {
     const data: Response = {role: MessageUtils.USER_ROLE};
-    if (userText !== '') data.text = userText;
-    if (uploadedFilesData) data.files = await this._messages.addMultipleFiles(uploadedFilesData);
+    if (text) data.text = text;
+    if (files) data.files = await this._messages.addMultipleFiles(files);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;
     if (Object.keys(data).length > 0) this._messages.addNewMessage(data);
   }

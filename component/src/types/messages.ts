@@ -32,6 +32,8 @@ export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boo
 
 export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 
+export type UserContent = {text?: string; files?: File[] | FileList};
+
 export interface ErrorMessageOverrides {
   default?: string;
   service?: string;

@@ -1,1 +1,3 @@
-export type ValidationHandler = (isProgrammatic?: boolean) => Promise<boolean | null>;
+import {UserContentI} from './messagesInternal';
+
+export type ValidationHandler = (programmatic?: UserContentI) => Promise<boolean | null>;

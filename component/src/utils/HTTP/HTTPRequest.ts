@@ -51,7 +51,7 @@ export class HTTPRequest {
   }
 
   public static executePollRequest(io: ServiceIO, url: string, requestInit: RequestInit, messages: Messages) {
-    console.log('polling');
+    // console.log('polling');
     const {onFinish} = io.completionsHandlers;
     fetch(url, requestInit)
       .then((response) => response.json())
@@ -63,7 +63,7 @@ export class HTTPRequest {
             HTTPRequest.executePollRequest(io, url, requestInit, messages);
           }, resultData.timeoutMS);
         } else {
-          console.log('finished polling');
+          // console.log('finished polling');
           if (io.deepChat.stream && resultData.text) {
             Stream.simulate(messages, io.streamHandlers, resultData);
           } else {

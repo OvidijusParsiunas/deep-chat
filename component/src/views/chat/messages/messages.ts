@@ -34,6 +34,7 @@ import {
   MessageContent,
   MessageStyles,
   IntroMessage,
+  UserContent,
 } from '../../../types/messages';
 
 export interface MessageElements {
@@ -63,7 +64,7 @@ export class Messages {
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   messages: MessageContentI[] = [];
   customDemoResponse?: DemoResponse;
-  submitUserMessage?: (text: string) => void;
+  submitUserMessage?: (content: UserContent) => void;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;

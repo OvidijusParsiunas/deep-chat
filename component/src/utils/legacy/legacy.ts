@@ -43,4 +43,10 @@ export class Legacy {
     }
     return undefined;
   }
+
+  public static processSubmitUserMessage(content: string) {
+    console.error('The submitUserMessage(text: string) argument string type is deprecated since version 1.4.4.');
+    console.error('Please change to using the new argument type: https://deepchat.dev/docs/methods#submitUserMessage');
+    return {text: content};
+  }
 }
