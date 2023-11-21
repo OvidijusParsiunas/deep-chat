@@ -1,41 +1,28 @@
-import {ProcessedTextToSpeechConfig, TextToSpeech} from './textToSpeech/textToSpeech';
+import {ErrorMessageOverrides, MessageContent, IntroMessage, UserContent} from '../../../types/messages';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
-import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
+import {ElementUtils} from '../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../types/messagesInternal';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {ResponseI} from '../../../types/responseInternal';
+import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {HTMLClassUtilities} from '../../../types/html';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
+import {MessageStream} from './stream/messageStream';
 import {Legacy} from '../../../utils/legacy/legacy';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {CustomStyle} from '../../../types/styles';
 import {HTMLMessages} from './html/htmlMessages';
-import {Response} from '../../../types/response';
-import {Avatars} from '../../../types/avatars';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
 import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {HTMLUtils} from './html/htmlUtils';
-import {Names} from '../../../types/names';
-import {Remarkable} from 'remarkable';
-import {AvatarEl} from './avatar';
-import {Name} from './name';
-import {
-  ErrorMessageOverrides,
-  MessageElementsStyles,
-  MessageRoleStyles,
-  MessageContent,
-  MessageStyles,
-  IntroMessage,
-  UserContent,
-} from '../../../types/messages';
 
 export interface MessageElements {
   outerContainer: HTMLElement;
@@ -43,39 +30,23 @@ export interface MessageElements {
   bubbleElement: HTMLElement;
 }
 
-export class Messages {
-  elementRef: HTMLElement;
-  readonly messageStyles?: MessageStyles;
-  private _messageElementRefs: MessageElements[] = [];
-  private readonly _avatars?: Avatars;
-  private readonly _names?: Names;
+// WORK - refactor this to extend multiple classes and reduce the size
+export class Messages extends MessageStream {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
-  private readonly _onNewMessage?: (message: MessageContentI, isInitial: boolean) => void;
   private readonly _onClearMessages?: () => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
-  private readonly _textElementsToText: [MessageElements, string][] = [];
-  private _remarkable: Remarkable;
-  private _textToSpeech?: ProcessedTextToSpeechConfig;
-  private _introPanel?: IntroPanel;
   private _introMessage?: IntroMessage;
-  private _streamedText = '';
   readonly htmlClassUtilities: HTMLClassUtilities = {};
-  messages: MessageContentI[] = [];
   customDemoResponse?: DemoResponse;
   submitUserMessage?: (content: UserContent) => void;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
+    super(deepChat);
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
-    this._remarkable = RemarkableConfig.createNew();
-    this.elementRef = Messages.createContainerElement();
-    this.messageStyles = deepChat.messageStyles;
-    this._avatars = deepChat.avatars;
-    this._names = deepChat.names;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
-    this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
@@ -87,7 +58,7 @@ export class Messages {
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
-    deepChat.scrollToBottom = this.scrollToBottom.bind(this);
+    deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
     serviceIO.addMessage = this.addIOMessage.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
@@ -119,12 +90,6 @@ export class Messages {
     }
   }
 
-  private static createContainerElement() {
-    const container = document.createElement('div');
-    container.id = 'messages';
-    return container;
-  }
-
   private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
     const text = SetupMessages.getText(deepChat, serviceIO);
     if (text) {
@@ -150,99 +115,7 @@ export class Messages {
       this.addNewMessage(message, true);
     });
     // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
-    setTimeout(() => this.scrollToBottom());
-  }
-
-  // prettier-ignore
-  public applyCustomStyles(elements: MessageElements | undefined, role: string, media: boolean,
-      otherStyles?: MessageRoleStyles | MessageElementsStyles) {
-    if (elements && this.messageStyles) {
-      MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, role, media, otherStyles);
-    }
-  }
-
-  // prettier-ignore
-  private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
-    bubbleElement.classList.add('message-bubble',
-      role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
-    bubbleElement.innerHTML = this._remarkable.render(text);
-    // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
-    // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
-    if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
-    if (this._avatars) AvatarEl.add(bubbleElement, role, this._avatars);
-    if (this._names) Name.add(bubbleElement, role, this._names);
-    return {bubbleElement};
-  }
-
-  private static createMessageContent(content: Response): MessageContentI {
-    // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
-    const {text, files, html, _sessionId, role} = content;
-    const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
-    if (text) messageContent.text = text;
-    if (files) messageContent.files = files;
-    if (html) messageContent.html = html;
-    if (!text && !files && !html) messageContent.text = '';
-    if (_sessionId) messageContent._sessionId = _sessionId;
-    return messageContent;
-  }
-
-  private static createBaseElements(): MessageElements {
-    const outerContainer = document.createElement('div');
-    const innerContainer = document.createElement('div');
-    innerContainer.classList.add('inner-message-container');
-    outerContainer.appendChild(innerContainer);
-    outerContainer.classList.add('outer-message-container');
-    const bubbleElement = document.createElement('div');
-    bubbleElement.classList.add('message-bubble');
-    innerContainer.appendChild(bubbleElement);
-    return {outerContainer, innerContainer, bubbleElement};
-  }
-
-  private createMessageElements(text: string, role: string) {
-    const messageElements = Messages.createBaseElements();
-    const {outerContainer, innerContainer, bubbleElement} = messageElements;
-    outerContainer.appendChild(innerContainer);
-    this.addInnerContainerElements(bubbleElement, text, role);
-    this._messageElementRefs.push(messageElements);
-    return messageElements;
-  }
-
-  private static isTemporaryElement(elements: MessageElements) {
-    return (
-      elements?.bubbleElement.classList.contains('loading-message-text') ||
-      HTMLDeepChatElements.isElementTemporary(elements)
-    );
-  }
-
-  public createNewMessageElement(text: string, role: string) {
-    this._introPanel?.hide();
-    const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (Messages.isTemporaryElement(lastMessageElements)) {
-      lastMessageElements.outerContainer.remove();
-      this._messageElementRefs.pop();
-    }
-    return this.createMessageElements(text, role);
-  }
-
-  private createAndAppendNewMessageElement(text: string, role: string) {
-    const messageElements = this.createNewMessageElement(text, role);
-    this.elementRef.appendChild(messageElements.outerContainer);
-    setTimeout(() => this.scrollToBottom()); // timeout neeed when bubble font is large
-    return messageElements;
-  }
-
-  // makes sure the bubble has dimensions when there is no text
-  public static editEmptyMessageElement(bubbleElement: HTMLElement) {
-    bubbleElement.textContent = '.';
-    bubbleElement.style.color = '#00000000';
-  }
-
-  private addNewTextMessage(text: string, role: string) {
-    const messageElements = this.createAndAppendNewMessageElement(text, role);
-    this.applyCustomStyles(messageElements, role, false);
-    if (text.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
-    this._textElementsToText.push([messageElements, text]);
-    return messageElements;
+    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef));
   }
 
   // this should not be activated by streamed messages
@@ -271,15 +144,11 @@ export class Messages {
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 
-  private sendClientUpdate(message: MessageContentI, isInitial = false) {
-    this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
-  }
-
   // prettier-ignore
   private removeMessageOnError() {
     const lastMessage = this._messageElementRefs[this._messageElementRefs.length - 1];
     const lastMessageBubble = lastMessage?.bubbleElement;
-    if ((lastMessageBubble?.classList.contains('streamed-message') && lastMessageBubble.textContent === '') ||
+    if ((lastMessageBubble?.classList.contains(MessageStream.MESSAGE_CLASS) && lastMessageBubble.textContent === '') ||
         Messages.isTemporaryElement(lastMessage)) {
       lastMessage.outerContainer.remove();
       this._messageElementRefs.pop();
@@ -300,9 +169,9 @@ export class Messages {
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
-    this.scrollToBottom();
+    ElementUtils.scrollToBottom(this.elementRef);
     if (this._textToSpeech) TextToSpeech.speak(text, this._textToSpeech);
-    this._streamedText = '';
+    this.clearStreamState();
   }
 
   private static checkPermittedErrorPrefixes(errorPrefixes: string[], message: string): string | undefined {
@@ -328,16 +197,6 @@ export class Messages {
     return undefined;
   }
 
-  private getLastMessageElement() {
-    return this.elementRef.children[this.elementRef.children.length - 1];
-  }
-
-  private getLastMessageBubbleElement() {
-    return Array.from(this.getLastMessageElement()?.children?.[0]?.children || []).find((element) => {
-      return element.classList.contains('message-bubble');
-    });
-  }
-
   public isLastMessageError() {
     return this.getLastMessageBubbleElement()?.classList.contains('error-message-text');
   }
@@ -357,41 +216,7 @@ export class Messages {
     this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading);
     LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
-    this.scrollToBottom();
-  }
-
-  public addNewStreamedMessage(role?: string) {
-    const {bubbleElement} = this.addNewTextMessage('', role || MessageUtils.AI_ROLE);
-    const messageContent = Messages.createMessageContent({text: ''});
-    this.messages.push(messageContent);
-    bubbleElement.classList.add('streamed-message');
-    this.scrollToBottom(); // need to scroll down completely
-  }
-
-  public updateStreamedMessage(text: string, isIncrement = true) {
-    const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
-    const {bubbleElement} = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (text.trim().length !== 0) {
-      const defaultColor = this.messageStyles?.default;
-      bubbleElement.style.color = defaultColor?.ai?.bubble?.color || defaultColor?.shared?.bubble?.color || '';
-    }
-    this._streamedText = isIncrement ? this._streamedText + text : text;
-    this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedText;
-    bubbleElement.innerHTML = this._remarkable.render(this._streamedText);
-    if (isScrollbarAtBottomOfElement) this.scrollToBottom();
-  }
-
-  public isStreamingText() {
-    return !!this._streamedText;
-  }
-
-  public finaliseStreamedMessage() {
-    if (!this.getLastMessageBubbleElement()?.classList.contains('streamed-message')) return;
-    this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedText;
-    this.messages[this.messages.length - 1].text = this._streamedText;
-    this.sendClientUpdate(Messages.createMessageContent({text: this._streamedText}), false);
-    if (this._textToSpeech) TextToSpeech.speak(this._streamedText, this._textToSpeech);
-    this._streamedText = '';
+    ElementUtils.scrollToBottom(this.elementRef);
   }
 
   private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
@@ -436,7 +261,7 @@ export class Messages {
     const retainedElements: MessageElements[] = [];
     this._messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
-      if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains('streamed-message')) {
+      if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
@@ -459,10 +284,6 @@ export class Messages {
     this._textElementsToText.splice(0, this._textElementsToText.length);
     this._onClearMessages?.();
     delete serviceIO.sessionId;
-  }
-
-  private scrollToBottom() {
-    this.elementRef.scrollTop = this.elementRef.scrollHeight;
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later

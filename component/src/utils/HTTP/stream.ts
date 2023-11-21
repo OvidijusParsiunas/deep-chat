@@ -41,9 +41,9 @@ export class Stream {
             .then((textBody?: DResponse) => {
               if (textBody?.text === undefined) {
                 // strategy - do not to stop the stream on one message failure to give other messages a change to display
-                console.error(`Response data: ${message.data} \n ${ErrorMessages.INVALID_STREAM_RESPONSE}`);
+                console.error(`Response data: ${message.data}`);
               } else {
-                messages.updateStreamedMessage(textBody.text);
+                messages.updatedStreamedMessage(textBody);
               }
             })
             .catch((e) => RequestUtils.displayError(messages, e));
@@ -78,6 +78,7 @@ export class Stream {
   public static simulate(messages: Messages, sh: StreamHandlers, result: DResponse) {
     const simulationSH = sh as unknown as SimulationSH;
     // .filter(Boolean) removes '' entries in the array as they stop the simulation
+    if (!result.text) return console.error(ErrorMessages.INVALID_STREAM_SIMULATION_RESPONSE);
     const responseText = result.text?.split(' ').filter(Boolean) || [];
     messages.addNewStreamedMessage(result.role);
     sh.onOpen();
@@ -88,7 +89,7 @@ export class Stream {
   private static populateMessages(responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
     const word = responseText[wordIndex];
     if (word) {
-      messages.updateStreamedMessage(`${word} `);
+      messages.updatedStreamedMessage({text: `${word} `});
       const timeout = setTimeout(() => {
         Stream.populateMessages(responseText, messages, sh, wordIndex + 1);
       }, sh.simulationInterim || 70);

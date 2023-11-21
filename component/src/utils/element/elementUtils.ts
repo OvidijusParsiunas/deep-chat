@@ -23,4 +23,8 @@ export class ElementUtils {
     (element.parentNode as HTMLElement).replaceChild(newElement, element);
     return newElement;
   }
+
+  public static scrollToBottom(element: HTMLElement) {
+    element.scrollTop = element.scrollHeight;
+  }
 }

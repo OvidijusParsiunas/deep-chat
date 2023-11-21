@@ -35,7 +35,7 @@ export class HTMLMessages {
       if (wasUpdated) return undefined;
     }
     const messageElements = HTMLMessages.createElements(messages, html, role);
-    if (html.trim().length === 0) Messages.editEmptyMessageElement(messageElements.bubbleElement);
+    if (html.trim().length === 0) Messages.fillEmptyMessageElement(messageElements.bubbleElement);
     HTMLUtils.apply(messages, messageElements.outerContainer);
     messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
     HTMLMessages.addElement(messages, messageElements.outerContainer);

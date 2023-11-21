@@ -53,9 +53,10 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const onResponse = (result: {text?: string; error?: string}) => {
+    const onResponse = (result: {text?: string; error?: string, html?: string}) => {
       if (!isHandlerActive) return;
-      if (!result || typeof result !== 'object' || (typeof result.error !== 'string' && typeof result.text !== 'string')) {
+      if (!result || typeof result !== 'object'
+        || (typeof result.error !== 'string' && typeof result.html !== 'string' && typeof result.text !== 'string')) {
         console.error(ErrorMessages.INVALID_RESPONSE(result, 'server', false));
       } else if (result.error) {
         console.error(result.error);
@@ -63,8 +64,8 @@ export class CustomHandler {
         io.streamHandlers.onClose();
         messages.addNewErrorMessage('service', result.error);
         isHandlerActive = false;
-      } else if (result.text) {
-        messages.updateStreamedMessage(result.text);
+      } else {
+        messages.updatedStreamedMessage(result);
       }
     };
     io.streamHandlers.abortStream.abort = () => {

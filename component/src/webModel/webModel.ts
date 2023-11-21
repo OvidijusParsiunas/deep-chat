@@ -169,8 +169,8 @@ export class WebModel extends BaseServiceIO {
   }
 
   private static callbackUpdateResponse(messages: Messages, _: number, msg: string) {
-    if (!messages.isStreamingText()) messages.addNewStreamedMessage();
-    messages.updateStreamedMessage(msg, false);
+    if (!messages.isStreaming()) messages.addNewStreamedMessage();
+    messages.updatedStreamedMessage({text: msg}, false);
   }
 
   private async streamResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
@@ -179,7 +179,7 @@ export class WebModel extends BaseServiceIO {
     };
     this.streamHandlers.onOpen();
     await chat.generate(text, WebModel.callbackUpdateResponse.bind(this, messages));
-    if (!messages.isStreamingText()) messages.addNewStreamedMessage(); // needed when early abort clicked
+    if (!messages.isStreaming()) messages.addNewStreamedMessage(); // needed when early abort clicked
     messages.finaliseStreamedMessage();
     this.streamHandlers.onClose();
   }
