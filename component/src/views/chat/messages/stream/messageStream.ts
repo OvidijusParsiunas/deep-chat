@@ -28,21 +28,20 @@ export class MessageStream extends MessageBase {
     ElementUtils.scrollToBottom(this.elementRef); // need to scroll down completely
   }
 
-  public updatedStreamedMessage(response: Response, isIncrement = true) {
-    const content = response.text || response.html;
+  public updatedStreamedMessage(response?: Response) {
+    const content = response?.text || response?.html;
     if (!content) return console.error(ErrorMessages.INVALID_STREAM_RESPONSE);
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     const {bubbleElement} = this._messageElementRefs[this._messageElementRefs.length - 1];
-    // WORK - optimize
     if (content.trim().length > 0) {
       const defaultColor = this.messageStyles?.default;
       bubbleElement.style.color = defaultColor?.ai?.bubble?.color || defaultColor?.shared?.bubble?.color || '';
     }
-    this.updateBasedOnType(content, !!response.text, bubbleElement, isIncrement);
+    this.updateBasedOnType(content, !!response.text, bubbleElement, response.streamOverwrite);
     if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this.elementRef);
   }
 
-  private updateBasedOnType(content: string, isText: boolean, bubbleElement: HTMLElement, isIncrement: boolean) {
+  private updateBasedOnType(content: string, isText: boolean, bubbleElement: HTMLElement, isOverwrite = false) {
     const expectedType = isText ? 'text' : 'html';
     const func = isText ? this.updateText : this.updateHTML;
     if (this._streamType === '') {
@@ -50,25 +49,25 @@ export class MessageStream extends MessageBase {
     } else if (this._streamType !== expectedType) {
       return console.error(ErrorMessages.INVALID_STREAM_MIX_RESPONSE);
     }
-    func.bind(this)(content, bubbleElement, isIncrement);
+    func.bind(this)(content, bubbleElement, isOverwrite);
   }
 
-  private updateText(text: string, bubbleElement: HTMLElement, isIncrement: boolean) {
-    this._streamedContent = isIncrement ? this._streamedContent + text : text;
+  private updateText(text: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
+    this._streamedContent = isOverwrite ? text : this._streamedContent + text;
     this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedContent;
     bubbleElement.innerHTML = this._remarkable.render(this._streamedContent);
   }
 
-  private updateHTML(html: string, bubbleElement: HTMLElement, isIncrement: boolean) {
-    if (isIncrement) {
+  private updateHTML(html: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
+    if (isOverwrite) {
+      this._streamedContent = html;
+      bubbleElement.innerHTML = html;
+    } else {
       if (this._streamedContent === '') bubbleElement.replaceChildren(); // remove '.'
       const wrapper = document.createElement('span');
       wrapper.innerHTML = html;
       bubbleElement.appendChild(wrapper);
       this._streamedContent = MessageStream.HTML_CONTENT_PLACEHOLDER;
-    } else {
-      this._streamedContent = html;
-      bubbleElement.innerHTML = html;
     }
   }
 

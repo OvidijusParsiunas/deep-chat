@@ -53,7 +53,7 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const onResponse = (result: {text?: string; error?: string, html?: string}) => {
+    const onResponse = (result: Response) => {
       if (!isHandlerActive) return;
       if (!result || typeof result !== 'object'
         || (typeof result.error !== 'string' && typeof result.html !== 'string' && typeof result.text !== 'string')) {

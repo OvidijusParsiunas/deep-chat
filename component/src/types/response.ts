@@ -6,5 +6,6 @@ export interface Response {
   html?: string;
   error?: string;
   role?: string;
+  streamOverwrite?: boolean;
   _sessionId?: string;
 }

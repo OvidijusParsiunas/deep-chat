@@ -170,7 +170,7 @@ export class WebModel extends BaseServiceIO {
 
   private static callbackUpdateResponse(messages: Messages, _: number, msg: string) {
     if (!messages.isStreaming()) messages.addNewStreamedMessage();
-    messages.updatedStreamedMessage({text: msg}, false);
+    messages.updatedStreamedMessage({text: msg, streamOverwrite: true});
   }
 
   private async streamResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {

@@ -39,12 +39,8 @@ export class Stream {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response)
             .then((textBody?: DResponse) => {
-              if (textBody?.text === undefined) {
-                // strategy - do not to stop the stream on one message failure to give other messages a change to display
-                console.error(`Response data: ${message.data}`);
-              } else {
-                messages.updatedStreamedMessage(textBody);
-              }
+              // do not to stop the stream on one message failure to give other messages a change to display
+              messages.updatedStreamedMessage(textBody);
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
