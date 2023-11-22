@@ -26,7 +26,7 @@ export class CustomHandler {
         console.error(result.error);
         messages.addNewErrorMessage('service', result.error);
         io.completionsHandlers.onFinish();
-      } else if (io.deepChat.stream && result.text) {
+      } else if (Stream.isSimulation(io.deepChat.stream)) {
         Stream.simulate(messages, io.streamHandlers, result);
       } else {
         messages.addNewMessage(result);

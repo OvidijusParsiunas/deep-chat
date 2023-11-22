@@ -122,7 +122,7 @@ export class Messages extends MessageStream {
   public addNewMessage(data: ResponseI, isInitial = false) {
     let isNewMessage = true;
     const message = Messages.createMessageContent(data);
-    if (message.text !== undefined && data.text !== null) {
+    if (!data.ignoreText && message.text !== undefined && data.text !== null) {
       this.addNewTextMessage(message.text, message.role);
       if (!isInitial && this._textToSpeech && message.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(message.text, this._textToSpeech);

@@ -60,7 +60,7 @@ export class Websocket {
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
-        if (io.deepChat.stream && resultData.text) {
+        if (Stream.isSimulation(io.deepChat.stream)) {
           Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
           messages.addNewMessage(resultData);

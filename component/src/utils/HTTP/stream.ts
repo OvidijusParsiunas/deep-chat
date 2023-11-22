@@ -1,9 +1,9 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
-import {Response as DResponse} from '../../types/response';
+import {Response as ResponseI} from '../../types/response';
+import {Stream as StreamI} from '../../types/stream';
 import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -38,7 +38,7 @@ export class Stream {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
           const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
           io.extractResultData?.(response)
-            .then((textBody?: DResponse) => {
+            .then((textBody?: ResponseI) => {
               // do not to stop the stream on one message failure to give other messages a change to display
               messages.updatedStreamedMessage(textBody);
             })
@@ -71,14 +71,17 @@ export class Stream {
     onFinish?.();
   }
 
-  public static simulate(messages: Messages, sh: StreamHandlers, result: DResponse) {
+  public static simulate(messages: Messages, sh: StreamHandlers, result: ResponseI) {
     const simulationSH = sh as unknown as SimulationSH;
-    // .filter(Boolean) removes '' entries in the array as they stop the simulation
-    if (!result.text) return console.error(ErrorMessages.INVALID_STREAM_SIMULATION_RESPONSE);
-    const responseText = result.text?.split(' ').filter(Boolean) || [];
-    messages.addNewStreamedMessage(result.role);
-    sh.onOpen();
-    Stream.populateMessages(responseText, messages, simulationSH);
+    // reason for not streaming html is because there is no standard way to split it
+    if (result.files || result.html) messages.addNewMessage({sendUpdate: false, ignoreText: true, ...result}, false);
+    if (result.text) {
+      // .filter(Boolean) removes '' entries in the array as they stop the simulation
+      const responseText = result.text?.split(' ').filter(Boolean) || [];
+      messages.addNewStreamedMessage(result.role);
+      sh.onOpen();
+      Stream.populateMessages(responseText, messages, simulationSH);
+    }
   }
 
   // prettier-ignore
@@ -96,6 +99,10 @@ export class Stream {
       messages.finaliseStreamedMessage();
       sh.onClose();
     }
+  }
+
+  public static isSimulation(stream?: StreamI) {
+    return typeof stream === 'object' && !!stream.simulation;
   }
 
   private static abort(timeout: number, messages: Messages, onClose: () => void) {

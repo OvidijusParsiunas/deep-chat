@@ -29,6 +29,4 @@ export const ErrorMessages = {
     '\n You can also augment them using the responseInterceptor property: ' +
     'https://deepchat.dev/docs/interceptors#responseInterceptor',
   INVALID_STREAM_MIX_RESPONSE: 'Cannot mix {text: string} and {html: string} responses.',
-  // reason for this is because there is no standard way to split html
-  INVALID_STREAM_SIMULATION_RESPONSE: 'Stream simulation response can only use {text: string} responses.',
 };
