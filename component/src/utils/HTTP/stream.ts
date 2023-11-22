@@ -20,6 +20,7 @@ export class Stream {
     if (error) return Stream.onInterceptorError(messages, error, onClose);
     if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
+    let streamBubble: HTMLElement | null = null;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -28,7 +29,7 @@ export class Stream {
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
         if (response.ok) {
-          messages.addNewStreamedMessage();
+          streamBubble = messages.addNewStreamedMessage();
           return onOpen();
         }
         const result = await RequestUtils.processResponseByType(response);
@@ -40,7 +41,7 @@ export class Stream {
           io.extractResultData?.(response)
             .then((textBody?: ResponseI) => {
               // do not to stop the stream on one message failure to give other messages a change to display
-              messages.updatedStreamedMessage(textBody);
+              if (streamBubble) messages.updatedStreamedMessage(streamBubble, textBody);
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
@@ -78,19 +79,20 @@ export class Stream {
     if (result.text) {
       // .filter(Boolean) removes '' entries in the array as they stop the simulation
       const responseText = result.text?.split(' ').filter(Boolean) || [];
-      messages.addNewStreamedMessage(result.role);
+      const streamBubble = messages.addNewStreamedMessage(result.role);
       sh.onOpen();
-      Stream.populateMessages(responseText, messages, simulationSH);
+      Stream.populateMessages(streamBubble, responseText, messages, simulationSH);
     }
   }
 
   // prettier-ignore
-  private static populateMessages(responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
+  private static populateMessages(streamBubble: HTMLElement,
+      responseText: string[], messages: Messages, sh: SimulationSH, wordIndex = 0) {
     const word = responseText[wordIndex];
     if (word) {
-      messages.updatedStreamedMessage({text: `${word} `});
+      messages.updatedStreamedMessage(streamBubble, {text: `${word} `});
       const timeout = setTimeout(() => {
-        Stream.populateMessages(responseText, messages, sh, wordIndex + 1);
+        Stream.populateMessages(streamBubble, responseText, messages, sh, wordIndex + 1);
       }, sh.simulationInterim || 70);
       sh.abortStream.abort = () => {
         Stream.abort(timeout, messages, sh.onClose);

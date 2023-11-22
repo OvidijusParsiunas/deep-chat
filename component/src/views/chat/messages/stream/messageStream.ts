@@ -26,13 +26,14 @@ export class MessageStream extends MessageBase {
     this.messages.push(messageContent);
     bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
     ElementUtils.scrollToBottom(this.elementRef); // need to scroll down completely
+    return bubbleElement;
   }
 
-  public updatedStreamedMessage(response?: Response) {
+  // important to have bubbleElement reference as multiple messages can be simulated at once in websockets
+  public updatedStreamedMessage(bubbleElement: HTMLElement, response?: Response) {
     const content = response?.text || response?.html;
     if (!content) return console.error(ErrorMessages.INVALID_STREAM_RESPONSE);
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
-    const {bubbleElement} = this._messageElementRefs[this._messageElementRefs.length - 1];
     if (content.trim().length > 0) {
       const defaultColor = this.messageStyles?.default;
       bubbleElement.style.color = defaultColor?.ai?.bubble?.color || defaultColor?.shared?.bubble?.color || '';
