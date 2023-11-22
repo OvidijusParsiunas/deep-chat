@@ -1,10 +1,11 @@
 import {MessageStyles} from '../../../types/messages';
-import {MessageElements, Messages} from './messages';
+import {MessageBase} from './stream/messagesBase';
+import {MessageElements} from './messages';
 
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
 
-  public static addMessage(messages: Messages, elements: MessageElements, styles: keyof MessageStyles, role: string) {
+  public static addMessage(messages: MessageBase, elements: MessageElements, styles: keyof MessageStyles, role: string) {
     messages.elementRef.appendChild(elements.outerContainer);
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;

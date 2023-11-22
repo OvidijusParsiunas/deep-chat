@@ -1,12 +1,12 @@
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
-import {MessageElements, Messages} from '../messages';
+import {MessageBase} from '../stream/messagesBase';
+import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';
 
 const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
 const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
-const DEEP_CHAT_UPDATE_MESSAGE = 'deep-chat-update-message';
 
 const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
   'deep-chat-button': {
@@ -33,19 +33,13 @@ const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
 const DEEP_CHAT_ELEMENT_CLASSES = Object.keys(DEEP_CHAT_ELEMENTS);
 
 export class HTMLDeepChatElements {
-  private static applySuggestionEvent(messages: Messages, element: Element) {
+  private static applySuggestionEvent(messages: MessageBase, element: Element) {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
       element.addEventListener('click', () => {
         messages.submitUserMessage?.({text: element.textContent?.trim() || ''});
       });
     });
-  }
-
-  public static isUpdateMessage(html: string) {
-    const testElement = document.createElement('div');
-    testElement.innerHTML = html;
-    return testElement.children[0]?.classList.contains(DEEP_CHAT_UPDATE_MESSAGE);
   }
 
   public static isElementTemporary(messageElements?: MessageElements) {
@@ -82,7 +76,7 @@ export class HTMLDeepChatElements {
     return StyleUtils.processStateful(mergedStyles, {}, {});
   }
 
-  public static applyDeepChatUtilities(messages: Messages, utilities: HTMLClassUtilities, element: HTMLElement) {
+  public static applyDeepChatUtilities(messages: MessageBase, utilities: HTMLClassUtilities, element: HTMLElement) {
     DEEP_CHAT_ELEMENT_CLASSES.forEach((className) => {
       const elements = element.getElementsByClassName(className);
       Array.from(elements || []).forEach((element) => {

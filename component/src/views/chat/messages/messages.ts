@@ -1,15 +1,13 @@
-import {ErrorMessageOverrides, MessageContent, IntroMessage, UserContent} from '../../../types/messages';
+import {ErrorMessageOverrides, MessageContent, IntroMessage} from '../../../types/messages';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../types/messagesInternal';
-import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {ResponseI} from '../../../types/responseInternal';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
-import {HTMLClassUtilities} from '../../../types/html';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {MessageStream} from './stream/messageStream';
@@ -38,15 +36,12 @@ export class Messages extends MessageStream {
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
   private _introMessage?: IntroMessage;
-  readonly htmlClassUtilities: HTMLClassUtilities = {};
   customDemoResponse?: DemoResponse;
-  submitUserMessage?: (content: UserContent) => void;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     super(deepChat);
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
-    if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
@@ -66,9 +61,6 @@ export class Messages extends MessageStream {
         this._textToSpeech = processedConfig;
       });
     }
-    setTimeout(() => {
-      this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available
-    });
   }
 
   private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
@@ -120,10 +112,9 @@ export class Messages extends MessageStream {
 
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isInitial = false) {
-    let isNewMessage = true;
     const message = Messages.createMessageContent(data);
     if (!data.ignoreText && message.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(message.text, message.role);
+      this.addNewTextMessage(message.text, message.role, data.overwrite);
       if (!isInitial && this._textToSpeech && message.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(message.text, this._textToSpeech);
       }
@@ -132,15 +123,14 @@ export class Messages extends MessageStream {
       FileMessages.addMessages(this, message.files, message.role);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this._messageElementRefs);
+      const elements = HTMLMessages.add(this, message.html, message.role, this._messageElementRefs, data.overwrite);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
-      isNewMessage = !!elements;
     }
-    this.updateStateOnMessage(message, isNewMessage, data.sendUpdate, isInitial);
+    this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, isNewMessage: boolean, update = true, initial = false) {
-    if (isNewMessage) this.messages.push(messageContent);
+  private updateStateOnMessage(messageContent: MessageContentI, isOverwrite?: boolean, update = true, initial = false) {
+    if (isOverwrite) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 
@@ -163,7 +153,7 @@ export class Messages extends MessageStream {
     bubbleElement.classList.add('error-message-text');
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
-    bubbleElement.innerHTML = this._remarkable.render(text);
+    this.renderText(bubbleElement, text);
     const fontElementStyles = MessageStyleUtils.extractParticularSharedStyles(['fontSize', 'fontFamily'],
       this.messageStyles?.default);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
@@ -284,13 +274,5 @@ export class Messages extends MessageStream {
     this._textElementsToText.splice(0, this._textElementsToText.length);
     this._onClearMessages?.();
     delete serviceIO.sessionId;
-  }
-
-  // this is mostly used for enabling highlight.js to highlight code if it downloads later
-  private refreshTextMessages() {
-    this._remarkable = RemarkableConfig.createNew();
-    this._textElementsToText.forEach((elementToText) => {
-      elementToText[0].bubbleElement.innerHTML = this._remarkable.render(elementToText[1]);
-    });
   }
 }

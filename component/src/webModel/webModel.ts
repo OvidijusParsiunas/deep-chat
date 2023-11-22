@@ -168,18 +168,16 @@ export class WebModel extends BaseServiceIO {
     this.completionsHandlers.onFinish();
   }
 
-  private static callbackUpdateResponse(messages: Messages, _: number, msg: string) {
-    if (!messages.isStreaming()) messages.addNewStreamedMessage();
-    messages.updatedStreamedMessage({text: msg, streamOverwrite: true});
-  }
-
   private async streamResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
     this.streamHandlers.abortStream.abort = () => {
       chat.interruptGenerate();
     };
     this.streamHandlers.onOpen();
-    await chat.generate(text, WebModel.callbackUpdateResponse.bind(this, messages));
-    if (!messages.isStreaming()) messages.addNewStreamedMessage(); // needed when early abort clicked
+    let streamBubble: HTMLElement | undefined;
+    await chat.generate(text, (_: number, message: string) => {
+      streamBubble ??= messages.updatedStreamedMessage(streamBubble, {text: message, overwrite: true});
+    });
+    // if (!messages.isStreaming()) messages.addNewStreamedMessage(); // needed when early abort clicked
     messages.finaliseStreamedMessage();
     this.streamHandlers.onClose();
   }
