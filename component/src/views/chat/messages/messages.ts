@@ -19,6 +19,7 @@ import {HTMLMessages} from './html/htmlMessages';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
 import {MessageUtils} from './messageUtils';
+import {MessagesBase} from './messagesBase';
 import {DeepChat} from '../../../deepChat';
 import {HTMLUtils} from './html/htmlUtils';
 
@@ -28,8 +29,7 @@ export interface MessageElements {
   bubbleElement: HTMLElement;
 }
 
-// WORK - refactor this to extend multiple classes and reduce the size
-export class Messages extends MessageStream {
+export class Messages extends MessagesBase {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onClearMessages?: () => void;
   private readonly _displayLoadingMessage?: boolean;
@@ -58,7 +58,7 @@ export class Messages extends MessageStream {
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
-        this._textToSpeech = processedConfig;
+        this.textToSpeech = processedConfig;
       });
     }
   }
@@ -96,7 +96,7 @@ export class Messages extends MessageStream {
       const elements = this.createAndAppendNewMessageElement(this._introMessage.text, MessageUtils.AI_ROLE);
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
     } else if (this._introMessage?.html) {
-      const elements = HTMLMessages.add(this, this._introMessage.html, MessageUtils.AI_ROLE, this._messageElementRefs);
+      const elements = HTMLMessages.add(this, this._introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
     }
   }
@@ -115,15 +115,15 @@ export class Messages extends MessageStream {
     const message = Messages.createMessageContent(data);
     if (!data.ignoreText && message.text !== undefined && data.text !== null) {
       this.addNewTextMessage(message.text, message.role, data.overwrite);
-      if (!isInitial && this._textToSpeech && message.role !== MessageUtils.USER_ROLE) {
-        TextToSpeech.speak(message.text, this._textToSpeech);
+      if (!isInitial && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
+        TextToSpeech.speak(message.text, this.textToSpeech);
       }
     }
     if (message.files && Array.isArray(message.files)) {
       FileMessages.addMessages(this, message.files, message.role);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this._messageElementRefs, data.overwrite);
+      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, data.overwrite);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
     this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
@@ -136,12 +136,12 @@ export class Messages extends MessageStream {
 
   // prettier-ignore
   private removeMessageOnError() {
-    const lastMessage = this._messageElementRefs[this._messageElementRefs.length - 1];
+    const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
     const lastMessageBubble = lastMessage?.bubbleElement;
     if ((lastMessageBubble?.classList.contains(MessageStream.MESSAGE_CLASS) && lastMessageBubble.textContent === '') ||
         Messages.isTemporaryElement(lastMessage)) {
       lastMessage.outerContainer.remove();
-      this._messageElementRefs.pop();
+      this.messageElementRefs.pop();
     }
   }
 
@@ -160,8 +160,7 @@ export class Messages extends MessageStream {
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
     this.elementRef.appendChild(outerContainer);
     ElementUtils.scrollToBottom(this.elementRef);
-    if (this._textToSpeech) TextToSpeech.speak(text, this._textToSpeech);
-    this.clearStreamState();
+    if (this.textToSpeech) TextToSpeech.speak(text, this.textToSpeech);
   }
 
   private static checkPermittedErrorPrefixes(errorPrefixes: string[], message: string): string | undefined {
@@ -188,11 +187,11 @@ export class Messages extends MessageStream {
   }
 
   public isLastMessageError() {
-    return this.getLastMessageBubbleElement()?.classList.contains('error-message-text');
+    return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.classList.contains('error-message-text');
   }
 
   public removeError() {
-    if (this.isLastMessageError()) this.getLastMessageElement().remove();
+    if (this.isLastMessageError()) MessageUtils.getLastMessageElement(this.elementRef).remove();
   }
 
   public addLoadingMessage() {
@@ -249,7 +248,7 @@ export class Messages extends MessageStream {
   // WORK - update all message classes to use deep-chat prefix
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
-    this._messageElementRefs.forEach((message) => {
+    this.messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
       if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)) {
         retainedElements.push(message);
@@ -257,7 +256,7 @@ export class Messages extends MessageStream {
         message.outerContainer.remove();
       }
     });
-    // this is a form of cleanup as this._messageElementRefs does not contain error messages
+    // this is a form of cleanup as this.messageElementRefs does not contain error messages
     // and can only be deleted by direct search
     Array.from(this.elementRef.children).forEach((messageElement) => {
       const bubbleClasslist = messageElement.children[0]?.children[0];
@@ -265,13 +264,13 @@ export class Messages extends MessageStream {
         messageElement.remove();
       }
     });
-    this._messageElementRefs = retainedElements;
+    this.messageElementRefs = retainedElements;
     if (isReset !== false) {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessage();
     }
     this.messages.splice(0, this.messages.length);
-    this._textElementsToText.splice(0, this._textElementsToText.length);
+    this.textElementsToText.splice(0, this.textElementsToText.length);
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }

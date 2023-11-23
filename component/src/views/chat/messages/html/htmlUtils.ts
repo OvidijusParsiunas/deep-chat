@@ -3,7 +3,7 @@ import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLDeepChatElements} from './htmlDeepChatElements';
 import {StatefulStyles} from '../../../../types/styles';
-import {MessageBase} from '../messagesBase';
+import {MessagesBase} from '../messagesBase';
 
 export class HTMLUtils {
   public static applyStylesToElement(element: HTMLElement, styles: StatefulStyles) {
@@ -39,7 +39,7 @@ export class HTMLUtils {
     });
   }
 
-  public static apply(messages: MessageBase, outmostElement: HTMLElement) {
+  public static apply(messages: MessagesBase, outmostElement: HTMLElement) {
     HTMLDeepChatElements.applyDeepChatUtilities(messages, messages.htmlClassUtilities, outmostElement);
     HTMLUtils.applyCustomClassUtilities(messages.htmlClassUtilities, outmostElement);
   }

@@ -1,9 +1,10 @@
-import {MessageElements, Messages} from '../views/chat/messages/messages';
+import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {WebModel as WebModelT} from '../types/webModel/webModel';
 import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {MessageContentI} from '../types/messagesInternal';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
+import {Messages} from '../views/chat/messages/messages';
 // import * as WebLLM2 from '@mlc-ai/web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
@@ -72,7 +73,7 @@ export class WebModel extends BaseServiceIO {
       Download a web model that will run entirely on your browser.
       <br/> <button style="margin-top: 10px; margin-bottom: 5px; margin-left: 1px"
         class="${downloadClass} deep-chat-button">Download</button>`;
-    const html = initialMessage?.html || `<div class="deep-chat-update-message">${text}</div>`;
+    const html = initialMessage?.html || `<div>${text}</div>`;
     this.addMessage?.({role: MessageUtils.AI_ROLE, html, sendUpdate: false});
     const button = shadowRoot.children[0]?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
     if (button) button.onclick = this.init.bind(this);
@@ -134,17 +135,16 @@ export class WebModel extends BaseServiceIO {
     // await window.webLLM.hasModelInCache(this.selectedModel, config); can potentially reuse this in the future
     this._isModelLoading = true;
     const initProgressCallback = (report: WebLLM.InitProgressReport) => {
-      this.addMessage?.({html: `<div class="deep-chat-update-message">${report.text}</div>`, sendUpdate: false});
+      this.addMessage?.({html: `<div>${report.text}</div>`, overwrite: true, sendUpdate: false});
     };
     WebModel.chat.setInitProgressCallback(initProgressCallback);
     try {
       const {model, pConfig} = this.getConfig();
       await WebModel.chat.reload(model, {conv_config: {system: 'keep responses to one sentence'}}, pConfig);
     } catch (err) {
-      this.unloadChat(err as string);
-      return;
+      return this.unloadChat(err as string);
     }
-    this.addMessage?.({html: '<div class="deep-chat-update-message">Model loaded</div>', sendUpdate: false});
+    this.addMessage?.({html: '<div>Model loaded</div>', overwrite: true, sendUpdate: false});
     this._isModelLoaded = true;
     this._isModelLoading = false;
   }
@@ -173,12 +173,11 @@ export class WebModel extends BaseServiceIO {
       chat.interruptGenerate();
     };
     this.streamHandlers.onOpen();
-    let streamElements: MessageElements | undefined;
+    const stream = new MessageStream(messages);
     await chat.generate(text, (_: number, message: string) => {
-      streamElements ??= messages.updatedStreamedMessage(streamElements, {text: message, overwrite: true});
+      stream.upsertStreamedMessage({text: message, overwrite: true});
     });
-    // if (!messages.isStreaming()) messages.addNewStreamedMessage(); // needed when early abort clicked
-    messages.finaliseStreamedMessage(streamElements?.outerContainer);
+    stream.finaliseStreamedMessage();
     this.streamHandlers.onClose();
   }
 

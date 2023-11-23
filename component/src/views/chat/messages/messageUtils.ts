@@ -75,4 +75,14 @@ export class MessageUtils {
       bubbleElement.replaceChildren();
     }
   }
+
+  public static getLastMessageBubbleElement(messagesEl: HTMLElement) {
+    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).find((element) => {
+      return element.classList.contains('message-bubble');
+    });
+  }
+
+  public static getLastMessageElement(messagesEl: HTMLElement) {
+    return messagesEl.children[messagesEl.children.length - 1];
+  }
 }

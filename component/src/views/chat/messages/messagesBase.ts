@@ -1,40 +1,40 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
+import {MessageContentI} from '../../../types/messagesInternal';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {HTMLClassUtilities} from '../../../types/html';
-import {IntroPanel} from '../introPanel/introPanel';
 import {MessageStyleUtils} from './messageStyleUtils';
+import {IntroPanel} from '../introPanel/introPanel';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
+import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
-import {MessageUtils} from './messageUtils';
 import {MessageElements} from './messages';
 import {Remarkable} from 'remarkable';
 import {AvatarEl} from './avatar';
 import {Name} from './name';
 
-export class MessageBase {
+export class MessagesBase {
+  messageElementRefs: MessageElements[] = [];
+  textToSpeech?: ProcessedTextToSpeechConfig;
   submitUserMessage?: (content: UserContent) => void;
   readonly elementRef: HTMLElement;
   readonly messageStyles?: MessageStyles;
   readonly messages: MessageContentI[] = [];
   readonly htmlClassUtilities: HTMLClassUtilities = {};
+  readonly textElementsToText: [MessageElements, string][] = [];
   protected _introPanel?: IntroPanel;
-  protected _messageElementRefs: MessageElements[] = [];
-  protected _textToSpeech?: ProcessedTextToSpeechConfig;
-  private _remarkable: Remarkable;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
-  protected readonly _textElementsToText: [MessageElements, string][] = [];
+  private _remarkable: Remarkable;
   private readonly _onNewMessage?: (message: MessageContentI, isInitial: boolean) => void;
 
   constructor(deepChat: DeepChat) {
-    this.elementRef = MessageBase.createContainerElement();
+    this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = deepChat.messageStyles;
     this._remarkable = RemarkableConfig.createNew();
     this._avatars = deepChat.avatars;
@@ -52,16 +52,16 @@ export class MessageBase {
     return container;
   }
 
-  protected addNewTextMessage(text: string, role: string, overwrite = false) {
+  public addNewTextMessage(text: string, role: string, overwrite = false) {
     if (overwrite) {
-      const overwrittenElements = this.overwriteText(role, text, this._messageElementRefs);
+      const overwrittenElements = this.overwriteText(role, text, this.messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
     }
     const messageElements = this.createAndAppendNewMessageElement(text, role);
     messageElements.bubbleElement.classList.add('text-message');
     this.applyCustomStyles(messageElements, role, false);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
-    this._textElementsToText.push([messageElements, text]);
+    this.textElementsToText.push([messageElements, text]);
     return messageElements;
   }
 
@@ -69,7 +69,7 @@ export class MessageBase {
     const elements = MessageUtils.overwriteMessage(this.messages, elementRefs, text, role, 'text', 'text-message');
     if (elements) {
       this.renderText(elements.bubbleElement, text);
-      const elementToText = MessageUtils.getLastTextToElement(this._textElementsToText, elements);
+      const elementToText = MessageUtils.getLastTextToElement(this.textElementsToText, elements);
       if (elementToText) elementToText[1] = text;
     }
     return elements;
@@ -84,10 +84,10 @@ export class MessageBase {
 
   public createNewMessageElement(text: string, role: string) {
     this._introPanel?.hide();
-    const lastMessageElements = this._messageElementRefs[this._messageElementRefs.length - 1];
-    if (MessageBase.isTemporaryElement(lastMessageElements)) {
+    const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
+    if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
-      this._messageElementRefs.pop();
+      this.messageElementRefs.pop();
     }
     return this.createMessageElements(text, role);
   }
@@ -100,11 +100,11 @@ export class MessageBase {
   }
 
   protected createMessageElements(text: string, role: string) {
-    const messageElements = MessageBase.createBaseElements();
+    const messageElements = MessagesBase.createBaseElements();
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, role);
-    this._messageElementRefs.push(messageElements);
+    this.messageElementRefs.push(messageElements);
     return messageElements;
   }
 
@@ -138,7 +138,7 @@ export class MessageBase {
     }
   }
 
-  protected static createMessageContent(content: Response): MessageContentI {
+  public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
     const {text, files, html, _sessionId, role} = content;
     const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
@@ -150,21 +150,11 @@ export class MessageBase {
     return messageContent;
   }
 
-  protected getLastMessageBubbleElement() {
-    return Array.from(this.getLastMessageElement()?.children?.[0]?.children || []).find((element) => {
-      return element.classList.contains('message-bubble');
-    });
-  }
-
-  protected getLastMessageElement() {
-    return this.elementRef.children[this.elementRef.children.length - 1];
-  }
-
-  protected sendClientUpdate(message: MessageContentI, isInitial = false) {
+  public sendClientUpdate(message: MessageContentI, isInitial = false) {
     this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
   }
 
-  protected renderText(bubbleElement: HTMLElement, text: string) {
+  public renderText(bubbleElement: HTMLElement, text: string) {
     bubbleElement.innerHTML = this._remarkable.render(text);
     // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
     // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
@@ -174,7 +164,7 @@ export class MessageBase {
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages() {
     this._remarkable = RemarkableConfig.createNew();
-    this._textElementsToText.forEach((elementToText) => {
+    this.textElementsToText.forEach((elementToText) => {
       this.renderText(elementToText[0].bubbleElement, elementToText[1]);
     });
   }

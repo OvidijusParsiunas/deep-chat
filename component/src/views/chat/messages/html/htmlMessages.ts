@@ -1,23 +1,23 @@
 import {Legacy} from '../../../../utils/legacy/legacy';
 import {MessageUtils} from '../messageUtils';
-import {MessageBase} from '../messagesBase';
+import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';
 
 export class HTMLMessages {
-  private static addElement(messages: MessageBase, outerElement: HTMLElement) {
+  private static addElement(messages: MessagesBase, outerElement: HTMLElement) {
     messages.elementRef.appendChild(outerElement);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  private static createElements(messages: MessageBase, html: string, role: string) {
+  private static createElements(messages: MessagesBase, html: string, role: string) {
     const messageElements = messages.createNewMessageElement('', role);
     messageElements.bubbleElement.classList.add('html-message');
     messageElements.bubbleElement.innerHTML = html;
     return messageElements;
   }
 
-  private static overwrite(messages: MessageBase, html: string, role: string, messagesEls: MessageElements[]) {
+  private static overwrite(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
     const {messages: aMessages} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(aMessages, messagesEls, html, role, 'html', 'html-message');
     if (overwrittenElements) {
@@ -28,7 +28,7 @@ export class HTMLMessages {
     return overwrittenElements;
   }
 
-  public static add(messages: MessageBase, html: string, role: string, messagesEls: MessageElements[], update = false) {
+  public static add(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[], update = false) {
     if (update) {
       const overwrittenElements = this.overwrite(messages, html, role, messagesEls);
       if (overwrittenElements) return overwrittenElements;

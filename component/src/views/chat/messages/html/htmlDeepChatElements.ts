@@ -1,7 +1,7 @@
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
-import {MessageBase} from '../messagesBase';
+import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';
 
@@ -33,7 +33,7 @@ const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
 const DEEP_CHAT_ELEMENT_CLASSES = Object.keys(DEEP_CHAT_ELEMENTS);
 
 export class HTMLDeepChatElements {
-  private static applySuggestionEvent(messages: MessageBase, element: Element) {
+  private static applySuggestionEvent(messages: MessagesBase, element: Element) {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
       element.addEventListener('click', () => {
@@ -76,7 +76,7 @@ export class HTMLDeepChatElements {
     return StyleUtils.processStateful(mergedStyles, {}, {});
   }
 
-  public static applyDeepChatUtilities(messages: MessageBase, utilities: HTMLClassUtilities, element: HTMLElement) {
+  public static applyDeepChatUtilities(messages: MessagesBase, utilities: HTMLClassUtilities, element: HTMLElement) {
     DEEP_CHAT_ELEMENT_CLASSES.forEach((className) => {
       const elements = element.getElementsByClassName(className);
       Array.from(elements || []).forEach((element) => {
