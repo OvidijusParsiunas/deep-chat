@@ -87,7 +87,7 @@ export class Websocket {
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (io.requestSettings?.url === Demo.URL) {
-      return Demo.request(messages, io.completionsHandlers.onFinish, io.deepChat.responseInterceptor);
+      return Demo.request(io, messages);
     }
     if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');

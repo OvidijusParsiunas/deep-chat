@@ -1,13 +1,9 @@
-import {MessageUtils} from '../../views/chat/messages/messageUtils';
-import {ResponseInterceptor} from '../../types/interceptors';
+import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {StreamHandlers} from '../../services/serviceIO';
 import {DemoResponse} from '../../types/demo';
 import {Response} from '../../types/response';
 import {Stream} from '../HTTP/stream';
-
-type Finish = () => void;
 
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
@@ -53,17 +49,19 @@ export class Demo {
   }
 
   // timeout is used to simulate a timeout for a response to come back
-  public static request(messages: Messages, onFinish: Finish, responseInterceptor?: ResponseInterceptor) {
+  public static request(io: ServiceIO, messages: Messages) {
     const response = Demo.getResponse(messages);
     setTimeout(async () => {
-      const preprocessedResponse = (await responseInterceptor?.(response)) || response;
-      if (preprocessedResponse.error) {
-        messages.addNewErrorMessage('service', preprocessedResponse.error);
+      const processedResponse = (await io.deepChat.responseInterceptor?.(response)) || response;
+      if (processedResponse.error) {
+        messages.addNewErrorMessage('service', processedResponse.error);
+        io.completionsHandlers.onFinish();
+      } else if (Stream.isSimulation(io.deepChat.stream)) {
+        Stream.simulate(messages, io.streamHandlers, processedResponse);
       } else {
-        preprocessedResponse.role ??= MessageUtils.AI_ROLE;
-        messages.addNewMessage(preprocessedResponse);
+        messages.addNewMessage(processedResponse);
+        io.completionsHandlers.onFinish();
       }
-      onFinish();
     }, 400);
   }
 

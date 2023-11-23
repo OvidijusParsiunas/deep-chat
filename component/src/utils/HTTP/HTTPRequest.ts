@@ -20,7 +20,7 @@ export class HTTPRequest {
     const {onFinish} = io.completionsHandlers;
     if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
     if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
-    if (io.requestSettings?.url === Demo.URL) return Demo.request(messages, onFinish, io.deepChat.responseInterceptor);
+    if (io.requestSettings?.url === Demo.URL) return Demo.request(io, messages);
     let responseValid = true;
     const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
     fetchFunc(interceptedBody).then((response) => {
