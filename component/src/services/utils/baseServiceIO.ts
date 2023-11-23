@@ -89,9 +89,8 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   private async request(body: any, messages: Messages, stringifyBody = true) {
-    // use actual stream if demo or when simulation prop not set
     const {stream} = this.deepChat;
-    if (stream && this.demo && !Stream.isSimulation(stream)) {
+    if (stream && !Stream.isSimulation(stream)) {
       return Stream.request(this, body, messages);
     }
     return HTTPRequest.request(this, body, messages, stringifyBody);

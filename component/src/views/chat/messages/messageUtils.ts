@@ -47,6 +47,8 @@ export class MessageUtils {
     return undefined;
   }
 
+  // IMPORTANT: If the overwrite message does not contain a role property it will be look for the last 'ai' role message
+  // and if messages have custom roles, it will still look to update the last 'ai' role message
   // prettier-ignore
   public static overwriteMessage(messages: MessageContentI[], messagesElements: MessageElements[],
       content: string, role: string, contentType: 'text' | 'html', className: string) {

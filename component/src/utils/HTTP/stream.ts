@@ -77,20 +77,19 @@ export class Stream {
     // reason for not streaming html is because there is no standard way to split it
     if (result.files || result.html) messages.addNewMessage({sendUpdate: false, ignoreText: true, ...result}, false);
     if (result.text) {
-      // .filter(Boolean) removes '' entries in the array as they stop the simulation
-      const responseText = result.text?.split(' ').filter(Boolean) || [];
       sh.onOpen();
+      const responseText = result.text.split(''); // important to split by char for Chinese characters
       Stream.populateMessages(responseText, new MessageStream(messages), simulationSH);
     }
   }
 
-  private static populateMessages(responseText: string[], stream: MessageStream, sh: SimulationSH, wordIndex = 0) {
-    const word = responseText[wordIndex];
-    if (word) {
-      stream.upsertStreamedMessage({text: `${word} `});
+  private static populateMessages(responseText: string[], stream: MessageStream, sh: SimulationSH, charIndex = 0) {
+    const character = responseText[charIndex];
+    if (character) {
+      stream.upsertStreamedMessage({text: character});
       const timeout = setTimeout(() => {
-        Stream.populateMessages(responseText, stream, sh, wordIndex + 1);
-      }, sh.simulationInterim || 70);
+        Stream.populateMessages(responseText, stream, sh, charIndex + 1);
+      }, sh.simulationInterim || 5);
       sh.abortStream.abort = () => {
         Stream.abort(timeout, stream, sh.onClose);
       };
