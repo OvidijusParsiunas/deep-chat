@@ -1,5 +1,6 @@
-import {MessageBase} from '../stream/messagesBase';
+import {Legacy} from '../../../../utils/legacy/legacy';
 import {MessageUtils} from '../messageUtils';
+import {MessageBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';
 
@@ -22,6 +23,7 @@ export class HTMLMessages {
     if (overwrittenElements) {
       overwrittenElements.bubbleElement.innerHTML = html;
       HTMLUtils.apply(messages, overwrittenElements.outerContainer);
+      Legacy.flagHTMLUpdateClass(overwrittenElements.bubbleElement);
     }
     return overwrittenElements;
   }
@@ -32,8 +34,9 @@ export class HTMLMessages {
       if (overwrittenElements) return overwrittenElements;
     }
     const messageElements = HTMLMessages.createElements(messages, html, role);
-    if (html.trim().length === 0) MessageBase.fillEmptyMessageElement(messageElements.bubbleElement);
+    MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, html);
     HTMLUtils.apply(messages, messageElements.outerContainer);
+    Legacy.flagHTMLUpdateClass(messageElements.bubbleElement);
     messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
     HTMLMessages.addElement(messages, messageElements.outerContainer);
     return messageElements;

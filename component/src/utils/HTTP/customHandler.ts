@@ -1,5 +1,5 @@
+import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {ErrorMessages} from '../errorMessages/errorMessages';
-import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {Response} from '../../types/response';
@@ -41,7 +41,7 @@ export class CustomHandler {
   public static stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
-    let streamBubble: HTMLElement | undefined;
+    let streamElements: MessageElements | undefined;
     const onOpen = () => {
       if (isOpen || !isHandlerActive) return;
       io.streamHandlers.onOpen();
@@ -49,7 +49,7 @@ export class CustomHandler {
     };
     const onClose = () => {
       if (!isHandlerActive) return;
-      messages.finaliseStreamedMessage();
+      messages.finaliseStreamedMessage(streamElements?.outerContainer);
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
@@ -60,16 +60,16 @@ export class CustomHandler {
         console.error(ErrorMessages.INVALID_RESPONSE(result, 'server', false));
       } else if (result.error) {
         console.error(result.error);
-        messages.finaliseStreamedMessage();
+        messages.finaliseStreamedMessage(streamElements?.outerContainer);
         io.streamHandlers.onClose();
         messages.addNewErrorMessage('service', result.error);
         isHandlerActive = false;
       } else {
-        streamBubble ??= messages.updatedStreamedMessage(streamBubble, result);
+        streamElements = messages.updatedStreamedMessage(streamElements, result);
       }
     };
     io.streamHandlers.abortStream.abort = () => {
-      messages.finaliseStreamedMessage();
+      messages.finaliseStreamedMessage(streamElements?.outerContainer);
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };

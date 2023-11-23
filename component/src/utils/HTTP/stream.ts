@@ -1,7 +1,7 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
+import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {OpenAIConverseResult} from '../../types/openAIResult';
-import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {Stream as StreamI} from '../../types/stream';
 import {CustomHandler} from './customHandler';
@@ -20,7 +20,7 @@ export class Stream {
     if (error) return Stream.onInterceptorError(messages, error, onClose);
     if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
-    let streamBubble: HTMLElement | undefined;
+    let streamElements: MessageElements | undefined;
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -40,7 +40,7 @@ export class Stream {
           io.extractResultData?.(response)
             .then((textBody?: ResponseI) => {
               // do not to stop the stream on one message failure to give other messages a change to display
-              streamBubble ??= messages.updatedStreamedMessage(streamBubble, textBody);
+              streamElements = messages.updatedStreamedMessage(streamElements, textBody);
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
@@ -50,7 +50,7 @@ export class Stream {
         throw err; // need to throw otherwise stream will retry infinitely
       },
       onclose() {
-        messages.finaliseStreamedMessage();
+        messages.finaliseStreamedMessage(streamElements?.outerContainer);
         onClose();
       },
       signal: abortStream.signal,
@@ -77,7 +77,7 @@ export class Stream {
     if (result.files || result.html) messages.addNewMessage({sendUpdate: false, ignoreText: true, ...result}, false);
     if (result.text) {
       // .filter(Boolean) removes '' entries in the array as they stop the simulation
-      const responseText = result.text?.split(' ').filter(Boolean) || [];
+      const responseText = result.text?.split('') || [];
       sh.onOpen();
       Stream.populateMessages(responseText, messages, simulationSH);
     }
@@ -85,18 +85,18 @@ export class Stream {
 
   // prettier-ignore
   private static populateMessages(responseText: string[],
-      messages: Messages, sh: SimulationSH, wordIndex = 0, streamBubble?: HTMLElement) {
+      messages: Messages, sh: SimulationSH, wordIndex = 0, streamElements?: MessageElements) {
     const word = responseText[wordIndex];
     if (word) {
-      streamBubble ??= messages.updatedStreamedMessage(streamBubble, {text: `${word} `});
+      streamElements = messages.updatedStreamedMessage(streamElements, {text: `${word}`});
       const timeout = setTimeout(() => {
-        Stream.populateMessages(responseText, messages, sh, wordIndex + 1, streamBubble);
+        Stream.populateMessages(responseText, messages, sh, wordIndex + 1, streamElements);
       }, sh.simulationInterim || 70);
       sh.abortStream.abort = () => {
-        Stream.abort(timeout, messages, sh.onClose);
+        Stream.abort(timeout, messages, sh.onClose, streamElements?.outerContainer);
       };
     } else {
-      messages.finaliseStreamedMessage();
+      messages.finaliseStreamedMessage(streamElements?.outerContainer);
       sh.onClose();
     }
   }
@@ -105,9 +105,9 @@ export class Stream {
     return typeof stream === 'object' && !!stream.simulation;
   }
 
-  private static abort(timeout: number, messages: Messages, onClose: () => void) {
+  private static abort(timeout: number, messages: Messages, onClose: () => void, outerContainer?: HTMLElement) {
     clearTimeout(timeout);
-    messages.finaliseStreamedMessage();
+    messages.finaliseStreamedMessage(outerContainer);
     onClose();
   }
 }

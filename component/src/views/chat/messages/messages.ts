@@ -130,7 +130,7 @@ export class Messages extends MessageStream {
   }
 
   private updateStateOnMessage(messageContent: MessageContentI, isOverwrite?: boolean, update = true, initial = false) {
-    if (isOverwrite) this.messages.push(messageContent);
+    if (!isOverwrite) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 

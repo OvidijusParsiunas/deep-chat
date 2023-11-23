@@ -1,9 +1,9 @@
+import {MessageElements, Messages} from '../views/chat/messages/messages';
 import {WebModel as WebModelT} from '../types/webModel/webModel';
 import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {MessageContentI} from '../types/messagesInternal';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
-import {Messages} from '../views/chat/messages/messages';
 // import * as WebLLM2 from '@mlc-ai/web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
@@ -173,12 +173,12 @@ export class WebModel extends BaseServiceIO {
       chat.interruptGenerate();
     };
     this.streamHandlers.onOpen();
-    let streamBubble: HTMLElement | undefined;
+    let streamElements: MessageElements | undefined;
     await chat.generate(text, (_: number, message: string) => {
-      streamBubble ??= messages.updatedStreamedMessage(streamBubble, {text: message, overwrite: true});
+      streamElements ??= messages.updatedStreamedMessage(streamElements, {text: message, overwrite: true});
     });
     // if (!messages.isStreaming()) messages.addNewStreamedMessage(); // needed when early abort clicked
-    messages.finaliseStreamedMessage();
+    messages.finaliseStreamedMessage(streamElements?.outerContainer);
     this.streamHandlers.onClose();
   }
 

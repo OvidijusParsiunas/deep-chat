@@ -5,7 +5,9 @@ import {Response} from '../../../../types/response';
 import {HTMLMessages} from '../html/htmlMessages';
 import {DeepChat} from '../../../../deepChat';
 import {MessageUtils} from '../messageUtils';
-import {MessageBase} from './messagesBase';
+import {HTMLUtils} from '../html/htmlUtils';
+import {MessageElements} from '../messages';
+import {MessageBase} from '../messagesBase';
 
 export class MessageStream extends MessageBase {
   private _streamedContent = '';
@@ -22,19 +24,22 @@ export class MessageStream extends MessageBase {
   }
 
   // important to keep track of bubbleElement reference as multiple messages can be simulated at once in websockets
-  public updatedStreamedMessage(bubbleElement?: HTMLElement, response?: Response) {
-    const content = response?.text || response?.html;
-    if (!content) return console.error(ErrorMessages.INVALID_STREAM_RESPONSE) as undefined;
+  public updatedStreamedMessage(elements?: MessageElements, response?: Response) {
+    if (response?.text === undefined && response?.html === undefined) {
+      console.error(ErrorMessages.INVALID_STREAM_RESPONSE) as undefined;
+    }
+    const content = response?.text || response?.html || '';
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
-    const streamType = response.text ? 'text' : 'html';
-    if (!bubbleElement && this._streamedContent === '') {
-      bubbleElement = this.updateInitialState(streamType, content, response?.role);
+    const streamType = response?.text !== undefined ? 'text' : 'html';
+    if (!elements && this._streamedContent === '') {
+      elements = this.updateInitialState(streamType, content, response?.role);
     } else if (this._streamType !== streamType) {
       return console.error(ErrorMessages.INVALID_STREAM_MIX_RESPONSE) as undefined;
+    } else {
+      this.updateBasedOnType(content, streamType, elements?.bubbleElement as HTMLElement, response?.overwrite);
     }
-    this.updateBasedOnType(content, streamType, bubbleElement as HTMLElement, response.overwrite);
     if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this.elementRef);
-    return bubbleElement;
+    return elements;
   }
 
   private updateInitialState(streamType: 'text' | 'html', content: string, role?: string) {
@@ -42,14 +47,16 @@ export class MessageStream extends MessageBase {
     role ??= MessageUtils.AI_ROLE;
     // does not overwrite previous message for simplicity as otherwise users would need to return first response with
     // {..., overwrite: false} and others as {..., ovewrite: true} which would be too complex on their end
-    const bubbleElement =
+    const elements =
       streamType === 'text'
-        ? this.addNewTextMessage(content, role).bubbleElement
-        : HTMLMessages.add(this, content, role, this._messageElementRefs).bubbleElement;
-    return bubbleElement;
+        ? this.addNewTextMessage(content, role)
+        : HTMLMessages.add(this, content, role, this._messageElementRefs);
+    elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
+    return elements;
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {
+    MessageUtils.unfillEmptyMessageElement(bubbleElement, content);
     const func = expectedType === 'text' ? this.updateText : this.updateHTML;
     func.bind(this)(content, bubbleElement, isOverwrite);
   }
@@ -65,7 +72,6 @@ export class MessageStream extends MessageBase {
       this._streamedContent = html;
       bubbleElement.innerHTML = html;
     } else {
-      if (this._streamedContent === '') bubbleElement.replaceChildren(); // remove '.'
       const wrapper = document.createElement('span');
       wrapper.innerHTML = html;
       bubbleElement.appendChild(wrapper);
@@ -73,7 +79,7 @@ export class MessageStream extends MessageBase {
     }
   }
 
-  public finaliseStreamedMessage() {
+  public finaliseStreamedMessage(outerContainer?: HTMLElement) {
     if (!this.getLastMessageBubbleElement()?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
     if (this._streamType === 'text') {
       this._textElementsToText[this._textElementsToText.length - 1][1] = this._streamedContent;
@@ -83,6 +89,7 @@ export class MessageStream extends MessageBase {
       if (this._streamedContent === MessageStream.HTML_CONTENT_PLACEHOLDER) {
         this._streamedContent = this.getLastMessageBubbleElement()?.innerHTML || '';
       }
+      if (outerContainer) HTMLUtils.apply(this, outerContainer);
       this.messages[this.messages.length - 1].html = this._streamedContent;
     }
     this.clearStreamState();

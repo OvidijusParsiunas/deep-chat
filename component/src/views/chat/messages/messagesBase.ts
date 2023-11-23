@@ -1,22 +1,22 @@
-import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../../types/messages';
-import {ProcessedTextToSpeechConfig} from '../textToSpeech/textToSpeech';
-import {ElementUtils} from '../../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../../types/messagesInternal';
-import {HTMLDeepChatElements} from '../html/htmlDeepChatElements';
-import {RemarkableConfig} from '../remarkable/remarkableConfig';
-import {FireEvents} from '../../../../utils/events/fireEvents';
-import {HTMLClassUtilities} from '../../../../types/html';
-import {IntroPanel} from '../../introPanel/introPanel';
-import {MessageStyleUtils} from '../messageStyleUtils';
-import {Response} from '../../../../types/response';
-import {Avatars} from '../../../../types/avatars';
-import {DeepChat} from '../../../../deepChat';
-import {Names} from '../../../../types/names';
-import {MessageUtils} from '../messageUtils';
-import {MessageElements} from '../messages';
+import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
+import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
+import {ElementUtils} from '../../../utils/element/elementUtils';
+import {MessageContentI} from '../../../types/messagesInternal';
+import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
+import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {FireEvents} from '../../../utils/events/fireEvents';
+import {HTMLClassUtilities} from '../../../types/html';
+import {IntroPanel} from '../introPanel/introPanel';
+import {MessageStyleUtils} from './messageStyleUtils';
+import {Response} from '../../../types/response';
+import {Avatars} from '../../../types/avatars';
+import {DeepChat} from '../../../deepChat';
+import {Names} from '../../../types/names';
+import {MessageUtils} from './messageUtils';
+import {MessageElements} from './messages';
 import {Remarkable} from 'remarkable';
-import {AvatarEl} from '../avatar';
-import {Name} from '../name';
+import {AvatarEl} from './avatar';
+import {Name} from './name';
 
 export class MessageBase {
   submitUserMessage?: (content: UserContent) => void;
@@ -60,7 +60,7 @@ export class MessageBase {
     const messageElements = this.createAndAppendNewMessageElement(text, role);
     messageElements.bubbleElement.classList.add('text-message');
     this.applyCustomStyles(messageElements, role, false);
-    if (text.trim().length === 0) MessageBase.fillEmptyMessageElement(messageElements.bubbleElement);
+    MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
     this._textElementsToText.push([messageElements, text]);
     return messageElements;
   }
@@ -136,12 +136,6 @@ export class MessageBase {
     if (elements && this.messageStyles) {
       MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, role, media, otherStyles);
     }
-  }
-
-  // makes sure the bubble has dimensions when there is no text
-  public static fillEmptyMessageElement(bubbleElement: HTMLElement) {
-    bubbleElement.textContent = '.';
-    bubbleElement.style.color = '#00000000';
   }
 
   protected static createMessageContent(content: Response): MessageContentI {

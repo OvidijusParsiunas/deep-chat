@@ -5,6 +5,7 @@ import {MessageElements} from './messages';
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
   public static readonly USER_ROLE = 'user';
+  private static readonly EMPTY_MESSAGE_CLASS = 'empty-message';
 
   public static getLastElementsByClass(messagesElements: MessageElements[], classes: string[], avoidedClasses?: string[]) {
     for (let i = messagesElements.length - 1; i >= 0; i -= 1) {
@@ -59,5 +60,19 @@ export class MessageUtils {
 
   public static getRoleClass(role: string) {
     return `${role}-message`;
+  }
+
+  // makes sure the bubble has dimensions when there is no text
+  public static fillEmptyMessageElement(bubbleElement: HTMLElement, content: string) {
+    if (content.trim().length === 0) {
+      bubbleElement.classList.add(MessageUtils.EMPTY_MESSAGE_CLASS);
+      bubbleElement.innerHTML = '<div style="color:#00000000">.</div>';
+    }
+  }
+
+  public static unfillEmptyMessageElement(bubbleElement: HTMLElement, newContent: string) {
+    if (bubbleElement.classList.contains(MessageUtils.EMPTY_MESSAGE_CLASS) && newContent.trim().length > 0) {
+      bubbleElement.replaceChildren();
+    }
   }
 }

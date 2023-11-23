@@ -1,5 +1,5 @@
 import {MessageStyles} from '../../../types/messages';
-import {MessageBase} from './stream/messagesBase';
+import {MessageBase} from './messagesBase';
 import {MessageElements} from './messages';
 
 export class FileMessageUtils {

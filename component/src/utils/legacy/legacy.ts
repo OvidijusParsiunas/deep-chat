@@ -49,4 +49,11 @@ export class Legacy {
     console.error('Please change to using the new argument type: https://deepchat.dev/docs/methods#submitUserMessage');
     return {text: content};
   }
+
+  public static flagHTMLUpdateClass(bubbleElement: HTMLElement) {
+    if (bubbleElement.children[0]?.classList.contains('deep-chat-update-message')) {
+      console.error('The "deep-chat-update-message" html class is deprecated since version 1.4.4.');
+      console.error('Please change to using {..., overwrite: true} object: https://deepchat.dev/docs/connect#Response');
+    }
+  }
 }
