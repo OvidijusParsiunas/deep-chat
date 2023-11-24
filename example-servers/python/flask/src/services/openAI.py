@@ -49,10 +49,9 @@ class OpenAI:
             "https://api.openai.com/v1/chat/completions", json=chat_body, headers=headers, stream=True)
 
         def generate():
-            accumulated_data = ""
-            for chunk in response.iter_content(chunk_size=1024):
+            # increase chunk size if getting errors for long messages
+            for chunk in response.iter_content(chunk_size=2048):
                 if chunk:
-                    delta = ""
                     if not(chunk.decode().strip().startswith("data")):
                         errorMessage = json.loads(chunk.decode())["error"]["message"]
                         print("Error in the retrieved stream chunk:", errorMessage)
@@ -65,16 +64,12 @@ class OpenAI:
                         data = line.replace("data:", "").replace(
                             "[DONE]", "").replace("data: [DONE]", "").strip()
                         if data:
-                            accumulated_data += data
                             try:
-                                result = json.loads(accumulated_data)
-                                for choice in result["choices"]:
-                                    delta += choice.get("delta",
-                                                        {}).get("content", "")
+                                result = json.loads(data)
+                                content = result["choices"][0].get("delta", {}).get("content", "")
                                 # Sends response back to Deep Chat using the Response format:
                                 # https://deepchat.dev/docs/connect/#Response
-                                yield "data: {}\n\n".format(json.dumps({"text": delta}))
-                                accumulated_data = ""  # Reset the accumulated data
+                                yield "data: {}\n\n".format(json.dumps({"text": content}))
                             except json.JSONDecodeError:
                                 # Incomplete JSON string, continue accumulating lines
                                 pass

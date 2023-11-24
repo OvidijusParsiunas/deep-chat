@@ -90,7 +90,13 @@ public class OpenAIService {
       .filter(data -> !data.isEmpty())
       .concatMap(data -> {
         try {
-          Map<String, Object> resultObject = new ObjectMapper().readValue(data, Map.class);
+          Map<String, Object> resultObject = null;
+          try {
+            resultObject = new ObjectMapper().readValue(data, Map.class);
+          } catch (JsonProcessingException e) {
+            // sometimes OpenAI responds with an incomplete JSON that you don't need to use
+            return Flux.just(new DeepChatTextRespose(""));
+          }
           StringBuilder delta = new StringBuilder();
           for (Map<String, Object> choice : (List<Map<String, Object>>) resultObject.get("choices")) {
             Map<String, Object> deltaObj = (Map<String, Object>) choice.getOrDefault("delta", Collections.emptyMap());
@@ -99,7 +105,7 @@ public class OpenAIService {
           // Sends response back to Deep Chat using the Response format:
           // https://deepchat.dev/docs/connect/#Response
           return Flux.just(new DeepChatTextRespose(delta.toString()));
-        } catch (JsonProcessingException e) {
+        } catch (RuntimeException e) {
           LOGGER.error("Error when processing a stream chunk: ", e);
           return null;
         }

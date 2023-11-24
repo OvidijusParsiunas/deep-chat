@@ -46,23 +46,24 @@ export class OpenAI {
     });
     stream.data.on('data', (chunk) => {
       try {
-        let delta = '';
         if (chunk?.toString().match(/^\{\n\s+\"error\"\:/)) {
           throw JSON.parse(chunk?.toString()).error;
         }
         const lines = chunk?.toString()?.split('\n') || [];
         const filtredLines = lines.filter((line: string) => line.trim());
-        const line = filtredLines[filtredLines.length - 1];
-        const data = line.toString().replace('data:', '').replace('[DONE]', '').replace('data: [DONE]', '').trim();
-        if (data) {
-          const result = JSON.parse(data);
-          result.choices.forEach((choice: {delta?: {content: string}}) => {
-            delta += choice.delta?.content || '';
-          });
-          // Sends response back to Deep Chat using the Response format:
-          // https://deepchat.dev/docs/connect/#Response
-          res.write(`data: ${JSON.stringify({text: delta})}\n\n`);
-        }
+        filtredLines.forEach((line: string) => {
+          const data = line.toString().replace('data:', '').replace('[DONE]', '').replace('data: [DONE]', '').trim();
+          if (data) {
+            try {
+              const result = JSON.parse(data);
+              if (result.choices[0].delta?.content) {
+                // Sends response back to Deep Chat using the Response format:
+                // https://deepchat.dev/docs/connect/#Response
+                res.write(`data: ${JSON.stringify({text: result.choices[0].delta.content})}\n\n`);
+              }
+            } catch (e) {} // sometimes OpenAI responds with an incomplete JSON that you don't need to use
+          }
+        });
       } catch (e) {
         console.error('Error when retrieving a stream chunk');
         console.log(e);
