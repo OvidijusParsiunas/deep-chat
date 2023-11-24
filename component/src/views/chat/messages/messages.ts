@@ -54,6 +54,9 @@ export class Messages extends MessagesBase {
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
+    deepChat.addMessage = (content: MessageContent, isUpdate = true) => {
+      this.addNewMessage({...content, sendUpdate: isUpdate}, !isUpdate);
+    };
     serviceIO.addMessage = this.addIOMessage.bind(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {

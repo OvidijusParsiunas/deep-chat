@@ -89,7 +89,7 @@ export class Stream {
       stream.upsertStreamedMessage({text: character});
       const timeout = setTimeout(() => {
         Stream.populateMessages(responseText, stream, sh, charIndex + 1);
-      }, sh.simulationInterim || 5);
+      }, sh.simulationInterim || 6);
       sh.abortStream.abort = () => {
         Stream.abort(timeout, stream, sh.onClose);
       };
