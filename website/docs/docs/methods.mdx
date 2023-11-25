@@ -81,13 +81,13 @@ chatElementRef.clearMessages();
 
 ### `submitUserMessage` {#submitUserMessage}
 
-- Type: (`text: string`) => `void`
+- Type: ([`message: UserMessage`](#UserMessage)) => `void`
 
-Send a user message programmatically.
+Send a new user message.
 
 #### Example
 
-<ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={'User message'}>
+<ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={{text: 'User message'}}>
   <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
@@ -95,11 +95,74 @@ Send a user message programmatically.
 <TabItem value="js" label="Code">
 
 ```html
-chatElementRef.submitUserMessage("User message");
+chatElementRef.submitUserMessage({text: "User message"});
 ```
 
 </TabItem>
 </Tabs>
+
+<LineBreak></LineBreak>
+
+#### `UserMessage` {#UserMessage}
+
+- Type: {`text?: string`, [`files?: File[] | FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList)}
+
+`text` is the text content of the outgoing message. <br />
+`files` is an array containing files that are going to be part of the outgoing message. This can either be an array
+of [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications) objects or a [`FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList)
+object which typically comes from a [file input](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications). <br />
+
+#### Files Example
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```text
+// html
+<input type="file" id="files-input" accept="image/png, image/jpeg" />
+
+// javascript
+const filesInput = document.getElementById('files-input');
+filesInput.onchange = (event) => {
+  chatElement.submitUserMessage({files: event.target.files});
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `addMessage` {#addMessage}
+
+- Type: ([`content: MessageContent`](/docs/messages#MessageContent), `isUpdate?: boolean`) => `void`
+
+Add a message to the chat. This is particularly useful for adding message history after loading it. <br />
+`content` is an object containing details of the message. <br />
+`isUpdate` identifies whether the message should be treated as new - e.g. should [`onNewMessage`](/docs/events#onNewMessage) event
+and [`textToSpeech`](/docs/speech#textToSpeech) be triggered.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'addMessage'} displayResults={false} argument={{text: 'AI message'}}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.addMessage({text: "AI message"});
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::caution
+[`addMessage`](#addMessage) should not be used for responding to user message requests.
+:::
 
 <LineBreak></LineBreak>
 

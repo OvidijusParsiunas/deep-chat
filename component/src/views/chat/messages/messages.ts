@@ -54,8 +54,8 @@ export class Messages extends MessagesBase {
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
-    deepChat.addMessage = (content: MessageContent, isUpdate = true) => {
-      this.addNewMessage({...content, sendUpdate: isUpdate}, !isUpdate);
+    deepChat.addMessage = (content: MessageContent, isUpdate?: boolean) => {
+      this.addNewMessage({...content, sendUpdate: !!isUpdate}, !isUpdate);
     };
     serviceIO.addMessage = this.addIOMessage.bind(this);
     if (demo) this.prepareDemo(demo);
@@ -132,8 +132,8 @@ export class Messages extends MessagesBase {
     this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, isOverwrite?: boolean, update = true, initial = false) {
-    if (!isOverwrite) this.messages.push(messageContent);
+  private updateStateOnMessage(messageContent: MessageContentI, overwrite?: boolean, update = true, initial = false) {
+    if (!overwrite) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 

@@ -39,6 +39,7 @@ to augment the transferred objects or the [`handler`](#Handler) function to cont
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
+import WebSocket from '/img/update-websocket-message.gif';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import YoutubeLogo from '/img/youtube.png';
 import TabItem from '@theme/TabItem';
@@ -111,11 +112,12 @@ Configuration for the outgoing network requests to the target server.
 
 - Type: `boolean` | {`simulation?: boolean | number`}
 
-Used to stream text responses from the target service. <br />
-If the service supports [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) via the `text/event-stream` MIME type,
-you can asynchronously stream the incoming events by setting this to _true_. See [`examples`](https://deepchat.dev/examples/servers) on how to set this up for your own server. <br />
-Alternatively, use the `simulation` object property to facilitate a <b>stream-like</b> experience for regular responses (incl. [websocket](#Websocket)). You can also control
-the millisecond interim of each word's appearance by assigning it a number with the default being _70_.
+Used to stream responses from the target service. <br />
+By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
+the server. See [`example`](https://deepchat.dev/examples/servers) server code. <br />
+The responses are expected to contain partial text, however you can use [`overwrite`](#Response) to overwrite each one. <br />
+You can alternatively use the `simulation` object property to facilitate a <b>stream-like</b> experience for any other connection type where the received content wil be
+gradually populated in the message bubble. You can also control the millisecond interim of each character's appearance by assigning it a number with the default being _6_. <br />
 
 #### Stream Service Example
 
@@ -159,7 +161,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    stream={{simulation: 150}}
+    stream={{simulation: 6}}
     demo={true}
     introMessage={{text: 'The response message bubble will be populated gradually with text events.'}}
   ></DeepChatBrowser>
@@ -169,7 +171,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat stream='{"simulation": 150}'></deep-chat>
+<deep-chat stream='{"simulation": 6}'></deep-chat>
 ```
 
 </TabItem>
@@ -179,7 +181,7 @@ the millisecond interim of each word's appearance by assigning it a number with 
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  stream='{"simulation": 150}'
+  stream='{"simulation": 6}'
   demo="true"
   style="border-radius: 8px"
   introMessage='{"text": The response message bubble will be populated gradually with text events."}'
@@ -323,14 +325,16 @@ Object used to configure the outgoing messages request settings. It MUST have ei
 
 ### `Response` {#Response}
 
-- Type: {[`MessageContent`](/docs/messages/#MessageContent), `error?: string`}
+- Type: {[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`}
 
-Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with an additional optional `error` property: <br />
+Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with additional optional `error` and
+`overwrite` properties: <br />
 `text` is the content for a text message. <br />
 `files` is an array that encapsulates details on the response files. <br />
 `html` is a string that defines the markup for [message elements](/docs/messages/HTML). <br />
 `error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](/docs/messages#errorMessages)
 is set to _true_, the same message will be displayed in the chat's error bubble. <br />
+`overwrite` is used to overwrite the last message from the same role. Check the [status bubble](#status-bubble-example) example. <br />
 
 #### Examples:
 
@@ -338,6 +342,7 @@ Simple - `{text: "Simple response"}` <br />
 Mixed - `{files: [{name: 'file.txt'}], html: "<div>Custom Element</div>"}` <br />
 Custom role - `{role: "bob", text: "Message from bob"}` <br />
 Error - `{error: "Service Error"}` <br />
+Overwrite - `{text: "New text", overwrite: true}` <br />
 
 <LineBreak></LineBreak>
 
@@ -397,10 +402,39 @@ Server message: <br />
 Check the [websocket server template](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/websockets) to help you get started.
 :::
 
-:::tip
-You can create a status message bubble that would be refreshed with new messages from the server.
-This is achieved via the use of the `"deep-chat-update-message"` class. Checkout an [example](/docs/messages/HTML#example-for-deep-chat-update-message) in [Deep Chat Classes](/docs/messages/HTML#deepChatClasses).
-:::
+<LineBreak></LineBreak>
+
+#### Status Bubble Example {#status-bubble-example}
+
+<img src={WebSocket} style={{marginLeft: 'auto', marginRight: 'auto', display: 'flex'}} />
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```text
+Messages from the server:
+1: {text: "Downloading..."}
+2: {text: "Loading...", overwrite: true}
+3: {text: "Processing...", overwrite: true}
+4: {text: "Ready...", overwrite: true}
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```text
+Component configuration:
+<deep-chat request='{"url": "ws://customapi.com", "websocket": true}'></deep-chat>
+
+Messages from the server:
+1: {text: "Downloading..."}
+2: {text: "Loading...", overwrite: true}
+3: {text: "Processing...", overwrite: true}
+4: {text: "Ready...", overwrite: true}
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
