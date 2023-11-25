@@ -263,14 +263,16 @@ Types shared with other component properties:
   &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `additionalBodyProps?: {[string]: any}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`credentials?: string`](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`websocket?: Websocket`](#Websocket), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`handler?: Handler`](#Handler) <br />
   }
 
-- Default: _{ method: "POST" }_
+- Default: _{ method: "POST", credentials: "same-origin" }_
 
-Object used to configure the outgoing messages request settings. It MUST have either `url` or `handler` defined. <br />
+Object used to configure the outgoing request settings. It MUST have either `url` or `handler` defined. <br />
 `additionalBodyProps` is used to add additional key value properties to the outgoing message body. <br />
+`credentials` is used to configure whether the outgoing request should contain cookies. [More info](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials). <br />
 `websocket` is used to establish a websocket connection instead of sending REST requests.
 
 #### Example
