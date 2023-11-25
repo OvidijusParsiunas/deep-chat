@@ -195,6 +195,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private changeToStopIcon() {
+    if (this._serviceIO.websocket) return; // stop not used for streaming messages in websocket
     this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
     this.elementRef.replaceChildren(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);
