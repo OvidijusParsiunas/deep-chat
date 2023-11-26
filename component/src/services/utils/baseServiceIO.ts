@@ -96,7 +96,7 @@ export class BaseServiceIO implements ServiceIO {
     return HTTPRequest.request(this, body, messages, stringifyBody);
   }
 
-  async callServiceAPI(messages: Messages, pMessages: MessageContentI[], _?: File[]) {
+  private async callAPIWithText(messages: Messages, pMessages: MessageContentI[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
     if (!this.requestSettings.headers?.['Content-Type']) {
@@ -108,13 +108,21 @@ export class BaseServiceIO implements ServiceIO {
     if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
   }
 
-  async callApiWithFiles(body: any, messages: Messages, pMessages: MessageContentI[], files: File[]) {
-    const formData = BaseServiceIO.createCustomFormDataBody(body, pMessages, files);
+  private async callApiWithFiles(messages: Messages, pMessages: MessageContentI[], files: File[]) {
+    const formData = BaseServiceIO.createCustomFormDataBody(this.rawBody, pMessages, files);
     const previousRequestSettings = this.requestSettings;
     const fileIO = this.getServiceIOByType(files[0]);
     this.requestSettings = fileIO?.request || this.requestSettings;
     await this.request(formData, messages, false);
     this.requestSettings = previousRequestSettings;
+  }
+
+  async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
+    if (files) {
+      this.callApiWithFiles(messages, pMessages, files);
+    } else {
+      this.callAPIWithText(messages, pMessages);
+    }
   }
 
   // prettier-ignore
@@ -125,8 +133,6 @@ export class BaseServiceIO implements ServiceIO {
     if (this.requestSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
       Websocket.sendWebsocket(this, body, messages, false);
-    } else if (requestContents.files && !this.isDirectConnection()) {
-      this.callApiWithFiles(this.rawBody, messages, processedMessages, requestContents.files);
     } else {
       this.callServiceAPI(messages, processedMessages, requestContents.files);
     }
