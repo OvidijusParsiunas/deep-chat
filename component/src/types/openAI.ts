@@ -19,6 +19,7 @@ export type OpenAISpeechToText = {
 
 // https://platform.openai.com/docs/api-reference/images
 export interface OpenAIImages {
+  model?: string;
   n?: number;
   size?: '256x256' | '512x512' | '1024x1024';
   response_format?: 'url' | 'b64_json';
