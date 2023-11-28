@@ -104,6 +104,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {text: ''};
   }
 
+  // prettier-ignore
   private async handleTools(message: OpenAIMessage, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseT> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
     if (!message.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
@@ -119,7 +120,8 @@ export class OpenAIChatIO extends DirectServiceIO {
     const handlerResponse = await this._functionHandler?.(functions);
     if (handlerResponse.text) return {text: handlerResponse.text};
     bodyCp.messages.push(message);
-    if (Array.isArray(handlerResponse)) {
+    if ((Array.isArray(handlerResponse) && !handlerResponse.find((response) => typeof response !== 'string'))
+        || functions.length === handlerResponse.length) {
       handlerResponse.forEach((resp, index) => {
         const toolCall = message.tool_calls?.[index];
         bodyCp?.messages.push({
@@ -135,6 +137,9 @@ export class OpenAIChatIO extends DirectServiceIO {
       if (result.error) throw result.error.message;
       return {text: result.choices[0].message.content || ''};
     }
-    throw Error('Response object must contain a FunctionHandlerResponse object');
+    throw Error(
+      'Response object must either be {response: string}[] for each individual function ' +
+        'or {text: string} for a direct response, see https://deepchat.dev/docs/directConnection/OpenAI#FunctionHandler.'
+    );
   }
 }

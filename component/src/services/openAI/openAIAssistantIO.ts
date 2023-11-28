@@ -116,6 +116,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const {status, required_action} = result;
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
     if (status === 'completed' && this.messages) {
+      // https://platform.openai.com/docs/api-reference/messages/listMessages
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
       const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
@@ -126,6 +127,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     throw Error(`Thread run status: ${status}`);
   }
 
+  // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
     if (!this._functionHandler) {
       throw Error(
@@ -137,6 +139,11 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       return {name: call.function.name, arguments: call.function.arguments};
     });
     const handlerResponse = await this._functionHandler(functions);
+    if (!Array.isArray(handlerResponse) || handlerResponse.find((response) => typeof response !== 'string')
+        || toolCalls.length !== handlerResponse.length) {
+      throw Error('Response must contain an array of strings for each individual function/tool_call, '
+        + 'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.');
+    }
     const tool_outputs = handlerResponse.map((resp, index) => {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
