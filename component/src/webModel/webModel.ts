@@ -1,11 +1,11 @@
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
-import {WebModel as WebModelT} from '../types/webModel/webModel';
 import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
-import {MessageContentI} from '../types/messagesInternal';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
+import {WebModelConfig} from '../types/webModel/webModel';
+import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
-// import * as WebLLM2 from '@mlc-ai/web-llm';
+// import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
 
@@ -33,12 +33,12 @@ export class WebModel extends BaseServiceIO {
   private _isModelLoading = false;
   private _loadOnFirstMessage = false;
   permittedErrorPrefixes = [WebModel.MULTIPLE_MODELS_ERROR, WebModel.WEB_LLM_NOT_FOUND_ERROR, WebModel.GENERIC_ERROR];
-  private readonly webModel: WebModelT = false;
+  private readonly webModel: WebModelConfig = {};
 
   constructor(deepChat: DeepChat) {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
-    this.webModel = deepChat._webModel;
+    if (typeof deepChat._webModel === 'object') this.webModel = deepChat._webModel;
     if (deepChat.shadowRoot) this.findModelInWindow(deepChat.shadowRoot);
     this.canSendMessage = this.canSubmit.bind(this);
   }
@@ -66,7 +66,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private addInitialMessage(shadowRoot: ShadowRoot) {
-    const initialMessage = typeof this.webModel === 'object' ? this.webModel.initialMessage : undefined;
+    const {initialMessage} = this.webModel;
     if (!this.webModel || initialMessage?.displayed === false) return false;
     const downloadClass = initialMessage?.downloadClass || WebModel.DOWNLOAD_BUTTON_CLASS;
     const text = `
@@ -81,12 +81,13 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async configureInit(wasMessageSet: boolean) {
-    if (this.webModel && typeof this.webModel !== 'boolean' && this.webModel.load) {
-      if (this.webModel.load.onInit) {
+    const {load} = this.webModel;
+    if (load) {
+      if (load.onInit) {
         this.init();
         return;
       }
-      if (this.webModel.load.onMessage) {
+      if (load.onMessage) {
         this._loadOnFirstMessage = true;
         return;
       }
@@ -106,28 +107,24 @@ export class WebModel extends BaseServiceIO {
       return;
     }
     if (this._isModelLoaded || this._isModelLoading) return;
-    return config.use_web_worker
-      ? new window.webLLM.ChatWorkerClient(new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'}))
-      : new window.webLLM.ChatModule();
+    const {worker} = this.webModel;
+    return config.use_web_worker && worker ? new window.webLLM.ChatWorkerClient(worker) : new window.webLLM.ChatModule();
   }
 
   private getConfig() {
     let model = WebModel.DEFAULT_MODEL;
-    if (this.webModel && typeof this.webModel !== 'boolean') {
-      if (this.webModel.model) model = this.webModel.model;
-      const newConfig = JSON.parse(JSON.stringify(config)) as typeof config;
-      if (this.webModel.modelUrl) {
-        const modelConfig = newConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
-        if (modelConfig) modelConfig.model_url = this.webModel.modelUrl;
-      }
-      if (this.webModel.wasmUrl) {
-        const modelKey = model as keyof typeof newConfig.model_lib_map;
-        const wasm = newConfig.model_lib_map[modelKey];
-        if (wasm) newConfig.model_lib_map[modelKey] = `${this.webModel.wasmUrl}${model}-webgpu.wasm`;
-      }
-      return {model, pConfig: newConfig};
+    if (this.webModel.model) model = this.webModel.model;
+    const newConfig = JSON.parse(JSON.stringify(config)) as typeof config;
+    if (this.webModel.modelUrl) {
+      const modelConfig = newConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
+      if (modelConfig) modelConfig.model_url = this.webModel.modelUrl;
     }
-    return {model, pConfig: config};
+    if (this.webModel.wasmUrl) {
+      const modelKey = model as keyof typeof newConfig.model_lib_map;
+      const wasm = newConfig.model_lib_map[modelKey];
+      if (wasm) newConfig.model_lib_map[modelKey] = `${this.webModel.wasmUrl}${model}-webgpu.wasm`;
+    }
+    return {model, pConfig: newConfig};
   }
 
   private async loadModel(chat: WebLLM.ChatInterface) {

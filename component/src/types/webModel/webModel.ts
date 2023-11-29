@@ -18,6 +18,7 @@ export type WebModelName =
 
 export interface WebModelConfig {
   model?: WebModelName;
+  worker?: Worker;
   modelUrl?: string;
   wasmUrl?: string;
   load?: {
