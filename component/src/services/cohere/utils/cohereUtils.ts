@@ -16,7 +16,8 @@ export class CohereUtils {
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const cohereResult = result as CohereCompletionsResult;
     // if the token is valid - it will simply error out that the prompt is wrong
-    if (cohereResult.message === 'invalid request: prompt must be at least 1 token long') {
+    // using this approach to not cost anything to the user
+    if (cohereResult.message?.includes('invalid request: prompt must be at least 1 token long')) {
       onSuccess(key);
     } else {
       onFail(ErrorMessages.INVALID_KEY);

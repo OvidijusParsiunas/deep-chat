@@ -8,23 +8,13 @@ import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
 export class CohereChatIO extends CohereIO {
-  private readonly username: string = 'USER';
-
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const config = directConnectionCopy.cohere?.chat as Cohere['chat'];
     const apiKey = directConnectionCopy.cohere;
     super(deepChat, 'https://api.cohere.ai/v1/chat', 'Ask me anything!', config, apiKey);
-    if (typeof config === 'object') {
-      if (config.user_name) this.username = config.user_name;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
-  }
-
-  private cleanConfig(config: CohereChatConfig) {
-    delete config.user_name;
   }
 
   private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
@@ -33,7 +23,7 @@ export class CohereChatIO extends CohereIO {
     bodyCopy.query = textMessages[textMessages.length - 1].text;
     bodyCopy.chat_history = textMessages
       .slice(0, textMessages.length - 1)
-      .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'CHATBOT' : this.username}));
+      .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'CHATBOT' : 'USER'}));
     return bodyCopy;
   }
 

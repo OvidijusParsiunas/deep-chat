@@ -55,15 +55,14 @@ export class ServiceIOFactory {
       if (directConnection.assemblyAI) {
         return new AssemblyAIAudioIO(deepChat);
       }
-      // WORK - update chat to be the default
       if (directConnection.cohere) {
-        if (directConnection.cohere.chat) {
-          return new CohereChatIO(deepChat);
+        if (directConnection.cohere.textGeneration) {
+          return new CohereTextGenerationIO(deepChat);
         }
         if (directConnection.cohere.summarization) {
           return new CohereSummarizationIO(deepChat);
         }
-        return new CohereTextGenerationIO(deepChat);
+        return new CohereChatIO(deepChat);
       }
       if (directConnection.huggingFace) {
         if (directConnection.huggingFace.textGeneration) {
