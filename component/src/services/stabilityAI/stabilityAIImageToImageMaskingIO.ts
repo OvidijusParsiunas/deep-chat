@@ -12,7 +12,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
-  url = 'https://api.stability.ai/v1/generation/stable-inpainting-512-v2-0/image-to-image/masking';
+  url = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image/masking';
   private readonly _imageWeight: number | undefined;
   private readonly _maskSource: StabilityAIImageToImageMasking['mask_source'] = 'MASK_IMAGE_WHITE';
   textInputPlaceholderText = 'Describe image changes';

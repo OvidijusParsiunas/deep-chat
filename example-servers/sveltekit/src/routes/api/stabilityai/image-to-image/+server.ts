@@ -22,7 +22,7 @@ export const POST: RequestHandler = async ({request}) => {
   imageToImageFormData.append('text_prompts[0][text]', text);
   imageToImageFormData.append('text_prompts[0][weight]', '1');
 
-  const result = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image', {
+  const result = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image', {
     // Be careful not to overwrite Content-Type headers as the Boundary header will not be automatically set
     headers: {Authorization: `Bearer ${process.env.STABILITY_API_KEY}`},
     method: 'POST',

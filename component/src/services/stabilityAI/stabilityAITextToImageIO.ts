@@ -11,7 +11,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class StabilityAITextToImageIO extends StabilityAIIO {
-  url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image';
+  url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image';
   private readonly _imageWeight: number | undefined;
   textInputPlaceholderText = 'Describe an image';
   introPanelMarkUp = `

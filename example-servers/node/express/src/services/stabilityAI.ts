@@ -10,7 +10,7 @@ export class StabilityAI {
     // https://deepchat.dev/docs/connect
     const descriptionBody = {text_prompts: [{text: body.messages[0].text}]};
     const req = https.request(
-      'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image',
+      'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image',
       {
         method: 'POST',
         headers: {
@@ -56,7 +56,7 @@ export class StabilityAI {
       formData.append('text_prompts[0][weight]', 1);
     }
     const formReq = https.request(
-      'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image',
+      'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image',
       {
         method: 'POST',
         headers: {

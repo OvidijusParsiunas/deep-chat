@@ -13,7 +13,7 @@ import {DeepChat} from '../../deepChat';
 
 // WORK - allow appropriate responses for invalid height etc
 export class StabilityAIImageToImageIO extends StabilityAIIO {
-  url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image';
+  url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image';
   private readonly _imageWeight: number | undefined;
   textInputPlaceholderText = 'Describe image changes';
   introPanelMarkUp = `

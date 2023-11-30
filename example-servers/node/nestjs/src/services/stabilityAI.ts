@@ -10,7 +10,7 @@ export class StabilityAI {
   async textToImage(body: Request['body']) {
     const descriptionBody = {text_prompts: [{text: body.messages[0].text}]};
     const response = await axios.post(
-      'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image',
+      'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image',
       descriptionBody,
       {
         method: 'POST',
@@ -39,7 +39,7 @@ export class StabilityAI {
       formData.append('text_prompts[0][weight]', 1);
     }
     const response = await axios.post(
-      'https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image',
+      'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image',
       formData,
       {
         headers: {

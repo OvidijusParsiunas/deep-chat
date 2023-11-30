@@ -12,7 +12,7 @@ class StabilityAI:
         }
         description_body = {"text_prompts": [{"text": body["messages"][0]["text"]}]}
         response = requests.post(
-            "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image", json=description_body, headers=headers)
+            "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image", json=description_body, headers=headers)
         json_response = response.json()
         if "message" in json_response:    
             raise Exception(json_response["message"])
@@ -23,7 +23,7 @@ class StabilityAI:
 
     # You can use an example image here: https://github.com/OvidijusParsiunas/deep-chat/blob/main/example-servers/ui/assets/example-image.png
     def image_to_image(self, request):
-        url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image"
+        url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image"
         headers = {
             "Authorization": "Bearer " + os.getenv("STABILITY_API_KEY")
         }

@@ -43,7 +43,7 @@ public class StabilityAIService {
     headers.setAccept(acceptableMediaTypes);
     headers.set("Authorization", "Bearer " + stabilityAIAPIKey);
     HttpEntity<StabilityAITextToImageBody> requestEntity = new HttpEntity<>(body, headers);
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image");
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image");
 
     // Send the request to Stability AI
     ResponseEntity<StabilityAIImageResult> response = restTemplate.exchange(
@@ -77,7 +77,7 @@ public class StabilityAIService {
     headers.set("Authorization", "Bearer " + stabilityAIAPIKey);
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
     RestTemplate restTemplate = new RestTemplate();
-    String url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image";
+    String url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image";
 
     // Send the request to Stability AI
     ResponseEntity<StabilityAIImageResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, StabilityAIImageResult.class);

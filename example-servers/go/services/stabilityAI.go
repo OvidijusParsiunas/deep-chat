@@ -36,7 +36,7 @@ func StabilityAITextToImage(w http.ResponseWriter, r *http.Request) error {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil { return err }
 
-	req, err := http.NewRequest("POST", "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image", bytes.NewBuffer(bodyBytes))
+	req, err := http.NewRequest("POST", "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image", bytes.NewBuffer(bodyBytes))
 	if err != nil { return err }
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer " + os.Getenv("STABILITY_API_KEY"))
@@ -106,7 +106,7 @@ func StabilityAIImageToImage(w http.ResponseWriter, r *http.Request) error {
 	err = multipartWriter.Close()
 	if err != nil { return nil }
 
-	req, err := http.NewRequest("POST", "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/image-to-image", &buf)
+	req, err := http.NewRequest("POST", "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/image-to-image", &buf)
 	if err != nil { return err }
 
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())

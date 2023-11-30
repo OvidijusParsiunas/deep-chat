@@ -17,7 +17,7 @@ async function handler(req: NextRequest) {
 
   const descriptionBody = {text_prompts: [{text: textRequestBody.messages[0].text}]};
 
-  const result = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image', {
+  const result = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image', {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
