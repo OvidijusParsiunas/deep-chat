@@ -44,6 +44,9 @@ export class DeepChat extends InternalHTML {
   request?: Request;
 
   @Property('object')
+  webModel?: WebModel;
+
+  @Property('object')
   stream?: Stream;
 
   @Property('object')
@@ -162,8 +165,6 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   demo?: Demo;
-
-  _webModel: WebModel = false;
 
   _hasBeenRendered = false;
 

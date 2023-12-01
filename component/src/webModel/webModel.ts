@@ -38,7 +38,7 @@ export class WebModel extends BaseServiceIO {
   constructor(deepChat: DeepChat) {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
-    if (typeof deepChat._webModel === 'object') this.webModel = deepChat._webModel;
+    if (typeof deepChat.webModel === 'object') this.webModel = deepChat.webModel;
     if (deepChat.shadowRoot) this.findModelInWindow(deepChat.shadowRoot);
     this.canSendMessage = this.canSubmit.bind(this);
   }

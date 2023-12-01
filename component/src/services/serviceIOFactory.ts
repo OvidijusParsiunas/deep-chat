@@ -32,8 +32,8 @@ import {DeepChat} from '../deepChat';
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
   public static create(deepChat: DeepChat): ServiceIO {
-    const {directConnection, request, demo, _webModel} = deepChat;
-    if (_webModel) {
+    const {directConnection, request, demo, webModel} = deepChat;
+    if (webModel) {
       return new WebModel(deepChat);
     }
     if (directConnection) {
