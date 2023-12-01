@@ -151,7 +151,7 @@ export class MessagesBase {
   }
 
   public sendClientUpdate(message: MessageContentI, isInitial = false) {
-    this._onNewMessage?.(JSON.parse(JSON.stringify(message)), isInitial);
+    this._onNewMessage?.(message, isInitial);
   }
 
   public renderText(bubbleElement: HTMLElement, text: string) {

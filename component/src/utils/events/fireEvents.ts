@@ -1,9 +1,11 @@
+import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {DeepChat} from '../../deepChat';
 
 export class FireEvents {
   public static onNewMessage(deepChat: DeepChat, message: MessageContentI, isInitial: boolean) {
     const updateBody = JSON.parse(JSON.stringify({message, isInitial}));
+    FileMessageUtils.reAddFileRefToObject(message, updateBody);
     deepChat.onNewMessage(updateBody);
     deepChat.dispatchEvent(new CustomEvent('new-message', {detail: updateBody}));
   }

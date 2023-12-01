@@ -1,4 +1,5 @@
-import {MessageStyles} from '../../../types/messages';
+import {MessageContent, MessageStyles} from '../../../types/messages';
+import {MessageFile} from '../../../types/messageFile';
 import {MessagesBase} from './messagesBase';
 import {MessageElements} from './messages';
 
@@ -49,5 +50,22 @@ export class FileMessageUtils {
         messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
       }
     }
+  }
+
+  // The strategy is to emit the actual file reference in the `onNewMessage` event for the user to inspect it
+  // But it is not actually used by anything in the chat, hence it is removed when adding a message
+
+  // after the body has been stringified and parsed - the file reference will disappear, hence this readds it
+  public static reAddFileRefToObject(message: MessageContent, body: {message: MessageContent; isInitial: boolean}) {
+    message.files?.forEach((file, index) => {
+      if (file.ref && body.message.files?.[index]) body.message.files[index].ref = file.ref;
+    });
+  }
+
+  // the chat does not use the actual file
+  public static removeFileRef(messageFile: MessageFile): Omit<MessageFile, 'file'> {
+    const newMessageFileObj = {...messageFile};
+    delete newMessageFileObj.ref;
+    return newMessageFileObj;
   }
 }

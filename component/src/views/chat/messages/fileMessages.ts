@@ -73,6 +73,7 @@ export class FileMessages {
   // no overwrite previous message logic as it is complex to track which files are to be overwritten
   public static addMessages(messages: Messages, files: MessageFiles, role: string) {
     files.forEach((fileData) => {
+      if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
       if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
         FileMessages.addNewAudioMessage(messages, fileData, role);
       } else if (fileData.type === 'image' || fileData.src?.startsWith('data:image')) {

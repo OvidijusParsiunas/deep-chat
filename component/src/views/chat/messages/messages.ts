@@ -227,12 +227,12 @@ export class Messages extends MessagesBase {
         return new Promise((resolve) => {
           if (!fileData.type || fileData.type === 'any') {
             const fileName = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
-            resolve({name: fileName, type: 'any'});
+            resolve({name: fileName, type: 'any', ref: fileData.file});
           } else {
             const reader = new FileReader();
             reader.readAsDataURL(fileData.file);
             reader.onload = () => {
-              resolve({src: reader.result as string, type: fileData.type});
+              resolve({src: reader.result as string, type: fileData.type, ref: fileData.file});
             };
           }
         });
