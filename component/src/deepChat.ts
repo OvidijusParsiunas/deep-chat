@@ -1,5 +1,5 @@
-import {MessageStyles, MessageContent, OnNewMessage, ErrorMessages, IntroMessage, UserContent} from './types/messages';
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
+import {MessageContent, IntroMessage, MessageStyles, UserContent, OnNewMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
@@ -14,6 +14,7 @@ import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
+import {ErrorMessages, OnError} from './types/error';
 import {SpeechToTextConfig} from './types/microphone';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
@@ -162,6 +163,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('function')
   onComponentRender: () => void = () => {};
+
+  @Property('function')
+  onError: OnError = () => {};
 
   @Property('object')
   demo?: Demo;

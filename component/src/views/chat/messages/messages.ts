@@ -1,11 +1,12 @@
-import {ErrorMessageOverrides, MessageContent, IntroMessage} from '../../../types/messages';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
+import {MessageContent, IntroMessage} from '../../../types/messages';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../types/messagesInternal';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {ErrorMessageOverrides} from '../../../types/error';
 import {ResponseI} from '../../../types/responseInternal';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {Demo, DemoResponse} from '../../../types/demo';
@@ -33,6 +34,7 @@ export interface MessageElements {
 export class Messages extends MessagesBase {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onClearMessages?: () => void;
+  private readonly _onError?: (error: string) => void;
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
@@ -44,6 +46,7 @@ export class Messages extends MessagesBase {
     const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
+    this._onError = FireEvents.onError.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.addSetupMessageIfNeeded(deepChat, serviceIO);
@@ -169,6 +172,7 @@ export class Messages extends MessagesBase {
     this.elementRef.appendChild(outerContainer);
     ElementUtils.scrollToBottom(this.elementRef);
     if (this.textToSpeech) TextToSpeech.speak(text, this.textToSpeech);
+    this._onError?.(text);
   }
 
   private static checkPermittedErrorPrefixes(errorPrefixes: string[], message: string): string | undefined {

@@ -1,4 +1,5 @@
-import {ErrorMessageOverrides, MessageContent} from './messages';
+import {ErrorMessageOverrides} from './error';
+import {MessageContent} from './messages';
 import {Response} from './response';
 
 export type DemoErrors = {[key in keyof ErrorMessageOverrides]?: boolean};

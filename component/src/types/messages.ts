@@ -33,16 +33,3 @@ export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boo
 export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 
 export type UserContent = {text?: string; files?: File[] | FileList};
-
-export interface ErrorMessageOverrides {
-  default?: string;
-  service?: string;
-  speechToText?: string;
-}
-
-export interface ErrorMessages {
-  // automatically display all error messages from the service, all others automatically default
-  // to the normal error structure -> type of message -> default -> 'Error, please try again.'
-  displayServiceErrorMessages?: boolean;
-  overrides?: ErrorMessageOverrides;
-}

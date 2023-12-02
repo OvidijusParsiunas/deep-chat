@@ -19,4 +19,9 @@ export class FireEvents {
     deepChat.onComponentRender();
     deepChat.dispatchEvent(new CustomEvent('render'));
   }
+
+  public static onError(deepChat: DeepChat, error: string) {
+    deepChat.onError(error);
+    deepChat.dispatchEvent(new CustomEvent('error', {detail: error}));
+  }
 }
