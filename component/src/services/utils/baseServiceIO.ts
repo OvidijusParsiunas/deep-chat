@@ -36,6 +36,8 @@ export class BaseServiceIO implements ServiceIO {
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
   addMessage?: (data: ResponseI) => void;
+  removeIntroMessage?: () => void;
+  messagesElRef?: HTMLElement;
   demo?: DemoT;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;

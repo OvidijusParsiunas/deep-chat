@@ -62,6 +62,8 @@ export class Messages extends MessagesBase {
       this.addNewMessage({...content, sendUpdate: !!isUpdate}, !isUpdate);
     };
     serviceIO.addMessage = this.addIOMessage.bind(this);
+    serviceIO.removeIntroMessage = this.removeIntroductoryMessage.bind(this);
+    serviceIO.messagesElRef = this.elementRef;
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -97,18 +99,30 @@ export class Messages extends MessagesBase {
     }
   }
 
+  // WORK - const file for deep chat classes
   private addIntroductoryMessage(deepChat?: DeepChat, serviceIO?: ServiceIO) {
-    if (deepChat?.shadowRoot && serviceIO) this._introMessage = deepChat.introMessage;
+    if (deepChat?.shadowRoot) this._introMessage = deepChat.introMessage;
     let introMessage = this._introMessage;
-    if (deepChat && serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(deepChat);
+    if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
     if (introMessage) {
+      let elements;
       if (introMessage?.text) {
-        const elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
-        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+        elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
       } else if (introMessage?.html) {
-        const elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
-        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+        elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
       }
+      if (elements) {
+        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+        elements.outerContainer.classList.add('deep-chat-intro');
+      }
+    }
+  }
+
+  private removeIntroductoryMessage() {
+    const introMessage = this.messageElementRefs[0];
+    if (introMessage.outerContainer.classList.contains('deep-chat-intro')) {
+      introMessage.outerContainer.remove();
+      this.messageElementRefs.shift();
     }
   }
 
@@ -140,8 +154,8 @@ export class Messages extends MessagesBase {
     this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, overwrite?: boolean, update = true, initial = false) {
-    if (!overwrite) this.messages.push(messageContent);
+  private updateStateOnMessage(messageContent: MessageContentI, isOverwrite?: boolean, update = true, initial = false) {
+    if (!isOverwrite) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 

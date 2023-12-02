@@ -14,6 +14,8 @@ export interface ChatConfig {
   tokenizer_files: Array<string>;
   conv_config?: Partial<ConvTemplateConfig>;
   conv_template: string;
+  // [userText, aiText][]
+  conversationHistory?: Array<[string, string]>;
   mean_gen_len: number;
   shift_fill_factor: number;
   repetition_penalty: number;
@@ -49,7 +51,12 @@ export type GenerateProgressCallback = (step: number, currentMessage: string) =>
 export interface ChatInterface {
   setInitProgressCallback: (initProgressCallback: InitProgressCallback) => void;
 
-  reload: (localIdOrUrl: string, chatOpts?: ChatOptions, appConfig?: AppConfig) => Promise<void>;
+  reload: (
+    localIdOrUrl: string,
+    chatOpts?: ChatOptions,
+    appConfig?: AppConfig,
+    files?: FileList
+  ) => Promise<File[] | void>;
 
   generate: (input: string, progressCallback?: GenerateProgressCallback, streamInterval?: number) => Promise<string>;
 

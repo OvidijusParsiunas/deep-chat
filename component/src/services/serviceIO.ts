@@ -104,6 +104,10 @@ export interface ServiceIO {
 
   addMessage?(data: ResponseI): void;
 
+  removeIntroMessage?(): void;
+
+  messagesElRef?: HTMLElement;
+
   isDirectConnection(): boolean;
 
   isWebModel(): boolean;

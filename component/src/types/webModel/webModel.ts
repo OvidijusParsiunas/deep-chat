@@ -16,6 +16,19 @@ export type WebModelName =
   | 'Mistral-7B-Instruct-v0.1-q4f16_1'
   | 'Mistral-7B-Instruct-v0.1-q4f32_1';
 
+export interface WebModelIntro {
+  displayed?: boolean;
+  startHtml?: string;
+  downloadClass?: string;
+  uploadClass?: string;
+  fileInputClass?: string;
+  afterLoadHtml?: string;
+  exportFilesClass?: string;
+  removeAfterLoad?: boolean;
+  removeAfterMessage?: boolean;
+  scroll?: boolean;
+}
+
 export interface WebModelConfig {
   model?: WebModelName;
   worker?: Worker;
@@ -25,11 +38,7 @@ export interface WebModelConfig {
     onInit?: boolean;
     onMessage?: boolean;
   };
-  introMessage?: {
-    displayed?: boolean;
-    html?: string;
-    downloadClass?: string;
-  };
+  introMessage?: WebModelIntro;
 }
 
 export type WebModel = boolean | WebModelConfig;

@@ -27,4 +27,8 @@ export class ElementUtils {
   public static scrollToBottom(element: HTMLElement) {
     element.scrollTop = element.scrollHeight;
   }
+
+  public static scrollToTop(element: HTMLElement) {
+    element.scrollTop = 0;
+  }
 }
