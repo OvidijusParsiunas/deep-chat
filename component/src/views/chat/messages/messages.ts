@@ -14,6 +14,7 @@ import {MessageStream} from './stream/messageStream';
 import {Legacy} from '../../../utils/legacy/legacy';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
+import {WebModel} from '../../../webModel/webModel';
 import {CustomStyle} from '../../../types/styles';
 import {HTMLMessages} from './html/htmlMessages';
 import {SetupMessages} from './setupMessages';
@@ -47,7 +48,7 @@ export class Messages extends MessagesBase {
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     this.addSetupMessageIfNeeded(deepChat, serviceIO);
     this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
-    if (deepChat.introMessage) this.addIntroductoryMessage(deepChat.introMessage);
+    this.addIntroductoryMessage(deepChat, serviceIO);
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
@@ -93,14 +94,18 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private addIntroductoryMessage(introMessage?: IntroMessage) {
-    if (introMessage) this._introMessage = introMessage;
-    if (this._introMessage?.text) {
-      const elements = this.createAndAppendNewMessageElement(this._introMessage.text, MessageUtils.AI_ROLE);
-      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
-    } else if (this._introMessage?.html) {
-      const elements = HTMLMessages.add(this, this._introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
-      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+  private addIntroductoryMessage(deepChat?: DeepChat, serviceIO?: ServiceIO) {
+    if (deepChat?.shadowRoot && serviceIO) this._introMessage = deepChat.introMessage;
+    let introMessage = this._introMessage;
+    if (deepChat && serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(deepChat);
+    if (introMessage) {
+      if (introMessage?.text) {
+        const elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
+        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+      } else if (introMessage?.html) {
+        const elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
+        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+      }
     }
   }
 

@@ -25,7 +25,7 @@ export interface WebModelConfig {
     onInit?: boolean;
     onMessage?: boolean;
   };
-  initialMessage?: {
+  introMessage?: {
     displayed?: boolean;
     html?: string;
     downloadClass?: string;

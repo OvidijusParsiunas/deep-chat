@@ -6,6 +6,7 @@ import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
 // import * as WebLLM2 from 'deep-chat-web-llm';
+import {IntroMessage} from '../types/messages';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
 
@@ -29,9 +30,11 @@ export class WebModel extends BaseServiceIO {
   private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
   private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
   private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
+  private static readonly MODULE_SEARCH_LIMIT_S = 5;
   private _isModelLoaded = false;
   private _isModelLoading = false;
   private _loadOnFirstMessage = false;
+  private _downloadButton?: HTMLButtonElement;
   permittedErrorPrefixes = [WebModel.MULTIPLE_MODELS_ERROR, WebModel.WEB_LLM_NOT_FOUND_ERROR, WebModel.GENERIC_ERROR];
   private readonly webModel: WebModelConfig = {};
 
@@ -39,18 +42,14 @@ export class WebModel extends BaseServiceIO {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
     if (typeof deepChat.webModel === 'object') this.webModel = deepChat.webModel;
-    if (deepChat.shadowRoot) this.findModelInWindow(deepChat.shadowRoot);
+    this.findModelInWindow(deepChat);
     this.canSendMessage = this.canSubmit.bind(this);
   }
 
-  private findModelInWindow(shadowRoot: ShadowRoot, seconds = 0) {
+  private findModelInWindow(deepChat: DeepChat, seconds = 0) {
     if (window.webLLM) {
-      setTimeout(() => {
-        // in timeout for this.addMessage to be set
-        const wasMessageSet = this.addInitialMessage(shadowRoot);
-        this.configureInit(wasMessageSet);
-      });
-    } else if (seconds > 5) {
+      this.configureInit(this.shouldAddInitialMessage(deepChat.introMessage));
+    } else if (seconds > WebModel.MODULE_SEARCH_LIMIT_S) {
       this.addMessage?.({error: WebModel.WEB_LLM_NOT_FOUND_ERROR, sendUpdate: false});
       console.error(
         'The WebLLM module is either not in the project or not been attached to the window object. ' +
@@ -60,27 +59,43 @@ export class WebModel extends BaseServiceIO {
       console.error('Hello World');
     } else {
       setTimeout(() => {
-        this.findModelInWindow(shadowRoot, seconds + 1);
+        this.findModelInWindow(deepChat, seconds + 1);
       }, 1000);
     }
   }
 
-  private addInitialMessage(shadowRoot: ShadowRoot) {
-    const {initialMessage} = this.webModel;
-    if (!this.webModel || initialMessage?.displayed === false) return false;
-    const downloadClass = initialMessage?.downloadClass || WebModel.DOWNLOAD_BUTTON_CLASS;
-    const text = `
-      Download a web model that will run entirely on your browser.
-      <br/> <button style="margin-top: 10px; margin-bottom: 5px; margin-left: 1px"
-        class="${downloadClass} deep-chat-button">Download</button>`;
-    const html = initialMessage?.html || `<div>${text}</div>`;
-    this.addMessage?.({role: MessageUtils.AI_ROLE, html, sendUpdate: false});
-    const button = shadowRoot.children[0]?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
-    if (button) button.onclick = this.init.bind(this);
-    return true;
+  private shouldAddInitialMessage(userIntroMessage?: IntroMessage) {
+    return !userIntroMessage && this.webModel && this.webModel.introMessage?.displayed !== false;
   }
 
-  private async configureInit(wasMessageSet: boolean) {
+  public getIntroMessage({shadowRoot, introMessage: userIntroMessage}: DeepChat) {
+    if (!this.shouldAddInitialMessage(userIntroMessage) || !shadowRoot) return;
+    const {introMessage} = this.webModel;
+    const downloadClass = introMessage?.downloadClass || WebModel.DOWNLOAD_BUTTON_CLASS;
+    const text = `
+      Download a web model that will run entirely on your browser.
+      <br/> <button disabled style="margin-top: 10px; margin-bottom: 5px; margin-left: 1px"
+        class="${downloadClass} deep-chat-button">Download</button>`;
+    const html = introMessage?.html || `<div>${text}</div>`;
+    setTimeout(() => {
+      this._downloadButton = shadowRoot.children[0]?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
+      if (this._downloadButton) {
+        this._downloadButton.onclick = this.init.bind(this);
+        this.enableButton(this._downloadButton);
+      }
+    });
+    return {role: MessageUtils.AI_ROLE, html, sendUpdate: false};
+  }
+
+  private enableButton(button: HTMLButtonElement, rounds = 0) {
+    if (window.webLLM) {
+      button.disabled = false;
+    } else if (rounds < WebModel.MODULE_SEARCH_LIMIT_S * 4) {
+      setTimeout(() => this.enableButton(button, rounds + 1), 250);
+    }
+  }
+
+  private async configureInit(wasIntroSet: boolean) {
     const {load} = this.webModel;
     if (load) {
       if (load.onInit) {
@@ -92,7 +107,7 @@ export class WebModel extends BaseServiceIO {
         return;
       }
     }
-    if (!wasMessageSet) this.init();
+    if (!wasIntroSet) this.init();
   }
 
   private async init() {
