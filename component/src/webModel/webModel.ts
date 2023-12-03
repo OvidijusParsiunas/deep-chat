@@ -171,7 +171,7 @@ export class WebModel extends BaseServiceIO {
     try {
       const {model, appConfig} = this.getConfig();
       const chatOpts: ChatOptions = {conv_config: {system: 'keep responses to one sentence'}};
-      if (this._conversationHistory.length > 0) chatOpts.conversationHistory = this._conversationHistory;
+      if (this._conversationHistory.length > 0) chatOpts.conversation_history = this._conversationHistory;
       loadedFiles = (await WebModel.chat.reload(model, chatOpts, appConfig, files)) as File[];
     } catch (err) {
       return this.unloadChat(err as string);

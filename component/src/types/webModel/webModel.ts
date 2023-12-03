@@ -29,15 +29,17 @@ export interface WebModelIntro {
   scroll?: boolean;
 }
 
+export interface WebModelLoad {
+  onInit?: boolean;
+  onMessage?: boolean;
+}
+
 export interface WebModelConfig {
   model?: WebModelName;
   worker?: Worker;
   modelUrl?: string;
   wasmUrl?: string;
-  load?: {
-    onInit?: boolean;
-    onMessage?: boolean;
-  };
+  load?: WebModelLoad;
   introMessage?: WebModelIntro;
 }
 

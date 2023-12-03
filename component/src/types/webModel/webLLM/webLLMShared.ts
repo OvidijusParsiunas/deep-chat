@@ -15,7 +15,7 @@ export interface ChatConfig {
   conv_config?: Partial<ConvTemplateConfig>;
   conv_template: string;
   // [userText, aiText][]
-  conversationHistory?: Array<[string, string]>;
+  conversation_history?: Array<[string, string]>;
   mean_gen_len: number;
   shift_fill_factor: number;
   repetition_penalty: number;
