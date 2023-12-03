@@ -1,10 +1,10 @@
+import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {MessageContent, IntroMessage} from '../../../types/messages';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {ErrorMessageOverrides} from '../../../types/error';
 import {ResponseI} from '../../../types/responseInternal';
@@ -138,8 +138,9 @@ export class Messages extends MessagesBase {
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isInitial = false) {
     const message = Messages.createMessageContent(data);
+    const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (!data.ignoreText && message.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(message.text, message.role, data.overwrite);
+      this.addNewTextMessage(message.text, message.role, overwrite);
       if (!isInitial && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(message.text, this.textToSpeech);
       }
@@ -148,14 +149,14 @@ export class Messages extends MessagesBase {
       FileMessages.addMessages(this, message.files, message.role);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, data.overwrite);
+      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
-    this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
+    this.updateStateOnMessage(message, overwrite.status, data.sendUpdate, isInitial);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, isOverwrite?: boolean, update = true, initial = false) {
-    if (!isOverwrite) this.messages.push(messageContent);
+  private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, initial = false) {
+    if (!overwritten) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 

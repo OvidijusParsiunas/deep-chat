@@ -1,8 +1,8 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
+import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {HTMLClassUtilities} from '../../../types/html';
@@ -52,10 +52,11 @@ export class MessagesBase {
     return container;
   }
 
-  public addNewTextMessage(text: string, role: string, overwrite = false) {
-    if (overwrite) {
+  public addNewTextMessage(text: string, role: string, overwrite?: Overwrite) {
+    if (overwrite?.status) {
       const overwrittenElements = this.overwriteText(role, text, this.messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
+      overwrite.status = false;
     }
     const messageElements = this.createAndAppendNewMessageElement(text, role);
     messageElements.bubbleElement.classList.add('text-message');
