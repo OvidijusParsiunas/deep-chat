@@ -9,7 +9,6 @@ import * as WebLLM from '../types/webModel/webLLM/webLLM';
 import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
-import {ServiceIO} from '../services/serviceIO';
 // import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
@@ -22,6 +21,8 @@ declare global {
 
 // WORK
 // create a separate library to faciliate webworkers.
+
+// WORK - in playground - upon the component that uses web model - remove static
 export class WebModel extends BaseServiceIO {
   private static chat?: WebLLM.ChatInterface;
   private static readonly GENERIC_ERROR =
@@ -38,7 +39,8 @@ export class WebModel extends BaseServiceIO {
   permittedErrorPrefixes = [WebModel.MULTIPLE_MODELS_ERROR, WebModel.WEB_LLM_NOT_FOUND_ERROR, WebModel.GENERIC_ERROR];
   private readonly _conversationHistory: Array<[string, string]> = [];
   private readonly _chatEl?: HTMLElement;
-  private _removeIntro?: ServiceIO['removeIntroMessage'];
+  private _removeIntro?: () => void;
+  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     super(deepChat);
@@ -47,11 +49,16 @@ export class WebModel extends BaseServiceIO {
     this.findModelInWindow(deepChat);
     this.canSendMessage = this.canSubmit.bind(this);
     this._chatEl = deepChat.shadowRoot?.children[0] as HTMLElement;
+    if (deepChat.initialMessages) WebModel.setUpHistory(this._conversationHistory, deepChat.initialMessages);
+  }
+
+  // need ref of messages object as web model exhibits unique behaviour to manipulate chat
+  public setUpMessages(messages: Messages) {
+    this._messages = messages;
     this._removeIntro = () => {
-      this.removeIntroMessage?.();
+      messages.removeIntroductoryMessage();
       this._removeIntro = undefined;
     };
-    if (deepChat.initialMessages) WebModel.setUpHistory(this._conversationHistory, deepChat.initialMessages);
   }
 
   private static setUpHistory(conversationHistory: Array<[string, string]>, initialMessages: MessageContent[]) {
@@ -69,7 +76,7 @@ export class WebModel extends BaseServiceIO {
     if (window.webLLM) {
       this.configureInit(this.shouldAddInitialMessage(deepChat.introMessage));
     } else if (seconds > WebModel.MODULE_SEARCH_LIMIT_S) {
-      this.addMessage?.({error: WebModel.WEB_LLM_NOT_FOUND_ERROR, sendUpdate: false});
+      this._messages?.addNewErrorMessage('service', WebModel.WEB_LLM_NOT_FOUND_ERROR);
       console.error(
         'The WebLLM module is either not in the project or not been attached to the window object. ' +
           'Please see the following guide:'
@@ -88,7 +95,7 @@ export class WebModel extends BaseServiceIO {
   private scrollToTop(timeoutMS?: number) {
     if (this._webModel.introMessage?.scroll === false) return;
     setTimeout(() => {
-      if (this.messagesElRef) ElementUtils.scrollToTop(this.messagesElRef);
+      if (this._messages?.elementRef) ElementUtils.scrollToTop(this._messages?.elementRef);
     }, timeoutMS);
   }
 
@@ -121,7 +128,7 @@ export class WebModel extends BaseServiceIO {
 
   private attemptToCreateChat() {
     if (WebModel.chat) {
-      this.addMessage?.({error: WebModel.MULTIPLE_MODELS_ERROR, sendUpdate: false});
+      this._messages?.addNewErrorMessage('service', WebModel.MULTIPLE_MODELS_ERROR);
       console.error(WebModel.MULTIPLE_MODELS_ERROR);
       return;
     }
@@ -151,8 +158,13 @@ export class WebModel extends BaseServiceIO {
     WebModel.chat = chat;
     // await window.webLLM.hasModelInCache(this.selectedModel, config); can potentially reuse this in the future
     this._isModelLoading = true;
+    let isNewMessage = this._webModel.introMessage?.displayed === false;
     const initProgressCallback = (report: WebLLM.InitProgressReport) => {
-      this.addMessage?.({html: `<div>${report.text}</div>`, overwrite: true, sendUpdate: false});
+      this._messages?.addNewMessage({html: `<div>${report.text}</div>`, overwrite: true, sendUpdate: false});
+      if (isNewMessage) {
+        setTimeout(() => ElementUtils.scrollToBottom(this._messages?.elementRef as HTMLElement));
+        isNewMessage = false;
+      }
     };
     WebModel.chat.setInitProgressCallback(initProgressCallback);
     let loadedFiles: File[];
@@ -166,7 +178,9 @@ export class WebModel extends BaseServiceIO {
     }
     if (!this._webModel.introMessage?.removeAfterLoad) {
       const html = WebModelIntroMessage.setUpAfterLoad(loadedFiles, this._webModel.introMessage, this._chatEl);
-      this.addMessage?.({html, overwrite: true, sendUpdate: false});
+      this._messages?.addNewMessage({html, overwrite: true, sendUpdate: false});
+    } else if (this._webModel.introMessage.displayed === false) {
+      this._messages?.removeLastMessage();
     } else {
       this._removeIntro?.();
     }
@@ -227,7 +241,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async unloadChat(err: string) {
-    this.addMessage?.({error: WebModel.GENERIC_ERROR, sendUpdate: false});
+    this._messages?.addNewErrorMessage('service', WebModel.GENERIC_ERROR);
     console.error(err);
     this._isModelLoaded = false;
     this._isModelLoading = false;

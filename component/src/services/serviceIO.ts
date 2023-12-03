@@ -100,13 +100,7 @@ export interface ServiceIO {
 
   demo?: Demo;
 
-  deepChat: DeepChat; // this is used for interceptors as the user may pass them much later after component is initiated
-
-  addMessage?(data: ResponseI): void;
-
-  removeIntroMessage?(): void;
-
-  messagesElRef?: HTMLElement;
+  deepChat: DeepChat;
 
   isDirectConnection(): boolean;
 

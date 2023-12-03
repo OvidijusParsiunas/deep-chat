@@ -61,9 +61,7 @@ export class Messages extends MessagesBase {
     deepChat.addMessage = (content: MessageContent, isUpdate?: boolean) => {
       this.addNewMessage({...content, sendUpdate: !!isUpdate}, !isUpdate);
     };
-    serviceIO.addMessage = this.addIOMessage.bind(this);
-    serviceIO.removeIntroMessage = this.removeIntroductoryMessage.bind(this);
-    serviceIO.messagesElRef = this.elementRef;
+    if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
@@ -118,7 +116,7 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private removeIntroductoryMessage() {
+  public removeIntroductoryMessage() {
     const introMessage = this.messageElementRefs[0];
     if (introMessage.outerContainer.classList.contains('deep-chat-intro')) {
       introMessage.outerContainer.remove();
@@ -152,12 +150,18 @@ export class Messages extends MessagesBase {
       const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
-    this.updateStateOnMessage(message, overwrite.status, data.sendUpdate, isInitial);
+    this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
   }
 
   private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, initial = false) {
     if (!overwritten) this.messages.push(messageContent);
     if (update) this.sendClientUpdate(messageContent, initial);
+  }
+
+  public removeLastMessage() {
+    const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
+    lastMessage.outerContainer.remove();
+    this.messageElementRefs.pop();
   }
 
   // prettier-ignore
@@ -166,8 +170,7 @@ export class Messages extends MessagesBase {
     const lastMessageBubble = lastMessage?.bubbleElement;
     if ((lastMessageBubble?.classList.contains(MessageStream.MESSAGE_CLASS) && lastMessageBubble.textContent === '') ||
         Messages.isTemporaryElement(lastMessage)) {
-      lastMessage.outerContainer.remove();
-      this.messageElementRefs.pop();
+      this.removeLastMessage();
     }
   }
 
@@ -262,14 +265,6 @@ export class Messages extends MessagesBase {
         });
       })
     );
-  }
-
-  private addIOMessage(data: ResponseI) {
-    if (data.error) {
-      this.addNewErrorMessage('service', data.error);
-    } else {
-      this.addNewMessage(data);
-    }
   }
 
   // WORK - update all message classes to use deep-chat prefix
