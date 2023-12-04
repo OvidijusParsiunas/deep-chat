@@ -44,17 +44,17 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
   }
 
-  private processMessages(pMessages: MessageContentI[], file_ids?: string[]) {
+  private processMessage(pMessages: MessageContentI[], file_ids?: string[]) {
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
-    return MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength).map((message) => {
-      return {content: message.text || '', role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant', file_ids};
-    });
+    // pMessages only conytains one message due to maxMessages being set to 1
+    const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
+    return {content: processedMessage.text || '', role: 'user', file_ids};
   }
 
   private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], file_ids?: string[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessages = this.processMessages(pMessages, file_ids);
-    bodyCopy.thread = {messages: processedMessages};
+    const processedMessage = this.processMessage(pMessages, file_ids);
+    bodyCopy.thread = {messages: [processedMessage]};
     return bodyCopy;
   }
 
@@ -62,7 +62,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
-      const body = this.processMessages(pMessages, file_ids)[0];
+      const body = this.processMessage(pMessages, file_ids);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
