@@ -1,6 +1,7 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
@@ -136,11 +137,11 @@ export class BaseServiceIO implements ServiceIO {
     }
   }
 
-  // WORK - validation to say that the response should have text, files or error property, link to example
-  // and responseInterceptor
   async extractResultData(result: any | Response): Promise<Response | {makingAnotherRequest: true}> {
     if (result.error) throw result.error;
     if (result.result) return Legacy.handleResponseProperty(result);
+    // if invalid - process later in HTTPRequest.request
+    if (!RequestUtils.validateResponseFormat(result)) return undefined as unknown as Response;
     return result;
   }
 

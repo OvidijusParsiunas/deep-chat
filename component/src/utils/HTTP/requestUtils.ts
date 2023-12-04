@@ -78,7 +78,7 @@ export class RequestUtils {
       (typeof response.error === 'string' ||
         typeof response.text === 'string' ||
         typeof response.html === 'string' ||
-        typeof response.files === 'object')
+        Array.isArray(response.files))
     );
   }
 }

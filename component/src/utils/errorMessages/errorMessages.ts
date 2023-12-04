@@ -15,7 +15,7 @@ function getInvalidResponseMessage(result: object, messageType: string, isInterc
     `${responseMessage + interceptorMessage}` +
     `Make sure the ${messageType} message is using the Response format: ` +
     'https://deepchat.dev/docs/connect/#Response ' +
-    '\n You can also augment it using the responseInterceptor property: ' +
+    '\nYou can also augment it using the responseInterceptor property: ' +
     'https://deepchat.dev/docs/interceptors#responseInterceptor'
   );
 }
@@ -26,7 +26,7 @@ export const ErrorMessages = {
   INVALID_RESPONSE: getInvalidResponseMessage,
   INVALID_STREAM_RESPONSE:
     'Make sure the events are using {text: string} or {html: string} format.' +
-    '\n You can also augment them using the responseInterceptor property: ' +
+    '\nYou can also augment them using the responseInterceptor property: ' +
     'https://deepchat.dev/docs/interceptors#responseInterceptor',
   INVALID_STREAM_MIX_RESPONSE: 'Cannot mix {text: string} and {html: string} responses.',
 };
