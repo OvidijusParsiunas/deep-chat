@@ -1,6 +1,5 @@
 import {AssistantFunctionHandler, OpenAIAssistant} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';

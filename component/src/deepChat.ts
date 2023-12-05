@@ -14,8 +14,8 @@ import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
-import {ErrorMessages, OnError} from './types/error';
 import {SpeechToTextConfig} from './types/microphone';
+import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
@@ -206,7 +206,7 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
-    this._activeService ??= ServiceIOFactory.create(this);
+    this._activeService ??= ServiceIOFactory.create(this); // not re-connecting if re-rerending
     if (!this._activeService) return;
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);

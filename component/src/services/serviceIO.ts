@@ -3,7 +3,6 @@ import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
 import {FetchFunc} from '../utils/HTTP/requestUtils';
-import {ResponseI} from '../types/responseInternal';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
