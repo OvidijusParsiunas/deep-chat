@@ -158,12 +158,6 @@ export class Messages extends MessagesBase {
     if (update) this.sendClientUpdate(messageContent, initial);
   }
 
-  public removeLastMessage() {
-    const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
-    lastMessage.outerContainer.remove();
-    this.messageElementRefs.pop();
-  }
-
   // prettier-ignore
   private removeMessageOnError() {
     const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];

@@ -20,13 +20,16 @@ function getInvalidResponseMessage(result: object, messageType: string, isInterc
   );
 }
 
+const INVALID_STREAM_EVENT =
+  'Make sure the events are using {text: string} or {html: string} format.' +
+  '\nYou can also augment them using the responseInterceptor property: ' +
+  'https://deepchat.dev/docs/interceptors#responseInterceptor';
+
 export const ErrorMessages = {
   INVALID_KEY: 'Invalid API Key',
   CONNECTION_FAILED: 'Failed to connect',
   INVALID_RESPONSE: getInvalidResponseMessage,
-  INVALID_STREAM_RESPONSE:
-    'Make sure the events are using {text: string} or {html: string} format.' +
-    '\nYou can also augment them using the responseInterceptor property: ' +
-    'https://deepchat.dev/docs/interceptors#responseInterceptor',
-  INVALID_STREAM_MIX_RESPONSE: 'Cannot mix {text: string} and {html: string} responses.',
+  INVALID_STREAM_EVENT,
+  INVALID_STREAM_EVENT_MIX: 'Cannot mix {text: string} and {html: string} responses.',
+  NO_VALID_STREAM_EVENTS_SENT: `No valid stream events were sent.\n${INVALID_STREAM_EVENT}`,
 };

@@ -151,6 +151,12 @@ export class MessagesBase {
     return messageContent;
   }
 
+  public removeLastMessage() {
+    const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
+    lastMessage.outerContainer.remove();
+    this.messageElementRefs.pop();
+  }
+
   public sendClientUpdate(message: MessageContentI, isInitial = false) {
     this._onNewMessage?.(message, isInitial);
   }

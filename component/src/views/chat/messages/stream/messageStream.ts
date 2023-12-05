@@ -15,7 +15,7 @@ export class MessageStream {
   private _streamType: 'text' | 'html' | '' = '';
   private _elements?: MessageElements;
   private _hasStreamEnded = false;
-  private _activeMessageContent?: MessageContentI;
+  private _activeMessageRole?: string;
   private readonly _messages: MessagesBase;
   private static readonly HTML_CONTENT_PLACEHOLDER = 'htmlplaceholder'; // used for extracting at end and for isStreaming
 
@@ -26,7 +26,7 @@ export class MessageStream {
   public upsertStreamedMessage(response?: Response) {
     if (this._hasStreamEnded) return;
     if (response?.text === undefined && response?.html === undefined) {
-      return console.error(ErrorMessages.INVALID_STREAM_RESPONSE);
+      return console.error(ErrorMessages.INVALID_STREAM_EVENT);
     }
     const content = response?.text || response?.html || '';
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef);
@@ -34,7 +34,7 @@ export class MessageStream {
     if (!this._elements && this._streamedContent === '') {
       this.setInitialState(streamType, content, response?.role);
     } else if (this._streamType !== streamType) {
-      return console.error(ErrorMessages.INVALID_STREAM_MIX_RESPONSE);
+      return console.error(ErrorMessages.INVALID_STREAM_EVENT_MIX);
     } else {
       this.updateBasedOnType(content, streamType, this._elements?.bubbleElement as HTMLElement, response?.overwrite);
     }
@@ -50,9 +50,9 @@ export class MessageStream {
       streamType === 'text'
         ? this._messages.addNewTextMessage(content, role)
         : HTMLMessages.add(this._messages, content, role, this._messages.messageElementRefs);
-    this._activeMessageContent = this._messages.messages[this._messages.messages.length - 1];
     this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
     this._streamedContent = content;
+    this._activeMessageRole = role;
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {
@@ -81,20 +81,25 @@ export class MessageStream {
 
   public finaliseStreamedMessage() {
     const {textElementsToText, elementRef} = this._messages;
-    if (!MessageUtils.getLastMessageBubbleElement(elementRef)?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
+    const lastMessageBubbleElClasses = MessageUtils.getLastMessageBubbleElement(elementRef)?.classList;
+    if (lastMessageBubbleElClasses?.contains('loading-message-text'))
+      throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
+    if (!lastMessageBubbleElClasses?.contains(MessageStream.MESSAGE_CLASS)) return;
+    const newMessage: MessageContentI = {role: this._activeMessageRole || MessageUtils.AI_ROLE};
     if (this._streamType === 'text') {
       textElementsToText[textElementsToText.length - 1][1] = this._streamedContent;
-      if (this._activeMessageContent) this._activeMessageContent.text = this._streamedContent;
+      newMessage.text = this._streamedContent;
       if (this._messages.textToSpeech) TextToSpeech.speak(this._streamedContent, this._messages.textToSpeech);
     } else if (this._streamType === 'html') {
       if (this._streamedContent === MessageStream.HTML_CONTENT_PLACEHOLDER) {
-        this._streamedContent = MessageUtils.getLastMessageBubbleElement(this._messages.elementRef)?.innerHTML || '';
+        this._streamedContent = MessageUtils.getLastMessageBubbleElement(elementRef)?.innerHTML || '';
       }
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);
-      if (this._activeMessageContent) this._activeMessageContent.html = this._streamedContent;
+      newMessage.html = this._streamedContent;
     }
-    if (this._activeMessageContent) {
-      this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._activeMessageContent), false);
+    if (newMessage) {
+      this._messages.messages.push(newMessage);
+      this._messages.sendClientUpdate(MessagesBase.createMessageContent(newMessage), false);
     }
     this._hasStreamEnded = true;
   }
