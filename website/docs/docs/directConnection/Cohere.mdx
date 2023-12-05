@@ -13,7 +13,7 @@ Properties used to connect to [Cohere](https://docs.cohere.com/docs).
 ### `cohere` {#cohere}
 
 - Type: {[`chat?: Chat`](#Chat), [`textGeneration?: TextGeneration`](#TextGeneration), [`summarization?: Summarization`](#Summarization)}
-- Default: _{textGeneration: true}_
+- Default: _{chat: true}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -31,17 +31,20 @@ import Tabs from '@theme/Tabs';
 
 - Type: `true` | {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `user_name?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `prompt_truncation?:` `"AUTO"` | `"OFF"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `connectors?:` `{id: string}[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `documents?:` `{title: string; snippet: string}[]` <br />
   }
 
-Connect to Cohere's [`conversational AI`](https://docs.cohere.com/docs/conversational-ai) API (you may first need to apply for access to [Coral](https://cohere.com/coral) before using this). <br />
-You can either set this property to _true_ or use an object to augment the request parameters: <br />
+Connect to Cohere's [`chat`](https://docs.cohere.com/reference/chat) API. You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the model used to generate text. <br />
-`user_name` is the name of the user. <br />
 `temperature` is the degree of the response randomness. <br />
-`max_tokens` is the maximum amount of tokens that can be used to generate the response. <br />
+`prompt_truncation` dictates how the prompt will be constructed. Default is _"OFF"_ which uses all resources. _"AUTO"_ drops some chat history and documents
+to construct a prompt that fits within the model's context length limit. <br />
+`connectors` is an array of objects that define custom connectors. <br />
+`documents` is an array of objects that define relevant documents which the model can use to enrich its reply.
+See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#document-mode) for more info. <br />
 
 #### Example
 
@@ -118,13 +121,13 @@ You can either set this property to _true_ or use an object to augment the reque
   &nbsp;&nbsp;&nbsp;&nbsp; `end_sequences?: string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stop_sequences?: string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `logit_bias?: {[string]: number}`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `truncate?:` `"NONE"` | `"START"` | `"END"` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `truncate?:` `"NONE"` | `"START"` | `"END"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `preset?: string` <br />
   }
 
-- Default: _{model: "command", max_tokens: 1000}_
+- Default: _{max_tokens: 1000}_
 
-Connect to Cohere's [`text generation`](https://docs.cohere.com/docs/intro-text-generation) API. <br />
-You can either set this property to _true_ or use an object to augment the [`request body`](https://docs.cohere.com/reference/generate): <br />
+Connect to Cohere's [`text generation`](https://docs.cohere.com/reference/generate) API. You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the model used to generate text. <br />
 `max_tokens` denotes the number of tokens to predict per generation. <br />
 `temperature` is a non-negative float that tunes the degree of randomness in generation. Lower temperatures mean less random generations. <br />
@@ -136,6 +139,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 `stop_sequences` is used to cut the generated text at the end of the earliest occurence of stop sequence strings. <br />
 `logit_bias` is used to prevent the model from generating unwanted tokens or to incentivize it to include desired ibes. The format is {token_id: bias} where bias is a float between -10 and 10. Tokens can be obtained from text using [Tokenize](https://docs.cohere.com/reference/tokenize). E.g. if the value *{"11": -10}_ is provided, the model will be very unlikely to include the token \_11_ ("\n", the newline character) anywhere in the generated text. In contrast _{"11": 10}_ will result in generations that nearly only contain that token. <br />
 `truncate` is used to specify how the API will handle inputs longer than the maximum token length. Passing _"START"_ will discard the start of the input. _"END"_ will discard the end of the input. _"NONE"_ will throw an error when the input exceeds the maximum input token length. <br />
+`preset` is a combination of parameters, such as prompt, temperature etc. Create presets in the [Cohere Playground](https://dashboard.cohere.com/playground/generate). <br />
 
 #### Example
 
@@ -202,7 +206,7 @@ You can either set this property to _true_ or use an object to augment the [`req
 ### `Summarization` {#Summarization}
 
 - Type: `true` | {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `model?:` `"summarize-xlarge"` | `"summarize-medium"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `length?`: `"auto"` | `"short"` | `"medium"` | `"long"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"auto"` | `"paragraph"` | `"bullets"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `extractiveness?:` `"auto"` | `"low"` | `"medium"` | `"high"`, <br />
@@ -210,10 +214,7 @@ You can either set this property to _true_ or use an object to augment the [`req
   &nbsp;&nbsp;&nbsp;&nbsp; `additional_command?: string` <br />
   }
 
-- Default: _{model: "summarize-xlarge"}_
-
-Connect to Cohere's [`summarize`](https://docs.cohere.com/docs/summarize) API. <br />
-You can either set this property to _true_ or use an object to augment the [`request body`](https://docs.cohere.com/reference/summarize-2): <br />
+Connect to Cohere's [`summarize`](https://docs.cohere.com/reference/summarize-2) API. You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the model used to generate a summary. <br />
 `length` indicates the approximate length of the summary. _"auto"_ chooses the best option based on the input text. <br />
 `format` indicates the style in which the summary will be delivered - in a free form paragraph or in bullet points. <br />

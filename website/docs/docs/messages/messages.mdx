@@ -607,14 +607,15 @@ or users in a group chat (`"bob"`/`"ross"`). You can style them using [`messageS
 
 ### `MessageFile` {#MessageFile}
 
-- Type: {`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType)} <br />
+- Type: {`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType), [`ref?: File`](https://developer.mozilla.org/en-US/docs/Web/API/File)} <br />
 - Default: _{name: "file", type: "any"}_
 
 Format that defines the details of a file. <br />
 `name` is used to display the file name inside the message bubble (if not image/gif/audio). <br />
 `src` is either the _url_ path to the file location or the base64 encoding as a string (make sure to use the correct type prefix e.g: _"data:(type);base64,"_).<br />
 The component will automatically try to infer the file type from the `src` property so that it can render its media correctly,
-however you can help it by setting the `type`.
+however you can help it by setting the `type`. <br />
+`ref` is the actual file's reference. It is only included in [`onNewMessage`](/docs/events#onNewMessage) events. <br />
 
 #### Example
 

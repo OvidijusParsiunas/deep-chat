@@ -424,6 +424,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
       allowMixedFiles: ['true', 'false'],
     },
     images: {
+      model: 'string',
       n: 'number',
       size: ['256x256', '512x512', '1024x1024'],
       user: 'string',
@@ -443,9 +444,8 @@ const SERVICE_MODAL_FORM_CONFIG = {
   cohere: {
     chat: {
       model: 'string',
-      user_name: 'number',
       temperature: 'number',
-      max_tokens: 'number',
+      prompt_truncation: ['AUTO', 'OFF'],
     },
     textGeneration: {
       model: 'string',
@@ -456,7 +456,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
       frequency_penalty: 'number',
       presence_penalty: 'number',
       truncate: ['NONE', 'START', 'END'],
-      logit_bias: 'constructable object',
+      preset: 'string',
     },
     summarization: {
       model: 'string',
@@ -622,18 +622,19 @@ const OPTIONAL_PARAM_TO_LINK = {
   openAI: {
     chat: {
       system_prompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
-      model: 'https://platform.openai.com/docs/api-reference/chat/object#model',
-      max_tokens: 'https://platform.openai.com/docs/api-reference/chat/create#max_tokens',
-      temperature: 'https://platform.openai.com/docs/api-reference/chat/create#temperature',
-      top_p: 'https://platform.openai.com/docs/api-reference/chat/create#top_p',
+      model: 'https://platform.openai.com/docs/api-reference/chat/object#chat/object-model',
+      max_tokens: 'https://platform.openai.com/docs/api-reference/chat/create#chat-create-max_tokens',
+      temperature: 'https://platform.openai.com/docs/api-reference/chat/create#chat-create-temperature',
+      top_p: 'https://platform.openai.com/docs/api-reference/chat/create#chat-create-top_p',
     },
     assistant: {
       assistant_id: 'https://platform.openai.com/docs/api-reference/assistants',
     },
     images: {
-      n: 'https://platform.openai.com/docs/api-reference/images/create#n',
-      size: 'https://platform.openai.com/docs/api-reference/images/create#size',
-      user: 'https://platform.openai.com/docs/api-reference/images/create#user',
+      model: 'https://platform.openai.com/docs/api-reference/images/create#images-create-model',
+      n: 'https://platform.openai.com/docs/api-reference/images/create#images-create-n',
+      size: 'https://platform.openai.com/docs/api-reference/images/create#images-create-size',
+      user: 'https://platform.openai.com/docs/api-reference/images/create#images-create-user',
     },
     textToSpeech: {
       model: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-model',
@@ -641,18 +642,19 @@ const OPTIONAL_PARAM_TO_LINK = {
       speed: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-speed',
     },
     speechToText: {
-      model: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#model',
-      temperature: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#temperature',
-      language: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#language',
+      model: 'https://platform.openai.com/docs/api-reference/audio/createTranscription#audio-createtranscription-model',
+      temperature:
+        'https://platform.openai.com/docs/api-reference/audio/createTranscription#audio-createtranscription-temperature',
+      language:
+        'https://platform.openai.com/docs/api-reference/audio/createTranscription#audio-createtranscription-language',
       type: 'https://platform.openai.com/docs/api-reference/audio',
     },
   },
   cohere: {
     chat: {
-      model: 'https://docs.cohere.com/docs/conversational-ai#parameters',
-      user_name: 'https://docs.cohere.com/docs/conversational-ai#parameters',
-      temperature: 'https://docs.cohere.com/docs/conversational-ai#parameters',
-      max_tokens: 'https://docs.cohere.com/docs/conversational-ai#parameters',
+      model: 'https://docs.cohere.com/reference/chat',
+      temperature: 'https://docs.cohere.com/reference/chat',
+      prompt_truncation: 'https://docs.cohere.com/reference/chat',
     },
     textGeneration: {
       model: 'https://docs.cohere.com/reference/generate',
@@ -664,6 +666,7 @@ const OPTIONAL_PARAM_TO_LINK = {
       presence_penalty: 'https://docs.cohere.com/reference/generate',
       truncate: 'https://docs.cohere.com/reference/generate',
       logit_bias: 'https://docs.cohere.com/reference/generate',
+      preset: 'https://docs.cohere.com/reference/generate',
     },
     summarization: {
       model: 'https://docs.cohere.com/reference/summarize-2',

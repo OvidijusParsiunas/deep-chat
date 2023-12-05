@@ -46,8 +46,7 @@ import Tabs from '@theme/Tabs';
   }
 - Default: _{system_prompt: "You are a helpful assistant.", model: "gpt-3.5-turbo"}_
 
-Connect to Open AI's [`chat`](https://platform.openai.com/docs/api-reference/chat) API. You can set this property to _true_ or
-[`configure`](https://platform.openai.com/docs/api-reference/chat/create) it using an object: <br />
+Connect to Open AI's [`chat`](https://platform.openai.com/docs/api-reference/chat) API. You can set this property to _true_ or configure it using an object: <br />
 `system_prompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
 `model` is the name of the model to be used by the API. Check [/v1/chat/completions](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
 `max_tokens` the maximum number of tokens to generate in the chat. Check [tokenizer](https://platform.openai.com/tokenizer) for more info. <br />
@@ -235,11 +234,17 @@ Try it out live in the Deep Chat [Playground](/playground).
 </TabItem>
 </Tabs>
 
+:::info
+Returned [MessageContent](/docs/messages#MessageContent) contains a hidden property called `_sessionId` which
+stores the thread id and allows conversation to continue on a new session.
+:::
+
 <LineBreak></LineBreak>
 
 ### `Images` {#Images}
 
 - Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"256x256"` | `"512x512"` | `"1024x1024"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
@@ -247,8 +252,8 @@ Try it out live in the Deep Chat [Playground](/playground).
   }
 - Default: _{size: "1024x1024"}_
 
-Connect to Open AI's [`Image Generation`](https://platform.openai.com/docs/guides/images) API to access DALL·E models. <br />
-You can set this property to _true_ or [`configure`](https://platform.openai.com/docs/api-reference/images/create) it using an object: <br />
+Connect to Open AI's [`Images`](https://platform.openai.com/docs/api-reference/images) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the specific model to be used by the API. Check [/v1/images/generations](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
 `n` is the number of images to generate. Ranges between 1 and 10. <br />
 `size` is the pixel dimensions of the generated images. <br />
 `response_format` is the format in which the generated images are returned. <br />
