@@ -1,7 +1,6 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
-import {OpenAIConverseResult} from '../../types/openAIResult';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {Stream as StreamI} from '../../types/stream';
@@ -35,10 +34,11 @@ export class Stream {
         const result = await RequestUtils.processResponseByType(response);
         throw result;
       },
-      onmessage(message: EventSourceMessage) {
+      async onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
-          const response = JSON.parse(message.data) as unknown as OpenAIConverseResult;
-          io.extractResultData?.(response)
+          const eventData = JSON.parse(message.data);
+          const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
+          io.extractResultData?.(finalEventData)
             .then((textBody?: ResponseI) => {
               // do not to stop the stream on one message failure to give other messages a change to display
               stream.upsertStreamedMessage(textBody);
