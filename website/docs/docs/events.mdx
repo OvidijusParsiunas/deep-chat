@@ -46,7 +46,7 @@ chatElementRef.onNewMessage = (message) => { console.log(message); };
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-chatElementRef.addEventListener('new-message', (message) => { console.log(message.detail); });
+chatElementRef.addEventListener('new-message', (event) => { console.log(event.detail); });
 ```
 
 </TabItem>
@@ -126,6 +126,40 @@ chatElementRef.onComponentRender = () => { console.log("Finished rendering"); };
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 chatElementRef.addEventListener('render', () => { console.log("Finished rendering"); });
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `onError` {#onError}
+
+- Function: (error: string) => `void`
+- Event: `error`
+
+Triggered when an error message appears in the chat.
+
+#### Example
+
+<ComponentContainerEvents propertyName={'onError'}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={{response: {error: 'custom error'}}}></DeepChatBrowser>
+</ComponentContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+chatElementRef.onError = (error) => { console.log(error); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+chatElementRef.addEventListener('error', (event) => { console.log(event.detail); });
 ```
 
 </TabItem>
