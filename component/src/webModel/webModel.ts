@@ -19,9 +19,6 @@ declare global {
   }
 }
 
-// WORK
-// create a separate library to faciliate webworkers.
-
 // WORK - in playground - upon the component that uses web model - remove static
 export class WebModel extends BaseServiceIO {
   private static chat?: WebLLM.ChatInterface;
@@ -141,14 +138,14 @@ export class WebModel extends BaseServiceIO {
     let model = WebModel.DEFAULT_MODEL;
     if (this._webModel.model) model = this._webModel.model;
     const appConfig = JSON.parse(JSON.stringify(config)) as typeof config;
-    if (this._webModel.modelUrl) {
+    if (this._webModel.url?.model) {
       const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
-      if (modelConfig) modelConfig.model_url = this._webModel.modelUrl;
+      if (modelConfig) modelConfig.model_url = this._webModel.url.model;
     }
-    if (this._webModel.wasmUrl) {
+    if (this._webModel.url?.wasm) {
       const modelKey = model as keyof typeof appConfig.model_lib_map;
       const wasm = appConfig.model_lib_map[modelKey];
-      if (wasm) appConfig.model_lib_map[modelKey] = `${this._webModel.wasmUrl}${model}-webgpu.wasm`;
+      if (wasm) appConfig.model_lib_map[modelKey] = this._webModel.url.wasm;
     }
     return {model, appConfig};
   }

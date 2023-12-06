@@ -34,11 +34,15 @@ export interface WebModelLoad {
   onMessage?: boolean;
 }
 
+export interface WebModelUrl {
+  model?: string;
+  wasm?: string;
+}
+
 export interface WebModelConfig {
   model?: WebModelName;
   worker?: Worker;
-  modelUrl?: string;
-  wasmUrl?: string;
+  url?: WebModelUrl;
   load?: WebModelLoad;
   introMessage?: WebModelIntro;
 }
