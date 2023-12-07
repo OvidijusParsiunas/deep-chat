@@ -142,9 +142,6 @@ export class DeepChat extends InternalHTML {
   submitUserMessage: (content: UserContent) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
-  addMessage: (content: MessageContent, isUpdate?: boolean) => void = () =>
-    console.warn('addMessage failed - please wait for chat view to render before calling this property.');
-
   focusInput: () => void = () => FocusUtils.focusFromParentElement(this._elementRef);
 
   refreshMessages: () => void = () => {};
