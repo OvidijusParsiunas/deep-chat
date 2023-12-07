@@ -3,7 +3,7 @@ import {DeepChat} from '../../../deepChat';
 
 export class SetupMessages {
   public static getText(deepChat: DeepChat, serviceIO: ServiceIO) {
-    if (!deepChat.directConnection && !deepChat.request && !deepChat.demo) {
+    if (!deepChat.directConnection && !deepChat.request && !deepChat.webModel && !deepChat.demo) {
       return `Connect to any API using the [request](https://deepchat.dev/docs/connect#Request)
         property or choose any one of the preconfigured APIs via
         the [directConnection](https://deepchat.dev/docs/directConnection/#directConnection) property.
