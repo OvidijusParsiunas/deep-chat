@@ -159,7 +159,7 @@ export class DeepChat extends InternalHTML {
   onClearMessages: () => void = () => {};
 
   @Property('function')
-  onComponentRender: () => void = () => {};
+  onComponentRender: (deepChat: DeepChat) => void = () => {};
 
   @Property('function')
   onError: OnError = () => {};
