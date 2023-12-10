@@ -1,6 +1,13 @@
+// import {DeepChat as DeepChatCore} from 'deep-chat'; <- type
 import {RequestDetails} from 'deep-chat/dist/types/interceptors';
 import styles from '../styles/Index.module.css';
 import dynamic from 'next/dynamic';
+
+// Info to get a reference for the component:
+// https://github.com/OvidijusParsiunas/deep-chat/issues/59#issuecomment-1839483469
+
+// Info to add types to a component reference:
+// https://github.com/OvidijusParsiunas/deep-chat/issues/59#issuecomment-1839487740
 
 export default function IndexPage() {
   // Need to import the component dynamically as it uses the 'window' property.
@@ -56,7 +63,7 @@ export default function IndexPage() {
             mixedFiles={true}
             textInput={{placeholder: {text: 'Send a file!'}}}
             validateInput={(_?: string, files?: File[]) => {
-              return files && files.length > 0;
+              return !!files && files.length > 0;
             }}
           />
         </div>
@@ -185,7 +192,7 @@ export default function IndexPage() {
             textInput={{placeholder: {text: 'Describe the desired changes'}}}
             errorMessages={{displayServiceErrorMessages: true}}
             validateInput={(text?: string, files?: File[]) => {
-              return !!text && text?.trim() !== '' && files && files.length > 0;
+              return !!text && text?.trim() !== '' && !!files && files.length > 0;
             }}
           />
           {/* If not using the camera, you can use an example image here:
