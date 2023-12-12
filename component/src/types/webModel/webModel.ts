@@ -32,9 +32,10 @@ export interface WebModelIntro {
 export interface WebModelLoad {
   onInit?: boolean;
   onMessage?: boolean;
+  removeCache?: boolean;
 }
 
-export interface WebModelUrl {
+export interface WebModelUrls {
   model?: string;
   wasm?: string;
 }
@@ -42,7 +43,7 @@ export interface WebModelUrl {
 export interface WebModelConfig {
   model?: WebModelName;
   worker?: Worker;
-  url?: WebModelUrl;
+  urls?: WebModelUrls;
   load?: WebModelLoad;
   introMessage?: WebModelIntro;
 }
