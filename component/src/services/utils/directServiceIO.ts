@@ -33,7 +33,8 @@ export class DirectServiceIO extends BaseServiceIO {
 
   private buildRequestSettings(key: string, requestSettings?: Request) {
     const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers = this.buildHeadersFunc(key);
+    requestSettingsObj.headers ??= {};
+    Object.assign(requestSettingsObj.headers, this.buildHeadersFunc(key));
     return requestSettingsObj;
   }
 
