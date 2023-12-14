@@ -16,7 +16,7 @@ export class FireEvents {
   }
 
   public static onRender(deepChat: DeepChat) {
-    deepChat.onComponentRender(deepChat);
+    deepChat.onComponentRender();
     deepChat.dispatchEvent(new CustomEvent('render'));
   }
 
