@@ -32,7 +32,7 @@ export interface ModelRecord {
 export interface AppConfig {
   model_list: Array<ModelRecord>;
   model_lib_map: Record<string, string>;
-  remove_cache?: boolean;
+  use_cache?: boolean;
 }
 
 export declare const prebuiltAppConfig: AppConfig;

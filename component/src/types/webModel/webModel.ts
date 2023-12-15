@@ -18,7 +18,7 @@ export type WebModelName =
 
 export interface WebModelIntro {
   displayed?: boolean;
-  startHtml?: string;
+  initialHtml?: string;
   downloadClass?: string;
   uploadClass?: string;
   fileInputClass?: string;
@@ -26,13 +26,14 @@ export interface WebModelIntro {
   exportFilesClass?: string;
   removeAfterLoad?: boolean;
   removeAfterMessage?: boolean;
-  scroll?: boolean;
+  autoScroll?: boolean;
 }
 
 export interface WebModelLoad {
   onInit?: boolean;
   onMessage?: boolean;
-  removeCache?: boolean;
+  clearCache?: boolean;
+  skipCache?: boolean;
 }
 
 export interface WebModelUrls {

@@ -1,8 +1,8 @@
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
+import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
-import {ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {WebModelIntroMessage} from './webModelIntroMessage';
 import {ElementUtils} from '../utils/element/elementUtils';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
@@ -22,9 +22,9 @@ declare global {
 // WORK - in playground - upon the component that uses web model - remove static
 export class WebModel extends BaseServiceIO {
   private static chat?: WebLLM.ChatInterface;
+  // WORK - if caching error - add a button to clear the cache on error
   private static readonly GENERIC_ERROR =
-    'ERROR. Your browser may not support this model. ' +
-    'Please check the following setup [instructions](https://webllm.mlc.ai/#instructions).';
+    'Error, please check the following list of [instructions](https://deepchat.dev/docs/webModel#error) to fix this.';
   private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
   private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
   private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
@@ -43,6 +43,7 @@ export class WebModel extends BaseServiceIO {
     super(deepChat);
     // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
     if (typeof deepChat.webModel === 'object') this._webModel = deepChat.webModel;
+    if (this._webModel.load?.clearCache) WebModel.clearAllCache();
     this.findModelInWindow(deepChat);
     this.canSendMessage = this.canSubmit.bind(this);
     this._chatEl = deepChat.shadowRoot?.children[0] as HTMLElement;
@@ -90,7 +91,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private scrollToTop(timeoutMS?: number) {
-    if (this._webModel.introMessage?.scroll === false) return;
+    if (this._webModel.introMessage?.autoScroll === false) return;
     setTimeout(() => {
       if (this._messages?.elementRef) ElementUtils.scrollToTop(this._messages?.elementRef);
     }, timeoutMS);
@@ -137,7 +138,7 @@ export class WebModel extends BaseServiceIO {
   private getConfig() {
     let model = WebModel.DEFAULT_MODEL;
     if (this._webModel.model) model = this._webModel.model;
-    const appConfig = JSON.parse(JSON.stringify(config)) as typeof config;
+    const appConfig = JSON.parse(JSON.stringify(config)) as AppConfig;
     if (this._webModel.urls?.model) {
       const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
       if (modelConfig) modelConfig.model_url = this._webModel.urls.model;
@@ -147,6 +148,7 @@ export class WebModel extends BaseServiceIO {
       const wasm = appConfig.model_lib_map[modelKey];
       if (wasm) appConfig.model_lib_map[modelKey] = this._webModel.urls.wasm;
     }
+    if (this._webModel.load?.skipCache) appConfig.use_cache = false;
     return {model, appConfig};
   }
 
@@ -249,5 +251,24 @@ export class WebModel extends BaseServiceIO {
 
   override isWebModel() {
     return true;
+  }
+
+  private static clearAllCache() {
+    // IMPORTANT - 'webllm/model' and 'webllm/wasm' need to match the scope in 'deep-chat-web-llm':
+    // chat_module file's fetchNDArrayCache call's scope:
+    // const resultFiles = await tvm.fetchNDArrayCache(modelUrl, tvm.webgpu(), "webllm/model"...
+    // and chat_module file's: const wasmCache = new tvmjs.ArtifactCache("webllm/wasm");
+    WebModel.clearCache('webllm/model');
+    WebModel.clearCache('webllm/wasm');
+  }
+
+  private static clearCache(scope: string) {
+    caches.open(scope).then((cache) => {
+      cache.keys().then((keys) => {
+        keys.forEach((key) => {
+          cache.delete(key);
+        });
+      });
+    });
   }
 }
