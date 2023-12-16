@@ -7,37 +7,37 @@ export class WebModelIntroMessage {
   private static readonly FILE_INPUT_CLASS = 'deep-chat-file-input';
   private static readonly EXPORT_BUTTON_CLASS = 'deep-chat-export-button';
 
-  private static enableButtons(start: HTMLButtonElement | undefined, upload: HTMLButtonElement | undefined, rounds = 0) {
+  private static enableButtons(dwnload: HTMLButtonElement | undefined, upload: HTMLButtonElement | undefined, rounds = 0) {
     if (window.webLLM) {
-      if (start) start.disabled = false;
+      if (dwnload) dwnload.disabled = false;
       if (upload) upload.disabled = false;
     } else if (rounds < WebModel.MODULE_SEARCH_LIMIT_S * 4) {
-      setTimeout(() => WebModelIntroMessage.enableButtons(start, upload, rounds + 1), 250);
+      setTimeout(() => WebModelIntroMessage.enableButtons(dwnload, upload, rounds + 1), 250);
     }
   }
 
   public static setUpInitial(init: (files?: FileList) => void, introMessage?: WebModelIntro, chatEl?: HTMLElement) {
-    const startClass = introMessage?.downloadClass || WebModelIntroMessage.DOWNLOAD_BUTTON_CLASS;
+    const downloadClass = introMessage?.downloadClass || WebModelIntroMessage.DOWNLOAD_BUTTON_CLASS;
     const uploadClass = introMessage?.uploadClass || WebModelIntroMessage.UPLOAD_BUTTON_CLASS;
     const fileInputClass = introMessage?.fileInputClass || WebModelIntroMessage.FILE_INPUT_CLASS;
     setTimeout(() => {
+      const downloadButton = chatEl?.getElementsByClassName(downloadClass)[0] as HTMLButtonElement;
       const fileInput = chatEl?.getElementsByClassName(fileInputClass)[0] as HTMLInputElement;
-      const startButton = chatEl?.getElementsByClassName(startClass)[0] as HTMLButtonElement;
       const uploadButton = chatEl?.getElementsByClassName(uploadClass)[0] as HTMLButtonElement;
-      if (startButton) startButton.onclick = () => init();
+      if (downloadButton) downloadButton.onclick = () => init();
       if (fileInput) {
         fileInput.onchange = () => {
           if (fileInput.files && fileInput.files.length > 0) init(fileInput.files);
         };
       }
       if (uploadButton) uploadButton.onclick = () => fileInput.click();
-      if (startButton || uploadButton) WebModelIntroMessage.enableButtons(startButton, uploadButton);
+      if (downloadButton || uploadButton) WebModelIntroMessage.enableButtons(downloadButton, uploadButton);
     });
     return (
-      introMessage?.startHtml ||
+      introMessage?.initialHtml ||
       `<div>
-        Initialize or upload a web model that will run entirely on your browser. <br/> 
-        <button disabled class="${startClass} deep-chat-button deep-chat-web-model-button">Start</button>
+        Download or upload a web model that will run entirely on your browser: <br/> 
+        <button disabled class="${downloadClass} deep-chat-button deep-chat-web-model-button">Download</button>
         <input type="file" class="${fileInputClass}" hidden multiple />
         <button disabled class="${uploadClass} deep-chat-button deep-chat-web-model-button">Upload</button>
       </div>`
@@ -73,7 +73,7 @@ export class WebModelIntroMessage {
       introMessage?.afterLoadHtml ||
       `<div>
         Model loaded successfully and has been cached for future requests. <br/>
-        <button class="${exportClass} deep-chat-button deep-chat-web-model-button">Export Files</button>
+        <button style="margin-top: 5px" class="${exportClass} deep-chat-button">Export</button>
       </div>`
     );
   }
