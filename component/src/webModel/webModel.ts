@@ -97,9 +97,11 @@ export class WebModel extends BaseServiceIO {
     }, timeoutMS);
   }
 
+  // prettier-ignore
   public getIntroMessage(customIntroMessage?: IntroMessage) {
     if (!this.shouldAddInitialMessage(customIntroMessage) || !this._chatEl) return;
-    const html = WebModelIntroMessage.setUpInitial(this.init.bind(this), this._webModel.introMessage, this._chatEl);
+    const html = WebModelIntroMessage.setUpInitial(
+      this.init.bind(this), this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
     this.scrollToTop(1);
     return {role: MessageUtils.AI_ROLE, html, sendUpdate: false};
   }
@@ -152,6 +154,7 @@ export class WebModel extends BaseServiceIO {
     return {model, appConfig};
   }
 
+  // prettier-ignore
   private async loadModel(chat: WebLLM.ChatInterface, files?: FileList) {
     this.scrollToTop();
     WebModel.chat = chat;
@@ -176,7 +179,8 @@ export class WebModel extends BaseServiceIO {
       return this.unloadChat(err as string);
     }
     if (!this._webModel.introMessage?.removeAfterLoad) {
-      const html = WebModelIntroMessage.setUpAfterLoad(loadedFiles, this._webModel.introMessage, this._chatEl);
+      const html = WebModelIntroMessage.setUpAfterLoad(
+        loadedFiles, this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
       this._messages?.addNewMessage({html, overwrite: true, sendUpdate: false});
     } else if (this._webModel.introMessage.displayed === false) {
       this._messages?.removeLastMessage();

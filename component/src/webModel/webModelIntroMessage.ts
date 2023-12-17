@@ -16,7 +16,9 @@ export class WebModelIntroMessage {
     }
   }
 
-  public static setUpInitial(init: (files?: FileList) => void, introMessage?: WebModelIntro, chatEl?: HTMLElement) {
+  // prettier-ignore
+  public static setUpInitial(
+      init: (files?: FileList) => void, introMessage?: WebModelIntro, chatEl?: HTMLElement, isWorker?: boolean) {
     const downloadClass = introMessage?.downloadClass || WebModelIntroMessage.DOWNLOAD_BUTTON_CLASS;
     const uploadClass = introMessage?.uploadClass || WebModelIntroMessage.UPLOAD_BUTTON_CLASS;
     const fileInputClass = introMessage?.fileInputClass || WebModelIntroMessage.FILE_INPUT_CLASS;
@@ -38,8 +40,9 @@ export class WebModelIntroMessage {
       `<div>
         Download or upload a web model that will run entirely on your browser: <br/> 
         <button disabled class="${downloadClass} deep-chat-button deep-chat-web-model-button">Download</button>
-        <input type="file" class="${fileInputClass}" hidden multiple />
-        <button disabled class="${uploadClass} deep-chat-button deep-chat-web-model-button">Upload</button>
+        ${isWorker ? ''
+          : `<input type="file" class="${fileInputClass}" hidden multiple />
+          <button disabled class="${uploadClass} deep-chat-button deep-chat-web-model-button">Upload</button>`}
       </div>`
     );
   }
@@ -63,7 +66,8 @@ export class WebModelIntroMessage {
     }
   }
 
-  public static setUpAfterLoad(files: File[], introMessage?: WebModelIntro, chatEl?: HTMLElement) {
+  // prettier-ignore
+  public static setUpAfterLoad(files: File[], introMessage?: WebModelIntro, chatEl?: HTMLElement, isWorker?: boolean) {
     const exportClass = introMessage?.exportFilesClass || WebModelIntroMessage.EXPORT_BUTTON_CLASS;
     setTimeout(() => {
       const exportButton = chatEl?.getElementsByClassName(exportClass)[0] as HTMLButtonElement;
@@ -72,8 +76,9 @@ export class WebModelIntroMessage {
     return (
       introMessage?.afterLoadHtml ||
       `<div>
-        Model loaded successfully and has been cached for future requests. <br/>
-        <button style="margin-top: 5px" class="${exportClass} deep-chat-button">Export</button>
+        Model loaded successfully and has been cached for future requests.
+        ${isWorker ? ''
+          : `<br/> <button style="margin-top: 5px" class="${exportClass} deep-chat-button">Export</button>`}
       </div>`
     );
   }
