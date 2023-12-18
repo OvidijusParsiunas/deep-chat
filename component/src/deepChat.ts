@@ -153,16 +153,16 @@ export class DeepChat extends InternalHTML {
   disableSubmitButton: DisableSubmitButton = () => {};
 
   @Property('function')
-  onNewMessage: OnNewMessage = () => {};
+  onNewMessage?: OnNewMessage;
 
   @Property('function')
-  onClearMessages: () => void = () => {};
+  onClearMessages?: () => void;
 
   @Property('function')
-  onComponentRender: () => void = () => {};
+  onComponentRender?: () => void;
 
   @Property('function')
-  onError: OnError = () => {};
+  onError?: OnError;
 
   @Property('object')
   demo?: Demo;
