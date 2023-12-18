@@ -43,7 +43,7 @@ npm install deep-chat
 If using React, install the following instead:
 
 ```
-npm install deep-chat-react
+npm install deep-chat-react 
 ```
 
 To test the component - simply add the following to your markup:
