@@ -25,7 +25,9 @@ export default function ChatComponent({config}) {
 
   function getBoolean(object, name) {
     if (object[name]) {
-      return object[name];
+      const resultBoolean = object[name];
+      delete object[name]; // deleting as directConnection services use property in requests
+      return resultBoolean;
     }
     const firstKey = Object.keys(object)[0] === 'key' ? Object.keys(object)[1] : Object.keys(object)[0];
     if (typeof object[firstKey] === 'object') {
@@ -34,25 +36,38 @@ export default function ChatComponent({config}) {
     return false;
   }
 
+  function parseConfigProperties(config) {
+    if (!config?.connect) return {connect: config?.connect};
+    const connectCp = JSON.parse(JSON.stringify(config.connect));
+    const allowImages = getBoolean(connectCp, 'allowImages');
+    const allowCamera = getBoolean(connectCp, 'allowCamera');
+    const allowGifs = getBoolean(connectCp, 'allowGifs');
+    const allowAudio = getBoolean(connectCp, 'allowAudio');
+    const allowMicrophone = getBoolean(connectCp, 'allowMicrophone');
+    const allowMixedFiles = getBoolean(connectCp, 'allowMixedFiles');
+    return {connect: connectCp, allowImages, allowCamera, allowGifs, allowAudio, allowMicrophone, allowMixedFiles};
+  }
+
   return (
     <BrowserOnly>
       {() => {
         // colorMode tracked in in wrapper because component would otherwise
         // not update properly as styles overwrite each other
         const {colorMode} = useColorMode();
-
+        const {connect, allowImages, allowCamera, allowGifs, allowAudio, allowMicrophone, allowMixedFiles} =
+          parseConfigProperties(config);
         if (colorMode === 'dark') {
           return (
             <div ref={componentRef} className="playground-chat-component">
               {config?.connect?.custom ? (
                 <DeepChatBrowser
-                  request={config.connect.custom}
-                  images={getBoolean(config.connect, 'allowImages')}
-                  camera={getBoolean(config.connect, 'allowCamera')}
-                  gifs={getBoolean(config.connect, 'allowGifs')}
-                  audio={getBoolean(config.connect, 'allowAudio')}
-                  microphone={getBoolean(config.connect, 'allowMicrophone')}
-                  mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
+                  request={connect.custom}
+                  images={allowImages}
+                  camera={allowCamera}
+                  gifs={allowGifs}
+                  audio={allowAudio}
+                  microphone={allowMicrophone}
+                  mixedFiles={allowMixedFiles}
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
@@ -78,13 +93,13 @@ export default function ChatComponent({config}) {
                 ></DeepChatBrowser>
               ) : (
                 <DeepChatBrowser
-                  directConnection={config.connect}
-                  images={getBoolean(config.connect, 'allowImages')}
-                  camera={getBoolean(config.connect, 'allowCamera')}
-                  gifs={getBoolean(config.connect, 'allowGifs')}
-                  audio={getBoolean(config.connect, 'allowAudio')}
-                  microphone={getBoolean(config.connect, 'allowMicrophone')}
-                  mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
+                  directConnection={connect}
+                  images={allowImages}
+                  camera={allowCamera}
+                  gifs={allowGifs}
+                  audio={allowAudio}
+                  microphone={allowMicrophone}
+                  mixedFiles={allowMixedFiles}
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
@@ -104,13 +119,13 @@ export default function ChatComponent({config}) {
           <div ref={componentRef} className="playground-chat-component">
             {config?.connect?.custom ? (
               <DeepChatBrowser
-                request={config.connect.custom}
-                images={getBoolean(config.connect, 'allowImages')}
-                camera={getBoolean(config.connect, 'allowCamera')}
-                gifs={getBoolean(config.connect, 'allowGifs')}
-                audio={getBoolean(config.connect, 'allowAudio')}
-                microphone={getBoolean(config.connect, 'allowMicrophone')}
-                mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
+                request={connect.custom}
+                images={allowImages}
+                camera={allowCamera}
+                gifs={allowGifs}
+                audio={allowAudio}
+                microphone={allowMicrophone}
+                mixedFiles={allowMixedFiles}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
@@ -126,13 +141,13 @@ export default function ChatComponent({config}) {
               ></DeepChatBrowser>
             ) : (
               <DeepChatBrowser
-                directConnection={config.connect}
-                images={getBoolean(config.connect, 'allowImages')}
-                camera={getBoolean(config.connect, 'allowCamera')}
-                gifs={getBoolean(config.connect, 'allowGifs')}
-                audio={getBoolean(config.connect, 'allowAudio')}
-                microphone={getBoolean(config.connect, 'allowMicrophone')}
-                mixedFiles={getBoolean(config.connect, 'allowMixedFiles')}
+                directConnection={connect}
+                images={allowImages}
+                camera={allowCamera}
+                gifs={allowGifs}
+                audio={allowAudio}
+                microphone={allowMicrophone}
+                mixedFiles={allowMixedFiles}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
