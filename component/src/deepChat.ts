@@ -203,8 +203,7 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
-    this._activeService ??= ServiceIOFactory.create(this); // not re-connecting if re-rerending
-    if (!this._activeService) return;
+    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
