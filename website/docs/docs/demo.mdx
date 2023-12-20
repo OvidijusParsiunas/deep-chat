@@ -18,7 +18,7 @@ This is used by default to demonstrate the component's capabilities without conn
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: boolean` <br />
   }}
 
-Set this to _true_ or define any of the other object properties to remove the initial setup guidance message. <br />
+Set this to _true_ or define an object with properties to remove the initial setup guidance message. <br />
 `response` is used to override the default demo response with a custom one. It can either be a [`Response`](/docs/connect#Response) object or a function that returns
 a [`Response`](/docs/connect#Response) object. <br />
 The following properties are used to toggle elements to showcase their design without making any user actions: <br />
@@ -46,7 +46,7 @@ import Tabs from '@theme/Tabs';
 <Tabs>
 <TabItem value="js" label="Sample code">
 
-```javascript
+```html
 <deep-chat demo="true"></deep-chat>
 ```
 

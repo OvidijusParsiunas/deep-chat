@@ -133,39 +133,6 @@ filesInput.onchange = (event) => {
 
 <LineBreak></LineBreak>
 
-### `addMessage` {#addMessage}
-
-- Type: ([`content: MessageContent`](/docs/messages#MessageContent), `isUpdate?: boolean`) => `void`
-
-Add a message to the chat. This is particularly useful for adding message history after loading it. <br />
-`content` is an object containing details of the message. <br />
-`isUpdate` identifies whether the message should be treated as new - e.g. should [`onNewMessage`](/docs/events#onNewMessage) event
-and [`textToSpeech`](/docs/speech#textToSpeech) be triggered.
-
-#### Example
-
-<ComponentContainerMethods propertyName={'addMessage'} displayResults={false} argument={{text: 'AI message'}}>
-  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
-</ComponentContainerMethods>
-
-<Tabs>
-<TabItem value="js" label="Code">
-
-```html
-chatElementRef.addMessage({text: "AI message"});
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-:::caution
-[`addMessage`](#addMessage) should not be used for responding to user message requests.
-:::
-
-<LineBreak></LineBreak>
-
 ### `scrollToBottom` {#scrollToBottom}
 
 - Type: `() => void`
