@@ -141,14 +141,12 @@ export class WebModel extends BaseServiceIO {
     let model = WebModel.DEFAULT_MODEL;
     if (this._webModel.model) model = this._webModel.model;
     const appConfig = JSON.parse(JSON.stringify(config)) as AppConfig;
-    if (this._webModel.urls?.model) {
+    if (this._webModel.urls) {
       const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
-      if (modelConfig) modelConfig.model_url = this._webModel.urls.model;
-    }
-    if (this._webModel.urls?.wasm) {
-      const modelKey = model as keyof typeof appConfig.model_lib_map;
-      const wasm = appConfig.model_lib_map[modelKey];
-      if (wasm) appConfig.model_lib_map[modelKey] = this._webModel.urls.wasm;
+      if (modelConfig) {
+        if (this._webModel.urls.model) modelConfig.model_url = this._webModel.urls.model;
+        if (this._webModel.urls.wasm) modelConfig.model_lib_url = this._webModel.urls.wasm;
+      }
     }
     if (this._webModel.load?.skipCache) appConfig.use_cache = false;
     return {model, appConfig};

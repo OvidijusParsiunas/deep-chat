@@ -26,12 +26,12 @@ export interface ChatConfig {
 export interface ModelRecord {
   model_url: string;
   local_id: string;
+  model_lib_url: string;
   required_features?: Array<string>;
 }
 
 export interface AppConfig {
   model_list: Array<ModelRecord>;
-  model_lib_map: Record<string, string>;
   use_cache?: boolean;
 }
 
