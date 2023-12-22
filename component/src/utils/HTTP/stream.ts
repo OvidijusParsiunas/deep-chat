@@ -17,7 +17,7 @@ export class Stream {
     const {body: interceptedBody, headers: interceptedHeaders, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onOpen, onClose, abortStream} = io.streamHandlers;
-    if (error) return Stream.onInterceptorError(messages, error, onClose);
+    if (error) return RequestUtils.onInterceptorError(messages, error, onClose);
     if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     const stream = new MessageStream(messages);
@@ -65,11 +65,6 @@ export class Stream {
           RequestUtils.displayError(messages, parsedError);
         });
     });
-  }
-
-  private static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
-    messages.addNewErrorMessage('service', error);
-    onFinish?.();
   }
 
   public static simulate(messages: Messages, sh: StreamHandlers, result: ResponseI) {

@@ -18,7 +18,7 @@ export class HTTPRequest {
     const {body: interceptedBody, headers, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
-    if (error) return HTTPRequest.onInterceptorError(messages, error, onFinish);
+    if (error) return RequestUtils.onInterceptorError(messages, error, onFinish);
     if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.request(io, messages);
     let responseValid = true;
@@ -83,18 +83,13 @@ export class HTTPRequest {
     const requestDetails = {body, headers: io.requestSettings?.headers};
     const {body: interceptedBody, headers, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
-    if (error) return HTTPRequest.onInterceptorError(messages, error);
+    if (error) return RequestUtils.onInterceptorError(messages, error);
     const url = io.requestSettings?.url || io.url || '';
     const method = io.requestSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit: RequestInit = {method, body: requestBody, headers};
     if (io.requestSettings.credentials) requestInit.credentials = io.requestSettings.credentials; 
     HTTPRequest.executePollRequest(io, url, requestInit, messages);
-  }
-
-  private static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
-    messages.addNewErrorMessage('service', error);
-    onFinish?.();
   }
 
   // prettier-ignore

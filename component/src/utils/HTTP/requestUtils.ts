@@ -10,7 +10,9 @@ import {DeepChat} from '../../deepChat';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FetchFunc = (body: any) => Promise<Response>;
 
-type InterceptorResult = Promise<RequestDetails & {error?: string}>;
+export type InterceptorResult = RequestDetails & {error?: string};
+
+type InterceptorResultP = Promise<InterceptorResult>;
 
 export class RequestUtils {
   public static readonly CONTENT_TYPE = 'Content-Type';
@@ -64,7 +66,7 @@ export class RequestUtils {
     return response.blob();
   }
 
-  public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResult {
+  public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResultP {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};
@@ -80,5 +82,10 @@ export class RequestUtils {
         typeof response.html === 'string' ||
         Array.isArray(response.files))
     );
+  }
+
+  public static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
+    messages.addNewErrorMessage('service', error);
+    onFinish?.();
   }
 }

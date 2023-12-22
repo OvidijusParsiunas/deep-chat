@@ -1,5 +1,7 @@
+import {InterceptorResult, RequestUtils} from '../utils/HTTP/requestUtils';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
+import {ErrorMessages} from '../utils/errorMessages/errorMessages';
 import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
@@ -9,6 +11,7 @@ import * as WebLLM from '../types/webModel/webLLM/webLLM';
 import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
+import {ResponseI} from '../types/responseInternal';
 // import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
@@ -189,22 +192,20 @@ export class WebModel extends BaseServiceIO {
     this._isModelLoading = false;
   }
 
-  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
-    const text = pMessages[pMessages.length - 1].text as string;
-    try {
-      if (this.deepChat.stream) {
-        this.streamResp(messages, text, chat);
-      } else {
-        this.immediateResp(messages, text, chat);
-      }
-    } catch (err) {
-      this.unloadChat(err as string);
-    }
+  private async unloadChat(err: string) {
+    this._messages?.addNewErrorMessage('service', WebModel.GENERIC_ERROR);
+    console.error(err);
+    this._isModelLoaded = false;
+    this._isModelLoading = false;
+    if (!WebModel.chat) return;
+    await WebModel.chat.unload();
+    WebModel.chat = undefined;
   }
 
   private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
-    const output = await chat.generate(text, undefined, 0); // anything but 1 will not stream
-    messages.addNewMessage({text: output});
+    const output = {text: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
+    const response = await WebModel.processResponse(this.deepChat, messages, output);
+    if (response) messages.addNewMessage(response);
     this.completionsHandlers.onFinish();
   }
 
@@ -214,17 +215,40 @@ export class WebModel extends BaseServiceIO {
     };
     this.streamHandlers.onOpen();
     const stream = new MessageStream(messages);
-    await chat.generate(text, (_: number, message: string) => {
-      stream.upsertStreamedMessage({text: message, overwrite: true});
+    await chat.generate(text, async (_: number, message: string) => {
+      const response = await WebModel.processResponse(this.deepChat, messages, {text: message});
+      if (response) stream.upsertStreamedMessage({text: response.text, overwrite: true});
     });
     stream.finaliseStreamedMessage();
     this.streamHandlers.onClose();
   }
 
-  private canSubmit(text?: string) {
-    if (!text?.trim() || this._isModelLoading) return false;
-    if (this._loadOnFirstMessage) return true;
-    return !!this._isModelLoaded;
+  private generateRespByType(messages: Messages, result: InterceptorResult, stream: boolean, chat: WebLLM.ChatInterface) {
+    const {body, error} = result;
+    if (error) {
+      RequestUtils.displayError(messages, new Error(result.error));
+      const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
+      onFinish();
+    } else if (!body || !body.text) {
+      const error = ErrorMessages.INVALID_MODEL_REQUEST({body}, false);
+      console.error(error);
+      const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
+      RequestUtils.onInterceptorError(messages, error, onFinish);
+    } else if (stream) {
+      this.streamResp(messages, body.text, chat);
+    } else {
+      this.immediateResp(messages, body.text, chat);
+    }
+  }
+
+  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
+    const lastText = pMessages[pMessages.length - 1].text as string;
+    const result = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {text: lastText}});
+    try {
+      this.generateRespByType(messages, result, !!this.deepChat.stream, chat);
+    } catch (err) {
+      this.unloadChat(err as string);
+    }
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
@@ -241,14 +265,23 @@ export class WebModel extends BaseServiceIO {
     this.generateResp(messages, pMessages, WebModel.chat);
   }
 
-  private async unloadChat(err: string) {
-    this._messages?.addNewErrorMessage('service', WebModel.GENERIC_ERROR);
-    console.error(err);
-    this._isModelLoaded = false;
-    this._isModelLoading = false;
-    if (!WebModel.chat) return;
-    await WebModel.chat.unload();
-    WebModel.chat = undefined;
+  private canSubmit(text?: string) {
+    if (!text?.trim() || this._isModelLoading) return false;
+    if (this._loadOnFirstMessage) return true;
+    return !!this._isModelLoaded;
+  }
+
+  private static async processResponse(deepChat: DeepChat, messages: Messages, output: ResponseI) {
+    const result: ResponseI = (await deepChat.responseInterceptor?.(output)) || output;
+    if (result.error) {
+      RequestUtils.displayError(messages, new Error(result.error));
+      return;
+    } else if (!result || !result.text) {
+      const error = ErrorMessages.INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
+      RequestUtils.displayError(messages, new Error(error));
+      return;
+    }
+    return result;
   }
 
   override isWebModel() {
