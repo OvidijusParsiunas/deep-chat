@@ -88,10 +88,10 @@ that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts
     htmlClassUtilities={{
       ['custom-button']: {
         events: {
-          mousedown: (event) => {
-            event.target.innerText = 'clicked';
-          },
           mouseenter: (event) => {
+            event.target.innerText = 'hovering';
+          },
+          mouseleave: (event) => {
             event.target.innerText = 'hovered';
           },
         },
@@ -107,8 +107,8 @@ that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts
       },
     }}
     initialMessages={[
-      {html: '<button class="custom-button">Hello</button>', role: 'user'},
-      {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+      {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
+      {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
     ]}
     style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
@@ -123,8 +123,8 @@ that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts
 chatElementRef.htmlClassUtilities = {
   ['custom-button']: {
     events: {
-      mousedown: (event) => (event.target.innerText = 'clicked'),
-      mouseenter: (event) => (event.target.innerText = 'hovered'),
+      mouseenter: (event) => (event.target.innerText = 'hovering'),
+      mouseleave: (event) => (event.target.innerText = 'hovered'),
     },
     styles: {
       default: {padding: '3px 8px', cursor: 'pointer'},
@@ -138,8 +138,8 @@ chatElementRef.htmlClassUtilities = {
   },
 };
 chatElementRef.initialMessages = [
-  {html: '<button class="custom-button">Hello</button>', role: 'user'},
-  {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+  {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
+  {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
 ];
 ```
 
@@ -152,8 +152,8 @@ chatElementRef.initialMessages = [
 chatElementRef.htmlClassUtilities = {
   ['custom-button']: {
     events: {
-      mousedown: (event) => (event.target.innerText = 'clicked'),
-      mouseenter: (event) => (event.target.innerText = 'hovered'),
+      mouseenter: (event) => (event.target.innerText = 'hovering'),
+      mouseleave: (event) => (event.target.innerText = 'hovered'),
     },
     styles: {
       default: {padding: '3px 8px', cursor: 'pointer'},
@@ -167,8 +167,8 @@ chatElementRef.htmlClassUtilities = {
   },
 };
 chatElementRef.initialMessages = [
-  {html: '<button class="custom-button">Hello</button>', role: 'user'},
-  {html: '<button class="custom-button ai-button">Goodbye</button>', role: 'ai'},
+  {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
+  {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
 ];
 Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
 chatElementRef.demo = true;
