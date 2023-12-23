@@ -147,7 +147,13 @@ export class Messages extends MessagesBase {
       const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
-    this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
+    if (this.isValidMessageContent(message)) {
+      this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
+    }
+  }
+
+  private isValidMessageContent(messageContent: MessageContentI) {
+    return messageContent.text || messageContent.html || (messageContent.files && messageContent.files.length > 0);
   }
 
   private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, initial = false) {
