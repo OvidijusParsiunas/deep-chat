@@ -9,6 +9,7 @@ import {DirectServiceIO} from './services/utils/directServiceIO';
 import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
 import {InternalHTML} from './utils/webComponent/internalHTML';
 import {InsertKeyView} from './views/insertKey/insertKeyView';
+import {WebModel as WebModelClass} from './webModel/webModel';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
@@ -226,6 +227,10 @@ export class DeepChat extends InternalHTML {
     }
     this._hasBeenRendered = true;
     FireEvents.onRender(this);
+  }
+
+  disconnectedCallback() {
+    WebModelClass.chat = undefined;
   }
 }
 

@@ -24,7 +24,7 @@ declare global {
 
 // WORK - in playground - upon the component that uses web model - remove static
 export class WebModel extends BaseServiceIO {
-  private static chat?: WebLLM.ChatInterface;
+  public static chat?: WebLLM.ChatInterface;
   // WORK - if caching error - add a button to clear the cache on error
   private static readonly GENERIC_ERROR =
     'Error, please check the following list of [instructions](https://deepchat.dev/docs/webModel#error) to fix this.';
@@ -125,6 +125,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async init(files?: FileList) {
+    this._messages?.removeError();
     const chat = this.attemptToCreateChat();
     if (chat) await this.loadModel(chat, files);
   }
@@ -175,6 +176,8 @@ export class WebModel extends BaseServiceIO {
       const {model, appConfig} = this.getConfig();
       const chatOpts: ChatOptions = {conv_config: {system: 'keep responses to one sentence'}};
       if (this._conversationHistory.length > 0) chatOpts.conversation_history = this._conversationHistory;
+      // considered creating funcitonality to stop/pause loading, but there is
+      // no real way to stop a fetch request in the same session
       loadedFiles = (await WebModel.chat.reload(model, chatOpts, appConfig, files)) as File[];
     } catch (err) {
       return this.unloadChat(err as string);
