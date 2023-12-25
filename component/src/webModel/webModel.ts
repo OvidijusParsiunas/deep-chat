@@ -1,4 +1,3 @@
-import {InterceptorResult, RequestUtils} from '../utils/HTTP/requestUtils';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {ErrorMessages} from '../utils/errorMessages/errorMessages';
@@ -11,8 +10,9 @@ import * as WebLLM from '../types/webModel/webLLM/webLLM';
 import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
+import {RequestUtils} from '../utils/HTTP/requestUtils';
 import {ResponseI} from '../types/responseInternal';
-// import * as WebLLM2 from 'deep-chat-web-llm';
+import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
 
@@ -22,7 +22,6 @@ declare global {
   }
 }
 
-// WORK - in playground - upon the component that uses web model - remove static
 export class WebModel extends BaseServiceIO {
   public static chat?: WebLLM.ChatInterface;
   // WORK - if caching error - add a button to clear the cache on error
@@ -44,7 +43,7 @@ export class WebModel extends BaseServiceIO {
 
   constructor(deepChat: DeepChat) {
     super(deepChat);
-    // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
+    window.webLLM = WebLLM2 as unknown as typeof WebLLM;
     if (typeof deepChat.webModel === 'object') this._webModel = deepChat.webModel;
     if (this._webModel.load?.clearCache) WebModel.clearAllCache();
     this.findModelInWindow(deepChat);
@@ -226,29 +225,37 @@ export class WebModel extends BaseServiceIO {
     this.streamHandlers.onClose();
   }
 
-  private generateRespByType(messages: Messages, result: InterceptorResult, stream: boolean, chat: WebLLM.ChatInterface) {
-    const {body, error} = result;
-    if (error) {
-      RequestUtils.displayError(messages, new Error(result.error));
-      const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
-      onFinish();
-    } else if (!body || !body.text) {
-      const error = ErrorMessages.INVALID_MODEL_REQUEST({body}, false);
-      console.error(error);
-      const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
-      RequestUtils.onInterceptorError(messages, error, onFinish);
-    } else if (stream) {
-      this.streamResp(messages, body.text, chat);
-    } else {
-      this.immediateResp(messages, body.text, chat);
+  private async generateRespByType(ms: Messages, text: string, stream: boolean, chat: WebLLM.ChatInterface) {
+    try {
+      // need await to catch the error
+      if (stream) {
+        await this.streamResp(ms, text, chat);
+      } else {
+        await this.immediateResp(ms, text, chat);
+      }
+    } catch (e) {
+      this._messages?.addNewErrorMessage('service');
+      console.log(e);
     }
   }
 
   private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
     const lastText = pMessages[pMessages.length - 1].text as string;
-    const result = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {text: lastText}});
+    const {body, error} = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {text: lastText}});
+    const stream = !!this.deepChat.stream;
     try {
-      this.generateRespByType(messages, result, !!this.deepChat.stream, chat);
+      if (error) {
+        RequestUtils.displayError(messages, new Error(error));
+        const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
+        onFinish();
+      } else if (!body || !body.text) {
+        const error = ErrorMessages.INVALID_MODEL_REQUEST({body}, false);
+        console.error(error);
+        const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
+        RequestUtils.onInterceptorError(messages, error, onFinish);
+      } else {
+        this.generateRespByType(messages, body, !!this.deepChat.stream, chat);
+      }
     } catch (err) {
       this.unloadChat(err as string);
     }
