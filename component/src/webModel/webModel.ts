@@ -12,7 +12,7 @@ import {MessageContentI} from '../types/messagesInternal';
 import {Messages} from '../views/chat/messages/messages';
 import {RequestUtils} from '../utils/HTTP/requestUtils';
 import {ResponseI} from '../types/responseInternal';
-import * as WebLLM2 from 'deep-chat-web-llm';
+// import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
 
@@ -24,9 +24,9 @@ declare global {
 
 export class WebModel extends BaseServiceIO {
   public static chat?: WebLLM.ChatInterface;
-  // WORK - if caching error - add a button to clear the cache on error
   private static readonly GENERIC_ERROR =
-    'Error, please check the following list of [instructions](https://deepchat.dev/docs/webModel#error) to fix this.';
+    'Error, please check the ' +
+    '[troubleshooting](https://deepchat.dev/docs/webModel#troubleshooting) section of documentation for help.';
   private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
   private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
   private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
@@ -43,7 +43,7 @@ export class WebModel extends BaseServiceIO {
 
   constructor(deepChat: DeepChat) {
     super(deepChat);
-    window.webLLM = WebLLM2 as unknown as typeof WebLLM;
+    // window.webLLM = WebLLM2 as unknown as typeof WebLLM;
     if (typeof deepChat.webModel === 'object') this._webModel = deepChat.webModel;
     if (this._webModel.load?.clearCache) WebModel.clearAllCache();
     this.findModelInWindow(deepChat);
@@ -78,11 +78,9 @@ export class WebModel extends BaseServiceIO {
     } else if (seconds > WebModel.MODULE_SEARCH_LIMIT_S) {
       this._messages?.addNewErrorMessage('service', WebModel.WEB_LLM_NOT_FOUND_ERROR);
       console.error(
-        'The WebLLM module is either not in the project or not been attached to the window object. ' +
-          'Please see the following guide:'
+        'The deep-chat-web-llm module has not been attached to the window object. ' + 'Please see the following guide:'
       );
-      // WORK
-      console.error('Hello World');
+      console.error('https://deepchat.dev/examples/externalModules');
     } else {
       setTimeout(() => this.findModelInWindow(deepChat, seconds + 1), 1000);
     }

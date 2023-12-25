@@ -178,6 +178,9 @@ export class DeepChat extends InternalHTML {
 
   _validationHandler?: ValidationHandler;
 
+  _addMessage: (content: MessageContent, isUpdate?: boolean) => void = () =>
+    console.warn('addMessage failed - please wait for chat view to render before calling this property.');
+
   // TO-DO - key view style
   @Property('object')
   _insertKeyViewStyles?: InsertKeyViewStyles;
