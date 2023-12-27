@@ -49,7 +49,7 @@ function App() {
           mixedFiles={true}
           textInput={{placeholder: {text: 'Send a file!'}}}
           validateInput={(_?: string, files?: File[]) => {
-            return files && files.length > 0;
+            return !!files && files.length > 0;
           }}
         />
       </div>
@@ -176,7 +176,7 @@ function App() {
           textInput={{placeholder: {text: 'Describe the desired changes'}}}
           errorMessages={{displayServiceErrorMessages: true}}
           validateInput={(text?: string, files?: File[]) => {
-            return !!text && text?.trim() !== '' && files && files.length > 0;
+            return !!text && text?.trim() !== '' && !!files && files.length > 0;
           }}
         />
         {/* If not using the camera, you can use an example image here:
