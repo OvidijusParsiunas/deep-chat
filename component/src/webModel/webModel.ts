@@ -252,7 +252,7 @@ export class WebModel extends BaseServiceIO {
         const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
         RequestUtils.onInterceptorError(messages, error, onFinish);
       } else {
-        this.generateRespByType(messages, body, !!this.deepChat.stream, chat);
+        this.generateRespByType(messages, body.text, !!this.deepChat.stream, chat);
       }
     } catch (err) {
       this.unloadChat(err as string);
