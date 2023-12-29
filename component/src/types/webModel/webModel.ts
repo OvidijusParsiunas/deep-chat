@@ -43,10 +43,10 @@ export interface WebModelUrls {
 
 export interface WebModelConfig {
   model?: WebModelName;
-  worker?: Worker;
   urls?: WebModelUrls;
   load?: WebModelLoad;
   introMessage?: WebModelIntro;
+  worker?: Worker;
 }
 
 export type WebModel = boolean | WebModelConfig;
