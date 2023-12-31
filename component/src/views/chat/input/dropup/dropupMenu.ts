@@ -10,6 +10,8 @@ export class DropupMenu {
   private _isOpen = true;
   highlightedItem?: HTMLElement;
   private readonly _styles?: DropupMenuStyles;
+  private clickEvent?: (event: MouseEvent) => void;
+  private keyDownEvent?: (event: KeyboardEvent) => void;
 
   constructor(containerElement: HTMLElement, styles?: DropupMenuStyles) {
     this._styles = styles;
@@ -52,30 +54,40 @@ export class DropupMenu {
 
   // prettier-ignore
   private addWindowEvents(containerElement: HTMLElement) {
-    window.addEventListener('click', (event) => {
-      // a really inconvenient way of making sure that the target element is not this component
-      // can refactor in the future if needed
-      if (containerElement.parentElement !== (event.target as HTMLElement).shadowRoot?.children[0]) {
+    this.clickEvent = this.windowClick.bind(this, containerElement);
+    window.addEventListener('click', this.clickEvent);
+    this.keyDownEvent = this.windowKeyDown.bind(this, containerElement);
+    window.addEventListener('keydown', this.keyDownEvent);
+  }
+
+  private windowClick(containerElement: HTMLElement, event: MouseEvent) {
+    if (!containerElement.isConnected && this.clickEvent) {
+      window.removeEventListener('click', this.clickEvent);
+    } else if (containerElement.parentElement !== (event.target as HTMLElement).shadowRoot?.children[0]) {
+      this.close();
+    }
+  }
+
+  // prettier-ignore
+  private windowKeyDown(containerElement: HTMLElement, event: KeyboardEvent) {
+    if (!containerElement.isConnected && this.keyDownEvent) {
+      window.removeEventListener('keydown', this.keyDownEvent);
+    } else if (this._isOpen) {
+      if (event.key === KEYBOARD_KEY.ESCAPE) {
         this.close();
+        this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
+      } else if (event.key === KEYBOARD_KEY.ENTER) {
+        this.highlightedItem?.click();
+        this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
+      } else if (event.key === KEYBOARD_KEY.ARROW_DOWN) {
+        DropupItemNavigation.focusSiblingItem(
+          this.highlightedItem || (this.elementRef.children[this.elementRef.children.length - 1] as HTMLElement),
+          this.elementRef, true);
+      } else if (event.key === KEYBOARD_KEY.ARROW_UP) {
+        DropupItemNavigation.focusSiblingItem(
+          this.highlightedItem || (this.elementRef.children[0] as HTMLElement),
+          this.elementRef, false);
       }
-    });
-    window.addEventListener('keydown', (event) => {
-      if (this._isOpen) {
-        if (event.key === KEYBOARD_KEY.ESCAPE) {
-          this.close();
-          this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
-        } else if (event.key === KEYBOARD_KEY.ENTER) {
-          this.highlightedItem?.click();
-          this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
-        } else if (event.key === KEYBOARD_KEY.ARROW_DOWN) {
-          DropupItemNavigation.focusSiblingItem(
-            this.highlightedItem || this.elementRef.children[this.elementRef.children.length - 1] as HTMLElement,
-            this.elementRef, true);
-        } else if (event.key === KEYBOARD_KEY.ARROW_UP) {
-          DropupItemNavigation.focusSiblingItem(
-            this.highlightedItem || this.elementRef.children[0] as HTMLElement, this.elementRef, false);
-        }
-      }
-    });
+    }
   }
 }
