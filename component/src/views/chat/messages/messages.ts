@@ -129,8 +129,10 @@ export class Messages extends MessagesBase {
       Legacy.processInitialMessageFile(message);
       this.addNewMessage(message, true);
     });
-    // still not enough for when font file is downloaded later as text size changes, hence need to scroll programmatically
-    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef));
+    // attempt to wait for the font file to be downloaded as otherwise text dimensions change after scroll
+    // the timeout is sometimes not long enough - see the following on how user's can fix it:
+    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
+    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
   }
 
   // this should not be activated by streamed messages
