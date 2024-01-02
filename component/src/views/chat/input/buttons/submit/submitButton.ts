@@ -238,10 +238,10 @@ export class SubmitButton extends InputButton<Styles> {
     }
   }
 
-  private disableSubmitButton(serviceIO: ServiceIO, isActive?: boolean) {
-    serviceIO.isSubmitProgrammaticallyDisabled = isActive !== false;
+  private disableSubmitButton(serviceIO: ServiceIO, isDisabled?: boolean) {
+    serviceIO.isSubmitProgrammaticallyDisabled = isDisabled !== false;
     if (this.status.requestInProgress || this.status.loadingActive) return;
-    if (isActive === false) {
+    if (isDisabled === false) {
       this._validationHandler?.();
     } else {
       this.changeToDisabledIcon(true);
