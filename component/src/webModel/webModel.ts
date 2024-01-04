@@ -171,7 +171,8 @@ export class WebModel extends BaseServiceIO {
     let loadedFiles: File[];
     try {
       const {model, appConfig} = this.getConfig();
-      const chatOpts: ChatOptions = {conv_config: {system: 'keep responses to one sentence'}};
+      const chatOpts: ChatOptions = {};
+      if (this._webModel.context) chatOpts.conv_config = {system: this._webModel.context};
       if (this._conversationHistory.length > 0) chatOpts.conversation_history = this._conversationHistory;
       // considered creating funcitonality to stop/pause loading, but there is
       // no real way to stop a fetch request in the same session

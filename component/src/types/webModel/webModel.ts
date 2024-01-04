@@ -43,6 +43,7 @@ export interface WebModelUrls {
 
 export interface WebModelConfig {
   model?: WebModelName;
+  context?: string;
   urls?: WebModelUrls;
   load?: WebModelLoad;
   introMessage?: WebModelIntro;
