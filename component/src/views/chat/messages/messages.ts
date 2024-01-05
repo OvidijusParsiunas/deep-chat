@@ -49,8 +49,9 @@ export class Messages extends MessagesBase {
     this._onError = FireEvents.onError.bind(this, deepChat);
     this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
     this._permittedErrorPrefixes = permittedErrorPrefixes;
-    this.addSetupMessageIfNeeded(deepChat, serviceIO);
-    this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
+    if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
+      this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
+    }
     this.addIntroductoryMessage(deepChat, serviceIO);
     if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
@@ -95,6 +96,7 @@ export class Messages extends MessagesBase {
       const elements = this.createAndAppendNewMessageElement(text, MessageUtils.AI_ROLE);
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false);
     }
+    return !!text;
   }
 
   // WORK - const file for deep chat classes
