@@ -6,6 +6,7 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {MessageFile} from '../../types/messageFile';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {DeepChat} from '../../deepChat';
 import {PollResult} from '../serviceIO';
@@ -119,11 +120,37 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
       const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
-      return {text: lastMessage.content[0].text.value, _sessionId: this.sessionId};
+      const textContent = lastMessage.content.find((content) => !!content.text);
+      const fileIds = lastMessage.content
+        .filter((content) => content.image_file?.file_id)
+        .map((file) => file.image_file?.file_id) as string[];
+      const files = fileIds && fileIds.length > 0 ? await this.getFiles(fileIds) : undefined;
+      return {text: textContent?.text?.value, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) return await this.handleTools(toolCalls);
     throw Error(`Thread run status: ${status}`);
+  }
+
+  async getFiles(filesIds: string[]) {
+    const fileRequests = filesIds.map((fileId) => {
+      // https://platform.openai.com/docs/api-reference/files/retrieve-contents
+      this.url = `https://api.openai.com/v1/files/${fileId}/content`;
+      return new Promise<Blob>((resolve) => {
+        resolve(OpenAIUtils.directFetch(this, undefined, 'GET', false));
+      });
+    });
+    const blobs = await Promise.all(fileRequests);
+    const imageReaders = blobs.map((blob) => {
+      return new Promise<MessageFile>((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = (event) => {
+          resolve({src: (event.target as FileReader).result as string, type: 'image'});
+        };
+      });
+    });
+    return await Promise.all(imageReaders);
   }
 
   // prettier-ignore

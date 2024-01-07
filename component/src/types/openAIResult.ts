@@ -11,7 +11,13 @@ export interface OpenAIAssistantInitReqResult {
 }
 
 export interface OpenAIAssistantMessagesResult {
-  data: {content: {text: {value: string}}[]}[];
+  data: {
+    // https://platform.openai.com/docs/api-reference/messages/object
+    content: {
+      image_file?: {file_id: string};
+      text?: {value: string};
+    }[];
+  }[];
 }
 
 export interface OpenAIRunResult {
