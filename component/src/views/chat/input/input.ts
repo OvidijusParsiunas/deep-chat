@@ -29,7 +29,6 @@ type Buttons = {
 export class Input {
   readonly elementRef: HTMLElement;
 
-  // prettier-ignore
   constructor(deepChat: DeepChat, messages: Messages, serviceIO: ServiceIO, containerElement: HTMLElement) {
     this.elementRef = Input.createPanelElement(deepChat.inputAreaStyle);
     const textInput = new TextInputEl(deepChat, serviceIO);

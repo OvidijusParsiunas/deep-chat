@@ -7,7 +7,7 @@ import {Legacy} from '../../../../utils/legacy/legacy';
 import {TextInputEl} from '../textInput/textInput';
 import {DeepChat} from '../../../../deepChat';
 
-export type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) => boolean;
+type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) => boolean;
 
 export class ValidationHandler {
   // prettier-ignore
