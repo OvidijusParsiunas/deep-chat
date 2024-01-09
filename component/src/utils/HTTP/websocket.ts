@@ -7,7 +7,6 @@ import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
-// WORK - problem when sending back html that does not have tags - {html: 'hello'}
 export class Websocket {
   public static setup(io: ServiceIO) {
     if (io.requestSettings.url !== Demo.URL) {
