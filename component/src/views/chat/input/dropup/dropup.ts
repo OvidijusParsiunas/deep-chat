@@ -23,6 +23,7 @@ export class Dropup extends InputButton<Styles> {
     this.elementRef.appendChild(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
     this.elementRef.classList.add('dropup-icon', 'upload-file-button');
+    this.elementRef.children[0].id = 'dropup-icon';
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
@@ -46,7 +47,6 @@ export class Dropup extends InputButton<Styles> {
 
   private static createSVGIconElement() {
     const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
-    svgIconElement.id = 'dropup-icon';
     return svgIconElement;
   }
 
