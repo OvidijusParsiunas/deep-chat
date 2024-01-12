@@ -8,7 +8,7 @@ declare global {
 }
 
 export class RemarkableConfig {
-  public static createNew() {
+  private static instantiate() {
     const hljsModule = window.hljs;
     if (hljsModule) {
       return new Remarkable({
@@ -42,5 +42,11 @@ export class RemarkableConfig {
         linkTarget: '_blank', // set target to open in a new tab
       });
     }
+  }
+
+  public static createNew() {
+    const remarkable = RemarkableConfig.instantiate();
+    remarkable.inline.validateLink = () => true;
+    return remarkable;
   }
 }

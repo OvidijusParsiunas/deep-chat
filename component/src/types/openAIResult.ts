@@ -10,14 +10,18 @@ export interface OpenAIAssistantInitReqResult {
   error?: {code: string; message: string};
 }
 
+export interface OpenAIAssistantContent {
+  image_file?: {file_id: string};
+  text?: {value: string; annotations?: {text?: string; file_path?: {file_id?: string}}[]};
+}
+
+export interface OpenAIAssistantData {
+  // https://platform.openai.com/docs/api-reference/messages/object
+  content: OpenAIAssistantContent[];
+}
+
 export interface OpenAIAssistantMessagesResult {
-  data: {
-    // https://platform.openai.com/docs/api-reference/messages/object
-    content: {
-      image_file?: {file_id: string};
-      text?: {value: string};
-    }[];
-  }[];
+  data: OpenAIAssistantData[];
 }
 
 export interface OpenAIRunResult {

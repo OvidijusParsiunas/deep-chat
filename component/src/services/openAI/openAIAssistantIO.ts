@@ -1,12 +1,12 @@
 import {AssistantFunctionHandler, OpenAIAssistant} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
+import {OpenAIAssistantFiles} from './utils/openAIAssistantFiles';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {MessageFile} from '../../types/messageFile';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {DeepChat} from '../../deepChat';
 import {PollResult} from '../serviceIO';
@@ -121,36 +121,14 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
       const textContent = lastMessage.content.find((content) => !!content.text);
-      const fileIds = lastMessage.content
-        .filter((content) => content.image_file?.file_id)
-        .map((file) => file.image_file?.file_id) as string[];
-      const files = fileIds && fileIds.length > 0 ? await this.getFiles(fileIds) : undefined;
-      return {text: textContent?.text?.value, _sessionId: this.sessionId, files};
+      const fileDetails = OpenAIAssistantFiles.getFileDetails(lastMessage, textContent);
+      // gets files and replaces hyperlinks with base64 file encodings
+      const {text, files} = await OpenAIAssistantFiles.getFilesAndNewText(this, fileDetails, textContent);
+      return {text, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) return await this.handleTools(toolCalls);
     throw Error(`Thread run status: ${status}`);
-  }
-
-  async getFiles(filesIds: string[]) {
-    const fileRequests = filesIds.map((fileId) => {
-      // https://platform.openai.com/docs/api-reference/files/retrieve-contents
-      this.url = `https://api.openai.com/v1/files/${fileId}/content`;
-      return new Promise<Blob>((resolve) => {
-        resolve(OpenAIUtils.directFetch(this, undefined, 'GET', false));
-      });
-    });
-    const blobs = await Promise.all(fileRequests);
-    const imageReaders = blobs.map((blob) => {
-      return new Promise<MessageFile>((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = (event) => {
-          resolve({src: (event.target as FileReader).result as string, type: 'image'});
-        };
-      });
-    });
-    return await Promise.all(imageReaders);
   }
 
   // prettier-ignore

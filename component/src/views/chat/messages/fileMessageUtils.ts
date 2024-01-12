@@ -12,17 +12,19 @@ export class FileMessageUtils {
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  private static wrapInLink(element: HTMLElement, url: string) {
+  private static wrapInLink(element: HTMLElement, url: string, name?: string) {
     const linkWrapperElement = document.createElement('a');
     linkWrapperElement.href = url;
+    if (name) linkWrapperElement.download = name;
     linkWrapperElement.target = '_blank';
     linkWrapperElement.appendChild(element);
     return linkWrapperElement;
   }
 
-  public static processContent(contentEl: HTMLElement, url?: string) {
-    if (!url || url.startsWith('data')) return contentEl;
-    return FileMessageUtils.wrapInLink(contentEl, url);
+  public static processContent(contentEl: HTMLElement, url?: string, name?: string, anyFile?: boolean) {
+    // not allowing javascript as it can be a potential security vulnerability
+    if (!url || (url.startsWith('data') && url.indexOf('javascript') === -1 && !anyFile)) return contentEl;
+    return FileMessageUtils.wrapInLink(contentEl, url, name);
   }
 
   private static waitToLoadThenScroll(messagesContainerEl: HTMLElement) {

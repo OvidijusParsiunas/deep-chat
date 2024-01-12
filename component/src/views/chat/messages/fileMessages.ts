@@ -59,7 +59,7 @@ export class FileMessages {
     fileNameElement.textContent = imageData.name || FileMessageUtils.DEFAULT_FILE_NAME;
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
-    return FileMessageUtils.processContent(contents, imageData.src);
+    return FileMessageUtils.processContent(contents, imageData.src, fileNameElement.textContent, true);
   }
 
   private static addNewAnyFileMessage(messages: Messages, data: MessageFile, role: string) {
