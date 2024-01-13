@@ -180,6 +180,7 @@ export class WebModel extends BaseServiceIO {
     } catch (err) {
       return this.unloadChat(err as string);
     }
+    this.deepChat._validationHandler?.();
     if (!this._webModel.introMessage?.removeAfterLoad) {
       const html = WebModelIntroMessage.setUpAfterLoad(
         loadedFiles, this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
