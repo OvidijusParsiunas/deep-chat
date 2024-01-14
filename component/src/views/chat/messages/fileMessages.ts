@@ -11,7 +11,7 @@ export class FileMessages {
     const imageElement = new Image();
     imageElement.src = imageData.src as string;
     FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
-    return FileMessageUtils.processContent(imageElement, imageElement.src);
+    return FileMessageUtils.processContent(imageElement, imageElement.src, imageData.name);
   }
 
   // WORK - should base64 images be clickable?

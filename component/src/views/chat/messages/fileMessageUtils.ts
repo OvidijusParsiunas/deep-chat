@@ -15,15 +15,21 @@ export class FileMessageUtils {
   private static wrapInLink(element: HTMLElement, url: string, name?: string) {
     const linkWrapperElement = document.createElement('a');
     linkWrapperElement.href = url;
-    if (name) linkWrapperElement.download = name;
+    linkWrapperElement.download = name || FileMessageUtils.DEFAULT_FILE_NAME;
     linkWrapperElement.target = '_blank';
     linkWrapperElement.appendChild(element);
     return linkWrapperElement;
   }
 
+  private static isNonLinkableDataUrl(url: string, anyFile?: boolean) {
+    if (!url.startsWith('data')) return false;
+    // not linking javascript as it can be a potential security vulnerability
+    // only images/gifs are linked
+    return (anyFile && url.startsWith('data:text/javascript')) || !url.startsWith('data:image');
+  }
+
   public static processContent(contentEl: HTMLElement, url?: string, name?: string, anyFile?: boolean) {
-    // not allowing javascript as it can be a potential security vulnerability
-    if (!url || (url.startsWith('data') && url.indexOf('javascript') === -1 && !anyFile)) return contentEl;
+    if (!url || FileMessageUtils.isNonLinkableDataUrl(url, anyFile)) return contentEl;
     return FileMessageUtils.wrapInLink(contentEl, url, name);
   }
 
