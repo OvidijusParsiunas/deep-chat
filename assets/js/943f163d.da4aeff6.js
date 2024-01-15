@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[8149],{10318:(e,t,c)=>{c.r(t),c.d(t,{default:()=>s});var r=c(67294);function s(e){let{code:t}=e;return r.createElement("pre",{id:"service-code"},t)}}}]);
