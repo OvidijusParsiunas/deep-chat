@@ -278,8 +278,8 @@ function getCodeStr(connect, isCustom, view, type) {
   }
   if (connect.webModel) {
     return `<deep-chat ${
-      connect.webModel.instruction
-        ? `webModel='${JSON.stringify({instruction: connect.webModel.instruction}, null, 2)}'`
+      Object.keys(connect.webModel).length > 0
+        ? `webModel='${JSON.stringify(connect.webModel, null, 2)}'`
         : `webModel="true"`
     }></deep-chat>`;
   }
@@ -418,7 +418,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
     allowMicrophone: ['true', 'false'],
     allowMixedFiles: ['true', 'false'],
   },
-  webModel: {instruction: 'string'},
+  webModel: {model: 'string', instruction: 'string'},
   openAI: {
     chat: {
       model: 'string',
@@ -629,7 +629,11 @@ const OPTIONAL_PARAM_TO_LINK = {
     headers: 'https://deepchat.dev/docs/connect#Request',
     additionalBodyProps: 'https://deepchat.dev/docs/connect#Request',
   },
-  webModel: {instruction: 'https://deepchat.dev/docs/webModel#webModel'},
+  webModel: {
+    model:
+      'https://github.com/OvidijusParsiunas/deep-chat/blob/4449a91e26bb86d1d3a45633fd49c4dead3293d4/component/src/types/webModel/webModel.ts#L1',
+    instruction: 'https://deepchat.dev/docs/webModel#webModel',
+  },
   openAI: {
     chat: {
       system_prompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',
