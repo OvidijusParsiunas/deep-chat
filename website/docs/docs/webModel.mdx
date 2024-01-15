@@ -331,12 +331,16 @@ self.onmessage = (msg) => {
 
 #### Example
 
-<ComponentContainer>
-  <DeepChatBrowser
-    style={{borderRadius: '8px'}}
-    webModel={{worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'})}}
-  ></DeepChatBrowser>
-</ComponentContainer>
+<BrowserOnly>
+  {() => (
+    <ComponentContainer>
+      <DeepChatBrowser
+        style={{borderRadius: '8px'}}
+        webModel={{worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'})}}
+      ></DeepChatBrowser>
+    </ComponentContainer>
+  )}
+</BrowserOnly>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
