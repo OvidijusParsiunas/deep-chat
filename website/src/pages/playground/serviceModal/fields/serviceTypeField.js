@@ -33,6 +33,7 @@ export default function ServiceType({availableTypes, activeService, activeType, 
 const TYPE_TO_LINK = {
   demo: 'https://deepchat.dev/docs/demo#demo',
   custom: 'https://deepchat.dev/docs/connect',
+  webModel: 'https://deepchat.dev/docs/webModel',
   openAI: {
     chat: 'https://platform.openai.com/docs/api-reference/chat',
     assistant: 'https://platform.openai.com/docs/api-reference/assistants',

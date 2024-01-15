@@ -36,7 +36,12 @@ export class Stream {
       },
       async onmessage(message: EventSourceMessage) {
         if (JSON.stringify(message.data) !== JSON.stringify('[DONE]')) {
-          const eventData = JSON.parse(message.data);
+          let eventData: object;
+          try {
+            eventData = JSON.parse(message.data);
+          } catch(e) {
+            eventData = {};
+          }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
           io.extractResultData?.(finalEventData)
             .then((textBody?: ResponseI) => {

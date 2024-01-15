@@ -2,6 +2,7 @@ import ConnectToPopularAPI from './start/connectToPopularAPI';
 import PreloadStartImages from './preload/preloadStartImages';
 import ConnectToCustomAPI from './start/connectToCustomAPI';
 import StartSmallScreen from './start/startSmallScreen';
+import AIInyourBrowser from './start/aiInYourBrowser';
 import CreateComponent from './start/createComponent';
 import StartParticles from './start/startParticles';
 import Options from './start/options';
@@ -38,6 +39,7 @@ function Main() {
           options={[
             {text: 'Create a chat component', number: 2},
             {text: 'Connect to a service', number: 3},
+            {text: 'AI in your browser', number: 6},
           ]}
           quickEntryTransition={quickEntryTransition}
         ></Options>
@@ -62,6 +64,9 @@ function Main() {
           setOptionNumber={setOptionNumberAndManipulateHeight}
           keepHeight={keepHeight}
         ></ConnectToCustomAPI>
+      )}
+      {optionNumber === 6 && (
+        <AIInyourBrowser setOptionNumber={setOptionNumberAndManipulateHeight} keepHeight={keepHeight}></AIInyourBrowser>
       )}
     </div>
   );

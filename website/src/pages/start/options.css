@@ -40,6 +40,11 @@
   top: 90px;
 }
 
+.start-page-text-option-container-4 {
+  transition-delay: 1.8s;
+  top: 135px;
+}
+
 .start-page-options-leave > .start-page-text-option-container {
   transition: 0.5s;
 }
@@ -56,6 +61,10 @@
   transition-delay: 0.4s;
 }
 
+.start-page-options-leave > .start-page-text-option-container-4 {
+  transition-delay: 0.6s;
+}
+
 .start-page-options-quick-entry > .start-page-text-option-container-1 {
   transition: all 0.7s 0s;
 }
@@ -66,6 +75,10 @@
 
 .start-page-options-quick-entry > .start-page-text-option-container-3 {
   transition: all 0.7s 0.8s;
+}
+
+.start-page-options-quick-entry > .start-page-text-option-container-4 {
+  transition: all 0.7s 1.2s;
 }
 
 .start-page-option-back {

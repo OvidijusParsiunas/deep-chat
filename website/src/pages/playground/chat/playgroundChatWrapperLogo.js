@@ -4,6 +4,7 @@ import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
+import WebModelLogo from '/img/chip.svg';
 import './playgroundChatWrapper.css';
 import Flash from '/img/flash.svg';
 import React from 'react';
@@ -34,6 +35,15 @@ function Icon({connect}) {
           src={openAILogo}
           width="17"
           style={{paddingTop: '6px', marginRight: '8px'}}
+          className="adaptive-logo-filter"
+        />
+      );
+    }
+    if (connect.webModel) {
+      return (
+        <WebModelLogo
+          width="18"
+          style={{paddingTop: '5px', marginRight: '6px', marginLeft: '-10px'}}
           className="adaptive-logo-filter"
         />
       );

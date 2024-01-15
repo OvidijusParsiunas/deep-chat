@@ -1,4 +1,5 @@
 import InformationModal from './playground/header/information/modal/playgroundInformationModal';
+import {importWebLLM} from '../components/externalModules/externalModules';
 import AddButton from './playground/chat/manipulate/playgroundAddButton';
 import HeaderButtons from './playground/header/playgroundHeaderButtons';
 import PreloadPlaygroundImages from './preload/preloadPlaygroundImages';
@@ -56,6 +57,7 @@ export default function Playground() {
       Sortable.create(componentListRef.current, sortableConfig);
       setHorizontalScroll(componentListRef.current);
     });
+    importWebLLM();
     return () => {
       window.removeEventListener('beforeunload', recordConfig);
       recordConfig();

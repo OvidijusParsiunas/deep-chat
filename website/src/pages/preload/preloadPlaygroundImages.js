@@ -4,6 +4,7 @@ import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
+import WebModelLogo from '/img/chip.svg';
 import Flash from '/img/flash.svg';
 import './preloadImages.css';
 import React from 'react';
@@ -32,6 +33,9 @@ export default function PreloadPlaygroundImages() {
         <div>
           <div className="preload-image">
             <Flash />
+          </div>
+          <div className="preload-image">
+            <WebModelLogo />
           </div>
           <div className="preload-image">
             <img src={openAILogo} />

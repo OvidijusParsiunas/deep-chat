@@ -4,6 +4,7 @@ sidebar_position: 3
 
 import azureLogo from '/img/azureLogo.png';
 import hljsLogo from '/img/hljsLogo.png';
+import WebModelLogo from '/img/chip.svg';
 
 # External Modules
 
@@ -14,6 +15,7 @@ The component has been set up to recognise them by using the `window` object:
 | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | Higlighting [code](/docs/messages#code-messages)                                    | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`      |
 | [Speech to text](/docs/speech#speechToText) with [Azure](/docs/speech#AzureOptions) | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
+| LLM [web model](/docs/webModel#webModel)                                            | <WebModelLogo width="18" style={{float: 'left', marginRight: '6px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[deep-chat-web-llm](https://github.com/OvidijusParsiunas/web-llm)                    | `window.webLLM`    |
 
 ## Implementation
 
@@ -25,14 +27,15 @@ Here are some simple approaches you can use to add these modules to your project
   <br />
   <br />
 
-  | Module                                                                         | URL                                                                                            |
-  | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import hljs from "highlight.js"; <br /> window.hljs = hljs;                                    |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk; |
+  | Module                                                                            | URL                                                                                            |
+  | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)          | import hljs from "highlight.js"; <br /> window.hljs = hljs;                                    |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)    | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk; |
+  | [web model](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import \* as webLLM from 'deep-chat-web-llm' <br /> window.webLLM = webLLM;                    |
 
   <br />
 
-- <b>Dynamic import from a dependancy</b> <br />
+- <b>Dynamic import from a dependancy (recommended for SSR)</b> <br />
   If you are using a dependancy manager such as npm, you can dynamically import the modules and assign them to the window
   object. The highlightjs module can load after messages are generated, use the refreshMessages method to apply it:
 
@@ -43,6 +46,7 @@ Here are some simple approaches you can use to add these modules to your project
   | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
   | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import("highlight.js").then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> }); |
   | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import('microsoft-cognitiveservices-speech-sdk').then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.SpeechSDK = module; <br /> });                                                                                      |
+  | [web model](https://github.com/OvidijusParsiunas/web-llm)                      | import('deep-chat-web-llm').then((module) => { <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.webLLM = module; <br /> });                                                                                                              |
 
   <br />
 
@@ -58,6 +62,7 @@ Here are some simple approaches you can use to add these modules to your project
   | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
   | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
   | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                                                          |
+  | [web model](https://github.com/OvidijusParsiunas/web-llm)                      | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                                                          |
 
   <br />
 
@@ -69,10 +74,10 @@ Here are some simple approaches you can use to add these modules to your project
   <br />
   <br />
 
-  | Module                                                                         | URL                                                                                                                                                                                                                                         |
-  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'speech.js'; <br /> document.body.appendChild(script);                                                                                                                 |
+  | Module                                                                   | URL                                                                                                                                                                                                                                         |
+  | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme) | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
+  | any other                                                                | const script = document.createElement('script'); <br /> script.src = 'name.js'; <br /> document.body.appendChild(script);                                                                                                                   |
 
   <br />
 
@@ -81,11 +86,13 @@ If your project is using `TypeScript`, add this to the file where the modules ar
 ```
 import hljs from 'highlight.js';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
+import * as webLLM from 'deep-chat-web-llm';
 
 declare global {
   interface Window {
     hljs: typeof hljs;
     SpeechSDK: typeof sdk;
+    webLLM: typeof webLLM;
   }
 }
 ```
@@ -94,7 +101,7 @@ declare global {
 
 React project that uses a package bundler - should work similarly for other [Frameworks](/examples/frameworks):
 
-[Click for Live Example](https://stackblitz.com/edit/stackblitz-starters-cebqwu?file=src%2FApp.tsx)
+[Click for Live Example](https://codesandbox.io/p/devbox/agitated-edison-9y3yh9?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522clq1fm83w00073b6hg3whvh9p%2522%252C%2522sizes%2522%253A%255B70%252C30%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522clq1fm83v00023b6hggc9e0ye%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522clq1fm83v00043b6hbxrmzcf7%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522clq1fm83v00063b6hiy17w0ip%2522%257D%255D%252C%2522sizes%2522%253A%255B100%255D%257D%255D%252C%2522sizes%2522%253A%255B62.45764825392191%252C37.54235174607809%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522clq1fm83v00023b6hggc9e0ye%2522%253A%257B%2522id%2522%253A%2522clq1fm83v00023b6hggc9e0ye%2522%252C%2522tabs%2522%253A%255B%255D%257D%252C%2522clq1fm83v00063b6hiy17w0ip%2522%253A%257B%2522id%2522%253A%2522clq1fm83v00063b6hiy17w0ip%2522%252C%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522clq1fm83v00053b6h2vei3mas%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522TASK_PORT%2522%252C%2522taskId%2522%253A%2522dev%2522%252C%2522port%2522%253A5173%252C%2522path%2522%253A%2522%252F%2522%257D%252C%257B%2522type%2522%253A%2522SANDBOX_INFO%2522%252C%2522id%2522%253A%2522clq1gf1mq02yk3b6h7u2qo17i%2522%252C%2522mode%2522%253A%2522permanent%2522%257D%255D%252C%2522activeTabId%2522%253A%2522clq1fm83v00053b6h2vei3mas%2522%257D%252C%2522clq1fm83v00043b6hbxrmzcf7%2522%253A%257B%2522id%2522%253A%2522clq1fm83v00043b6hbxrmzcf7%2522%252C%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522clq1fm83v00033b6hcx2dya5e%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522TASK_LOG%2522%252C%2522taskId%2522%253A%2522dev%2522%257D%255D%252C%2522activeTabId%2522%253A%2522clq1fm83v00033b6hcx2dya5e%2522%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Atrue%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)
 
 VanillaJS approach with no bundler (this can also be used as fallback if above doesn't work):
 

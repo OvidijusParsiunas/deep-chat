@@ -158,7 +158,7 @@ function isChildElementVisible(parentElement, childElement) {
 
 function getDescription(connect) {
   const service = Object.keys(connect)[0];
-  if (service === 'custom') {
+  if (service === 'custom' || service === 'webModel') {
     return SERVICE_TO_NAME[service];
   }
   const keys = Object.keys(connect[service]);
@@ -168,6 +168,7 @@ function getDescription(connect) {
 const SERVICE_TO_NAME = {
   demo: 'Default',
   custom: 'Service',
+  webModel: 'Web Model',
   openAI: {
     chat: 'OpenAI: Chat',
     assistant: 'OpenAI: Assistant',

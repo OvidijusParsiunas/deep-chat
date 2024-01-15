@@ -11,7 +11,7 @@ import React from 'react';
 // TO-DO
 // add a copy button when hovering over code
 // TO-DO
-// images, audio, gifs, camera, speech-to-text, stream
+// speech-to-text, stream
 
 // editingChatRef is used for displaying modal
 export default function ServiceModal({chatComponent, collapseStates, setEditingChatRef, view}) {
@@ -60,7 +60,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     setAvailableTypes(availableTypes);
     const type = newActiveType || availableTypes[0];
     setActiveType(type);
-    if (newService === 'custom') {
+    if (newService === 'custom' || newService === 'webModel') {
       setRequiredValue(chatComponent.connect[newService]?.url || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
@@ -78,7 +78,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     const type = changeFirstLetter(newType, false);
     setActiveType(type);
     setOptionalParameters(
-      activeService === 'custom'
+      activeService === 'custom' || activeService === 'webModel'
         ? SERVICE_MODAL_FORM_CONFIG[activeService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][type]
     );
@@ -121,7 +121,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     if (activeService === 'demo') return {demo: true};
     const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
     const optionalParams =
-      activeService === 'custom'
+      activeService === 'custom' || activeService === 'webModel'
         ? SERVICE_MODAL_FORM_CONFIG[activeService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
     const connect = buildConnect(optionalParams, optionalParamsValues);
@@ -130,6 +130,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
       const requiredSecondValue = requiredValue2Ref.current?.value;
       connect[requiredParameter] = requiredSecondValue;
     }
+    if (activeService === 'webModel') return {webModel: connect};
     return {
       [activeService]:
         activeService === 'custom'
@@ -161,7 +162,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         <b className="playground-modal-title">Service Settings</b>
         <div className="playgroud-service-modal-form">
           <Service activeService={activeService} changeService={changeService} modalRef={modalRef} />
-          {activeService !== 'demo' && activeService !== 'custom' && (
+          {activeService !== 'demo' && activeService !== 'custom' && activeService !== 'webModel' && (
             <ServiceType
               availableTypes={availableTypes}
               activeService={activeService}
@@ -171,7 +172,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               modalRef={modalRef}
             />
           )}
-          {activeService !== 'demo' && activeService !== 'custom' && (
+          {activeService !== 'demo' && activeService !== 'custom' && activeService !== 'webModel' && (
             <Required
               ref={requiredValueRef}
               requiredValue={requiredValue}
@@ -212,7 +213,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               ref={optionalParamsRef}
               optionalParameters={optionalParameters}
               connect={
-                activeService === 'custom'
+                activeService === 'custom' || activeService === 'webModel'
                   ? chatComponent.connect[activeService]
                   : chatComponent.connect[activeService]?.[activeType]
               }
@@ -220,7 +221,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               websocket={websocket}
               pseudoNames={PSEUDO_NAMES}
               links={
-                activeService === 'custom'
+                activeService === 'custom' || activeService === 'webModel'
                   ? OPTIONAL_PARAM_TO_LINK[activeService]
                   : OPTIONAL_PARAM_TO_LINK[activeService]?.[activeType]
               }
@@ -274,6 +275,13 @@ function extractFiles(connect) {
 function getCodeStr(connect, isCustom, view, type) {
   if (connect.demo) {
     return `<deep-chat demo="true"></deep-chat>`;
+  }
+  if (connect.webModel) {
+    return `<deep-chat ${
+      connect.webModel.instruction
+        ? `webModel='${JSON.stringify({instruction: connect.webModel.instruction}, null, 2)}'`
+        : `webModel="true"`
+    }></deep-chat>`;
   }
   let files = '';
   if (isCustom) {
@@ -410,6 +418,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
     allowMicrophone: ['true', 'false'],
     allowMixedFiles: ['true', 'false'],
   },
+  webModel: {instruction: 'string'},
   openAI: {
     chat: {
       model: 'string',
@@ -602,6 +611,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
 const SERVICE_TYPE_TO_API_KEY_LINK = {
   demo: '',
   custom: '',
+  webModel: '',
   openAI: 'https://platform.openai.com/account/api-keys',
   cohere: 'https://dashboard.cohere.ai/api-keys',
   huggingFace: 'https://huggingface.co/settings/tokens',
@@ -619,6 +629,7 @@ const OPTIONAL_PARAM_TO_LINK = {
     headers: 'https://deepchat.dev/docs/connect#Request',
     additionalBodyProps: 'https://deepchat.dev/docs/connect#Request',
   },
+  webModel: {instruction: 'https://deepchat.dev/docs/webModel#webModel'},
   openAI: {
     chat: {
       system_prompt: 'https://deepchat.dev/docs/directConnection/OpenAI#Chat',

@@ -41,7 +41,7 @@ export default function Options(props) {
     setLeaveTransition(true);
     setTimeout(() => {
       setOptionNumber(optionNumber);
-    }, 500);
+    }, 800);
   };
 
   return (

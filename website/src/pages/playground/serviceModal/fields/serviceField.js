@@ -5,6 +5,7 @@ import assemblyAILogo from '/img/assemblyAILogo.png';
 import openAILogo from '/img/openAILogo.png';
 import cohereLogo from '/img/cohereLogo.png';
 import azureLogo from '/img/azureLogo.png';
+import WebModelLogo from '/img/chip.svg';
 import Flash from '/img/flash.svg';
 import './serviceField.css';
 import React from 'react';
@@ -56,6 +57,16 @@ const services = {
     value: 'custom',
     text: 'Custom',
     icon: <Flash className="playground-service-modal-service-icon" style={{marginLeft: '1px', transform: 'scale(1.7)'}} />,
+  },
+  webModel: {
+    value: 'webModel',
+    text: 'Web Model',
+    icon: (
+      <WebModelLogo
+        className="playground-service-modal-service-icon adaptive-logo-filter"
+        style={{marginLeft: '1.5px', transform: 'scale(1.52)'}}
+      />
+    ),
   },
   openAI: {
     value: 'openAI',
@@ -122,6 +133,7 @@ const services = {
 const SERVICE_TO_LINK = {
   demo: 'https://deepchat.dev/docs/demo#demo',
   custom: 'https://deepchat.dev/docs/connect',
+  webModel: 'https://deepchat.dev/docs/webModel',
   openAI: 'https://openai.com/blog/openai-api',
   cohere: 'https://docs.cohere.com/docs',
   huggingFace: 'https://learn.microsoft.com/en-gb/azure/ai-services',

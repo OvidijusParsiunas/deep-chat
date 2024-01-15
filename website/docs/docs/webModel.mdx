@@ -1,0 +1,397 @@
+---
+sidebar_position: 3
+---
+
+# Web Model
+
+Run a chat model entirely on your browser. No need to connect to any service.
+
+<a href="https://youtu.be/ilzVAooE4HI">
+  <img src={YoutubeLogo} className={'youtube-icon'} />
+  Video demo
+</a>
+
+### Setup
+
+See the [External Modules](/examples/externalModules) section on how to integrate the [`deep-chat-web-llm`](https://github.com/OvidijusParsiunas/web-llm) module into your project.
+Then proceed with using the [`webModel`](#webModel) property:
+
+### `webModel` {#webModel}
+
+- Type: `true` | { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `instruction?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`urls?: WebModelUrls`](#WebModelUrls), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`load?: WebModelLoad`](#WebModelLoad), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`introMessage?: WebModelIntro`](#WebModelIntro), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`worker?: Worker`](#Worker) <br />
+  }
+- Default: _{model: "Llama-2-7b-chat-hf-q4f32_1"}_
+
+Set this to _true_ or define an object with any of the following properties: <br />
+`model` is the name of the model to be used. See [full list](https://github.com/OvidijusParsiunas/deep-chat/blob/4449a91e26bb86d1d3a45633fd49c4dead3293d4/component/src/types/webModel/webModel.ts#L1). <br />
+`instruction` directs how the model should respond. <br />
+`urls` defines the endpoint to retrieve the web model assets. <br />
+`load` defines how and when the model is loaded. <br />
+`introMessage` is the configuration for the introductory web model message. <br />
+`worker` is a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) that can enhance the rendering performance. [Example](#Worker). <br />
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import YoutubeLogo from '/img/youtube.png';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+<BrowserOnly>{() => require('@site/src/components/externalModules/externalModules').importWebLLM()}</BrowserOnly>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} webModel={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat webModel="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat webModel="true" style="border-radius: 8px"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Types
+
+Object types for [`webModel`](#webModel):
+
+### `WebModelUrls` {#WebModelUrls}
+
+- Type: {`model?: string`, `wasm?: string`}
+
+Deep Chat uses the [`webModelConfig.ts`](https://github.com/OvidijusParsiunas/deep-chat/blob/284bc845de8bcefe8ef36b2ee1b79079e6978593/component/src/webModel/webModelConfig.ts) file to determine where the `model` and the `wasm` files will be downloaded from.
+You can overwite the links to your prefered locations like your own server.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    webModel={{urls: {model: 'http://localhost:8080/model-file', wasm: 'http://localhost:8080/wasm-file'}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  webModel='{
+    "urls": {
+      "model": "http://localhost:8080/model-file",
+      "wasm": "http://localhost:8080/wasm-file"
+  }}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  webModel='{
+    "urls": {
+      "model": "http://localhost:8080/model-file",
+      "wasm": "http://localhost:8080/wasm-file"
+  }}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `WebModelLoad` {#WebModelLoad}
+
+- Type: {`onInit?: boolean`, `onMessage?: boolean`, `clearCache?: boolean`, `skipCache?: boolean`}
+
+This is an object that is used to define the web model loading/downloading behaviour: <br />
+`onInit` will start loading the model as soon as the component is rendered. <br />
+`onMessage` will start loading the model when the user submits a message (or clicks the _Start_ button). <br />
+`clearCache` is used to remove all the cached web model files in the browser and replace them with new ones. <br />
+`skipCache` will not use the browser cache. This is useful for trying out multiple models without overfilling the cache. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} webModel={{load: {onMessage: true}}}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat webModel='{"load": {"onMessage": true}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat webModel='{"load": {"onMessage": true}}' style="border-radius: 8px"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `WebModelIntro` {#WebModelIntro}
+
+- Type: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayed?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `autoScroll?: boolean` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `removeAfterLoad?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `removeAfterMessage?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `initialHtml?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `downloadClass?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `uploadClass?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `fileInputClass?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `afterLoadHtml?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `exportFilesClass?: string` <br />
+  }
+- Default: _{displayed: true, autoScroll: true}_
+
+This is an object that controls the introductory web model message behaviour: <br />
+`displayed` is used to toggle whether the message is visible. <br />
+`autoScroll` toggles whether the chat automatically scrolls to the intro message. <br />
+`removeAfterLoad` removes the message after the model files have successfully loaded. <br />
+`removeAfterMessage` removes the message after the model files have loaded and the user types a message. <br />
+`initialHtml` is a string that contains html used for the initial message. <br />
+`downloadClass` is the name of the class used for the button that downloads the model files. <br />
+`uploadClass` is the name of the class used for the button that upload model files. <br />
+`fileInputClass` is the name of the class used for the hidden file input element that toggles the file upload functionality. <br />
+`afterLoadHtml` is a string that contains html used for the message displayed after the model has been uploaded. <br />
+`exportFilesClass` is the name of the class used for the button that exports the model files. <br />
+
+#### Initial Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    webModel={{
+      introMessage: {
+        initialHtml: `<button class="start">Start</button>
+          <button class="upload">Upload Files</button>
+          <input type="file" class="input" hidden multiple />`,
+        downloadClass: 'start',
+        uploadClass: 'upload',
+        fileInputClass: 'input',
+      },
+    }}
+    htmlClassUtilities={{upload: {styles: {default: {marginLeft: '4px'}}}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.webModel = {
+  introMessage: {
+    initialHtml: `<button class="start">Start</button> <button class="files">Files</button> <input type="file" class="input" hidden multiple />`,
+    downloadClass: 'start',
+    uploadClass: 'files',
+    fileInputClass: 'input',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.webModel = {
+  introMessage: {
+    initialHtml: `<button class="start">Start</button> <button class="files">Files</button> <input type="file" class="input" hidden multiple />`,
+    downloadClass: 'start',
+    uploadClass: 'files',
+    fileInputClass: 'input',
+  },
+};
+
+chatElementRef.htmlClassUtilities = {upload: {styles: {default: {marginLeft: '4px'}}}};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### After Load Example
+
+Need to first download/upload the model.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    webModel={{
+      afterLoadHtml: {
+        initialHtml: `Finished loading the model! <br /> <button class="export">Export Files</button>`,
+        exportFilesClass: 'export',
+      },
+    }}
+    htmlClassUtilities={{export: {styles: {default: {marginTop: '8px'}}}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.webModel = {
+  afterLoadHtml: {
+    initialHtml: `Finished loading the model! <br /> <button class="export">Export Files</button>`,
+    exportFilesClass: 'export',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.webModel = {
+  afterLoadHtml: {
+    initialHtml: `Finished loading the model! <br /> <button class="export">Export Files</button>`,
+    exportFilesClass: 'export',
+  },
+};
+
+chatElementRef.htmlClassUtilities = {export: {styles: {default: {marginTop: '8px'}}}};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+Element styles can be customized using the [`htmlClassUtilities`](/docs/messages/HTML#htmlClassUtilities) property.
+:::
+
+### `Worker` {#Worker}
+
+- Type: [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
+
+This is a reference to a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) that is used to process chat responses in another
+thread and improves browser rendering performance. To note, this does not allow model files to be uploaded or exported.
+
+To define its property value, please use the following: <br />
+`worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'})` <br /> <br />
+Create a [`worker.js`](https://github.com/OvidijusParsiunas/deep-chat/blob/284bc845de8bcefe8ef36b2ee1b79079e6978593/website/docs/docs/worker.js) (or `worker.ts`) file in the same folder - which contains the following code:
+
+```
+import {ChatWorkerHandler, ChatModule} from 'deep-chat-web-llm';
+
+const chat = new ChatModule();
+const handler = new ChatWorkerHandler(chat);
+self.onmessage = (msg) => {
+  handler.onmessage(msg);
+};
+```
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    webModel={{worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'})}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```javascript
+chatElementRef.webModel = {
+  worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'}),
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```javascript
+// worker.js file
+import {ChatWorkerHandler, ChatModule} from 'deep-chat-web-llm';
+
+const chat = new ChatModule();
+const handler = new ChatWorkerHandler(chat);
+self.onmessage = (msg) => {
+  handler.onmessage(msg);
+};
+
+// component code
+chatElementRef.webModel = {
+  worker: new Worker(new URL('./worker.js', import.meta.url), {type: 'module'}),
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Troubleshooting
+
+If the chat displays an error, we recommend trying any of the following options:
+
+- Download the latest version of [Chrome browser](https://www.google.co.uk/chrome/)
+- Download the [Canary version of Chrome browser](https://www.google.com/chrome/canary/)
+- Run the following command in the browser console: _--enable-dawn-features=allow_unsafe_apis_
+
+If you are using an SSR related framework such as [NextJs](https://nextjs.org/) or [SvelteKit](https://kit.svelte.dev/) and get the following error:
+`unhandledRejection: Error [ReferenceError]: require is not defined in ES module scope...`
+
+- Use the following syntax to import [`deep-chat-web-llm`](https://github.com/OvidijusParsiunas/web-llm) instead:
+
+```
+if (typeof window !== 'undefined') {
+  import('deep-chat-web-llm').then((module) => {
+    window.webLLM = module;
+  });
+}
+```
+
+If you are still experiencing issues, please see [**github issues**](https://github.com/OvidijusParsiunas/deep-chat/issues) or create
+a [**new issue ticket**](https://github.com/OvidijusParsiunas/deep-chat/issues/new) and we will look into
+it as soon as possible.

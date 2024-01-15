@@ -18,14 +18,15 @@
 - Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
 - Support for all major ui frameworks/libraries
+- Host a model on the browser
 - Everything is customizable!
 
 ### :tada: Latest updates
 
-The OpenAI API has been upgraded with GPT-4 Vision, Assistants, Text to Speech, Function Calling and much more! Check out Deep Chat's [OpenAI](https://deepchat.dev/docs/directConnection/OpenAI) documentation and try it out in the [Playground](https://deepchat.dev/playground):
+No servers, no connections, no limits. Host an LLM model entirely on your browser. Checkout [web model](https://deepchat.dev/docs/webModel) for more:
 
 <p align="center">
-    <img width="730" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/a43b43c1-20e1-4949-bdfc-2910d78fd3fb" alt="OpenAI New Features">
+    <img width="650" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5bc7bf60-354a-4fe1-8edd-a106c3dfdc5b" alt="Web Model">
 </p>
 
 Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API:
@@ -84,6 +85,18 @@ Please note that this approach should be used for local/prototyping/demo purpose
 
 Currently supported direct API connections:
 [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs), [Stability AI](https://stability.ai/), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssemblyAI](https://www.assemblyai.com/)
+
+### :robot: Web model
+
+![Web Model](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/83936e6f-d0c1-42b7-ab61-ac75d7803660)
+
+No servers, no connections, host an LLM model entirely on your browser.
+
+Simply add the [deep-chat-web-llm](https://deepchat.dev/examples/externalModules) module and define the [webModel](https://deepchat.dev/docs/webModel) property:
+
+```
+<deep-chat webModel="true" />
+```
 
 ### :camera: :microphone: Camera and Microphone
 

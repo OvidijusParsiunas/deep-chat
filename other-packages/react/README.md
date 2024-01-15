@@ -18,6 +18,7 @@
 - Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
 - Support for all major ui frameworks/libraries
+- Host a model on the browser
 - Everything is customizable!
 
 ### :computer: Getting started
@@ -64,6 +65,18 @@ Please note that this approach should be used for local/prototyping/demo purpose
 
 Currently supported direct API connections:
 [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [Cohere](https://docs.cohere.com/docs), [Stability AI](https://stability.ai/), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssemblyAI](https://www.assemblyai.com/)
+
+### :robot: Web model
+
+![Web Model](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/83936e6f-d0c1-42b7-ab61-ac75d7803660)
+
+No servers, no connections, host an LLM model entirely on your browser.
+
+Simply add the [deep-chat-web-llm](https://deepchat.dev/examples/externalModules) module and define the [webModel](https://deepchat.dev/docs/webModel) property:
+
+```
+<deep-chat webModel="true" />
+```
 
 ### :camera: :microphone: Camera and Microphone
 

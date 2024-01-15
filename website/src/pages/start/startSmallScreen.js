@@ -8,8 +8,9 @@ export default function StartSmallScreen() {
       <Options
         options={[
           {text: 'Setup the component', link: 'https://deepchat.dev/docs/installation'},
-          {text: 'Connect to a popular AI API', link: 'https://deepchat.dev/docs/directConnection/'},
+          {text: 'Connect to a popular AI API', link: 'https://deepchat.dev/docs/directConnection'},
           {text: 'Connect to a custom API', link: 'https://deepchat.dev/docs/connect'},
+          {text: 'AI in your browser', link: 'https://deepchat.dev/docs/webModel'},
         ]}
       ></Options>
     </div>

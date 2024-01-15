@@ -19,3 +19,11 @@ export async function importHighlightAsync() {
 export function removeHighlight() {
   delete window.hljs;
 }
+
+export function importWebLLM() {
+  if (!window.webLLM) {
+    import('deep-chat-web-llm').then((module) => {
+      window.webLLM = module;
+    });
+  }
+}

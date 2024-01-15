@@ -1,0 +1,120 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
+#start-page-web-model {
+  width: 456px;
+  height: 180px;
+}
+
+#start-page-web-model.start-page-main-details-expanded {
+  height: 344px;
+}
+
+#start-page-web-model-intro {
+  margin-top: 12px;
+  font-size: 22px;
+}
+
+#start-page-web-model-instructions {
+  font-size: 17.5px;
+  left: 16px;
+}
+
+#start-page-web-model-property {
+  margin-top: 4px;
+  left: 16px;
+}
+
+#start-page-web-model-video {
+  margin-top: 25px;
+  font-size: 17.8px;
+}
+
+#start-page-web-model-video-icon {
+  width: 28px;
+  position: absolute;
+  margin-top: 0.5px;
+}
+
+#start-page-web-model-video > a > span {
+  margin-left: 35px;
+}
+
+#start-page-web-model-navigation {
+  padding-left: 40px;
+  margin-top: 26px;
+  margin-left: 0px;
+  cursor: pointer;
+}
+
+.start-page-web-model-slide {
+  position: absolute !important;
+  left: 147px;
+  font-size: 25px !important;
+  margin-top: 22px;
+  color: var(--start-text-slider-color);
+}
+
+#start-page-web-model > .start-page-web-model-slide-visible {
+  opacity: 1;
+  left: 97px;
+}
+
+#start-page-web-model > .start-page-web-model-slide-visible-out {
+  opacity: 0;
+  left: 48px;
+}
+
+#start-page-web-model-navigation.start-page-main-details-visible {
+  padding-left: 0px;
+}
+
+#start-page-web-model-navigation:hover {
+  padding-left: 4px;
+}
+
+@media (max-height: 700px) {
+  #start-page-web-model {
+    height: 130px;
+  }
+
+  #start-page-web-model-navigation {
+    margin-top: 30px;
+  }
+}
+
+@media (max-height: 590px) {
+  #start-page-web-model {
+    width: 420px;
+  }
+
+  #start-page-web-model.start-page-main-details-expanded {
+    height: 320px;
+  }
+
+  #start-page-web-model-intro {
+    font-size: 20px;
+  }
+
+  #start-page-web-model-navigation {
+    margin-top: 15px;
+  }
+
+  .start-page-web-model-slide {
+    left: 142px;
+    font-size: 21px !important;
+  }
+
+  #start-page-web-model > .start-page-web-model-slide-visible {
+    left: 92px;
+  }
+
+  #start-page-web-model > .start-page-web-model-slide-visible-out {
+    left: 42px;
+  }
+}
+
+@media (min-height: 880px) {
+  #start-page-web-model.start-page-main-details-expanded {
+    height: 450px;
+  }
+}

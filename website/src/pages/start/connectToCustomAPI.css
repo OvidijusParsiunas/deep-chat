@@ -18,23 +18,6 @@
   margin-left: 11px;
 }
 
-.interceptor-code {
-  transition: 1s;
-  display: inline-block;
-  margin-left: 20px;
-  opacity: 0;
-}
-
-.interceptor-code.start-page-main-details-visible {
-  opacity: 1;
-  margin-left: 0px;
-  margin-right: 10px;
-}
-
-.interceptor-code.start-page-main-details-visible:nth-child(2) {
-  transition-delay: 0.5s;
-}
-
 .start-page-connect-to-custom-padded-content {
   left: 8px;
 }

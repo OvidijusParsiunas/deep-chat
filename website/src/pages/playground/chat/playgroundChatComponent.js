@@ -48,6 +48,12 @@ export default function ChatComponent({config}) {
     return {connect: connectCp, allowImages, allowCamera, allowGifs, allowAudio, allowMicrophone, allowMixedFiles};
   }
 
+  function getWebModelConfig(webModelConfig) {
+    const defaultConfig = {load: {onMessage: true}};
+    const customConfig = typeof webModelConfig === 'boolean' ? {} : webModelConfig;
+    return Object.assign(defaultConfig, customConfig);
+  }
+
   return (
     <BrowserOnly>
       {() => {
@@ -90,6 +96,15 @@ export default function ChatComponent({config}) {
                   submitButtonStyles={darkButtonStyles}
                   auxiliaryStyle={darkAuxiliaryStyle}
                   introPanelStyle={darkPanelStyle}
+                ></DeepChatBrowser>
+              ) : config?.connect?.webModel ? (
+                <DeepChatBrowser
+                  webModel={getWebModelConfig(config.connect.webModel)}
+                  style={darkContainerStyle}
+                  messageStyles={darkMessageStyles}
+                  initialMessages={config.messages}
+                  onNewMessage={newestMessages}
+                  onClearMessages={clearMessages}
                 ></DeepChatBrowser>
               ) : (
                 <DeepChatBrowser
@@ -134,6 +149,14 @@ export default function ChatComponent({config}) {
             ) : config?.connect?.demo ? (
               <DeepChatBrowser
                 demo={DEMO_RESPONSE}
+                style={lightContainerStyle}
+                initialMessages={config.messages}
+                onNewMessage={newestMessages}
+                onClearMessages={clearMessages}
+              ></DeepChatBrowser>
+            ) : config?.connect?.webModel ? (
+              <DeepChatBrowser
+                webModel={getWebModelConfig(config.connect.webModel)}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
                 onNewMessage={newestMessages}
