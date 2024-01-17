@@ -1,7 +1,6 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
-import {Messages} from '../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
 
@@ -34,33 +33,6 @@ export class OpenAIUtils {
       method: 'GET',
       handleVerificationResult: OpenAIUtils.handleVerificationResult,
     };
-  }
-
-  public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
-    const headers = serviceIO.requestSettings.headers;
-    if (!headers) return;
-    serviceIO.url = `https://api.openai.com/v1/files`; // stores files
-    const previousContetType = headers[RequestUtils.CONTENT_TYPE];
-    delete headers[RequestUtils.CONTENT_TYPE];
-    const requests = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append('purpose', 'assistants');
-      formData.append('file', file);
-      return new Promise<{id: string}>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
-      });
-    });
-    try {
-      const fileIds = (await Promise.all(requests)).map((result) => result.id);
-      headers[RequestUtils.CONTENT_TYPE] = previousContetType;
-      return fileIds;
-    } catch (err) {
-      headers[RequestUtils.CONTENT_TYPE] = previousContetType;
-      // error handled here as files not sent using HTTPRequest.request to not trigger the interceptors
-      RequestUtils.displayError(messages, err as object);
-      serviceIO.completionsHandlers.onFinish();
-      throw err;
-    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

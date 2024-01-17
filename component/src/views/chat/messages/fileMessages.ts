@@ -11,7 +11,7 @@ export class FileMessages {
     const imageElement = new Image();
     imageElement.src = imageData.src as string;
     FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
-    return FileMessageUtils.processContent(imageElement, imageElement.src, imageData.name);
+    return FileMessageUtils.processContent('image', imageElement, imageElement.src, imageData.name);
   }
 
   // WORK - should base64 images be clickable?
@@ -59,7 +59,7 @@ export class FileMessages {
     fileNameElement.textContent = imageData.name || FileMessageUtils.DEFAULT_FILE_NAME;
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
-    return FileMessageUtils.processContent(contents, imageData.src, fileNameElement.textContent, true);
+    return FileMessageUtils.processContent('any', contents, imageData.src, fileNameElement.textContent);
   }
 
   private static addNewAnyFileMessage(messages: Messages, data: MessageFile, role: string) {

@@ -1,5 +1,5 @@
+import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {MessageContent, MessageStyles} from '../../../types/messages';
-import {MessageFile} from '../../../types/messageFile';
 import {MessagesBase} from './messagesBase';
 import {MessageElements} from './messages';
 
@@ -21,15 +21,16 @@ export class FileMessageUtils {
     return linkWrapperElement;
   }
 
-  private static isNonLinkableDataUrl(url: string, anyFile?: boolean) {
-    if (!url.startsWith('data')) return false;
+  private static isNonLinkableDataUrl(type: MessageFileType, url: string) {
+    // if not a data url (http url) or image
+    if (!url.startsWith('data') || type === 'image') return false;
     // not linking javascript as it can be a potential security vulnerability
-    // only images/gifs are linked
-    return (anyFile && url.startsWith('data:text/javascript')) || !url.startsWith('data:image');
+    // if not marked as image, but image - is linkable
+    return (type === 'any' && url.startsWith('data:text/javascript')) || !url.startsWith('data:image');
   }
 
-  public static processContent(contentEl: HTMLElement, url?: string, name?: string, anyFile?: boolean) {
-    if (!url || FileMessageUtils.isNonLinkableDataUrl(url, anyFile)) return contentEl;
+  public static processContent(type: MessageFileType, contentEl: HTMLElement, url?: string, name?: string) {
+    if (!url || FileMessageUtils.isNonLinkableDataUrl(type, url)) return contentEl;
     return FileMessageUtils.wrapInLink(contentEl, url, name);
   }
 

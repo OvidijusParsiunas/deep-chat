@@ -77,7 +77,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
-    const file_ids = files ? await OpenAIUtils.storeFiles(this, messages, files) : undefined;
+    const file_ids = files ? await OpenAIAssistantFiles.storeFiles(this, messages, files) : undefined;
     this.requestSettings.method = 'POST';
     this.callService(messages, pMessages, file_ids);
   }
@@ -120,10 +120,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
       const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
       const lastMessage = threadMessages.data[0];
-      const textContent = lastMessage.content.find((content) => !!content.text);
-      const fileDetails = OpenAIAssistantFiles.getFileDetails(lastMessage, textContent);
-      // gets files and replaces hyperlinks with base64 file encodings
-      const {text, files} = await OpenAIAssistantFiles.getFilesAndNewText(this, fileDetails, textContent);
+      const content = lastMessage.content.find((content) => !!content.text || !!content.image_file);
+      const {text, files} = await OpenAIAssistantFiles.getFilesAndText(this, lastMessage, content);
       return {text, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
