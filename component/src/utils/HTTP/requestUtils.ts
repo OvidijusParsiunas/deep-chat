@@ -35,7 +35,7 @@ export class RequestUtils {
     return result;
   }
 
-  public static displayError(messages: Messages, err: object, defMessage = 'Service error, please try again.') {
+  public static displayError(messages: Messages, err: object | string, defMessage = 'Service error, please try again.') {
     console.error(err);
     if (typeof err === 'object') {
       if (Object.keys(err).length === 0) {
