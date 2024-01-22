@@ -32,9 +32,23 @@ export type AssistantFunctionHandlerResponse = string[] | Promise<string[]>;
 
 export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
 
+// https://platform.openai.com/docs/api-reference/assistants/createAssistant
+export interface OpenAINewAssistant {
+  model?: string;
+  name?: string;
+  description?: string;
+  instructions?: string;
+  tools?: {
+    type: 'code_interpreter' | 'retrieval' | 'function';
+    function?: {name: string; description?: string; parameters?: object};
+  }[];
+  file_ids?: string[];
+}
+
 // https://platform.openai.com/docs/api-reference/assistants
 export interface OpenAIAssistant {
-  assistant_id: string;
+  assistant_id?: string;
+  new_assistant?: OpenAINewAssistant;
   function_handler?: AssistantFunctionHandler;
 }
 
@@ -62,7 +76,7 @@ export type OpenAIChat = {
 
 export interface OpenAI {
   chat?: true | OpenAIChat;
-  assistant?: OpenAIAssistant;
+  assistant?: true | OpenAIAssistant;
   images?: true | OpenAIImages;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;

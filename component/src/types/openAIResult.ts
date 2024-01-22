@@ -10,6 +10,10 @@ export interface OpenAIAssistantInitReqResult {
   error?: {code: string; message: string};
 }
 
+export interface OpenAINewAssistantResult {
+  id: string;
+}
+
 export interface OpenAIAssistantContent {
   image_file?: {file_id: string};
   text?: {value: string; annotations?: {text?: string; file_path?: {file_id?: string}}[]};

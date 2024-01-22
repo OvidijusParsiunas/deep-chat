@@ -23,13 +23,6 @@ export class SetupMessages {
           ` the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
         );
       }
-      const openAIAssistant = deepChat.directConnection.openAI?.assistant;
-      if (typeof openAIAssistant === 'boolean' || (openAIAssistant && !openAIAssistant.assistant_id)) {
-        return (
-          'Please define the `assistant_id` property inside' +
-          ` the openAI [assistant](https://deepchat.dev/docs/directConnection/openAI#Assistant) object.`
-        );
-      }
     } else if (deepChat.request) {
       if (!deepChat.request.url && !deepChat.request.handler) {
         return (

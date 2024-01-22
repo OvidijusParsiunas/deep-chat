@@ -1,4 +1,4 @@
-import {AssistantFunctionHandler, OpenAIAssistant} from '../../types/openAI';
+import {AssistantFunctionHandler, OpenAIAssistant, OpenAINewAssistant} from '../../types/openAI';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {OpenAIAssistantFiles} from './utils/openAIAssistantFiles';
 import {DirectConnection} from '../../types/directConnection';
@@ -13,6 +13,7 @@ import {PollResult} from '../serviceIO';
 import {
   OpenAIAssistantMessagesResult,
   OpenAIAssistantInitReqResult,
+  OpenAINewAssistantResult,
   OpenAIRunResult,
   ToolCalls,
 } from '../../types/openAIResult';
@@ -22,12 +23,17 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   override getKeyLink = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly THREAD_PREFIX = 'https://api.openai.com/v1/threads';
+  private static readonly NEW_ASSISTANT_URL = 'https://api.openai.com/v1/assistants';
   private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect'];
   private messages?: Messages;
   private run_id?: string;
   private searchedForThreadId = false;
+  private readonly config: OpenAIAssistant = {};
+  private readonly newAssistantDetails: OpenAINewAssistant = {
+    model: 'gpt-4',
+  };
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -35,9 +41,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
     if (typeof config === 'object') {
-      this.rawBody.assistant_id = config.assistant_id;
+      this.config = config; // stored that assistant_id could be added
+      Object.assign(this.newAssistantDetails, this.config.new_assistant);
       const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
+    } else if (directConnectionCopy.openAI?.assistant) {
+      directConnectionCopy.openAI.assistant = config;
     }
     this.requestSettings.headers ??= {};
     this.requestSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
@@ -75,11 +84,25 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
     const file_ids = files ? await OpenAIAssistantFiles.storeFiles(this, messages, files) : undefined;
     this.requestSettings.method = 'POST';
     this.callService(messages, pMessages, file_ids);
+  }
+
+  private async createNewAssistant() {
+    try {
+      this.url = OpenAIAssistantIO.NEW_ASSISTANT_URL;
+      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
+      this.config.assistant_id = (result as OpenAINewAssistantResult).id;
+      return this.config.assistant_id;
+    } catch (e) {
+      console.error(e);
+      console.error('Failed to create a new assistant'); // letting later calls throw and handle error
+    }
+    return undefined;
   }
 
   private searchPreviousMessagesForThreadId(messages: MessageContentI[]) {
