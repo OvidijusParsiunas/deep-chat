@@ -131,6 +131,11 @@ chatElementRef.addEventListener('render', () => { console.log("Finished renderin
 </TabItem>
 </Tabs>
 
+:::note
+Setting a property's value on the DeepChat element when this event is triggered can cause infinite recursion
+as the component will re-render every time a property value is set. Use a flag variable to prevent this - [example](https://github.com/OvidijusParsiunas/deep-chat/issues/99#issuecomment-1899202984).
+:::
+
 <LineBreak></LineBreak>
 
 ### `onError` {#onError}
