@@ -50,7 +50,7 @@ export interface ServiceIO {
 
   insertKeyPlaceholderText?: string;
 
-  getKeyLink?: string;
+  keyHelpUrl?: string;
 
   url?: string;
 

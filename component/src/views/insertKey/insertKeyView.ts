@@ -11,10 +11,10 @@ export class InsertKeyView {
     return cautionElement;
   }
 
-  private static createHelpLink(link: string) {
+  private static createHelpLink(keyHelpUrl: string) {
     const helpElement = document.createElement('a');
     helpElement.classList.add('insert-key-input-help-text');
-    helpElement.href = link;
+    helpElement.href = keyHelpUrl;
     helpElement.innerText = 'Find more info here';
     helpElement.target = '_blank';
     return helpElement;
@@ -27,15 +27,15 @@ export class InsertKeyView {
     return failElement;
   }
 
-  private static createHelpTextContainer(link?: string, displayCaution = true) {
+  private static createHelpTextContainer(keyHelpUrl?: string, displayCaution = true) {
     const helpTextContainerElement = document.createElement('div');
     helpTextContainerElement.id = 'insert-key-help-text-container';
     const helpTextContentsElement = document.createElement('div');
     helpTextContentsElement.id = 'insert-key-help-text-contents';
     const failTextElement = InsertKeyView.createFailText();
     helpTextContentsElement.appendChild(failTextElement);
-    if (link) {
-      const helpLinkElement = InsertKeyView.createHelpLink(link);
+    if (keyHelpUrl) {
+      const helpLinkElement = InsertKeyView.createHelpLink(keyHelpUrl);
       helpTextContentsElement.appendChild(helpLinkElement);
     }
     if (displayCaution === true) {
@@ -116,7 +116,7 @@ export class InsertKeyView {
     contentsElement.appendChild(inputContainerElement);
     const startButton = InsertKeyView.createStartButton();
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer(
-      serviceIO.getKeyLink, serviceIO.deepChat._insertKeyViewStyles?.displayCautionText);
+      serviceIO.keyHelpUrl, serviceIO.deepChat._insertKeyViewStyles?.displayCautionText);
     contentsElement.appendChild(startButton);
     contentsElement.appendChild(helpTextContainerElement);
     InsertKeyView.addVerificationEvents(inputElement, startButton, failTextElement, changeToChat, serviceIO);

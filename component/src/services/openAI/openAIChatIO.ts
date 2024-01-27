@@ -18,7 +18,7 @@ type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
-  override getKeyLink = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
   private readonly _functionHandler?: ChatFunctionHandler;

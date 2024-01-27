@@ -10,7 +10,7 @@ import {Azure} from '../../types/azure';
 
 export class AzureTranslationIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
-  override getKeyLink =
+  override keyHelpUrl =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
   url = '';

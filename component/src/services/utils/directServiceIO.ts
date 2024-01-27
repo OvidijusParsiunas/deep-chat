@@ -10,7 +10,7 @@ import {DeepChat} from '../../deepChat';
 export class DirectServiceIO extends BaseServiceIO {
   key?: string;
   insertKeyPlaceholderText = 'API Key';
-  getKeyLink = '';
+  keyHelpUrl = '';
   sessionId?: string;
   private readonly keyVerificationDetails: KeyVerificationDetails;
   private readonly buildHeadersFunc: BuildHeadersFunc;

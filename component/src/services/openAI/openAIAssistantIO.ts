@@ -20,7 +20,7 @@ import {
 
 export class OpenAIAssistantIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
-  override getKeyLink = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly THREAD_PREFIX = 'https://api.openai.com/v1/threads';
   private static readonly NEW_ASSISTANT_URL = 'https://api.openai.com/v1/assistants';

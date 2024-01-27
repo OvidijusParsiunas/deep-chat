@@ -11,7 +11,7 @@ import {DeepChat} from '../../deepChat';
 
 export class OpenAITextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
-  override getKeyLink = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/audio/speech';
   permittedErrorPrefixes = ['Invalid'];
   private static readonly DEFAULT_MODEL = 'tts-1';

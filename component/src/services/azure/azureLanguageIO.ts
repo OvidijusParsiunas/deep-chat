@@ -7,7 +7,7 @@ import {DeepChat} from '../../deepChat';
 
 export class AzureLanguageIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Language Subscription Key';
-  override getKeyLink =
+  override keyHelpUrl =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
   permittedErrorPrefixes = ['Access'];

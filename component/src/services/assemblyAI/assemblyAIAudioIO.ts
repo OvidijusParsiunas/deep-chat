@@ -9,7 +9,7 @@ import {DeepChat} from '../../deepChat';
 
 export class AssemblyAIAudioIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'AssemblyAI API Key';
-  override getKeyLink = 'https://www.assemblyai.com/app/account';
+  override keyHelpUrl = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>AssemblyAI Audio</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text.

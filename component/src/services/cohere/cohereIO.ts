@@ -5,7 +5,7 @@ import {DeepChat} from '../../deepChat';
 
 export class CohereIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Cohere API Key';
-  override getKeyLink = 'https://dashboard.cohere.ai/api-keys';
+  override keyHelpUrl = 'https://dashboard.cohere.ai/api-keys';
   textInputPlaceholderText: string;
   permittedErrorPrefixes = ['invalid'];
   url: string;

@@ -14,7 +14,7 @@ type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceCon
 
 export class HuggingFaceIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Hugging Face Token';
-  override getKeyLink = 'https://huggingface.co/settings/tokens';
+  override keyHelpUrl = 'https://huggingface.co/settings/tokens';
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
