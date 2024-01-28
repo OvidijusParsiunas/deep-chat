@@ -192,13 +192,41 @@ If `max_tokens` is not set, the component sets it to _300_ as otherwise the API 
 
 ### `Assistant` {#Assistant}
 
-- Type: {`assistant_id?: string`, [`function_handler?: AssistantFunctionHandler`](#assistant-functions)}
+- Type: `true` | {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `assistant_id?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`new_assistant?: NewAssistant`](#NewAssistant), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: AssistantFunctionHandler`](#assistant-functions), <br />
+  }
 
-Connect to your Open AI [`assistant`](https://platform.openai.com/docs/assistants/overview). <br />
-`assistant_id` is the id of your assistant. To create a new one - please go to the official [OpenAI assistants platform](https://platform.openai.com/assistants). <br />
+Connect to your Open AI [`assistant`](https://platform.openai.com/docs/assistants/overview).
+When set to `true` or the `assistant_id` is not defined, Deep Chat will automatically create a new assistant when the user sends the first message. <br />
+`assistant_id` is the id of your assistant. <br />
+`new_assistant` defines the details for the newly created assistant. <br />
 `function_handler` is the actual function used to handle the model's function response. Please navigate to [Assistant Functions](#assistant-functions) for more info. <br />
 
-Try it out live in the Deep Chat [Playground](/playground).
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          assistant: {},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          assistant: {},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -208,9 +236,8 @@ Try it out live in the Deep Chat [Playground](/playground).
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "assistant": {"assistant_id": "placeholder-id"}
+      "assistant": true
   }}'
-  mixedFiles="true"
 ></deep-chat>
 ```
 
@@ -224,9 +251,8 @@ Try it out live in the Deep Chat [Playground](/playground).
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "assistant": {"assistant_id": "placeholder-id"}
+      "assistant": true
   }}'
-  mixedFiles="true"
   style="border-radius: 8px"
 ></deep-chat>
 ```
@@ -237,6 +263,113 @@ Try it out live in the Deep Chat [Playground](/playground).
 :::info
 Returned [MessageContent](/docs/messages#MessageContent) contains a hidden property called `_sessionId` which
 stores the thread id and allows conversation to continue on a new session.
+:::
+
+<LineBreak></LineBreak>
+
+#### `NewAssistant` {#NewAssistant}
+
+- Type: {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `name?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `instructions?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `fileIds?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tools?`: { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?`: `"code_interpreter"` | `"retrieval"` | `"function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `function?`: {`name: string`, `description?: string`, `parameters?: object`} <br />
+  }}
+
+- Default: _{model: "gpt-4"}_
+
+When `assistant_id` is not used, this object is used to define the details of the new assistant that will be created by Deep Chat when
+the user sends a new message. This object follows the [Open AI Create Asssistant API](https://platform.openai.com/docs/api-reference/assistants/createAssistant). <br />
+`model` is the name of the model to be used by the API. Check the [model overview](https://platform.openai.com/docs/models/overview) for more. <br />
+`name` and `description` are used to describe the new assistant. <br />
+`instructions` direct the assistant's behaviour. <br />
+`fileIds` is an array of file ids that the new assistant has access to. Log into OpenAI and check [files](https://platform.openai.com/files). <br />
+`tools` is an array of objects that describe the tools the assistant will have access to.
+When using the `"function"` tool, you will need to also define the `function` object. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          assistant: {
+            new_assistant: {
+              name: 'test model',
+              tools: [{type: 'code_interpreter'}],
+            },
+          },
+        },
+      }}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          assistant: {
+            new_assistant: {
+              name: 'test model',
+              tools: [{type: 'code_interpreter'}],
+            },
+          },
+        },
+      }}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "assistant": {
+        "new_assistant": {
+          "name": "Demo Assistant",
+          "tools": [{"type": "code_interpreter"}]
+      }}
+  }}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "assistant": {
+        "new_assistant": {
+          "name": "Demo Assistant",
+          "tools": [{"type": "code_interpreter"}]
+      }}
+  }}'
+  mixedFiles="true"
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+Access the newly created `assistant_id` via `chatElementRef._activeService.rawBody.assistant_id`.
 :::
 
 <LineBreak></LineBreak>

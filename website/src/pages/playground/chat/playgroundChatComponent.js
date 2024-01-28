@@ -11,11 +11,13 @@ export default function ChatComponent({config}) {
 
   // updating messages here to keep track of them so that when user moves to a different page they can be added to config
   // to note componentRef.current will be undefined, hence need to keep track
-  function newestMessages({isInitial}) {
+  function newMessage({isInitial}) {
     if (!isInitial) {
+      const deepChatComponent = componentRef.current.children[0];
+      if (config.connect?.openAI?.assistant) assignOpenAIAssistantId(deepChatComponent, config);
       const {messages} = config;
       messages.splice(0, messages.length);
-      messages.push(...componentRef.current.children[0].getMessages());
+      messages.push(...deepChatComponent.getMessages());
     }
   }
 
@@ -77,7 +79,7 @@ export default function ChatComponent({config}) {
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
-                  onNewMessage={newestMessages}
+                  onNewMessage={newMessage}
                   onClearMessages={clearMessages}
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
@@ -90,7 +92,7 @@ export default function ChatComponent({config}) {
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
-                  onNewMessage={newestMessages}
+                  onNewMessage={newMessage}
                   onClearMessages={clearMessages}
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
@@ -103,7 +105,7 @@ export default function ChatComponent({config}) {
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
-                  onNewMessage={newestMessages}
+                  onNewMessage={newMessage}
                   onClearMessages={clearMessages}
                 ></DeepChatBrowser>
               ) : (
@@ -118,7 +120,7 @@ export default function ChatComponent({config}) {
                   style={darkContainerStyle}
                   messageStyles={darkMessageStyles}
                   initialMessages={config.messages}
-                  onNewMessage={newestMessages}
+                  onNewMessage={newMessage}
                   onClearMessages={clearMessages}
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
@@ -143,7 +145,7 @@ export default function ChatComponent({config}) {
                 mixedFiles={allowMixedFiles}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
-                onNewMessage={newestMessages}
+                onNewMessage={newMessage}
                 onClearMessages={clearMessages}
               ></DeepChatBrowser>
             ) : config?.connect?.demo ? (
@@ -151,7 +153,7 @@ export default function ChatComponent({config}) {
                 demo={DEMO_RESPONSE}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
-                onNewMessage={newestMessages}
+                onNewMessage={newMessage}
                 onClearMessages={clearMessages}
               ></DeepChatBrowser>
             ) : config?.connect?.webModel ? (
@@ -159,7 +161,7 @@ export default function ChatComponent({config}) {
                 webModel={getWebModelConfig(config.connect.webModel)}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
-                onNewMessage={newestMessages}
+                onNewMessage={newMessage}
                 onClearMessages={clearMessages}
               ></DeepChatBrowser>
             ) : (
@@ -173,7 +175,7 @@ export default function ChatComponent({config}) {
                 mixedFiles={allowMixedFiles}
                 style={lightContainerStyle}
                 initialMessages={config.messages}
-                onNewMessage={newestMessages}
+                onNewMessage={newMessage}
                 onClearMessages={clearMessages}
               ></DeepChatBrowser>
             )}
@@ -254,3 +256,13 @@ const lightContainerStyle = {
   marginRight: '10px',
   width: '302px',
 };
+
+function assignOpenAIAssistantId(deepChatComponent, config) {
+  if (deepChatComponent._activeService.rawBody.assistant_id) {
+    if (typeof config.connect.openAI.assistant === 'boolean') {
+      config.connect.openAI.assistant = {assistant_id: deepChatComponent._activeService.rawBody.assistant_id};
+    } else if (!config.connect.openAI.assistant.assistant_id) {
+      config.connect.openAI.assistant.assistant_id = deepChatComponent._activeService.rawBody.assistant_id;
+    }
+  }
+}

@@ -361,9 +361,6 @@ const REQUIRED_PARAMETERS = {
   huggingFace: {
     questionAnswer: 'context',
   },
-  openAI: {
-    assistant: 'assistant_id',
-  },
 };
 
 const REQUIRED_PARAMETERS_LINKS = {
@@ -374,9 +371,6 @@ const REQUIRED_PARAMETERS_LINKS = {
   },
   huggingFace: {
     questionAnswer: 'https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task',
-  },
-  openAI: {
-    assistant: 'https://platform.openai.com/docs/api-reference/assistants',
   },
 };
 
@@ -430,6 +424,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
       allowCamera: ['true', 'false'],
     },
     assistant: {
+      assistant_id: 'string',
       allowMixedFiles: ['true', 'false'],
     },
     images: {
