@@ -1,6 +1,10 @@
 import {MessageContentI} from '../../../types/messagesInternal';
 import {MessageContent} from '../../../types/messages';
+import {Avatars} from '../../../types/avatars';
 import {MessageElements} from './messages';
+import {Names} from '../../../types/names';
+import {Avatar} from './avatar';
+import {Name} from './name';
 
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
@@ -86,5 +90,16 @@ export class MessageUtils {
 
   public static getLastMessageElement(messagesEl: HTMLElement) {
     return messagesEl.children[messagesEl.children.length - 1];
+  }
+
+  public static addRoleElements(bubbleElement: HTMLElement, role: string, avatars?: Avatars, names?: Names) {
+    if (avatars) Avatar.add(bubbleElement, role, avatars);
+    if (names) Name.add(bubbleElement, role, names);
+  }
+
+  public static hideRoleElements(messageElementRefs: MessageElements[], avatars: boolean, names: boolean) {
+    const innerContainer = messageElementRefs[messageElementRefs.length - 1].innerContainer;
+    if (avatars) Avatar.hide(innerContainer);
+    if (names) Name.hide(innerContainer);
   }
 }

@@ -3,20 +3,26 @@ import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
 import {MessageUtils} from './messageUtils';
 
-export class AvatarEl {
+export class Avatar {
+  private static readonly CONTAINER_CLASS = 'avatar-container';
+
+  public static hide(innerContainer: HTMLElement) {
+    (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility = 'hidden';
+  }
+
   private static applyCustomStylesToElements(container: HTMLElement, avatar: HTMLElement, style: AvatarStyles) {
     Object.assign(container.style, style.container);
     Object.assign(avatar.style, style.avatar);
   }
 
   private static applyCustomStyles(container: HTMLElement, avatar: HTMLElement, avatars: CustomAvatars, role: string) {
-    if (avatars.default?.styles) AvatarEl.applyCustomStylesToElements(container, avatar, avatars.default.styles);
+    if (avatars.default?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars.default.styles);
     if (role === MessageUtils.USER_ROLE) {
-      if (avatars.user?.styles) AvatarEl.applyCustomStylesToElements(container, avatar, avatars.user.styles);
+      if (avatars.user?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars.user.styles);
     } else {
-      if (avatars.ai?.styles) AvatarEl.applyCustomStylesToElements(container, avatar, avatars.ai.styles);
+      if (avatars.ai?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars.ai.styles);
       const customRoleStyles = avatars[role]?.styles;
-      if (customRoleStyles) AvatarEl.applyCustomStylesToElements(container, avatar, customRoleStyles);
+      if (customRoleStyles) Avatar.applyCustomStylesToElements(container, avatar, customRoleStyles);
     }
   }
 
@@ -29,9 +35,9 @@ export class AvatarEl {
     }
     avatar.classList.add('avatar');
     const avatarContainer = document.createElement('div');
-    avatarContainer.classList.add('avatar-container');
+    avatarContainer.classList.add(Avatar.CONTAINER_CLASS);
     avatarContainer.appendChild(avatar);
-    if (avatars) AvatarEl.applyCustomStyles(avatarContainer, avatar, avatars, role);
+    if (avatars) Avatar.applyCustomStyles(avatarContainer, avatar, avatars, role);
     return avatarContainer;
   }
 
@@ -45,8 +51,8 @@ export class AvatarEl {
 
   public static add(messageText: HTMLElement, role: string, avatars: Avatars) {
     const styles = typeof avatars === 'boolean' ? undefined : avatars;
-    const avatarContainerElement = AvatarEl.createAvatar(role, styles);
-    const position = AvatarEl.getPosition(role, styles);
+    const avatarContainerElement = Avatar.createAvatar(role, styles);
+    const position = Avatar.getPosition(role, styles);
     avatarContainerElement.classList.add(position === 'left' ? 'left-item-position' : 'right-item-position');
     messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatarContainerElement);
   }

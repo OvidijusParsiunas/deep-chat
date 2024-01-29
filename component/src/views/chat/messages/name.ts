@@ -2,6 +2,12 @@ import {Names, Name as NameT, CustomNames} from '../../../types/names';
 import {MessageUtils} from './messageUtils';
 
 export class Name {
+  private static readonly NAME_CLASS = 'name';
+
+  public static hide(innerContainer: HTMLElement) {
+    (innerContainer.getElementsByClassName(Name.NAME_CLASS)[0] as HTMLElement).style.visibility = 'hidden';
+  }
+
   private static getPosition(role: string, names: CustomNames) {
     let position: NameT['position'] | undefined = names?.[role]?.position;
     if (role !== MessageUtils.USER_ROLE) position ??= names?.ai?.position;
@@ -32,7 +38,7 @@ export class Name {
 
   private static createName(role: string, names: CustomNames) {
     const element = document.createElement('div');
-    element.classList.add('name');
+    element.classList.add(Name.NAME_CLASS);
     element.textContent = Name.getNameText(role, names);
     Name.applyStyle(element, role, names);
     return element;

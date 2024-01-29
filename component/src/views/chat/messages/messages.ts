@@ -220,10 +220,6 @@ export class Messages extends MessagesBase {
     return undefined;
   }
 
-  public isLastMessageError() {
-    return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.classList.contains('error-message-text');
-  }
-
   public removeError() {
     if (this.isLastMessageError()) MessageUtils.getLastMessageElement(this.elementRef).remove();
   }

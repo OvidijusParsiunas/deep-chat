@@ -15,8 +15,6 @@ import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
 import {Remarkable} from 'remarkable';
-import {AvatarEl} from './avatar';
-import {Name} from './name';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -123,11 +121,13 @@ export class MessagesBase {
 
   // prettier-ignore
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
+    if (this.messages[this.messages.length - 1]?.role === role && !this.isLastMessageError()) {
+      MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
+    }
     bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
       role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
     this.renderText(bubbleElement, text);
-    if (this._avatars) AvatarEl.add(bubbleElement, role, this._avatars);
-    if (this._names) Name.add(bubbleElement, role, this._names);
+    MessageUtils.addRoleElements(bubbleElement, role, this._avatars, this._names);
     return {bubbleElement};
   }
 
@@ -155,6 +155,10 @@ export class MessagesBase {
     const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
     lastMessage.outerContainer.remove();
     this.messageElementRefs.pop();
+  }
+
+  public isLastMessageError() {
+    return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.classList.contains('error-message-text');
   }
 
   public sendClientUpdate(message: MessageContentI, isInitial = false) {
