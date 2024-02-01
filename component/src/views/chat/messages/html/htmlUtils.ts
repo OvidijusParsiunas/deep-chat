@@ -14,8 +14,8 @@ export class HTMLUtils {
 
   private static applyEventsToElement(element: HTMLElement, events: EventToFunction) {
     Object.keys(events).forEach((event) => {
-      const eventFunction = events[event as keyof EventToFunction];
-      if (eventFunction) element.addEventListener(event as keyof EventToFunction, eventFunction as () => void);
+      const eventFunction = events[event];
+      if (eventFunction) element.addEventListener(event, eventFunction as () => void);
     });
   }
 
