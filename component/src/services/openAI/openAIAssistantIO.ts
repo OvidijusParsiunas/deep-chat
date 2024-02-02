@@ -31,9 +31,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private run_id?: string;
   private searchedForThreadId = false;
   private readonly config: OpenAIAssistant = {};
-  private readonly newAssistantDetails: OpenAINewAssistant = {
-    model: 'gpt-4',
-  };
+  private readonly newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -141,14 +139,20 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (status === 'completed' && this.messages) {
       // https://platform.openai.com/docs/api-reference/messages/listMessages
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
-      const threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
+      let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
+      if (this.deepChat.responseInterceptor) {
+        threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
+      }
       const lastMessage = threadMessages.data[0];
       const content = lastMessage.content.find((content) => !!content.text || !!content.image_file);
       const {text, files} = await OpenAIAssistantFiles.getFilesAndText(this, lastMessage, content);
       return {text, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
-    if (status === 'requires_action' && toolCalls) return await this.handleTools(toolCalls);
+    if (status === 'requires_action' && toolCalls) {
+      const toolsResult = await this.handleTools(toolCalls);
+      return (await this.deepChat.responseInterceptor?.(toolsResult)) || toolsResult;
+    }
     throw Error(`Thread run status: ${status}`);
   }
 

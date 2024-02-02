@@ -118,7 +118,10 @@ export class OpenAIChatIO extends DirectServiceIO {
       return {name: call.function.name, arguments: call.function.arguments};
     });
     const handlerResponse = await this._functionHandler?.(functions);
-    if (handlerResponse.text) return {text: handlerResponse.text};
+    if (handlerResponse.text) {
+      const response = {text: handlerResponse.text};
+      return await this.deepChat.responseInterceptor?.(response) || response;
+    }
     bodyCp.messages.push(message);
     if ((Array.isArray(handlerResponse) && !handlerResponse.find((response) => typeof response !== 'string'))
         || functions.length === handlerResponse.length) {
@@ -133,7 +136,8 @@ export class OpenAIChatIO extends DirectServiceIO {
       });
       delete bodyCp.tools;
       delete bodyCp.tool_choice;
-      const result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
+      let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
+      result = await this.deepChat.responseInterceptor?.(result) || result;
       if (result.error) throw result.error.message;
       return {text: result.choices[0].message.content || ''};
     }
