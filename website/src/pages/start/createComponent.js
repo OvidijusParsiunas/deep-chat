@@ -48,7 +48,7 @@ function Logos(props) {
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
-        <a href="https://codesandbox.io/p/sandbox/deep-chat-solidjs-nnx9nc?file=%2Fsrc%2FApp.tsx%3A1%2C1" target="_blank">
+        <a href="https://stackblitz.com/edit/deep-chat-solid?file=src%2FApp.tsx" target="_blank">
           <img src={solidLogo} width="40" style={{paddingTop: 8}} />
         </a>
       </div>
