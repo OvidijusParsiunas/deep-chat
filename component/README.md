@@ -157,14 +157,14 @@ $ npm run build:bundle
 Thankyou to our generous sponsors!
 
 <p align="center">
-<img src="https://github.com/eljefedelrodeodeljefe.png" width="100px" hspace="24"/>
-&nbsp; &nbsp; &nbsp; &nbsp;  
-<img src="https://github.com/matthiasamberg.png" hspace="8" width="100px"/>
+    <img src="https://github.com/eljefedelrodeodeljefe.png" width="110px" hspace="20"/>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="https://github.com/matthiasamberg.png" hspace="2" width="110px"/>
 </p>
 <p align="center">
-<a href="https://github.com/eljefedelrodeodeljefe">eljefedelrodeodeljefe</a>
-&nbsp; &nbsp; &nbsp; &nbsp;
-<a href="https://github.com/matthiasamberg" >matthiasamberg</a>
+    <a href="https://github.com/eljefedelrodeodeljefe">eljefedelrodeodeljefe</a>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a href="https://github.com/matthiasamberg" >matthiasamberg</a>
 </p>
 
 ## :heart: Contributions
