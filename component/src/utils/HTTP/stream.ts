@@ -10,6 +10,8 @@ import {Demo} from '../demo/demo';
 
 type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
 
+type UpsertFunc = (response?: ResponseI) => MessageStream | void;
+
 export class Stream {
   // prettier-ignore
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
@@ -44,9 +46,9 @@ export class Stream {
           }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
           io.extractResultData?.(finalEventData)
-            .then((textBody?: ResponseI) => {
+            .then((result?: ResponseI) => {
               // do not to stop the stream on one message failure to give other messages a change to display
-              stream.upsertStreamedMessage(textBody);
+              Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
@@ -103,9 +105,24 @@ export class Stream {
     return typeof stream === 'object' && !!stream.simulation;
   }
 
+  public static isSimulatable(stream?: StreamI, respone?: ResponseI) {
+    return Stream.isSimulation(stream) && respone && (respone.text || respone.html);
+  }
+
   private static abort(timeout: number, stream: MessageStream, onClose: () => void) {
     clearTimeout(timeout);
     stream.finaliseStreamedMessage();
     onClose();
+  }
+
+  public static upsertWFiles(messages: Messages, upsert: UpsertFunc, stream?: MessageStream, response?: ResponseI) {
+    if (response?.text || response?.html) {
+      const resultStream = upsert(response);
+      stream ??= resultStream || undefined; // when streaming with websockets - created per message due to roles
+    }
+    if (response?.files) {
+      messages.addNewMessage({files: response.files});
+      stream?.markFileAded();
+    }
   }
 }

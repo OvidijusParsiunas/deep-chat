@@ -1,1 +1,5 @@
-export type Stream = boolean | {simulation?: boolean | number};
+export interface StreamSimulation {
+  simulation?: boolean | number | string;
+}
+
+export type Stream = boolean | StreamSimulation;

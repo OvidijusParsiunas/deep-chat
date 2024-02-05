@@ -1,7 +1,9 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
+import {RoleToStream, Websocket} from './websocket';
 import {ServiceIO} from '../../services/serviceIO';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
@@ -27,7 +29,7 @@ export class CustomHandler {
         console.error(result.error);
         messages.addNewErrorMessage('service', result.error);
         io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulation(io.deepChat.stream)) {
+      } else if (Stream.isSimulatable(io.deepChat.stream, result)) {
         Stream.simulate(messages, io.streamHandlers, result);
       } else {
         messages.addNewMessage(result);
@@ -36,6 +38,15 @@ export class CustomHandler {
     };
     const signals = CustomHandler.generateOptionalSignals();
     io.requestSettings.handler?.(body, {...signals, onResponse});
+  }
+
+  private static attemptToFinaliseStream(stream: MessageStream, messages: Messages) {
+    try {
+      stream.finaliseStreamedMessage();
+    } catch (error) {
+      console.error(error);
+      messages.addNewErrorMessage('service', error as string);
+    }
   }
 
   // prettier-ignore
@@ -50,27 +61,26 @@ export class CustomHandler {
     };
     const onClose = () => {
       if (!isHandlerActive) return;
-      stream.finaliseStreamedMessage();
+      CustomHandler.attemptToFinaliseStream(stream, messages);
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
     const onResponse = (result: Response) => {
       if (!isHandlerActive) return;
-      if (!result || typeof result !== 'object'
-        || (typeof result.error !== 'string' && typeof result.html !== 'string' && typeof result.text !== 'string')) {
+      if (!result || typeof result !== 'object') {
         console.error(ErrorMessages.INVALID_RESPONSE(result, 'server', false));
       } else if (result.error) {
         console.error(result.error);
         stream.finaliseStreamedMessage();
-        io.streamHandlers.onClose();
         messages.addNewErrorMessage('service', result.error);
+        io.streamHandlers.onClose();
         isHandlerActive = false;
       } else {
-        stream.upsertStreamedMessage(result);
+        Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
       }
     };
     io.streamHandlers.abortStream.abort = () => {
-      stream.finaliseStreamedMessage();
+      CustomHandler.attemptToFinaliseStream(stream, messages);
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
@@ -81,7 +91,7 @@ export class CustomHandler {
 
   // prettier-ignore
   public static websocket(io: ServiceIO, messages: Messages) {
-    const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}};
+    const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}, roleToStream: {}};
     io.websocket = internalConfig;
     const onOpen = () => {
       messages.removeError();
@@ -99,8 +109,10 @@ export class CustomHandler {
       } else if (typeof result.error === 'string') {
         console.error(result.error);
         if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', result.error);
-      } else if (io.deepChat.stream) {
-        Stream.simulate(messages, io.streamHandlers, result);
+      } else if (Stream.isSimulation(io.deepChat.stream)) {
+        const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
+        const stream = (internalConfig.roleToStream as RoleToStream)[response.role || MessageUtils.AI_ROLE];
+        Stream.upsertWFiles(messages, upsertFunc, stream, response);
       } else {
         messages.addNewMessage(result);
       }

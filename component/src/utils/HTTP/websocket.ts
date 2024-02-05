@@ -1,11 +1,16 @@
+import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
+import {StreamSimulation} from '../../types/stream';
 import {ServiceIO} from '../../services/serviceIO';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
+
+export type RoleToStream = {[role: string]: MessageStream};
 
 export class Websocket {
   public static setup(io: ServiceIO) {
@@ -51,6 +56,7 @@ export class Websocket {
   }
 
   private static assignListeners(io: ServiceIO, ws: WebSocket, messages: Messages) {
+    const roleToStream = {} as RoleToStream;
     ws.onmessage = async (message) => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
@@ -60,7 +66,9 @@ export class Websocket {
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
         if (Stream.isSimulation(io.deepChat.stream)) {
-          Stream.simulate(messages, io.streamHandlers, resultData);
+          const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
+          const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
+          Stream.upsertWFiles(messages, upsertFunc, stream, resultData);
         } else {
           messages.addNewMessage(resultData);
         }
@@ -109,5 +117,23 @@ export class Websocket {
   // if false then it is the internal websocket handler
   private static isWebSocket(websocket: WebSocket | IWebsocketHandler): websocket is WebSocket {
     return (websocket as WebSocket).send !== undefined;
+  }
+
+  public static stream(io: ServiceIO, messages: Messages, roleToStream: RoleToStream, result?: Response) {
+    if (!result) return;
+    const simulation = (io.deepChat.stream as StreamSimulation).simulation;
+    if (typeof simulation === 'string') {
+      const role = result.role || MessageUtils.AI_ROLE;
+      const stream = roleToStream[role];
+      if (result.text === simulation) {
+        stream?.finaliseStreamedMessage();
+        delete roleToStream[role];
+      } else {
+        roleToStream[role] ??= new MessageStream(messages);
+        roleToStream[role].upsertStreamedMessage(result);
+      }
+    } else {
+      Stream.simulate(messages, io.streamHandlers, result);
+    }
   }
 }

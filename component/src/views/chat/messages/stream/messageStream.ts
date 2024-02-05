@@ -11,6 +11,7 @@ import {MessageElements} from '../messages';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
+  private _fileAdded = false;
   private _streamedContent = '';
   private _streamType: 'text' | 'html' | '' = '';
   private _elements?: MessageElements;
@@ -80,11 +81,10 @@ export class MessageStream {
   }
 
   public finaliseStreamedMessage() {
-    const {textElementsToText, elementRef} = this._messages;
-    const lastMessageBubbleElClasses = MessageUtils.getLastMessageBubbleElement(elementRef)?.classList;
-    if (lastMessageBubbleElClasses?.contains('loading-message-text'))
-      throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
-    if (!lastMessageBubbleElClasses?.contains(MessageStream.MESSAGE_CLASS)) return;
+    const {textElementsToText} = this._messages;
+    if (this._fileAdded && !this._elements) return;
+    if (!this._elements) throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
+    if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
     const newMessage: MessageContentI = {role: this._activeMessageRole || MessageUtils.AI_ROLE};
     if (this._streamType === 'text') {
       textElementsToText[textElementsToText.length - 1][1] = this._streamedContent;
@@ -92,7 +92,7 @@ export class MessageStream {
       if (this._messages.textToSpeech) TextToSpeech.speak(this._streamedContent, this._messages.textToSpeech);
     } else if (this._streamType === 'html') {
       if (this._streamedContent === MessageStream.HTML_CONTENT_PLACEHOLDER) {
-        this._streamedContent = MessageUtils.getLastMessageBubbleElement(elementRef)?.innerHTML || '';
+        this._streamedContent = this._elements.bubbleElement?.innerHTML || '';
       }
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);
       newMessage.html = this._streamedContent;
@@ -102,5 +102,9 @@ export class MessageStream {
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(newMessage), false);
     }
     this._hasStreamEnded = true;
+  }
+
+  public markFileAded() {
+    this._fileAdded = true;
   }
 }
