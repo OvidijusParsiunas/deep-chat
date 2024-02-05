@@ -152,6 +152,21 @@ $ npm run start
 $ npm run build:bundle
 ```
 
+## :star2: Sponsors
+
+Thankyou to our generous sponsors!
+
+<p align="center">
+<img src="https://github.com/eljefedelrodeodeljefe.png" width="100px" hspace="24"/>
+&nbsp; &nbsp; &nbsp; &nbsp;  
+<img src="https://github.com/matthiasamberg.png" hspace="8" width="100px"/>
+</p>
+<p align="center">
+<a href="https://github.com/eljefedelrodeodeljefe">eljefedelrodeodeljefe</a>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<a href="https://github.com/matthiasamberg" >matthiasamberg</a>
+</p>
+
 ## :heart: Contributions
 
 Open source is built by the community for the community. All contributions to this project are welcome!<br>
