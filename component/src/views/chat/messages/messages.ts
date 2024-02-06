@@ -69,6 +69,7 @@ export class Messages extends MessagesBase {
         this.textToSpeech = processedConfig;
       });
     }
+    if (serviceIO.fetchHistory) this.fetchHistory(serviceIO.fetchHistory);
   }
 
   private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
@@ -133,6 +134,15 @@ export class Messages extends MessagesBase {
     });
     // attempt to wait for the font file to be downloaded as otherwise text dimensions change after scroll
     // the timeout is sometimes not long enough - see the following on how user's can fix it:
+    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
+    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
+  }
+
+  private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
+    const history = await ioFetchHistory();
+    history.forEach((message) => {
+      this.addNewMessage(message, true);
+    });
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
   }

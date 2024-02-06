@@ -95,7 +95,9 @@ export class OpenAIAssistantFiles {
     return fileDetails;
   }
 
-  private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails, content?: OpenAIAssistantContent) {
+  // prettier-ignore
+  private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails,
+      role?: string, content?: OpenAIAssistantContent) {
     let files: MessageFile[] | undefined;
     if (fileDetails.length > 0) {
       files = await OpenAIAssistantFiles.getFiles(io, fileDetails);
@@ -109,12 +111,12 @@ export class OpenAIAssistantFiles {
         });
       }
     }
-    return {files, text: content?.text?.value};
+    return {files, text: content?.text?.value, role};
   }
 
-  public static async getFilesAndText(io: ServiceIO, lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
-    const fileDetails = OpenAIAssistantFiles.getFileDetails(lastMessage, content);
+  public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
+    const fileDetails = OpenAIAssistantFiles.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
-    return await OpenAIAssistantFiles.getFilesAndNewText(io, fileDetails, content);
+    return await OpenAIAssistantFiles.getFilesAndNewText(io, fileDetails, message.role, content);
   }
 }

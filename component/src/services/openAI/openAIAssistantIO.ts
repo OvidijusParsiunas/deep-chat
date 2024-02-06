@@ -5,6 +5,7 @@ import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -32,6 +33,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private searchedForThreadId = false;
   private readonly config: OpenAIAssistant = {};
   private readonly newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
+  private readonly shouldFetchHistory: boolean = false;
+  fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -40,8 +43,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
     if (typeof config === 'object') {
       this.config = config; // stored that assistant_id could be added
-      Object.assign(this.newAssistantDetails, this.config.new_assistant);
-      const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      const {new_assistant, thread_id, load_thread_history, function_handler} = this.config;
+      Object.assign(this.newAssistantDetails, new_assistant);
+      if (thread_id) this.sessionId = thread_id;
+      if (load_thread_history) this.shouldFetchHistory = true;
       if (function_handler) this._functionHandler = function_handler;
     } else if (directConnectionCopy.openAI?.assistant) {
       directConnectionCopy.openAI.assistant = config;
@@ -49,6 +54,18 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.requestSettings.headers ??= {};
     this.requestSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
+    if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
+  }
+
+  private async fetchHistoryFunc() {
+    setTimeout(() => this.deepChat.disableSubmitButton(), 2); // not initialised when fetchHistoryFunc called
+    try {
+      const threadMessages = await this.getThreadMessages(this.sessionId as string, true);
+      this.deepChat.disableSubmitButton(false);
+      return threadMessages.reverse();
+    } catch (e) {
+      return [{error: 'failed to fetch thread history'}];
+    }
   }
 
   private processMessage(pMessages: MessageContentI[], file_ids?: string[]) {
@@ -133,19 +150,27 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
   }
 
+  private async getThreadMessages(thread_id: string, isInitial = false) {
+    // https://platform.openai.com/docs/api-reference/messages/listMessages
+    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${thread_id}/messages`;
+    let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
+    if (!isInitial && this.deepChat.responseInterceptor) {
+      threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
+    }
+    const messages = isInitial ? threadMessages.data : [threadMessages.data[0]];
+    const parsedMessages = messages.map(async (data) => {
+      const content = data.content.find((content) => !!content.text || !!content.image_file);
+      return await OpenAIAssistantFiles.getFilesAndText(this, data, content);
+    });
+    return Promise.all(parsedMessages);
+  }
+
   async extractPollResultData(result: OpenAIRunResult): PollResult {
     const {status, required_action} = result;
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
     if (status === 'completed' && this.messages) {
-      // https://platform.openai.com/docs/api-reference/messages/listMessages
-      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${result.thread_id}/messages`;
-      let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
-      if (this.deepChat.responseInterceptor) {
-        threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
-      }
-      const lastMessage = threadMessages.data[0];
-      const content = lastMessage.content.find((content) => !!content.text || !!content.image_file);
-      const {text, files} = await OpenAIAssistantFiles.getFilesAndText(this, lastMessage, content);
+      const threadMessages = await this.getThreadMessages(result.thread_id);
+      const {text, files} = threadMessages[0];
       return {text, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;

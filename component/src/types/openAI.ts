@@ -48,6 +48,8 @@ export interface OpenAINewAssistant {
 // https://platform.openai.com/docs/api-reference/assistants
 export interface OpenAIAssistant {
   assistant_id?: string;
+  thread_id?: string;
+  load_thread_history?: boolean;
   new_assistant?: OpenAINewAssistant;
   function_handler?: AssistantFunctionHandler;
 }

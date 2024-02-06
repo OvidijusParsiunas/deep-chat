@@ -108,4 +108,6 @@ export interface ServiceIO {
   isSubmitProgrammaticallyDisabled?: boolean;
 
   sessionId?: string;
+
+  fetchHistory?: () => Promise<Response[]> | Response[];
 }

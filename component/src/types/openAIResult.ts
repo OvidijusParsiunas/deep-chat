@@ -22,6 +22,7 @@ export interface OpenAIAssistantContent {
 export interface OpenAIAssistantData {
   // https://platform.openai.com/docs/api-reference/messages/object
   content: OpenAIAssistantContent[];
+  role: string;
 }
 
 export interface OpenAIAssistantMessagesResult {
