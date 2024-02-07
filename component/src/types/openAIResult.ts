@@ -57,7 +57,9 @@ export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: s
 // text for completion request & stream
 // message for chat completion request
 // delta for chat completion stream
-type ResultChoice = InterfacesUnion<{text: string} | {message: OpenAIMessage} | {delta: OpenAIMessage}>;
+export type ResultChoice = InterfacesUnion<
+  {text: string} | {message: OpenAIMessage} | {delta: OpenAIMessage; finish_reason?: string}
+>;
 
 export interface OpenAIConverseResult {
   choices: ResultChoice[];

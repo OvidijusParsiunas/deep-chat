@@ -110,4 +110,7 @@ export interface ServiceIO {
   sessionId?: string;
 
   fetchHistory?: () => Promise<Response[]> | Response[];
+
+  // mostly used for streaming to not close the stream when it makes another request
+  asyncCallInProgress?: boolean;
 }

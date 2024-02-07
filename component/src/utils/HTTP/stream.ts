@@ -23,6 +23,7 @@ export class Stream {
     if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     const stream = new MessageStream(messages);
+    const fetchFunc = RequestUtils.fetch.bind(this, io, interceptedHeaders, stringifyBody);
     fetchEventSource(io.requestSettings?.url || io.url || '', {
       method: io.requestSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -45,10 +46,17 @@ export class Stream {
             eventData = {};
           }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
-          io.extractResultData?.(finalEventData)
+          io.extractResultData?.(finalEventData, fetchFunc, interceptedBody)
             .then((result?: ResponseI) => {
-              // do not to stop the stream on one message failure to give other messages a change to display
-              Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
+              // when async call is happening - an event with text signals its over
+              if (io.asyncCallInProgress && result && result.text !== '') {
+                Stream.simulate(messages, io.streamHandlers, result);
+                onClose();
+                io.asyncCallInProgress = false;
+              } else {
+                // do not to stop the stream on one message failure to give other messages a change to display
+                Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
+              }
             })
             .catch((e) => RequestUtils.displayError(messages, e));
         }
@@ -58,8 +66,10 @@ export class Stream {
         throw err; // need to throw otherwise stream will retry infinitely
       },
       onclose() {
-        stream.finaliseStreamedMessage();
-        onClose();
+        if (!io.asyncCallInProgress) {
+          stream.finaliseStreamedMessage();
+          onClose();
+        }
       },
       signal: abortStream.signal,
     }).catch((err) => {
