@@ -136,6 +136,6 @@ const SERVICE_TO_LINK = {
   webModel: 'https://deepchat.dev/docs/webModel',
   openAI: 'https://openai.com/blog/openai-api',
   cohere: 'https://docs.cohere.com/docs',
-  huggingFace: 'https://learn.microsoft.com/en-gb/azure/ai-services',
+  huggingFace: 'https://huggingface.co/docs/api-inference/index',
   azure: 'https://learn.microsoft.com/en-gb/azure/ai-services',
 };

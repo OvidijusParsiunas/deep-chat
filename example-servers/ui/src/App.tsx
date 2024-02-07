@@ -100,7 +100,7 @@ function App() {
       </div>
 
       <h1 className="server-title">Server for Hugging Face</h1>
-      <a href="https://learn.microsoft.com/en-gb/azure/cognitive-services/" target="_blank" rel="noreferrer">
+      <a href="https://huggingface.co/docs/api-inference/index" target="_blank" rel="noreferrer">
         <img
           className="server-title-icon"
           src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/huggingFaceLogo.png"

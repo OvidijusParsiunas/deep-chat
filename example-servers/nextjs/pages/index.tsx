@@ -112,7 +112,7 @@ export default function IndexPage() {
         </div>
 
         <h1 className={styles.serverTitle}>Server for Hugging Face</h1>
-        <a href="https://learn.microsoft.com/en-gb/azure/cognitive-services/" target="_blank" rel="noreferrer">
+        <a href="https://huggingface.co/docs/api-inference/index" target="_blank" rel="noreferrer">
           <img
             className={styles.serverTitleIcon}
             src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/huggingFaceLogo.png"
