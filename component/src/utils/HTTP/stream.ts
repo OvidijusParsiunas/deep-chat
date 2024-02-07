@@ -73,6 +73,7 @@ export class Stream {
       },
       signal: abortStream.signal,
     }).catch((err) => {
+      if (messages.isLastMessageError()) return;
       // allowing extractResultData to attempt extract error message and throw it
       io.extractResultData?.(err)
         .then(() => {
