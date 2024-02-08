@@ -196,11 +196,9 @@ chatElementRef.focusInput();
 
 ### `disableSubmitButton` {#disableSubmitButton}
 
-- Type: (`isDisabled?: boolean`) => `void`
+- Type: (`override?: boolean`) => `void`
 
-By default the [`submitButton`](/docs/styles#submitButtonStyles) automatically enables and disables itself based on the user's input
-or the [websocket](/docs/connect#Websocket) connection. This method overrides this behaviour and allows you to disable it manually.
-To reset back to automatic behaviour - call this method again with a boolean _false_ argument.
+Disables the submit button. To re-enable automatic state handling - call this method again with a boolean argument of _false_.
 
 #### Example
 
