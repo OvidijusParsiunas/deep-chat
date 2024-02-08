@@ -17,6 +17,7 @@ export class MessageStream {
   private _elements?: MessageElements;
   private _hasStreamEnded = false;
   private _activeMessageRole?: string;
+  private _message?: MessageContentI;
   private readonly _messages: MessagesBase;
   private static readonly HTML_CONTENT_PLACEHOLDER = 'htmlplaceholder'; // used for extracting at end and for isStreaming
 
@@ -54,6 +55,8 @@ export class MessageStream {
     this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
     this._streamedContent = content;
     this._activeMessageRole = role;
+    this._message = {role: this._activeMessageRole, [streamType]: this._streamedContent};
+    this._messages.messages.push(this._message);
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {
@@ -85,21 +88,19 @@ export class MessageStream {
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
     if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
-    const newMessage: MessageContentI = {role: this._activeMessageRole || MessageUtils.AI_ROLE};
     if (this._streamType === 'text') {
       textElementsToText[textElementsToText.length - 1][1] = this._streamedContent;
-      newMessage.text = this._streamedContent;
+      if (this._message) this._message.text = this._streamedContent;
       if (this._messages.textToSpeech) TextToSpeech.speak(this._streamedContent, this._messages.textToSpeech);
     } else if (this._streamType === 'html') {
       if (this._streamedContent === MessageStream.HTML_CONTENT_PLACEHOLDER) {
         this._streamedContent = this._elements.bubbleElement?.innerHTML || '';
       }
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);
-      newMessage.html = this._streamedContent;
+      if (this._message) this._message.html = this._streamedContent;
     }
-    if (newMessage) {
-      this._messages.messages.push(newMessage);
-      this._messages.sendClientUpdate(MessagesBase.createMessageContent(newMessage), false);
+    if (this._message) {
+      this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
     }
     this._hasStreamEnded = true;
   }
