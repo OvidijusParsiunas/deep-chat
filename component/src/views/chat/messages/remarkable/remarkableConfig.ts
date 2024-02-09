@@ -36,9 +36,6 @@ export class RemarkableConfig {
       });
     } else {
       return new Remarkable({
-        highlight: (str) => {
-          return str;
-        },
         linkTarget: '_blank', // set target to open in a new tab
       });
     }

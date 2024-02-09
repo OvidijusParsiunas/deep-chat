@@ -16,6 +16,6 @@ declare module 'remarkable' {
     linkTarget?: string;
     typographer?: boolean;
     quotes?: string;
-    highlight: (str: string, lang: string) => void;
+    highlight?: (str: string, lang: string) => void;
   }
 }
