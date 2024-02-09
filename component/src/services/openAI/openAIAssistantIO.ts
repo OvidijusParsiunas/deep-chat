@@ -43,10 +43,11 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
     if (typeof config === 'object') {
       this.config = config; // stored that assistant_id could be added
-      const {new_assistant, thread_id, load_thread_history, function_handler} = this.config;
+      const {new_assistant, thread_id, load_thread_history} = this.config;
       Object.assign(this.newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
+      const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
     } else if (directConnectionCopy.openAI?.assistant) {
       directConnectionCopy.openAI.assistant = config;
