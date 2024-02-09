@@ -65,10 +65,11 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const onResponse = (result: Response) => {
+    const onResponse = async (response: Response) => {
       if (!isHandlerActive) return;
-      if (!result || typeof result !== 'object') {
-        console.error(ErrorMessages.INVALID_RESPONSE(result, 'server', false));
+      const result = (await io.deepChat.responseInterceptor?.(response)) || response;
+      if (!RequestUtils.validateResponseFormat(result)) {
+        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
       } else if (result.error) {
         console.error(result.error);
         stream.finaliseStreamedMessage();
