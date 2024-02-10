@@ -141,7 +141,11 @@ export class Messages extends MessagesBase {
   private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
     const history = await ioFetchHistory();
     history.forEach((message) => {
-      this.addNewMessage(message, true);
+      if (message.error) {
+        this.addNewErrorMessage('service', message.error);
+      } else {
+        this.addNewMessage(message, true);
+      }
     });
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
