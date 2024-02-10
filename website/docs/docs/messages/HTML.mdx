@@ -76,8 +76,8 @@ import Tabs from '@theme/Tabs';
 
 Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) and your html is rendered inside it - the resulting elements will not be able to access the CSS and JavaScript
 in your app. To help with this, you can use this object to declare reusable styling and bind your app's functions to the elements via their class names. <br />
-`events` is an object that accepts properties with keys that use any of the ones in [GlobalEventHandlersEventMap](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html) (same as the string
-that you would use for _addEventListener(HERE)_, e.g. _"mousedown"_) and accepts a function as the value. <br />
+`events` is an object that accepts properties with keys from [GlobalEventHandlersEventMap](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html) (same as the string
+used for _addEventListener(HERE)_, e.g. _"mousedown"_) or any custom event name and accepts a function as the value. <br />
 `styles` defines the styles applied to the element for different mouse states. <br />
 
 #### Example

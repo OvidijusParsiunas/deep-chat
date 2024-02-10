@@ -194,6 +194,8 @@ If `max_tokens` is not set, the component sets it to _300_ as otherwise the API 
 
 - Type: `true` | {<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `assistant_id?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `thread_id?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `load_thread_history?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`new_assistant?: NewAssistant`](#NewAssistant), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: AssistantFunctionHandler`](#assistant-functions) <br />
   }
@@ -201,6 +203,8 @@ If `max_tokens` is not set, the component sets it to _300_ as otherwise the API 
 Connect to your Open AI [`assistant`](https://platform.openai.com/docs/assistants/overview).
 When set to `true` or the `assistant_id` is not defined, Deep Chat will automatically create a new assistant when the user sends the first message. <br />
 `assistant_id` is the id of your assistant. <br />
+`thread_id` allows you to communicate in the context of an already existing conversation/[thread](https://platform.openai.com/docs/api-reference/threads). <br />
+`load_thread_history` toggles a preload of the previous conversation/[thread](https://platform.openai.com/docs/api-reference/threads) messages on chat is initialisation. <br />
 `new_assistant` defines the details for the newly created assistant. <br />
 `function_handler` is the actual function used to handle the model's function response. Please navigate to [Assistant Functions](#assistant-functions) for more info. <br />
 

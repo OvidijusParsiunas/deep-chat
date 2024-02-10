@@ -110,14 +110,15 @@ Configuration for the outgoing network requests to the target server.
 
 ### `stream` {#stream}
 
-- Type: `boolean` | {`simulation?: boolean | number`}
+- Type: `boolean` | {`simulation?: boolean | number | string`}
 
 Used to stream responses from the target service. <br />
 By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
 the server. See [`example`](https://deepchat.dev/examples/servers) server code. <br />
 The responses are expected to contain partial text, however you can use [`overwrite`](#Response) to overwrite each one. <br />
 You can alternatively use the `simulation` object property to facilitate a <b>stream-like</b> experience for any other connection type where the received content wil be
-gradually populated in the message bubble. You can also control the millisecond interim of each character's appearance by assigning it a number with the default being _6_. <br />
+gradually populated in the message bubble. You can control the millisecond interim of each word's appearance by assigning it a number with the default being _6_.
+A string value is used to act like an _end-phrase_ for individual websocket messages that facilitate a stream. <br />
 
 #### Stream Service Example
 

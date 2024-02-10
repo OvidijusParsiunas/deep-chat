@@ -22,7 +22,7 @@
     "@mdx-js/react": "^1.6.22",
     "active-table-react": "latest",
     "clsx": "^1.2.1",
-    "deep-chat-react": "1.4.10",
+    "deep-chat-react": "1.4.11",
     "deep-chat-web-llm": "^0.0.23",
     "highlight.js": "^11.7.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.30.1",

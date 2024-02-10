@@ -425,6 +425,8 @@ const SERVICE_MODAL_FORM_CONFIG = {
     },
     assistant: {
       assistant_id: 'string',
+      thread_id: 'string',
+      load_thread_history: ['true', 'false'],
       allowMixedFiles: ['true', 'false'],
     },
     images: {
@@ -623,6 +625,12 @@ const OPTIONAL_PARAM_TO_LINK = {
     websocket: 'https://deepchat.dev/docs/connect#Websocket',
     headers: 'https://deepchat.dev/docs/connect#Request',
     additionalBodyProps: 'https://deepchat.dev/docs/connect#Request',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
+    allowGifs: 'https://deepchat.dev/docs/files#gifs',
+    allowAudio: 'https://deepchat.dev/docs/files#audio',
+    allowMicrophone: 'https://deepchat.dev/docs/files#microphone',
+    allowMixedFiles: 'https://deepchat.dev/docs/files/#mixedFiles',
   },
   webModel: {
     model:
@@ -638,7 +646,10 @@ const OPTIONAL_PARAM_TO_LINK = {
       top_p: 'https://platform.openai.com/docs/api-reference/chat/create#chat-create-top_p',
     },
     assistant: {
-      assistant_id: 'https://platform.openai.com/docs/api-reference/assistants',
+      assistant_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
+      thread_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
+      load_thread_history: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
+      allowMixedFiles: 'https://deepchat.dev/docs/files/#mixedFiles',
     },
     images: {
       model: 'https://platform.openai.com/docs/api-reference/images/create#images-create-model',
