@@ -26,13 +26,13 @@
       -->
     <deep-chat id="chat-element" demo="true" textInput='{"placeholder":{"text": "Welcome to the demo!"}}'></deep-chat>
     <script type="module">
-      const chatElement = document.getElementById('chat-element');
+      const chatElementRef = document.getElementById('chat-element');
       // Setting value via a property (easiest way)
-      chatElement.initialMessages = [
+      chatElementRef.initialMessages = [
         {role: 'user', text: 'Hey, how are you today?'},
         {role: 'ai', text: 'I am doing very well!'},
       ];
-      chatElement.setAttribute(
+      chatElementRef.setAttribute(
         'introMessage',
         JSON.stringify({
           text: 'You are now running deep chat locally.',
