@@ -157,12 +157,9 @@ function Components() {
         demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
-          {text: 'I am doing great, how about you?', role: 'ai'},
+          {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
-          {
-            text: 'This completely depends on the person.',
-            role: 'ai',
-          },
+          {text: 'Seeking fulfillment and personal growth.', role: 'ai'},
         ]}
         style={{
           borderRadius: '10px',
@@ -175,12 +172,9 @@ function Components() {
         demo={true}
         initialMessages={[
           {text: 'Hey, how are you?', role: 'user'},
-          {text: 'I am doing great, how about you?', role: 'ai'},
+          {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
-          {
-            text: 'This completely depends on the person.',
-            role: 'ai',
-          },
+          {text: 'Seeking fulfillment and personal growth.', role: 'ai'},
         ]}
         style={{
           borderRadius: '10px',
