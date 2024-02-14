@@ -8,7 +8,7 @@
   color: #848484;
   box-shadow: 9990px 0 0 0 #848484, calc(9990px + 0.44em) 0 0 0 #848484, calc(9990px + 0.8em) 0 0 0 #848484;
   animation: dots-jumping 1.5s infinite linear;
-  bottom: -0.7em;
+  bottom: -0.75em;
 }
 
 @keyframes dots-jumping {
