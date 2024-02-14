@@ -170,7 +170,7 @@ export default function AIInyourBrowser(props) {
         id="start-page-web-model-video"
         className={`start-page-text ${displayDemo ? 'start-page-main-details-visible' : ''}`}
       >
-        <a href="WORK">
+        <a href="https://youtu.be/ilzVAooE4HI?si=G1u096YDAR1HkKqt">
           <img src={YoutubeLogo} id="start-page-web-model-video-icon" className={'youtube-icon'} />
           <span>Demo Video</span>
         </a>
