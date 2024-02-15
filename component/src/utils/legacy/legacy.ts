@@ -2,10 +2,12 @@ import {ValidateInput} from '../../types/validateInput';
 import {MessageContent} from '../../types/messages';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
+import {Stream} from '../../types/stream';
 import {DeepChat} from '../../deepChat';
 
 interface LegacyDeepChat {
   containerStyle: CustomStyle;
+  stream: Stream;
 }
 
 export class Legacy {
@@ -55,5 +57,15 @@ export class Legacy {
       console.error('The "deep-chat-update-message" html class is deprecated since version 1.4.4.');
       console.error('Please change to using {..., overwrite: true} object: https://deepchat.dev/docs/connect#Response');
     }
+  }
+
+  public static checkForStream(deepChat: DeepChat) {
+    const stream = (deepChat as unknown as LegacyDeepChat).stream;
+    if (stream) {
+      console.error('The stream property has been moved to the request object in version 1.4.12.');
+      console.error('Please see the thew request object: https://deepchat.dev/docs/connect#request');
+      return stream;
+    }
+    return undefined;
   }
 }

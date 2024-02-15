@@ -29,7 +29,7 @@ export class CustomHandler {
         console.error(result.error);
         messages.addNewErrorMessage('service', result.error);
         io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulatable(io.deepChat.stream, result)) {
+      } else if (Stream.isSimulatable(io.stream, result)) {
         Stream.simulate(messages, io.streamHandlers, result);
       } else {
         messages.addNewMessage(result);
@@ -110,7 +110,7 @@ export class CustomHandler {
       } else if (typeof result.error === 'string') {
         console.error(result.error);
         if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', result.error);
-      } else if (Stream.isSimulation(io.deepChat.stream)) {
+      } else if (Stream.isSimulation(io.stream)) {
         const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
         const stream = (internalConfig.roleToStream as RoleToStream)[response.role || MessageUtils.AI_ROLE];
         Stream.upsertWFiles(messages, upsertFunc, stream, response);

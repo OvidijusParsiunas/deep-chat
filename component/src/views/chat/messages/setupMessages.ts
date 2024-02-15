@@ -24,6 +24,13 @@ export class SetupMessages {
         );
       }
     } else if (deepChat.request) {
+      if (deepChat.demo && !deepChat.request.stream) {
+        return (
+          'When [demo](https://deepchat.dev/docs/demo) mode is enabled - ' +
+          'the [request](https://deepchat.dev/docs/connect#Request) ' +
+          'object can only accept the [stream](https://deepchat.dev/docs/connect#stream) property.'
+        );
+      }
       if (!deepChat.request.url && !deepChat.request.handler) {
         return (
           'Please define a `url` or a `handler` property inside ' +

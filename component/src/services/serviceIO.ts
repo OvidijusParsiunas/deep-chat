@@ -7,6 +7,7 @@ import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Request} from '../types/request';
 import {Signals} from '../types/handler';
+import {Stream} from '../types/stream';
 import {DeepChat} from '../deepChat';
 import {Demo} from '../types/demo';
 
@@ -98,6 +99,8 @@ export interface ServiceIO {
   extractPollResultData?(result: object): PollResult;
 
   demo?: Demo;
+
+  stream?: Stream;
 
   deepChat: DeepChat;
 

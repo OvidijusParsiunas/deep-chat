@@ -65,7 +65,7 @@ export class Websocket {
         const resultData = await io.extractResultData(finalResult);
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
-        if (Stream.isSimulation(io.deepChat.stream)) {
+        if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
           const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
           Stream.upsertWFiles(messages, upsertFunc, stream, resultData);
@@ -80,7 +80,7 @@ export class Websocket {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
-      if (io.deepChat.stream) io.streamHandlers.abortStream.abort();
+      if (io.stream) io.streamHandlers.abortStream.abort();
       Websocket.createConnection(io, messages);
     };
   }
@@ -121,7 +121,7 @@ export class Websocket {
 
   public static stream(io: ServiceIO, messages: Messages, roleToStream: RoleToStream, result?: Response) {
     if (!result) return;
-    const simulation = (io.deepChat.stream as StreamSimulation).simulation;
+    const simulation = (io.stream as StreamSimulation).simulation;
     if (typeof simulation === 'string') {
       const role = result.role || MessageUtils.AI_ROLE;
       const stream = roleToStream[role];

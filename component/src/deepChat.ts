@@ -32,7 +32,6 @@ import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
 import {Request} from './types/request';
 import {Avatars} from './types/avatars';
-import {Stream} from './types/stream';
 import {Names} from './types/names';
 import {Demo} from './types/demo';
 
@@ -47,9 +46,6 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   webModel?: WebModel;
-
-  @Property('object')
-  stream?: Stream;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;
@@ -217,9 +213,8 @@ export class DeepChat extends InternalHTML {
     if (this._activeService.key && this._activeService.validateConfigKey) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
-      // WORK - potentially refactor to not have to use childElement
       // set before container populated, not available in constructor for react,
-      // assigning to variable as it is added to panel and is no longer child
+      // assigning to variable as it is added to panel and is no longer child (test in official website)
       this._childElement ??= this.children[0] as HTMLElement | undefined;
       ChatView.render(this, this._elementRef, this._activeService, this._childElement);
     } else if (this._activeService instanceof DirectServiceIO) { // when direct service with no key

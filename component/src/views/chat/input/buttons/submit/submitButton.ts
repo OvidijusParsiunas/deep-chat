@@ -131,7 +131,7 @@ export class SubmitButton extends InputButton<Styles> {
       abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
-    const {stream} = this._serviceIO.deepChat;
+    const {stream} = this._serviceIO;
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
       this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
     }
@@ -203,7 +203,6 @@ export class SubmitButton extends InputButton<Styles> {
     this.status.loadingActive = false;
   }
 
-  // WORK - animation needs to be lowered
   private changeToLoadingIcon() {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);

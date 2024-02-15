@@ -56,7 +56,7 @@ export class Demo {
       if (processedResponse.error) {
         messages.addNewErrorMessage('service', processedResponse.error);
         io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulatable(io.deepChat.stream, processedResponse)) {
+      } else if (Stream.isSimulatable(io.stream, processedResponse)) {
         Stream.simulate(messages, io.streamHandlers, processedResponse);
       } else {
         messages.addNewMessage(processedResponse);

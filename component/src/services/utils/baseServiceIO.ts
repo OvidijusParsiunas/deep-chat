@@ -5,6 +5,7 @@ import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
+import {Stream as StreamI} from '../../types/stream';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
@@ -36,6 +37,7 @@ export class BaseServiceIO implements ServiceIO {
   totalMessagesMaxCharLength?: number;
   maxMessages?: number;
   demo?: DemoT;
+  stream?: StreamI;
   // these are placeholders that are later populated in submitButton.ts
   completionsHandlers: CompletionsHandlers = {} as CompletionsHandlers;
   streamHandlers: StreamHandlers = {} as StreamHandlers;
@@ -50,6 +52,7 @@ export class BaseServiceIO implements ServiceIO {
     if (deepChat.request) this.requestSettings = deepChat.request;
     if (this.demo) this.requestSettings.url ??= Demo.URL;
     if (this.requestSettings.websocket) Websocket.setup(this);
+    this.stream = this.deepChat.request?.stream || Legacy.checkForStream(this.deepChat);
   }
 
   private static canSendMessage(text?: string, files?: File[], isProgrammatic?: boolean) {
@@ -88,8 +91,7 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   private async request(body: any, messages: Messages, stringifyBody = true) {
-    const {stream} = this.deepChat;
-    if (stream && !Stream.isSimulation(stream)) {
+    if (this.stream && !Stream.isSimulation(this.stream)) {
       return Stream.request(this, body, messages);
     }
     return HTTPRequest.request(this, body, messages, stringifyBody);

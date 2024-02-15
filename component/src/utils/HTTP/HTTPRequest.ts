@@ -37,7 +37,7 @@ export class HTTPRequest {
         if (!resultData || typeof resultData !== 'object')
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.makingAnotherRequest) return;
-        if (Stream.isSimulatable(io.deepChat.stream, resultData)) {
+        if (Stream.isSimulatable(io.stream, resultData)) {
           Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
           messages.addNewMessage(resultData);
@@ -64,7 +64,7 @@ export class HTTPRequest {
           }, resultData.timeoutMS);
         } else {
           // console.log('finished polling');
-          if (Stream.isSimulatable(io.deepChat.stream, result)) {
+          if (Stream.isSimulatable(io.stream, result)) {
             Stream.simulate(messages, io.streamHandlers, resultData);
           } else {
             messages.addNewMessage(resultData);

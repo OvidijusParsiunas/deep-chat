@@ -242,7 +242,7 @@ export class WebModel extends BaseServiceIO {
   private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
     const lastText = pMessages[pMessages.length - 1].text as string;
     const {body, error} = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {text: lastText}});
-    const stream = !!this.deepChat.stream;
+    const stream = !!this.stream;
     try {
       if (error) {
         RequestUtils.displayError(messages, new Error(error));
@@ -254,7 +254,7 @@ export class WebModel extends BaseServiceIO {
         const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
         RequestUtils.onInterceptorError(messages, error, onFinish);
       } else {
-        this.generateRespByType(messages, body.text, !!this.deepChat.stream, chat);
+        this.generateRespByType(messages, body.text, !!this.stream, chat);
       }
     } catch (err) {
       this.unloadChat(err as string);
