@@ -49,7 +49,7 @@ export class WebModel extends BaseServiceIO {
     this.findModelInWindow(deepChat);
     this.canSendMessage = this.canSubmit.bind(this);
     this._chatEl = deepChat.shadowRoot?.children[0] as HTMLElement;
-    if (deepChat.initialMessages) WebModel.setUpHistory(this._conversationHistory, deepChat.initialMessages);
+    if (deepChat.history) WebModel.setUpHistory(this._conversationHistory, deepChat.history);
   }
 
   // need ref of messages object as web model exhibits unique behaviour to manipulate chat
@@ -61,10 +61,10 @@ export class WebModel extends BaseServiceIO {
     };
   }
 
-  private static setUpHistory(conversationHistory: Array<[string, string]>, initialMessages: MessageContent[]) {
-    initialMessages.forEach((message, index) => {
+  private static setUpHistory(conversationHistory: Array<[string, string]>, history: MessageContent[]) {
+    history.forEach((message, index) => {
       if (message.role === MessageUtils.USER_ROLE && message.text) {
-        const nextMessage = initialMessages[index + 1];
+        const nextMessage = history[index + 1];
         if (nextMessage?.text && nextMessage.role !== MessageUtils.USER_ROLE) {
           conversationHistory.push([message.text, nextMessage.text]); // [userText, aiText]
         }
@@ -74,7 +74,7 @@ export class WebModel extends BaseServiceIO {
 
   private findModelInWindow(deepChat: DeepChat, seconds = 0) {
     if (window.webLLM) {
-      this.configureInit(this.shouldAddInitialMessage(deepChat.introMessage));
+      this.configureInit(this.shouldAddIntroMessage(deepChat.introMessage));
     } else if (seconds > WebModel.MODULE_SEARCH_LIMIT_S) {
       this._messages?.addNewErrorMessage('service', WebModel.WEB_LLM_NOT_FOUND_ERROR);
       console.error(
@@ -86,7 +86,7 @@ export class WebModel extends BaseServiceIO {
     }
   }
 
-  private shouldAddInitialMessage(customIntroMessage?: IntroMessage) {
+  private shouldAddIntroMessage(customIntroMessage?: IntroMessage) {
     return !customIntroMessage && this._webModel && this._webModel.introMessage?.displayed !== false;
   }
 
@@ -99,7 +99,7 @@ export class WebModel extends BaseServiceIO {
 
   // prettier-ignore
   public getIntroMessage(customIntroMessage?: IntroMessage) {
-    if (!this.shouldAddInitialMessage(customIntroMessage) || !this._chatEl) return;
+    if (!this.shouldAddIntroMessage(customIntroMessage) || !this._chatEl) return;
     const html = WebModelIntroMessage.setUpInitial(
       this.init.bind(this), this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
     this.scrollToTop(1);

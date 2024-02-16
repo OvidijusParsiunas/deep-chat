@@ -6,6 +6,7 @@ import {Stream} from '../../types/stream';
 import {DeepChat} from '../../deepChat';
 
 interface LegacyDeepChat {
+  initialMessages: MessageContent[];
   containerStyle: CustomStyle;
   stream: Stream;
 }
@@ -27,7 +28,17 @@ export class Legacy {
     return result.result;
   }
 
-  public static processInitialMessageFile(message: MessageContent) {
+  public static processHistory(deepChat: DeepChat) {
+    const initialMessages = (deepChat as unknown as LegacyDeepChat).initialMessages;
+    if (initialMessages) {
+      console.error('The initialMessages property is deprecated since version 1.5.0.');
+      console.error('Please change to using the history property instead: https://deepchat.dev/docs/messages/#history');
+      return initialMessages;
+    }
+    return undefined;
+  }
+
+  public static processHistoryFile(message: MessageContent) {
     const file = (message as MessageContent & {file?: MessageFile}).file;
     if (file) {
       console.error('The file property in MessageContent is deprecated since version 1.3.17.');
@@ -62,7 +73,7 @@ export class Legacy {
   public static checkForStream(deepChat: DeepChat) {
     const stream = (deepChat as unknown as LegacyDeepChat).stream;
     if (stream) {
-      console.error('The stream property has been moved to the request object in version 1.4.12.');
+      console.error('The stream property has been moved to the request object in version 1.5.0.');
       console.error('Please see the thew request object: https://deepchat.dev/docs/connect#request');
       return stream;
     }

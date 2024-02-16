@@ -53,7 +53,7 @@ export class Messages extends MessagesBase {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     }
     this.addIntroductoryMessage(deepChat, serviceIO);
-    if (deepChat.initialMessages) this.populateInitialMessages(deepChat.initialMessages);
+    this.populateHistory(deepChat);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
@@ -127,9 +127,11 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private populateInitialMessages(initialMessages: MessageContent[]) {
-    initialMessages.forEach((message) => {
-      Legacy.processInitialMessageFile(message);
+  private populateHistory(deepChat: DeepChat) {
+    const history = deepChat.history || Legacy.processHistory(deepChat);
+    if (!history) return;
+    history.forEach((message) => {
+      Legacy.processHistoryFile(message);
       this.addNewMessage(message, true);
     });
     // attempt to wait for the font file to be downloaded as otherwise text dimensions change after scroll

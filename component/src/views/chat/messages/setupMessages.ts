@@ -28,7 +28,7 @@ export class SetupMessages {
         return (
           'When [demo](https://deepchat.dev/docs/demo) mode is enabled - ' +
           'the [request](https://deepchat.dev/docs/connect#Request) ' +
-          'object can only accept the [stream](https://deepchat.dev/docs/connect#stream) property.'
+          'object can only accept the [stream](https://deepchat.dev/docs/connect#Stream) property.'
         );
       }
       if (!deepChat.request.url && !deepChat.request.handler) {
