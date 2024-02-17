@@ -28,7 +28,7 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     HTTPRequest.poll(this, files[0], messages, false);
   }

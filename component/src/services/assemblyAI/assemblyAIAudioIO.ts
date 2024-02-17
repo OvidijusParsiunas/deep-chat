@@ -33,14 +33,14 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
     HTTPRequest.request(this, files[0], messages, false);
   }
 
   override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
-    const key = this.requestSettings?.headers?.['Authorization'] as string;
+    const key = this.connectSettings?.headers?.['Authorization'] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
     return {text: pollingResult.text};
   }

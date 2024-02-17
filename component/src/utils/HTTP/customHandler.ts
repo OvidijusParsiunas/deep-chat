@@ -37,7 +37,7 @@ export class CustomHandler {
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.requestSettings.handler?.(body, {...signals, onResponse});
+    io.connectSettings.handler?.(body, {...signals, onResponse});
   }
 
   private static attemptToFinaliseStream(stream: MessageStream, messages: Messages) {
@@ -86,7 +86,7 @@ export class CustomHandler {
       isHandlerActive = false;
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.requestSettings.handler?.(body,
+    io.connectSettings.handler?.(body,
       {...signals, onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked});
   }
 
@@ -119,7 +119,7 @@ export class CustomHandler {
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.requestSettings.handler?.(undefined,
+    io.connectSettings.handler?.(undefined,
       {...signals, onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage});
   }
 

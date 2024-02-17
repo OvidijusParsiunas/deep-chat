@@ -3,7 +3,7 @@ import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BuildHeadersFunc} from '../../types/headers';
 import {BaseServiceIO} from './baseServiceIO';
-import {Request} from '../../types/request';
+import {Connect} from '../../types/connect';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -19,11 +19,11 @@ export class DirectServiceIO extends BaseServiceIO {
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
       buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, existingFileTypes);
-    Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
+    Object.assign(this.rawBody, deepChat.connect?.additionalBodyProps);
     this.keyVerificationDetails = keyVerificationDetails;
     this.buildHeadersFunc = buildHeadersFunc;
     if (apiKey) this.setApiKeyProperties(apiKey);
-    this.requestSettings = this.buildRequestSettings(this.key || '', deepChat.request);
+    this.connectSettings = this.buildConnectSettings(this.key || '', deepChat.connect);
   }
 
   private setApiKeyProperties(apiKey: APIKey) {
@@ -31,15 +31,15 @@ export class DirectServiceIO extends BaseServiceIO {
     if (apiKey.validateKeyProperty) this.validateConfigKey = apiKey.validateKeyProperty;
   }
 
-  private buildRequestSettings(key: string, requestSettings?: Request) {
-    const requestSettingsObj = requestSettings ?? {};
-    requestSettingsObj.headers ??= {};
-    Object.assign(requestSettingsObj.headers, this.buildHeadersFunc(key));
-    return requestSettingsObj;
+  private buildConnectSettings(key: string, connectSettings?: Connect) {
+    const connectSettingsObj = connectSettings ?? {};
+    connectSettingsObj.headers ??= {};
+    Object.assign(connectSettingsObj.headers, this.buildHeadersFunc(key));
+    return connectSettingsObj;
   }
 
   private keyAuthenticated(onSuccess: () => void, key: string) {
-    this.requestSettings = this.buildRequestSettings(key, this.requestSettings);
+    this.connectSettings = this.buildConnectSettings(key, this.connectSettings);
     this.key = key;
     onSuccess();
   }

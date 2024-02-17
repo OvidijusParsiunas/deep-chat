@@ -30,7 +30,7 @@ import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
 import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
-import {Request} from './types/request';
+import {Connect} from './types/connect';
 import {Avatars} from './types/avatars';
 import {Names} from './types/names';
 import {Demo} from './types/demo';
@@ -39,10 +39,10 @@ import {Demo} from './types/demo';
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class DeepChat extends InternalHTML {
   @Property('object')
-  directConnection?: DirectConnection;
+  connect?: Connect;
 
   @Property('object')
-  request?: Request;
+  directConnection?: DirectConnection;
 
   @Property('object')
   webModel?: WebModel;
@@ -203,6 +203,7 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
+    Legacy.processConnect(this);
     if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);

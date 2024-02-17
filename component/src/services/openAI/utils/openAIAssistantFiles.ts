@@ -9,7 +9,7 @@ type FileDetails = {fileId: string; path?: string; name?: string}[];
 
 export class OpenAIAssistantFiles {
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
-    const headers = serviceIO.requestSettings.headers;
+    const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
     serviceIO.url = `https://api.openai.com/v1/files`; // stores files
     const previousContetType = headers[RequestUtils.CONTENT_TYPE];

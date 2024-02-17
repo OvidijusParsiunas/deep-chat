@@ -11,7 +11,7 @@ import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
 import {Demo as DemoT} from '../../types/demo';
 import {Response} from '../../types/response';
-import {Request} from '../../types/request';
+import {Connect} from '../../types/connect';
 import {SetFileTypes} from './setFileTypes';
 import {Demo} from '../../utils/demo/demo';
 import {DeepChat} from '../../deepChat';
@@ -30,7 +30,7 @@ export class BaseServiceIO implements ServiceIO {
   deepChat: DeepChat;
   validateConfigKey = false;
   canSendMessage: ValidateInput = BaseServiceIO.canSendMessage;
-  requestSettings: Request = {};
+  connectSettings: Connect = {};
   fileTypes: ServiceFileTypes = {};
   camera?: CameraFilesServiceConfig;
   recordAudio?: MicrophoneFilesServiceConfig;
@@ -45,14 +45,14 @@ export class BaseServiceIO implements ServiceIO {
   constructor(deepChat: DeepChat, existingFileTypes?: ServiceFileTypes, demo?: DemoT) {
     this.deepChat = deepChat;
     this.demo = demo;
-    Object.assign(this.rawBody, deepChat.request?.additionalBodyProps);
+    Object.assign(this.rawBody, deepChat.connect?.additionalBodyProps);
     this.totalMessagesMaxCharLength = deepChat?.requestBodyLimits?.totalMessagesMaxCharLength;
     this.maxMessages = deepChat?.requestBodyLimits?.maxMessages;
     SetFileTypes.set(deepChat, this, existingFileTypes);
-    if (deepChat.request) this.requestSettings = deepChat.request;
-    if (this.demo) this.requestSettings.url ??= Demo.URL;
-    if (this.requestSettings.websocket) Websocket.setup(this);
-    this.stream = this.deepChat.request?.stream || Legacy.checkForStream(this.deepChat);
+    if (deepChat.connect) this.connectSettings = deepChat.connect;
+    if (this.demo) this.connectSettings.url ??= Demo.URL;
+    if (this.connectSettings.websocket) Websocket.setup(this);
+    this.stream = this.deepChat.connect?.stream || Legacy.checkForStream(this.deepChat);
   }
 
   private static canSendMessage(text?: string, files?: File[], isProgrammatic?: boolean) {
@@ -100,22 +100,22 @@ export class BaseServiceIO implements ServiceIO {
   private async callAPIWithText(messages: Messages, pMessages: MessageContentI[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
-    if (!this.requestSettings.headers?.['Content-Type']) {
-      this.requestSettings.headers ??= {};
-      this.requestSettings.headers['Content-Type'] ??= 'application/json';
+    if (!this.connectSettings.headers?.['Content-Type']) {
+      this.connectSettings.headers ??= {};
+      this.connectSettings.headers['Content-Type'] ??= 'application/json';
       tempHeaderSet = true;
     }
     await this.request(body, messages);
-    if (tempHeaderSet) delete this.requestSettings.headers?.['Content-Type'];
+    if (tempHeaderSet) delete this.connectSettings.headers?.['Content-Type'];
   }
 
   private async callApiWithFiles(messages: Messages, pMessages: MessageContentI[], files: File[]) {
     const formData = BaseServiceIO.createCustomFormDataBody(this.rawBody, pMessages, files);
-    const previousRequestSettings = this.requestSettings;
+    const previousConnectSettings = this.connectSettings;
     const fileIO = this.getServiceIOByType(files[0]);
-    this.requestSettings = fileIO?.request || this.requestSettings;
+    this.connectSettings = fileIO?.connect || this.connectSettings;
     await this.request(formData, messages, false);
-    this.requestSettings = previousRequestSettings;
+    this.connectSettings = previousConnectSettings;
   }
 
   async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
@@ -128,10 +128,10 @@ export class BaseServiceIO implements ServiceIO {
 
   // prettier-ignore
   async callAPI(requestContents: RequestContents, messages: Messages) {
-    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
       messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
-    if (this.requestSettings.websocket) {
+    if (this.connectSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
       Websocket.sendWebsocket(this, body, messages, false);
     } else {

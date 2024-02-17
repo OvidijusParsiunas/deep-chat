@@ -69,12 +69,12 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error('Request settings have not been set up');
     if (!files || !files[0] || !files[1]) throw new Error('Image was not found');
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], files[1], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestUtils.tempRemoveContentHeader(this.requestSettings,
+    RequestUtils.tempRemoveContentHeader(this.connectSettings,
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 

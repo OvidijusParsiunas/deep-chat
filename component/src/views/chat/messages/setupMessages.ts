@@ -3,8 +3,8 @@ import {DeepChat} from '../../../deepChat';
 
 export class SetupMessages {
   public static getText(deepChat: DeepChat, serviceIO: ServiceIO) {
-    if (!deepChat.directConnection && !deepChat.request && !deepChat.webModel && !deepChat.demo) {
-      return `Connect to any API using the [request](https://deepchat.dev/docs/connect#Request)
+    if (!deepChat.directConnection && !deepChat.connect && !deepChat.webModel && !deepChat.demo) {
+      return `Connect to any API using the [connect](https://deepchat.dev/docs/connect#connect-1)
         property or a popular service via
         [directConnection](https://deepchat.dev/docs/directConnection/#directConnection).
         \n Host AI entirely on your browser via a [webModel](https://deepchat.dev/docs/webModel).
@@ -23,18 +23,22 @@ export class SetupMessages {
           ` the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
         );
       }
-    } else if (deepChat.request) {
-      if (deepChat.demo && !deepChat.request.stream) {
-        return (
-          'When [demo](https://deepchat.dev/docs/demo) mode is enabled - ' +
-          'the [request](https://deepchat.dev/docs/connect#Request) ' +
-          'object can only accept the [stream](https://deepchat.dev/docs/connect#Stream) property.'
-        );
-      }
-      if (!deepChat.request.url && !deepChat.request.handler) {
+    } else if (deepChat.connect) {
+      // don't forget that when Demo mode is enabled - url is set to 'deep-chat-demo'
+      if (!deepChat.connect.url && !deepChat.connect.handler) {
+        if (deepChat.demo) {
+          if (!deepChat.connect.stream) {
+            return (
+              'When [demo](https://deepchat.dev/docs/demo) mode is enabled - ' +
+              'the [connect](https://deepchat.dev/docs/connect#connect-1) ' +
+              'object can only accept the [stream](https://deepchat.dev/docs/connect#Stream) property.'
+            );
+          }
+          return null;
+        }
         return (
           'Please define a `url` or a `handler` property inside ' +
-          'the [request](https://deepchat.dev/docs/connect#Request) object.'
+          'the [connect](https://deepchat.dev/docs/connect#connect-1) object.'
         );
       }
     }

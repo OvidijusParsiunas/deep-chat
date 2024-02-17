@@ -40,10 +40,10 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   }
 
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    if (this.requestSettings?.headers) {
-      this.requestSettings.headers['Content-Type'] = files[0].name.toLocaleLowerCase().endsWith('.wav')
+    if (this.connectSettings?.headers) {
+      this.connectSettings.headers['Content-Type'] = files[0].name.toLocaleLowerCase().endsWith('.wav')
         ? 'audio/wav; codecs=audio/pcm; samplerate=16000'
         : 'audio/ogg; codecs=opus';
     }

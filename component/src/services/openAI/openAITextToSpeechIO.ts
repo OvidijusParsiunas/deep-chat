@@ -45,8 +45,8 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
-    this.url = this.requestSettings.url || this.url;
+    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
+    this.url = this.connectSettings.url || this.url;
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body, messages);
   }

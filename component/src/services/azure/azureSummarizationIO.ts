@@ -48,7 +48,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as object, messages);
     this.messages = messages;
@@ -58,7 +58,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     if (result.error) throw result.error.message;
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
-      const requestInit = {method: 'GET', headers: this.requestSettings?.headers as GenericObject<string>};
+      const requestInit = {method: 'GET', headers: this.connectSettings?.headers as GenericObject<string>};
       HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
     return {makingAnotherRequest: true};

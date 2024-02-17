@@ -77,16 +77,16 @@ export class OpenAIImagesIO extends DirectServiceIO {
       formData = OpenAIImagesIO.createFormDataBody(this.rawBody, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestUtils.tempRemoveContentHeader(this.requestSettings,
+    RequestUtils.tempRemoveContentHeader(this.connectSettings,
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
     if (files?.[0]) {
       this.callApiWithImage(messages, pMessages, files);
     } else {
-      if (!this.requestSettings) throw new Error('Request settings have not been set up');
+      if (!this.connectSettings) throw new Error('Request settings have not been set up');
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
       const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
       HTTPRequest.request(this, body, messages);

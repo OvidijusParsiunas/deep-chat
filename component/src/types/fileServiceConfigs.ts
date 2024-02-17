@@ -2,20 +2,20 @@ import {AudioRecordingFiles, MicrophoneStyles} from './microphone';
 import {FileAttachments} from './fileAttachments';
 import {CameraFiles} from './camera';
 import {CustomStyle} from './styles';
-import {Request} from './request';
+import {Connect} from './connect';
 import {Button} from './button';
 
-export type FilesServiceConfig = {request?: Request; files?: FileAttachments; button?: Button};
+export type FilesServiceConfig = {connect?: Connect; files?: FileAttachments; button?: Button};
 
 export type CameraFilesServiceConfig = {
-  request?: Request;
+  connect?: Connect;
   files?: CameraFiles;
   button?: Button;
   modalContainerStyle?: CustomStyle;
 };
 
 export type MicrophoneFilesServiceConfig = {
-  request?: Request;
+  connect?: Connect;
   files?: AudioRecordingFiles;
   button?: MicrophoneStyles;
 };

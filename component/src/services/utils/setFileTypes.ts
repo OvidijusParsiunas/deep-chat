@@ -2,17 +2,17 @@ import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableC
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../serviceIO';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {FileAttachments} from '../../types/fileAttachments';
-import {Request} from '../../types/request';
+import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
 import {Remarkable} from 'remarkable';
 
 export class SetFileTypes {
   // prettier-ignore
-  private static parseConfig(requestSettings: Request, defFiles: FileAttachments, remark: Remarkable,
+  private static parseConfig(connectSettings: Connect, defFiles: FileAttachments, remark: Remarkable,
       fileType?: boolean | FilesServiceConfig) {
     const fileConfig: FileServiceIO & {files: FileAttachments} = {files: defFiles};
     if (typeof fileType === 'object') {
-      const {files, request, button} = fileType;
+      const {files, connect, button} = fileType;
       if (files) {
         if (files.infoModal) {
           fileConfig.files.infoModal = files.infoModal;
@@ -24,13 +24,13 @@ export class SetFileTypes {
         if (files.maxNumberOfFiles) fileConfig.files.maxNumberOfFiles = files.maxNumberOfFiles;
       }
       fileConfig.button = button;
-      if (request && (request.headers || request.method || request.url || request.credentials
-          || requestSettings.headers || requestSettings.method || requestSettings.url || requestSettings.credentials)) {
-        fileConfig.request = {
-          url: request?.url || requestSettings.url,
-          method: request?.method || requestSettings.method,
-          headers: request?.headers || requestSettings.headers,
-          credentials: request?.credentials || requestSettings.credentials,
+      if (connect && (connect.headers || connect.method || connect.url || connect.credentials
+          || connectSettings.headers || connectSettings.method || connectSettings.url || connectSettings.credentials)) {
+        fileConfig.connect = {
+          url: connect?.url || connectSettings.url,
+          method: connect?.method || connectSettings.method,
+          headers: connect?.headers || connectSettings.headers,
+          credentials: connect?.credentials || connectSettings.credentials,
         };
       }
     }
@@ -40,7 +40,7 @@ export class SetFileTypes {
   private static processMixedFiles(serviceIO: ServiceIO, remark: Remarkable, mixedFiles: DeepChat['mixedFiles']) {
     if (mixedFiles) {
       const defFormats = {acceptedFormats: ''};
-      serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.requestSettings, defFormats, remark, mixedFiles);
+      serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.connectSettings, defFormats, remark, mixedFiles);
     }
   }
 
@@ -52,7 +52,7 @@ export class SetFileTypes {
   const defaultFormats = {acceptedFormats: 'audio/*', ...files};
   if (!microphone) return;
   if (navigator.mediaDevices.getUserMedia !== undefined) {
-    serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, microphone);
+    serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, microphone);
     // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
     if (typeof microphone === 'object') {
       if (microphone.files) {
@@ -67,7 +67,7 @@ export class SetFileTypes {
     }
     // if microphone is not available - fallback to normal audio upload
   } else if (!audio) {
-    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, microphone);
+    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, microphone);
   }
 }
 
@@ -78,7 +78,7 @@ export class SetFileTypes {
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'audio/*', ...files};
     // make sure to set these in the right services
-    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, audio);
+    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, audio);
   }
 
   // prettier-ignore
@@ -88,7 +88,7 @@ export class SetFileTypes {
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'image/gif', ...files};
     // make sure to set these in the right services
-    serviceIO.fileTypes.gifs = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, gifs);
+    serviceIO.fileTypes.gifs = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, gifs);
   }
 
   // needs to be set after images to overwrite maxNumberOfFiles
@@ -100,7 +100,7 @@ export class SetFileTypes {
     if (!camera) return;
     if (navigator.mediaDevices.getUserMedia !== undefined) {
       // check how maxNumberOfFiles is set here - if user has set in images - should use that instead
-      serviceIO.camera = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, camera);
+      serviceIO.camera = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, camera);
       if (typeof camera === 'object') {
         serviceIO.camera.modalContainerStyle = camera.modalContainerStyle;
         // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
@@ -113,7 +113,7 @@ export class SetFileTypes {
       }
       // if camera is not available - fallback to normal image upload
     } else if (!images) {
-      serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, camera);
+      serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, camera);
     }
   }
 
@@ -124,7 +124,7 @@ export class SetFileTypes {
     const files = fileIO?.files || {};
     const defaultFormats = {acceptedFormats: 'image/*', ...files};
     // make sure to set these in the right services
-    serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.requestSettings, defaultFormats, remark, images);
+    serviceIO.fileTypes.images = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, images);
   }
 
   // default for direct service

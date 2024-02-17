@@ -75,13 +75,13 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');
-    this.url = this.requestSettings.url || this._service_url;
+    this.url = this.connectSettings.url || this._service_url;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const formData = OpenAISpeechToTextIO.createFormDataBody(body, files[0]);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestUtils.tempRemoveContentHeader(this.requestSettings,
+    RequestUtils.tempRemoveContentHeader(this.connectSettings,
       HTTPRequest.request.bind(this, this, formData, messages), false);
   }
 

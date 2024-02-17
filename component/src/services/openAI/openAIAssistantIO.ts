@@ -52,8 +52,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     } else if (directConnectionCopy.openAI?.assistant) {
       directConnectionCopy.openAI.assistant = config;
     }
-    this.requestSettings.headers ??= {};
-    this.requestSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
+    this.connectSettings.headers ??= {};
+    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
   }
@@ -99,12 +99,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.requestSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error('Request settings have not been set up');
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
     const file_ids = files ? await OpenAIAssistantFiles.storeFiles(this, messages, files) : undefined;
-    this.requestSettings.method = 'POST';
+    this.connectSettings.method = 'POST';
     this.callService(messages, pMessages, file_ids);
   }
 
@@ -132,7 +132,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}`;
-    const requestInit = {method: 'GET', headers: this.requestSettings?.headers};
+    const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
   }

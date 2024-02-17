@@ -5,7 +5,7 @@ import {InterfacesUnion} from '../types/utilityTypes';
 import {FetchFunc} from '../utils/HTTP/requestUtils';
 import {FILE_TYPES} from '../types/fileTypes';
 import {Response} from '../types/response';
-import {Request} from '../types/request';
+import {Connect} from '../types/connect';
 import {Signals} from '../types/handler';
 import {Stream} from '../types/stream';
 import {DeepChat} from '../deepChat';
@@ -75,7 +75,7 @@ export interface ServiceIO {
 
   recordAudio?: MicrophoneFilesServiceConfig;
 
-  requestSettings: Request;
+  connectSettings: Connect;
 
   introPanelMarkUp?: string;
 

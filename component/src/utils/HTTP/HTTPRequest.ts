@@ -14,13 +14,13 @@ export type HandleVerificationResult = (
 export class HTTPRequest {
   // prettier-ignore
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
-    const requestDetails: RequestDetails = {body, headers: io.requestSettings?.headers};
+    const requestDetails: RequestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, headers, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onFinish} = io.completionsHandlers;
     if (error) return RequestUtils.onInterceptorError(messages, error, onFinish);
-    if (io.requestSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
-    if (io.requestSettings?.url === Demo.URL) return Demo.request(io, messages);
+    if (io.connectSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
+    if (io.connectSettings?.url === Demo.URL) return Demo.request(io, messages);
     let responseValid = true;
     const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
     fetchFunc(interceptedBody).then((response) => {
@@ -80,15 +80,15 @@ export class HTTPRequest {
 
   // prettier-ignore
   public static async poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
-    const requestDetails = {body, headers: io.requestSettings?.headers};
+    const requestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, headers, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     if (error) return RequestUtils.onInterceptorError(messages, error);
-    const url = io.requestSettings?.url || io.url || '';
-    const method = io.requestSettings?.method || 'POST';
+    const url = io.connectSettings?.url || io.url || '';
+    const method = io.connectSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit: RequestInit = {method, body: requestBody, headers};
-    if (io.requestSettings.credentials) requestInit.credentials = io.requestSettings.credentials; 
+    if (io.connectSettings.credentials) requestInit.credentials = io.connectSettings.credentials; 
     HTTPRequest.executePollRequest(io, url, requestInit, messages);
   }
 

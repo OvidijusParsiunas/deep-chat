@@ -14,7 +14,7 @@ export type RoleToStream = {[role: string]: MessageStream};
 
 export class Websocket {
   public static setup(io: ServiceIO) {
-    if (io.requestSettings.url !== Demo.URL) {
+    if (io.connectSettings.url !== Demo.URL) {
       io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
       io.websocket = 'pending'; // main reason why not connecting here is because messages is not available yet
     }
@@ -22,13 +22,13 @@ export class Websocket {
 
   public static createConnection(io: ServiceIO, messages: Messages) {
     if (!document.body.contains(io.deepChat)) return; // check if element is still present
-    const websocketConfig = io.requestSettings.websocket;
+    const websocketConfig = io.connectSettings.websocket;
     if (!websocketConfig) return;
-    if (io.requestSettings.handler) return CustomHandler.websocket(io, messages);
+    if (io.connectSettings.handler) return CustomHandler.websocket(io, messages);
     try {
       const protocols = typeof websocketConfig !== 'boolean' ? websocketConfig : undefined;
       // this will throw an error when url doesn't start with 'ws:'
-      const websocket = new WebSocket(io.requestSettings.url || '', protocols);
+      const websocket = new WebSocket(io.connectSettings.url || '', protocols);
       io.websocket = websocket;
       io.websocket.onopen = () => {
         messages.removeError();
@@ -88,12 +88,12 @@ export class Websocket {
   public static async sendWebsocket(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const ws = io.websocket;
     if (!ws || ws === 'pending') return;
-    const requestDetails = {body, headers: io.requestSettings?.headers};
+    const requestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, error} = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     if (error) return messages.addNewErrorMessage('service', error);
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
-    if (io.requestSettings?.url === Demo.URL) {
+    if (io.connectSettings?.url === Demo.URL) {
       return Demo.request(io, messages);
     }
     if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {

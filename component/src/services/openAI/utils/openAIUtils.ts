@@ -37,8 +37,8 @@ export class OpenAIUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static async directFetch(serviceIO: ServiceIO, body: any, method: 'POST' | 'GET', stringify = true) {
-    serviceIO.requestSettings.method = method;
-    const result = await RequestUtils.fetch(serviceIO, serviceIO.requestSettings.headers, stringify, body).then((resp) =>
+    serviceIO.connectSettings.method = method;
+    const result = await RequestUtils.fetch(serviceIO, serviceIO.connectSettings.headers, stringify, body).then((resp) =>
       RequestUtils.processResponseByType(resp)
     );
     if (result.error) throw result.error.message;

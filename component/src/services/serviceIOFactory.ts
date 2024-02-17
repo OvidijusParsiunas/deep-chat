@@ -33,7 +33,7 @@ import {DeepChat} from '../deepChat';
 export class ServiceIOFactory {
   // this should only be called when no _activeService is set or is demo as otherwise we don't want to reconnect
   public static create(deepChat: DeepChat): ServiceIO {
-    const {directConnection, request, demo, webModel} = deepChat;
+    const {directConnection, connect, demo, webModel} = deepChat;
     if (webModel) {
       return new WebModel(deepChat);
     }
@@ -119,10 +119,10 @@ export class ServiceIOFactory {
         return new StabilityAITextToImageIO(deepChat);
       }
     }
-    if (request) {
+    if (connect && !(demo && connect.stream)) {
       return new BaseServiceIO(deepChat);
     }
-    // when directConnection and request are not defined, we default to demo
+    // when directConnection and connect are not defined, we default to demo
     return new BaseServiceIO(deepChat, undefined, demo || true);
   }
 }

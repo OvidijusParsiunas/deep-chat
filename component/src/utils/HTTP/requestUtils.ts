@@ -3,7 +3,7 @@ import {Response as ResponseT} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {GenericObject} from '../../types/object';
-import {Request} from '../../types/request';
+import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
 
 // this is mostly used for calling the request again for OpenAI API function calls
@@ -19,19 +19,19 @@ export class RequestUtils {
 
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
   // prettier-ignore
-  public static async tempRemoveContentHeader(requestSettings: Request | undefined,
+  public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
       request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
-    if (!requestSettings?.headers) throw new Error('Request settings have not been set up');
-    const previousContetType = requestSettings.headers[RequestUtils.CONTENT_TYPE];
-    delete requestSettings.headers[RequestUtils.CONTENT_TYPE];
+    if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
+    const previousContetType = connectSettings.headers[RequestUtils.CONTENT_TYPE];
+    delete connectSettings.headers[RequestUtils.CONTENT_TYPE];
     let result;
     try {
       result = await request(stringifyBody);
     } catch (e) {
-      requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+      connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
       throw e;
     }
-    requestSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+    connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
     return result;
   }
 
@@ -48,10 +48,10 @@ export class RequestUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
-    const requestContent: RequestInit = {method: io.requestSettings?.method || 'POST', headers};
+    const requestContent: RequestInit = {method: io.connectSettings?.method || 'POST', headers};
     if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
-    if (io.requestSettings.credentials) requestContent.credentials = io.requestSettings.credentials;
-    return fetch(io.requestSettings?.url || io.url || '', requestContent);
+    if (io.connectSettings.credentials) requestContent.credentials = io.connectSettings.credentials;
+    return fetch(io.connectSettings?.url || io.url || '', requestContent);
   }
 
   public static processResponseByType(response: Response) {

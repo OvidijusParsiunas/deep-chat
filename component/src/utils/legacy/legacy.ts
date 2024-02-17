@@ -2,13 +2,15 @@ import {ValidateInput} from '../../types/validateInput';
 import {MessageContent} from '../../types/messages';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
+import {Connect} from '../../types/connect';
 import {Stream} from '../../types/stream';
 import {DeepChat} from '../../deepChat';
 
 interface LegacyDeepChat {
-  initialMessages: MessageContent[];
-  containerStyle: CustomStyle;
-  stream: Stream;
+  request?: Connect;
+  stream?: Stream;
+  initialMessages?: MessageContent[];
+  containerStyle?: CustomStyle;
 }
 
 export class Legacy {
@@ -70,11 +72,25 @@ export class Legacy {
     }
   }
 
+  public static processConnect(deepChat: DeepChat) {
+    const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
+    if (legacyDeepchat.request) {
+      if (legacyDeepchat.connect) {
+        Object.assign(legacyDeepchat.connect, legacyDeepchat.request);
+      } else {
+        // this will cause the component to render twice but it is needed
+        legacyDeepchat.connect = legacyDeepchat.request;
+      }
+      console.error('The request property is deprecated since version 1.5.0.');
+      console.error('Please see the the connect object: https://deepchat.dev/docs/connect#connect-1');
+    }
+  }
+
   public static checkForStream(deepChat: DeepChat) {
     const stream = (deepChat as unknown as LegacyDeepChat).stream;
     if (stream) {
-      console.error('The stream property has been moved to the request object in version 1.5.0.');
-      console.error('Please see the thew request object: https://deepchat.dev/docs/connect#request');
+      console.error('The stream property has been moved to the connect object in version 1.5.0.');
+      console.error('Please see the the connect object: https://deepchat.dev/docs/connect#connect-1');
       return stream;
     }
     return undefined;

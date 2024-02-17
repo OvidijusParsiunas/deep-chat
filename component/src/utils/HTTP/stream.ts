@@ -15,19 +15,19 @@ type UpsertFunc = (response?: ResponseI) => MessageStream | void;
 export class Stream {
   // prettier-ignore
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
-    const requestDetails = {body, headers: io.requestSettings?.headers};
+    const requestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     if (error) return RequestUtils.onInterceptorError(messages, error, onClose);
-    if (io.requestSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
-    if (io.requestSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
+    if (io.connectSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
+    if (io.connectSettings?.url === Demo.URL) return Demo.requestStream(messages, io.streamHandlers);
     const stream = new MessageStream(messages);
     const fetchFunc = RequestUtils.fetch.bind(this, io, interceptedHeaders, stringifyBody);
-    fetchEventSource(io.requestSettings?.url || io.url || '', {
-      method: io.requestSettings?.method || 'POST',
+    fetchEventSource(io.connectSettings?.url || io.url || '', {
+      method: io.connectSettings?.method || 'POST',
       headers: interceptedHeaders,
-      credentials: io.requestSettings?.credentials,
+      credentials: io.connectSettings?.credentials,
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
       openWhenHidden: true, // keep stream open when browser tab not open
       async onopen(response: Response) {
