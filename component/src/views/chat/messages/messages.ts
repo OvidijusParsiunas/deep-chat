@@ -1,6 +1,5 @@
 import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
-import {MessageContent, IntroMessage} from '../../../types/messages';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
@@ -11,6 +10,7 @@ import {ResponseI} from '../../../types/responseInternal';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
+import {IntroMessage} from '../../../types/messages';
 import {MessageStream} from './stream/messageStream';
 import {Legacy} from '../../../utils/legacy/legacy';
 import {IntroPanel} from '../introPanel/introPanel';
@@ -59,8 +59,8 @@ export class Messages extends MessagesBase {
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
-    deepChat._addMessage = (content: MessageContent, isUpdate?: boolean) => {
-      this.addNewMessage({...content, sendUpdate: !!isUpdate}, !isUpdate);
+    deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
+      this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
     };
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
     if (demo) this.prepareDemo(demo);
@@ -142,15 +142,17 @@ export class Messages extends MessagesBase {
 
   private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
     const history = await ioFetchHistory();
-    history.forEach((message) => {
-      if (message.error) {
-        this.addNewErrorMessage('service', message.error);
-      } else {
-        this.addNewMessage(message, true);
-      }
-    });
+    history.forEach((message) => this.addAnyMessage(message, true));
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
+  }
+
+  private addAnyMessage(message: ResponseI, isInitial = false) {
+    if (message.error) {
+      this.addNewErrorMessage('service', message.error);
+    } else {
+      this.addNewMessage(message, isInitial);
+    }
   }
 
   // this should not be activated by streamed messages

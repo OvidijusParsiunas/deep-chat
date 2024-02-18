@@ -28,6 +28,7 @@ import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
+import {Response} from './types/response';
 import {CustomStyle} from './types/styles';
 import style from './deepChat.css?inline';
 import {Connect} from './types/connect';
@@ -139,6 +140,9 @@ export class DeepChat extends InternalHTML {
   submitUserMessage: (content: UserContent) => void = () =>
     console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
 
+  addMessage: (message: Response, isUpdate?: boolean) => void = () =>
+    console.warn('addMessage failed - please wait for chat view to render before calling this property.');
+
   focusInput: () => void = () => FocusUtils.focusFromParentElement(this._elementRef);
 
   refreshMessages: () => void = () => {};
@@ -173,9 +177,6 @@ export class DeepChat extends InternalHTML {
   _childElement?: HTMLElement;
 
   _validationHandler?: ValidationHandler;
-
-  _addMessage: (content: MessageContent, isUpdate?: boolean) => void = () =>
-    console.warn('addMessage failed - please wait for chat view to render before calling this property.');
 
   // TO-DO - key view style
   @Property('object')
