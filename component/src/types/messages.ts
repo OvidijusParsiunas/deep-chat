@@ -28,7 +28,7 @@ export interface MessageStyles {
 
 export type MessageContent = {role?: string; text?: string; files?: MessageFile[]; html?: string; _sessionId?: string};
 
-export type OnNewMessage = (newMessage: {message: MessageContent; isInitial: boolean}) => void;
+export type OnNewMessage = (newMessage: {message: MessageContent; isHistory: boolean}) => void;
 
 export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 

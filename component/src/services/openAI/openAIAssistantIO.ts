@@ -151,14 +151,14 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
   }
 
-  private async getThreadMessages(thread_id: string, isInitial = false) {
+  private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
     this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${thread_id}/messages`;
     let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
-    if (!isInitial && this.deepChat.responseInterceptor) {
+    if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
-    const messages = isInitial ? threadMessages.data : [threadMessages.data[0]];
+    const messages = isHistory ? threadMessages.data : [threadMessages.data[0]];
     const parsedMessages = messages.map(async (data) => {
       const content = data.content.find((content) => !!content.text || !!content.image_file);
       return await OpenAIAssistantFiles.getFilesAndText(this, data, content);

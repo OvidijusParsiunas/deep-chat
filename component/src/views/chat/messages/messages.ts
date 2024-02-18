@@ -147,21 +147,21 @@ export class Messages extends MessagesBase {
     setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
   }
 
-  private addAnyMessage(message: ResponseI, isInitial = false) {
+  private addAnyMessage(message: ResponseI, isHistory = false) {
     if (message.error) {
       this.addNewErrorMessage('service', message.error);
     } else {
-      this.addNewMessage(message, isInitial);
+      this.addNewMessage(message, isHistory);
     }
   }
 
   // this should not be activated by streamed messages
-  public addNewMessage(data: ResponseI, isInitial = false) {
+  public addNewMessage(data: ResponseI, isHistory = false) {
     const message = Messages.createMessageContent(data);
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (!data.ignoreText && message.text !== undefined && data.text !== null) {
       this.addNewTextMessage(message.text, message.role, overwrite);
-      if (!isInitial && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
+      if (!isHistory && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(message.text, this.textToSpeech);
       }
     }
@@ -173,7 +173,7 @@ export class Messages extends MessagesBase {
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
     if (this.isValidMessageContent(message)) {
-      this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isInitial);
+      this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
     }
   }
 
@@ -181,9 +181,9 @@ export class Messages extends MessagesBase {
     return messageContent.text || messageContent.html || (messageContent.files && messageContent.files.length > 0);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, initial = false) {
+  private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, isHistory = false) {
     if (!overwritten) this.messages.push(messageContent);
-    if (update) this.sendClientUpdate(messageContent, initial);
+    if (update) this.sendClientUpdate(messageContent, isHistory);
   }
 
   // prettier-ignore

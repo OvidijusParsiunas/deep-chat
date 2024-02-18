@@ -29,7 +29,7 @@ export class MessagesBase {
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
   private _remarkable: Remarkable;
-  private readonly _onNewMessage?: (message: MessageContentI, isInitial: boolean) => void;
+  private readonly _onNewMessage?: (message: MessageContentI, isHistory: boolean) => void;
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
@@ -161,8 +161,8 @@ export class MessagesBase {
     return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.classList.contains('error-message-text');
   }
 
-  public sendClientUpdate(message: MessageContentI, isInitial = false) {
-    this._onNewMessage?.(message, isInitial);
+  public sendClientUpdate(message: MessageContentI, isHistory = false) {
+    this._onNewMessage?.(message, isHistory);
   }
 
   public renderText(bubbleElement: HTMLElement, text: string) {
