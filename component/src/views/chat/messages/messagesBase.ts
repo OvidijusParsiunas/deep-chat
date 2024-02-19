@@ -29,7 +29,7 @@ export class MessagesBase {
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
   private _remarkable: Remarkable;
-  private readonly _onNewMessage?: (message: MessageContentI, isHistory: boolean) => void;
+  private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
@@ -37,7 +37,7 @@ export class MessagesBase {
     this._remarkable = RemarkableConfig.createNew();
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
-    this._onNewMessage = FireEvents.onNewMessage.bind(this, deepChat);
+    this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available
@@ -162,7 +162,7 @@ export class MessagesBase {
   }
 
   public sendClientUpdate(message: MessageContentI, isHistory = false) {
-    this._onNewMessage?.(message, isHistory);
+    this._onMessage?.(message, isHistory);
   }
 
   public renderText(bubbleElement: HTMLElement, text: string) {

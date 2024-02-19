@@ -1,5 +1,5 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageContent, IntroMessage, MessageStyles, UserContent, OnNewMessage} from './types/messages';
+import {MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
@@ -154,7 +154,7 @@ export class DeepChat extends InternalHTML {
   disableSubmitButton: DisableSubmitButton = () => {};
 
   @Property('function')
-  onNewMessage?: OnNewMessage;
+  onMessage?: OnMessage;
 
   @Property('function')
   onClearMessages?: () => void;

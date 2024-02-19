@@ -61,7 +61,7 @@ export class FileMessageUtils {
     }
   }
 
-  // The strategy is to emit the actual file reference in the `onNewMessage` event for the user to inspect it
+  // The strategy is to emit the actual file reference in the `onMessage` event for the user to inspect it
   // But it is not actually used by anything in the chat, hence it is removed when adding a message
 
   // after the body has been stringified and parsed - the file reference will disappear, hence this readds it
