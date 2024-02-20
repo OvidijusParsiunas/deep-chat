@@ -28,7 +28,7 @@ import {
 export class BaseServiceIO implements ServiceIO {
   readonly rawBody: any = {};
   deepChat: DeepChat;
-  validateConfigKey = false;
+  validateKeyProperty = false;
   canSendMessage: ValidateInput = BaseServiceIO.canSendMessage;
   connectSettings: Connect = {};
   fileTypes: ServiceFileTypes = {};

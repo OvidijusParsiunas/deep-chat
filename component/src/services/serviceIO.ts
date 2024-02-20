@@ -47,7 +47,7 @@ export type ServiceFileTypes = {
 export interface ServiceIO {
   key?: string;
 
-  validateConfigKey: boolean;
+  validateKeyProperty: boolean;
 
   insertKeyPlaceholderText?: string;
 

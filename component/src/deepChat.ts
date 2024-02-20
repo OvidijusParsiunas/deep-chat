@@ -198,7 +198,7 @@ export class DeepChat extends InternalHTML {
   private readonly _elementRef: HTMLElement;
 
   private changeToChatView() {
-    if (this._activeService) this._activeService.validateConfigKey = false;
+    if (this._activeService) this._activeService.validateKeyProperty = false;
     this.onRender();
   }
 
@@ -212,7 +212,7 @@ export class DeepChat extends InternalHTML {
     }
     WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle);
     Legacy.checkForContainerStyles(this, this._elementRef);
-    if (this._activeService.key && this._activeService.validateConfigKey) {
+    if (this._activeService.key && this._activeService.validateKeyProperty) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
       // set before container populated, not available in constructor for react,

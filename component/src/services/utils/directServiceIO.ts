@@ -28,7 +28,7 @@ export class DirectServiceIO extends BaseServiceIO {
 
   private setApiKeyProperties(apiKey: APIKey) {
     this.key = apiKey.key;
-    if (apiKey.validateKeyProperty) this.validateConfigKey = apiKey.validateKeyProperty;
+    if (apiKey.validateKeyProperty) this.validateKeyProperty = apiKey.validateKeyProperty;
   }
 
   private buildConnectSettings(key: string, connectSettings?: Connect) {
