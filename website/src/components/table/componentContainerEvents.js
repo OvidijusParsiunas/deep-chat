@@ -13,7 +13,7 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
           if (closureEventsText.length > 3) closureEventsText.pop();
           closureEventsText.unshift('Messages cleared');
           setEventsText([...closureEventsText]);
-        } else {
+        } else if (propertyName !== 'onComponentRender') {
           if (!ref.current || argument === undefined) return;
           if (closureEventsText.length > 3) closureEventsText.pop();
           closureEventsText.unshift(JSON.parse(JSON.stringify(argument)));
