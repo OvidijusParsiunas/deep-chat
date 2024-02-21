@@ -1,6 +1,7 @@
 import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {DeepChat} from '../../deepChat';
+import {Legacy} from '../legacy/legacy';
 
 export class FireEvents {
   public static onMessage(deepChat: DeepChat, message: MessageContentI, isHistory: boolean) {
@@ -8,6 +9,7 @@ export class FireEvents {
     FileMessageUtils.reAddFileRefToObject(message, updateBody);
     deepChat.onMessage?.(updateBody);
     deepChat.dispatchEvent(new CustomEvent('message', {detail: updateBody}));
+    Legacy.fireOnNewMessage(deepChat, updateBody);
   }
 
   public static onClearMessages(deepChat: DeepChat) {

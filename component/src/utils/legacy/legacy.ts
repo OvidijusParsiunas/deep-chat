@@ -1,5 +1,5 @@
+import {MessageContent, OnMessage} from '../../types/messages';
 import {ValidateInput} from '../../types/validateInput';
-import {MessageContent} from '../../types/messages';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
@@ -11,6 +11,7 @@ interface LegacyDeepChat {
   stream?: Stream;
   initialMessages?: MessageContent[];
   containerStyle?: CustomStyle;
+  onNewMessage?: OnMessage;
 }
 
 export class Legacy {
@@ -82,7 +83,7 @@ export class Legacy {
         legacyDeepchat.connect = legacyDeepchat.request;
       }
       console.error('The request property is deprecated since version 1.5.0.');
-      console.error('Please see the the connect object: https://deepchat.dev/docs/connect#connect-1');
+      console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
     }
   }
 
@@ -90,9 +91,19 @@ export class Legacy {
     const stream = (deepChat as unknown as LegacyDeepChat).stream;
     if (stream) {
       console.error('The stream property has been moved to the connect object in version 1.5.0.');
-      console.error('Please see the the connect object: https://deepchat.dev/docs/connect#connect-1');
+      console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
       return stream;
     }
     return undefined;
+  }
+
+  public static fireOnNewMessage(deepChat: DeepChat, updateBody: {message: MessageContent; isHistory: boolean}) {
+    const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
+    if (legacyDeepchat.onNewMessage) {
+      console.error('The onNewMessage event has deprecated since version 1.5.0.');
+      console.error('Please see the onMessage event: https://deepchat.dev/docs/events#onMessage');
+      legacyDeepchat.onNewMessage?.(updateBody);
+    }
+    deepChat.dispatchEvent(new CustomEvent('new-message', {detail: updateBody}));
   }
 }
