@@ -2,6 +2,7 @@
 @import url('./views/insertKey/insertKeyView.css');
 @import url('./views/error/errorView.css');
 @import url('./views/chat/chatView.css');
+@import url('./webModel/webModel.css');
 
 :host {
   /* this property prevents outside styles from affecting this component */
