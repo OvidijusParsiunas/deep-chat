@@ -4,13 +4,13 @@ import {FileAttachmentsType} from './fileAttachments/fileAttachmentTypes/fileAtt
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
 import {InputButtonPositions} from './buttons/styleAdjustments/inputButtonPositions';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/files/fileTypeButtonIcons';
+import {SpeechToText} from './buttons/microphone/speechToText/speechToText';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
 import {ButtonContainers} from './buttonContainers/buttonContainers';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {ValidationHandler} from './validation/validationHandler';
-import {SpeechToText} from './buttons/microphone/speechToText';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
