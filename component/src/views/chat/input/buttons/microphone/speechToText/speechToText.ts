@@ -1,3 +1,4 @@
+import {ValidationHandler} from '../../../../../../types/validationHandler';
 import {SpeechToTextConfig} from '../../../../../../types/microphone';
 import {OnPreResult} from 'speech-to-element/dist/types/options';
 import {TextInputEl} from '../../../textInput/textInput';
@@ -14,6 +15,7 @@ export type AddErrorMessage = Messages['addNewErrorMessage'];
 export class SpeechToText extends MicrophoneButton {
   private readonly _addErrorMessage: AddErrorMessage;
   private _silenceSubmit?: SilenceSubmit;
+  private _validationHandler?: ValidationHandler;
 
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText?.button : {});
@@ -25,6 +27,9 @@ export class SpeechToText extends MicrophoneButton {
       const isInputEnabled = !deepChat.textInput || !deepChat.textInput.disabled;
       this.elementRef.onclick = this.buttonClick.bind(this, textInput, isInputEnabled, serviceName, processedConfig);
     }
+    setTimeout(() => {
+      this._validationHandler = deepChat._validationHandler;
+    });
   }
 
   // prettier-ignore
@@ -73,13 +78,17 @@ export class SpeechToText extends MicrophoneButton {
       },
       onStart: this.changeToActive.bind(this),
       onStop: () => {
+        this._validationHandler?.();
         this._silenceSubmit?.clearSilenceTimeout();
         this.changeToDefault();
       },
       onPauseTrigger: (isStart: boolean) => {
         this._silenceSubmit?.onPause(isStart, textInput, this.elementRef.onclick as Function);
       },
-      onResult: () => this._silenceSubmit?.resetSilenceTimeout(textInput, this.elementRef.onclick as Function),
+      onResult: (_, isFinal: boolean) => {
+        if (isFinal) this._validationHandler?.();
+        this._silenceSubmit?.resetSilenceTimeout(textInput, this.elementRef.onclick as Function);
+      },
       onCommandModeTrigger: this.onCommandModeTrigger.bind(this),
       ...config,
     });
