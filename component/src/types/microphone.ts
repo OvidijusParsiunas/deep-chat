@@ -26,6 +26,7 @@ export type SpeechToTextConfig = {
   textColor?: TextColor;
   translations?: Translations;
   commands?: Commands & {submit?: string};
+  stopAfterSubmitClick?: false;
   submitAfterSilence?: SubmitAfterSilence;
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
 };

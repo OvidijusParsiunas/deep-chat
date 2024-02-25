@@ -1,12 +1,12 @@
 import {SubmitAfterSilence} from '../../../../../../types/microphone';
 import {TextInputEl} from '../../../textInput/textInput';
 import SpeechToElement from 'speech-to-element';
+import {SpeechToText} from './speechToText';
 
 export class SilenceSubmit {
   private _silenceTimeout?: number;
   private readonly ms: number = 2000;
   private readonly stop: boolean = true;
-  private static readonly MICROPHONE_RESET_TIMEOUT_MS = 300;
 
   constructor(submitAfterSilence: SubmitAfterSilence) {
     if (typeof submitAfterSilence === 'object') {
@@ -21,7 +21,7 @@ export class SilenceSubmit {
       textInput.submit?.();
       SpeechToElement.stop();
       if (!this.stop) {
-        setTimeout(buttonClick, SilenceSubmit.MICROPHONE_RESET_TIMEOUT_MS);
+        setTimeout(buttonClick, SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
       }
     }, this.ms);
   }

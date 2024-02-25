@@ -22,7 +22,7 @@ import {TextInputEl} from './textInput/textInput';
 import {Messages} from '../messages/messages';
 import {DeepChat} from '../../../deepChat';
 
-type Buttons = {
+export type Buttons = {
   [key in BUTTON_TYPES]?: {button: InputButton; fileType?: FileAttachmentsType};
 };
 
@@ -33,16 +33,16 @@ export class Input {
     this.elementRef = Input.createPanelElement(deepChat.inputAreaStyle);
     const textInput = new TextInputEl(deepChat, serviceIO);
     const buttons: Buttons = {};
-    const fileAttachments = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
+    const fileAtts = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
     if (deepChat.speechToText && !buttons.microphone) {
       buttons.microphone = {button: new SpeechToText(deepChat, textInput, messages.addNewErrorMessage.bind(messages))};
     }
-    const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAttachments);
+    const submitButton = new SubmitButton(deepChat, textInput.inputElementRef, messages, serviceIO, fileAtts, buttons);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
-    ValidationHandler.attach(deepChat, serviceIO, textInput, fileAttachments, submitButton);
+    ValidationHandler.attach(deepChat, serviceIO, textInput, fileAtts, submitButton);
     deepChat.submitUserMessage = submitButton.programmaticSubmit.bind(submitButton);
     buttons.submit = {button: submitButton};
-    Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAttachments, deepChat.dropupStyles);
+    Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAtts, deepChat.dropupStyles);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {

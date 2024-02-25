@@ -16,6 +16,7 @@ export class SpeechToText extends MicrophoneButton {
   private readonly _addErrorMessage: AddErrorMessage;
   private _silenceSubmit?: SilenceSubmit;
   private _validationHandler?: ValidationHandler;
+  public static readonly MICROPHONE_RESET_TIMEOUT_MS = 300;
 
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText?.button : {});
@@ -104,5 +105,10 @@ export class SpeechToText extends MicrophoneButton {
 
   private onError() {
     this._addErrorMessage('speechToText', 'speech input error');
+  }
+
+  public static toggleSpeechAfterSubmit(microphoneButton: HTMLElement, stopAfterSubmitClick = true) {
+    microphoneButton.click();
+    if (!stopAfterSubmitClick) setTimeout(() => microphoneButton.click(), SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
   }
 }

@@ -3,6 +3,7 @@ import {ValidationHandler} from '../../../../../types/validationHandler';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
+import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {UserContentI} from '../../../../../types/messagesInternal';
@@ -17,6 +18,7 @@ import {Signals} from '../../../../../types/handler';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
+import {Buttons} from '../../input';
 import {
   DefinedButtonInnerElements,
   DefinedButtonStateStyles,
@@ -37,13 +39,15 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private readonly _alwaysEnabled: boolean;
+  private _microphoneButton?: HTMLElement;
+  private _stopSTTAfterSubmit?: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
   readonly status = {requestInProgress: false, loadingActive: false};
 
   // prettier-ignore
   constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
-      fileAttachments: FileAttachments) {
+      fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
@@ -56,6 +60,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._alwaysEnabled = !!submitButtonStyles?.alwaysEnabled;
     deepChat.disableSubmitButton = this.disableSubmitButton.bind(this, serviceIO);
     this.attemptOverwriteLoadingStyle(deepChat);
+    if (buttons.microphone) this.setUpSpeechToText(buttons.microphone.button, deepChat.speechToText);
     setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
       this._validationHandler = deepChat._validationHandler;
       this.assignHandlers(this._validationHandler as ValidationHandler);
@@ -135,6 +140,11 @@ export class SubmitButton extends InputButton<Styles> {
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
       this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
     }
+  }
+
+  private setUpSpeechToText(microphoneButton: InputButton, speechToText: DeepChat['speechToText']) {
+    this._microphoneButton = microphoneButton.elementRef;
+    this._stopSTTAfterSubmit = typeof speechToText === 'object' ? speechToText.stopAfterSubmitClick : false;
   }
 
   private resetSubmit(validationHandler: ValidationHandler) {
@@ -221,7 +231,10 @@ export class SubmitButton extends InputButton<Styles> {
     this.elementRef.classList.add(SubmitButton.SUBMIT_CLASS);
     this.elementRef.replaceChildren(this._innerElements.submit);
     SubmitButtonStateStyle.resetSubmit(this, this.status.loadingActive);
-    this.elementRef.onclick = this.submitFromInput.bind(this);
+    this.elementRef.onclick = () => {
+      this.submitFromInput();
+      if (this._microphoneButton) SpeechToText.toggleSpeechAfterSubmit(this._microphoneButton, !!this._stopSTTAfterSubmit);
+    };
   }
 
   // called every time when user triggers an input via ValidationHandler - hence use class to check if not already present
