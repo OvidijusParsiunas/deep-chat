@@ -26,7 +26,7 @@ export class UploadFileButton extends InputButton<Styles> {
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce === false
-    ? undefined : fileService.files?.infoModal?.openModalOnce;
+      ? undefined : fileService.files?.infoModal?.openModalOnce;
   }
 
   private createInnerElements(iconId: string, iconSVGString: string, customStyles?: Styles) {
