@@ -124,7 +124,6 @@ export default function Playground() {
         setEditingChatRef={setEditingChatRef}
         removeComponent={removeComponent}
         cloneComponent={cloneComponent}
-        playgroundConfig={playgroundConfig}
         isAtEnd={isChatAtEnd(index)}
         ref={ref}
       >

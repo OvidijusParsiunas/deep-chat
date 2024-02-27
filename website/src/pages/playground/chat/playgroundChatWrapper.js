@@ -8,7 +8,7 @@ import React from 'react';
 
 // The wrapper is used to manipulate the css without re-rendering the actual chat component by storing it inside children
 const ChatWrapper = React.forwardRef(
-  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd, playgroundConfig}, ref) => {
+  ({children, config, removeComponent, cloneComponent, setEditingChatRef, isAtEnd}, ref) => {
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
