@@ -1,12 +1,13 @@
 import {StyleUtils} from '../element/styleUtils';
 import {CustomStyle} from '../../types/styles';
+import {GoogleFont} from './googleFont';
 
 export class WebComponentStyleUtils {
   private static readonly DEFAULT_COMPONENT_STYLE: Partial<CSSStyleDeclaration> = {
     height: '350px',
     width: '320px',
     border: '1px solid #cacaca',
-    fontFamily: `'Inter', sans-serif, Avenir, Helvetica, Arial`,
+    fontFamily: GoogleFont.DEFAULT_FONT_FAMILY,
     fontSize: '0.9rem',
     backgroundColor: 'white',
     position: 'relative',
