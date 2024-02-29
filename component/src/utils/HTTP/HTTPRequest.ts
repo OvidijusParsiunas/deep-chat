@@ -64,7 +64,7 @@ export class HTTPRequest {
           }, resultData.timeoutMS);
         } else {
           // console.log('finished polling');
-          if (Stream.isSimulatable(io.stream, result)) {
+          if (Stream.isSimulatable(io.stream, resultData)) {
             Stream.simulate(messages, io.streamHandlers, resultData);
           } else {
             messages.addNewMessage(resultData);
