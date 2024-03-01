@@ -18,10 +18,20 @@ export type OpenAISpeechToText = {
 };
 
 // https://platform.openai.com/docs/api-reference/images
-export interface OpenAIImages {
-  model?: string;
+export interface OpenAIImagesDalle2 {
+  model?: 'dall-e-2';
   n?: number;
   size?: '256x256' | '512x512' | '1024x1024';
+  response_format?: 'url' | 'b64_json';
+  user?: string;
+}
+
+// https://platform.openai.com/docs/api-reference/images
+export interface OpenAIImagesDalle3 {
+  model: 'dall-e-3';
+  quality?: string;
+  size?: '1024x1024' | '1792x1024' | '1024x1792';
+  style?: 'vivid' | 'natural';
   response_format?: 'url' | 'b64_json';
   user?: string;
 }
@@ -79,7 +89,7 @@ export type OpenAIChat = {
 export interface OpenAI {
   chat?: true | OpenAIChat;
   assistant?: true | OpenAIAssistant;
-  images?: true | OpenAIImages;
+  images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;
 }
