@@ -5,7 +5,7 @@ import {Legacy} from '../legacy/legacy';
 
 export class FireEvents {
   public static onMessage(deepChat: DeepChat, message: MessageContentI, isHistory: boolean) {
-    const updateBody = JSON.parse(JSON.stringify({message, isHistory}));
+    const updateBody = JSON.parse(JSON.stringify({message, isHistory, isInitial: isHistory}));
     FileMessageUtils.reAddFileRefToObject(message, updateBody);
     deepChat.onMessage?.(updateBody);
     deepChat.dispatchEvent(new CustomEvent('message', {detail: updateBody}));
