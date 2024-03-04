@@ -77,4 +77,16 @@ export class FileMessageUtils {
     delete newMessageFileObj.ref;
     return newMessageFileObj;
   }
+
+  public static isAudioFile(fileData: MessageFile) {
+    const audioRegex = /\.(mp3|ogg|wav|aac|webm|4a)$/i;
+    const {type, src} = fileData;
+    return type === 'audio' || src?.startsWith('data:audio') || (src && audioRegex.test(src));
+  }
+
+  public static isImageFile(fileData: MessageFile) {
+    const imageRegex = /\.(jpg|jpeg|png|gif|bmp)$/i;
+    const {type, src} = fileData;
+    return type === 'image' || src?.startsWith('data:image') || (src && imageRegex.test(src));
+  }
 }

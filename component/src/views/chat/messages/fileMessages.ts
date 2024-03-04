@@ -73,12 +73,11 @@ export class FileMessages {
   public static addMessages(messages: Messages, files: MessageFiles, role: string) {
     files.forEach((fileData) => {
       if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
-      if (fileData.type === 'audio' || fileData.src?.startsWith('data:audio')) {
+      if (FileMessageUtils.isAudioFile(fileData)) {
         FileMessages.addNewAudioMessage(messages, fileData, role);
-      } else if (fileData.type === 'image' || fileData.src?.startsWith('data:image')) {
+      } else if (FileMessageUtils.isImageFile(fileData)) {
         FileMessages.addNewImageMessage(messages, fileData, role);
       } else {
-        // WORK - should there be a check to see if it is image
         FileMessages.addNewAnyFileMessage(messages, fileData, role);
       }
     });
