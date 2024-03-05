@@ -26,6 +26,7 @@ import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {WebModel} from '../webModel/webModel';
+import {MistralIO} from './mistral/mistralO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
@@ -117,6 +118,9 @@ export class ServiceIOFactory {
           return new StabilityAIImageToImageMaskingIO(deepChat);
         }
         return new StabilityAITextToImageIO(deepChat);
+      }
+      if (directConnection.mistral) {
+        return new MistralIO(deepChat);
       }
     }
     if (connect && !(demo && connect.stream)) {
