@@ -144,7 +144,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private setUpSpeechToText(microphoneButton: InputButton, speechToText: DeepChat['speechToText']) {
     this._microphoneButton = microphoneButton.elementRef;
-    this._stopSTTAfterSubmit = typeof speechToText === 'object' ? speechToText.stopAfterSubmitClick : false;
+    this._stopSTTAfterSubmit = typeof speechToText === 'object' ? speechToText.stopAfterSubmit : false;
   }
 
   private resetSubmit(validationHandler: ValidationHandler) {

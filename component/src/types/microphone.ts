@@ -17,7 +17,7 @@ export interface AudioRecordingFiles {
   maxDurationSeconds?: number;
 }
 
-export type SubmitAfterSilence = true | {ms?: number; stop?: boolean};
+export type SubmitAfterSilence = true | number;
 
 export type SpeechToTextConfig = {
   webSpeech?: true | WebSpeechOptions;
@@ -26,7 +26,7 @@ export type SpeechToTextConfig = {
   textColor?: TextColor;
   translations?: Translations;
   commands?: Commands & {submit?: string};
-  stopAfterSubmitClick?: false;
+  stopAfterSubmit?: false;
   submitAfterSilence?: SubmitAfterSilence;
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
 };

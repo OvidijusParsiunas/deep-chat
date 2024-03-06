@@ -59,7 +59,9 @@ export class SpeechToText extends MicrophoneButton {
         return null;
       };
     }
-    if (newConfig.submitAfterSilence) this._silenceSubmit = new SilenceSubmit(newConfig.submitAfterSilence);
+    if (newConfig.submitAfterSilence) {
+      this._silenceSubmit = new SilenceSubmit(newConfig.submitAfterSilence, newConfig.stopAfterSubmit);
+    }
     const serviceName = SpeechToText.getServiceName(newConfig);
     return {serviceName, processedConfig};
   }
@@ -107,8 +109,8 @@ export class SpeechToText extends MicrophoneButton {
     this._addErrorMessage('speechToText', 'speech input error');
   }
 
-  public static toggleSpeechAfterSubmit(microphoneButton: HTMLElement, stopAfterSubmitClick = true) {
+  public static toggleSpeechAfterSubmit(microphoneButton: HTMLElement, stopAfterSubmit = true) {
     microphoneButton.click();
-    if (!stopAfterSubmitClick) setTimeout(() => microphoneButton.click(), SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
+    if (!stopAfterSubmit) setTimeout(() => microphoneButton.click(), SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
   }
 }
