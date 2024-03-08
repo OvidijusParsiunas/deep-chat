@@ -43,25 +43,25 @@
     "component"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.22.10",
-    "@babel/core": "^7.22.11",
-    "@babel/preset-env": "^7.22.14",
-    "@custom-elements-manifest/analyzer": "^0.6.8",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-replace": "^4.0.0",
-    "@types/dom-speech-recognition": "^0.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.25.0",
-    "@typescript-eslint/parser": "^5.25.0",
-    "eslint": "^8.15.0",
-    "highlight.js": "^11.7.0",
-    "prettier": "^2.8.4",
-    "rimraf": "^5.0.1",
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@custom-elements-manifest/analyzer": "^0.9.3",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@types/dom-speech-recognition": "^0.0.4",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "highlight.js": "^11.9.0",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
     "rollup": "^2.79.1",
     "rollup-plugin-summary": "^1.4.3",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.4",
-    "vite-plugin-dts": "^2.0.2"
+    "typescript": "~5.3.3",
+    "vite": "^5.1.5",
+    "vite-plugin-dts": "^3.7.3"
   },
   "customElements": "custom-elements.json",
   "files": [
@@ -70,8 +70,6 @@
     "custom-elements.json"
   ],
   "dependencies": {
-    "@microsoft/fetch-event-source": "^2.0.1",
-    "remarkable": "^2.0.1",
-    "speech-to-element": "^0.1.66"
+    "active-chat": "^0.0.3"
   }
 }
