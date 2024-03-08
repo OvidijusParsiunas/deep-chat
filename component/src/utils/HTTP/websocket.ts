@@ -125,7 +125,7 @@ export class Websocket {
     if (typeof simulation === 'string') {
       const role = result.role || MessageUtils.AI_ROLE;
       const stream = roleToStream[role];
-      if (result.text === simulation) {
+      if (result.text === simulation || result.html === simulation) {
         stream?.finaliseStreamedMessage();
         delete roleToStream[role];
       } else {

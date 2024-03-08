@@ -123,10 +123,11 @@ export class ServiceIOFactory {
         return new MistralIO(deepChat);
       }
     }
-    if (connect && !(demo && connect.stream)) {
+    // if connect, make sure it is not a demo stream
+    if (connect && (!demo || !connect.stream)) {
       return new BaseServiceIO(deepChat);
     }
-    // when directConnection and connect are not defined, we default to demo
+    // when not directConnection and connect connection, we default to demo
     return new BaseServiceIO(deepChat, undefined, demo || true);
   }
 }
