@@ -7,7 +7,7 @@ export class Avatar {
   private static readonly CONTAINER_CLASS = 'avatar-container';
 
   public static hide(innerContainer: HTMLElement) {
-    (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility = 'hidden';
+    (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility ||= 'hidden';
   }
 
   private static applyCustomStylesToElements(container: HTMLElement, avatar: HTMLElement, style: AvatarStyles) {

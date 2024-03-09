@@ -5,7 +5,7 @@ export class Name {
   private static readonly NAME_CLASS = 'name';
 
   public static hide(innerContainer: HTMLElement) {
-    (innerContainer.getElementsByClassName(Name.NAME_CLASS)[0] as HTMLElement).style.visibility = 'hidden';
+    (innerContainer.getElementsByClassName(Name.NAME_CLASS)[0] as HTMLElement).style.visibility ||= 'hidden';
   }
 
   private static getPosition(role: string, names: CustomNames) {
