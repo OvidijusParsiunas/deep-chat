@@ -20,6 +20,6 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result[0].sequence || ''};
+    return {text: result[0]?.sequence || ''};
   }
 }

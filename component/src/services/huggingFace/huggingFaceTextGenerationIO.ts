@@ -13,6 +13,6 @@ export class HuggingFaceTextGenerationIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceTextGenerationResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result[0].generated_text || ''};
+    return {text: result[0]?.generated_text || ''};
   }
 }
