@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[6731],{72041:(e,s,c)=>{c.r(s),c.d(s,{default:()=>t});c(96540);var l=c(74848);function t(){return(0,l.jsx)("img",{id:"small-screen-deep-chat-logo",src:"img/deep-chat-small-screen-logo.svg"})}}}]);
