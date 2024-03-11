@@ -22,13 +22,13 @@ property to connect to your server. Read more about this in [`Connect`](../conne
 
 ### `directConnection` {#directConnection}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `openAI?:` {[`OpenAI`](openAI#openAI), [`APIKey`](#APIKey)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `huggingFace?:` {[`HuggingFace`](huggingFace#huggingFace), [`APIKey`](#APIKey)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `azure?:` {[`Azure`](azure#azure), [`APIKey`](#APIKey)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `cohere?:` {[`Cohere`](cohere#cohere), [`APIKey`](#APIKey)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `assemblyAI?:` {[`AssemblyAI`](assemblyAI#assemblyAI), [`APIKey`](#APIKey)}
-  }
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `openAI?:` \{[`OpenAI`](/docs/directConnection/OpenAI#openAI), [`APIKey`](#APIKey)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `huggingFace?:` \{[`HuggingFace`](/docs/directConnection/HuggingFace#huggingFace), [`APIKey`](#APIKey)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `azure?:` \{[`Azure`](/docs/directConnection/Azure#azure), [`APIKey`](#APIKey)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `cohere?:` \{[`Cohere`](/docs/directConnection/Cohere#cohere), [`APIKey`](#APIKey)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `assemblyAI?:` \{[`AssemblyAI`](/docs/directConnection/AssemblyAI#assemblyAI), [`APIKey`](#APIKey)\}
+  \}
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -47,7 +47,7 @@ Shared types for the `directConnection` property.
 
 ### `APIKey` {#APIKey}
 
-- Type: {`key?: string`, `validateKeyProperty?: boolean`}
+- Type: \{`key?: string`, `validateKeyProperty?: boolean`\}
 
 These object properties are used to load up the chat view without the user having to insert the API key. <br />
 `key` is the target service's API key required for authentication. <br />

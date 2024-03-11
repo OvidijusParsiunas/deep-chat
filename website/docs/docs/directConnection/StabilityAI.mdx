@@ -12,13 +12,13 @@ Properties used to connect to [Stability AI](https://platform.stability.ai/).
 
 ### `stabilityAI` {#stabilityAI}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textToImage?: TextToImage`](#TextToImage), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImage?: ImageToImage`](#ImageToImage), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImageMasking?: ImageToImageMasking`](#ImageToImageMasking), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`imageToImageUpscale?: ImageToImageUpscale`](#ImageToImageUpscale) <br />
-  }
-- Default: _{textToImage: true}_
+  \}
+- Default: _\{textToImage: true\}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -34,8 +34,8 @@ import Tabs from '@theme/Tabs';
 
 ### `TextToImage` {#TextToImage}
 
-- Type: `true` | { [`StabilityAICommon`](#StabilityAICommon), `width?: number`, `height?: number` }
-- Default: _{engine_id: "stable-diffusion-v1-6", width: 512, height: 512}_
+- Type: `true` | \{ [`StabilityAICommon`](#StabilityAICommon), `width?: number`, `height?: number` \}
+- Default: _\{engine_id: "stable-diffusion-v1-6", width: 512, height: 512\}_
 
 Connect to Stability AI's [`text-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage) API. <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
@@ -106,21 +106,21 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
 
 ### `ImageToImage` {#ImageToImage}
 
-- Type: `true` | {<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`StabilityAICommon`](#StabilityAICommon), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `init_image_mode?:` `"image_strength"` | `"step_schedule_*"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `image_strength?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `step_schedule_start?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `step_schedule_end?: number` <br />
-  }
+  \}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _engine_id: "stable-diffusion-v1-6"_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _init_image_mode: "image_strength"_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _image_strength: 0.35_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _step_schedule_start: 0.65_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _weight: 1_ <br />
-  }
+  \}
 
 Connect to Stability AI's [`image-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage) API. <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
@@ -195,12 +195,12 @@ values will result in more influence from the diffusion steps. (0 to 1)
 
 ### `ImageToImageMasking` {#ImageToImageMasking}
 
-- Type: `true` | {<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`StabilityAICommon`](#StabilityAICommon), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `mask_source?:` `"MASK_IMAGE_WHITE"` | `"MASK_IMAGE_BLACK"` | `"INIT_IMAGE_ALPHA"` <br />
-  }
+  \}
 
-- Default: _{engine_id: "stable-diffusion-xl-1024-v1-0", mask_source: "MASK_IMAGE_WHITE", weight: 1}_
+- Default: _\{engine_id: "stable-diffusion-xl-1024-v1-0", mask_source: "MASK_IMAGE_WHITE", weight: 1\}_
 
 Connect to Stability AI's [`image-to-image-masking`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking) API. <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
@@ -273,8 +273,8 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
 
 ### `ImageToImageUpscale` {#ImageToImageUpscale}
 
-- Type: `true` | {`engine_id?: string`, `width?: number`, `height?: number`}
-- Default: _{engine_id: "esrgan-v1-x2plus"}_
+- Type: `true` | \{`engine_id?: string`, `width?: number`, `height?: number`\}
+- Default: _\{engine_id: "esrgan-v1-x2plus"\}_
 
 Connect to Stability AI's [`image-to-image-upscale`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage) API. <br />
 `engine_id` is the engine that will be used to process the image. <br />
@@ -349,7 +349,7 @@ Types used in [`stabilityAI`](#stabilityAI) properties:
 
 ### `StabilityAICommon` {#StabilityAICommon}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `engine_id?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `samples?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `weight?: number`, <br />
@@ -359,15 +359,15 @@ Types used in [`stabilityAI`](#stabilityAI) properties:
   &nbsp;&nbsp;&nbsp;&nbsp; `steps?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `style_preset?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `clip_guidance_preset?: string` <br />
-  }
+  \}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _samples: 1_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _cfg_scale: 7_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _seed: 0_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _steps: 50_, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; _clip_guidance_preset: "NONE"_ <br />
-  }
+  \}
 
 Object that is used to define the target engine and other image processing parameters. <br />
 `engine_id` is the identifier for the engine that will be used to process the images. <br />

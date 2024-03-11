@@ -68,11 +68,11 @@ import Tabs from '@theme/Tabs';
 
 ### `htmlClassUtilities` {#htmlClassUtilities}
 
-- Type: {<br />
-  &nbsp;&nbsp;[`className: string`]: { <br />
+- Type: \{<br />
+  &nbsp;&nbsp;[`className: string`]: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`events?: {[eventType: string]?: (event) => void}`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](/docs/styles/#StatefulStyles) <br />
-  }}
+  \}\}
 
 Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) and your html is rendered inside it - the resulting elements will not be able to access the CSS and JavaScript
 in your app. To help with this, you can use this object to declare reusable styling and bind your app's functions to the elements via their class names. <br />

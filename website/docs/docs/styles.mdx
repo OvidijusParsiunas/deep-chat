@@ -98,14 +98,14 @@ Object containing CSS styling properties for the element containing files attach
 
 ### `dropupStyles` {#dropupStyles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](#Button), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `menu?:` { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `menu?:` \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](#CustomStyle), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`item?: StatefulStyles`](#StatefulStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`iconContainer?: CustomStyle`](#CustomStyle), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`text?: CustomStyle`](#CustomStyle) <br />
-  }}
+  \}\}
 
 Configuration for the dropup button and its menu element styles. <br />
 
@@ -278,12 +278,12 @@ Styling for the chat view's bottom area dedicated for text input and file button
 
 ### `textInput` {#textInput}
 
-- Type: {<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` {[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle), [`focus?: CustomStyle`](#CustomStyle)}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` {`text?: string`, [`style?: CustomStyle`](#CustomStyle)}, <br />
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle), [`focus?: CustomStyle`](#CustomStyle)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` \{`text?: string`, [`style?: CustomStyle`](#CustomStyle)\}, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
-  }
+  \}
 
 Custom details for the chat's text input. <br />
 `styles` object defines the styling for the `text` element and its box `container`. The `focus` property is used to set the container style when it is focused. <br />
@@ -400,14 +400,14 @@ Custom details for the chat's text input. <br />
 
 ### `submitButtonStyles` {#submitButtonStyles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`submit?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`stop?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`disabled?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `alwaysEnabled?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition) <br />
-  }
+  \}
 
 Custom styling for the submit button. <br />
 `submit` state is displayed when the user's input is valid and can be sent. <br />
@@ -810,7 +810,7 @@ as optionals. A TypeScript example can be found in this [link](https://github.co
 
 ### `StatefulStyles` {#StatefulStyles}
 
-- Type: {[`default?: CustomStyle`](#CustomStyle), [`hover?: CustomStyle`](#CustomStyle), [`click?: CustomStyle`](#CustomStyle)}
+- Type: \{[`default?: CustomStyle`](#CustomStyle), [`hover?: CustomStyle`](#CustomStyle), [`click?: CustomStyle`](#CustomStyle)\}
 
 Object defining styling properties for different mouse states on the element.
 
@@ -818,7 +818,7 @@ Object defining styling properties for different mouse states on the element.
 
 ### `Button` {#Button}
 
-- Type: {[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition)}
+- Type: \{[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition)\}
 
 Styling for a button inside the chat view. <br />
 `container` is used to style the base element of the button for its various mouse states. <br />
@@ -897,11 +897,11 @@ Styling for a button inside the chat view. <br />
 
 ### `ButtonStyles` {#ButtonStyles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`container?: StatefulStyles`](#StatefulStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`svg?: ButtonInnerStyles`](#ButtonInnerStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`text?: ButtonInnerStyles`](#ButtonInnerStyles) <br />
-  }
+  \}
 
 Styling for a button inside the chat view. <br />
 `container` is used to style the base element of the button for its various mouse states. <br />
@@ -1073,10 +1073,10 @@ You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to 
 
 ### `ButtonInnerStyles` {#ButtonInnerStyles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](#StatefulStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `content?: string` <br />
-  }
+  \}
 
 Styling for an element inside a button container. <br />
 `styles` is used to set the style of the element for its various mouse states. <br />
@@ -1151,12 +1151,12 @@ Position for a button either _inside_ the [text input container](#textInput), _o
 
 ### `MicrophoneStyles` {#MicrophoneStyles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`default?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`active?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`unsupported?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition) <br />
-  }
+  \}
 
 Custom styling for the microphone button. <br />
 `default` is used for the default button state. <br />

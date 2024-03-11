@@ -18,15 +18,15 @@ Then proceed with using the [`webModel`](#webModel) property:
 
 ### `webModel` {#webModel}
 
-- Type: `true` | { <br />
+- Type: `true` | \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`model?: string`](https://github.com/OvidijusParsiunas/deep-chat/blob/10db3f4931d7fefff81e1c93d38a9a9809701113/component/src/types/webModel/webModel.ts#L1), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `instruction?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`urls?: WebModelUrls`](#WebModelUrls), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`load?: WebModelLoad`](#WebModelLoad), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`introMessage?: WebModelIntro`](#WebModelIntro), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`worker?: Worker`](#Worker) <br />
-  }
-- Default: _{model: "Llama-2-7b-chat-hf-q4f32_1"}_
+  \}
+- Default: _\{model: "Llama-2-7b-chat-hf-q4f32_1"\}_
 
 Set this to _true_ or define an object with any of the following properties: <br />
 `model` is the name of the model to be used. See [full list](https://github.com/OvidijusParsiunas/deep-chat/blob/10db3f4931d7fefff81e1c93d38a9a9809701113/component/src/types/webModel/webModel.ts#L1). <br />
@@ -81,7 +81,7 @@ Object types for [`webModel`](#webModel):
 
 ### `WebModelUrls` {#WebModelUrls}
 
-- Type: {`model?: string`, `wasm?: string`}
+- Type: \{`model?: string`, `wasm?: string`\}
 
 Deep Chat uses the [`webModelConfig.ts`](https://github.com/OvidijusParsiunas/deep-chat/blob/284bc845de8bcefe8ef36b2ee1b79079e6978593/component/src/webModel/webModelConfig.ts) file to determine where the `model` and the `wasm` files will be downloaded from.
 You can overwite the links to your prefered locations like your own server.
@@ -131,7 +131,7 @@ You can overwite the links to your prefered locations like your own server.
 
 ### `WebModelLoad` {#WebModelLoad}
 
-- Type: {`onInit?: boolean`, `onMessage?: boolean`, `clearCache?: boolean`, `skipCache?: boolean`}
+- Type: \{`onInit?: boolean`, `onMessage?: boolean`, `clearCache?: boolean`, `skipCache?: boolean`\}
 
 This is an object that is used to define the web model loading/downloading behaviour: <br />
 `onInit` will start loading the model as soon as the component is rendered. <br />
@@ -168,7 +168,7 @@ This is an object that is used to define the web model loading/downloading behav
 
 ### `WebModelIntro` {#WebModelIntro}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayed?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `autoScroll?: boolean` <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `removeAfterLoad?: boolean`, <br />
@@ -179,8 +179,8 @@ This is an object that is used to define the web model loading/downloading behav
   &nbsp;&nbsp;&nbsp;&nbsp; `fileInputClass?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `afterLoadHtml?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `exportFilesClass?: string` <br />
-  }
-- Default: _{displayed: true, autoScroll: true}_
+  \}
+- Default: _\{displayed: true, autoScroll: true\}_
 
 This is an object that controls the introductory web model message behaviour: <br />
 `displayed` is used to toggle whether the message is visible. <br />

@@ -19,11 +19,11 @@ and respond using the formats described below.
 The outgoing Deep Chat request body is encapsulated in one of the following formats:
 
 - When sending **text** based messages only, the request body will have the following JSON type: <br />
-  {[`messages: MessageContent[]`](/docs/messages/#MessageContent)} <br />
+  \{[`messages: MessageContent[]`](/docs/messages/#MessageContent)\} <br />
 
 - When sending messages that contain **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
-  where files are set inside an array property called _"files"_ and each text message is stored inside a _"message{index}"_ property with a corresponding index: <br />
-  {`files: File[]`, [`message1: MessageContent`](/docs/messages/#MessageContent), [`message2: MessageContent`](/docs/messages/#MessageContent)... } <br />
+  where files are set inside an array property called _"files"_ and each text message is stored inside a _"message\{index\}"_ property with a corresponding index: <br />
+  \{`files: File[]`, [`message1: MessageContent`](/docs/messages/#MessageContent), [`message2: MessageContent`](/docs/messages/#MessageContent)... \} <br />
 
 <h3>Response message</h3>
 
@@ -110,7 +110,7 @@ Configuration for the outgoing network requests to the target server.
 
 ### `stream` {#stream}
 
-- Type: `boolean` | {`simulation?: boolean | number | string`}
+- Type: `boolean` | \{`simulation?: boolean | number | string`\}
 
 Used to stream responses from the target service. <br />
 By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
@@ -196,7 +196,7 @@ A string value is used to act like an _end-phrase_ for individual websocket mess
 
 ### `requestBodyLimits` {#requestBodyLimits}
 
-- Type: {`maxMessages?: number`, `totalMessagesMaxCharLength?: number`}
+- Type: \{`maxMessages?: number`, `totalMessagesMaxCharLength?: number`\}
 
 Used to limit the content that is going to be included in the outgoing requests. <br />
 `maxMessages` is the maximum number of messages counting from the most recent one. If this is set to a number higher than _0_ such as _1_ - the outgoing request will only include the new user message,
@@ -259,7 +259,7 @@ Types shared with other component properties:
 
 ### `Request` {#Request}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `url?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
@@ -267,9 +267,9 @@ Types shared with other component properties:
   &nbsp;&nbsp;&nbsp;&nbsp; [`credentials?: string`](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`websocket?: Websocket`](#Websocket), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`handler?: Handler`](#Handler) <br />
-  }
+  \}
 
-- Default: _{ method: "POST", credentials: "same-origin" }_
+- Default: _\{ method: "POST", credentials: "same-origin" \}_
 
 Object used to configure the outgoing request settings. It MUST have either `url` or `handler` defined. <br />
 `additionalBodyProps` is used to add additional key value properties to the outgoing message body. <br />
@@ -328,7 +328,7 @@ Object used to configure the outgoing request settings. It MUST have either `url
 
 ### `Response` {#Response}
 
-- Type: {[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`}
+- Type: \{[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`\}
 
 Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with additional optional `error` and
 `overwrite` properties: <br />
@@ -574,13 +574,13 @@ Error handling must be done within the `handler` function.
 
 #### `Signals` {#Signals}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp;[`onResponse: (response: Response) => void`](#Response), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;`onOpen: () => void`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;`onClose: () => void`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;`stopClicked: {listener: () => void}`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;`newUserMessage: {listener: (body: any) => void}` <br />
-  }
+  &nbsp;&nbsp;&nbsp;&nbsp;`stopClicked: \{listener: () => void\}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`newUserMessage: \{listener: (body: any) => void\}` <br />
+  \}
 
 Object containing functions that are used to notify the Deep Chat component about the status of the current request.
 The `stopClicked` and `newUserMessage` functions are triggered by Deep Chat itself and contain `listener` properties

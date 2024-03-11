@@ -12,13 +12,13 @@ import azureCredentials from '/img/azure-credentials.png';
 
 ### `textToSpeech` {#textToSpeech}
 
-- Type: `true` | {<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `voiceName?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `pitch?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `rate?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number` <br />
-  }
+  \}
 
 When the chat receives a new text message - your device will automatically read it out. <br />
 `voiceName` is the name of the voice that will be used to read out the incoming message. Please note that different Operating Systems
@@ -85,7 +85,7 @@ import Tabs from '@theme/Tabs';
 
 ### `speechToText` {#speechToText}
 
-- Type: `true` | {<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `webSpeech?:` `true` | [`WebSpeechOptions`](#WebSpeechOptions), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`azure?: AzureOptions`](#AzureOptions), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textColor?: TextColor`](#TextColor), <br />
@@ -93,9 +93,9 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; `translations?: {[key: string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`commands?: Commands`](#Commands), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles) <br />
-  }
+  \}
 
-- Default: _{webSpeech: true}_
+- Default: _\{webSpeech: true\}_
 
 Transcribe your voice into text and control chat with commands.<br />
 `webSpeech` utilises [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to transcribe your speech. <br />
@@ -186,7 +186,7 @@ Object types for [`speechToText`](#speechToText):
 
 ### `WebSpeechOptions` {#WebSpeechOptions}
 
-- Type: {`language?: string`}
+- Type: \{`language?: string`\}
 
 `language` is used to set the recognition language. See the following [`QA`](https://stackoverflow.com/questions/23733537/what-are-the-supported-languages-for-web-speech-api-in-html5)
 for the full list.
@@ -239,16 +239,16 @@ This service stops after a brief period of silence due to limitations in its API
 
 ### `AzureOptions` {#AzureOptions}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `region: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `retrieveToken?: () => Promise<string>`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `subscriptionKey?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `token?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `language?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSilenceMs?: number` <br />
-  }
+  \}
 
-- Default: _{stopAfterSilenceMs: 25000 (25 seconds)}_
+- Default: _\{stopAfterSilenceMs: 25000 (25 seconds)\}_
 
 This object requires `region` and either `retrieveToken`, `subscriptionKey` or the `token` properties to be defined with it: <br />
 `region` is the location/region of your Azure speech resource. <br />
@@ -397,7 +397,7 @@ speechToText.speechToText = {
 
 ### `TextColor` {#TextColor}
 
-- Type: {`interim?: string`, `final?: string`}
+- Type: \{`interim?: string`, `final?: string`\}
 
 This object is used to set the color of `interim` and `final` results text. <br />
 
@@ -440,17 +440,17 @@ This object is used to set the color of `interim` and `final` results text. <br 
 
 ### `Commands` {#Commands}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `pause?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `resume?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `removeAllText?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `submit?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `commandMode?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `settings?:` {`substrings?: boolean`, `caseSensitive?: boolean`} <br />
-  }
+  &nbsp;&nbsp;&nbsp;&nbsp; `settings?:` \{`substrings?: boolean`, `caseSensitive?: boolean`\} <br />
+  \}
 
-- Default: _{settings: {substrings: true, caseSensitive: false}}_
+- Default: _\{settings: \{substrings: true, caseSensitive: false\}\}_
 
 This object is used to set the phrases which will control chat functionality via speech. <br />
 `stop` is used to stop the speech service. <br />
@@ -542,7 +542,7 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
 
 ### `ButtonStyles` {#ButtonStyles}
 
-- Type: {[`commandMode?: ButtonStyles`](/docs/styles/#ButtonStyles), [`MicrophoneStyles`](/docs/styles/#MicrophoneStyles)}
+- Type: \{[`commandMode?: ButtonStyles`](/docs/styles/#ButtonStyles), [`MicrophoneStyles`](/docs/styles/#MicrophoneStyles)\}
 
 This object is used to define the styling for the microphone button. <br />
 It contains the same properties as the [`MicrophoneStyles`](/docs/styles/#MicrophoneStyles) object

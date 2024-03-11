@@ -12,12 +12,12 @@ Properties used to connect to [Azure Cognitive Services](https://learn.microsoft
 
 ### `azure` {#azure}
 
-- Type: { <br />
+- Type: \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](#TextToSpeech), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](#SpeechToText), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`summarization?: Summarization`](#Summarization), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](#Translation)<br />
-  }
+  \}
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -33,15 +33,15 @@ import Tabs from '@theme/Tabs';
 
 ### `TextToSpeech` {#TextToSpeech}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `region: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `name?: string` <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `gender?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `outputFormat?: string` <br />
-  }
+  \}
 
-- Default: _{lang: "en-US", name: "en-US-JennyNeural", gender: "Female", outputFormat: "audio-16khz-128kbitrate-mono-mp3"}_
+- Default: _\{lang: "en-US", name: "en-US-JennyNeural", gender: "Female", outputFormat: "audio-16khz-128kbitrate-mono-mp3"\}_
 
 Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/rest-text-to-speech?tabs=streaming#convert-text-to-speech) API. <br />
 `region` is a required string property to denote the region of your speech service, e.g. _"eastus"_. <br />
@@ -114,8 +114,8 @@ Connect to Azure's [`text to speech`](https://learn.microsoft.com/en-GB/azure/co
 
 ### `SpeechToText` {#SpeechToText}
 
-- Type: {`region: string`, `lang?: string`}
-- Default: _{lang: "en-US"}_
+- Type: \{`region: string`, `lang?: string`\}
+- Default: _\{lang: "en-US"\}_
 
 Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/cognitive-services/speech-service/rest-speech-to-text) API. <br />
 `region` is a required string property to denote the region of your speech service, e.g. _"eastus"_. <br />
@@ -185,8 +185,8 @@ Connect to Azure's [`speech to text`](https://learn.microsoft.com/en-gb/azure/co
 
 ### `Summarization` {#Summarization}
 
-- Type: {`endpoint: string`, `language?: string`}
-- Default: _{language: "en"}_
+- Type: \{`endpoint: string`, `language?: string`\}
+- Default: _\{language: "en"\}_
 
 Connect to Azure's [`summarization`](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/overview?tabs=document-summarization) API. Please read [here](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/summarization/quickstart?tabs=document-summarization%2Cwindows&pivots=rest-api) how to generate a language service. <br />
 `endpoint` is the full endpoint for your generated language service. <br />
@@ -248,8 +248,8 @@ Cannot input a test key as user's language service `endpoint` is required.
 
 ### `Translation` {#Translation}
 
-- Type: {`region?: string`, `language?: string`}
-- Default: _{language: "es"}_
+- Type: \{`region?: string`, `language?: string`\}
+- Default: _\{language: "es"\}_
 
 Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference) API. <br />
 `region` is the region of your translator resource. This is optional if your resource is global. <br />

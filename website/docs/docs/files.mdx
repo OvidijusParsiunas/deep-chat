@@ -339,7 +339,7 @@ Types shared by files properties:
 
 ### `FilesServiceConfig` {#FilesServiceConfig}
 
-- Type: {[`request?: Request`](/docs/connect#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](/docs/styles#Button)}
+- Type: \{[`request?: Request`](/docs/connect#Request), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](/docs/styles#Button)\}
 
 Object used to configure the ability for the component to send files. <br />
 `request` object is used to override the default service request settings when sending a file. <br />
@@ -397,18 +397,18 @@ Object used to configure the ability for the component to send files. <br />
 
 ### `FileAttachments` {#FileAttachments}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`infoModal?: InfoModal`](#InfoModal) <br />
-  }
+  \}
 
-- Default: _{<br />
+- Default: _\{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for images: ".png,.jpg", <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for audio: ".4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a", <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for gifs: ".gif" <br />
-  }_
+  \}_
 
 Used to configure what files the component can accept. <br />
 `maxNumberOfFiles` controls the maximum number of files that can be sent within one message. <br />
@@ -460,8 +460,8 @@ use this value to verify the dropped files. <br />
 
 ### `InfoModal` {#InfoModal}
 
-- Type: {`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](/docs/styles#CustomStyle)}
-- Default: _{openModalOnce: false}_
+- Type: \{`textMarkDown: string`, `openModalOnce?: boolean`, [`containerStyle?: CustomStyle`](/docs/styles#CustomStyle)\}
+- Default: _\{openModalOnce: false\}_
 
 A modal that is triggered when a user clicks on a button to upload a file. It is useful for scenarios when a user needs some
 clarification of how their data will be handled or other noteworty information. <br />
@@ -536,12 +536,12 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 
 ### `CameraFilesServiceConfig` {#CameraFilesServiceConfig}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](/docs/connect#Request), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](/docs/styles#Button), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](/docs/styles#CustomStyle) <br />
-  }
+  \}
 
 Configuration for capturing images using a web camera and handling the resultant files. <br />
 `request` is used to override the default request settings when sending image files. <br />
@@ -603,17 +603,17 @@ Configuration for capturing images using a web camera and handling the resultant
 
 ### `CameraFiles` {#CameraFiles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"png"` | `"jpeg"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `dimensions?:` {`width?: number`, `height?: number`} <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
-  }
+  \}
 
-- Default: _{<br />
+- Default: _\{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; format: "png", <br />
   &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "image/\*" <br />
-  }_
+  \}_
 
 Configuration for the captured files by the camera. <br />
 `format` is the resultant format of the image file that is produced by capturing a photograph. <br />
@@ -685,11 +685,11 @@ the `acceptedFormats` property, it will override this one.<br />
 
 ### `MicrophoneFilesServiceConfig` {#MicrophoneFilesServiceConfig}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`request?: Request`](/docs/connect#Request), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: AudioRecordingFiles`](#AudioRecordingFiles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](/docs/styles#MicrophoneStyles) <br />
-  }
+  \}
 
 Configuration for recording audio using a microphone and handling the resultant files. <br />
 `request` is used to override the default request settings when sending audio files. <br />
@@ -747,18 +747,18 @@ Configuration for recording audio using a microphone and handling the resultant 
 
 ### `AudioRecordingFiles` {#AudioRecordingFiles}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`format?: AudioFormat`](#AudioFormat), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxDurationSeconds?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
-  }
+  \}
 
-- Default: _{<br />
+- Default: _\{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; format: "mp3", <br />
   &nbsp;&nbsp;&nbsp;&nbsp; maxDurationSeconds: 5999, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; acceptedFormats: "audio/\*" <br />
-  }_
+  \}_
 
 Configuration for the recorded microphone files. <br />
 `format` is the resultant audio file format. <br />

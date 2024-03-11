@@ -10,7 +10,7 @@ Properties related to messages.
 
 - Type: [`MessageContent[]`](#MessageContent)
 
-Messages that are pre-populated when the chat loads up. This is useful for displaying previous messages. <br />
+Messages that are pre-populated when the chat loads up.<br />
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -76,7 +76,7 @@ import Tabs from '@theme/Tabs';
 
 ### `introMessage` {#introMessage}
 
-- Type: {`text?: string`, `html?: string`}
+- Type: \{`text?: string`, `html?: string`\}
 
 Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](#initialMessages) as it will not trigger
 the [`onNewMessage`](/docs/events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](/docs/methods#getMessages) method is called and
@@ -121,7 +121,7 @@ class to make this message disappear after a new one is added.
 
 ### `avatars` {#avatars}
 
-- Type: `true` | {[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar), [`[custom]?: Avatar`](#Avatar)}
+- Type: `true` | \{[`default?: Avatar`](#Avatar), [`ai?: Avatar`](#Avatar), [`user?: Avatar`](#Avatar), [`[custom]?: Avatar`](#Avatar)\}
 
 Add avatars beside messages. You can enable this by setting the value to _true_
 or by defining an object with [`Avatar`](#Avatar) properties. The `default` property is applied to all roles.
@@ -182,13 +182,13 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
 
 #### `Avatar` {#Avatar}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `styles?: {` <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: CustomStyle`](/docs/styles#CustomStyle), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](/docs/styles#CustomStyle) <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
-  }}
+  }\}
 
 This object is used to configure avatars that are displayed beside messages. <br />
 `src` is the path to an avatar image file. <br />
@@ -272,7 +272,7 @@ This object is used to configure avatars that are displayed beside messages. <br
 
 ### `names` {#names}
 
-- Type: `true` | {[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name), [`[custom]?: Name`](#Name)}
+- Type: `true` | \{[`default?: Name`](#Name), [`ai?: Name`](#Name), [`user?: Name`](#Name), [`[custom]?: Name`](#Name)\}
 
 Add names beside messages. You can enable this by setting the value to _true_
 or by defining an object with [`Name`](#Name) properties. The `default` property is applied to all roles.
@@ -333,11 +333,11 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 
 #### `Name` {#Name}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `text?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`style?: CustomStyle`](/docs/styles#CustomStyle), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
-  }
+  \}
 
 This object is used to configure names that are displayed beside messages. <br />
 `text` is the string used for the name. <br />
@@ -458,15 +458,15 @@ will automatically have a loading animation.
 
 ### `errorMessages` {#errorMessages}
 
-- Type: {<br />
+- Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayServiceErrorMessages?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `overrides?:` { <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `overrides?:` \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `default?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: string` <br />
-  }}
+  \}\}
 
-- Default: _{ displayServiceErrorMessages: false, overrides: {default: "Error, please try again." }}_
+- Default: _\{ displayServiceErrorMessages: false, overrides: \{default: "Error, please try again." \}\}_
 
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
@@ -534,7 +534,7 @@ Shared object property types related to messages:
 
 ### `MessageContent` {#MessageContent}
 
-- Type: {[`role?: MessageRole`](#MessageRole), `text?: string`, [`files?: MessageFile[]`](#MessageFile), [`html?: string`](/docs/messages/HTML)}
+- Type: \{[`role?: MessageRole`](#MessageRole), `text?: string`, [`files?: MessageFile[]`](#MessageFile), [`html?: string`](/docs/messages/HTML)\}
 
 Object format used to encapsulate a message within the chat. <br />
 `role` defines the message sender. If not set it is automatically regarded as _"ai"_. <br />
@@ -606,8 +606,8 @@ or users in a group chat (`"bob"`/`"ross"`). You can style them using [`messageS
 
 ### `MessageFile` {#MessageFile}
 
-- Type: {`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType), [`ref?: File`](https://developer.mozilla.org/en-US/docs/Web/API/File)} <br />
-- Default: _{name: "file", type: "any"}_
+- Type: \{`name?: string`, `src?: string`, [`type?: MessageFileType`](#MessageFileType), [`ref?: File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\} <br />
+- Default: _\{name: "file", type: "any"\}_
 
 Format that defines the details of a file. <br />
 `name` is used to display the file name inside the message bubble (if not image/gif/audio). <br />
