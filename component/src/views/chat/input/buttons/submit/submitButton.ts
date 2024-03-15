@@ -8,6 +8,7 @@ import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {UserContentI} from '../../../../../types/messagesInternal';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
+import {MicrophoneButton} from '../microphone/microphoneButton';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {MessageUtils} from '../../../messages/messageUtils';
 import {UserContent} from '../../../../../types/messages';
@@ -39,7 +40,7 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
   private readonly _alwaysEnabled: boolean;
-  private _microphoneButton?: HTMLElement;
+  private _microphoneButton?: MicrophoneButton;
   private _stopSTTAfterSubmit?: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
@@ -143,7 +144,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private setUpSpeechToText(microphoneButton: InputButton, speechToText: DeepChat['speechToText']) {
-    this._microphoneButton = microphoneButton.elementRef;
+    this._microphoneButton = microphoneButton as MicrophoneButton;
     this._stopSTTAfterSubmit = typeof speechToText === 'object' ? speechToText.stopAfterSubmit : false;
   }
 
@@ -233,7 +234,9 @@ export class SubmitButton extends InputButton<Styles> {
     SubmitButtonStateStyle.resetSubmit(this, this.status.loadingActive);
     this.elementRef.onclick = () => {
       this.submitFromInput();
-      if (this._microphoneButton) SpeechToText.toggleSpeechAfterSubmit(this._microphoneButton, !!this._stopSTTAfterSubmit);
+      if (this._microphoneButton?.isActive) {
+        SpeechToText.toggleSpeechAfterSubmit(this._microphoneButton.elementRef, !!this._stopSTTAfterSubmit);
+      }
     };
   }
 
