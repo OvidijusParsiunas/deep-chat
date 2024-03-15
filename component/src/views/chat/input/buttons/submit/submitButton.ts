@@ -70,8 +70,18 @@ export class SubmitButton extends InputButton<Styles> {
 
   // prettier-ignore
   private createInnerElements() {
+    const states: (keyof Styles)[] = []
+    if (this._customStyles?.submit && Object.keys(this._customStyles.submit).length !== 0) {
+      states.push('submit')
+    }
+    if (this._customStyles?.loading && Object.keys(this._customStyles.loading).length !== 0) {
+      states.push('loading')
+    }
+    if (this._customStyles?.stop && Object.keys(this._customStyles.stop).length !== 0) {
+      states.push('stop')
+    }
     const {submit, loading, stop} = CustomButtonInnerElements.create<Styles>(
-      this.elementRef, ['submit', 'loading', 'stop'], this._customStyles);
+      this.elementRef, states, this._customStyles);
     const submitElement = submit || SubmitButton.createSubmitIconElement();
     return {
       submit: submitElement,
