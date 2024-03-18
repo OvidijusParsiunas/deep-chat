@@ -29,11 +29,12 @@ export class MessageStyleUtils {
     }
   }
 
-  private static isMessageSideStyles(styles: MessageRoleStyles | MessageElementsStyles): styles is MessageRoleStyles {
+  private static isElementsStyles(styles: MessageRoleStyles | MessageElementsStyles): styles is MessageElementsStyles {
     return !!(
-      (styles as MessageRoleStyles).ai ||
-      (styles as MessageRoleStyles).shared ||
-      (styles as MessageRoleStyles).user
+      (styles as MessageElementsStyles).outerContainer ||
+      (styles as MessageElementsStyles).innerContainer ||
+      (styles as MessageElementsStyles).bubble ||
+      (styles as MessageElementsStyles).media
     );
   }
 
@@ -41,13 +42,12 @@ export class MessageStyleUtils {
   public static applyCustomStyles(messageStyles: MessageStyles,
       elements: MessageElements, role: string, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (otherStyles && messageStyles.default !== otherStyles) {
-      if (MessageStyleUtils.isMessageSideStyles(otherStyles)) {
-        MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
-        MessageStyleUtils.applySideStyles(elements, role, media, otherStyles);
-      } else {
-        // do not apply sides when not side related
+      if (MessageStyleUtils.isElementsStyles(otherStyles)) {
         MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles.default?.shared);
         MessageStyleUtils.applyCustomStylesToElements(elements, media, otherStyles);
+      } else {
+        MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
+        MessageStyleUtils.applySideStyles(elements, role, media, otherStyles);
       }
     } else {
       // just apply the default for all sides
