@@ -69,20 +69,8 @@ export class SubmitButton extends InputButton<Styles> {
     });
   }
 
-  // prettier-ignore
   private createInnerElements() {
-    const states: (keyof Styles)[] = []
-    if (this._customStyles?.submit && Object.keys(this._customStyles.submit).length !== 0) {
-      states.push('submit')
-    }
-    if (this._customStyles?.loading && Object.keys(this._customStyles.loading).length !== 0) {
-      states.push('loading')
-    }
-    if (this._customStyles?.stop && Object.keys(this._customStyles.stop).length !== 0) {
-      states.push('stop')
-    }
-    const {submit, loading, stop} = CustomButtonInnerElements.create<Styles>(
-      this.elementRef, states, this._customStyles);
+    const {submit, loading, stop} = this.createCustomElements();
     const submitElement = submit || SubmitButton.createSubmitIconElement();
     return {
       submit: submitElement,
@@ -90,6 +78,18 @@ export class SubmitButton extends InputButton<Styles> {
       stop: stop || SubmitButton.createStopIconElement(),
       disabled: this.createDisabledIconElement(submitElement),
     };
+  }
+
+  private createCustomElements() {
+    const submit = CustomButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this._customStyles);
+    const states: {[key in keyof Styles]: ButtonInnerElement} = {loading: undefined, stop: undefined};
+    Object.keys(states).forEach((state) => {
+      const styleState = state as keyof Styles;
+      const element = CustomButtonInnerElements.createCustomElement(styleState, this._customStyles);
+      if (element) states[styleState] = element;
+    });
+    states.submit = submit;
+    return states;
   }
 
   private static createButtonContainerElement() {
