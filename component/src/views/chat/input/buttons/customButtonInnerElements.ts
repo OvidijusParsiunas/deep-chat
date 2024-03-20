@@ -1,4 +1,4 @@
-import {ButtonInnerElements, ButtonStateStyles} from '../../../../types/buttonInternal';
+import {ButtonStateStyles} from '../../../../types/buttonInternal';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 
 export class CustomButtonInnerElements {
@@ -34,25 +34,5 @@ export class CustomButtonInnerElements {
     if (customStyles) element = CustomButtonInnerElements.createCustomElement(state, customStyles);
     CustomButtonInnerElements.processElement(parentEl, element);
     return element;
-  }
-
-  // used for creating elements that change state in a sequence
-  // prettier-ignore
-  public static create<T>(
-      parentEl: HTMLElement, states: (keyof T)[], styles?: ButtonStateStyles<T>): ButtonInnerElements<T> {
-    const returnObj: ButtonInnerElements<T> = {};
-    if (!styles) {
-      CustomButtonInnerElements.processElement(parentEl);
-      return returnObj;
-    }
-    // if the user has specified element for any state, it will be reused for next states
-    const initialStateEl = CustomButtonInnerElements.createSpecificStateElement<T>(parentEl, states[0], styles);
-    returnObj[states[0]] = initialStateEl;
-    let lastStateEl = initialStateEl;
-    states.slice(1).forEach((state) => {
-      lastStateEl = CustomButtonInnerElements.createCustomElement<T>(state, styles) || lastStateEl;
-      returnObj[state] = lastStateEl;
-    });
-    return returnObj;
   }
 }
