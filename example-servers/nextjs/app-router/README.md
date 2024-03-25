@@ -1,6 +1,6 @@
 ![Deep Chat](../../../assets/readme/nextjs-connect.png)
 
-This is an example NextJS [Pages Router](https://nextjs.org/docs/pages) template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://huggingface.co/docs/api-inference/index), [StabilityAI](https://stability.ai/), [Cohere](https://docs.cohere.com/docs).
+This is an example NextJS [App Router](https://nextjs.org/docs/app) template that can be used to communicate with the [Deep Chat](https://www.npmjs.com/package/deep-chat) component. It includes a variety of endpoints that can be used to host your own service or act as a proxy for the following AI APIs - [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://huggingface.co/docs/api-inference/index), [StabilityAI](https://stability.ai/), [Cohere](https://docs.cohere.com/docs).
 
 This project is fully setup and ready to be hosted by a platform such as [Vercel](https://vercel.com/).
 

@@ -1,0 +1,37 @@
+.main {
+  font-family: sans-serif;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+#pageTitle {
+  padding-bottom: 5px;
+}
+
+.components {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.components > * {
+  margin: 0 20px;
+}
+
+.diagonalLine {
+  position: absolute;
+  transform: skewY(-2.5deg);
+  height: 200px;
+  width: 100%;
+  background: #e8f5ff;
+  padding-top: 30px;
+  margin-top: 50px;
+}
+
+.serverTitle {
+  display: contents;
+}
+
+.serverTitleIcon {
+  margin-left: 10px;
+}
