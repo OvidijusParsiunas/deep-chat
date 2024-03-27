@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // Define this when using the App router API
 'use client';
 
