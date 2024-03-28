@@ -2,7 +2,9 @@ import {DeepChatTextRequestBody} from '../../../types/deepChatTextRequestBody';
 import errorHandler from '../../../utils/errorHandler';
 import {NextRequest} from 'next/server';
 
-export const runtime = 'edge';
+export const config = {
+  runtime: 'edge',
+};
 
 // this is used to enable streaming
 export const dynamic = 'force-dynamic';
