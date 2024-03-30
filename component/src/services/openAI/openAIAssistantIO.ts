@@ -6,9 +6,11 @@ import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
+import {Response as ResponseT} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 import {PollResult} from '../serviceIO';
 import {
@@ -34,6 +36,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private readonly config: OpenAIAssistant = {};
   private readonly newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
   private readonly shouldFetchHistory: boolean = false;
+  private waitingForStreamResponse = false;
+  private readonly isSSEStream: boolean = false;
   fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
@@ -55,6 +59,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.connectSettings.headers ??= {};
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
+    this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
   }
 
@@ -93,12 +98,17 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/runs`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, file_ids);
-      HTTPRequest.request(this, body, messages);
+      if (this.isSSEStream) {
+        this.createStreamRun(body);
+      } else {
+        HTTPRequest.request(this, body, messages);
+      }
     }
     this.messages = messages;
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
+    this.waitingForStreamResponse = false;
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
@@ -127,7 +137,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.searchedForThreadId = true;
   }
 
-  override async extractResultData(result: OpenAIAssistantInitReqResult): Promise<{makingAnotherRequest: true}> {
+  // prettier-ignore
+  override async extractResultData(result: OpenAIAssistantInitReqResult):
+      Promise<ResponseT | {makingAnotherRequest: true}> {
+    if (this.waitingForStreamResponse || (this.isSSEStream && this.sessionId)) {
+      return this.handleStream(result);
+    }
     if (result.error) throw result.error.message;
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
@@ -206,5 +221,35 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs`;
     await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
     return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
+  }
+
+  private handleStream(result: OpenAIAssistantInitReqResult) {
+    if (this.waitingForStreamResponse) {
+      return this.parseStreamResult(result);
+    }
+    if (this.isSSEStream && this.sessionId) {
+      // https://platform.openai.com/docs/api-reference/runs/createRun
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs`;
+      const newBody = JSON.parse(JSON.stringify(this.rawBody));
+      this.createStreamRun(newBody);
+    }
+    return {makingAnotherRequest: true};
+  }
+
+  private parseStreamResult(result: OpenAIAssistantInitReqResult) {
+    if (result.delta) {
+      return {text: result.delta.content[0].text.value};
+    }
+    if (!this.sessionId && result.thread_id) {
+      this.sessionId = result.thread_id;
+    }
+    return {makingAnotherRequest: true};
+  }
+
+  // https://platform.openai.com/docs/api-reference/assistants-streaming
+  private createStreamRun(body: object & {stream?: boolean}) {
+    body.stream = true;
+    this.waitingForStreamResponse = true;
+    Stream.request(this, body, this.messages as Messages);
   }
 }
