@@ -14,7 +14,7 @@ type UpsertFunc = (response?: ResponseI) => MessageStream | void;
 
 export class Stream {
   // prettier-ignore
-  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true, canBeEmpty = false) {
     const requestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, headers: interceptedHeaders, error} =
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
@@ -66,9 +66,12 @@ export class Stream {
         throw err; // need to throw otherwise stream will retry infinitely
       },
       onclose() {
-        if (!io.asyncCallInProgress) {
+        if (io.asyncCallInProgress) return;
+        try {
           stream.finaliseStreamedMessage();
           onClose();
+        } catch (e) {
+          if (!canBeEmpty) throw e;
         }
       },
       signal: abortStream.signal,

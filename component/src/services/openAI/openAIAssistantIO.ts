@@ -89,6 +89,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   }
 
   private callService(messages: Messages, pMessages: MessageContentI[], file_ids?: string[]) {
+    this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
@@ -104,7 +105,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         HTTPRequest.request(this, body, messages);
       }
     }
-    this.messages = messages;
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
@@ -141,7 +141,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   override async extractResultData(result: OpenAIAssistantInitReqResult):
       Promise<ResponseT | {makingAnotherRequest: true}> {
     if (this.waitingForStreamResponse || (this.isSSEStream && this.sessionId)) {
-      return this.handleStream(result);
+      return await this.handleStream(result);
     }
     if (result.error) throw result.error.message;
     await this.assignThreadAndRun(result);
@@ -191,8 +191,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) {
-      const toolsResult = await this.handleTools(toolCalls);
-      return (await this.deepChat.responseInterceptor?.(toolsResult)) || toolsResult;
+      return await this.handleTools(toolCalls);
     }
     throw Error(`Thread run status: ${status}`);
   }
@@ -219,11 +218,20 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
     this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs`;
-    await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
+    if (this.isSSEStream) {
+      await this.createStreamRun({tool_outputs});
+    } else {
+      await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
+    }
     return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
   }
 
-  private handleStream(result: OpenAIAssistantInitReqResult) {
+  private async handleStream(result: OpenAIAssistantInitReqResult) {
+    const toolCalls = result.required_action?.submit_tool_outputs?.tool_calls;
+    if (result.status === 'requires_action' && toolCalls) {
+      this.run_id = result.id;
+      return await this.handleTools(toolCalls);
+    }
     if (this.waitingForStreamResponse) {
       return this.parseStreamResult(result);
     }
@@ -237,7 +245,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   }
 
   private parseStreamResult(result: OpenAIAssistantInitReqResult) {
-    if (result.delta) {
+    if (result.delta?.content) {
       return {text: result.delta.content[0].text.value};
     }
     if (!this.sessionId && result.thread_id) {
@@ -247,9 +255,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   }
 
   // https://platform.openai.com/docs/api-reference/assistants-streaming
-  private createStreamRun(body: object & {stream?: boolean}) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private async createStreamRun(body: any) {
     body.stream = true;
     this.waitingForStreamResponse = true;
-    Stream.request(this, body, this.messages as Messages);
+    await Stream.request(this, body, this.messages as Messages, true, true);
   }
 }

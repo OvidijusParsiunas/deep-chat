@@ -4,11 +4,16 @@ import {InterfacesUnion} from './utilityTypes';
 // https://platform.openai.com/docs/api-reference/messages/createMessage
 // or when creating and running together
 // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
-export interface OpenAIAssistantInitReqResult {
+export type OpenAIAssistantInitReqResult = OpenAIRunResult & {
   id: string; // run id
-  thread_id: string;
   error?: {code: string; message: string};
-}
+  delta?: {
+    content?: {text: {value: string}}[];
+    step_details?: {
+      tool_calls?: ToolCalls;
+    };
+  };
+};
 
 export interface OpenAINewAssistantResult {
   id: string;
