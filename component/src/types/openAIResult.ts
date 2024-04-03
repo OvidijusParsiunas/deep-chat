@@ -7,12 +7,15 @@ import {InterfacesUnion} from './utilityTypes';
 export type OpenAIAssistantInitReqResult = OpenAIRunResult & {
   id: string; // run id
   error?: {code: string; message: string};
+  // this is used exclusively for streams
   delta?: {
     content?: {text: {value: string}}[];
     step_details?: {
       tool_calls?: ToolCalls;
     };
   };
+  // this is used exclusively for streams
+  file_ids?: string[];
 };
 
 export interface OpenAINewAssistantResult {
