@@ -92,7 +92,7 @@ export class BaseServiceIO implements ServiceIO {
 
   private async request(body: any, messages: Messages, stringifyBody = true) {
     if (this.stream && !Stream.isSimulation(this.stream)) {
-      return Stream.request(this, body, messages);
+      return Stream.request(this, body, messages, stringifyBody);
     }
     return HTTPRequest.request(this, body, messages, stringifyBody);
   }
