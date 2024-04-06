@@ -6,7 +6,6 @@ import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {Response as ResponseT} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -139,7 +138,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   // prettier-ignore
   override async extractResultData(result: OpenAIAssistantInitReqResult):
-      Promise<ResponseT | {makingAnotherRequest: true}> {
+      Promise<ResponseI | {makingAnotherRequest: true}> {
     if (this.waitingForStreamResponse || (this.isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
@@ -173,12 +172,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
-    const messages = isHistory ? threadMessages.data : [threadMessages.data[0]];
-    const parsedMessages = messages.map(async (data) => {
-      const content = data.content.find((content) => !!content.text || !!content.image_file);
-      return await OpenAIAssistantFiles.getFilesAndText(this, data, content);
-    });
-    return Promise.all(parsedMessages);
+    return OpenAIAssistantFiles.processAPIMessages(this, threadMessages, isHistory);
   }
 
   async extractPollResultData(result: OpenAIRunResult): PollResult {
@@ -186,7 +180,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
     if (status === 'completed' && this.messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
-      const {text, files} = threadMessages[0];
+      const {text, files} = threadMessages.pop() as ResponseI;
+      setTimeout(() => {
+        threadMessages.forEach((message) => this.deepChat.addMessage(message));
+      });
       return {text, _sessionId: this.sessionId, files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;

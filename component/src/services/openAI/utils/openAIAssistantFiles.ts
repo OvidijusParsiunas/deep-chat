@@ -1,7 +1,8 @@
-import {OpenAIAssistantData, OpenAIAssistantContent} from '../../../types/openAIResult';
+import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../types/openAIResult';
 import {MessageFileType, MessageFile} from '../../../types/messageFile';
 import {Messages} from '../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
+import {DirectServiceIO} from '../../utils/directServiceIO';
 import {OpenAIUtils} from './openAIUtils';
 import {ServiceIO} from '../../serviceIO';
 
@@ -118,5 +119,47 @@ export class OpenAIAssistantFiles {
     const fileDetails = OpenAIAssistantFiles.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
     return await OpenAIAssistantFiles.getFilesAndNewText(io, fileDetails, message.role, content);
+  }
+
+  private static parseMesages(result: OpenAIAssistantMessagesResult, isHistory: boolean) {
+    let messages = [];
+    if (isHistory) {
+      messages = result.data;
+    } else {
+      for (let i = 0; i < result.data.length; i += 1) {
+        const message = result.data[i];
+        if (message.role === 'assistant') {
+          messages.push(message);
+        } else {
+          break;
+        }
+      }
+    }
+    return messages;
+  }
+
+  // test this using this prompt and it should give 2 text mesages and a file:
+  // "give example data for a csv and create a suitable bar chart"
+  private static parseContent(io: DirectServiceIO, messages: OpenAIAssistantData[]) {
+    const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
+    messages.forEach(async (data) => {
+      data.content
+        .filter((content) => !!content.text || !!content.image_file)
+        .sort((content) => {
+          if (content.text) return -1;
+          if (content.image_file) return 1;
+          return 0;
+        })
+        .forEach(async (content) => {
+          parsedContent.push(OpenAIAssistantFiles.getFilesAndText(io, data, content));
+        });
+    });
+    return parsedContent;
+  }
+
+  public static async processAPIMessages(io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean) {
+    const messages = OpenAIAssistantFiles.parseMesages(result, isHistory);
+    const parsedContent = OpenAIAssistantFiles.parseContent(io, messages);
+    return Promise.all(parsedContent);
   }
 }
