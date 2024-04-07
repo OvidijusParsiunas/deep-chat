@@ -1,6 +1,7 @@
 import {AssistantFunctionHandler, OpenAIAssistant, OpenAINewAssistant} from '../../types/openAI';
+import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {OpenAIAssistantFiles} from './utils/openAIAssistantFiles';
+import {OpenAIAssistantUtils} from './utils/openAIAssistantUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -37,6 +38,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private readonly shouldFetchHistory: boolean = false;
   private waitingForStreamResponse = false;
   private readonly isSSEStream: boolean = false;
+  private streamedMessageId: string | undefined;
+  private messageStream: MessageStream | undefined;
   fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
@@ -110,9 +113,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.waitingForStreamResponse = false;
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
+    this.streamedMessageId = undefined;
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
-    const file_ids = files ? await OpenAIAssistantFiles.storeFiles(this, messages, files) : undefined;
+    const file_ids = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
     this.connectSettings.method = 'POST';
     this.callService(messages, pMessages, file_ids);
   }
@@ -172,7 +176,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
-    return OpenAIAssistantFiles.processAPIMessages(this, threadMessages, isHistory);
+    return OpenAIAssistantUtils.processAPIMessages(this, threadMessages, isHistory);
   }
 
   async extractPollResultData(result: OpenAIRunResult): PollResult {
@@ -241,9 +245,19 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     return {makingAnotherRequest: true};
   }
 
-  private parseStreamResult(result: OpenAIAssistantInitReqResult) {
+  private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
     if (result.delta?.content) {
-      return {text: result.delta.content[0].text.value};
+      if (!this.streamedMessageId) {
+        this.streamedMessageId = result.id;
+      } else if (this.streamedMessageId !== result.id) {
+        this.streamedMessageId = result.id;
+        this.messageStream?.newMessage();
+      }
+      if (result.delta.content.length > 1) {
+        const messages = await OpenAIAssistantUtils.processSteamMessages(this, result.delta.content);
+        return {text: messages[0].text, files: messages[1].files};
+      }
+      return {text: result.delta.content[0].text?.value};
     }
     if (!this.sessionId && result.thread_id) {
       this.sessionId = result.thread_id;
@@ -256,6 +270,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private async createStreamRun(body: any) {
     body.stream = true;
     this.waitingForStreamResponse = true;
-    await Stream.request(this, body, this.messages as Messages, true, true);
+    this.messageStream = (await Stream.request(this, body, this.messages as Messages, true, true)) as MessageStream;
   }
 }

@@ -105,7 +105,16 @@ export class MessageStream {
     this._hasStreamEnded = true;
   }
 
-  public markFileAded() {
+  public markFileAdded() {
     this._fileAdded = true;
+  }
+
+  public newMessage() {
+    this.finaliseStreamedMessage();
+    this._elements = undefined;
+    this._streamedContent = '';
+    this._fileAdded = false;
+    this._hasStreamEnded = false;
+    this._activeMessageRole = undefined;
   }
 }

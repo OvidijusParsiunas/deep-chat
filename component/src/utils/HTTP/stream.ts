@@ -86,6 +86,7 @@ export class Stream {
           RequestUtils.displayError(messages, parsedError);
         });
     });
+    return stream;
   }
 
   public static simulate(messages: Messages, sh: StreamHandlers, result: ResponseI) {
@@ -136,7 +137,7 @@ export class Stream {
     }
     if (response?.files) {
       messages.addNewMessage({files: response.files});
-      stream?.markFileAded();
+      stream?.markFileAdded();
     }
   }
 }

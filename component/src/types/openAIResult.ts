@@ -9,7 +9,7 @@ export type OpenAIAssistantInitReqResult = OpenAIRunResult & {
   error?: {code: string; message: string};
   // this is used exclusively for streams
   delta?: {
-    content?: {text: {value: string}}[];
+    content?: OpenAIAssistantContent[];
     step_details?: {
       tool_calls?: ToolCalls;
     };

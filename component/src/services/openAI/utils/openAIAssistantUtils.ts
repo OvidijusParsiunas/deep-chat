@@ -8,7 +8,7 @@ import {ServiceIO} from '../../serviceIO';
 
 type FileDetails = {fileId: string; path?: string; name?: string}[];
 
-export class OpenAIAssistantFiles {
+export class OpenAIAssistantUtils {
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
@@ -60,7 +60,7 @@ export class OpenAIAssistantFiles {
           resolve({
             src: (event.target as FileReader).result as string,
             name: fileDetails[index].name,
-            type: OpenAIAssistantFiles.getType(fileDetails, index),
+            type: OpenAIAssistantUtils.getType(fileDetails, index),
           });
         };
       });
@@ -82,7 +82,7 @@ export class OpenAIAssistantFiles {
             fileDetails.push({
               path: annotation.text,
               fileId: annotation.file_path.file_id,
-              name: OpenAIAssistantFiles.getFileName(annotation.text),
+              name: OpenAIAssistantUtils.getFileName(annotation.text),
             });
           }
         });
@@ -101,7 +101,7 @@ export class OpenAIAssistantFiles {
       role?: string, content?: OpenAIAssistantContent) {
     let files: MessageFile[] | undefined;
     if (fileDetails.length > 0) {
-      files = await OpenAIAssistantFiles.getFiles(io, fileDetails);
+      files = await OpenAIAssistantUtils.getFiles(io, fileDetails);
       if (content?.text?.value) {
         files.forEach((file, index) => {
           if (!file.src) return;
@@ -116,12 +116,12 @@ export class OpenAIAssistantFiles {
   }
 
   public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
-    const fileDetails = OpenAIAssistantFiles.getFileDetails(message, content);
+    const fileDetails = OpenAIAssistantUtils.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
-    return await OpenAIAssistantFiles.getFilesAndNewText(io, fileDetails, message.role, content);
+    return await OpenAIAssistantUtils.getFilesAndNewText(io, fileDetails, message.role, content);
   }
 
-  private static parseMesages(result: OpenAIAssistantMessagesResult, isHistory: boolean) {
+  private static parseResult(result: OpenAIAssistantMessagesResult, isHistory: boolean) {
     let messages = [];
     if (isHistory) {
       messages = result.data;
@@ -140,7 +140,7 @@ export class OpenAIAssistantFiles {
 
   // test this using this prompt and it should give 2 text mesages and a file:
   // "give example data for a csv and create a suitable bar chart"
-  private static parseContent(io: DirectServiceIO, messages: OpenAIAssistantData[]) {
+  private static parseMessages(io: DirectServiceIO, messages: OpenAIAssistantData[]) {
     const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
     messages.forEach(async (data) => {
       data.content
@@ -151,15 +151,18 @@ export class OpenAIAssistantFiles {
           return 0;
         })
         .forEach(async (content) => {
-          parsedContent.push(OpenAIAssistantFiles.getFilesAndText(io, data, content));
+          parsedContent.push(OpenAIAssistantUtils.getFilesAndText(io, data, content));
         });
     });
-    return parsedContent;
+    return Promise.all(parsedContent);
+  }
+
+  public static async processSteamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[]) {
+    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}]);
   }
 
   public static async processAPIMessages(io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean) {
-    const messages = OpenAIAssistantFiles.parseMesages(result, isHistory);
-    const parsedContent = OpenAIAssistantFiles.parseContent(io, messages);
-    return Promise.all(parsedContent);
+    const messages = OpenAIAssistantUtils.parseResult(result, isHistory);
+    return OpenAIAssistantUtils.parseMessages(io, messages);
   }
 }
