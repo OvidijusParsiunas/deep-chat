@@ -1,4 +1,5 @@
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
@@ -16,7 +17,7 @@ export class TextInputEl {
   private readonly _config: TextInput;
   submit?: () => void;
 
-  constructor(deepChat: DeepChat, serviceIO: ServiceIO) {
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAts: FileAttachments) {
     const processedConfig = TextInputEl.processConfig(serviceIO, deepChat.textInput);
     this.elementRef = TextInputEl.createContainerElement(processedConfig?.styles?.container);
     this.inputElementRef = this.createInputElement(processedConfig);
@@ -24,7 +25,7 @@ export class TextInputEl {
     this.elementRef.appendChild(this.inputElementRef);
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
-      TextInputEvents.add(this.inputElementRef, deepChat.textInput?.characterLimit, deepChat._validationHandler);
+      TextInputEvents.add(this.inputElementRef, fileAts, deepChat.textInput?.characterLimit, deepChat._validationHandler);
     });
   }
 

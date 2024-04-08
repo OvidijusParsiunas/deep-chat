@@ -1,5 +1,6 @@
 import {ValidationHandler} from '../../../../types/validationHandler';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {FocusUtils} from './focusUtils';
 
 export class TextInputEvents {
@@ -9,11 +10,17 @@ export class TextInputEvents {
     KEYBOARD_KEY.ARROW_DOWN, KEYBOARD_KEY.ARROW_UP, KEYBOARD_KEY.META, KEYBOARD_KEY.CONTROL, KEYBOARD_KEY.ENTER
   ]);
 
-  public static add(inputElement: HTMLElement, characterLimit?: number, validationHandler?: ValidationHandler) {
+  // prettier-ignore
+  public static add(inputElement: HTMLElement, fileAts: FileAttachments, characterLimit?: number,
+      validationHandler?: ValidationHandler) {
     if (characterLimit !== undefined) {
       inputElement.addEventListener('keydown', TextInputEvents.onKeyDown.bind(this, characterLimit));
     }
     inputElement.oninput = TextInputEvents.onInput.bind(this, characterLimit, validationHandler);
+    inputElement.onpaste = (event) => {
+      event.preventDefault();
+      if (event.clipboardData?.files.length) fileAts.addFilesToAnyType(Array.from(event.clipboardData.files));
+    };
   }
 
   // preventing insertion early for a nicer UX
