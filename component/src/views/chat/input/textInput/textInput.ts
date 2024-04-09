@@ -97,7 +97,7 @@ export class TextInputEl {
       inputElement.onblur = this.onBlur.bind(this, textInput.styles.focus, textInput?.styles?.container);
     }
     inputElement.addEventListener('keydown', this.onKeydown.bind(this));
-    inputElement.onpaste = PasteUtils.sanitizePastedTextContent;
+    inputElement.addEventListener('paste', PasteUtils.sanitizePastedTextContent);
   }
 
   private onFocus(focusStyle?: CustomStyle) {
