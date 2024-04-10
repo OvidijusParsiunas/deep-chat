@@ -170,7 +170,8 @@ export class SubmitButton extends InputButton<Styles> {
     if (this._inputElementRef.classList.contains('text-input-placeholder')) {
       this.attemptSubmit({text: '', files: uploadedFilesData});
     } else {
-      const inputText = this._inputElementRef.textContent?.trim() as string;
+      // not using textContent as it ignores new line spaces
+      const inputText = this._inputElementRef.innerText.trim() as string;
       this.attemptSubmit({text: inputText, files: uploadedFilesData});
     }
   }
