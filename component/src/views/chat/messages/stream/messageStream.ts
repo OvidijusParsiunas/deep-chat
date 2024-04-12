@@ -2,12 +2,13 @@ import {ErrorMessages} from '../../../../utils/errorMessages/errorMessages';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
+import {MessageFile} from '../../../../types/messageFile';
+import {MessageElements, Messages} from '../messages';
 import {Response} from '../../../../types/response';
 import {HTMLMessages} from '../html/htmlMessages';
 import {MessageUtils} from '../messageUtils';
 import {MessagesBase} from '../messagesBase';
 import {HTMLUtils} from '../html/htmlUtils';
-import {MessageElements} from '../messages';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
@@ -19,6 +20,7 @@ export class MessageStream {
   private _activeMessageRole?: string;
   private _message?: MessageContentI;
   private readonly _messages: MessagesBase;
+  private _endStreamAfterOperation?: boolean;
   private static readonly HTML_CONTENT_PLACEHOLDER = 'htmlplaceholder'; // used for extracting at end and for isStreaming
 
   constructor(messages: MessagesBase) {
@@ -85,6 +87,7 @@ export class MessageStream {
 
   public finaliseStreamedMessage() {
     const {textElementsToText} = this._messages;
+    if (this._endStreamAfterOperation) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
     if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
@@ -116,5 +119,16 @@ export class MessageStream {
     this._fileAdded = false;
     this._hasStreamEnded = false;
     this._activeMessageRole = undefined;
+  }
+
+  // prettier-ignore
+  public async endStreamAfterFileDownloaded(
+      messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
+    this._endStreamAfterOperation = true;
+    const {text, files} = await downloadCb();
+    if (text) this.updateBasedOnType(text, 'text', this._elements?.bubbleElement as HTMLElement, true);
+    this._endStreamAfterOperation = false;
+    this.finaliseStreamedMessage();
+    if (files) messages.addNewMessage({files}); // adding later to trigger event later
   }
 }

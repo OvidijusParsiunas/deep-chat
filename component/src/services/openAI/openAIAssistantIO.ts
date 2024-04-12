@@ -245,7 +245,14 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     return {makingAnotherRequest: true};
   }
 
+  // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
+    if (result.content && result.content.length > 0 && this.messages) {
+      const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
+        this, {role: 'assistant', content: result.content}, result.content[0]);
+      this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
+      return {text: ''};
+    }
     if (result.delta?.content) {
       if (!this.streamedMessageId) {
         this.streamedMessageId = result.id;
@@ -254,7 +261,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         this.messageStream?.newMessage();
       }
       if (result.delta.content.length > 1) {
-        const messages = await OpenAIAssistantUtils.processSteamMessages(this, result.delta.content);
+        const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content);
         return {text: messages[0].text, files: messages[1].files};
       }
       return {text: result.delta.content[0].text?.value};

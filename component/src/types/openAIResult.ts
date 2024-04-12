@@ -16,6 +16,7 @@ export type OpenAIAssistantInitReqResult = OpenAIRunResult & {
   };
   // this is used exclusively for streams
   file_ids?: string[];
+  content?: OpenAIAssistantContent[];
 };
 
 export interface OpenAINewAssistantResult {

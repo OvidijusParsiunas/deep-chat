@@ -157,7 +157,7 @@ export class OpenAIAssistantUtils {
     return Promise.all(parsedContent);
   }
 
-  public static async processSteamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[]) {
+  public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[]) {
     return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}]);
   }
 
