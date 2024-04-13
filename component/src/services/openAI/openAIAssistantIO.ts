@@ -248,10 +248,14 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
     if (result.content && result.content.length > 0 && this.messages) {
-      const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-        this, {role: 'assistant', content: result.content}, result.content[0]);
-      this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
-      return {text: ''};
+      // if file is included and there is an annotation/link in text, process at the end
+      const textContent = result.content.find((content) => content.text);
+      if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
+        const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
+          this, {role: 'assistant', content: result.content}, result.content[0]);
+        this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
+        return {text: ''};
+      }
     }
     if (result.delta?.content) {
       if (!this.streamedMessageId) {
@@ -261,8 +265,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         this.messageStream?.newMessage();
       }
       if (result.delta.content.length > 1) {
-        const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content);
-        return {text: messages[0].text, files: messages[1].files};
+        // if file is included and there is no annotation/link in text, process during the stream
+        const textContent = result.delta.content.find((content) => content.text);
+        if (textContent?.text?.annotations && textContent.text.annotations.length === 0) {
+          const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content);
+          return {text: messages[0].text, files: messages[1].files};
+        }
       }
       return {text: result.delta.content[0].text?.value};
     }
