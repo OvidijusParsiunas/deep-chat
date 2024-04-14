@@ -8,7 +8,7 @@ Message transactions can be intercepted to change their contents or execute othe
 
 ### `requestInterceptor` {#requestInterceptor}
 
-- Type: ([`RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails) | {`error: string`}
+- Type: ([`RequestDetails`](#RequestDetails)) => [`RequestDetails`](#RequestDetails) | \{`error: string`\}
 
 Triggered before a user message is sent out. This method MUST either return a [`RequestDetails`](#RequestDetails) object or
 an object that contains an `error` property to cancel the request.
