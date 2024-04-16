@@ -25,8 +25,10 @@ export class FileMessageUtils {
     // if not a data url (http url) or image
     if (!url.startsWith('data') || type === 'image') return false;
     // not linking javascript as it can be a potential security vulnerability
-    // if not marked as image, but image - is linkable
-    return (type === 'any' && url.startsWith('data:text/javascript')) || !url.startsWith('data:image');
+    return (
+      (type === 'any' && url.startsWith('data:text/javascript')) ||
+      (!url.startsWith('data:image') && !url.startsWith('data:application'))
+    );
   }
 
   public static processContent(type: MessageFileType, contentEl: HTMLElement, url?: string, name?: string) {
