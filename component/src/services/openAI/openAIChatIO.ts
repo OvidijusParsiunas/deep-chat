@@ -7,7 +7,7 @@ import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseT} from '../../types/response';
+import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
@@ -92,7 +92,7 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   // prettier-ignore
   override async extractResultData(result: OpenAIConverseResult,
-      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseT> {
+      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices?.[0]?.delta) {
       return this.extractStreamResult(result.choices[0], fetchFunc, prevBody);
@@ -126,7 +126,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseT> {
+  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
     if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
       throw Error(
