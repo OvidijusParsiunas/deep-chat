@@ -1,5 +1,5 @@
 import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseT} from '../../types/response';
+import {Response as ResponseI} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
 import {GenericObject} from '../../types/object';
@@ -73,7 +73,7 @@ export class RequestUtils {
     return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
   }
 
-  public static validateResponseFormat(response: ResponseT) {
+  public static validateResponseFormat(response: ResponseI) {
     return (
       response &&
       typeof response === 'object' &&
