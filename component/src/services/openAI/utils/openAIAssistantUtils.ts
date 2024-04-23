@@ -1,4 +1,5 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../types/openAIResult';
+import {FileMessageUtils} from '../../../views/chat/messages/fileMessageUtils';
 import {MessageFileType, MessageFile} from '../../../types/messageFile';
 import {Messages} from '../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
@@ -73,12 +74,14 @@ export class OpenAIAssistantUtils {
     return parts[parts.length - 1];
   }
 
+  // prettier-ignore
   private static getFileDetails(lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
     const fileDetails: FileDetails = [];
     if (content?.text?.value) {
       lastMessage.content.forEach((content) => {
         content.text?.annotations?.forEach((annotation) => {
-          if (annotation.text && annotation.text.startsWith('sandbox:') && annotation.file_path?.file_id) {
+          if (annotation.text && annotation.text.startsWith('sandbox:')
+              && !FileMessageUtils.isImageFile({src: annotation.text}) && annotation.file_path?.file_id) {
             fileDetails.push({
               path: annotation.text,
               fileId: annotation.file_path.file_id,
