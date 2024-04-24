@@ -138,7 +138,7 @@ export class OpenAIAssistantUtils {
         }
       }
     }
-    return messages;
+    return messages.reverse();
   }
 
   // test this using this prompt and it should give 2 text mesages and a file:

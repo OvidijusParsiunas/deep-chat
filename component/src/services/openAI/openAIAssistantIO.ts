@@ -184,7 +184,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
     if (status === 'completed' && this.messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
-      const {text, files} = threadMessages.pop() as ResponseI;
+      const {text, files} = threadMessages.shift() as ResponseI;
       setTimeout(() => {
         threadMessages.forEach((message) => this.deepChat.addMessage(message));
       });
