@@ -43,4 +43,23 @@ export class HTMLUtils {
     HTMLDeepChatElements.applyDeepChatUtilities(messages, messages.htmlClassUtilities, outmostElement);
     HTMLUtils.applyCustomClassUtilities(messages.htmlClassUtilities, outmostElement);
   }
+
+  private static traverseNodes(node: ChildNode, topLevelElements: string[]) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      topLevelElements.push((node as HTMLElement).outerHTML);
+    }
+    node.childNodes.forEach((childNode) => {
+      HTMLUtils.traverseNodes(childNode, topLevelElements);
+    });
+  }
+
+  public static splitHTML(htmlString: string) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const topLevelElements: string[] = [];
+    doc.body.childNodes.forEach((childNode) => {
+      HTMLUtils.traverseNodes(childNode, topLevelElements);
+    });
+    return topLevelElements;
+  }
 }

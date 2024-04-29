@@ -1,6 +1,7 @@
 import {EventSourceMessage, fetchEventSource} from '@microsoft/fetch-event-source';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
+import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {Stream as StreamI} from '../../types/stream';
@@ -91,21 +92,27 @@ export class Stream {
 
   public static simulate(messages: Messages, sh: StreamHandlers, result: ResponseI) {
     const simulationSH = sh as unknown as SimulationSH;
-    // reason for not streaming html is because there is no standard way to split it
-    if (result.files || result.html) messages.addNewMessage({sendUpdate: false, ignoreText: true, ...result}, false);
+    if (result.files) messages.addNewMessage({sendUpdate: false, ignoreText: true, ...result}, false);
     if (result.text) {
       sh.onOpen();
-      const responseText = result.text.split(''); // important to split by char for Chinese characters
-      Stream.populateMessages(responseText, new MessageStream(messages), simulationSH);
+      const responseTextStrings = result.text.split(''); // important to split by char for Chinese characters
+      Stream.populateMessages(responseTextStrings, new MessageStream(messages), simulationSH, 'text');
+    }
+    if (result.html) {
+      sh.onOpen();
+      const responseHTMLStrings = HTMLUtils.splitHTML(result.html);
+      Stream.populateMessages(responseHTMLStrings, new MessageStream(messages), simulationSH, 'html');
     }
   }
 
-  private static populateMessages(responseText: string[], stream: MessageStream, sh: SimulationSH, charIndex = 0) {
-    const character = responseText[charIndex];
+  // prettier-ignore
+  private static populateMessages(
+      responseStrings: string[], stream: MessageStream, sh: SimulationSH, type: 'text'|'html', charIndex = 0) {
+    const character = responseStrings[charIndex];
     if (character) {
-      stream.upsertStreamedMessage({text: character});
+      stream.upsertStreamedMessage({[type]: character});
       const timeout = setTimeout(() => {
-        Stream.populateMessages(responseText, stream, sh, charIndex + 1);
+        Stream.populateMessages(responseStrings, stream, sh, type, charIndex + 1);
       }, sh.simulationInterim || 6);
       sh.abortStream.abort = () => {
         Stream.abort(timeout, stream, sh.onClose);
