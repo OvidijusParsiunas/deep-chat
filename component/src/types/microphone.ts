@@ -1,5 +1,15 @@
-import {AzureOptions, Commands, TextColor, Translations, WebSpeechOptions} from 'speech-to-element/dist/types/options';
 import {ButtonStyles, ButtonPosition} from './button';
+import {
+  OnCommandModeTrigger,
+  WebSpeechOptions,
+  OnPauseTrigger,
+  AzureOptions,
+  Translations,
+  OnPreResult,
+  TextColor,
+  Commands,
+  OnResult,
+} from 'speech-to-element/dist/types/options';
 
 export interface MicrophoneStyles {
   default?: ButtonStyles;
@@ -19,6 +29,15 @@ export interface AudioRecordingFiles {
 
 export type SubmitAfterSilence = true | number;
 
+export interface SpeechEvents {
+  onStart?: () => void;
+  onStop?: () => void;
+  onResult?: OnResult;
+  onPreResult?: OnPreResult;
+  onCommandModeTrigger?: OnCommandModeTrigger;
+  onPauseTrigger?: OnPauseTrigger;
+}
+
 export type SpeechToTextConfig = {
   webSpeech?: true | WebSpeechOptions;
   azure?: AzureOptions;
@@ -29,4 +48,5 @@ export type SpeechToTextConfig = {
   stopAfterSubmit?: false;
   submitAfterSilence?: SubmitAfterSilence;
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
+  speechEvents?: SpeechEvents;
 };
