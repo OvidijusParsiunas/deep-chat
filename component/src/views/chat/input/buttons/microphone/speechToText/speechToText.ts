@@ -19,7 +19,8 @@ export class SpeechToText extends MicrophoneButton {
   public static readonly MICROPHONE_RESET_TIMEOUT_MS = 300;
 
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
-    super(typeof deepChat.speechToText === 'object' ? deepChat.speechToText?.button : {});
+    const config = typeof deepChat.speechToText === 'object' ? deepChat.speechToText : {};
+    super(config?.button);
     const {serviceName, processedConfig} = this.processConfiguration(textInput, deepChat.speechToText);
     this._addErrorMessage = addErrorMessage;
     if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechSupported()) {
@@ -44,6 +45,7 @@ export class SpeechToText extends MicrophoneButton {
       textColor: newConfig.textColor ?? undefined,
       translations: newConfig.translations ?? undefined,
       commands: newConfig.commands ?? undefined,
+      events: newConfig.events ?? undefined,
       ...webSpeechConfig,
       ...azureConfig,
     };
@@ -71,6 +73,7 @@ export class SpeechToText extends MicrophoneButton {
   }
 
   private buttonClick(textInput: TextInputEl, isInputEnabled: boolean, serviceName: string, config?: ProcessedConfig) {
+    const events = config?.events;
     textInput.removeTextIfPlaceholder();
     SpeechToElement.toggle(serviceName as 'webspeech', {
       insertInCursorLocation: false,
@@ -79,20 +82,32 @@ export class SpeechToText extends MicrophoneButton {
         this.onError();
         this._silenceSubmit?.clearSilenceTimeout();
       },
-      onStart: this.changeToActive.bind(this),
+      onStart: () => {
+        this.changeToActive();
+        events?.onStart?.();
+      },
       onStop: () => {
         this._validationHandler?.();
         this._silenceSubmit?.clearSilenceTimeout();
         this.changeToDefault();
+        events?.onStop?.();
       },
       onPauseTrigger: (isStart: boolean) => {
         this._silenceSubmit?.onPause(isStart, textInput, this.elementRef.onclick as Function);
+        events?.onPauseTrigger?.(isStart);
       },
-      onResult: (_, isFinal: boolean) => {
+      onPreResult: (text: string, isFinal: boolean) => {
+        events?.onPreResult?.(text, isFinal);
+      },
+      onResult: (text: string, isFinal: boolean) => {
         if (isFinal) this._validationHandler?.();
         this._silenceSubmit?.resetSilenceTimeout(textInput, this.elementRef.onclick as Function);
+        events?.onResult?.(text, isFinal);
       },
-      onCommandModeTrigger: this.onCommandModeTrigger.bind(this),
+      onCommandModeTrigger: (isStart: boolean) => {
+        this.onCommandModeTrigger(isStart);
+        events?.onCommandModeTrigger?.(isStart);
+      },
       ...config,
     });
   }

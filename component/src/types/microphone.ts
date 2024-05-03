@@ -48,5 +48,5 @@ export type SpeechToTextConfig = {
   stopAfterSubmit?: false;
   submitAfterSilence?: SubmitAfterSilence;
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
-  speechEvents?: SpeechEvents;
+  events?: SpeechEvents;
 };
