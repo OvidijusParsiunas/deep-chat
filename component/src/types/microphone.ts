@@ -32,10 +32,10 @@ export type SubmitAfterSilence = true | number;
 export interface SpeechEvents {
   onStart?: () => void;
   onStop?: () => void;
-  onResult?: OnResult;
-  onPreResult?: OnPreResult;
-  onCommandModeTrigger?: OnCommandModeTrigger;
-  onPauseTrigger?: OnPauseTrigger;
+  onResult?: (text: string, isFinal: boolean) => void;
+  onPreResult?: (text: string, isFinal: boolean) => void;
+  onCommandModeTrigger?: (isStart: boolean) => void;
+  onPauseTrigger?: (isStart: boolean) => void;
 }
 
 export type SpeechToTextConfig = {
