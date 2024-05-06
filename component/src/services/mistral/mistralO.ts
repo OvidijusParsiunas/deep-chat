@@ -37,10 +37,9 @@ export class MistralIO extends DirectServiceIO {
   private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
-    bodyCopy.query = textMessages[textMessages.length - 1].text;
-    bodyCopy.chat_history = textMessages
+    bodyCopy.messages = textMessages
       .slice(0, textMessages.length - 1)
-      .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'CHATBOT' : 'USER'}));
+      .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'system' : 'user'}));
     return bodyCopy;
   }
 
