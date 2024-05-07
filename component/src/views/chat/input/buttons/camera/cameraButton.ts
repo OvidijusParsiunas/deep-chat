@@ -14,8 +14,10 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
-    super(CameraButton.createButtonElement(), fileService?.button?.position, fileService?.button || {}, 'Photo');
-    const innerElements = this.createInnerElements(this._customStyles);
+    const buttonPosition = fileService?.button?.position;
+    const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
+    super(CameraButton.createButtonElement(), buttonPosition, fileService?.button || {}, dropupText);
+    const innerElements = this.createInnerElements(this._customStyles, buttonPosition === 'dropup-menu');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
@@ -24,14 +26,12 @@ export class CameraButton extends InputButton<Styles> {
     this.reapplyStateStyle('styles');
   }
 
-  private createInnerElements(customStyles?: Styles) {
+  // prettier-ignore
+  private createInnerElements(customStyles?: Styles, isDropup = false) {
     return {
-      styles: this.createInnerElement(CameraButton.createSVGIconElement(), 'styles', customStyles),
+      styles: CustomButtonInnerElements.createInnerElement(
+        this.elementRef, CameraButton.createSVGIconElement(), 'styles', customStyles, isDropup),
     };
-  }
-
-  private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createButtonElement() {

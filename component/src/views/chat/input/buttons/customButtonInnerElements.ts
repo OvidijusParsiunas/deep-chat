@@ -15,8 +15,8 @@ export class CustomButtonInnerElements {
 
   public static createCustomElement<T>(state: keyof T, customStyles?: ButtonStateStyles<T>) {
     const stateStyle = customStyles?.[state];
-    if (stateStyle?.text?.content) return CustomButtonInnerElements.createElement(stateStyle?.text?.content, true);
     if (stateStyle?.svg?.content) return CustomButtonInnerElements.createElement(stateStyle?.svg?.content, false);
+    if (stateStyle?.text?.content) return CustomButtonInnerElements.createElement(stateStyle?.text?.content, true);
     return;
   }
 
@@ -34,5 +34,14 @@ export class CustomButtonInnerElements {
     if (customStyles) element = CustomButtonInnerElements.createCustomElement(state, customStyles);
     CustomButtonInnerElements.processElement(parentEl, element);
     return element;
+  }
+
+  // isDropup here is only determined by the user and not when moved to dropup automatically
+  // prettier-ignore
+  public static createInnerElement<T>(parentEl: HTMLElement,
+      baseButton: SVGGraphicsElement, state: keyof T, customStyles?: ButtonStateStyles<T>, isDropup = false) {
+    // if the destination is specified to be dropup and content is not defined - use baseButton
+    if (isDropup && !customStyles?.[state]?.svg?.content) return baseButton;
+    return CustomButtonInnerElements.createSpecificStateElement(parentEl, state, customStyles) || baseButton;
   }
 }
