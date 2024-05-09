@@ -1,15 +1,5 @@
+import {WebSpeechOptions, AzureOptions, Translations, TextColor, Commands} from 'speech-to-element/dist/types/options';
 import {ButtonStyles, ButtonPosition} from './button';
-import {
-  OnCommandModeTrigger,
-  WebSpeechOptions,
-  OnPauseTrigger,
-  AzureOptions,
-  Translations,
-  OnPreResult,
-  TextColor,
-  Commands,
-  OnResult,
-} from 'speech-to-element/dist/types/options';
 
 export interface MicrophoneStyles {
   default?: ButtonStyles;
