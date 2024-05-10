@@ -21,7 +21,7 @@ export class Websocket {
   }
 
   public static createConnection(io: ServiceIO, messages: Messages) {
-    if (!document.body.contains(io.deepChat)) return; // check if element is still present
+    if (!(io.deepChat.getRootNode({composed: true}) instanceof Document)) return; // check if element is still present
     const websocketConfig = io.connectSettings.websocket;
     if (!websocketConfig) return;
     if (io.connectSettings.handler) return CustomHandler.websocket(io, messages);
@@ -47,7 +47,7 @@ export class Websocket {
 
   private static retryConnection(io: ServiceIO, messages: Messages) {
     io.deepChat._validationHandler?.();
-    if (!document.body.contains(io.deepChat)) return; // check if element is still present
+    if (!(io.deepChat.getRootNode({composed: true}) instanceof Document)) return; // check if element is still present
     io.websocket = 'pending';
     if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
     setTimeout(() => {
