@@ -59,7 +59,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       directConnectionCopy.openAI.assistant = config;
     }
     this.connectSettings.headers ??= {};
-    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v1';
+    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2';
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
