@@ -1,7 +1,8 @@
 import {AssistantFunctionHandler, OpenAIAssistant, OpenAINewAssistant} from '../../types/openAI';
+import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {OpenAIAssistantUtils} from './utils/openAIAssistantUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -20,6 +21,15 @@ import {
   OpenAIRunResult,
   ToolCalls,
 } from '../../types/openAIResult';
+
+// https://platform.openai.com/docs/api-reference/messages/createMessage
+type MessageContentArr = {
+  type: string;
+  image_file?: {
+    file_id: string;
+  };
+  text?: string;
+}[];
 
 export class OpenAIAssistantIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -59,7 +69,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       directConnectionCopy.openAI.assistant = config;
     }
     this.connectSettings.headers ??= {};
-    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2';
+    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
@@ -76,31 +86,43 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
   }
 
-  private processMessage(pMessages: MessageContentI[], file_ids?: string[]) {
+  private processMessage(pMessages: MessageContentI[], files?: UploadedFile[]) {
     const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
     // pMessages only conytains one message due to maxMessages being set to 1
     const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
-    return {content: processedMessage.text || '', role: 'user', file_ids};
+    // https://platform.openai.com/docs/api-reference/messages/createMessage
+    const contentArr: MessageContentArr | undefined = files
+      ?.filter((file) => FileMessageUtils.isImageFileExtension(file.name))
+      .map((file) => {
+        return {type: 'image_file', image_file: {file_id: file.id}};
+      });
+    if (contentArr && contentArr.length > 0) {
+      if (processedMessage.text && processedMessage.text.length > 0) {
+        contentArr.push({type: 'text', text: processedMessage.text});
+      }
+      return {content: contentArr, role: 'user'};
+    }
+    return {content: processedMessage.text || '', role: 'user'};
   }
 
-  private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], file_ids?: string[]) {
+  private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], files?: UploadedFile[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessage = this.processMessage(pMessages, file_ids);
+    const processedMessage = this.processMessage(pMessages, files);
     bodyCopy.thread = {messages: [processedMessage]};
     return bodyCopy;
   }
 
-  private callService(messages: Messages, pMessages: MessageContentI[], file_ids?: string[]) {
+  private callService(messages: Messages, pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
     this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
-      const body = this.processMessage(pMessages, file_ids);
+      const body = this.processMessage(pMessages, uploadedFiles);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
       this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/runs`;
-      const body = this.createNewThreadMessages(this.rawBody, pMessages, file_ids);
+      const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
       if (this.isSSEStream) {
         this.createStreamRun(body);
       } else {
@@ -116,9 +138,9 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.streamedMessageId = undefined;
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
-    const file_ids = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
+    const uploadedFiles = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
     this.connectSettings.method = 'POST';
-    this.callService(messages, pMessages, file_ids);
+    this.callService(messages, pMessages, uploadedFiles);
   }
 
   private async createNewAssistant() {

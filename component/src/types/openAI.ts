@@ -49,10 +49,16 @@ export interface OpenAINewAssistant {
   description?: string;
   instructions?: string;
   tools?: {
-    type: 'code_interpreter' | 'retrieval' | 'function';
+    type: 'code_interpreter' | 'file_search' | 'function';
     function?: {name: string; description?: string; parameters?: object};
   }[];
-  file_ids?: string[];
+  tool_resources?: {
+    file_ids: string[];
+  };
+  file_search?: {
+    vector_store_ids?: string[];
+    vector_stores: {file_ids: string[]};
+  };
 }
 
 // https://platform.openai.com/docs/api-reference/assistants
@@ -61,6 +67,7 @@ export interface OpenAIAssistant {
   thread_id?: string;
   load_thread_history?: boolean;
   new_assistant?: OpenAINewAssistant;
+  files_tool_type?: 'code_interpreter' | 'file_search'; // images can be used without a file tool type
   function_handler?: AssistantFunctionHandler;
 }
 

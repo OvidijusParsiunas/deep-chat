@@ -9,27 +9,31 @@ import {ServiceIO} from '../../serviceIO';
 
 type FileDetails = {fileId: string; path?: string; name?: string}[];
 
+export type UploadedFile = {id: string; name: string};
+
 export class OpenAIAssistantUtils {
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
-    serviceIO.url = `https://api.openai.com/v1/files`; // stores files
-    const previousContetType = headers[RequestUtils.CONTENT_TYPE];
+    serviceIO.url = 'https://api.openai.com/v1/files'; // stores files
+    const previousContentType = headers[RequestUtils.CONTENT_TYPE];
     delete headers[RequestUtils.CONTENT_TYPE];
     const requests = files.map(async (file) => {
       const formData = new FormData();
       formData.append('purpose', 'assistants');
       formData.append('file', file);
-      return new Promise<{id: string}>((resolve) => {
+      return new Promise<{id: string; filename: string}>((resolve) => {
         resolve(OpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
       });
     });
     try {
-      const fileIds = (await Promise.all(requests)).map((result) => result.id);
-      headers[RequestUtils.CONTENT_TYPE] = previousContetType;
-      return fileIds;
+      const uploadedFiles = (await Promise.all(requests)).map((result) => {
+        return {id: result.id, name: result.filename};
+      });
+      headers[RequestUtils.CONTENT_TYPE] = previousContentType;
+      return uploadedFiles as UploadedFile[];
     } catch (err) {
-      headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+      headers[RequestUtils.CONTENT_TYPE] = previousContentType;
       // error handled here as files not sent using HTTPRequest.request to not trigger the interceptors
       RequestUtils.displayError(messages, err as object);
       serviceIO.completionsHandlers.onFinish();
