@@ -36,6 +36,7 @@ export class CustomButtonInnerElements {
     return element;
   }
 
+  // https://github.com/OvidijusParsiunas/deep-chat/issues/175
   // isDropup here is only determined by the user and not when moved to dropup automatically
   // prettier-ignore
   public static createInnerElement<T>(parentEl: HTMLElement,
