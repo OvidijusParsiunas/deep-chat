@@ -88,14 +88,14 @@ export default function Home() {
           <DeepChat
             style={{borderRadius: '10px'}}
             introMessage={{text: 'Send a chat message through an example server to OpenAI.'}}
-            request={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
+            request={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-4o'}}}
             requestBodyLimits={{maxMessages: -1}}
             errorMessages={{displayServiceErrorMessages: true}}
           />
           <DeepChat
             style={{borderRadius: '10px'}}
             introMessage={{text: 'Send a streamed chat message through an example server to OpenAI.'}}
-            request={{url: '/api/openai/chat-stream', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
+            request={{url: '/api/openai/chat-stream', additionalBodyProps: {model: 'gpt-4o'}}}
             stream={true}
             requestBodyLimits={{maxMessages: -1}}
             errorMessages={{displayServiceErrorMessages: true}}

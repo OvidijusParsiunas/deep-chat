@@ -40,7 +40,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       Object.assign(this.rawBody, config);
     }
     this.maxMessages ??= -1;
-    this.rawBody.model ??= 'gpt-3.5-turbo';
+    this.rawBody.model ??= 'gpt-4o';
   }
 
   private static generateSystemMessage(system_prompt: string): SystemMessageInternal {
