@@ -87,8 +87,12 @@ export class FileMessageUtils {
   }
 
   public static isImageFile(fileData: MessageFile) {
-    const imageRegex = /\.(jpg|jpeg|png|gif|bmp)$/i;
     const {type, src} = fileData;
-    return type === 'image' || src?.startsWith('data:image') || (src && imageRegex.test(src));
+    return type === 'image' || src?.startsWith('data:image') || (src && FileMessageUtils.isImageFileExtension(src));
+  }
+
+  public static isImageFileExtension(fileName: string) {
+    const imageRegex = /\.(jpg|jpeg|png|gif|bmp)$/i;
+    return imageRegex.test(fileName);
   }
 }
