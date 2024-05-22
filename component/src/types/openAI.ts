@@ -53,11 +53,13 @@ export interface OpenAINewAssistant {
     function?: {name: string; description?: string; parameters?: object};
   }[];
   tool_resources?: {
-    file_ids: string[];
-  };
-  file_search?: {
-    vector_store_ids?: string[];
-    vector_stores: {file_ids: string[]};
+    code_interpreter?: {
+      file_ids: string[];
+    };
+    file_search?: {
+      vector_store_ids?: string[];
+      vector_stores: {file_ids: string[]};
+    };
   };
 }
 
@@ -67,7 +69,8 @@ export interface OpenAIAssistant {
   thread_id?: string;
   load_thread_history?: boolean;
   new_assistant?: OpenAINewAssistant;
-  files_tool_type?: 'code_interpreter' | 'file_search'; // images can be used without a file tool type
+  // if image is uploaded and this is undefined, it will default to images
+  files_tool_type?: 'code_interpreter' | 'file_search' | 'images'; // images can be used without a file tool type
   function_handler?: AssistantFunctionHandler;
 }
 

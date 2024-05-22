@@ -31,6 +31,11 @@ type MessageContentArr = {
   text?: string;
 }[];
 
+type FileAttachments = {
+  file_id: string;
+  tools: {type: OpenAIAssistant['files_tool_type']}[];
+}[];
+
 export class OpenAIAssistantIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -50,6 +55,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private readonly isSSEStream: boolean = false;
   private streamedMessageId: string | undefined;
   private messageStream: MessageStream | undefined;
+  private readonly filesToolType: OpenAIAssistant['files_tool_type'];
   fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
@@ -65,6 +71,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       if (load_thread_history) this.shouldFetchHistory = true;
       const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
+      this.filesToolType = config.files_tool_type;
     } else if (directConnectionCopy.openAI?.assistant) {
       directConnectionCopy.openAI.assistant = config;
     }
@@ -86,12 +93,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
   }
 
-  private processMessage(pMessages: MessageContentI[], files?: UploadedFile[]) {
-    const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
-    // pMessages only conytains one message due to maxMessages being set to 1
-    const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
-    // https://platform.openai.com/docs/api-reference/messages/createMessage
-    const contentArr: MessageContentArr | undefined = files
+  private static processImageMessage(processedMessage: MessageContentI, uploadedFiles?: UploadedFile[]) {
+    const contentArr: MessageContentArr | undefined = uploadedFiles
       ?.filter((file) => FileMessageUtils.isImageFileExtension(file.name))
       .map((file) => {
         return {type: 'image_file', image_file: {file_id: file.id}};
@@ -101,6 +104,28 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         contentArr.push({type: 'text', text: processedMessage.text});
       }
       return {content: contentArr, role: 'user'};
+    }
+    return undefined;
+  }
+
+  private static processFileSearchMessage(processedMessage: MessageContentI, uploadedFiles: UploadedFile[]) {
+    const attachments: FileAttachments = uploadedFiles.map((file) => {
+      return {tools: [{type: 'file_search'}], file_id: file.id};
+    });
+    return {attachments, content: [{type: 'text', text: processedMessage.text}], role: 'user'};
+  }
+
+  private processMessage(pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
+    const totalMessagesMaxCharLength = this.totalMessagesMaxCharLength || -1;
+    // pMessages only conytains one message due to maxMessages being set to 1
+    const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
+    // https://platform.openai.com/docs/api-reference/messages/createMessage
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      if (this.filesToolType === 'file_search') {
+        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles);
+      }
+      const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
+      if (imageMessage) return imageMessage;
     }
     return {content: processedMessage.text || '', role: 'user'};
   }
