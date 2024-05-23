@@ -108,9 +108,13 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     return undefined;
   }
 
-  private static processFileSearchMessage(processedMessage: MessageContentI, uploadedFiles: UploadedFile[]) {
+  private static processFileSearchMessage(
+    processedMessage: MessageContentI,
+    uploadedFiles: UploadedFile[],
+    toolType: OpenAIAssistant['files_tool_type']
+  ) {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
-      return {tools: [{type: 'file_search'}], file_id: file.id};
+      return {tools: [{type: toolType}], file_id: file.id};
     });
     return {attachments, content: [{type: 'text', text: processedMessage.text}], role: 'user'};
   }
@@ -122,7 +126,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     // https://platform.openai.com/docs/api-reference/messages/createMessage
     if (uploadedFiles && uploadedFiles.length > 0) {
       if (this.filesToolType === 'file_search') {
-        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles);
+        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles, 'file_search');
+      }
+      if (this.filesToolType === 'code_interpreter') {
+        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
       const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
       if (imageMessage) return imageMessage;
