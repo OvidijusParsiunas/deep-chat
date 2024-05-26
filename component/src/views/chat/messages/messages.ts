@@ -8,6 +8,7 @@ import {FireEvents} from '../../../utils/events/fireEvents';
 import {ErrorMessageOverrides} from '../../../types/error';
 import {ResponseI} from '../../../types/responseInternal';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
+import {ErrorResp} from '../../../types/errorInternal';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroMessage} from '../../../types/messages';
@@ -197,7 +198,7 @@ export class Messages extends MessagesBase {
   }
 
   // prettier-ignore
-  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: string) {
+  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: ErrorResp) {
     this.removeMessageOnError();
     const messageElements = Messages.createBaseElements();
     const {outerContainer, bubbleElement} = messageElements;
@@ -222,16 +223,33 @@ export class Messages extends MessagesBase {
     return undefined;
   }
 
-  private getPermittedMessage(message?: string) {
+  private static extractErrorMessages(message: ErrorResp): string[] {
+    if (Array.isArray(message)) {
+      return message;
+    }
+    if (message instanceof Error) {
+      return [message.message];
+    }
+    if (typeof message === 'string') {
+      return [message];
+    }
+    if (typeof message === 'object' && message.error) {
+      return [message.error];
+    }
+    return [];
+  }
+
+  private getPermittedMessage(message?: ErrorResp): string | undefined {
     if (message) {
-      if (this._displayServiceErrorMessages) return message;
-      if (typeof message === 'string' && this._permittedErrorPrefixes) {
-        const result = Messages.checkPermittedErrorPrefixes(this._permittedErrorPrefixes, message);
-        if (result) return result;
-      } else if (Array.isArray(message) && this._permittedErrorPrefixes) {
-        for (let i = 0; i < message.length; i += 1) {
-          const result = Messages.checkPermittedErrorPrefixes(this._permittedErrorPrefixes, message[i]);
-          if (result) return result;
+      const messages = Messages.extractErrorMessages(message); // turning all into array for convenience
+      for (let i = 0; i < messages.length; i += 1) {
+        const messageStr = messages[i];
+        if (typeof messageStr === 'string') {
+          if (this._displayServiceErrorMessages) return messageStr;
+          if (this._permittedErrorPrefixes) {
+            const result = Messages.checkPermittedErrorPrefixes(this._permittedErrorPrefixes, messageStr);
+            if (result) return result;
+          }
         }
       }
     }

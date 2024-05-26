@@ -12,6 +12,9 @@ type FileDetails = {fileId: string; path?: string; name?: string}[];
 export type UploadedFile = {id: string; name: string};
 
 export class OpenAIAssistantUtils {
+  // triggered ONLY for file_search and code_interceptor
+  public static readonly FILES_WITH_TEXT_ERROR = 'content with type `text` must have `text` values';
+
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;

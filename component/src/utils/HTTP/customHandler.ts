@@ -45,7 +45,7 @@ export class CustomHandler {
       stream.finaliseStreamedMessage();
     } catch (error) {
       console.error(error);
-      messages.addNewErrorMessage('service', error as string);
+      messages.addNewErrorMessage('service', error as Error);
     }
   }
 

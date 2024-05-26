@@ -44,7 +44,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private static readonly NEW_ASSISTANT_URL = 'https://api.openai.com/v1/assistants';
   private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;
-  permittedErrorPrefixes = ['Incorrect'];
+  permittedErrorPrefixes = ['Incorrect', 'Please send text'];
   private messages?: Messages;
   private run_id?: string;
   private searchedForThreadId = false;
@@ -108,7 +108,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     return undefined;
   }
 
-  private static processFileSearchMessage(
+  private static processAttachmentsMessage(
     processedMessage: MessageContentI,
     uploadedFiles: UploadedFile[],
     toolType: OpenAIAssistant['files_tool_type']
@@ -126,10 +126,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     // https://platform.openai.com/docs/api-reference/messages/createMessage
     if (uploadedFiles && uploadedFiles.length > 0) {
       if (this.filesToolType === 'file_search') {
-        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles, 'file_search');
+        return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'file_search');
       }
       if (this.filesToolType === 'code_interpreter') {
-        return OpenAIAssistantIO.processFileSearchMessage(processedMessage, uploadedFiles, 'code_interpreter');
+        return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
       const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
       if (imageMessage) return imageMessage;
@@ -200,7 +200,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     if (this.waitingForStreamResponse || (this.isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
-    if (result.error) throw result.error.message;
+    if (result.error) {
+      if (result.error.message.startsWith(OpenAIAssistantUtils.FILES_WITH_TEXT_ERROR)) {
+        throw Error('Please send text with your file(s)');
+      }
+      throw result.error.message;
+    }
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}`;
