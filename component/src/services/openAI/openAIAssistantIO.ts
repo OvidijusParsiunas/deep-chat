@@ -125,10 +125,20 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
     // https://platform.openai.com/docs/api-reference/messages/createMessage
     if (uploadedFiles && uploadedFiles.length > 0) {
-      if (this.filesToolType === 'file_search') {
+      let toolType = this.filesToolType;
+      // OpenAI also allows multiple tool types for a message but not doing it here as we don't process multiple responses.
+      // https://platform.openai.com/docs/assistants/migration/what-has-changed
+      // "tools": [
+      //   { "type": "file_search" },
+      //   { "type": "code_interpreter" }
+      // ]
+      if (typeof this.filesToolType === 'function') {
+        toolType = this.filesToolType(uploadedFiles.map(({name}) => name));
+      }
+      if (toolType === 'file_search') {
         return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'file_search');
       }
-      if (this.filesToolType === 'code_interpreter') {
+      if (toolType === 'code_interpreter') {
         return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
       const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
