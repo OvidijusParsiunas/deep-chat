@@ -133,7 +133,13 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       //   { "type": "code_interpreter" }
       // ]
       if (typeof this.filesToolType === 'function') {
-        toolType = this.filesToolType(uploadedFiles.map(({name}) => name));
+        const rToolType = this.filesToolType(uploadedFiles.map(({name}) => name));
+        if (rToolType === 'code_interpreter' || rToolType === 'file_search' || rToolType === 'images') {
+          toolType = rToolType;
+        } else {
+          console.error(`Tool type "${rToolType}" is not valid`);
+          console.error('Expected "code_interpreter" or "file_search" or "images". Going to default to "images"');
+        }
       }
       if (toolType === 'file_search') {
         return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'file_search');
@@ -141,8 +147,20 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       if (toolType === 'code_interpreter') {
         return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
-      const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
-      if (imageMessage) return imageMessage;
+      const notImage = uploadedFiles.find(({name}) => !FileMessageUtils.isImageFileExtension(name));
+      if (notImage) {
+        console.error('The uploaded files contained a non-image file');
+        console.error(
+          'Make sure only images can be uploaded or define a "code_interpreter" or "file_search"' +
+            ' value in the "files_tool_type" property'
+        );
+        console.warn(
+          'Make sure your existing assistant supports these "tools" or specify them in the "new_assistant" property'
+        );
+      } else {
+        const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
+        if (imageMessage) return imageMessage;
+      }
     }
     return {content: processedMessage.text || '', role: 'user'};
   }
