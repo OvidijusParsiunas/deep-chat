@@ -4,13 +4,15 @@ import {DeepChat} from '../../../deepChat';
 export class SetupMessages {
   public static getText(deepChat: DeepChat, serviceIO: ServiceIO) {
     if (!deepChat.directConnection && !deepChat.connect && !deepChat.webModel && !deepChat.demo) {
-      return `Connect to any API using the [connect](https://deepchat.dev/docs/connect#connect-1)
-        property or a popular service via
-        [directConnection](https://deepchat.dev/docs/directConnection/#directConnection).
-        \n Host AI entirely on your browser via a [webModel](https://deepchat.dev/docs/webModel).
-        \n To get started checkout the [Start](https://deepchat.dev/start) page and
-        live code [examples](https://deepchat.dev/examples/frameworks).
-        \n To remove this message set the [demo](https://deepchat.dev/docs/demo#demo) property to true.`;
+      return (
+        'Connect to any API using the [connect](https://deepchat.dev/docs/connect#connect-1) ' +
+        'property or a popular service via ' +
+        '[directConnection](https://deepchat.dev/docs/directConnection/#directConnection).' +
+        '\n Host AI entirely on your browser via a [webModel](https://deepchat.dev/docs/webModel).' +
+        '\n To get started checkout the [Start](https://deepchat.dev/start) page and ' +
+        'live code [examples](https://deepchat.dev/examples/frameworks).' +
+        '\n To remove this message set the [demo](https://deepchat.dev/docs/demo#demo) property to true.'
+      );
     } else if (deepChat.directConnection) {
       if (!serviceIO.isDirectConnection()) {
         return `Please define a valid service inside
@@ -20,7 +22,7 @@ export class SetupMessages {
       if (typeof openAIChat === 'object' && openAIChat.tools && !openAIChat.function_handler) {
         return (
           'Please define the `function_handler` property inside' +
-          ` the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.`
+          ' the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
         );
       }
     } else if (deepChat.connect) {
