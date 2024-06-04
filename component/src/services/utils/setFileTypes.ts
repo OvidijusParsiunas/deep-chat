@@ -2,6 +2,7 @@ import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableC
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../serviceIO';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {FileAttachments} from '../../types/fileAttachments';
+import {Legacy} from '../../utils/legacy/legacy';
 import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
 import {Remarkable} from 'remarkable';
@@ -12,6 +13,7 @@ export class SetFileTypes {
       fileType?: boolean | FilesServiceConfig) {
     const fileConfig: FileServiceIO & {files: FileAttachments} = {files: defFiles};
     if (typeof fileType === 'object') {
+      Legacy.processFileConfigConnect(fileType);
       const {files, connect, button} = fileType;
       if (files) {
         if (files.infoModal) {
