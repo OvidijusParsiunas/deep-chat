@@ -12,6 +12,7 @@ import {PasteUtils} from './pasteUtils';
 // TO-DO state for focused (like input)
 export class TextInputEl {
   public static TEXT_INPUT_ID = 'text-input';
+  public static PLACEHOLDER_TEXT_CLASS = 'text-input-placeholder';
   readonly elementRef: HTMLElement;
   readonly inputElementRef: HTMLElement;
   private readonly _config: TextInput;
@@ -23,6 +24,8 @@ export class TextInputEl {
     this.inputElementRef = this.createInputElement(processedConfig);
     this._config = processedConfig;
     this.elementRef.appendChild(this.inputElementRef);
+    deepChat.setPlaceholderText = this.setPlaceholderText.bind(this, deepChat);
+    deepChat.setPlaceholderText(deepChat.textInput?.placeholder?.text || 'Ask me anything!');
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
       TextInputEvents.add(this.inputElementRef, fileAts, deepChat.textInput?.characterLimit, deepChat._validationHandler);
@@ -58,8 +61,7 @@ export class TextInputEl {
   private createInputElement(textInput?: TextInput) {
     const inputElement = document.createElement('div');
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
-    inputElement.classList.add('text-input-styling', 'text-input-placeholder');
-    inputElement.innerText = textInput?.placeholder?.text || 'Ask me anything!';
+    inputElement.classList.add('text-input-styling', TextInputEl.PLACEHOLDER_TEXT_CLASS);
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof textInput?.disabled === 'boolean' && textInput.disabled === true) {
       inputElement.contentEditable = 'false';
@@ -75,7 +77,7 @@ export class TextInputEl {
 
   public removeTextIfPlaceholder() {
     if (
-      this.inputElementRef.classList.contains('text-input-placeholder') &&
+      this.inputElementRef.classList.contains(TextInputEl.PLACEHOLDER_TEXT_CLASS) &&
       !this.inputElementRef.classList.contains('text-input-disabled')
     ) {
       if (this._config.placeholder?.style) {
@@ -83,7 +85,7 @@ export class TextInputEl {
         Object.assign(this.inputElementRef.style, this._config?.styles?.text);
       }
       TextInputEl.clear(this.inputElementRef);
-      this.inputElementRef.classList.remove('text-input-placeholder');
+      this.inputElementRef.classList.remove(TextInputEl.PLACEHOLDER_TEXT_CLASS);
     }
   }
 
@@ -129,6 +131,16 @@ export class TextInputEl {
     if (event.key === KEYBOARD_KEY.ENTER && !event.ctrlKey && !event.shiftKey) {
       event.preventDefault();
       this.submit?.();
+    }
+  }
+
+  private setPlaceholderText(deepChat: DeepChat, text: string) {
+    if (document.activeElement === deepChat) return;
+    if (this.inputElementRef.textContent === '') {
+      this.inputElementRef.classList.add(TextInputEl.PLACEHOLDER_TEXT_CLASS);
+    }
+    if (this.inputElementRef.classList.contains(TextInputEl.PLACEHOLDER_TEXT_CLASS)) {
+      this.inputElementRef.textContent = text;
     }
   }
 }

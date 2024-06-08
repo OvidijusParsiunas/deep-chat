@@ -167,7 +167,7 @@ export class SubmitButton extends InputButton<Styles> {
   public async submitFromInput() {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
-    if (this._inputElementRef.classList.contains('text-input-placeholder')) {
+    if (this._inputElementRef.classList.contains(TextInputEl.PLACEHOLDER_TEXT_CLASS)) {
       this.attemptSubmit({text: '', files: uploadedFilesData});
     } else {
       // not using textContent as it ignores new line spaces
