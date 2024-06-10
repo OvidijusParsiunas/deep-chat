@@ -1,5 +1,4 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../types/openAIResult';
-import {FileMessageUtils} from '../../../views/chat/messages/fileMessageUtils';
 import {MessageFileType, MessageFile} from '../../../types/messageFile';
 import {Messages} from '../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
@@ -82,31 +81,6 @@ export class OpenAIAssistantUtils {
   }
 
   // prettier-ignore
-  private static getFileDetails(lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
-    const fileDetails: FileDetails = [];
-    if (content?.text?.value) {
-      lastMessage.content.forEach((content) => {
-        content.text?.annotations?.forEach((annotation) => {
-          if (annotation.text && annotation.text.startsWith('sandbox:')
-              && !FileMessageUtils.isImageFile({src: annotation.text}) && annotation.file_path?.file_id) {
-            fileDetails.push({
-              path: annotation.text,
-              fileId: annotation.file_path.file_id,
-              name: OpenAIAssistantUtils.getFileName(annotation.text),
-            });
-          }
-        });
-      });
-    }
-    if (content?.image_file) {
-      fileDetails.push({
-        fileId: content.image_file.file_id,
-      });
-    }
-    return fileDetails;
-  }
-
-  // prettier-ignore
   private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails,
       role?: string, content?: OpenAIAssistantContent) {
     let files: MessageFile[] | undefined;
@@ -122,7 +96,36 @@ export class OpenAIAssistantUtils {
         });
       }
     }
-    return {files, text: content?.text?.value, role};
+    // not displaying a separate file if annotated
+    return content?.text?.value ? {text: content.text.value, role} : {files, role};
+  }
+
+  // Noticed an issue where text contains a sandbox hyperlink to a csv, but no annotation provided
+  // To reproduce use the following text:
+  // give example data for a csv and create a suitable bar chart for it with a link
+  // Don't think it can be fixed and it is something on OpenAI side of things
+  // prettier-ignore
+  private static getFileDetails(lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
+    const fileDetails: FileDetails = [];
+    if (content?.text?.value) {
+      lastMessage.content.forEach((content) => {
+        content.text?.annotations?.forEach((annotation) => {
+          if (annotation.text && annotation.text.startsWith('sandbox:') && annotation.file_path?.file_id) {
+            fileDetails.push({
+              path: annotation.text,
+              fileId: annotation.file_path.file_id,
+              name: OpenAIAssistantUtils.getFileName(annotation.text),
+            });
+          }
+        });
+      });
+    }
+    if (content?.image_file) {
+      fileDetails.push({
+        fileId: content.image_file.file_id,
+      });
+    }
+    return fileDetails;
   }
 
   public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
