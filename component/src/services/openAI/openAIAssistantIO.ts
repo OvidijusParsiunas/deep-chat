@@ -338,8 +338,9 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       // if file is included and there is an annotation/link in text, process at the end
       const textContent = result.content.find((content) => content.text);
       if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
+        const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: 'assistant', content: result.content}, result.content[0]);
+          this, {role: 'assistant', content: result.content}, textFileFirst);
         this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
         return {text: ''};
       }
