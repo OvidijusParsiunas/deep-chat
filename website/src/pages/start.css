@@ -125,6 +125,10 @@
   transition: all 1s 0.6s;
 }
 
+.start-page-display-logos > div:nth-child(8) {
+  transition: all 1s 0.7s;
+}
+
 .start-page-logo {
   margin-right: 20px;
   opacity: 0;
@@ -175,11 +179,12 @@
 
   .start-page-logos {
     margin-top: 8px;
+    left: -4px;
   }
 
   .start-page-logo {
     transform: scale(0.8);
-    margin-right: 10px;
+    margin-right: 9px;
   }
 
   .start-page-navigation {

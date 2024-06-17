@@ -4,6 +4,7 @@ import svelteLogo from '/img/svelteLogo.png';
 import reactLogo from '/img/reactLogo.png';
 import solidLogo from '/img/solidLogo.png';
 import nextLogo from '/img/nextLogo.png';
+import nuxtLogo from '/img/nuxtLogo.png';
 import vueLogo from '/img/vueLogo.png';
 import './createComponent.css';
 import React from 'react';
@@ -55,6 +56,11 @@ function Logos(props) {
       <div className="start-page-logo start-panel-logo">
         <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/nextjs" target="_blank">
           <img src={nextLogo} width="37" style={{paddingTop: 9}} />
+        </a>
+      </div>
+      <div className="start-page-logo start-panel-logo">
+        <a href="https://stackblitz.com/edit/nuxt-starter-vwz6pg?file=app.vue" target="_blank">
+          <img src={nuxtLogo} width="37" style={{paddingTop: 9}} />
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
