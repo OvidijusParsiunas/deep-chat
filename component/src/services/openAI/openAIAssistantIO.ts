@@ -295,13 +295,15 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this._functionHandler(functions);
-    if (!Array.isArray(handlerResponse) || handlerResponse.find((response) => typeof response !== 'string')
-        || toolCalls.length !== handlerResponse.length) {
-      throw Error('Response must contain an array of strings for each individual function/tool_call, '
-        + 'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.');
+    const handlerResponse = this._functionHandler(functions);
+    if (!Array.isArray(handlerResponse) || toolCalls.length !== handlerResponse.length) {
+      throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }
-    const tool_outputs = handlerResponse.map((resp, index) => {
+    const invidualResponses = await Promise.all(handlerResponse);
+    if (invidualResponses.find((response) => typeof response !== 'string')) {
+      throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
+    }
+    const tool_outputs = invidualResponses.map((resp, index) => {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs

@@ -14,6 +14,10 @@ export class OpenAIAssistantUtils {
   // triggered ONLY for file_search and code_interceptor
   public static readonly FILES_WITH_TEXT_ERROR = 'content with type `text` must have `text` values';
 
+  public static readonly FUNCTION_TOOL_RESP_ERROR =
+    'Response must contain an array of strings for each individual function/tool_call, ' +
+    'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.';
+
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
