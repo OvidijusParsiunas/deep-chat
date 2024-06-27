@@ -53,7 +53,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private readonly shouldFetchHistory: boolean = false;
   private waitingForStreamResponse = false;
   private readonly isSSEStream: boolean = false;
-  private streamedMessageId: string | undefined;
   private messageStream: MessageStream | undefined;
   private readonly filesToolType: OpenAIAssistant['files_tool_type'];
   fetchHistory?: () => Promise<ResponseI[]>;
@@ -195,7 +194,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.waitingForStreamResponse = false;
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
-    this.streamedMessageId = undefined;
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
     const uploadedFiles = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
@@ -348,12 +346,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       }
     }
     if (result.delta?.content) {
-      if (!this.streamedMessageId) {
-        this.streamedMessageId = result.id;
-      } else if (this.streamedMessageId !== result.id) {
-        this.streamedMessageId = result.id;
-        this.messageStream?.newMessage();
-      }
       if (result.delta.content.length > 1) {
         // if file is included and there is no annotation/link in text, process during the stream
         const textContent = result.delta.content.find((content) => content.text);
