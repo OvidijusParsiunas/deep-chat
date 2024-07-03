@@ -4,7 +4,6 @@ import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
-import {RemarkableUtils} from './remarkable/remarkableUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {HTMLClassUtilities} from '../../../types/html';
 import {MessageStyleUtils} from './messageStyleUtils';
@@ -167,11 +166,10 @@ export class MessagesBase {
   }
 
   public renderText(bubbleElement: HTMLElement, text: string) {
-    const processedText = RemarkableUtils.replaceNewlineWithDouble(text);
-    bubbleElement.innerHTML = this._remarkable.render(processedText);
+    bubbleElement.innerHTML = this._remarkable.render(text);
     // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
     // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
-    if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = processedText;
+    if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later

@@ -29,13 +29,14 @@ export class RemarkableConfig {
         },
         html: false, // Enable HTML tags in source
         xhtmlOut: false, // Use '/' to close single tags (<br />)
-        breaks: false, // Convert '\n' in paragraphs into <br>
+        breaks: true, // Convert '\n' in paragraphs into <br>
         langPrefix: 'language-', // CSS language prefix for fenced blocks
         linkTarget: '_blank', // set target to open in a new tab
         typographer: true, // Enable smartypants and other sweet transforms
       });
     } else {
       return new Remarkable({
+        breaks: true,
         linkTarget: '_blank', // set target to open in a new tab
       });
     }
