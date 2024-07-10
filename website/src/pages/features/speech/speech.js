@@ -8,7 +8,7 @@ function RightPanel() {
     <div id="speech-right-panel" className="feature-panel">
       <DeepChatBrowser
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'What is speech to text?', role: 'user'},
           {text: 'Transcribe your voice via the microphone button.', role: 'ai'},
           {text: 'Ok, then how does text to speech work?', role: 'user'},
@@ -21,7 +21,7 @@ function RightPanel() {
         }}
         textToSpeech={true}
         speechToText={true}
-        stream={true}
+        connect={{stream: true}}
       ></DeepChatBrowser>
     </div>
   );

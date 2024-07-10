@@ -6,15 +6,15 @@ sidebar_position: 11
 
 Events can be observed in two ways, either by assigning a function to a property or by listening to custom events fired from the component element.
 
-### `onNewMessage` {#onNewMessage}
+### `onMessage` {#onMessage}
 
-- Function: (`newMessage: Body`) => `void`
-- Event: `new-message`
-- `Body`: \{[`message: MessageContent`](/docs/messages#MessageContent), `isInitial: boolean`\}
+- Function: (`body: Body`) => `void`
+- Event: `message`
+- `Body`: \{[`message: MessageContent`](/docs/messages#MessageContent), `isHistory: boolean`\}
 
 Triggered when a message is sent from the user and recieved from the target service. <br />
 `message` encompasses all of the message contents. <br />
-`isInitial` is used to determine whether if the message is from the prepopulated [`initialMessages`](/docs/messages#initialMessages) property.
+`isHistory` is used to determine whether if the message is from the prepopulated [`history`](/docs/messages#history) property.
 
 #### Example
 
@@ -29,7 +29,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-<ComponentContainerEvents propertyName={'onNewMessage'}>
+<ComponentContainerEvents propertyName={'onMessage'}>
   <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerEvents>
 
@@ -37,7 +37,7 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Function">
 
 ```html
-chatElementRef.onNewMessage = (message) => { console.log(message); };
+chatElementRef.onMessage = (message) => { console.log(message); };
 ```
 
 </TabItem>
@@ -68,7 +68,7 @@ Triggered when the [`clearMessages`](/docs/methods#clearMessages) method has bee
     <DeepChatBrowser
       style={{borderRadius: '8px'}}
       demo={true}
-      initialMessages={[
+      history={[
         {text: 'What is 2 + 2?', role: 'user'},
         {text: 'The result of 2 + 2 is 4.', role: 'ai'},
         {text: 'Wrong, it is 5.', role: 'user'},

@@ -13,7 +13,7 @@ Message transactions can be intercepted to change their contents or execute othe
 Triggered before a user message is sent out. This method MUST either return a [`RequestDetails`](#RequestDetails) object or
 an object that contains an `error` property to cancel the request.
 
-<a href="https://youtu.be/0jzILPqA454?si=2YDbr5P0vMnCt_g9&t=201">
+<a href="https://youtu.be/NuRhPeqDCus?si=UkO8mC4rA4-OTItQ&t=263">
   <img src={YoutubeLogo} className={'youtube-icon'} />
   Video demo
 </a>
@@ -94,10 +94,10 @@ chatElementRef.requestInterceptor = (requestDetails) => {
 Triggered when a message has been received from the target service.
 The types for the return argument is `determined` by the connection variety used:
 
-- If you are connecting to a server via the [`request`](/docs/connect/#request) property - the type will be [`Response`](/docs/connect/#Response).
+- If you are connecting to a server via the [`connect`](/docs/connect/#connect-1) property - the type will be [`Response`](/docs/connect/#Response).
 - If you are connecting via the [`directConnection`](/docs/directConnection) property - the type will be defined by the chosen service API.
 
-<a href="https://youtu.be/0jzILPqA454?si=2YDbr5P0vMnCt_g9&t=201">
+<a href="https://youtu.be/NuRhPeqDCus?si=UkO8mC4rA4-OTItQ&t=263">
   <img src={YoutubeLogo} className={'youtube-icon'} />
   Video demo
 </a>

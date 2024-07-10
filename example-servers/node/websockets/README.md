@@ -27,7 +27,7 @@ npm run start
 The UI component configuration to communicate with this server:
 
 ```
-<deep-chat request='{"url": "ws://localhost:8080", "websocket": true}'></deep-chat>
+<deep-chat connect='{"url": "ws://localhost:8080", "websocket": true}'></deep-chat>
 ```
 
 The exact syntax for this example will vary depending on the framework of your choice ([see here](https://deepchat.dev/examples/frameworks)).

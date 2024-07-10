@@ -7,7 +7,7 @@ export default function SmallScreenPanel() {
     <div id="small-screen-component">
       <DeepChatBrowser
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'What is Deep Chat?', role: 'user'},
           {text: 'A framework agnostic chat component.', role: 'ai'},
           {text: 'What exactly can it be used for?', role: 'user'},

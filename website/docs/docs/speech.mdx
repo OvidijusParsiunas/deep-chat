@@ -92,10 +92,12 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; `displayInterimResults?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `translations?: {[key: string]: string}`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`commands?: Commands`](#Commands), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSubmit?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`submitAfterSilence?: SubmitAfterSilence`](#SubmitAfterSilence) <br />
   \}
 
-- Default: _\{webSpeech: true\}_
+- Default: _\{webSpeech: true, stopAfterSubmit: true\}_
 
 Transcribe your voice into text and control chat with commands.<br />
 `webSpeech` utilises [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to transcribe your speech. <br />
@@ -104,7 +106,9 @@ Transcribe your voice into text and control chat with commands.<br />
 `displayInterimResults` controls whether interim results are displayed. <br />
 `translations` is a case-sensitive one-to-one mapping of words that will automatically be translated to others. <br />
 `commands` is used to set the phrases that will trigger various chat functionality. <br />
-`button` defines the styling used for the microphone button.
+`button` defines the styling used for the microphone button. <br />
+`stopAfterSubmit` is used to toggle whether the recording stops after a message has been submitted. <br />
+`submitAfterSilence` configures automated message submit functionality when the user stops speaking. <br />
 
 <div className="web-speech-not-supported-error">
   <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API">Web Speech API</a> is
@@ -406,7 +410,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    introMessage={{text: 'Send a message to hear the response.'}}
+    introMessage={{text: 'Click the microphone to start transcribing your speech.'}}
     style={{borderRadius: '8px'}}
     speechToText={{textColor: {interim: 'green', final: 'blue'}}}
   ></DeepChatBrowser>
@@ -427,7 +431,7 @@ This object is used to set the color of `interim` and `final` results text. <br 
 
 <deep-chat
   speechToText='{"textColor": {"interim": "green", "final": "blue"}}'
-  introMessage='{"text": "Send a message to hear the response."}'
+  introMessage='{"text": "Click the microphone to start transcribing your speech."}'
   style="border-radius: 8px"
   demo="true"
 ></deep-chat>
@@ -682,6 +686,58 @@ and an additional `commandMode` property which sets the button styling when the 
 
 :::tip
 You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to generate filter values for the icon color.
+:::
+
+<LineBreak></LineBreak>
+
+### `SubmitAfterSilence` {#SubmitAfterSilence}
+
+- Type: `true` | `number`
+
+Automatically submit the input message after a period of silence. <br />
+This property accepts the value of _true_ or a number which represents the milliseconds of silence
+required to wait before a messaget is submitted. If this is set to _true_ the default milliseconds is _2000_. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    introMessage={{text: 'Click the microphone to start transcribing your speech.'}}
+    style={{borderRadius: '8px'}}
+    speechToText={{submitAfterSilence: {ms: 3000, stop: false}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat speechToText='{"submitAfterSilence": 3000}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  speechToText='{"submitAfterSilence": 3000}'
+  introMessage='{"text": "Click the microphone to start transcribing your speech."}'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::caution
+When using the default [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) - the recording will
+automatically stop after 5-7 seconds of silence, please take care when setting the `ms` property.
 :::
 
 <LineBreak></LineBreak>

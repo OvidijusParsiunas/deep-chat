@@ -82,7 +82,7 @@ function ComponentPanel() {
       <div id="start-panel-component" ref={component} className={'start-panel-component-center'}>
         <DeepChatBrowser
           demo={true}
-          initialMessages={[
+          history={[
             {text: 'What is Deep Chat?', role: 'user'},
             {text: 'A framework agnostic chat component.', role: 'ai'},
             {text: 'What exactly can it be used for?', role: 'user'},
@@ -94,7 +94,7 @@ function ComponentPanel() {
             border: '1px solid white',
             zIndex: 10,
           }}
-          stream="true"
+          connect={{stream: true}}
         ></DeepChatBrowser>
       </div>
       <Logos ref={logos}></Logos>

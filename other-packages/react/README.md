@@ -39,10 +39,10 @@ Explore live examples for React and other frameworks [here](https://deepchat.dev
 
 ![Connect](https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/assets/readme/connect.png)
 
-Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
+Connecting to a service is simple, all you need to do is define its API details using the [`connect`](https://deepchat.dev/docs/connect#connect-1) property:
 
 ```
-<DeepChat request={{url:"https://service.com/chat"}}/>
+<DeepChat connect={{url:"https://service.com/chat"}}/>
 ```
 
 The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out the [server template](https://deepchat.dev/examples/servers) examples.
@@ -61,7 +61,7 @@ Connect to popular AI APIs directly from the browser via the use of the [`direct
 <DeepChat directConnection={{openAI:{key: "optional-key-here"}}}/>
 ```
 
-Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`request`](https://deepchat.dev/docs/connect#request) property described above along with a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
+Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`connect`](https://deepchat.dev/docs/connect#connect-1) property described above along with a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
 
 Currently supported direct API connections:
 [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://huggingface.co/docs/api-inference/index), [Cohere](https://docs.cohere.com/docs), [Stability AI](https://stability.ai/), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssemblyAI](https://www.assemblyai.com/)

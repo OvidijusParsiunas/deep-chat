@@ -6,11 +6,11 @@ sidebar_position: 6
 
 Properties related to messages.
 
-### `initialMessages` {#initialMessages}
+### `history` {#history}
 
 - Type: [`MessageContent[]`](#MessageContent)
 
-Messages that are pre-populated when the chat loads up.<br />
+Messages that are pre-populated when the chat loads up. <br />
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -27,7 +27,7 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Show me a modern city', role: 'user'},
       {files: [{src: '/img/city.jpeg', type: 'image'}], role: 'ai'},
       {text: 'Whats on your mind?', role: 'user'},
@@ -42,7 +42,7 @@ import Tabs from '@theme/Tabs';
 
 ```html
 <deep-chat
-  initialMessages='[
+  history='[
     {"text": "Show me a modern city", "role": "user"},
     {"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "ai"},
     {"text": "Whats on your mind?", "role": "user"},
@@ -58,7 +58,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  initialMessages='[
+  history='[
     {"text": "Show me a modern city", "role": "user"},
     {"files": [{"src": "path-to-file.jpeg", "type": "image"}], "role": "ai"},
     {"text": "Whats on your mind?", "role": "user"},
@@ -78,8 +78,8 @@ import Tabs from '@theme/Tabs';
 
 - Type: \{`text?: string`, `html?: string`\}
 
-Initial `ai` message that is displayed when the chat is loaded. It is different to [`initialMessages`](#initialMessages) as it will not trigger
-the [`onNewMessage`](/docs/events#onNewMessage) listener, will not be part of the returned messages when the [`getMessages`](/docs/methods#getMessages) method is called and
+Initial `ai` message that is displayed when the chat is loaded. It is different to [`history`](#history) as it will not trigger
+the [`onMessage`](/docs/events#onMessage) listener, will not be part of the returned messages when [`getMessages`](/docs/methods#getMessages) is called and
 is not taken into consideration when calculating [`requestBodyLimits`](/docs/connect#requestBodyLimits). <br />
 `html` is used to render [custom code](/docs/messages/HTML) and can be coupled with a [`deep-chat-temporary-message`](/docs/messages/HTML#deepChatClasses)
 class to make this message disappear after a new one is added.
@@ -132,7 +132,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
       {text: 'What is the meaning of life?', role: 'user'},
@@ -161,7 +161,7 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
 
 <deep-chat
   avatars="true"
-  initialMessages='[
+  history='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
     {"text": "What is the meaning of life?", "role": "user"},
@@ -201,7 +201,7 @@ This object is used to configure avatars that are displayed beside messages. <br
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {text: 'What is the meaning of life?', role: 'user'},
       {
         text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
@@ -249,7 +249,7 @@ This object is used to configure avatars that are displayed beside messages. <br
     "ai": {"src": "path-to-file.svg", "styles": {"avatar": {"marginLeft": "-3px"}}},
     "bob": {"src": "path-to-file.png", "styles": {"avatar": {"borderRadius": "15px"}}}
   }'
-  initialMessages='[
+  history='[
     {"text": "What is the meaning of life?", "role": "user"},
     {
       "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
@@ -283,7 +283,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great!', role: 'ai'},
       {text: 'Motivate me', role: 'user'},
@@ -312,7 +312,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 
 <deep-chat
   names="true"
-  initialMessages='[
+  history='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great!", "role": "ai"},
     {"text": "Motivate me", "role": "user"},
@@ -349,7 +349,7 @@ This object is used to configure names that are displayed beside messages. <br /
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great!', role: 'ai'},
       {text: 'Motivate me', role: 'user'},
@@ -393,7 +393,7 @@ This object is used to configure names that are displayed beside messages. <br /
     "ai": {"text": "You"},
     "user": {"text": "Me"},
     "Bob": {"style": {"color": "green"}}}'
-  initialMessages='[
+  history='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great!", "role": "ai"},
     {"text": "Motivate me", "role": "user"},
@@ -548,7 +548,7 @@ paragraphs and more. See this [playground](https://jonschlinkert.github.io/remar
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {files: [{src: '/img/bird-2.jpeg', type: 'image'}], role: 'user'},
       {
         text: 'This is a nice image of a yellow bird on a branch.',
@@ -564,7 +564,7 @@ paragraphs and more. See this [playground](https://jonschlinkert.github.io/remar
 
 ```html
 <deep-chat
-  initialMessages='[
+  history='[
     {"files": [{"src": "path-to-image.jpeg", "type": "image"}], "role": "user"},
     {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
@@ -578,7 +578,7 @@ paragraphs and more. See this [playground](https://jonschlinkert.github.io/remar
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  initialMessages='[
+  history='[
     {"files": [{"src": "path-to-image.jpeg", "type": "image"}], "role": "user"},
     {"text": "This is a nice image of a yellow bird on a branch.", "role": "ai"}
   ]'
@@ -614,14 +614,14 @@ Format that defines the details of a file. <br />
 `src` is either the _url_ path to the file location or the base64 encoding as a string (make sure to use the correct type prefix e.g: _"data:(type);base64,"_).<br />
 The component will automatically try to infer the file type from the `src` property so that it can render its media correctly,
 however you can help it by setting the `type`. <br />
-`ref` is the actual file's reference. It is only included in [`onNewMessage`](/docs/events#onNewMessage) events. <br />
+`ref` is the actual file's reference. It is only included in [`onMessage`](/docs/events#onMessage) events. <br />
 
 #### Example
 
 <ComponentContainer minHeight={535}>
   <DeepChatBrowser
     style={{borderRadius: '8px', height: '480px'}}
-    initialMessages={[
+    history={[
       {
         role: 'user',
         files: [
@@ -642,7 +642,7 @@ however you can help it by setting the `type`. <br />
 
 ```html
 <deep-chat
-  initialMessages='[
+  history='[
     {"role": "user", "files": [
         {"src": "path-to-file.jpeg", "type": "image"},
         {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"},
@@ -660,7 +660,7 @@ however you can help it by setting the `type`. <br />
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  initialMessages='[
+  history='[
     {"role": "user", "files": [
         {"src": "path-to-file.jpeg", "type": "image"},
         {"src": "data:image/gif;base64,R0lGODlh4A...", "type": "image"},
@@ -703,7 +703,7 @@ Check out external module [EXAMPLES](/examples/externalModules) to find multiple
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
         role: 'ai',
@@ -725,7 +725,7 @@ Check out external module [EXAMPLES](/examples/externalModules) to find multiple
 
 ````html
 <deep-chat
-  initialMessages='[
+  history='[
     {
       "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
       "role": "ai"
@@ -741,7 +741,7 @@ Check out external module [EXAMPLES](/examples/externalModules) to find multiple
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  initialMessages='[
+  history='[
     {
       "text": "```java\nwhile (i < 5) {\n console.log(\"hi\");\n i+= 1;\n}\n```",
       "role": "ai"

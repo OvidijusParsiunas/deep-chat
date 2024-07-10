@@ -9,9 +9,9 @@ function ComponentsDark() {
   return (
     <div id="customize-content">
       <DeepChatBrowser
-        stream={true}
+        connect={{stream: true}}
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
@@ -74,9 +74,9 @@ function ComponentsDark() {
           }"
       ></DeepChatBrowser>
       <DeepChatBrowser
-        stream={true}
+        connect={{stream: true}}
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
@@ -142,9 +142,9 @@ function ComponentsDark() {
           }"
       ></DeepChatBrowser>
       <DeepChatBrowser
-        stream={true}
+        connect={{stream: true}}
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
@@ -221,7 +221,7 @@ function ComponentsLight() {
     <div id="customize-content" ref={ref}>
       <DeepChatBrowser
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
@@ -245,7 +245,7 @@ function ComponentsLight() {
             },
           },
         }}
-        stream={true}
+        connect={{stream: true}}
         avatars={{
           default: {styles: {position: 'left'}},
           ai: {
@@ -290,6 +290,8 @@ function ComponentsLight() {
               default: {backgroundColor: 'white'},
             },
             svg: {
+              content:
+                '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z"> </path> </svg>',
               styles: {
                 default: {
                   filter:
@@ -321,7 +323,7 @@ function ComponentsLight() {
       ></DeepChatBrowser>
       <DeepChatBrowser
         demo={true}
-        stream={true}
+        connect={{stream: true}}
         style={{
           borderRadius: '10px',
           boxShadow: '0 .5rem 1rem 0 rgba(44, 51, 73, .1)',
@@ -406,9 +408,9 @@ function ComponentsLight() {
         <IntroPanel></IntroPanel>
       </DeepChatBrowser>
       <DeepChatBrowser
-        stream={true}
+        connect={{stream: true}}
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Hey, how are you?', role: 'user'},
           {text: 'I am doing great, thanks.', role: 'ai'},
           {text: 'What is the meaning of life?', role: 'user'},
@@ -476,6 +478,8 @@ function ComponentsLight() {
           },
           loading: {
             svg: {
+              content:
+                '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z"/></svg>',
               styles: {
                 default: {
                   filter:
@@ -489,6 +493,8 @@ function ComponentsLight() {
               hover: {backgroundColor: '#ededed'},
             },
             svg: {
+              content:
+                '<?xml version="1.0" encoding="utf-8"?> <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21.426 11.095-17-8A.999.999 0 0 0 3.03 4.242L4.969 12 3.03 19.758a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81zM5.481 18.197l.839-3.357L12 12 6.32 9.16l-.839-3.357L18.651 12l-13.17 6.197z"/></svg>',
               styles: {
                 default: {
                   filter:

@@ -7,7 +7,7 @@ sidebar_position: 3
 Deep Chat is preconfigured to connect to popular AI APIs right out of the box. <br /> Depending on the service you choose component assets
 such as buttons and intro panel will automatically be changed to suit the chosen service. Their configuration can still be overwitten manually. <br />
 
-<a href="https://youtu.be/ySU7Tj99mbA?si=DDDIvf1s_5WBr9Pc">
+<a href="https://youtu.be/RnGEUJDOTTc">
   <img src={YoutubeLogo} className={'youtube-icon'} />
   Video demo
 </a>
@@ -16,7 +16,7 @@ such as buttons and intro panel will automatically be changed to suit the chosen
 
 :::caution
 The [`directConnection`](#directConnection) and [`key`](#APIKey) properties are intended to be used for **prototyping purposes ONLY** and should not be
-deployed to a public website as their values can be accessed in the browser. Before going live, switch to using the [`request`](../connect#request)
+deployed to a public website as their values can be accessed in the browser. Before going live, switch to using the [`connect`](/docs/connect/#connect-1)
 property to connect to your server. Read more about this in [`Connect`](../connect) and check [examples](https://deepchat.dev/examples/servers).
 :::
 
@@ -56,7 +56,7 @@ is loaded up during the validation period.
 
 :::caution
 This object is intended to be used for **prototyping purposes ONLY** and should not be deployed to an environment as it can be accessed in the browser.
-Before going live, use the [`request`](../connect#request) property in combination with your own service to safely use your key there.
+Before going live, use the [`connect`](/docs/connect/#connect-1) property in combination with your own service to safely use your key there.
 Read more about this in [`Connect`](../connect) and check [examples](https://deepchat.dev/examples/servers).
 :::
 

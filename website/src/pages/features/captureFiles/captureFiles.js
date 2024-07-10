@@ -20,7 +20,7 @@ function LeftPanel() {
       <DeepChatBrowser
         demo={true}
         introMessage={`Click the camera or the microphone button.`}
-        initialMessages={[
+        history={[
           {files: [{src: '/img/cat.jpg', type: 'image'}], role: 'user'},
           {files: [{src: '/audio/jeff.mp3', type: 'audio'}], role: 'ai'},
         ]}

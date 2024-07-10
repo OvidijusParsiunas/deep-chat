@@ -24,14 +24,14 @@ import Tabs from '@theme/Tabs';
 
 <deep-chat
   style="border-radius: 10px; position: fixed; bottom: 0px; right: 7%; z-index: 1"
-  initialMessages='[
+  history='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, thanks.", "role": "ai"},
     {"text": "What is the meaning of life?", "role": "user"},
     {"text": "Seeking fulfillment and personal growth.", "role": "ai"}
   ]'
   demo="true"
-  stream="true"
+  connect='{"stream": true}'
 ></deep-chat>
 ```
 
@@ -40,13 +40,13 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer minHeight={1}>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, thanks.', role: 'ai'},
       {text: 'What is the meaning of life?', role: 'user'},
       {text: 'Seeking fulfillment and personal growth.', role: 'ai'},
     ]}
-    stream={true}
+    connect={{stream: true}}
     style={{
       borderRadius: '10px',
       position: 'fixed',

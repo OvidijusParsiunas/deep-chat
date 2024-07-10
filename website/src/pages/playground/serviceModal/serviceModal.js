@@ -70,8 +70,8 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     }
     setTimeout(() => {
       changeCode(newService, type);
-      // 6 as otherwise when connect is custom and opening modal causes extractOptionalParameterValues to throw error
-    }, 6);
+      // 5 as otherwise when connect is custom and opening modal causes extractOptionalParameterValues to throw error
+    }, 5);
   };
 
   const changeType = (newType) => {
@@ -101,20 +101,24 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   const changeCode = (serviceArg, newTypeArg) => {
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
-    const connect = constructConnect(optionalParamsRef.current, service, type);
-    if (service === 'custom') {
-      const websocketValue = connect['custom'].websocket === 'true';
-      setWebsocket(websocketValue);
-      if (websocketValue) {
-        setTimeout(() => {
-          const newConnect = constructConnect(optionalParamsRef.current, service, type);
-          setCode(getCodeStr(newConnect, true, view));
-        });
-        return;
+    // timeout for optional parameters to be populated up in time
+    // test by creating OpenAI Assistant, set load_thread_history to true, submit, then open modal again to see if code section is correct
+    setTimeout(() => {
+      const connect = constructConnect(optionalParamsRef.current, service, type);
+      if (service === 'custom') {
+        const websocketValue = connect['custom'].websocket === 'true';
+        setWebsocket(websocketValue);
+        if (websocketValue) {
+          setTimeout(() => {
+            const newConnect = constructConnect(optionalParamsRef.current, service, type);
+            setCode(getCodeStr(newConnect, true, view));
+          });
+          return;
+        }
+        return setCode(getCodeStr(connect, true, view));
       }
-      return setCode(getCodeStr(connect, true, view));
-    }
-    setCode(getCodeStr(connect, false, view, type));
+      setCode(getCodeStr(connect, false, view, type));
+    });
   };
 
   function constructConnect(optionalParamsEl, activeService, activeType) {
@@ -189,7 +193,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               requiredValue={requiredValue}
               setValue={changeRequiredValue.bind(this, setRequiredValue)}
               title="URL:"
-              link={'https://deepchat.dev/docs/connect#Request'}
+              link={'https://deepchat.dev/docs/connect#connect-1'}
             />
           )}
           {REQUIRED_PARAMETERS[activeService]?.[activeType] && (
@@ -287,7 +291,7 @@ function getCodeStr(connect, isCustom, view, type) {
   if (isCustom) {
     const extractedFiles = extractFiles(connect['custom']);
     if (extractedFiles.length > 1) files = extractedFiles;
-    return `<deep-chat${files} request='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
+    return `<deep-chat${files} connect='${JSON.stringify(connect['custom'], null, 2)}'></deep-chat>`;
   }
   const service = Object.keys(connect)[0];
   if (!view.isKeyVisible) {
@@ -403,6 +407,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
   custom: {
     method: ['POST', 'PUT', 'GET'],
     websocket: ['true', 'false'],
+    stream: ['true', 'false'],
     headers: 'constructable object',
     additionalBodyProps: 'constructable object',
     allowImages: ['true', 'false'],
@@ -432,8 +437,10 @@ const SERVICE_MODAL_FORM_CONFIG = {
     images: {
       model: 'string',
       n: 'number',
-      size: ['256x256', '512x512', '1024x1024'],
+      size: 'string',
       user: 'string',
+      quality: 'string',
+      style: 'string,',
     },
     textToSpeech: {
       model: 'string',
@@ -621,10 +628,11 @@ const SERVICE_TYPE_TO_API_KEY_LINK = {
 const OPTIONAL_PARAM_TO_LINK = {
   demo: {demo: ''},
   custom: {
-    method: 'https://deepchat.dev/docs/connect#Request',
+    method: 'https://deepchat.dev/docs/connect#connect-1',
     websocket: 'https://deepchat.dev/docs/connect#Websocket',
-    headers: 'https://deepchat.dev/docs/connect#Request',
-    additionalBodyProps: 'https://deepchat.dev/docs/connect#Request',
+    stream: 'https://deepchat.dev/docs/connect#Stream',
+    headers: 'https://deepchat.dev/docs/connect#connect-1',
+    additionalBodyProps: 'https://deepchat.dev/docs/connect#connect-1',
     allowImages: 'https://deepchat.dev/docs/files#images',
     allowCamera: 'https://deepchat.dev/docs/files#camera',
     allowGifs: 'https://deepchat.dev/docs/files#gifs',
@@ -653,9 +661,11 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
     images: {
       model: 'https://platform.openai.com/docs/api-reference/images/create#images-create-model',
-      n: 'https://platform.openai.com/docs/api-reference/images/create#images-create-n',
+      n: 'https://deepchat.dev/docs/directConnection/OpenAI#dall-e-2',
       size: 'https://platform.openai.com/docs/api-reference/images/create#images-create-size',
       user: 'https://platform.openai.com/docs/api-reference/images/create#images-create-user',
+      quality: 'https://deepchat.dev/docs/directConnection/OpenAI#dall-e-3',
+      style: 'https://deepchat.dev/docs/directConnection/OpenAI#dall-e-3,',
     },
     textToSpeech: {
       model: 'https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-model',

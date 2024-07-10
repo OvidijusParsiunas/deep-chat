@@ -58,7 +58,7 @@ a _false_ argument to prevent this.
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'What is 2 + 2?', role: 'user'},
       {text: 'The result of 2 + 2 is 4.', role: 'ai'},
       {text: 'Wrong, it is 5.', role: 'user'},
@@ -133,6 +133,49 @@ filesInput.onchange = (event) => {
 
 <LineBreak></LineBreak>
 
+### `addMessage` {#addMessage}
+
+- Type: ([`message: Response`](/docs/connect#Response), `isUpdate?: boolean`) => `void`
+
+Add a message to the chat. <br />
+`message` is an object containing message details. <br />
+`isUpdate` identifies whether the message should be treated as new - e.g. should [`onMessage`](/docs/events#onMessage) event
+and [`textToSpeech`](/docs/speech#textToSpeech) be triggered.
+
+#### Example
+
+<ComponentContainerMethods
+  propertyName={'addMessage'}
+  displayResults={false}
+  argument={{
+    html: `<button class="deep-chat-button deep-chat-suggestion-button deep-chat-temporary-message">What is your name?</button>`,
+    role: 'user',
+  }}
+>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```javascript
+chatElementRef.addMessage({
+  html: `<button class="deep-chat-button deep-chat-suggestion-button deep-chat-temporary-message">What is your name?</button>`,
+  role: 'user',
+});
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+This can be used to add [suggestion buttons](/docs/messages/HTML#moreExamples) after message.
+:::
+
+<LineBreak></LineBreak>
+
 ### `scrollToBottom` {#scrollToBottom}
 
 - Type: `() => void`
@@ -144,7 +187,7 @@ Moves the chat's scrollbar to the bottom.
 <ComponentContainerMethods propertyName={'scrollToBottom'} displayResults={false}>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {
         role: 'user',
         text: 'So close it has no boundaries. A blinking cursor pulses in the electric darkness like a heart coursing with phosphorous light, burning beneath the derma of black-neon glass. A PHONE begins to RING, we hear it as though we were making the call.  The cursor continues to throb, relentlessly patient, until... Hello? Data now slashes across the screen, information flashing faster than we read.',
@@ -194,6 +237,35 @@ chatElementRef.focusInput();
 
 <LineBreak></LineBreak>
 
+### `setPlaceholderText` {#setPlaceholderText}
+
+- Type: (`text: string`) => `void`
+
+Dynamically change the text input placeholder text. <br />
+This is useful for setting the placeholder text after the user sends a message.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'setPlaceholderText'} argument={'New placeholder text'} displayResults={false}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.setPlaceholderText("New placeholder text");
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+Default placeholder text should be set using the `placeholder` property in [`textInput`](/docs/styles/#textInput).
+:::
+
+<LineBreak></LineBreak>
+
 ### `disableSubmitButton` {#disableSubmitButton}
 
 - Type: (`override?: boolean`) => `void`
@@ -231,7 +303,7 @@ method to highlight the code with the loaded module.
 <ComponentContainerHighlightMethod displayResults={false}>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    initialMessages={[
+    history={[
       {
         text: '```java\nwhile (i < 5) {\n console.log("hi");\n i+= 1;\n}\n```',
         role: 'ai',

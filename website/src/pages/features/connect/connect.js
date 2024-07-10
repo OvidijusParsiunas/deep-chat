@@ -19,11 +19,11 @@ function LeftPanel() {
     <div id="connect-left-panel" className="feature-panel">
       <DeepChatBrowser
         demo={true}
-        initialMessages={[
+        history={[
           {text: 'Where do I start?', role: 'user'},
           {text: 'Check Docs on how to install this component.', role: 'ai'},
           {text: 'Can it connect to my custom API?', role: 'user'},
-          {text: 'It sure can! Check the Service section in Docs.', role: 'ai'},
+          {text: 'It sure can! Check the Connect section in Docs.', role: 'ai'},
         ]}
         style={{
           borderRadius: '10px',
@@ -39,7 +39,7 @@ function LeftPanel() {
             },
           },
         }}
-        stream={true}
+        connect={{stream: true}}
       ></DeepChatBrowser>
     </div>
   );

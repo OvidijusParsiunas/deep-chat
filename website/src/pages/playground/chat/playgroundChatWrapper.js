@@ -12,7 +12,7 @@ const ChatWrapper = React.forwardRef(
     React.useImperativeHandle(ref, () => ({
       update() {
         setCounter(counter + 1);
-        config.messages.splice(0, config.messages.length); // these are initial messages from the config, remove when changing connection object
+        config.messages.splice(0, config.messages.length); // these are history messages from the config, remove when changing connection object
         if (!descriptionRef.current.getDirty()) {
           setDescriptionText(getDescription(config.connect));
         }

@@ -44,7 +44,7 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`ChatFunctions`](#chat-functions) <br />
   \}
-- Default: _\{system_prompt: "You are a helpful assistant.", model: "gpt-3.5-turbo"\}_
+- Default: _\{system_prompt: "You are a helpful assistant.", model: "gpt-4o"\}_
 
 Connect to Open AI's [`chat`](https://platform.openai.com/docs/api-reference/chat) API. You can set this property to _true_ or configure it using an object: <br />
 `system_prompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
@@ -197,6 +197,7 @@ If `max_tokens` is not set, the component sets it to _300_ as otherwise the API 
   &nbsp;&nbsp;&nbsp;&nbsp; `thread_id?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `load_thread_history?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`new_assistant?: NewAssistant`](#NewAssistant), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`files_tool_type?: FileToolTypes`](#FileToolTypes), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: AssistantFunctionHandler`](#assistant-functions) <br />
   \}
 
@@ -206,6 +207,7 @@ When set to `true` or the `assistant_id` is not defined, Deep Chat will automati
 `thread_id` allows you to communicate in the context of an already existing conversation/[thread](https://platform.openai.com/docs/api-reference/threads). <br />
 `load_thread_history` toggles a preload of the previous conversation/[thread](https://platform.openai.com/docs/api-reference/threads) messages on chat initialisation. <br />
 `new_assistant` defines the details for the newly created assistant. <br />
+`files_tool_type` defines the type of a tool to be used to process an uploaded file. <br />
 `function_handler` is the actual function used to handle the model's function response. Please navigate to [Assistant Functions](#assistant-functions) for more info. <br />
 
 <ContainersKeyToggle>
@@ -278,11 +280,16 @@ stores the thread id and allows conversation to continue on a new session.
   &nbsp;&nbsp;&nbsp;&nbsp; `name?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `instructions?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `fileIds?: string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `tools?`: \{ <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?`: `"code_interpreter"` | `"retrieval"` | `"function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?`: `"code_interpreter"` | `"file_search"` | `"function"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `function?`: \{`name: string`, `description?: string`, `parameters?: object`\} <br />
-  \}\}
+  &nbsp;&nbsp;&nbsp;&nbsp; \}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_resources?`: \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `code_interpreter?`: \{`file_ids: string[]`\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `file_search?`: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `vector_store_ids: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `vector_stores?`: \{`file_ids: string[]`\} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;\}\}\} <br />
 
 - Default: _\{model: "gpt-4"\}_
 
@@ -291,7 +298,7 @@ the user sends a new message. This object follows the [Open AI Create Asssistant
 `model` is the name of the model to be used by the API. Check the [model overview](https://platform.openai.com/docs/models/overview) for more. <br />
 `name` and `description` are used to describe the new assistant. <br />
 `instructions` direct the assistant's behaviour. <br />
-`fileIds` is an array of file ids that the new assistant has access to. Log into OpenAI and check [files](https://platform.openai.com/files). <br />
+`tool_resources` defines the resources that the assistant has access to. <br />
 `tools` is an array of objects that describe the tools the assistant will have access to.
 When using the `"function"` tool, you will need to also define the `function` object. <br />
 
@@ -373,28 +380,117 @@ When using the `"function"` tool, you will need to also define the `function` ob
 </Tabs>
 
 :::info
-Access the newly created `assistant_id` via `chatElementRef._activeService.rawBody.assistant_id`.
+You can access the created `assistant_id` via `chatElementRef._activeService.rawBody.assistant_id`.
 :::
+
+<LineBreak></LineBreak>
+
+#### `FileToolTypes` {#FileToolTypes}
+
+- Type: [FileToolType](#FileToolType) | (`fileNames: string[]`) => [FileToolType](#FileToolType)
+- Default: _"images"_
+
+This is used to define the type of tool that will be used to process uploaded files. You can either define it as a string or a function that will return
+the tool type based on the uploaded files. <br />
+When nothing is defined and the user uploads an image, Deep Chat will automatically use [`"images"`](https://platform.openai.com/docs/assistants/how-it-works/creating-image-input-content)
+which will not use any tools and send the image directly to the [_vision model_](https://platform.openai.com/docs/models). <br />
+It is important to note that the `"code_interpreter"` and `"file_search"` tools must be toggled ON in the assistant that you are using before
+the files are uploaded. This can either be done in the [OpenAI Assistant Playground](https://platform.openai.com/playground) or in the [NewAssistant](#NewAssistant) object.
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          assistant: {
+            assistant_id: 'assistant with code interpreter',
+            files_tool_type: 'code_interpreter',
+          },
+        },
+      }}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          assistant: {
+            assistant_id: 'assistant with code interpreter',
+            files_tool_type: 'code_interpreter',
+          },
+        },
+      }}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "assistant": {
+        "assistant_id": "assistant with code interpreter",
+        "files_tool_type": "code_interpreter"
+  }}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "assistant": {
+        "assistant_id": "assistant with code interpreter",
+        "files_tool_type": "code_interpreter"
+  }}}'
+  mixedFiles="true"
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+When uploading a file, the user must also submit a text message.
+:::
+
+<LineBreak></LineBreak>
+
+#### `FileToolType` {#FileToolType}
+
+- Type: `"code_interpreter"` | `"file_search"` | `"images"`
+
+Type of tool used to process an uploaded file. Find out more information in [`"code_interpreter"`](https://platform.openai.com/docs/assistants/tools/code-interpreter) and
+[`"file_search"`](https://platform.openai.com/docs/assistants/tools/file-search). [`"images"`](https://platform.openai.com/docs/assistants/how-it-works/managing-threads-and-messages) is
+technically not a tool but a way to indicate that image files will be sent directly to a [_vision model_](https://platform.openai.com/docs/models).
 
 <LineBreak></LineBreak>
 
 ### `Images` {#Images}
 
-- Type: `true` | \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"256x256"` | `"512x512"` | `"1024x1024"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `user?: number` <br />
-  \}
-- Default: _\{size: "1024x1024"\}_
+- Type: `true` | [`Dall-e-2`](#dall-e-2) | [`Dall-e-3`](#dall-e-3)
+- Default: _Dall-e-2_
 
-Connect to Open AI's [`Images`](https://platform.openai.com/docs/api-reference/images) API. You can set this property to _true_ or configure it using an object: <br />
-`model` is the name of the specific model to be used by the API. Check [/v1/images/generations](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
-`n` is the number of images to generate. Ranges between 1 and 10. <br />
-`size` is the pixel dimensions of the generated images. <br />
-`response_format` is the format in which the generated images are returned. <br />
-`user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
+Connect to Open AI's [`Images`](https://platform.openai.com/docs/api-reference/images) API.
+Set this property to _true_ or use either of the [`Dall-e-2`](#dall-e-2) or [`Dall-e-3`](#dall-e-3) objects. <br />
 
 You can automatically call any of the following three APIs by combining different inputs:
 
@@ -461,6 +557,38 @@ You can automatically call any of the following three APIs by combining differen
 
 </TabItem>
 </Tabs>
+
+#### `Dall-e-2`
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: "dall-e-2"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"256x256"` | `"512x512"` | `"1024x1024"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `user?: number` <br />
+  \}
+- Default: _\{model: "dall-e-2", size: "1024x1024"\}_
+
+`model` is the name of the specific model to be used by the API. <br />
+`n` is the number of images to generate. Ranges between 1 and 10. <br />
+`size` is the pixel dimensions of the generated images. <br />
+`response_format` is the format in which the generated images are returned. <br />
+`user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
+
+#### `Dall-e-3`
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model: "dall-e-3"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `size?:` `"1024x1024"` | `"1792x1024"` | `"1024x1792"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?:` `"url"` | `"b64_json"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `user?: number` <br />
+  \}
+- Default: _\{size: "1024x1024"\}_
+
+`model` is the name of the specific model to be used by the API. <br />
+`size` is the pixel dimensions of the generated images. <br />
+`response_format` is the format in which the generated images are returned. <br />
+`user` is a unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. More info can be found [`here`](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids). <br />
 
 <LineBreak></LineBreak>
 

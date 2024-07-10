@@ -138,8 +138,8 @@ export default function ConnectToCustomAPI(props) {
     >
       <div className={`start-page-text start-page-large-text ${displayRequest ? 'start-page-main-details-visible' : ''}`}>
         Configure your connection settings using the{' '}
-        <a href="https://deepchat.dev/docs/connect#request" target="_blank">
-          request
+        <a href="https://deepchat.dev/docs/connect#connect-1" target="_blank">
+          connect
         </a>{' '}
         property:
       </div>
@@ -148,7 +148,7 @@ export default function ConnectToCustomAPI(props) {
           displayRequest ? 'start-page-main-details-visible' : ''
         }`}
       >
-        {`<deep-chat request='{"url":"https://service.com/chat"}'/>`}
+        {`<deep-chat connect='{"url":"https://service.com/chat"}'/>`}
       </div>
       <div
         id="start-page-requirements"

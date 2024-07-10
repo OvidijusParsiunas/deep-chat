@@ -288,7 +288,7 @@ Styling for the chat view's bottom area dedicated for text input and file button
 Custom details for the chat's text input. <br />
 `styles` object defines the styling for the `text` element and its box `container`. The `focus` property is used to set the container style when it is focused. <br />
 `placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
-`style` can be used to customize it. <br />
+`style` can be used to customize it. Use [`setPlaceholderText`](/docs/methods#setPlaceholderText) to set text after user submits a message. <br />
 `characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
 `disabled` is used to prevent the user from inserting text. This also comes with its own custom styling. <br />
 
@@ -412,7 +412,7 @@ Custom details for the chat's text input. <br />
 Custom styling for the submit button. <br />
 `submit` state is displayed when the user's input is valid and can be sent. <br />
 `loading` is used when waiting for a message response from the target server. <br />
-`stop` is used when a message response is being [`streamed`](/docs/connect#stream). <br />
+`stop` is used when a message response is being [`streamed`](/docs/connect#Stream). <br />
 `disabled` is used when the user's input cannot be sent (see [`validateInput`](/docs/interceptors#validateInput)) or the [websocket](/docs/connect#Websocket) connection is not live.
 You can also set this state manually by calling the [`disableSubmitButton`](/docs/methods#disableSubmitButton) method. <br />
 `alwaysEnabled` prevents the `disabled` button state from being used. <br />
@@ -561,7 +561,7 @@ however `hover` and `submit` need to be defined.
         },
       },
     }}
-    stream={true}
+    connect={{stream: true}}
     demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -627,7 +627,7 @@ however `hover` and `submit` need to be defined.
     "alwaysEnabled": true
   }'
   style="border-radius: 8px"
-  stream="true"
+  connect='{"stream": true}'
   demo="true"
 ></deep-chat>
 ```
@@ -713,7 +713,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Hey, how are you?', role: 'user'},
       {text: 'I am doing great, how about you?', role: 'ai'},
       {text: 'What is the meaning of life?', role: 'user'},
@@ -769,7 +769,7 @@ example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-
       background-color: #54a7ff;
       border-radius: 5px;
     }"
-  initialMessages='[
+  history='[
     {"text": "Hey, how are you?", "role": "user"},
     {"text": "I am doing great, how about you?", "role": "ai"},
     {"text": "What is the meaning of life?", "role": "user"},
