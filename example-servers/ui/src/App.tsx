@@ -20,7 +20,7 @@ function App() {
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a chat message to an example server.'}}
-          request={{url: 'http://localhost:8080/chat'}}
+          connect={{url: 'http://localhost:8080/chat'}}
           requestBodyLimits={{maxMessages: -1}}
           requestInterceptor={(details: RequestDetails) => {
             console.log(details);
@@ -34,13 +34,12 @@ function App() {
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a streamed chat message to an example server.'}}
-          request={{url: 'http://localhost:8080/chat-stream'}}
-          stream={true}
+          connect={{url: 'http://localhost:8080/chat-stream', stream: true}}
         />
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send files to an example server.'}}
-          request={{url: 'http://localhost:8080/files'}}
+          connect={{url: 'http://localhost:8080/files'}}
           audio={true}
           images={true}
           gifs={true}
@@ -66,22 +65,25 @@ function App() {
       <div className="components">
         <div className="diagonal-line" style={{background: '#f2f2f2'}}></div>
         {/* additionalBodyProps is used to set other properties that will be sent to the server along with the message:
-            https://deepchat.dev/docs/connect#request */}
+            https://deepchat.dev/docs/connect#connect */}
         {/* by setting maxMessages requestBodyLimits to 0 or lower - each request will send full chat history:
             https://deepchat.dev/docs/connect/#requestBodyLimits */}
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a chat message through an example server to OpenAI.'}}
-          request={{url: 'http://localhost:8080/openai-chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
+          connect={{url: 'http://localhost:8080/openai-chat', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
           requestBodyLimits={{maxMessages: -1}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a streamed chat message through an example server to OpenAI.'}}
-          request={{url: 'http://localhost:8080/openai-chat-stream', additionalBodyProps: {model: 'gpt-3.5-turbo'}}}
+          connect={{
+            url: 'http://localhost:8080/openai-chat-stream',
+            stream: true,
+            additionalBodyProps: {model: 'gpt-3.5-turbo'},
+          }}
           requestBodyLimits={{maxMessages: -1}}
-          stream={true}
           errorMessages={{displayServiceErrorMessages: true}}
         />
         {/* If not using the camera, you can use an example image here:
@@ -91,7 +93,7 @@ function App() {
           introMessage={{
             text: 'Send a 1024x1024 .png image through an example server to OpenAI, which will generate its variation.',
           }}
-          request={{url: 'http://localhost:8080/openai-image'}}
+          connect={{url: 'http://localhost:8080/openai-image'}}
           camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
@@ -117,7 +119,7 @@ function App() {
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a conversation message through an example server to Hugging Face.'}}
           requestBodyLimits={{maxMessages: -1}}
-          request={{url: 'http://localhost:8080/huggingface-conversation'}}
+          connect={{url: 'http://localhost:8080/huggingface-conversation'}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
         {/* If not using the camera, you can use an example image here:
@@ -125,7 +127,7 @@ function App() {
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send an image through an example server to Hugging Face and retrieve its classification.'}}
-          request={{url: 'http://localhost:8080/huggingface-image'}}
+          connect={{url: 'http://localhost:8080/huggingface-image'}}
           camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{disabled: true, placeholder: {text: 'Send an image!'}}}
@@ -136,7 +138,7 @@ function App() {
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send an audio file through an example server to Hugging Face and recieve its transcript.'}}
-          request={{url: 'http://localhost:8080/huggingface-speech'}}
+          connect={{url: 'http://localhost:8080/huggingface-speech'}}
           audio={{files: {maxNumberOfFiles: 1}}}
           microphone={{files: {maxNumberOfFiles: 1}}}
           textInput={{disabled: true, placeholder: {text: 'Send an audio file!'}}}
@@ -159,7 +161,7 @@ function App() {
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send a prompt through an example server to Stability AI to generate an image.'}}
-          request={{url: 'http://localhost:8080/stability-text-to-image'}}
+          connect={{url: 'http://localhost:8080/stability-text-to-image'}}
           textInput={{placeholder: {text: 'Describe an image'}}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
@@ -170,7 +172,7 @@ function App() {
           introMessage={{
             text: 'Send an image along with a description through an example server to Stability AI in order to generate a new one with the described changes.',
           }}
-          request={{url: 'http://localhost:8080/stability-image-to-image'}}
+          connect={{url: 'http://localhost:8080/stability-image-to-image'}}
           camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{placeholder: {text: 'Describe the desired changes'}}}
@@ -186,7 +188,7 @@ function App() {
           introMessage={{
             text: 'Send an image through an example server to Stability AI in order to generate a new one with a higher resolution.',
           }}
-          request={{url: 'http://localhost:8080/stability-image-upscale'}}
+          connect={{url: 'http://localhost:8080/stability-image-upscale'}}
           camera={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           images={{files: {maxNumberOfFiles: 1, acceptedFormats: '.png'}}}
           textInput={{disabled: true, placeholder: {text: 'Send an image'}}}
@@ -211,7 +213,7 @@ function App() {
           introMessage={{
             text: 'Send a chat message through an example server to Cohere. You may need to apply for Coral access before using this.',
           }}
-          request={{url: 'http://localhost:8080/cohere-chat'}}
+          connect={{url: 'http://localhost:8080/cohere-chat'}}
           requestBodyLimits={{maxMessages: -1}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
@@ -220,14 +222,14 @@ function App() {
           introMessage={{
             text: 'Send start text through an example server to Cohere and receive its genereated completion. E.g. "Please explain to me how LLMs work"',
           }}
-          request={{url: 'http://localhost:8080/cohere-generate'}}
+          connect={{url: 'http://localhost:8080/cohere-generate'}}
           textInput={{placeholder: {text: 'Once upon a time...'}}}
           errorMessages={{displayServiceErrorMessages: true}}
         />
         <DeepChat
           style={{borderRadius: '10px'}}
           introMessage={{text: 'Send text through an example server to Cohere and receive its summary.'}}
-          request={{url: 'http://localhost:8080/cohere-summarize'}}
+          connect={{url: 'http://localhost:8080/cohere-summarize'}}
           textInput={{placeholder: {text: 'Insert text to summarize'}}}
           errorMessages={{displayServiceErrorMessages: true}}
         />

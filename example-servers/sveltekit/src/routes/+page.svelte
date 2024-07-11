@@ -76,6 +76,8 @@
     <h3>Make sure to set the OPENAI_API_KEY environment variable in your server</h3>
     <div class="components">
       <div class="diagonal-line" style="background: #f2f2f2"></div>
+      <!-- additionalBodyProps is used to set other properties that will be sent to the server along with the message:
+        https://deepchat.dev/docs/connect#connect -->
       <!-- by setting maxMessages requestBodyLimits to 0 or lower - each request will send full chat history:
         https://deepchat.dev/docs/connect/#requestBodyLimits -->
       <deep-chat
@@ -88,7 +90,7 @@
       <deep-chat
         style="border-radius: 10px"
         introMessage={{text: "Send a streamed chat message through an example server to OpenAI."}}
-        connect={{url: '/api/openai/chat-stream', additionalBodyProps: {model: 'gpt-4o'}, stream: true}}
+        connect={{url: '/api/openai/chat-stream', stream: true, additionalBodyProps: {model: 'gpt-4o'}}}
         requestBodyLimits={{maxMessages: -1}}
         errorMessages={{displayServiceErrorMessages: true}}
       />
