@@ -35,7 +35,7 @@ export class Legacy {
   public static processHistory(deepChat: DeepChat) {
     const initialMessages = (deepChat as unknown as LegacyDeepChat).initialMessages;
     if (initialMessages) {
-      console.error('The initialMessages property is deprecated since version 1.5.0.');
+      console.error('The initialMessages property is deprecated since version 2.0.0.');
       console.error('Please change to using the history property instead: https://deepchat.dev/docs/messages/#history');
       return initialMessages;
     }
@@ -83,7 +83,7 @@ export class Legacy {
         // this will cause the component to render twice but it is needed
         legacyDeepchat.connect = legacyDeepchat.request;
       }
-      console.error('The request property is deprecated since version 1.5.0.');
+      console.error('The request property is deprecated since version 2.0.0.');
       console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
     }
   }
@@ -91,7 +91,7 @@ export class Legacy {
   public static checkForStream(deepChat: DeepChat) {
     const stream = (deepChat as unknown as LegacyDeepChat).stream;
     if (stream) {
-      console.error('The stream property has been moved to the connect object in version 1.5.0.');
+      console.error('The stream property has been moved to the connect object in version 2.0.0.');
       console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
       return stream;
     }
@@ -101,7 +101,7 @@ export class Legacy {
   public static fireOnNewMessage(deepChat: DeepChat, updateBody: {message: MessageContent; isHistory: boolean}) {
     const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
     if (legacyDeepchat.onNewMessage) {
-      console.error('The onNewMessage event has been deprecated since version 1.5.0.');
+      console.error('The onNewMessage event has been deprecated since version 2.0.0.');
       console.error('Please see the onMessage event: https://deepchat.dev/docs/events#onMessage');
       legacyDeepchat.onNewMessage?.(updateBody);
     }
@@ -111,7 +111,7 @@ export class Legacy {
   public static processFileConfigConnect(config: FilesServiceConfig) {
     const legacyConfig = config as unknown as FilesServiceConfig & {request?: Connect};
     if (legacyConfig.request) {
-      console.error('The request property in file configuration is deprecated since version 1.5.0.');
+      console.error('The request property in file configuration is deprecated since version 2.0.0.');
       console.error('Please use the connect property instead: https://deepchat.dev/docs/files');
       if (!legacyConfig.connect) legacyConfig.connect = legacyConfig.request;
     }

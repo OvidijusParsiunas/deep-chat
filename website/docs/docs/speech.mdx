@@ -94,7 +94,8 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; [`commands?: Commands`](#Commands), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`button?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSubmit?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`submitAfterSilence?: SubmitAfterSilence`](#SubmitAfterSilence) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`submitAfterSilence?: SubmitAfterSilence`](#SubmitAfterSilence), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`events?: SpeechEvents`](#SpeechEvents) <br />
   \}
 
 - Default: _\{webSpeech: true, stopAfterSubmit: true\}_
@@ -109,6 +110,7 @@ Transcribe your voice into text and control chat with commands.<br />
 `button` defines the styling used for the microphone button. <br />
 `stopAfterSubmit` is used to toggle whether the recording stops after a message has been submitted. <br />
 `submitAfterSilence` configures automated message submit functionality when the user stops speaking. <br />
+`events` is used to listen to speech functionality events. <br />
 
 <div className="web-speech-not-supported-error">
   <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API">Web Speech API</a> is
@@ -741,6 +743,61 @@ automatically stop after 5-7 seconds of silence, please take care when setting t
 :::
 
 <LineBreak></LineBreak>
+
+### `SpeechEvents` {#SpeechEvents}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onStart?:` `() => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onStop?:` `() => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onResult?:` `(text: string, isFinal: boolean) => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onPreResult?:` `(text: string, isFinal: boolean) => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onCommandModeTrigger?:` `(isStart: boolean) => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onPauseTrigger?:` `(isStart: boolean) => void` <br />
+  \}
+
+This object contains multiple properties that can be attached with functions that will be
+triggered when the corresponding event occurs. <br />
+`onStart` is triggered when speech recording starts. <br />
+`onStop` is triggered when speech recording stops. <br />
+`onResult` is triggered when the latest speech segment is transcribed and inserted into chat's text input. <br />
+`onPreResult` is triggered when the latest speech segment is transcribed and before it is inserted into chat's text input. This is
+particularly useful for executing [commands](#Commands). <br />
+`onCommandModeTrigger` is triggered when command mode is initiated and stopped. <br />
+`onPauseTrigger` is triggered when the pause command is initiated and then stopped via the resume command. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    introMessage={{
+      text: "Check your browser's developer console to view the results",
+    }}
+    style={{borderRadius: '8px'}}
+    speechToText={{
+      events: {
+        onResult: (text, isFinal) => {
+          console.log(text, isFinal);
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```js
+chatElementRef.speechToText = {
+  events: {
+    onResult: (text, isFinal) => { console.log(text, isFinal); };
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Demo
 

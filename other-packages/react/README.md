@@ -141,20 +141,20 @@ If you wish to edit the component functionality, please see the core [Deep Chat]
 Thankyou to our generous sponsors!
 
 <p align="center">
-    &nbsp; &nbsp;
-    <img src="https://github.com/eljefedelrodeodeljefe.png" width="110px" />
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; 
     <img src="https://github.com/matthiasamberg.png" width="110px"/>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <img src="https://github.com/dorra.png" width="110px"/>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+    <img src="https://github.com/techpeace.png" width="110px" />
 </p>
 <p align="center">
-    <a href="https://github.com/eljefedelrodeodeljefe">eljefedelrodeodeljefe</a>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+     &nbsp;
     <a href="https://github.com/matthiasamberg">matthiasamberg</a>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;
-    <a href="https://github.com/matthiasamberg">dorra</a>
-    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a href="https://github.com/dorra">dorra</a>
+    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a href="https://github.com/techpeace">techpeace</a>
 </p>
 
 ## :heart: Contributions

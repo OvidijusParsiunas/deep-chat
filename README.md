@@ -1,7 +1,5 @@
 <br />
 
-Update logos
-
 ![Deep Chat](./assets/readme/banner-2.png)
 
 <b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with minimal to no effort. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
@@ -23,18 +21,12 @@ Update logos
 - Host a model on the browser
 - Everything is customizable!
 
-### :tada: Latest updates
+### :tada: :tada: 2.0 is now available :tada: :tada:
 
-No servers, no connections, no limits. Host an LLM model entirely on your browser. Checkout [web model](https://deepchat.dev/docs/webModel) for more:
+Announcing Deep Chat 2.0! We have redesigned and improved Deep Chat based on all of your generous feedback. It is now much easier to implement it into any website and configure it to provide the best possible chat experience for your users. Check out the [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.0.0) for more information.
 
-<p align="center">
-    <img width="650" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5bc7bf60-354a-4fe1-8edd-a106c3dfdc5b" alt="Web Model">
-</p>
-
-Message bubbles now support custom elements! Add suggestion buttons, charts, maps and anything you desire using the new [message HTML](https://deepchat.dev/docs/messages/HTML) API:
-
-<p align="center">
-    <img width="700" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/5ba04d84-1efb-424a-8718-ba160011cafe" alt="Messages HTML">
+<p align="center">v
+    <img width="1200" src="https://github.com/user-attachments/assets/ea88cdd8-6197-4322-8e16-3908f69a7eb5" alt="version 2.0">
 </p>
 
 ### :computer: Getting started
@@ -61,10 +53,10 @@ The exact syntax for the above will vary depending on the framework of your choi
 
 ![Connect](./assets/readme/connect.png)
 
-Connecting to a service is simple, all you need to do is define its API details using the [`connect`](https://deepchat.dev/docs/connect#connect-1) property:
+Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
 
 ```
-<deep-chat connect='{"url":"https://service.com/chat"}'/>
+<deep-chat request='{"url":"https://service.com/chat"}'/>
 ```
 
 The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out the [server template](https://deepchat.dev/examples/servers) examples.
@@ -83,7 +75,7 @@ Connect to popular AI APIs directly from the browser via the use of the [`direct
 <deep-chat directConnection='{"openAI":{"key": "optional-key-here"}}'/>
 ```
 
-Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`connect`](https://deepchat.dev/docs/connect#connect-1) property described above along with a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
+Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`request`](https://deepchat.dev/docs/connect#request) property described above along with a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
 
 Currently supported direct API connections:
 [OpenAI](https://openai.com/blog/openai-api), [HuggingFace](https://huggingface.co/docs/api-inference/index), [Cohere](https://docs.cohere.com/docs), [Stability AI](https://stability.ai/), [Azure](https://learn.microsoft.com/en-gb/azure/cognitive-services/), [AssemblyAI](https://www.assemblyai.com/)
@@ -165,20 +157,20 @@ Create, configure and use Deep Chat components without writing any code in the o
 Thankyou to our generous sponsors!
 
 <p align="center">
-    &nbsp; &nbsp;
-    <img src="https://github.com/eljefedelrodeodeljefe.png" width="110px" />
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; 
     <img src="https://github.com/matthiasamberg.png" width="110px"/>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <img src="https://github.com/dorra.png" width="110px"/>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+    <img src="https://github.com/techpeace.png" width="110px" />
 </p>
 <p align="center">
-    <a href="https://github.com/eljefedelrodeodeljefe">eljefedelrodeodeljefe</a>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+     &nbsp;
     <a href="https://github.com/matthiasamberg">matthiasamberg</a>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;
-    <a href="https://github.com/matthiasamberg">dorra</a>
-    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a href="https://github.com/dorra">dorra</a>
+    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a href="https://github.com/techpeace">techpeace</a>
 </p>
 
 ## :heart: Contributions
