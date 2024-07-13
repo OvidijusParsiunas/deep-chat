@@ -10,7 +10,7 @@ If you want to use your code for an introduction panel - check out [`Intro Panel
 ### Getting started {#Getting Started}
 
 The `html` property can be used in server [Response](/docs/connect#Response)s and is stored inside the chat using the [MessageContent](/docs/messages#MessageContent) format.
-It must describe full (not partial) elements or simple plain text. Here is an example for [`initialMessages`](/docs/messages#initialMessages):
+It must describe full (not partial) elements or simple plain text. Here is an example for [`history`](/docs/messages#history):
 
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -36,7 +36,7 @@ import Tabs from '@theme/Tabs';
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[{html: '<button>Button</button>', role: 'user'}]}
+    history={[{html: '<button>Button</button>', role: 'user'}]}
     style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -45,7 +45,7 @@ import Tabs from '@theme/Tabs';
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat initialMessages='[{"html": "<button>Button</button>", "role": "user"}]'></deep-chat>
+<deep-chat history='[{"html": "<button>Button</button>", "role": "user"}]'></deep-chat>
 ```
 
 </TabItem>
@@ -55,7 +55,7 @@ import Tabs from '@theme/Tabs';
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  initialMessages='[{"html": "<button>Button</button>", "role": "user"}]'
+  history='[{"html": "<button>Button</button>", "role": "user"}]'
   style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
@@ -106,7 +106,7 @@ used for _addEventListener(HERE)_, e.g. _"mousedown"_) or any custom event name 
         },
       },
     }}
-    initialMessages={[
+    history={[
       {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
       {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
     ]}
@@ -137,7 +137,7 @@ chatElementRef.htmlClassUtilities = {
     },
   },
 };
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
   {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
 ];
@@ -166,7 +166,7 @@ chatElementRef.htmlClassUtilities = {
     },
   },
 };
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {html: '<button class="custom-button">Hoverable</button>', role: 'user'},
   {html: '<button class="custom-button ai-button">Hoverable</button>', role: 'ai'},
 ];
@@ -189,7 +189,7 @@ to the parent-most element in the `html` string. This message is also not tracke
 
 <ComponentContainer>
   <DeepChatBrowser
-    initialMessages={[
+    history={[
       {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
       {
         html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>',
@@ -207,7 +207,7 @@ to the parent-most element in the `html` string. This message is also not tracke
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
   {html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>', role: 'user'},
 ];
@@ -219,7 +219,7 @@ chatElementRef.initialMessages = [
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {html: '<button class="deep-chat-button deep-chat-suggestion-button">Hello</button>', role: 'ai'},
   {html: '<button class="deep-chat-suggestion-button deep-chat-temporary-message">Goodbye</button>', role: 'user'},
 ];
@@ -245,7 +245,7 @@ To unset/change the message bubble styling, use the `html` property in the [mess
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[{html: '<button>User button</button>', role: 'user'}]}
+    history={[{html: '<button>User button</button>', role: 'user'}]}
     messageStyles={{html: {shared: {bubble: {backgroundColor: 'unset'}}}}}
     style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
@@ -266,7 +266,7 @@ To unset/change the message bubble styling, use the `html` property in the [mess
 
 <deep-chat
   messageStyles='{"html": {"shared": {"bubble": {"backgroundColor": "unset"}}}}'
-  initialMessages='[{"html": "<button>User button</button>", "role": "user"}]'
+  history='[{"html": "<button>User button</button>", "role": "user"}]'
   style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
@@ -295,7 +295,7 @@ To create new web components - use any of the following approaches:
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[{html: '<custom-element/>', role: 'user'}]}
+    history={[{html: '<custom-element/>', role: 'user'}]}
     style={{height: '370px', borderRadius: '8px'}}
   ></DeepChatBrowser>
 </ComponentContainer>
@@ -317,7 +317,7 @@ class CustomElement extends HTMLElement {
 customElements.define('custom-element', CustomElement);
 
 // HTML
-<deep-chat initialMessages='[{"html": "<custom-element/>", "role": "user"}]'></deep-chat>
+<deep-chat history='[{"html": "<custom-element/>", "role": "user"}]'></deep-chat>
 ```
 
 </TabItem>
@@ -338,7 +338,7 @@ customElements.define('custom-element', CustomElement);
 
 // HTML
 <deep-chat
-  initialMessages='[{"html": "<custom-element/>", "role": "user"}]'
+  history='[{"html": "<custom-element/>", "role": "user"}]'
   style="height: 370px; border-radius: 8px"
   demo="true"
 ></deep-chat>
@@ -368,7 +368,7 @@ Basic suggestion buttons using [Deep Chat Classes](#deepChatClasses).
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'How are you doing?', role: 'user'},
       {text: 'Good, how may I help?', role: 'ai'},
       {
@@ -392,7 +392,7 @@ Basic suggestion buttons using [Deep Chat Classes](#deepChatClasses).
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {
     html: `
       <div class="deep-chat-temporary-message">
@@ -413,7 +413,7 @@ chatElementRef.messageStyles = {html: {shared: {bubble: {backgroundColor: 'unset
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {text: 'How are you doing?', role: 'user'},
   {text: 'Good, how may I help?', role: 'ai'},
   {
@@ -446,7 +446,7 @@ Preset user responses which can be used to give feedback, follow a conversation 
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Can I monitor your diet?', role: 'ai'},
       {text: 'Yes', role: 'user'},
       {text: 'Have you drank water?', role: 'ai'},
@@ -484,7 +484,7 @@ Preset user responses which can be used to give feedback, follow a conversation 
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {
     html: `
       <div class="deep-chat-temporary-message">
@@ -506,7 +506,7 @@ chatElementRef.messageStyles = {
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {text: 'Can I monitor your diet?', role: 'ai'},
   {text: 'Yes', role: 'user'},
   {text: 'Have you drank water?', role: 'ai'},
@@ -554,7 +554,7 @@ Add feedback buttons to response messages.
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'What is mitochondria?', role: 'user'},
       {
         html: `<div class="feedback">
@@ -627,7 +627,7 @@ Add feedback buttons to response messages.
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {
     html: `<div class="feedback">
         <div class="feedback-text">The powerhouse of a cell.</div>
@@ -673,7 +673,7 @@ chatElementRef.htmlClassUtilities = {
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {text: 'What is mitochondria?', role: 'user'},
   {
     html: `<div class="feedback">
@@ -741,7 +741,7 @@ Add a chart component (e.g. using [Google Chart](https://developers.google.com/c
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Can you give me an example chart', role: 'user'},
       {
         html: `
@@ -769,7 +769,7 @@ Add a chart component (e.g. using [Google Chart](https://developers.google.com/c
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {
     html: `
       <div>
@@ -792,7 +792,7 @@ chatElementRef.initialMessages = [
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {text: 'Can you give me an example chart', role: 'user'},
   {
     html: `
@@ -835,7 +835,7 @@ Add an interactive table component (e.g. using [Active Table](https://activetabl
 <ComponentContainer>
   <DeepChatBrowser
     demo={true}
-    initialMessages={[
+    history={[
       {text: 'Generate a table with info about planets', role: 'user'},
       {
         html: `
@@ -867,7 +867,7 @@ Add an interactive table component (e.g. using [Active Table](https://activetabl
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {
     html: `
       <div>
@@ -890,7 +890,7 @@ chatElementRef.initialMessages = [
 ```js
 // using JavaScript for a simplified example
 
-chatElementRef.initialMessages = [
+chatElementRef.history = [
   {text: 'Generate a table with info about planets', role: 'user'},
   {
     html: `
