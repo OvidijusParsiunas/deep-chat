@@ -1,5 +1,4 @@
 import {RequestDetails} from 'deep-chat/dist/types/interceptors';
-import {DeepChat as DeepChatCore} from 'deep-chat';
 import styles from '../styles/Index.module.css';
 import dynamic from 'next/dynamic';
 
@@ -14,7 +13,7 @@ export default function IndexPage() {
   // If you have found a better way of adding the component in next, please create a new issue ticket so we can update the example!
   const DeepChat = dynamic(() => import('deep-chat-react').then((mod) => mod.DeepChat), {
     ssr: false,
-  }) as React.ComponentType<Partial<DeepChatCore>>;
+  });
 
   return (
     <>

@@ -23,7 +23,7 @@
 
 ### :tada: :tada: 2.0 is now available :tada: :tada:
 
-Announcing Deep Chat 2.0! We have redesigned and improved Deep Chat based on all of your generous feedback. It is now much easier to implement into any website and configure it to provide the best possible chat experience for your users. Check out the [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.0.0) for more information.
+Announcing Deep Chat 2.0! We have redesigned and improved Deep Chat based on all of your generous feedback. It is now much easier to implement into any website and configure to provide the best possible chat experience for your users. Check out the [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.0.0) for more information.
 
 <p align="center">
     <img width="1200" src="https://github.com/user-attachments/assets/ea88cdd8-6197-4322-8e16-3908f69a7eb5" alt="version 2.0">
