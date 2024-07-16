@@ -28,6 +28,7 @@ import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
+import {LoadHistory} from './types/history';
 import {CustomStyle} from './types/styles';
 import {Response} from './types/response';
 import style from './deepChat.css?inline';
@@ -59,6 +60,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('function')
   validateInput?: ValidateInput;
+
+  @Property('function')
+  loadHistory?: LoadHistory;
 
   @Property('object')
   chatStyle?: CustomStyle;
