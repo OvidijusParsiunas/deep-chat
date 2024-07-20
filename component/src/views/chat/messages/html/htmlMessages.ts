@@ -11,8 +11,8 @@ export class HTMLMessages {
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  private static createElements(messages: MessagesBase, html: string, role: string) {
-    const messageElements = messages.createNewMessageElement('', role);
+  private static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {
+    const messageElements = messages.createMessageElementsOnOrientation('', role, isTop);
     messageElements.bubbleElement.classList.add('html-message');
     messageElements.bubbleElement.innerHTML = html;
     return messageElements;
@@ -31,18 +31,19 @@ export class HTMLMessages {
 
   // prettier-ignore
   public static add(
-      messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[], overwrite?: Overwrite) {
+      messages: MessagesBase, html: string, role: string,
+      messagesEls: MessageElements[], overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
       const overwrittenElements = this.overwrite(messages, html, role, messagesEls);
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
     }
-    const messageElements = HTMLMessages.createElements(messages, html, role);
+    const messageElements = HTMLMessages.createElements(messages, html, role, isTop);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, html);
     HTMLUtils.apply(messages, messageElements.outerContainer);
     Legacy.flagHTMLUpdateClass(messageElements.bubbleElement);
     messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
-    HTMLMessages.addElement(messages, messageElements.outerContainer);
+    if (!isTop) HTMLMessages.addElement(messages, messageElements.outerContainer);
     return messageElements;
   }
 }

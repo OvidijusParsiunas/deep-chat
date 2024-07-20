@@ -6,10 +6,14 @@ import {MessageElements} from './messages';
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
 
-  public static addMessage(messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string) {
-    messages.elementRef.appendChild(elements.outerContainer);
+  // prettier-ignore
+  public static addMessage(
+      messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
-    messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
+    if (!isTop) {
+      messages.elementRef.appendChild(elements.outerContainer);
+      messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
+    }
   }
 
   private static wrapInLink(element: HTMLElement, url: string, name?: string) {

@@ -7,20 +7,20 @@ import {MessageUtils} from './messageUtils';
 import {Messages} from './messages';
 
 export class FileMessages {
-  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement) {
+  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, isTop: boolean) {
     const imageElement = new Image();
     imageElement.src = imageData.src as string;
-    FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
+    if (!isTop) FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
     return FileMessageUtils.processContent('image', imageElement, imageElement.src, imageData.name);
   }
 
   // WORK - image still does not scroll down when loaded
-  private static async addNewImageMessage(messages: Messages, imageData: MessageFile, role: string) {
-    const image = FileMessages.createImage(imageData, messages.elementRef);
+  private static async addNewImageMessage(messages: Messages, imageData: MessageFile, role: string, isTop: boolean) {
+    const image = FileMessages.createImage(imageData, messages.elementRef, isTop);
     const elements = messages.createNewMessageElement('', role);
     elements.bubbleElement.appendChild(image);
     elements.bubbleElement.classList.add('image-message');
-    FileMessageUtils.addMessage(messages, elements, 'image', role);
+    FileMessageUtils.addMessage(messages, elements, 'image', role, isTop);
   }
 
   private static createAudioElement(audioData: MessageFile, role: string) {
@@ -37,12 +37,12 @@ export class FileMessages {
     return audioElement;
   }
 
-  private static addNewAudioMessage(messages: Messages, audioData: MessageFile, role: string) {
+  private static addNewAudioMessage(messages: Messages, audioData: MessageFile, role: string, isTop: boolean) {
     const audioElement = FileMessages.createAudioElement(audioData, role);
-    const elements = messages.createNewMessageElement('', role);
+    const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     elements.bubbleElement.appendChild(audioElement);
     elements.bubbleElement.classList.add('audio-message');
-    FileMessageUtils.addMessage(messages, elements, 'audio', role);
+    FileMessageUtils.addMessage(messages, elements, 'audio', role, isTop);
   }
 
   private static createAnyFile(imageData: MessageFile) {
@@ -61,24 +61,24 @@ export class FileMessages {
     return FileMessageUtils.processContent('any', contents, imageData.src, fileNameElement.textContent);
   }
 
-  private static addNewAnyFileMessage(messages: Messages, data: MessageFile, role: string) {
-    const elements = messages.createNewMessageElement('', role);
+  private static addNewAnyFileMessage(messages: Messages, data: MessageFile, role: string, isTop: boolean) {
+    const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     const anyFile = FileMessages.createAnyFile(data);
     elements.bubbleElement.classList.add('any-file-message-bubble');
     elements.bubbleElement.appendChild(anyFile);
-    FileMessageUtils.addMessage(messages, elements, 'file', role);
+    FileMessageUtils.addMessage(messages, elements, 'file', role, isTop);
   }
 
   // no overwrite previous message logic as it is complex to track which files are to be overwritten
-  public static addMessages(messages: Messages, files: MessageFiles, role: string) {
+  public static addMessages(messages: Messages, files: MessageFiles, role: string, isTop: boolean) {
     files.forEach((fileData) => {
       if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
       if (FileMessageUtils.isAudioFile(fileData)) {
-        FileMessages.addNewAudioMessage(messages, fileData, role);
+        FileMessages.addNewAudioMessage(messages, fileData, role, isTop);
       } else if (FileMessageUtils.isImageFile(fileData)) {
-        FileMessages.addNewImageMessage(messages, fileData, role);
+        FileMessages.addNewImageMessage(messages, fileData, role, isTop);
       } else {
-        FileMessages.addNewAnyFileMessage(messages, fileData, role);
+        FileMessages.addNewAnyFileMessage(messages, fileData, role, isTop);
       }
     });
   }

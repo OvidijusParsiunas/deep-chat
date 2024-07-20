@@ -50,17 +50,20 @@ export class MessagesBase {
     return container;
   }
 
-  public addNewTextMessage(text: string, role: string, overwrite?: Overwrite) {
+  public addNewTextMessage(text: string, role: string, overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
       const overwrittenElements = this.overwriteText(role, text, this.messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
     }
-    const messageElements = this.createAndAppendNewMessageElement(text, role);
+    const messageElements = isTop
+      ? this.createAndPrependNewMessageElement(text, role, isTop)
+      : this.createAndAppendNewMessageElement(text, role);
     messageElements.bubbleElement.classList.add('text-message');
     this.applyCustomStyles(messageElements, role, false);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
-    this.textElementsToText.push([messageElements, text]);
+    const textElements: [MessageElements, string] = [messageElements, text];
+    MessageUtils.updateRefArr(this.textElementsToText, textElements, isTop);
     return messageElements;
   }
 
@@ -81,14 +84,26 @@ export class MessagesBase {
     return messageElements;
   }
 
-  public createNewMessageElement(text: string, role: string) {
+  private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean) {
+    const messageElements = this.createNewMessageElement(text, role, isTop);
+    this.elementRef.insertBefore(messageElements.outerContainer, this.elementRef.firstChild);
+    return messageElements;
+  }
+
+  public createMessageElementsOnOrientation(text: string, role: string, isTop: boolean) {
+    return isTop
+      ? this.createAndPrependNewMessageElement(text, role, isTop)
+      : this.createNewMessageElement(text, role, isTop);
+  }
+
+  public createNewMessageElement(text: string, role: string, isTop = false) {
     this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
       this.messageElementRefs.pop();
     }
-    return this.createMessageElements(text, role);
+    return this.createMessageElements(text, role, isTop);
   }
 
   protected static isTemporaryElement(elements: MessageElements) {
@@ -98,12 +113,12 @@ export class MessagesBase {
     );
   }
 
-  protected createMessageElements(text: string, role: string) {
+  protected createMessageElements(text: string, role: string, isTop = false) {
     const messageElements = MessagesBase.createBaseElements();
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, role);
-    this.messageElementRefs.push(messageElements);
+    MessageUtils.updateRefArr(this.messageElementRefs, messageElements, isTop);
     return messageElements;
   }
 

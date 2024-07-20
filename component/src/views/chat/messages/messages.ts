@@ -13,11 +13,11 @@ import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroMessage} from '../../../types/messages';
 import {MessageStream} from './stream/messageStream';
-import {Legacy} from '../../../utils/legacy/legacy';
 import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {WebModel} from '../../../webModel/webModel';
 import {CustomStyle} from '../../../types/styles';
+import {MessagesHistory} from './messagesHistory';
 import {HTMLMessages} from './html/htmlMessages';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
@@ -32,6 +32,7 @@ export interface MessageElements {
   bubbleElement: HTMLElement;
 }
 
+// WORK - change setUp to setup
 export class Messages extends MessagesBase {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onClearMessages?: () => void;
@@ -54,7 +55,7 @@ export class Messages extends MessagesBase {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     }
     this.addIntroductoryMessage(deepChat, serviceIO);
-    this.populateHistory(deepChat);
+    new MessagesHistory(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
@@ -63,6 +64,7 @@ export class Messages extends MessagesBase {
     deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
       this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
     };
+    // interface - setUpMessagesForService
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
     if (demo) this.prepareDemo(demo);
     if (deepChat.textToSpeech) {
@@ -70,7 +72,6 @@ export class Messages extends MessagesBase {
         this.textToSpeech = processedConfig;
       });
     }
-    if (serviceIO.fetchHistory) this.fetchHistory(serviceIO.fetchHistory);
   }
 
   private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
@@ -93,6 +94,7 @@ export class Messages extends MessagesBase {
   }
 
   private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
+    // interface - getSetUpMessage
     const text = SetupMessages.getText(deepChat, serviceIO);
     if (text) {
       const elements = this.createAndAppendNewMessageElement(text, MessageUtils.AI_ROLE);
@@ -105,6 +107,7 @@ export class Messages extends MessagesBase {
   private addIntroductoryMessage(deepChat?: DeepChat, serviceIO?: ServiceIO) {
     if (deepChat?.shadowRoot) this._introMessage = deepChat.introMessage;
     let introMessage = this._introMessage;
+    // interface - introMessage
     if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
     if (introMessage) {
       let elements;
@@ -128,54 +131,34 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private populateHistory(deepChat: DeepChat) {
-    const history = deepChat.history || Legacy.processHistory(deepChat);
-    if (!history) return;
-    history.forEach((message) => {
-      Legacy.processHistoryFile(message);
-      this.addNewMessage(message, true);
-    });
-    // attempt to wait for the font file to be downloaded as otherwise text dimensions change after scroll
-    // the timeout is sometimes not long enough - see the following on how user's can fix it:
-    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
-  }
-
-  private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
-    const history = await ioFetchHistory();
-    history.forEach((message) => this.addAnyMessage(message, true));
-    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef), 0);
-  }
-
-  private addAnyMessage(message: ResponseI, isHistory = false) {
+  public addAnyMessage(message: ResponseI, isHistory = false, isTop = false) {
     if (message.error) {
-      this.addNewErrorMessage('service', message.error);
-    } else {
-      this.addNewMessage(message, isHistory);
+      return this.addNewErrorMessage('service', message.error);
     }
+    return this.addNewMessage(message, isHistory, isTop);
   }
 
   // this should not be activated by streamed messages
-  public addNewMessage(data: ResponseI, isHistory = false) {
+  public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
     const message = Messages.createMessageContent(data);
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (!data.ignoreText && message.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(message.text, message.role, overwrite);
+      this.addNewTextMessage(message.text, message.role, overwrite, isTop);
       if (!isHistory && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(message.text, this.textToSpeech);
       }
     }
     if (message.files && Array.isArray(message.files)) {
-      FileMessages.addMessages(this, message.files, message.role);
+      FileMessages.addMessages(this, message.files, message.role, isTop);
     }
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite);
+      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite, isTop);
       if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
-    if (this.isValidMessageContent(message)) {
+    if (this.isValidMessageContent(message) && !isTop) {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
     }
+    return message;
   }
 
   private isValidMessageContent(messageContent: MessageContentI) {

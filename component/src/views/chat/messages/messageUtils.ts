@@ -102,4 +102,12 @@ export class MessageUtils {
     if (avatars) Avatar.hide(innerContainer);
     if (names) Name.hide(innerContainer);
   }
+
+  public static updateRefArr<T>(arr: Array<T>, item: T, isTop: boolean) {
+    if (isTop) {
+      arr.unshift(item);
+    } else {
+      arr.push(item);
+    }
+  }
 }
