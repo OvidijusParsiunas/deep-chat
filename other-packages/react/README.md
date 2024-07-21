@@ -27,7 +27,7 @@
 npm install deep-chat-react
 ```
 
-To test the component - simply add the following to your markup:
+Simply add the following to your markup:
 
 ```
 <DeepChat></DeepChat>

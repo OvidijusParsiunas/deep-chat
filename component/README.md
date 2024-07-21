@@ -33,7 +33,7 @@ If using React, install the [following](https://www.npmjs.com/package/deep-chat-
 npm install deep-chat-react
 ```
 
-To test the component - simply add the following to your markup:
+Simply add the following to your markup:
 
 ```
 <deep-chat></deep-chat>
