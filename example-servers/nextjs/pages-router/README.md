@@ -12,10 +12,12 @@ If you are downloading the project via `git clone` - we advise you to use shallo
 git clone --depth 1 https://github.com/OvidijusParsiunas/deep-chat.git
 ```
 
-Navigate to this directory and run the following command to download the dependencies:
+Navigate to this directory and run the following commands to download and build the dependencies:
 
 ```
 npm install
+
+npm build
 ```
 
 Run the project:
