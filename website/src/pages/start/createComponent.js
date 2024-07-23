@@ -44,7 +44,7 @@ function Logos(props) {
         </a>
       </div>
       <div className="start-page-logo start-panel-logo">
-        <a href="https://stackblitz.com/edit/deep-chat-angular?file=src%2Fapp%2Fapp.component.ts" target="_blank">
+        <a href="https://stackblitz.com/edit/stackblitz-starters-7gygrp?file=src%2Fapp%2Fapp.component.ts" target="_blank">
           <img src={angularLogo} width="50" style={{paddingTop: 1}} />
         </a>
       </div>
