@@ -1,5 +1,6 @@
 import {HistoryMessage, LoadHistory} from '../../../types/history';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {MessageContentI} from '../../../types/messagesInternal';
 import {MessageContent} from '../../../types/messages';
 import {ServiceIO} from '../../../services/serviceIO';
 import {Legacy} from '../../../utils/legacy/legacy';
@@ -22,7 +23,7 @@ export class MessagesHistory {
     const messages = await loadHistory(0);
     this._isComplete = !messages.find((message) => !message);
     const messageContent = messages.filter((message) => !!message);
-    this.populateHistory(deepChat, messageContent);
+    this.populateHistory(deepChat, messageContent as MessageContent[]);
   }
 
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
@@ -42,7 +43,7 @@ export class MessagesHistory {
       })
       .filter((message) => !!message)
       .reverse()
-      .forEach((messageContent) => this._messages.sendClientUpdate(messageContent, true));
+      .forEach((message) => this._messages.sendClientUpdate(message as MessageContentI, true));
     if (firstMessageEl) this._messages.elementRef.scrollTop = currentScrollTop + firstMessageEl.offsetTop;
     this._isLoading = false;
   }

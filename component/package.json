@@ -1,6 +1,6 @@
 {
   "name": "deep-chat",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Customizable chat component for AI APIs",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
@@ -61,7 +61,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "~5.3.3",
     "vite": "^5.1.5",
-    "vite-plugin-dts": "^3.7.3"
+    "vite-plugin-dts": "^2.3.0"
   },
   "customElements": "custom-elements.json",
   "files": [

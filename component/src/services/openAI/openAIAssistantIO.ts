@@ -86,7 +86,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     try {
       const threadMessages = await this.getThreadMessages(this.sessionId as string, true);
       this.deepChat.disableSubmitButton(false);
-      return threadMessages.reverse();
+      return threadMessages;
     } catch (e) {
       return [{error: 'failed to fetch thread history'}];
     }
@@ -256,7 +256,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
-    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${thread_id}/messages`;
+    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${thread_id}/messages?order=desc`;
     let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
