@@ -74,7 +74,7 @@ export class SpeechToText extends MicrophoneButton {
 
   private buttonClick(textInput: TextInputEl, isInputEnabled: boolean, serviceName: string, config?: ProcessedConfig) {
     const events = config?.events;
-    textInput.removeTextIfPlaceholder();
+    textInput.removePlaceholderStyle();
     SpeechToElement.toggle(serviceName as 'webspeech', {
       insertInCursorLocation: false,
       element: isInputEnabled ? textInput.inputElementRef : undefined,

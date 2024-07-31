@@ -69,6 +69,8 @@
   user-select: none;
 }
 
-.text-input-placeholder {
+[contenteditable='true']:empty:before {
+  content: attr(deep-chat-placeholder-text);
+  pointer-events: none !important;
   color: grey;
 }

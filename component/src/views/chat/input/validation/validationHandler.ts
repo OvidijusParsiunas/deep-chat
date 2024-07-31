@@ -25,8 +25,7 @@ export class ValidationHandler {
   // prettier-ignore
   private static async useValidationFunc(validation: ValidateFunc,
       textInput: TextInputEl, fileAttachments: FileAttachments, submitButton: SubmitButton) {
-    const inputElement = textInput.inputElementRef;
-    const text = inputElement.classList.contains(TextInputEl.PLACEHOLDER_TEXT_CLASS) ? '' : inputElement.textContent;
+    const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData.file);

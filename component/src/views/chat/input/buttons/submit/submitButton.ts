@@ -34,7 +34,7 @@ export class SubmitButton extends InputButton<Styles> {
   private static readonly DISABLED_CLASS = 'disabled-button';
   private readonly _serviceIO: ServiceIO;
   private readonly _messages: Messages;
-  private readonly _inputElementRef: HTMLElement;
+  private readonly _textInput: TextInputEl;
   private readonly _abortStream: AbortController;
   private readonly _stopClicked: Signals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
@@ -47,12 +47,12 @@ export class SubmitButton extends InputButton<Styles> {
   readonly status = {requestInProgress: false, loadingActive: false};
 
   // prettier-ignore
-  constructor(deepChat: DeepChat, inputElementRef: HTMLElement, messages: Messages, serviceIO: ServiceIO,
+  constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
-    this._inputElementRef = inputElementRef;
+    this._textInput = textInput;
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
@@ -167,11 +167,11 @@ export class SubmitButton extends InputButton<Styles> {
   public async submitFromInput() {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
-    if (this._inputElementRef.classList.contains(TextInputEl.PLACEHOLDER_TEXT_CLASS)) {
+    if (this._textInput.isTextInputEmpty()) {
       this.attemptSubmit({text: '', files: uploadedFilesData});
     } else {
       // not using textContent as it ignores new line spaces
-      const inputText = this._inputElementRef.innerText.trim() as string;
+      const inputText = this._textInput.inputElementRef.innerText.trim() as string;
       this.attemptSubmit({text: inputText, files: uploadedFilesData});
     }
   }
@@ -194,7 +194,6 @@ export class SubmitButton extends InputButton<Styles> {
     this.changeToLoadingIcon();
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    TextInputEl.clear(this._inputElementRef); // when uploading a file and placeholder text present
     const filesData = content.files?.map((fileData) => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
