@@ -69,8 +69,11 @@
   user-select: none;
 }
 
-[contenteditable='true']:empty:before {
+[contenteditable]:empty:before {
   content: attr(deep-chat-placeholder-text);
-  pointer-events: none !important;
+  pointer-events: none;
+}
+
+[contenteditable][textcolor]:empty:before {
   color: grey;
 }

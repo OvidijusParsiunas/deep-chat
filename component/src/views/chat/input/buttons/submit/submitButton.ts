@@ -194,6 +194,7 @@ export class SubmitButton extends InputButton<Styles> {
     this.changeToLoadingIcon();
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
+    this._textInput.clear();
     const filesData = content.files?.map((fileData) => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
