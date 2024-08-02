@@ -1,7 +1,7 @@
 import {InterfacesUnion} from './utilityTypes';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
-export type OpenAITextToSpeech = {
+export type AzureOpenAITextToSpeech = {
   model?: string;
   voice?: string;
   speed?: number;
@@ -10,7 +10,7 @@ export type OpenAITextToSpeech = {
 // https://platform.openai.com/docs/guides/speech-to-text
 // https://platform.openai.com/docs/api-reference/audio/createTranscription
 // https://platform.openai.com/docs/api-reference/audio/create
-export type OpenAISpeechToText = {
+export type AzureOpenAISpeechToText = {
   model?: string;
   temperature?: number;
   language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
@@ -18,7 +18,7 @@ export type OpenAISpeechToText = {
 };
 
 // https://platform.openai.com/docs/api-reference/images
-export interface OpenAIImagesDalle2 {
+export interface AzureOpenAIImagesDalle2 {
   model?: 'dall-e-2';
   n?: number;
   size?: '256x256' | '512x512' | '1024x1024';
@@ -27,7 +27,7 @@ export interface OpenAIImagesDalle2 {
 }
 
 // https://platform.openai.com/docs/api-reference/images
-export interface OpenAIImagesDalle3 {
+export interface AzureOpenAIImagesDalle3 {
   model: 'dall-e-3';
   quality?: string;
   size?: '1024x1024' | '1792x1024' | '1024x1792';
@@ -43,7 +43,7 @@ export type AssistantFunctionHandlerResponse = string[] | Promise<string>[];
 export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
 
 // https://platform.openai.com/docs/api-reference/assistants/createAssistant
-export interface OpenAINewAssistant {
+export interface AzureOpenAINewAssistant {
   model?: string;
   name?: string;
   description?: string;
@@ -66,11 +66,11 @@ export interface OpenAINewAssistant {
 export type FileToolTypes = 'code_interpreter' | 'file_search' | 'images';
 
 // https://platform.openai.com/docs/api-reference/assistants
-export interface OpenAIAssistant {
+export interface AzureOpenAIAssistant {
   assistant_id?: string;
   thread_id?: string;
   load_thread_history?: boolean;
-  new_assistant?: OpenAINewAssistant;
+  new_assistant?: AzureOpenAINewAssistant;
   // if image is uploaded and this is undefined, it will default to images
   // images can be used without a file tool type
   files_tool_type?: FileToolTypes | ((fileNames: string[]) => FileToolTypes);
@@ -83,7 +83,7 @@ export type ChatFunctionHandler = (
   functionsDetails: FunctionsDetails
 ) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse>;
 
-export interface OpenAIChatFunctions {
+export interface AzureOpenAIChatFunctions {
   // parameters use the JSON Schema type
   tools?: {type: 'function' | 'object'; function: {name: string; description?: string; parameters: object}}[];
   tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
@@ -91,25 +91,21 @@ export interface OpenAIChatFunctions {
 }
 
 // https://platform.openai.com/docs/api-reference/chat
-export type OpenAIChat = {
+export type AzureOpenAIChat = {
   system_prompt?: string;
   model?: string;
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
-} & OpenAIChatFunctions;
+} & AzureOpenAIChatFunctions;
 
-export type AzureOpenAIConfig = {
+export interface AzureOpenAI {
   endpoint: string;
   version: string;
   deploymentId?: string;
-}
-
-export interface OpenAI {
-  chat?: true | OpenAIChat;
-  azureConfig?: AzureOpenAIConfig;
-  assistant?: true | OpenAIAssistant;
-  images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
-  textToSpeech?: true | OpenAITextToSpeech;
-  speechToText?: true | OpenAISpeechToText;
+  chat?: true | AzureOpenAIChat;
+  assistant?: true | AzureOpenAIAssistant;
+  images?: true | AzureOpenAIImagesDalle2 | AzureOpenAIImagesDalle3;
+  textToSpeech?: true | AzureOpenAITextToSpeech;
+  speechToText?: true | AzureOpenAISpeechToText;
 }
