@@ -8,6 +8,7 @@ import {CustomStyle} from '../../../../types/styles';
 import {TextInputEvents} from './textInputEvents';
 import {DeepChat} from '../../../../deepChat';
 import {PasteUtils} from './pasteUtils';
+import {FocusUtils} from './focusUtils';
 
 // TO-DO state for focused (like input)
 export class TextInputEl {
@@ -23,7 +24,7 @@ export class TextInputEl {
     this._config = processedConfig;
     this.inputElementRef = this.createInputElement();
     this.elementRef.appendChild(this.inputElementRef);
-    deepChat.setPlaceholderText = this.setPlaceholderText.bind(this, deepChat);
+    deepChat.setPlaceholderText = this.setPlaceholderText.bind(this);
     deepChat.setPlaceholderText(this._config.placeholder?.text || 'Ask me anything!');
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
@@ -63,6 +64,7 @@ export class TextInputEl {
     if (!this.inputElementRef.classList.contains('text-input-disabled')) {
       Object.assign(this.inputElementRef.style, this._config.placeholder?.style);
       this.inputElementRef.textContent = '';
+      FocusUtils.focusEndOfInput(this.inputElementRef);
     }
     if (Browser.IS_CHROMIUM) window.scrollTo({top: scrollY});
   }
@@ -81,6 +83,7 @@ export class TextInputEl {
     }
     Object.assign(inputElement.style, this._config.styles?.text);
     Object.assign(inputElement.style, this._config.placeholder?.style);
+    if (!this._config.placeholder?.style?.color) inputElement.setAttribute('textcolor', '');
     return inputElement;
   }
 
@@ -122,12 +125,8 @@ export class TextInputEl {
     }
   }
 
-  private setPlaceholderText(deepChat: DeepChat, text: string) {
-    if (document.activeElement === deepChat) return;
-    if (this.isTextInputEmpty()) {
-      this.inputElementRef.setAttribute('deep-chat-placeholder-text', text);
-      if (!this._config.placeholder?.style?.color) this.inputElementRef.setAttribute('textcolor', '');
-    }
+  private setPlaceholderText(text: string) {
+    this.inputElementRef.setAttribute('deep-chat-placeholder-text', text);
   }
 
   public isTextInputEmpty() {
