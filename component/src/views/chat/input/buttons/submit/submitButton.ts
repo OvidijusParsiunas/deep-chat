@@ -106,7 +106,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private static createLoadingIconElement() {
     const loadingIconElement = document.createElement('div');
-    loadingIconElement.classList.add('dots-jumping');
+    loadingIconElement.classList.add('loading-submit-button');
     return loadingIconElement;
   }
 

@@ -3,7 +3,7 @@ import {ErrorView} from '../error/errorView';
 
 export class ValidateKeyPropertyView {
   private static onLoad(startElement: HTMLElement) {
-    startElement.innerHTML = '<div id="large-loading-ring"></div>';
+    startElement.innerHTML = '<div id="loading-validate-key-property"></div>';
   }
 
   private static createElements() {

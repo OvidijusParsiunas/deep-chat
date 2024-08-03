@@ -1,0 +1,49 @@
+.loading-history-message-full-view {
+  position: absolute;
+  height: 70%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.loading-history-message-small {
+  scale: 0.6;
+  height: 20px;
+  margin-bottom: 30px;
+}
+
+.loading-history-message {
+  margin-top: 0px;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: unset;
+}
+
+.loading-history {
+  width: 70px;
+}
+
+.loading-history div {
+  position: absolute;
+  width: 57px;
+  height: 57px;
+  margin: 7px;
+  border: 5px solid;
+  border-radius: 50%;
+  animation: loading-spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: rgb(219, 219, 219) transparent transparent transparent;
+}
+
+.loading-history div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.loading-history div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.loading-history div:nth-child(3) {
+  animation-delay: -0.15s;
+}

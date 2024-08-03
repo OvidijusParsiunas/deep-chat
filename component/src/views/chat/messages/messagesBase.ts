@@ -5,6 +5,7 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
@@ -99,6 +100,7 @@ export class MessagesBase {
   public createNewMessageElement(text: string, role: string, isTop = false) {
     this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
+    LoadingHistory.changeFullViewToSmall(lastMessageElements);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
       this.messageElementRefs.pop();
@@ -113,7 +115,7 @@ export class MessagesBase {
     );
   }
 
-  protected createMessageElements(text: string, role: string, isTop = false) {
+  public createMessageElements(text: string, role: string, isTop = false) {
     const messageElements = MessagesBase.createBaseElements();
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
@@ -164,6 +166,12 @@ export class MessagesBase {
     if (!text && !files && !html) messageContent.text = '';
     if (_sessionId) messageContent._sessionId = _sessionId;
     return messageContent;
+  }
+
+  public removeMessage(messageElements: MessageElements) {
+    messageElements.outerContainer.remove();
+    const messageElementsIndex = this.messageElementRefs.findIndex((elRefs) => elRefs === messageElements);
+    this.messageElementRefs.splice(messageElementsIndex, 1);
   }
 
   public removeLastMessage() {

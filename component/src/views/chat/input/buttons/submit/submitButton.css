@@ -19,3 +19,64 @@
   margin-right: 0.3em;
   margin-left: 0.3em;
 }
+
+.loading-submit-button {
+  position: relative;
+  left: calc(-9990px + 0.275em);
+  width: 0.22em;
+  height: 0.22em;
+  border-radius: 5px;
+  background-color: #848484;
+  color: #848484;
+  box-shadow:
+    9990px 0 0 0 #848484,
+    calc(9990px + 0.44em) 0 0 0 #848484,
+    calc(9990px + 0.8em) 0 0 0 #848484;
+  animation: loading-submit-button 1.5s infinite linear;
+  bottom: -0.75em;
+}
+
+@keyframes loading-submit-button {
+  0% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+  16.667% {
+    box-shadow:
+      9990px -6px 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+  33.333% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+  50% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) -6px 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+  66.667% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+  83.333% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) -6px 0 0 #848484;
+  }
+  100% {
+    box-shadow:
+      9990px 0 0 0 #848484,
+      calc(9990px + 0.44em) 0 0 0 #848484,
+      calc(9990px + 0.8em) 0 0 0 #848484;
+  }
+}

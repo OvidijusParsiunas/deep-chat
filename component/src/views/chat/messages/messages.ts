@@ -8,6 +8,7 @@ import {FireEvents} from '../../../utils/events/fireEvents';
 import {ErrorMessageOverrides} from '../../../types/error';
 import {ResponseI} from '../../../types/responseInternal';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
+import {LoadingHistory} from './history/loadingHistory';
 import {ErrorResp} from '../../../types/errorInternal';
 import {Demo, DemoResponse} from '../../../types/demo';
 import {MessageStyleUtils} from './messageStyleUtils';
@@ -249,7 +250,7 @@ export class Messages extends MessagesBase {
     const {outerContainer, bubbleElement} = messageElements;
     bubbleElement.classList.add('loading-message-text');
     const dotsElement = document.createElement('div');
-    dotsElement.classList.add('dots-flashing');
+    dotsElement.classList.add('loading-message-bubble');
     bubbleElement.appendChild(dotsElement);
     this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading);
     LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
@@ -291,7 +292,11 @@ export class Messages extends MessagesBase {
     const retainedElements: MessageElements[] = [];
     this.messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
-      if (bubbleClasslist.contains('loading-message-text') || bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)) {
+      if (
+        bubbleClasslist.contains('loading-message-text') ||
+        bubbleClasslist.contains(LoadingHistory.CLASS) ||
+        bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)
+      ) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();

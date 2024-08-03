@@ -1,0 +1,40 @@
+#messages {
+  overflow: auto;
+}
+
+.outer-message-container:last-child {
+  margin-bottom: 5px;
+}
+
+.inner-message-container {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(97.5% - 24px);
+  max-width: 100%;
+}
+
+.message-bubble {
+  margin-top: 10px;
+  word-wrap: break-word;
+  width: fit-content;
+  max-width: 60%;
+  border-radius: 10px;
+  padding: 0.42em 0.55em;
+  height: fit-content;
+  line-height: 1.26em;
+}
+
+.user-message-text {
+  color: white;
+  background-color: #0084ff;
+  margin-right: 0px;
+  margin-left: auto;
+}
+
+.ai-message-text {
+  color: black;
+  background-color: #e4e6eb;
+  margin-left: 0px;
+  margin-right: auto;
+}

@@ -112,13 +112,13 @@
   margin-top: 16px;
 }
 
-#loading-ring {
+#loading-key {
   display: inline-block;
   width: 16px;
   height: 16px;
 }
 
-#loading-ring:after {
+#loading-key:after {
   content: ' ';
   display: block;
   width: 11px;
@@ -127,14 +127,5 @@
   border-radius: 50%;
   border: 2px solid #0084ff;
   border-color: #0084ff transparent #0084ff transparent;
-  animation: loading-ring 1.2s linear infinite;
-}
-
-@keyframes loading-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  animation: loading-spinner 1.2s linear infinite;
 }

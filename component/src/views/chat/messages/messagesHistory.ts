@@ -1,6 +1,7 @@
 import {HistoryMessage, LoadHistory} from '../../../types/history';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../types/messagesInternal';
+import {LoadingHistory} from './history/loadingHistory';
 import {MessageContent} from '../../../types/messages';
 import {ServiceIO} from '../../../services/serviceIO';
 import {Legacy} from '../../../utils/legacy/legacy';
@@ -10,26 +11,27 @@ import {Messages} from './messages';
 export class MessagesHistory {
   private readonly _messages: Messages;
   private _isLoading = false;
-  private _isComplete = false;
+  private _isPaginationComplete = false;
+  private _index = 0;
 
   constructor(deepChat: DeepChat, messages: Messages, serviceIO: ServiceIO) {
     this._messages = messages;
-    this.populateHistory(deepChat);
     if (serviceIO.fetchHistory) this.fetchHistory(serviceIO.fetchHistory); // direct service
-    if (deepChat.loadHistory) this.setupLoadHistory(deepChat, deepChat.loadHistory); // custom service
+    if (deepChat.loadHistory) this.setupLoadHistoryOnScroll(deepChat.loadHistory); // custom service
+    this.setupInitialHistory(deepChat);
   }
 
-  private async loadInitialHistory(deepChat: DeepChat, loadHistory: LoadHistory) {
-    const messages = await loadHistory(0);
-    this._isComplete = !messages.find((message) => !message);
-    const messageContent = messages.filter((message) => !!message);
-    this.populateHistory(deepChat, messageContent as MessageContent[]);
+  private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
+    const history = await ioFetchHistory();
+    history.forEach((message) => this._messages.addAnyMessage(message, true));
+    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
+    setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
   }
 
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
-    this._isLoading = true;
     const firstMessageEl = this._messages.messageElementRefs[0]?.outerContainer;
     const currentScrollTop = this._messages.elementRef.scrollTop;
+    // WORK - don't add at start if intro message
     historyMessages
       ?.reverse()
       .map((message) => {
@@ -38,44 +40,61 @@ export class MessagesHistory {
           if (messageContent) this._messages.messages.unshift(messageContent);
           return messageContent;
         } else {
-          this._isComplete = true;
+          this._isPaginationComplete = true;
         }
       })
       .filter((message) => !!message)
       .reverse()
       .forEach((message) => this._messages.sendClientUpdate(message as MessageContentI, true));
     if (firstMessageEl) this._messages.elementRef.scrollTop = currentScrollTop + firstMessageEl.offsetTop;
-    this._isLoading = false;
   }
 
-  private async setupLoadHistory(deepChat: DeepChat, loadHistory: LoadHistory) {
+  private async setupLoadHistoryOnScroll(loadHistory: LoadHistory) {
     this._messages.elementRef.onscroll = async () => {
-      if (!this._isLoading && !this._isComplete && this._messages.elementRef.scrollTop === 0) {
-        const messages = await loadHistory(0);
+      if (!this._isLoading && !this._isPaginationComplete && this._messages.elementRef.scrollTop === 0) {
+        this._isLoading = true;
+        const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages, false);
+        const messages = await loadHistory(this._index++);
+        this._messages.removeMessage(loadingElements);
         this.processLoadedHistory(messages);
+        this._isLoading = false;
       }
     };
-    const history = deepChat.history || Legacy.processHistory(deepChat);
-    if (!history) this.loadInitialHistory(deepChat, loadHistory);
   }
 
-  private populateHistory(deepChat: DeepChat, historyArg?: MessageContent[]) {
-    const history = deepChat.history || Legacy.processHistory(deepChat) || historyArg;
-    if (!history) return;
+  private populateInitialHistory(history: MessageContent[]) {
     history.forEach((message) => {
       Legacy.processHistoryFile(message);
       this._messages.addNewMessage(message, true);
     });
-    // attempt to wait for the font file to be downloaded as otherwise text dimensions change after scroll
-    // the timeout is sometimes not long enough - see the following on how users can fix it:
-    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-    setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
   }
 
-  private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
-    const history = await ioFetchHistory();
-    history.forEach((message) => this._messages.addAnyMessage(message, true));
-    // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-    setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+  private async loadInitialHistory(loadHistory: LoadHistory) {
+    this._isLoading = true;
+    const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages);
+    // WORK - error handling
+    const messages = await loadHistory(this._index++);
+    const scrollTop = this._messages.elementRef.scrollTop;
+    this._messages.removeMessage(loadingElements);
+    this._isPaginationComplete = !!messages.find((message) => !message);
+    const messageContent = messages.filter((message) => !!message);
+    this.processLoadedHistory(messageContent as MessageContent[]);
+    // force scroll to bottom if user has not scrolled anywhere themselves, otherwise keep at current location
+    if (scrollTop === 0) {
+      // https://github.com/OvidijusParsiunas/deep-chat/issues/84
+      setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+    }
+    this._isLoading = false;
+  }
+
+  private async setupInitialHistory(deepChat: DeepChat) {
+    if (deepChat.loadHistory) {
+      this.loadInitialHistory(deepChat.loadHistory);
+    }
+    const history = deepChat.history || Legacy.processHistory(deepChat);
+    if (history) {
+      this.populateInitialHistory(history);
+      this._index += 1;
+    }
   }
 }

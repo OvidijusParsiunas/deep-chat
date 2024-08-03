@@ -56,7 +56,7 @@ export class InsertKeyView {
 
   private static onLoad(inputEl: HTMLInputElement, startEl: HTMLElement) {
     inputEl.classList.add('loading');
-    startEl.innerHTML = '<div id="loading-ring"></div>';
+    startEl.innerHTML = '<div id="loading-key"></div>';
   }
 
   // prettier-ignore
