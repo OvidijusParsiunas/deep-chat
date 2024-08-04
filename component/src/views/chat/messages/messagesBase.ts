@@ -100,7 +100,7 @@ export class MessagesBase {
   public createNewMessageElement(text: string, role: string, isTop = false) {
     this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
-    LoadingHistory.changeFullViewToSmall(lastMessageElements);
+    LoadingHistory.changeFullViewToSmall(this, lastMessageElements);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       lastMessageElements.outerContainer.remove();
       this.messageElementRefs.pop();

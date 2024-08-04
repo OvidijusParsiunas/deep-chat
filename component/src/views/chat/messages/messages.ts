@@ -1,7 +1,7 @@
 import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
-import {LoadingMessageDotsStyle} from './loadingMessageDotsStyle';
+import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
@@ -252,8 +252,8 @@ export class Messages extends MessagesBase {
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-bubble');
     bubbleElement.appendChild(dotsElement);
-    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading);
-    LoadingMessageDotsStyle.set(bubbleElement, this.messageStyles);
+    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message);
+    LoadingStyle.setDots(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
     ElementUtils.scrollToBottom(this.elementRef);
   }

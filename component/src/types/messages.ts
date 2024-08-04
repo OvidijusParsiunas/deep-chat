@@ -15,6 +15,16 @@ export type MessageRoleStyles = {
   ai?: MessageElementsStyles;
 } & {[role: string]: MessageElementsStyles};
 
+export interface LoadingHistoryStyles {
+  full?: {styles?: MessageElementsStyles; element?: HTMLElement};
+  small?: {styles?: MessageElementsStyles; element?: HTMLElement};
+}
+
+export interface LoadingStyles {
+  message?: MessageElementsStyles;
+  history?: LoadingHistoryStyles;
+}
+
 export interface MessageStyles {
   default?: MessageRoleStyles;
   image?: MessageRoleStyles;
@@ -22,7 +32,7 @@ export interface MessageStyles {
   file?: MessageRoleStyles;
   html?: MessageRoleStyles;
   intro?: MessageElementsStyles;
-  loading?: MessageElementsStyles;
+  loading?: LoadingStyles;
   error?: MessageElementsStyles;
 }
 

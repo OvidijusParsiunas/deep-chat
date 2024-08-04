@@ -27,13 +27,13 @@
 
 .loading-history div {
   position: absolute;
-  width: 57px;
-  height: 57px;
-  margin: 7px;
-  border: 5px solid;
+  width: var(--loading-history-width);
+  height: var(--loading-history-height);
+  margin: var(--loading-history-margin);
+  border: var(--loading-history-border) solid;
   border-radius: 50%;
   animation: loading-spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: rgb(219, 219, 219) transparent transparent transparent;
+  border-color: var(--loading-history-color) transparent transparent transparent;
 }
 
 .loading-history div:nth-child(1) {

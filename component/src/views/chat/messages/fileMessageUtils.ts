@@ -9,6 +9,7 @@ export class FileMessageUtils {
   // prettier-ignore
   public static addMessage(
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
+    if (styles === 'loading') return;
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
     if (!isTop) {
       messages.elementRef.appendChild(elements.outerContainer);
