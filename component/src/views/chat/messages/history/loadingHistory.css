@@ -7,9 +7,12 @@
 }
 
 .loading-history-message-small {
-  scale: 0.6;
   height: 20px;
   margin-bottom: 30px;
+}
+
+.loading-history-message-small > div > div {
+  scale: 0.6;
 }
 
 .loading-history-message {

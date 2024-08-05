@@ -18,7 +18,6 @@ import {IntroPanel} from '../introPanel/introPanel';
 import {FileMessageUtils} from './fileMessageUtils';
 import {WebModel} from '../../../webModel/webModel';
 import {CustomStyle} from '../../../types/styles';
-import {MessagesHistory} from './messagesHistory';
 import {HTMLMessages} from './html/htmlMessages';
 import {SetupMessages} from './setupMessages';
 import {FileMessages} from './fileMessages';
@@ -26,6 +25,7 @@ import {MessageUtils} from './messageUtils';
 import {MessagesBase} from './messagesBase';
 import {DeepChat} from '../../../deepChat';
 import {HTMLUtils} from './html/htmlUtils';
+import {History} from './history/history';
 
 export interface MessageElements {
   outerContainer: HTMLElement;
@@ -56,7 +56,7 @@ export class Messages extends MessagesBase {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     }
     this.addIntroductoryMessage(deepChat, serviceIO);
-    new MessagesHistory(deepChat, this, serviceIO);
+    new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);

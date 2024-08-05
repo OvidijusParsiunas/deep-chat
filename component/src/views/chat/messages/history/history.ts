@@ -1,14 +1,14 @@
-import {HistoryMessage, LoadHistory} from '../../../types/history';
-import {ElementUtils} from '../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../types/messagesInternal';
-import {LoadingHistory} from './history/loadingHistory';
-import {MessageContent} from '../../../types/messages';
-import {ServiceIO} from '../../../services/serviceIO';
-import {Legacy} from '../../../utils/legacy/legacy';
-import {DeepChat} from '../../../deepChat';
-import {Messages} from './messages';
+import {HistoryMessage, LoadHistory} from '../../../../types/history';
+import {ElementUtils} from '../../../../utils/element/elementUtils';
+import {MessageContentI} from '../../../../types/messagesInternal';
+import {MessageContent} from '../../../../types/messages';
+import {ServiceIO} from '../../../../services/serviceIO';
+import {Legacy} from '../../../../utils/legacy/legacy';
+import {LoadingHistory} from './loadingHistory';
+import {DeepChat} from '../../../../deepChat';
+import {Messages} from '../messages';
 
-export class MessagesHistory {
+export class History {
   private readonly _messages: Messages;
   private _isLoading = false;
   private _isPaginationComplete = false;
