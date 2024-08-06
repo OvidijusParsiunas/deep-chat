@@ -87,14 +87,20 @@ export class MessagesBase {
 
   private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean) {
     const messageElements = this.createNewMessageElement(text, role, isTop);
-    this.elementRef.insertBefore(messageElements.outerContainer, this.elementRef.firstChild);
+    if (isTop && (this.elementRef.firstChild as HTMLElement)?.classList.contains('deep-chat-intro')) {
+      (this.elementRef.firstChild as HTMLElement).insertAdjacentElement('afterend', messageElements.outerContainer);
+      // swapping to place intro refs into correct position
+      const introRefs = this.messageElementRefs[0];
+      this.messageElementRefs[0] = this.messageElementRefs[1];
+      this.messageElementRefs[1] = introRefs;
+    } else {
+      this.elementRef.insertBefore(messageElements.outerContainer, this.elementRef.firstChild);
+    }
     return messageElements;
   }
 
   public createMessageElementsOnOrientation(text: string, role: string, isTop: boolean) {
-    return isTop
-      ? this.createAndPrependNewMessageElement(text, role, isTop)
-      : this.createNewMessageElement(text, role, isTop);
+    return isTop ? this.createAndPrependNewMessageElement(text, role, true) : this.createNewMessageElement(text, role);
   }
 
   public createNewMessageElement(text: string, role: string, isTop = false) {
