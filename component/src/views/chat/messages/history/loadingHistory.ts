@@ -19,11 +19,11 @@ export class LoadingHistory {
     return loadingRingElement;
   }
 
-  private static apply(messages: MessagesBase, messageElements: MessageElements, styles: MessageElementsStyles) {
-    if (styles.bubble) {
-      LoadingStyle.setRing(messageElements.bubbleElement, styles.bubble);
+  private static apply(messages: MessagesBase, messageElements: MessageElements, styles?: MessageElementsStyles) {
+    LoadingStyle.setRing(messageElements.bubbleElement, styles?.bubble);
+    if (styles?.bubble) {
       styles = JSON.parse(JSON.stringify(styles)) as MessageElementsStyles;
-      delete styles.bubble;
+      delete styles.bubble; // removing bubble styling as above uses it
     }
     messages.applyCustomStyles(messageElements, 'history', false, styles);
   }
@@ -39,7 +39,7 @@ export class LoadingHistory {
     const styles = isInitial
       ? messages.messageStyles?.loading?.history?.full?.styles
       : messages.messageStyles?.loading?.history?.small?.styles;
-    if (styles) LoadingHistory.apply(messages, messageElements, styles);
+    LoadingHistory.apply(messages, messageElements, styles);
     messages.elementRef.prepend(outerContainer);
     return messageElements;
   }

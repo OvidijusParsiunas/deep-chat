@@ -24,8 +24,8 @@ export class LoadingStyle {
     }
   }
 
-  public static setRing(bubbleElement: HTMLElement, style: CustomStyle) {
-    const {color, width, height, margin, border} = style;
+  public static setRing(bubbleElement: HTMLElement, style?: CustomStyle) {
+    const {color, width, height, margin, border} = style || {};
     if (color) {
       const hexColor = LoadingStyle.colorToHex(color);
       bubbleElement.style.setProperty('--loading-history-color', hexColor);

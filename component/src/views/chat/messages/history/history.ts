@@ -22,7 +22,9 @@ export class History {
   }
 
   private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
+    const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages);
     const history = await ioFetchHistory();
+    this._messages.removeMessage(loadingElements);
     history.forEach((message) => this._messages.addAnyMessage(message, true));
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
