@@ -1,4 +1,5 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {History} from '../../views/chat/messages/history/history';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
@@ -53,6 +54,7 @@ export class BaseServiceIO implements ServiceIO {
     if (this.demo) this.connectSettings.url ??= Demo.URL;
     if (this.connectSettings.websocket) Websocket.setup(this);
     this.stream = this.deepChat.connect?.stream || Legacy.checkForStream(this.deepChat);
+    if (deepChat.loadHistory) History.addErrorPrefix(this);
   }
 
   private static canSendMessage(text?: string, files?: File[], isProgrammatic?: boolean) {

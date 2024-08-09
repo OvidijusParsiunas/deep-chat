@@ -182,20 +182,19 @@ export class Messages extends MessagesBase {
   }
 
   // prettier-ignore
-  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: ErrorResp) {
+  public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: ErrorResp, isTop = false) {
     this.removeMessageOnError();
-    const messageElements = Messages.createBaseElements();
-    const {outerContainer, bubbleElement} = messageElements;
-    bubbleElement.classList.add('error-message-text');
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
+    const messageElements = this.createMessageElementsOnOrientation(text, '', isTop);
+    const {bubbleElement, outerContainer} = messageElements;
+    bubbleElement.classList.add('error-message-text');
     this.renderText(bubbleElement, text);
     const fontElementStyles = MessageStyleUtils.extractParticularSharedStyles(['fontSize', 'fontFamily'],
       this.messageStyles?.default);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
-    this.elementRef.appendChild(outerContainer);
-    ElementUtils.scrollToBottom(this.elementRef);
+    if (!isTop) this.elementRef.appendChild(outerContainer);
     if (this.textToSpeech) TextToSpeech.speak(text, this.textToSpeech);
     this._onError?.(text);
   }

@@ -3,6 +3,7 @@ import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
+import {History} from '../../views/chat/messages/history/history';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -44,7 +45,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private static readonly NEW_ASSISTANT_URL = 'https://api.openai.com/v1/assistants';
   private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;
-  permittedErrorPrefixes = ['Incorrect', 'Please send text'];
+  permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
   private messages?: Messages;
   private run_id?: string;
   private searchedForThreadId = false;
@@ -88,7 +89,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.deepChat.disableSubmitButton(false);
       return threadMessages;
     } catch (e) {
-      return [{error: 'failed to fetch thread history'}];
+      return [{error: 'Failed to fetch history'}];
     }
   }
 

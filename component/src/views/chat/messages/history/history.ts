@@ -10,6 +10,7 @@ import {Messages} from '../messages';
 
 export class History {
   private readonly _messages: Messages;
+  public static readonly FAILED_ERROR_MESSAGE = 'Failed to load history';
   private _isLoading = false;
   private _isPaginationComplete = false;
   private _index = 0;
@@ -33,7 +34,6 @@ export class History {
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
     const firstMessageEl = this._messages.messageElementRefs[0]?.outerContainer;
     const currentScrollTop = this._messages.elementRef.scrollTop;
-    // WORK - don't add at start if intro message
     historyMessages
       ?.reverse()
       .map((message) => {
@@ -56,10 +56,17 @@ export class History {
       if (!this._isLoading && !this._isPaginationComplete && this._messages.elementRef.scrollTop === 0) {
         this._isLoading = true;
         const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages, false);
-        const messages = await loadHistory(this._index++);
-        this._messages.removeMessage(loadingElements);
-        this.processLoadedHistory(messages);
-        this._isLoading = false;
+        try {
+          const messages = await loadHistory(this._index++);
+          this._messages.removeMessage(loadingElements);
+          this.processLoadedHistory(messages);
+          this._isLoading = false;
+        } catch (e) {
+          this._messages.removeMessage(loadingElements);
+          this._isPaginationComplete = true;
+          this._messages.addNewErrorMessage('service', History.FAILED_ERROR_MESSAGE, true);
+          console.error(e);
+        }
       }
     };
   }
@@ -74,17 +81,23 @@ export class History {
   private async loadInitialHistory(loadHistory: LoadHistory) {
     this._isLoading = true;
     const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages);
-    // WORK - error handling
-    const messages = await loadHistory(this._index++);
-    const scrollTop = this._messages.elementRef.scrollTop;
-    this._messages.removeMessage(loadingElements);
-    this._isPaginationComplete = !!messages.find((message) => !message);
-    const messageContent = messages.filter((message) => !!message);
-    this.processLoadedHistory(messageContent as MessageContent[]);
-    // force scroll to bottom if user has not scrolled anywhere themselves, otherwise keep at current location
-    if (scrollTop === 0) {
-      // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-      setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+    try {
+      const messages = await loadHistory(this._index++);
+      const scrollTop = this._messages.elementRef.scrollTop;
+      this._messages.removeMessage(loadingElements);
+      this._isPaginationComplete = !!messages.find((message) => !message);
+      const messageContent = messages.filter((message) => !!message);
+      this.processLoadedHistory(messageContent as MessageContent[]);
+      // force scroll to bottom if user has not scrolled anywhere themselves, otherwise keep at current location
+      if (scrollTop === 0) {
+        // https://github.com/OvidijusParsiunas/deep-chat/issues/84
+        setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+      }
+    } catch (e) {
+      this._messages.removeMessage(loadingElements);
+      this._isPaginationComplete = true;
+      this._messages.addNewErrorMessage('service', History.FAILED_ERROR_MESSAGE, true);
+      console.error(e);
     }
     this._isLoading = false;
   }
@@ -98,5 +111,10 @@ export class History {
       this.populateInitialHistory(history);
       this._index += 1;
     }
+  }
+
+  public static addErrorPrefix(io: ServiceIO) {
+    io.permittedErrorPrefixes ??= [];
+    io.permittedErrorPrefixes.push(History.FAILED_ERROR_MESSAGE);
   }
 }
