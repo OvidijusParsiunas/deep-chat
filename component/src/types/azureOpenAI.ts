@@ -1,41 +1,5 @@
 import {InterfacesUnion} from './utilityTypes';
 
-// https://platform.openai.com/docs/api-reference/audio/createSpeech
-export type AzureOpenAITextToSpeech = {
-  model?: string;
-  voice?: string;
-  speed?: number;
-};
-
-// https://platform.openai.com/docs/guides/speech-to-text
-// https://platform.openai.com/docs/api-reference/audio/createTranscription
-// https://platform.openai.com/docs/api-reference/audio/create
-export type AzureOpenAISpeechToText = {
-  model?: string;
-  temperature?: number;
-  language?: string; // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes - 639-1 format
-  type?: 'transcription' | 'translation';
-};
-
-// https://platform.openai.com/docs/api-reference/images
-export interface AzureOpenAIImagesDalle2 {
-  model?: 'dall-e-2';
-  n?: number;
-  size?: '256x256' | '512x512' | '1024x1024';
-  response_format?: 'url' | 'b64_json';
-  user?: string;
-}
-
-// https://platform.openai.com/docs/api-reference/images
-export interface AzureOpenAIImagesDalle3 {
-  model: 'dall-e-3';
-  quality?: string;
-  size?: '1024x1024' | '1792x1024' | '1024x1792';
-  style?: 'vivid' | 'natural';
-  response_format?: 'url' | 'b64_json';
-  user?: string;
-}
-
 export type FunctionsDetails = {name: string; arguments: string}[];
 
 export type AssistantFunctionHandlerResponse = string[] | Promise<string>[];
@@ -109,7 +73,4 @@ export interface AzureOpenAI {
   azureConfig: AzureConfig;
   chat?: true | AzureOpenAIChat;
   assistant?: true | AzureOpenAIAssistant;
-  images?: true | AzureOpenAIImagesDalle2 | AzureOpenAIImagesDalle3;
-  textToSpeech?: true | AzureOpenAITextToSpeech;
-  speechToText?: true | AzureOpenAISpeechToText;
 }

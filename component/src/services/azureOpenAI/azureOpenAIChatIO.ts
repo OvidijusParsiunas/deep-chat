@@ -2,7 +2,7 @@ import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../type
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
-import {ChatFunctionHandler, AzureOpenAIChat} from '../../types/azureOpenAI';
+import {ChatFunctionHandler, AzureOpenAIChat, AzureConfig} from '../../types/azureOpenAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -31,18 +31,16 @@ export class AzureOpenAIChatIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.azureOpenAI;
 
-    if (!directConnectionCopy.azureOpenAI) {
-      throw Error("Azure OpenAI (azureOpenAI) not defined");
+    if (!directConnectionCopy.azureOpenAI?.azureConfig) {
+      throw Error("Azure OpenAI endpoint not defined")
     }
 
-    const endpoint = directConnectionCopy.azureOpenAI.endpoint;
-    const version = directConnectionCopy.azureOpenAI.version;
-    const deploymentId = directConnectionCopy.azureOpenAI.deploymentId;
+    const azureConfig: AzureConfig = directConnectionCopy.azureOpenAI?.azureConfig;
 
-    super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(endpoint,version), AzureOpenAIUtils.buildHeaders, apiKey);
+    super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(azureConfig), AzureOpenAIUtils.buildHeaders, apiKey);
 
     // need to call super before accessing this
-    this.url= `${endpoint}/deployments/${deploymentId}/completions?api-version=${version}`;
+    this.url= `${azureConfig.endpoint}/deployments/${azureConfig.deploymentId}/completions?api-version=${azureConfig.version}`;
 
     const config = directConnectionCopy.azureOpenAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
