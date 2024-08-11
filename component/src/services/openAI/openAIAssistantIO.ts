@@ -41,10 +41,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
-  private static ENDPOINT = 'https://api.openai.com/v1'
-  private static readonly THREAD_RESOURCE = `threads`;
-  private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
-  private static QUERY_PARAMS = ''; // default, may be set in constructor
+  private static readonly THREAD_PREFIX = 'https://api.openai.com/v1/threads';
+  private static readonly NEW_ASSISTANT_URL = 'https://api.openai.com/v1/assistants';
   private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
@@ -63,23 +61,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-
-    let buildKeyVerificationDetails;
-    let buildHeadersFunc;
-
-    if (directConnectionCopy.openAI?.azureConfig) {
-      const azureConfig = directConnectionCopy.openAI.azureConfig;
-      OpenAIAssistantIO.ENDPOINT = azureConfig.endpoint;
-      OpenAIAssistantIO.QUERY_PARAMS = `api-version=${azureConfig.version}`;
-      buildKeyVerificationDetails = OpenAIUtils.buildAzureKeyVerificationDetails(azureConfig);
-      buildHeadersFunc = OpenAIUtils.buildAzureHeaders;
-    } else {
-      buildKeyVerificationDetails = OpenAIUtils.buildKeyVerificationDetails();
-      buildHeadersFunc = OpenAIUtils.buildHeaders;
-    }
-
-    super(deepChat, buildKeyVerificationDetails, buildHeadersFunc, apiKey);
-
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
     if (typeof config === 'object') {
       this.config = config; // stored that assistant_id could be added
@@ -194,12 +176,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/messages?order=desc&${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/messages`;
       const body = this.processMessage(pMessages, uploadedFiles);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/runs`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
       if (this.isSSEStream) {
         this.createStreamRun(body);
@@ -222,7 +204,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   private async createNewAssistant() {
     try {
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = OpenAIAssistantIO.NEW_ASSISTANT_URL;
       const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
       this.config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this.config.assistant_id;
@@ -253,7 +235,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
-    const url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}?${OpenAIAssistantIO.QUERY_PARAMS}`;
+    const url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
@@ -262,7 +244,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs`;
       const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
       this.run_id = runObj.id;
     } else {
@@ -275,7 +257,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
-    this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${thread_id}/messages?${OpenAIAssistantIO.QUERY_PARAMS}`;
+    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${thread_id}/messages?order=desc`;
     let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
@@ -324,7 +306,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
-    this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+    this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs`;
     if (this.isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
@@ -344,7 +326,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
     if (this.isSSEStream && this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${OpenAIAssistantIO.THREAD_PREFIX}/${this.sessionId}/runs`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }

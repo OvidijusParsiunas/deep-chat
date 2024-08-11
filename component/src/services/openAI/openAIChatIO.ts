@@ -19,7 +19,7 @@ type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  url = 'https://api.openai.com/v1/chat/completions'; // default, may be set in constructor
+  url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
   private readonly _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
@@ -30,32 +30,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-
-    let buildKeyVerificationDetails;
-    let buildHeadersFunc;
-    let updatedUrl = '';
-
-    const azureConfig = directConnectionCopy.openAI?.azureConfig;
-    if (azureConfig) {
-
-      if (!azureConfig.deploymentId) {
-        throw Error("openAI.azureConfig.deploymentId not set (trying to use OpenAI Chat with Azure)");
-      }
-      buildKeyVerificationDetails = OpenAIUtils.buildAzureKeyVerificationDetails(azureConfig);
-      buildHeadersFunc = OpenAIUtils.buildAzureHeaders;
-      updatedUrl = `${azureConfig.endpoint}/deployments/${azureConfig.deploymentId}/completions?api-version=${azureConfig.version}`;
-    } else {
-      buildKeyVerificationDetails = OpenAIUtils.buildKeyVerificationDetails();
-      buildHeadersFunc = OpenAIUtils.buildHeaders;
-    }
-
-    super(deepChat, buildKeyVerificationDetails, buildHeadersFunc, apiKey);
-
-    // need to call super before accessing this
-    if (updatedUrl != '') { 
-      this.url = updatedUrl;
-    }
-
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);

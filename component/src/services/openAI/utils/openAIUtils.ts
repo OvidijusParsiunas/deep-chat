@@ -3,19 +3,11 @@ import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
-import {AzureOpenAIConfig} from '../../../types/openAI';
 
 export class OpenAIUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-    };
-  }
-
-  public static buildAzureHeaders(key: string) {
-    return {
-      "api-key": key,
       'Content-Type': 'application/json',
     };
   }
@@ -38,14 +30,6 @@ export class OpenAIUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.openai.com/v1/models',
-      method: 'GET',
-      handleVerificationResult: OpenAIUtils.handleVerificationResult,
-    };
-  }
-
-  public static buildAzureKeyVerificationDetails(azureConfig: AzureOpenAIConfig): KeyVerificationDetails {
-    return {
-      url: `${azureConfig.endpoint}/models?api-version=${azureConfig.version}`,
       method: 'GET',
       handleVerificationResult: OpenAIUtils.handleVerificationResult,
     };

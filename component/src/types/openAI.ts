@@ -99,15 +99,8 @@ export type OpenAIChat = {
   top_p?: number;
 } & OpenAIChatFunctions;
 
-export type AzureOpenAIConfig = {
-  endpoint: string;
-  version: string;
-  deploymentId?: string;
-}
-
 export interface OpenAI {
   chat?: true | OpenAIChat;
-  azureConfig?: AzureOpenAIConfig;
   assistant?: true | OpenAIAssistant;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
