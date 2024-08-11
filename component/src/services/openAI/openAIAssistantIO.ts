@@ -44,7 +44,6 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private static ENDPOINT = 'https://api.openai.com/v1'
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
-  private static readonly FILES_RESOURCE = 'files';
   private static QUERY_PARAMS = ''; // default, may be set in constructor
   private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;

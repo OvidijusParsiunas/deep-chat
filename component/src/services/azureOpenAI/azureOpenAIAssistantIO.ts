@@ -1,5 +1,5 @@
-import {AssistantFunctionHandler, OpenAIAssistant, OpenAINewAssistant} from '../../types/openAI';
-import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
+import {AssistantFunctionHandler, AzureConfig, AzureOpenAIAssistant, AzureOpenAINewAssistant} from '../../types/azureOpenAI';
+import {AzureOpenAIAssistantUtils, UploadedFile} from './utils/azureOpenAIAssistantUtils';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
@@ -10,7 +10,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {OpenAIUtils} from './utils/openAIUtils';
+import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 import {PollResult} from '../serviceIO';
@@ -33,68 +33,58 @@ type MessageContentArr = {
 
 type FileAttachments = {
   file_id: string;
-  tools: {type: OpenAIAssistant['files_tool_type']}[];
+  tools: {type: AzureOpenAIAssistant['files_tool_type']}[];
 }[];
 
-export class OpenAIAssistantIO extends DirectServiceIO {
+export class AzureOpenAIAssistantIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
-  private static ENDPOINT = 'https://api.openai.com/v1'
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
-  private static readonly FILES_RESOURCE = 'files';
-  private static QUERY_PARAMS = ''; // default, may be set in constructor
-  private static readonly POLLING_TIMEOUT_MS = 800;
+  private static readonly POLLING_TIMEOUT_MS = 1000;
   private readonly _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect', 'Please send text'];
   private messages?: Messages;
   private run_id?: string;
   private searchedForThreadId = false;
-  private readonly config: OpenAIAssistant = {};
-  private readonly newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
+  private readonly config: AzureOpenAIAssistant = {};
+  private readonly newAssistantDetails: AzureOpenAINewAssistant = {model: 'gpt-4'};
   private readonly shouldFetchHistory: boolean = false;
   private waitingForStreamResponse = false;
   private readonly isSSEStream: boolean = false;
   private messageStream: MessageStream | undefined;
-  private readonly filesToolType: OpenAIAssistant['files_tool_type'];
+  private readonly filesToolType: AzureOpenAIAssistant['files_tool_type'];
+  private readonly azureConfig: AzureConfig;
   fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.openAI;
+    const apiKey = directConnectionCopy.azureOpenAI;
 
-    let buildKeyVerificationDetails;
-    let buildHeadersFunc;
-
-    if (directConnectionCopy.openAI?.azureConfig) {
-      const azureConfig = directConnectionCopy.openAI.azureConfig;
-      OpenAIAssistantIO.ENDPOINT = azureConfig.endpoint;
-      OpenAIAssistantIO.QUERY_PARAMS = `api-version=${azureConfig.version}`;
-      buildKeyVerificationDetails = OpenAIUtils.buildAzureKeyVerificationDetails(azureConfig);
-      buildHeadersFunc = OpenAIUtils.buildAzureHeaders;
-    } else {
-      buildKeyVerificationDetails = OpenAIUtils.buildKeyVerificationDetails();
-      buildHeadersFunc = OpenAIUtils.buildHeaders;
+    if (!directConnectionCopy.azureOpenAI?.azureConfig) {
+      throw Error("Azure OpenAI endpoint not defined")
     }
 
-    super(deepChat, buildKeyVerificationDetails, buildHeadersFunc, apiKey);
+    const azureConfig = directConnectionCopy.azureOpenAI?.azureConfig;
 
-    const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
+    super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(azureConfig), AzureOpenAIUtils.buildHeaders, apiKey);
+
+    this.azureConfig = azureConfig;
+    const config = directConnectionCopy.azureOpenAI?.assistant; // can be undefined as this is the default service
     if (typeof config === 'object') {
       this.config = config; // stored that assistant_id could be added
       const {new_assistant, thread_id, load_thread_history} = this.config;
       Object.assign(this.newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
-      const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      const {function_handler} = deepChat.directConnection?.azureOpenAI?.assistant as AzureOpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
       this.filesToolType = config.files_tool_type;
-    } else if (directConnectionCopy.openAI?.assistant) {
-      directConnectionCopy.openAI.assistant = config;
+    } else if (directConnectionCopy.azureOpenAI?.assistant) {
+      directConnectionCopy.azureOpenAI.assistant = config;
     }
     this.connectSettings.headers ??= {};
-    this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
@@ -129,7 +119,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private static processAttachmentsMessage(
     processedMessage: MessageContentI,
     uploadedFiles: UploadedFile[],
-    toolType: OpenAIAssistant['files_tool_type']
+    toolType: AzureOpenAIAssistant['files_tool_type']
   ) {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
       return {tools: [{type: toolType}], file_id: file.id};
@@ -160,10 +150,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         }
       }
       if (toolType === 'file_search') {
-        return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'file_search');
+        return AzureOpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'file_search');
       }
       if (toolType === 'code_interpreter') {
-        return OpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
+        return AzureOpenAIAssistantIO.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
       const notImage = uploadedFiles.find(({name}) => !FileMessageUtils.isImageFileExtension(name));
       if (notImage) {
@@ -176,7 +166,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
           'Make sure your existing assistant supports these "tools" or specify them in the "new_assistant" property'
         );
       } else {
-        const imageMessage = OpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
+        const imageMessage = AzureOpenAIAssistantIO.processImageMessage(processedMessage, uploadedFiles);
         if (imageMessage) return imageMessage;
       }
     }
@@ -194,12 +184,12 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/messages?order=desc&${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/messages?order=desc&api-version=${this.azureConfig.version}`;
       const body = this.processMessage(pMessages, uploadedFiles);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/runs?api-version=${this.azureConfig.version}`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
       if (this.isSSEStream) {
         this.createStreamRun(body);
@@ -215,15 +205,15 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
-    const uploadedFiles = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
+    const uploadedFiles = files ? await AzureOpenAIAssistantUtils.storeFiles(this, this.azureConfig, messages, files) : undefined;
     this.connectSettings.method = 'POST';
     this.callService(messages, pMessages, uploadedFiles);
   }
 
   private async createNewAssistant() {
     try {
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}?${OpenAIAssistantIO.QUERY_PARAMS}`;
-      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
+      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}?api-version=${this.azureConfig.version}`;
+      const result = await AzureOpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
       this.config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this.config.assistant_id;
     } catch (e) {
@@ -246,14 +236,14 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       return await this.handleStream(result);
     }
     if (result.error) {
-      if (result.error.message.startsWith(OpenAIAssistantUtils.FILES_WITH_TEXT_ERROR)) {
+      if (result.error.message.startsWith(AzureOpenAIAssistantUtils.FILES_WITH_TEXT_ERROR)) {
         throw Error('Please send text with your file(s)');
       }
       throw result.error.message;
     }
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
-    const url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}?${OpenAIAssistantIO.QUERY_PARAMS}`;
+    const url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}?api-version=${this.azureConfig.version}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
@@ -262,8 +252,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
-      const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
+      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
+      const runObj = await AzureOpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
       this.run_id = runObj.id;
     } else {
       this.sessionId = result.thread_id;
@@ -275,17 +265,17 @@ export class OpenAIAssistantIO extends DirectServiceIO {
 
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
-    this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${thread_id}/messages?${OpenAIAssistantIO.QUERY_PARAMS}`;
-    let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
+    this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${thread_id}/messages?api-version=${this.azureConfig.version}`;
+    let threadMessages = (await AzureOpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
-    return OpenAIAssistantUtils.processAPIMessages(this, threadMessages, isHistory);
+    return AzureOpenAIAssistantUtils.processAPIMessages(this, this.azureConfig, threadMessages, isHistory);
   }
 
   async extractPollResultData(result: OpenAIRunResult): PollResult {
     const {status, required_action} = result;
-    if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
+    if (status === 'queued' || status === 'in_progress') return {timeoutMS: AzureOpenAIAssistantIO.POLLING_TIMEOUT_MS};
     if (status === 'completed' && this.messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
       const {text, files} = threadMessages.shift() as ResponseI;
@@ -314,23 +304,23 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     });
     const handlerResponse = this._functionHandler(functions);
     if (!Array.isArray(handlerResponse) || toolCalls.length !== handlerResponse.length) {
-      throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
+      throw Error(AzureOpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }
     const invidualResponses = await Promise.all(handlerResponse);
     if (invidualResponses.find((response) => typeof response !== 'string')) {
-      throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
+      throw Error(AzureOpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }
     const tool_outputs = invidualResponses.map((resp, index) => {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
-    this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+    this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs?api-version=${this.azureConfig.version}`;
     if (this.isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
-      await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
+      await AzureOpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
     }
-    return {timeoutMS: OpenAIAssistantIO.POLLING_TIMEOUT_MS};
+    return {timeoutMS: AzureOpenAIAssistantIO.POLLING_TIMEOUT_MS};
   }
 
   private async handleStream(result: OpenAIAssistantInitReqResult) {
@@ -344,7 +334,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     }
     if (this.isSSEStream && this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${OpenAIAssistantIO.ENDPOINT}/${OpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?${OpenAIAssistantIO.QUERY_PARAMS}`;
+      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
@@ -358,8 +348,8 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       const textContent = result.content.find((content) => content.text);
       if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
-        const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: 'assistant', content: result.content}, textFileFirst);
+        const downloadCb = AzureOpenAIAssistantUtils.getFilesAndText.bind(this,
+          this, this.azureConfig, {role: 'assistant', content: result.content}, textFileFirst);
         this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
         return {text: ''};
       }
@@ -369,7 +359,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
         // if file is included and there is no annotation/link in text, process during the stream
         const textContent = result.delta.content.find((content) => content.text);
         if (textContent?.text?.annotations && textContent.text.annotations.length === 0) {
-          const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content);
+          const messages = await AzureOpenAIAssistantUtils.processStreamMessages(this, this.azureConfig, result.delta.content);
           return {text: messages[0].text, files: messages[1].files};
         }
       }

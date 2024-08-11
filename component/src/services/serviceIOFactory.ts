@@ -29,6 +29,8 @@ import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
+import {AzureOpenAIAssistantIO} from './azureOpenAI/azureOpenAIAssistantIO';
+import {AzureOpenAIChatIO} from './azureOpenAI/azureOpenAIChatIO';
 
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
@@ -53,6 +55,14 @@ export class ServiceIOFactory {
           return new OpenAIAssistantIO(deepChat);
         }
         return new OpenAIChatIO(deepChat);
+      }
+      if (directConnection.azureOpenAI) {
+        if (directConnection.azureOpenAI.assistant) {
+          console.log("using azureOpenAI assistant")
+          return new AzureOpenAIAssistantIO(deepChat);
+        }
+        console.log("using azureOpenAI chat")
+        return new AzureOpenAIChatIO(deepChat);
       }
       if (directConnection.assemblyAI) {
         return new AssemblyAIAudioIO(deepChat);

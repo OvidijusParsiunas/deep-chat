@@ -27,19 +27,25 @@
     <deep-chat
       id="chat-element"
       directConnection='{
-        "AzureOpenAI": {
-          "key": "<key here>",
+        "azureOpenAI": {
+          "key": "d97bb611709d48a9b0a860c3d35fb43f",
           "validateKeyProperty": true,
-          "endpoint": "<endpoint here>",
-          "version": "2024-05-01-preview"
+          "azureConfig": {
+            "endpoint": "https://jacktestaoai.openai.azure.com/openai",
+            "version": "2024-05-01-preview"
           },
           "assistant": {
             "new_assistant": {
-              "model": "gpt-4o",
+              "model": "gpt-4o-mini",
               "name": "Test Azure Assistant",
               "description": "An assistant to test Azure integration into deep-chat",
-              "instructions": "You are an assistant. Your instructions are to help test the integration of Azure with deep-chat"
-            }
+              "instructions": "You are an assistant. Your instructions are to help test the integration of Azure with deep-chat",
+              "tools": [
+                { "type": "code_interpreter" },
+                { "type": "file_search" }
+              ]
+            },
+            "files_tool_type": "code_interpreter"
           }
         }
       }'

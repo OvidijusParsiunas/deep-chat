@@ -3,14 +3,15 @@ import {MessageFileType, MessageFile} from '../../../types/messageFile';
 import {Messages} from '../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {DirectServiceIO} from '../../utils/directServiceIO';
-import {OpenAIUtils} from './openAIUtils';
+import {AzureOpenAIUtils} from './azureOpenAIUtils';
 import {ServiceIO} from '../../serviceIO';
+import { AzureConfig } from '../../../types/azureOpenAI';
 
 type FileDetails = {fileId: string; path?: string; name?: string}[];
 
 export type UploadedFile = {id: string; name: string};
 
-export class OpenAIAssistantUtils {
+export class AzureOpenAIAssistantUtils {
   // triggered ONLY for file_search and code_interceptor
   public static readonly FILES_WITH_TEXT_ERROR = 'content with type `text` must have `text` values';
 
@@ -18,10 +19,10 @@ export class OpenAIAssistantUtils {
     'Response must contain an array of strings for each individual function/tool_call, ' +
     'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.';
 
-  public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
+  public static async storeFiles(serviceIO: ServiceIO, azureConfig: AzureConfig, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
-    serviceIO.url = 'https://api.openai.com/v1/files'; // stores files
+    serviceIO.url = `${azureConfig.endpoint}/files?api-version=${azureConfig.version}`; // stores files
     const previousContentType = headers[RequestUtils.CONTENT_TYPE];
     delete headers[RequestUtils.CONTENT_TYPE];
     const requests = files.map(async (file) => {
@@ -29,7 +30,7 @@ export class OpenAIAssistantUtils {
       formData.append('purpose', 'assistants');
       formData.append('file', file);
       return new Promise<{id: string; filename: string}>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
+        resolve(AzureOpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
       });
     });
     try {
@@ -54,12 +55,12 @@ export class OpenAIAssistantUtils {
     return 'any';
   }
 
-  private static async getFiles(serviceIO: ServiceIO, fileDetails: FileDetails) {
+  private static async getFiles(serviceIO: ServiceIO, azureConfig: AzureConfig, fileDetails: FileDetails) {
     const fileRequests = fileDetails.map(({fileId}) => {
       // https://platform.openai.com/docs/api-reference/files/retrieve-contents
-      serviceIO.url = `https://api.openai.com/v1/files/${fileId}/content`;
+      serviceIO.url = `${azureConfig.endpoint}/files/${fileId}/content?api-version=${azureConfig.version}`;
       return new Promise<Blob>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, undefined, 'GET', false));
+        resolve(AzureOpenAIUtils.directFetch(serviceIO, undefined, 'GET', false));
       });
     });
     const blobs = await Promise.all(fileRequests);
@@ -71,7 +72,7 @@ export class OpenAIAssistantUtils {
           resolve({
             src: (event.target as FileReader).result as string,
             name: fileDetails[index].name,
-            type: OpenAIAssistantUtils.getType(fileDetails, index),
+            type: AzureOpenAIAssistantUtils.getType(fileDetails, index),
           });
         };
       });
@@ -85,11 +86,11 @@ export class OpenAIAssistantUtils {
   }
 
   // prettier-ignore
-  private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails,
+  private static async getFilesAndNewText(io: ServiceIO, azureConfig: AzureConfig, fileDetails: FileDetails,
       role?: string, content?: OpenAIAssistantContent) {
     let files: MessageFile[] | undefined;
     if (fileDetails.length > 0) {
-      files = await OpenAIAssistantUtils.getFiles(io, fileDetails);
+      files = await AzureOpenAIAssistantUtils.getFiles(io, azureConfig, fileDetails);
       if (content?.text?.value) {
         files.forEach((file, index) => {
           if (!file.src) return;
@@ -118,7 +119,7 @@ export class OpenAIAssistantUtils {
             fileDetails.push({
               path: annotation.text,
               fileId: annotation.file_path.file_id,
-              name: OpenAIAssistantUtils.getFileName(annotation.text),
+              name: AzureOpenAIAssistantUtils.getFileName(annotation.text),
             });
           }
         });
@@ -132,10 +133,10 @@ export class OpenAIAssistantUtils {
     return fileDetails;
   }
 
-  public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
-    const fileDetails = OpenAIAssistantUtils.getFileDetails(message, content);
+  public static async getFilesAndText(io: ServiceIO, azureConfig: AzureConfig, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
+    const fileDetails = AzureOpenAIAssistantUtils.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
-    return await OpenAIAssistantUtils.getFilesAndNewText(io, fileDetails, message.role, content);
+    return await AzureOpenAIAssistantUtils.getFilesAndNewText(io, azureConfig, fileDetails, message.role, content);
   }
 
   private static parseResult(result: OpenAIAssistantMessagesResult, isHistory: boolean) {
@@ -157,7 +158,7 @@ export class OpenAIAssistantUtils {
 
   // test this using this prompt and it should give 2 text mesages and a file:
   // "give example data for a csv and create a suitable bar chart"
-  private static parseMessages(io: DirectServiceIO, messages: OpenAIAssistantData[]) {
+  private static parseMessages(io: DirectServiceIO, azureConfig: AzureConfig, messages: OpenAIAssistantData[]) {
     const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
     messages.forEach(async (data) => {
       data.content
@@ -168,18 +169,18 @@ export class OpenAIAssistantUtils {
           return 0;
         })
         .forEach(async (content) => {
-          parsedContent.push(OpenAIAssistantUtils.getFilesAndText(io, data, content));
+          parsedContent.push(AzureOpenAIAssistantUtils.getFilesAndText(io, azureConfig, data, content));
         });
     });
     return Promise.all(parsedContent);
   }
 
-  public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[]) {
-    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}]);
+  public static async processStreamMessages(io: DirectServiceIO, azureConfig: AzureConfig, content: OpenAIAssistantContent[]) {
+    return AzureOpenAIAssistantUtils.parseMessages(io, azureConfig, [{content, role: 'assistant'}]);
   }
 
-  public static async processAPIMessages(io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean) {
-    const messages = OpenAIAssistantUtils.parseResult(result, isHistory);
-    return OpenAIAssistantUtils.parseMessages(io, messages);
+  public static async processAPIMessages(io: DirectServiceIO, azureConfig: AzureConfig, result: OpenAIAssistantMessagesResult, isHistory: boolean) {
+    const messages = AzureOpenAIAssistantUtils.parseResult(result, isHistory);
+    return AzureOpenAIAssistantUtils.parseMessages(io, azureConfig, messages);
   }
 }

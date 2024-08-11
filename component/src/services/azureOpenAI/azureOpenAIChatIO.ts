@@ -2,7 +2,7 @@ import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../type
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
-import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
+import {ChatFunctionHandler, AzureOpenAIChat} from '../../types/azureOpenAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -10,56 +10,44 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {OpenAIUtils} from './utils/openAIUtils';
+import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepChat} from '../../deepChat';
 
 type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
-export class OpenAIChatIO extends DirectServiceIO {
+export class AzureOpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  url = 'https://api.openai.com/v1/chat/completions'; // default, may be set in constructor
+  url = ''; // set in constructor
   permittedErrorPrefixes = ['Incorrect'];
   private readonly _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
   asyncCallInProgress = false; // used when streaming tools
   private readonly _systemMessage: SystemMessageInternal =
-    OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
+    AzureOpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.openAI;
+    const apiKey = directConnectionCopy.azureOpenAI;
 
-    let buildKeyVerificationDetails;
-    let buildHeadersFunc;
-    let updatedUrl = '';
-
-    const azureConfig = directConnectionCopy.openAI?.azureConfig;
-    if (azureConfig) {
-
-      if (!azureConfig.deploymentId) {
-        throw Error("openAI.azureConfig.deploymentId not set (trying to use OpenAI Chat with Azure)");
-      }
-      buildKeyVerificationDetails = OpenAIUtils.buildAzureKeyVerificationDetails(azureConfig);
-      buildHeadersFunc = OpenAIUtils.buildAzureHeaders;
-      updatedUrl = `${azureConfig.endpoint}/deployments/${azureConfig.deploymentId}/completions?api-version=${azureConfig.version}`;
-    } else {
-      buildKeyVerificationDetails = OpenAIUtils.buildKeyVerificationDetails();
-      buildHeadersFunc = OpenAIUtils.buildHeaders;
+    if (!directConnectionCopy.azureOpenAI) {
+      throw Error("Azure OpenAI (azureOpenAI) not defined");
     }
 
-    super(deepChat, buildKeyVerificationDetails, buildHeadersFunc, apiKey);
+    const endpoint = directConnectionCopy.azureOpenAI.endpoint;
+    const version = directConnectionCopy.azureOpenAI.version;
+    const deploymentId = directConnectionCopy.azureOpenAI.deploymentId;
+
+    super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(endpoint,version), AzureOpenAIUtils.buildHeaders, apiKey);
 
     // need to call super before accessing this
-    if (updatedUrl != '') { 
-      this.url = updatedUrl;
-    }
+    this.url= `${endpoint}/deployments/${deploymentId}/completions?api-version=${version}`;
 
-    const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
+    const config = directConnectionCopy.azureOpenAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
-      if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
-      const {function_handler} = deepChat.directConnection?.openAI?.chat as OpenAIChat;
+      if (config.system_prompt) this._systemMessage = AzureOpenAIChatIO.generateSystemMessage(config.system_prompt);
+      const {function_handler} = deepChat.directConnection?.azureOpenAI?.chat as AzureOpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -72,7 +60,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {role: 'system', content: system_prompt};
   }
 
-  private cleanConfig(config: OpenAIChat) {
+  private cleanConfig(config: AzureOpenAIChat) {
     delete config.system_prompt;
     delete config.function_handler;
   }
@@ -94,7 +82,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
       .map((message) => {
-        return {content: OpenAIChatIO.getContent(message),
+        return {content: AzureOpenAIChatIO.getContent(message),
           role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
       bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
@@ -117,7 +105,7 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   // prettier-ignore
   override async extractResultData(result: OpenAIConverseResult,
-      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
+      fetchFunc?: FetchFunc, prevBody?: AzureOpenAIChat): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices?.[0]?.delta) {
       return this.extractStreamResult(result.choices[0], fetchFunc, prevBody);
@@ -131,7 +119,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {text: ''};
   }
 
-  private async extractStreamResult(choice: ResultChoice, fetchFunc?: FetchFunc, prevBody?: OpenAIChat) {
+  private async extractStreamResult(choice: ResultChoice, fetchFunc?: FetchFunc, prevBody?: AzureOpenAIChat) {
     const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls') {
       this.asyncCallInProgress = true;
@@ -151,7 +139,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   // prettier-ignore
-  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
+  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: AzureOpenAIChat): Promise<ResponseI> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
     if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
       throw Error(
