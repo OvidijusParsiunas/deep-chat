@@ -2,6 +2,16 @@ import {InterfacesUnion} from './utilityTypes';
 import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
+export interface LoadingHistoryStyles {
+  full?: {styles?: MessageElementsStyles; html?: string};
+  small?: {styles?: MessageElementsStyles; html?: string};
+}
+
+export interface LoadingStyles {
+  message?: MessageElementsStyles;
+  history?: LoadingHistoryStyles;
+}
+
 export interface MessageElementsStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
@@ -14,16 +24,6 @@ export type MessageRoleStyles = {
   user?: MessageElementsStyles;
   ai?: MessageElementsStyles;
 } & {[role: string]: MessageElementsStyles};
-
-export interface LoadingHistoryStyles {
-  full?: {styles?: MessageElementsStyles; element?: HTMLElement};
-  small?: {styles?: MessageElementsStyles; element?: HTMLElement};
-}
-
-export interface LoadingStyles {
-  message?: MessageElementsStyles;
-  history?: LoadingHistoryStyles;
-}
 
 export interface MessageStyles {
   default?: MessageRoleStyles;
