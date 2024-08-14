@@ -30,7 +30,7 @@ export class AzureOpenAIUtils {
 
   public static buildKeyVerificationDetails(azureConfig: AzureConfig): KeyVerificationDetails {
     return {
-      url: `${azureConfig.endpoint}/models?api-version=${azureConfig.version}`,
+      url: `${azureConfig.endpoint}/openai/models?api-version=${azureConfig.version}`,
       method: 'GET',
       handleVerificationResult: AzureOpenAIUtils.handleVerificationResult,
     };

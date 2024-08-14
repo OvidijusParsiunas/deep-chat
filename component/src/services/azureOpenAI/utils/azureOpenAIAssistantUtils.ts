@@ -22,7 +22,7 @@ export class AzureOpenAIAssistantUtils {
   public static async storeFiles(serviceIO: ServiceIO, azureConfig: AzureConfig, messages: Messages, files: File[]) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
-    serviceIO.url = `${azureConfig.endpoint}/files?api-version=${azureConfig.version}`; // stores files
+    serviceIO.url = `${azureConfig.endpoint}/openai/files?api-version=${azureConfig.version}`; // stores files
     const previousContentType = headers[RequestUtils.CONTENT_TYPE];
     delete headers[RequestUtils.CONTENT_TYPE];
     const requests = files.map(async (file) => {
@@ -58,7 +58,7 @@ export class AzureOpenAIAssistantUtils {
   private static async getFiles(serviceIO: ServiceIO, azureConfig: AzureConfig, fileDetails: FileDetails) {
     const fileRequests = fileDetails.map(({fileId}) => {
       // https://platform.openai.com/docs/api-reference/files/retrieve-contents
-      serviceIO.url = `${azureConfig.endpoint}/files/${fileId}/content?api-version=${azureConfig.version}`;
+      serviceIO.url = `${azureConfig.endpoint}/openai/files/${fileId}/content?api-version=${azureConfig.version}`;
       return new Promise<Blob>((resolve) => {
         resolve(AzureOpenAIUtils.directFetch(serviceIO, undefined, 'GET', false));
       });

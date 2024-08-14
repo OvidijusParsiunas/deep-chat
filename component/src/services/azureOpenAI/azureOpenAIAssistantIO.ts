@@ -42,7 +42,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
   url = ''; // set dynamically
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
-  private static readonly POLLING_TIMEOUT_MS = 1000;
+  private static readonly POLLING_TIMEOUT_MS = 800;
   private readonly _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect', 'Please send text'];
   private messages?: Messages;
@@ -184,12 +184,12 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
     this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
-      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/messages?order=desc&api-version=${this.azureConfig.version}`;
+      this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/messages?order=desc&api-version=${this.azureConfig.version}`;
       const body = this.processMessage(pMessages, uploadedFiles);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
-      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/runs?api-version=${this.azureConfig.version}`;
+      this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/runs?api-version=${this.azureConfig.version}`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
       if (this.isSSEStream) {
         this.createStreamRun(body);
@@ -212,7 +212,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
 
   private async createNewAssistant() {
     try {
-      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}?api-version=${this.azureConfig.version}`;
+      this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}?api-version=${this.azureConfig.version}`;
       const result = await AzureOpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
       this.config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this.config.assistant_id;
@@ -243,7 +243,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
     }
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
-    const url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}?api-version=${this.azureConfig.version}`;
+    const url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}?api-version=${this.azureConfig.version}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
@@ -252,7 +252,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
+      this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
       const runObj = await AzureOpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
       this.run_id = runObj.id;
     } else {
@@ -265,7 +265,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
 
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
-    this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${thread_id}/messages?api-version=${this.azureConfig.version}`;
+    this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${thread_id}/messages?api-version=${this.azureConfig.version}`;
     let threadMessages = (await AzureOpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
@@ -314,7 +314,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
-    this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs?api-version=${this.azureConfig.version}`;
+    this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs/${this.run_id}/submit_tool_outputs?api-version=${this.azureConfig.version}`;
     if (this.isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
@@ -334,7 +334,7 @@ export class AzureOpenAIAssistantIO extends DirectServiceIO {
     }
     if (this.isSSEStream && this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${this.azureConfig.endpoint}/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
+      this.url = `${this.azureConfig.endpoint}/openai/${AzureOpenAIAssistantIO.THREAD_RESOURCE}/${this.sessionId}/runs?api-version=${this.azureConfig.version}`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }

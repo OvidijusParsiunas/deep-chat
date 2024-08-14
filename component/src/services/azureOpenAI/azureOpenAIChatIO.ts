@@ -40,7 +40,7 @@ export class AzureOpenAIChatIO extends DirectServiceIO {
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(azureConfig), AzureOpenAIUtils.buildHeaders, apiKey);
 
     // need to call super before accessing this
-    this.url= `${azureConfig.endpoint}/deployments/${azureConfig.deploymentId}/completions?api-version=${azureConfig.version}`;
+    this.url= `${azureConfig.endpoint}/openai/deployments/${azureConfig.deploymentId}/completions?api-version=${azureConfig.version}`;
 
     const config = directConnectionCopy.azureOpenAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {

@@ -58,10 +58,8 @@ export class ServiceIOFactory {
       }
       if (directConnection.azureOpenAI) {
         if (directConnection.azureOpenAI.assistant) {
-          console.log("using azureOpenAI assistant")
           return new AzureOpenAIAssistantIO(deepChat);
         }
-        console.log("using azureOpenAI chat")
         return new AzureOpenAIChatIO(deepChat);
       }
       if (directConnection.assemblyAI) {
