@@ -116,7 +116,7 @@ All examples are ready to be deployed on a hosting platform such as [Vercel](htt
 
 ## :tv: Tutorials
 
-Demo videos ara available on [YouTube](https://www.youtube.com/@ovi-il4rg/videos):
+Demo videos are available on [YouTube](https://www.youtube.com/@ovi-il4rg/videos):
 
 <p align="center">
     <a href="https://www.youtube.com/@ovi-il4rg/videos">
