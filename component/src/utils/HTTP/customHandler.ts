@@ -1,5 +1,6 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
+import {MessagesBase} from '../../views/chat/messages/messagesBase';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
@@ -42,7 +43,13 @@ export class CustomHandler {
 
   private static attemptToFinaliseStream(stream: MessageStream, messages: Messages) {
     try {
-      stream.finaliseStreamedMessage();
+      const lastMessageEls = messages.messageElementRefs[messages.messageElementRefs.length - 1];
+      const isLastMessageLoading = MessagesBase.isLoadingMessage(lastMessageEls);
+      if (isLastMessageLoading) {
+        messages.removeLastMessage();
+      } else {
+        stream.finaliseStreamedMessage();
+      }
     } catch (error) {
       console.error(error);
       messages.addNewErrorMessage('service', error as Error);

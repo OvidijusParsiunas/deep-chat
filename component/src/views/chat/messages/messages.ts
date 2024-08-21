@@ -247,9 +247,9 @@ export class Messages extends MessagesBase {
     if (!this._displayLoadingMessage) return;
     const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
     const {outerContainer, bubbleElement} = messageElements;
-    bubbleElement.classList.add('loading-message-text');
+    bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
     const dotsElement = document.createElement('div');
-    dotsElement.classList.add('loading-message-bubble');
+    dotsElement.classList.add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
     this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message);
     LoadingStyle.setDots(bubbleElement, this.messageStyles);
@@ -292,7 +292,7 @@ export class Messages extends MessagesBase {
     this.messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
       if (
-        bubbleClasslist.contains('loading-message-text') ||
+        bubbleClasslist.contains(LoadingStyle.BUBBLE_CLASS) ||
         bubbleClasslist.contains(LoadingHistory.CLASS) ||
         bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)
       ) {

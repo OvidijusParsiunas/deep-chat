@@ -17,7 +17,7 @@
   margin-bottom: 10px;
 }
 
-.loading-message-text {
+.deep-chat-loading-message-bubble {
   width: 1em;
   padding-top: 0.6em;
   padding-bottom: 0.6em;
@@ -25,48 +25,48 @@
   padding-right: 0.75em;
 }
 
-.loading-message-bubble {
+.loading-message-dots {
   position: relative;
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
   background-color: var(--loading-message-color);
   color: var(--loading-message-color);
-  animation: loading-message-bubble 1s infinite linear alternate;
+  animation: loading-message-dots 1s infinite linear alternate;
   animation-delay: 0.5s;
 }
 
-.loading-message-bubble::before,
-.loading-message-bubble::after {
+.loading-message-dots::before,
+.loading-message-dots::after {
   content: '';
   display: inline-block;
   position: absolute;
   top: 0;
 }
 
-.loading-message-bubble::before {
+.loading-message-dots::before {
   left: -0.7em;
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
   background-color: var(--loading-message-color);
   color: var(--loading-message-color);
-  animation: loading-message-bubble 1s infinite alternate;
+  animation: loading-message-dots 1s infinite alternate;
   animation-delay: 0s;
 }
 
-.loading-message-bubble::after {
+.loading-message-dots::after {
   left: 0.7em;
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
   background-color: var(--loading-message-color);
   color: var(--loading-message-color);
-  animation: loading-message-bubble 1s infinite alternate;
+  animation: loading-message-dots 1s infinite alternate;
   animation-delay: 1s;
 }
 
-@keyframes loading-message-bubble {
+@keyframes loading-message-dots {
   0% {
     background-color: var(--loading-message-color);
   }

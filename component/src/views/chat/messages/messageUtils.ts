@@ -1,3 +1,4 @@
+import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {MessageContentI} from '../../../types/messagesInternal';
 import {MessageContent} from '../../../types/messages';
 import {Avatars} from '../../../types/avatars';
@@ -56,9 +57,9 @@ export class MessageUtils {
   // prettier-ignore
   public static overwriteMessage(messages: MessageContentI[], messagesElements: MessageElements[],
       content: string, role: string, contentType: 'text' | 'html', className: string) {
-    // not sure if loading-message-text is needed
+    // not sure if LoadingStyle.LOADING_MESSAGE_TEXT_CLASS is needed
     const elements = MessageUtils.getLastElementsByClass(
-      messagesElements, [MessageUtils.getRoleClass(role), className], ['loading-message-text']);
+      messagesElements, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
     const lastMessage = MessageUtils.getLastMessage(messages, role, contentType);
     if (lastMessage) lastMessage[contentType] = content;
     return elements;

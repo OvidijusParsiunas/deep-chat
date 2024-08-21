@@ -2,6 +2,8 @@ import {MessageStyles} from '../../types/messages';
 import {CustomStyle} from '../../types/styles';
 
 export class LoadingStyle {
+  public static readonly BUBBLE_CLASS = 'deep-chat-loading-message-bubble';
+
   private static colorToHex(color: string) {
     const dummyElement = document.createElement('div');
     dummyElement.style.color = color;
