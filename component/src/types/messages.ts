@@ -7,16 +7,16 @@ export interface LoadingHistoryStyles {
   small?: {styles?: MessageElementsStyles; html?: string};
 }
 
-export interface LoadingStyles {
-  message?: MessageElementsStyles;
-  history?: LoadingHistoryStyles;
-}
-
 export interface MessageElementsStyles {
   outerContainer?: CustomStyle;
   innerContainer?: CustomStyle;
   bubble?: CustomStyle;
   media?: CustomStyle;
+}
+
+export interface LoadingStyles {
+  message?: MessageElementsStyles;
+  history?: LoadingHistoryStyles;
 }
 
 export type MessageRoleStyles = {
@@ -32,8 +32,8 @@ export interface MessageStyles {
   file?: MessageRoleStyles;
   html?: MessageRoleStyles;
   intro?: MessageElementsStyles;
-  loading?: LoadingStyles;
   error?: MessageElementsStyles;
+  loading?: LoadingStyles;
 }
 
 export type MessageContent = {role?: string; text?: string; files?: MessageFile[]; html?: string; _sessionId?: string};

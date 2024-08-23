@@ -23,7 +23,7 @@ export class History {
   }
 
   private async fetchHistory(ioFetchHistory: Required<ServiceIO>['fetchHistory']) {
-    const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages);
+    const loadingElements = LoadingHistory.addMessage(this._messages);
     const history = await ioFetchHistory();
     this._messages.removeMessage(loadingElements);
     history.forEach((message) => this._messages.addAnyMessage(message, true));
@@ -55,7 +55,7 @@ export class History {
     this._messages.elementRef.onscroll = async () => {
       if (!this._isLoading && !this._isPaginationComplete && this._messages.elementRef.scrollTop === 0) {
         this._isLoading = true;
-        const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages, false);
+        const loadingElements = LoadingHistory.addMessage(this._messages, false);
         try {
           const messages = await loadHistory(this._index++);
           this._messages.removeMessage(loadingElements);
@@ -80,7 +80,7 @@ export class History {
 
   private async loadInitialHistory(loadHistory: LoadHistory) {
     this._isLoading = true;
-    const loadingElements = LoadingHistory.addLoadHistoryMessage(this._messages);
+    const loadingElements = LoadingHistory.addMessage(this._messages);
     try {
       const messages = await loadHistory(this._index++);
       const scrollTop = this._messages.elementRef.scrollTop;

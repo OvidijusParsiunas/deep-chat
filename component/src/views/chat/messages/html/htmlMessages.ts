@@ -11,7 +11,7 @@ export class HTMLMessages {
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  private static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {
+  public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop);
     messageElements.bubbleElement.classList.add('html-message');
     messageElements.bubbleElement.innerHTML = html;

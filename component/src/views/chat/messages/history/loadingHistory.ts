@@ -1,6 +1,7 @@
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {MessageElementsStyles} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
+import {HTMLMessages} from '../html/htmlMessages';
 import {MessagesBase} from '../messagesBase';
 import {MessageUtils} from '../messageUtils';
 
@@ -28,19 +29,31 @@ export class LoadingHistory {
     messages.applyCustomStyles(messageElements, 'history', false, styles);
   }
 
-  public static addLoadHistoryMessage(messages: Messages, isInitial = true) {
-    const messageElements = messages.createMessageElements('', MessageUtils.AI_ROLE);
-    const {outerContainer, bubbleElement} = messageElements;
-    bubbleElement.classList.add(LoadingHistory.CLASS);
-    const loadingRingElement = LoadingHistory.generateLoadingRingElement();
-    bubbleElement.appendChild(loadingRingElement);
+  private static addLoadHistoryMessage(messageElements: MessageElements, messages: Messages, isInitial = true) {
+    messageElements.bubbleElement.classList.add(LoadingHistory.CLASS);
     const viewClass = isInitial ? LoadingHistory.FULL_VIEW_CLASS : LoadingHistory.SMALL_CLASS;
     messageElements.outerContainer.classList.add(viewClass);
     const styles = isInitial
       ? messages.messageStyles?.loading?.history?.full?.styles
       : messages.messageStyles?.loading?.history?.small?.styles;
     LoadingHistory.apply(messages, messageElements, styles);
-    messages.elementRef.prepend(outerContainer);
+    messages.elementRef.prepend(messageElements.outerContainer);
+  }
+
+  public static createDefaultElements(messages: Messages) {
+    const messageElements = messages.createMessageElements('', MessageUtils.AI_ROLE);
+    const {bubbleElement} = messageElements;
+    const loadingRingElement = LoadingHistory.generateLoadingRingElement();
+    bubbleElement.appendChild(loadingRingElement);
+    return messageElements;
+  }
+
+  public static addMessage(messages: Messages, isInitial = true) {
+    const html = messages.messageStyles?.loading?.history?.full?.html;
+    const messageElements = html
+      ? HTMLMessages.createElements(messages, html, MessageUtils.AI_ROLE, true)
+      : LoadingHistory.createDefaultElements(messages);
+    LoadingHistory.addLoadHistoryMessage(messageElements, messages, isInitial);
     return messageElements;
   }
 
