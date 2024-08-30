@@ -62,6 +62,8 @@ export class LoadingHistory {
       messageElements.outerContainer.classList.replace(LoadingHistory.FULL_VIEW_CLASS, LoadingHistory.SMALL_CLASS);
       const styles = messages.messageStyles?.loading?.history?.small?.styles;
       if (styles) LoadingHistory.apply(messages, messageElements, styles);
+      const html = messages.messageStyles?.loading?.history?.small?.html;
+      if (html) messageElements.bubbleElement.innerHTML = html;
     }
   }
 }
