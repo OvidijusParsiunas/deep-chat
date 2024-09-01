@@ -16,8 +16,8 @@ export class LoadingStyle {
   }
 
   public static setDots(bubbleElement: HTMLElement, messageStyles?: MessageStyles) {
-    if (messageStyles?.loading?.message?.bubble?.color) {
-      const color = LoadingStyle.colorToHex(messageStyles.loading.message.bubble.color);
+    if (messageStyles?.loading?.message?.styles?.bubble?.color) {
+      const color = LoadingStyle.colorToHex(messageStyles.loading.message.styles.bubble.color);
       bubbleElement.style.setProperty('--loading-message-color', color);
       bubbleElement.style.setProperty('--loading-message-color-fade', `${color}33`);
     } else {

@@ -2,9 +2,14 @@ import {InterfacesUnion} from './utilityTypes';
 import {MessageFile} from './messageFile';
 import {CustomStyle} from './styles';
 
+export interface LoadingStyles {
+  styles?: MessageElementsStyles;
+  html?: string;
+}
+
 export interface LoadingHistoryStyles {
-  full?: {styles?: MessageElementsStyles; html?: string};
-  small?: {styles?: MessageElementsStyles; html?: string};
+  full?: LoadingStyles;
+  small?: LoadingStyles;
 }
 
 export interface MessageElementsStyles {
@@ -14,8 +19,8 @@ export interface MessageElementsStyles {
   media?: CustomStyle;
 }
 
-export interface LoadingStyles {
-  message?: MessageElementsStyles;
+export interface LoadingMessageStyles {
+  message?: LoadingStyles;
   history?: LoadingHistoryStyles;
 }
 
@@ -33,7 +38,7 @@ export interface MessageStyles {
   html?: MessageRoleStyles;
   intro?: MessageElementsStyles;
   error?: MessageElementsStyles;
-  loading?: LoadingStyles;
+  loading?: LoadingMessageStyles;
 }
 
 export type MessageContent = {role?: string; text?: string; files?: MessageFile[]; html?: string; _sessionId?: string};

@@ -251,7 +251,7 @@ export class Messages extends MessagesBase {
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
-    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message);
+    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
     LoadingStyle.setDots(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
     ElementUtils.scrollToBottom(this.elementRef);
