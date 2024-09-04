@@ -243,17 +243,26 @@ export class Messages extends MessagesBase {
     if (this.isLastMessageError()) MessageUtils.getLastMessageElement(this.elementRef).remove();
   }
 
-  public addLoadingMessage() {
-    if (!this._displayLoadingMessage) return;
+  private addDefaultLoadingMessage() {
     const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
     const {outerContainer, bubbleElement} = messageElements;
-    bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
+    messageElements.bubbleElement.classList.add(LoadingStyle.DOTS_CONTAINER_CLASS);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
-    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
     LoadingStyle.setDots(bubbleElement, this.messageStyles);
     this.elementRef.appendChild(outerContainer);
+    return messageElements;
+  }
+
+  public addLoadingMessage() {
+    if (!this._displayLoadingMessage) return;
+    const html = this.messageStyles?.loading?.message?.html;
+    const messageElements = html
+      ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, true)
+      : this.addDefaultLoadingMessage();
+    messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
+    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
     ElementUtils.scrollToBottom(this.elementRef);
   }
 

@@ -3,6 +3,7 @@ import {CustomStyle} from '../../types/styles';
 
 export class LoadingStyle {
   public static readonly BUBBLE_CLASS = 'deep-chat-loading-message-bubble';
+  public static readonly DOTS_CONTAINER_CLASS = 'deep-chat-loading-message-dots-container';
 
   private static colorToHex(color: string) {
     const dummyElement = document.createElement('div');
