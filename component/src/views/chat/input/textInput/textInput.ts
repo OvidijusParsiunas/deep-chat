@@ -97,16 +97,17 @@ export class TextInputEl {
   private addEventListeners(inputElement: HTMLElement) {
     if (this._config.styles?.focus) {
       inputElement.onfocus = () => Object.assign(this.elementRef.style, this._config.styles?.focus);
-      inputElement.onblur = this.onBlur.bind(this, this._config.styles.focus, this._config.styles?.container);
+      inputElement.onblur = this.onBlur.bind(this, inputElement, this._config.styles.focus, this._config.styles?.container);
     }
     inputElement.addEventListener('keydown', this.onKeydown.bind(this));
     inputElement.addEventListener('input', this.onInput.bind(this));
     inputElement.addEventListener('paste', PasteUtils.sanitizePastedTextContent);
   }
 
-  private onBlur(focusStyle: CustomStyle, containerStyle?: CustomStyle) {
+  private onBlur(inputElement: HTMLElement, focusStyle: CustomStyle, containerStyle?: CustomStyle) {
     StyleUtils.unsetStyle(this.elementRef, focusStyle);
     if (containerStyle) Object.assign(this.elementRef.style, containerStyle);
+    if (!inputElement.textContent) this.setPlaceholderText(this._config.placeholder?.text || 'Ask me anything!');
   }
 
   private onKeydown(event: KeyboardEvent) {
