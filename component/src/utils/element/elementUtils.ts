@@ -24,11 +24,11 @@ export class ElementUtils {
     return newElement;
   }
 
-  public static scrollToBottom(element: HTMLElement) {
-    element.scrollTop = element.scrollHeight;
+  public static scrollToBottom(element: HTMLElement, smooth: boolean = false) {
+    element.scrollTo({left: 0, top: element.scrollHeight, behavior: (smooth ? 'smooth' : 'instant')});
   }
 
-  public static scrollToTop(element: HTMLElement) {
-    element.scrollTop = 0;
+  public static scrollToTop(element: HTMLElement, smooth: boolean = false) {
+    element.scrollTo({left: 0, top: 0, behavior: (smooth ? 'smooth' : 'instant')});
   }
 }
