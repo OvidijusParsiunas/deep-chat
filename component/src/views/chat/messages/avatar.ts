@@ -10,6 +10,10 @@ export class Avatar {
     (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility ||= 'hidden';
   }
 
+  public static reveal(innerContainer: HTMLElement) {
+    (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility = '';
+  }
+
   private static applyCustomStylesToElements(container: HTMLElement, avatar: HTMLElement, style: AvatarStyles) {
     Object.assign(container.style, style.container);
     Object.assign(avatar.style, style.avatar);

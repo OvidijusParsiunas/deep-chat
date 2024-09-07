@@ -8,6 +8,10 @@ export class Name {
     (innerContainer.getElementsByClassName(Name.NAME_CLASS)[0] as HTMLElement).style.visibility ||= 'hidden';
   }
 
+  public static reveal(innerContainer: HTMLElement) {
+    (innerContainer.getElementsByClassName(Name.NAME_CLASS)[0] as HTMLElement).style.visibility = '';
+  }
+
   private static getPosition(role: string, names: CustomNames) {
     let position: NameT['position'] | undefined = names?.[role]?.position;
     if (role !== MessageUtils.USER_ROLE) position ??= names?.ai?.position;
