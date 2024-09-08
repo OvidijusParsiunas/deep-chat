@@ -104,6 +104,11 @@ export class MessageUtils {
     if (names) Name.hide(innerContainer);
   }
 
+  public static revealRoleElements(innerContainer: HTMLElement, avatars?: Avatars, names?: Names) {
+    if (avatars) Avatar.reveal(innerContainer);
+    if (names) Name.reveal(innerContainer);
+  }
+
   public static updateRefArr<T>(arr: Array<T>, item: T, isTop: boolean) {
     if (isTop) {
       arr.unshift(item);

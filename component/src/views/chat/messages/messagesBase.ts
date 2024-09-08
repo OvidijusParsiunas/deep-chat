@@ -109,10 +109,25 @@ export class MessagesBase {
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
     LoadingHistory.changeFullViewToSmall(this, lastMessageElements);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
+      this.revealRoleElementsIfTempRemoved(lastMessageElements, role);
       lastMessageElements.outerContainer.remove();
       this.messageElementRefs.pop();
     }
     return this.createMessageElements(text, role, isTop);
+  }
+
+  // this can be tested by having an ai message, then a temp ai message with html that submits new user message:
+  // https://github.com/OvidijusParsiunas/deep-chat/issues/258
+  // prettier-ignore
+  private revealRoleElementsIfTempRemoved(tempElements: MessageElements, newRole: string) {
+    if ((this._avatars || this._names) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
+      // if prev message before temp has a different role to the new one, make sure its avatar is revealed
+      const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
+      if (prevMessageElements && this.messages[this.messages.length - 1]
+          && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
+        MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this._avatars, this._names);
+      }
+    }
   }
 
   protected static isTemporaryElement(elements: MessageElements) {
