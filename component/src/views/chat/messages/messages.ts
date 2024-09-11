@@ -245,13 +245,12 @@ export class Messages extends MessagesBase {
 
   private addDefaultLoadingMessage() {
     const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
-    const {outerContainer, bubbleElement} = messageElements;
+    const {bubbleElement} = messageElements;
     messageElements.bubbleElement.classList.add(LoadingStyle.DOTS_CONTAINER_CLASS);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
     LoadingStyle.setDots(bubbleElement, this.messageStyles);
-    this.elementRef.appendChild(outerContainer);
     return messageElements;
   }
 
@@ -259,8 +258,9 @@ export class Messages extends MessagesBase {
     if (!this._displayLoadingMessage) return;
     const html = this.messageStyles?.loading?.message?.html;
     const messageElements = html
-      ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, true)
+      ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, false)
       : this.addDefaultLoadingMessage();
+    this.elementRef.appendChild(messageElements.outerContainer);
     messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
     ElementUtils.scrollToBottom(this.elementRef);
