@@ -109,7 +109,7 @@ export class MessagesBase {
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
     LoadingHistory.changeFullViewToSmall(this, lastMessageElements);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
-      this.revealRoleElementsIfTempRemoved(lastMessageElements, role);
+      this.revealRoleElementsIfTempRemoved(lastMessageElements, role); // readding role elements to previous message
       lastMessageElements.outerContainer.remove();
       this.messageElementRefs.pop();
     }
