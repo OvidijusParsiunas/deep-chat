@@ -302,8 +302,7 @@ export class Messages extends MessagesBase {
       const bubbleClasslist = message.bubbleElement.classList;
       if (
         bubbleClasslist.contains(LoadingStyle.BUBBLE_CLASS) ||
-        bubbleClasslist.contains(LoadingHistory.CLASS) ||
-        bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)
+        bubbleClasslist.contains(LoadingHistory.CLASS)
       ) {
         retainedElements.push(message);
       } else {
