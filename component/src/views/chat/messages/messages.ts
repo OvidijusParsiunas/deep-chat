@@ -41,7 +41,7 @@ export class Messages extends MessagesBase {
   private readonly _displayLoadingMessage?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
-  private _introMessage?: IntroMessage;
+  private _introMessage?: IntroMessage | IntroMessage[];
   customDemoResponse?: DemoResponse;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
@@ -55,7 +55,7 @@ export class Messages extends MessagesBase {
     if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     }
-    this.addIntroductoryMessage(deepChat, serviceIO);
+    this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
@@ -105,22 +105,32 @@ export class Messages extends MessagesBase {
   }
 
   // WORK - const file for deep chat classes
-  private addIntroductoryMessage(deepChat?: DeepChat, serviceIO?: ServiceIO) {
+  private addIntroductoryMessages(deepChat?: DeepChat, serviceIO?: ServiceIO) {
     if (deepChat?.shadowRoot) this._introMessage = deepChat.introMessage;
     let introMessage = this._introMessage;
     // interface - introMessage
     if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
     if (introMessage) {
-      let elements;
-      if (introMessage?.text) {
-        elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
-      } else if (introMessage?.html) {
-        elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
+      if (Array.isArray(introMessage)) {
+        introMessage.forEach((intro) => {
+          this.addIntroductoryMessage(intro);
+        });
+      } else {
+        this.addIntroductoryMessage(introMessage);
       }
-      if (elements) {
-        this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
-        elements.outerContainer.classList.add('deep-chat-intro');
-      }
+    }
+  }
+
+  private addIntroductoryMessage(introMessage: IntroMessage) {
+    let elements;
+    if (introMessage?.text) {
+      elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
+    } else if (introMessage?.html) {
+      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
+    }
+    if (elements) {
+      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
+      elements.outerContainer.classList.add('deep-chat-intro');
     }
   }
 
@@ -321,7 +331,7 @@ export class Messages extends MessagesBase {
     this.messageElementRefs = retainedElements;
     if (isReset !== false) {
       if (this._introPanel?._elementRef) this._introPanel.display();
-      this.addIntroductoryMessage();
+      this.addIntroductoryMessages();
     }
     this.messages.splice(0, this.messages.length);
     this.textElementsToText.splice(0, this.textElementsToText.length);
