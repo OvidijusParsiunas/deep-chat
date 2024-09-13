@@ -86,7 +86,7 @@ export class WebModel extends BaseServiceIO {
     }
   }
 
-  private shouldAddIntroMessage(customIntroMessage?: IntroMessage) {
+  private shouldAddIntroMessage(customIntroMessage?: IntroMessage | IntroMessage[]) {
     return !customIntroMessage && this._webModel && this._webModel.introMessage?.displayed !== false;
   }
 
