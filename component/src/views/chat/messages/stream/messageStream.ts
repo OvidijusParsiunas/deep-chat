@@ -102,6 +102,7 @@ export class MessageStream {
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);
       if (this._message) this._message.html = this._streamedContent;
     }
+    this._elements.bubbleElement.classList.remove(MessageStream.MESSAGE_CLASS);
     if (this._message) {
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
     }

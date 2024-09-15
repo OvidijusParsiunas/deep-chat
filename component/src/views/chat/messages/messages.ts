@@ -305,20 +305,29 @@ export class Messages extends MessagesBase {
     );
   }
 
+  private static isActiveElement(bubbleClasslist: DOMTokenList) {
+    return (
+      bubbleClasslist.contains(LoadingStyle.BUBBLE_CLASS) ||
+      bubbleClasslist.contains(LoadingHistory.CLASS) ||
+      bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)
+    );
+  }
+
   // WORK - update all message classes to use deep-chat prefix
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
+    const retainedTextElemenets: [MessageElements, string][] = [];
     this.messageElementRefs.forEach((message) => {
       const bubbleClasslist = message.bubbleElement.classList;
-      if (
-        bubbleClasslist.contains(LoadingStyle.BUBBLE_CLASS) ||
-        bubbleClasslist.contains(LoadingHistory.CLASS) ||
-        bubbleClasslist.contains(MessageStream.MESSAGE_CLASS)
-      ) {
+      if (Messages.isActiveElement(bubbleClasslist)) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
       }
+    });
+    this.textElementsToText.forEach((textElementToText) => {
+      const bubbleClasslist = textElementToText[0].bubbleElement.classList;
+      if (Messages.isActiveElement(bubbleClasslist)) retainedTextElemenets.push(textElementToText);
     });
     // this is a form of cleanup as this.messageElementRefs does not contain error messages
     // and can only be deleted by direct search
@@ -334,7 +343,7 @@ export class Messages extends MessagesBase {
       this.addIntroductoryMessages();
     }
     this.messages.splice(0, this.messages.length);
-    this.textElementsToText.splice(0, this.textElementsToText.length);
+    this.textElementsToText = retainedTextElemenets;
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }
