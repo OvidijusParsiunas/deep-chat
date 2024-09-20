@@ -112,7 +112,8 @@ export class Messages extends MessagesBase {
     if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
     if (introMessage) {
       if (Array.isArray(introMessage)) {
-        introMessage.forEach((intro) => {
+        introMessage.forEach((intro, index) => {
+          if (index !== 0) MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
           this.addIntroductoryMessage(intro);
         });
       } else {
