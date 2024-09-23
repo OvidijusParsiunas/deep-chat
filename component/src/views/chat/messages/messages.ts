@@ -340,11 +340,11 @@ export class Messages extends MessagesBase {
       }
     });
     this.messageElementRefs = retainedElements;
+    this.messages.splice(0, this.messages.length);
     if (isReset !== false) {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessages();
     }
-    this.messages.splice(0, this.messages.length);
     this.textElementsToText = retainedTextElemenets;
     this._onClearMessages?.();
     delete serviceIO.sessionId;
