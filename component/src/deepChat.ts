@@ -20,13 +20,13 @@ import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
+import type { RemarkableOptions } from 'remarkable';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
-import type { Remarkable } from 'remarkable';
 import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
 import {LoadHistory} from './types/history';
@@ -51,7 +51,7 @@ export class DeepChat extends InternalHTML {
   webModel?: WebModel;
 
   @Property('object')
-  remarkableConfig?: Remarkable;
+  remarkableConfig?: RemarkableOptions;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;

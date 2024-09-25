@@ -6,6 +6,7 @@ import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {Remarkable, RemarkableOptions} from 'remarkable';
 import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
 import {MessageStyleUtils} from './messageStyleUtils';
@@ -16,7 +17,6 @@ import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
-import {Remarkable} from 'remarkable';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -36,7 +36,7 @@ export class MessagesBase {
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = deepChat.messageStyles;
-    this._remarkable = deepChat.remarkableConfig ?? RemarkableConfig.createNew();
+    this._remarkable = RemarkableConfig.createNew(deepChat.remarkableConfig);
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
@@ -219,8 +219,8 @@ export class MessagesBase {
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
-  protected refreshTextMessages() {
-    this._remarkable = RemarkableConfig.createNew();
+  protected refreshTextMessages(config?: RemarkableOptions) {
+    this._remarkable = RemarkableConfig.createNew(config);
     this.textElementsToText.forEach((elementToText) => {
       this.renderText(elementToText[0].bubbleElement, elementToText[1]);
     });
