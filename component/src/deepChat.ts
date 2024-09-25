@@ -26,6 +26,7 @@ import {DropupStyles} from './types/dropupStyles';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
+import type { Remarkable } from 'remarkable';
 import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
 import {LoadHistory} from './types/history';
@@ -48,6 +49,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   webModel?: WebModel;
+
+  @Property('object')
+  remarkableConfig?: Remarkable;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;
