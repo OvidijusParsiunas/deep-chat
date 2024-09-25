@@ -9,8 +9,10 @@ declare global {
 
 export class RemarkableConfig {
   private static instantiate(config?: RemarkableOptions) {
-    const hljsModule = window.hljs;
-    if (hljsModule) {
+    if (config) {
+      return new Remarkable(config);
+    } else if (window.hljs) {
+      const hljsModule = window.hljs;
       return new Remarkable({
         highlight: function (str, lang) {
           if (lang && hljsModule.getLanguage(lang)) {
@@ -34,8 +36,6 @@ export class RemarkableConfig {
         linkTarget: '_blank', // set target to open in a new tab
         typographer: true, // Enable smartypants and other sweet transforms
       });
-    } else if (config) {
-      return new Remarkable(config);
     } else {      
       return new Remarkable({
         breaks: true,
