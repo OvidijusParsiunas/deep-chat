@@ -1,7 +1,9 @@
+import {Browser} from '../../../../utils/browser/browser';
 import {TextInputEl} from './textInput';
 
 export class FocusUtils {
   public static focusEndOfInput(inputElement: HTMLElement) {
+    if (Browser.IS_SAFARI) inputElement.focus(); // can only focus the start of the input in Safari
     const range = document.createRange(); // create a new Range object
     range.selectNodeContents(inputElement); // set the Range object to contain the contents of the contentEditable div
     range.collapse(false); // collapse the Range object to the end of the contents
