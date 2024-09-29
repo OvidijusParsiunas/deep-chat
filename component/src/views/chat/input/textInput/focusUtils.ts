@@ -3,7 +3,6 @@ import {TextInputEl} from './textInput';
 
 export class FocusUtils {
   public static focusEndOfInput(inputElement: HTMLElement) {
-    if (Browser.IS_SAFARI) inputElement.focus(); // can only focus the start of the input in Safari
     const range = document.createRange(); // create a new Range object
     range.selectNodeContents(inputElement); // set the Range object to contain the contents of the contentEditable div
     range.collapse(false); // collapse the Range object to the end of the contents
@@ -13,7 +12,10 @@ export class FocusUtils {
   }
 
   public static focusFromParentElement(parentElement: HTMLElement) {
-    const inputElement = parentElement.querySelector(`#${TextInputEl.TEXT_INPUT_ID}`);
-    if (inputElement) FocusUtils.focusEndOfInput(inputElement as HTMLElement);
+    const inputElement = parentElement.querySelector(`#${TextInputEl.TEXT_INPUT_ID}`) as HTMLElement;
+    if (inputElement) {
+      if (Browser.IS_SAFARI) inputElement.focus(); // can only focus the start of the input in Safari
+      FocusUtils.focusEndOfInput(inputElement);
+    }
   }
 }
