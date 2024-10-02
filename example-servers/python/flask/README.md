@@ -19,7 +19,7 @@ Navigate to the `src` directory and run the following command to initialize and 
 ```
 python -m venv .env && source .env/bin/activate
 ```
-install the required packages:
+Install the required python packages:
 
 ```
 pip install flask flask-cors load_dotenv requests
