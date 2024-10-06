@@ -294,7 +294,7 @@ export class OpenAIAssistantIO extends DirectServiceIO {
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = this._functionHandler(functions);
+    const handlerResponse = await this._functionHandler(functions);
     if (!Array.isArray(handlerResponse) || toolCalls.length !== handlerResponse.length) {
       throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }
