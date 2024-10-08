@@ -38,7 +38,11 @@ export interface OpenAIImagesDalle3 {
 
 export type FunctionsDetails = {name: string; arguments: string}[];
 
-export type AssistantFunctionHandlerResponse = string[] | Promise<string>[] | Promise<string[]>;
+export type AssistantFunctionHandlerResponse =
+  | string[]
+  | Promise<string>[]
+  | Promise<string[]>
+  | Promise<Promise<string>[]>;
 
 export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
 
