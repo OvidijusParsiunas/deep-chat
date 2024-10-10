@@ -60,6 +60,8 @@ export class SubmitButton extends InputButton<Styles> {
     this._serviceIO = serviceIO;
     this._alwaysEnabled = !!submitButtonStyles?.alwaysEnabled;
     deepChat.disableSubmitButton = this.disableSubmitButton.bind(this, serviceIO);
+    deepChat.enableSubmitButtonLoading = this.enableSubmitButtonLoading.bind(this);
+    deepChat.disableSubmitButtonLoading = this.disableSubmitButtonLoading.bind(this);
     this.attemptOverwriteLoadingStyle(deepChat);
     if (buttons.microphone) this.setUpSpeechToText(buttons.microphone.button, deepChat.speechToText);
     setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
@@ -271,6 +273,19 @@ export class SubmitButton extends InputButton<Styles> {
       this._validationHandler?.();
     } else {
       this.changeToDisabledIcon(true);
+    }
+  }
+
+  private enableSubmitButtonLoading() {
+    if (!this.status.loadingActive) {
+      this.changeToLoadingIcon();
+    }
+  }
+
+  private disableSubmitButtonLoading() {
+    if (this.status.loadingActive) {
+      this.resetSubmit(() => Promise.resolve(null));
+      this.changeToSubmitIcon();
     }
   }
 }

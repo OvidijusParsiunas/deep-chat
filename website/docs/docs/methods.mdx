@@ -289,6 +289,54 @@ chatElementRef.disableSubmitButton();
 
 <LineBreak></LineBreak>
 
+### `enableSubmitButtonLoading` {#enableSubmitButtonLoading}
+
+- Type: (`override?: boolean`) => `void`
+
+Applies loading styles to the confirmation button.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'enableSubmitButtonLoading'} displayResults={false}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.enableSubmitButtonLoading();
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `disableSubmitButtonLoading` {#disableSubmitButtonLoading}
+
+- Type: (`override?: boolean`) => `void`
+
+Removes loading styles to the confirmation button and applies default styles.
+
+#### Example
+
+<ComponentContainerMethods propertyName={'disableSubmitButtonLoading'} displayResults={false}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.disableSubmitButtonLoading();
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `refreshMessages` {#refreshMessages}
 
 - Type: `() => void`

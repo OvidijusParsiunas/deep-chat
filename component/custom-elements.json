@@ -298,6 +298,21 @@
                 "text": "DisableSubmitButton"
               }
             },
+
+            {
+              "kind": "field",
+              "name": "enableSubmitButtonLoading",
+              "type": {
+                "text": "() => void"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disableSubmitButtonLoading",
+              "type": {
+                "text": "() => void"
+              }
+            },
             {
               "kind": "field",
               "name": "setPlaceholderText",
@@ -40127,6 +40142,18 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "enableSubmitButtonLoading",
+              "privacy": "private",
+              "parameters": []
+            },
+            {
+              "kind": "method",
+              "name": "disableSubmitButtonLoading",
+              "privacy": "private",
+              "parameters": []
             },
             {
               "kind": "field",

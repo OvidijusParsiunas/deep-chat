@@ -412,6 +412,7 @@ Custom details for the chat's text input. <br />
 Custom styling for the submit button. <br />
 `submit` state is displayed when the user's input is valid and can be sent. <br />
 `loading` is used when waiting for a message response from the target server. <br />
+You can also set this state manually by calling the [`enableSubmitButtonLoading`](/docs/methods#enableSubmitButtonLoading) method and then revert manually by calling the [`disableSubmitButtonLoading`](/docs/methods#disableSubmitButtonLoading) method. <br />
 `stop` is used when a message response is being [`streamed`](/docs/connect#Stream). <br />
 `disabled` is used when the user's input cannot be sent (see [`validateInput`](/docs/interceptors#validateInput)) or the [websocket](/docs/connect#Websocket) connection is not live.
 You can also set this state manually by calling the [`disableSubmitButton`](/docs/methods#disableSubmitButton) method. <br />

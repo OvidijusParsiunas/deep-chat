@@ -157,6 +157,10 @@ export class DeepChat extends InternalHTML {
 
   disableSubmitButton: DisableSubmitButton = () => {};
 
+  enableSubmitButtonLoading: () => void = () => {};
+
+  disableSubmitButtonLoading: () => void = () => {};
+
   setPlaceholderText: (text: string) => void = () => {};
 
   @Property('function')
