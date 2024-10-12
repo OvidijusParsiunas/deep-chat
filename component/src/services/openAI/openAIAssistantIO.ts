@@ -251,7 +251,10 @@ export class OpenAIAssistantIO extends DirectServiceIO {
       this.sessionId = result.thread_id;
       this.run_id = result.id;
       // updates the user sent message with the session id (the message event sent did not have this id)
-      if (this.messages) this.messages.messages[this.messages.messages.length - 1]._sessionId = this.sessionId;
+      // user can clear the messages when they make a request, hence checking if messages length > 0
+      if (this.messages && this.messages.messages.length > 0) {
+        this.messages.messages[this.messages.messages.length - 1]._sessionId = this.sessionId;
+      }
     }
   }
 
