@@ -67,7 +67,7 @@ export interface OpenAINewAssistant {
   };
 }
 
-export type FileToolTypes = 'code_interpreter' | 'file_search' | 'images';
+export type FileToolType = 'code_interpreter' | 'file_search' | 'images';
 
 // https://platform.openai.com/docs/api-reference/assistants
 export interface OpenAIAssistant {
@@ -77,7 +77,7 @@ export interface OpenAIAssistant {
   new_assistant?: OpenAINewAssistant;
   // if image is uploaded and this is undefined, it will default to images
   // images can be used without a file tool type
-  files_tool_type?: FileToolTypes | ((fileNames: string[]) => FileToolTypes);
+  files_tool_type?: FileToolType | ((fileNames: string[]) => FileToolType);
   function_handler?: AssistantFunctionHandler;
 }
 
