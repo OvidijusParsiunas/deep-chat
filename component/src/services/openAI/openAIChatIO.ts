@@ -1,5 +1,6 @@
 import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
+import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
 import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
@@ -10,8 +11,10 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {BuildHeadersFunc} from '../../types/headers';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
@@ -27,11 +30,15 @@ export class OpenAIChatIO extends DirectServiceIO {
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
-  constructor(deepChat: DeepChat) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, keyVerificationDetailsArg?: KeyVerificationDetails,
+      buildHeadersFuncArg?: BuildHeadersFunc, apiKeyArg?: APIKey, configArg?: true | OpenAIChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.openAI;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
+    const keyVerificationDetails = keyVerificationDetailsArg || OpenAIUtils.buildKeyVerificationDetails();
+    const buildHeadersFunc = buildHeadersFuncArg || OpenAIUtils.buildHeaders;
+    const apiKey = apiKeyArg || directConnectionCopy.openAI;
+    super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
+    const config = configArg || directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
       const {function_handler} = deepChat.directConnection?.openAI?.chat as OpenAIChat;

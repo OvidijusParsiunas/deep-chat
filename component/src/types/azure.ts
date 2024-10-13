@@ -1,3 +1,5 @@
+import {OpenAIAssistant, OpenAIChat} from './openAI';
+
 // https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
 export interface AzureTranslationConfig {
   language?: string;
@@ -31,7 +33,20 @@ export interface AzureRegion {
   region: string;
 }
 
+type URLDetails = {
+  endpoint: string;
+  version: string;
+  deploymentId: string;
+};
+
+export interface AzureOpenAI {
+  urlDetails: URLDetails;
+  chat?: true | OpenAIChat;
+  assistant?: true | OpenAIAssistant;
+}
+
 export interface Azure {
+  openAI?: AzureOpenAI;
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig;
   speechToText?: AzureRegion & AzureSpeechToTextConfig;
   summarization?: AzureEndpoint & AzureSummarizationConfig;

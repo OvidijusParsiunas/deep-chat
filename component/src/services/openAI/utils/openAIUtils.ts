@@ -13,7 +13,7 @@ export class OpenAIUtils {
   }
 
   // prettier-ignore
-  private static handleVerificationResult(result: object, key: string,
+  public static handleVerificationResult(result: object, key: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const openAIResult = result as OpenAIConverseResult;
     if (openAIResult.error) {

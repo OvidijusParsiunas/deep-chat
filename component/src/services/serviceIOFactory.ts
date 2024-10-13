@@ -21,6 +21,7 @@ import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {OpenAIAssistantIO} from './openAI/openAIAssistantIO';
+import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
@@ -94,6 +95,11 @@ export class ServiceIOFactory {
         return new HuggingFaceConversationIO(deepChat);
       }
       if (directConnection.azure) {
+        if (directConnection.azure.openAI) {
+          if (directConnection.azure.openAI.chat) {
+            return new AzureOpenAIChatIO(deepChat);
+          }
+        }
         if (directConnection.azure.speechToText) {
           return new AzureSpeechToTextIO(deepChat);
         }
