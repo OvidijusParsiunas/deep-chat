@@ -37,7 +37,7 @@ export class RemarkableConfig {
     } else {
       return new Remarkable({
         breaks: true,
-        linkTarget: '_blank', // set target to open in a new tab
+        linkTarget: '',
       });
     }
   }
