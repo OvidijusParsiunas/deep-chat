@@ -1,5 +1,5 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
-import {OpenAIAssistantUtils, UploadedFile} from '../utils/openAIAssistantUtils';
+import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {FileMessageUtils} from '../../../views/chat/messages/fileMessageUtils';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
@@ -37,16 +37,15 @@ type FileAttachments = {
   tools: {type: OpenAIAssistant['files_tool_type']}[];
 }[];
 
-type URLSegments = {
-  prefix: string;
-  posfix: string;
+export type URLSegments = {
+  threadsPrefix: string;
+  threadsPosfix: string;
   newAssistantUrl: string;
-  createMessageUrlPostfix: string;
-  listMessagesUrlPostfix: string;
-  storeFilesUrl: string;
-  getFilesUrl: string;
-  getFilesPrefixUrl: string;
-  getFilesPostfixUrl: string;
+  createMessagePostfix: string;
+  listMessagesPostfix: string;
+  storeFiles: string;
+  getFilesPrefix: string;
+  getFilesPostfix: string;
 };
 
 export class OpenAIAssistantIOI extends DirectServiceIO {
@@ -179,12 +178,12 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
-      this.url = `${this.urlSegments.prefix}/${this.sessionId}/messages${this.urlSegments.createMessageUrlPostfix}`;
+      this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/messages${this.urlSegments.createMessagePostfix}`;
       const body = this.processMessage(pMessages, uploadedFiles);
       HTTPRequest.request(this, body, messages);
     } else {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
-      this.url = `${this.urlSegments.prefix}/runs${this.urlSegments.prefix}`;
+      this.url = `${this.urlSegments.threadsPrefix}/runs${this.urlSegments.threadsPosfix}`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
       if (this.isSSEStream) {
         this.createStreamRun(body);
@@ -200,7 +199,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
-    const uploadedFiles = files ? await OpenAIAssistantUtils.storeFiles(this, messages, files) : undefined;
+    const uploadedFiles = files
+      ? await OpenAIAssistantUtils.storeFiles(this, messages, files, this.urlSegments.storeFiles)
+      : undefined;
     this.connectSettings.method = 'POST';
     this.callService(messages, pMessages, uploadedFiles);
   }
@@ -238,7 +239,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     }
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
-    const url = `${this.urlSegments.prefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.posfix}`;
+    const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
@@ -247,7 +248,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${this.urlSegments.prefix}/${this.sessionId}/runs${this.urlSegments.posfix}`;
+      this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
       const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
       this.run_id = runObj.id;
     } else {
@@ -263,12 +264,12 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
-    this.url = `${this.urlSegments.prefix}/${thread_id}/messages?${this.urlSegments.listMessagesUrlPostfix}`;
+    this.url = `${this.urlSegments.threadsPrefix}/${thread_id}/messages?${this.urlSegments.listMessagesPostfix}`;
     let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
-    return OpenAIAssistantUtils.processAPIMessages(this, threadMessages, isHistory);
+    return OpenAIAssistantUtils.processAPIMessages(this, threadMessages, isHistory, this.urlSegments);
   }
 
   async extractPollResultData(result: OpenAIRunResult): PollResult {
@@ -312,8 +313,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       return {tool_call_id: toolCalls[index].id, output: resp};
     });
     // https://platform.openai.com/docs/api-reference/runs/submitToolOutputs
-    const prefix = `${this.urlSegments.prefix}/${this.sessionId}`;
-    const postfix = `/runs/${this.run_id}/submit_tool_outputs${this.urlSegments.posfix}`;
+    const prefix = `${this.urlSegments.threadsPrefix}/${this.sessionId}`;
+    const postfix = `/runs/${this.run_id}/submit_tool_outputs${this.urlSegments.threadsPosfix}`;
     this.url = `${prefix}${postfix}`;
     if (this.isSSEStream) {
       await this.createStreamRun({tool_outputs});
@@ -334,7 +335,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     }
     if (this.isSSEStream && this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
-      this.url = `${this.urlSegments.prefix}/${this.sessionId}/runs${this.urlSegments.posfix}`;
+      this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
@@ -349,7 +350,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: 'assistant', content: result.content}, textFileFirst);
+          this, {role: 'assistant', content: result.content}, this.urlSegments, textFileFirst);
         this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
         return {text: ''};
       }
@@ -359,7 +360,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         // if file is included and there is no annotation/link in text, process during the stream
         const textContent = result.delta.content.find((content) => content.text);
         if (textContent?.text?.annotations && textContent.text.annotations.length === 0) {
-          const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content);
+          const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content, this.urlSegments);
           return {text: messages[0].text, files: messages[1].files};
         }
       }

@@ -11,6 +11,7 @@ import {StabilityAIImageToImageIO} from './stabilityAI/stabilityAIImageToImageIO
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
 import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
+import {OpenAIAssistantIO} from './openAI/assistant/openAIAssistantIO';
 import {CohereTextGenerationIO} from './cohere/cohereTextGenerationIO';
 import {CohereSummarizationIO} from './cohere/cohereSummarizationIO';
 import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
@@ -20,7 +21,6 @@ import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
-import {OpenAIAssistantIO} from './openAI/openAIAssistantIO';
 import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
