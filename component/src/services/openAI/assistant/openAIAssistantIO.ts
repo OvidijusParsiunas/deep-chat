@@ -19,10 +19,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-    const config = directConnectionCopy.openAI?.assistant; // can be undefined as this is the default service
-    if (typeof directConnectionCopy.openAI?.assistant === 'boolean' && directConnectionCopy.openAI?.assistant === true) {
-      directConnectionCopy.openAI.assistant = config;
-    }
+    const config = directConnectionCopy.openAI?.assistant;
     super(deepChat, config, OpenAIAssistantIO.URL_SEGMENTS, apiKey);
     this.connectSettings.headers ??= {};
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
