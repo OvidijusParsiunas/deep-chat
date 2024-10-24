@@ -5,17 +5,26 @@ import {AzureOpenAI} from '../../types/azure';
 import {DeepChat} from '../../deepChat';
 
 export class AzureOpenAIChatIO extends OpenAIChatIO {
+  override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
+  isTextInputDisabled = false;
+
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const key = directConnectionCopy.azure;
-    const urlDetails = directConnectionCopy.azure?.openAI?.urlDetails as AzureOpenAI['urlDetails'];
+    const urlDetails = directConnectionCopy.azure?.openAI?.urlDetails || ({} as AzureOpenAI['urlDetails']);
     const config = directConnectionCopy.azure?.openAI?.chat as AzureOpenAI['chat'];
 
-    // WORK
-    if (!urlDetails) throw Error('Please define the Azure URL Details. More details [here](WORK)');
-
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
-    this.url = AzureOpenAIChatIO.buildURL(urlDetails);
+
+    if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
+      this.isTextInputDisabled = true;
+      this.canSendMessage = () => false;
+      setTimeout(() => {
+        deepChat.addMessage({error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+      });
+    } else {
+      this.url = AzureOpenAIChatIO.buildURL(urlDetails);
+    }
   }
 
   private static buildURL(urlDetails: AzureOpenAI['urlDetails']) {
