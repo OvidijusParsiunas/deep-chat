@@ -12,13 +12,16 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';
+  private static readonly REGION_ERROR_MESSAGE =
+    // eslint-disable-next-line max-len
+    'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#SpeechToText)';
+  permittedErrorPrefixes: string[] = [AzureSpeechToTextIO.REGION_ERROR_MESSAGE];
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Speech To Text</b></div>
     <p><b>Upload a .wav or .ogg audio file</b> to transcribe it into text.
     <p>
       Click <a href="${AzureSpeechToTextIO.HELP_LINK}">here</a> for more info.
     </p>`;
-
   url = '';
   isTextInputDisabled = true;
   textInputPlaceholderText = 'Upload an audio file';
@@ -28,11 +31,19 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     const apiKey = deepChat.directConnection?.azure;
     const defaultFile = {audio: {files: {acceptedFormats: '.wav,.ogg'}}};
     super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, defaultFile);
-    this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;
-    const lang = config.lang || 'en-US';
-    // eslint-disable-next-line max-len
-    this.url = `https://${config.region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`;
-    this.recordAudio = undefined; // recorded audio files do not seem to work - investigate in the future
+    if (!config.region) {
+      this.isTextInputDisabled = true;
+      this.canSendMessage = () => false;
+      setTimeout(() => {
+        deepChat.addMessage({error: AzureSpeechToTextIO.REGION_ERROR_MESSAGE});
+      });
+    } else {
+      this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;
+      const lang = config.lang || 'en-US';
+      // eslint-disable-next-line max-len
+      this.url = `https://${config.region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`;
+      this.recordAudio = undefined; // recorded audio files do not seem to work - investigate in the future
+    }
   }
 
   private static canFileSendMessage(_?: string, files?: File[]) {
