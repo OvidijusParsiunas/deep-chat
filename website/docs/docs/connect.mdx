@@ -430,13 +430,13 @@ signal functions differ based on the type of connection you are establishing. Se
 chatElementRef.connect = {
   handler: (body, signals) => {
     try {
-      fetch('custom-url).then((response) => {
+      fetch('custom-url').then((response) => {
         signals.onResponse({text: 'Handler response'}); // displays the response text message
-      })
+      });
     } catch (e) {
       signals.onResponse({error: 'Error'}); // displays an error message
     }
-  }
+  },
 };
 ```
 
