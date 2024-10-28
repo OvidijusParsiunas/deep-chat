@@ -197,7 +197,7 @@ export class Messages extends MessagesBase {
     this.removeMessageOnError();
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
-    const messageElements = this.createMessageElementsOnOrientation(text, '', isTop);
+    const messageElements = this.createMessageElementsOnOrientation(text, 'error', isTop);
     MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
     const {bubbleElement, outerContainer} = messageElements;
     bubbleElement.classList.add('error-message-text');
