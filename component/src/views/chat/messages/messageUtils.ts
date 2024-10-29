@@ -11,6 +11,9 @@ export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
   public static readonly USER_ROLE = 'user';
   private static readonly EMPTY_MESSAGE_CLASS = 'empty-message';
+  private static readonly POSITION_TOP_MESSAGE_CLASS = 'deep-chat-top-message';
+  private static readonly POSITION_MIDDLE_MESSAGE_CLASS = 'deep-chat-middle-message';
+  private static readonly POSITION_BOTTOM_MESSAGE_CLASS = 'deep-chat-bottom-message';
 
   public static getLastElementsByClass(messagesElements: MessageElements[], classes: string[], avoidedClasses?: string[]) {
     for (let i = messagesElements.length - 1; i >= 0; i -= 1) {
@@ -115,5 +118,46 @@ export class MessageUtils {
     } else {
       arr.push(item);
     }
+  }
+
+  public static buildRoleContainerClass(role: string) {
+    return `deep-chat-${role}-container`;
+  }
+
+  private static addNewPositionClasses(messageEls: MessageElements, classes: string[]) {
+    messageEls.outerContainer.classList.remove(
+      MessageUtils.POSITION_TOP_MESSAGE_CLASS,
+      MessageUtils.POSITION_MIDDLE_MESSAGE_CLASS,
+      MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS
+    );
+    messageEls.outerContainer.classList.add(...classes);
+  }
+
+  public static classifyMessages(role: string, messageElementRefs: MessageElements[]) {
+    const currentRole = MessageUtils.buildRoleContainerClass(role);
+    messageElementRefs.forEach((messageEls, index) => {
+      const hasCurrentRole = messageEls.outerContainer.classList.contains(currentRole);
+
+      const prevMessageEls = messageElementRefs[index - 1];
+      const nextMessageEls = messageElementRefs[index + 1];
+
+      const hasPrevRole = prevMessageEls?.outerContainer.classList.contains(currentRole);
+      const hasNextRole = nextMessageEls?.outerContainer.classList.contains(currentRole);
+
+      if (hasCurrentRole) {
+        if (!hasPrevRole && hasNextRole) {
+          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_TOP_MESSAGE_CLASS]);
+        } else if (hasPrevRole && hasNextRole) {
+          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_MIDDLE_MESSAGE_CLASS]);
+        } else if (hasPrevRole && !hasNextRole) {
+          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS]);
+        } else if (!hasPrevRole && !hasNextRole) {
+          MessageUtils.addNewPositionClasses(messageEls, [
+            MessageUtils.POSITION_TOP_MESSAGE_CLASS,
+            MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS,
+          ]);
+        }
+      }
+    });
   }
 }

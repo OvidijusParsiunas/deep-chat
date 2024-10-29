@@ -135,20 +135,22 @@ export class MessagesBase {
   }
 
   public createMessageElements(text: string, role: string, isTop = false) {
-    const messageElements = MessagesBase.createBaseElements();
+    const messageElements = MessagesBase.createBaseElements(role);
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, role);
     MessageUtils.updateRefArr(this.messageElementRefs, messageElements, isTop);
+    MessageUtils.classifyMessages(role, this.messageElementRefs);
     return messageElements;
   }
 
-  protected static createBaseElements(): MessageElements {
+  protected static createBaseElements(role: string): MessageElements {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
     outerContainer.classList.add('outer-message-container');
+    outerContainer.classList.add(MessageUtils.buildRoleContainerClass(role));
     const bubbleElement = document.createElement('div');
     bubbleElement.classList.add('message-bubble');
     innerContainer.appendChild(bubbleElement);
