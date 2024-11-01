@@ -21,7 +21,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
     const config = directConnectionCopy.openAI?.assistant;
-    super(deepChat, config, OpenAIAssistantIO.URL_SEGMENTS, OpenAIUtils.buildHeaders, apiKey);
+    super(deepChat, config, OpenAIAssistantIO.URL_SEGMENTS, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     this.connectSettings.headers ??= {};
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);

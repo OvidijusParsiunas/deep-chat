@@ -8,6 +8,8 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
   override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
+  override insertKeyPlaceholderText = 'Azure OpenAI API Key';
+  override keyHelpUrl = 'https://learn.microsoft.com/en-us/answers/questions/1193991/how-to-get-the-value-of-openai-api-key';
   isTextInputDisabled = false;
 
   constructor(deepChat: DeepChat) {
@@ -28,7 +30,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       getFilesPostfix: `/content${commonPostfix}`,
     };
 
-    super(deepChat, config?.assistant, urlSegments, AzureOpenAIUtils.buildHeaders, apiKey);
+    super(deepChat, config?.assistant, urlSegments, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;
