@@ -21,14 +21,14 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       threadsPrefix: `${commonPrefix}${AzureOpenAIAssistantIO.THREAD_RESOURCE}`,
       threadsPosfix: commonPostfix,
       newAssistantUrl: `${commonPrefix}${AzureOpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}${commonPostfix}`,
-      createMessagePostfix: `?order=desc&api-version=${config?.urlDetails?.version}`,
-      listMessagesPostfix: commonPostfix,
+      createMessagePostfix: commonPostfix,
+      listMessagesPostfix: `order=desc&api-version=${config?.urlDetails?.version}`,
       storeFiles: `${commonPrefix}files${commonPostfix}`,
       getFilesPrefix: `${commonPrefix}files/`,
       getFilesPostfix: `/content${commonPostfix}`,
     };
 
-    super(deepChat, config?.assistant, urlSegments, apiKey);
+    super(deepChat, config?.assistant, urlSegments, AzureOpenAIUtils.buildHeaders, apiKey);
 
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;
