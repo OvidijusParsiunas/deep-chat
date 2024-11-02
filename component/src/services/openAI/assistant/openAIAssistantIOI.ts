@@ -2,6 +2,7 @@ import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} f
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {FileMessageUtils} from '../../../views/chat/messages/fileMessageUtils';
+import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {History} from '../../../views/chat/messages/history/history';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
@@ -10,8 +11,10 @@ import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../../utils/directServiceIO';
-import {OpenAIUtils} from '../utils/openAIUtils';
+import {BuildHeadersFunc} from '../../../types/headers';
 import {Stream} from '../../../utils/HTTP/stream';
+import {OpenAIUtils} from '../utils/openAIUtils';
+import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 import {PollResult} from '../../serviceIO';
 import {
@@ -21,9 +24,6 @@ import {
   OpenAIRunResult,
   ToolCalls,
 } from '../../../types/openAIResult';
-import {APIKey} from '../../../types/APIKey';
-import {BuildHeadersFunc} from '../../../types/headers';
-import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
 
 // https://platform.openai.com/docs/api-reference/messages/createMessage
 type MessageContentArr = {
@@ -68,8 +68,10 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
   private readonly filesToolType: OpenAIAssistant['files_tool_type'];
-  
-  constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments, keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey) {
+
+  // prettier-ignore
+  constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
+      keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey) {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     this.urlSegments = urlSegments;
     if (typeof config === 'object') {
