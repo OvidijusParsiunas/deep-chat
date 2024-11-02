@@ -22,6 +22,8 @@ import {
   ToolCalls,
 } from '../../../types/openAIResult';
 import {APIKey} from '../../../types/APIKey';
+import {BuildHeadersFunc} from '../../../types/headers';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
 
 // https://platform.openai.com/docs/api-reference/messages/createMessage
 type MessageContentArr = {
@@ -66,9 +68,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
   private readonly filesToolType: OpenAIAssistant['files_tool_type'];
-
-  constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments, apiKey?: APIKey) {
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
+  
+  constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments, keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey) {
+    super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     this.urlSegments = urlSegments;
     if (typeof config === 'object') {
       this.config = config; // stored that assistant_id could be added
