@@ -100,7 +100,8 @@ export class Stream {
     }
     if (result.html) {
       sh.onOpen();
-      const responseHTMLStrings = HTMLUtils.splitHTML(result.html);
+      let responseHTMLStrings = HTMLUtils.splitHTML(result.html);
+      if (responseHTMLStrings.length === 0) responseHTMLStrings = result.html.split('');
       Stream.populateMessages(responseHTMLStrings, new MessageStream(messages), simulationSH, 'html');
     }
   }
