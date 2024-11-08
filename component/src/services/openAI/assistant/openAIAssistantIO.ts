@@ -20,7 +20,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
-    const config = directConnectionCopy.openAI?.assistant;
+    const config = deepChat.directConnection?.openAI?.assistant;
     // prettier-ignore
     super(deepChat, config, OpenAIAssistantIO.URL_SEGMENTS, OpenAIUtils.buildKeyVerificationDetails(),
       OpenAIUtils.buildHeaders, apiKey);
