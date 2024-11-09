@@ -55,7 +55,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 800;
-  private readonly _functionHandler?: AssistantFunctionHandler;
+  _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
   readonly shouldFetchHistory: boolean = false;
   private messages?: Messages;
@@ -80,8 +80,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       Object.assign(this.newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
-      const {function_handler} = config as OpenAIAssistant;
-      if (function_handler) this._functionHandler = function_handler;
       this.filesToolType = config.files_tool_type;
     }
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages

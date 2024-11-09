@@ -2,6 +2,7 @@ import {DirectConnection} from '../../types/directConnection';
 import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
 import {AzureOpenAI} from '../../types/azure';
+import {OpenAIChat} from '../../types/openAI';
 import {DeepChat} from '../../deepChat';
 
 export class AzureOpenAIChatIO extends OpenAIChatIO {
@@ -16,6 +17,10 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
 
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
 
+    if (typeof config === 'object') {
+      const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as OpenAIChat;
+      if (function_handler) this._functionHandler = function_handler;
+    }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;

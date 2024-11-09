@@ -24,7 +24,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
-  private readonly _functionHandler?: ChatFunctionHandler;
+  _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
   asyncCallInProgress = false; // used when streaming tools
   private readonly _systemMessage: SystemMessageInternal =

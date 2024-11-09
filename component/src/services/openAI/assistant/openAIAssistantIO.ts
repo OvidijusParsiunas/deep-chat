@@ -1,8 +1,9 @@
 import {DirectConnection} from '../../../types/directConnection';
 import {Response as ResponseI} from '../../../types/response';
 import {OpenAIAssistantIOI} from './openAIAssistantIOI';
-import {DeepChat} from '../../../deepChat';
+import {OpenAIAssistant} from '../../../types/openAI';
 import {OpenAIUtils} from '../utils/openAIUtils';
+import {DeepChat} from '../../../deepChat';
 
 export class OpenAIAssistantIO extends OpenAIAssistantIOI {
   fetchHistory?: () => Promise<ResponseI[]>;
@@ -27,5 +28,9 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     this.connectSettings.headers ??= {};
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
+    if (typeof config === 'object') {
+      const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      if (function_handler) this._functionHandler = function_handler;
+    }
   }
 }

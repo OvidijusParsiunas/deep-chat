@@ -1,6 +1,7 @@
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
 import {DirectConnection} from '../../types/directConnection';
 import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
+import {OpenAIAssistant} from '../../types/openAI';
 import {AzureOpenAI} from '../../types/azure';
 import {DeepChat} from '../../deepChat';
 
@@ -35,6 +36,10 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
     super(deepChat, config?.assistant, urlSegments,
       AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
+    if (typeof config === 'object') {
+      const {function_handler} = deepChat.directConnection?.azure?.openAI as OpenAIAssistant;
+      if (function_handler) this._functionHandler = function_handler;
+    }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
