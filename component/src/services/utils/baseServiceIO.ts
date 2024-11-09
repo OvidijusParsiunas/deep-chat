@@ -132,7 +132,7 @@ export class BaseServiceIO implements ServiceIO {
   async callAPI(requestContents: RequestContents, messages: Messages) {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const processedMessages = MessageLimitUtils.processMessages(
-      messages.messages, this.maxMessages, this.totalMessagesMaxCharLength);
+      messages.messageToElements.map(([msg]) => msg), this.maxMessages, this.totalMessagesMaxCharLength);
     if (this.connectSettings.websocket) {
       const body = {messages: processedMessages, ...this.rawBody};
       Websocket.sendWebsocket(this, body, messages, false);

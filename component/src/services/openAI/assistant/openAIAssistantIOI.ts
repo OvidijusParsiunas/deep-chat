@@ -1,4 +1,5 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
+import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {FileMessageUtils} from '../../../views/chat/messages/fileMessageUtils';
@@ -6,7 +7,6 @@ import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {History} from '../../../views/chat/messages/history/history';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
@@ -202,7 +202,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
-    if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messages);
+    if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messageToElements);
     const uploadedFiles = files
       ? await OpenAIAssistantUtils.storeFiles(this, messages, files, this.urlSegments.storeFiles)
       : undefined;
@@ -223,9 +223,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     return undefined;
   }
 
-  private searchPreviousMessagesForThreadId(messages: MessageContentI[]) {
-    const messageWithSession = messages.find((message) => message._sessionId);
-    if (messageWithSession) this.sessionId = messageWithSession._sessionId;
+  private searchPreviousMessagesForThreadId(messageToElements: MessageToElements) {
+    const messageWithSession = messageToElements.find(([msgToEls]) => msgToEls._sessionId);
+    if (messageWithSession) this.sessionId = messageWithSession[0]._sessionId;
     this.searchedForThreadId = true;
   }
 
@@ -260,8 +260,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.run_id = result.id;
       // updates the user sent message with the session id (the message event sent did not have this id)
       // user can clear the messages when they make a request, hence checking if messages length > 0
-      if (this.messages && this.messages.messages.length > 0) {
-        this.messages.messages[this.messages.messages.length - 1]._sessionId = this.sessionId;
+      if (this.messages && this.messages.messageToElements.length > 0) {
+        this.messages.messageToElements[this.messages.messageToElements.length - 1][0]._sessionId = this.sessionId;
       }
     }
   }

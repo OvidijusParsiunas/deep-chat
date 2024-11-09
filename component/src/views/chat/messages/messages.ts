@@ -58,7 +58,7 @@ export class Messages extends MessagesBase {
     this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
-    deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messages));
+    deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messageToElements.map(([msg]) => msg)));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
@@ -183,7 +183,10 @@ export class Messages extends MessagesBase {
   }
 
   private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, isHistory = false) {
-    if (!overwritten) this.messages.push(messageContent);
+    if (!overwritten) {
+      const num = MessageUtils.getNumberOfElements(messageContent);
+      this.messageToElements.push([messageContent, this.messageElementRefs.slice(this.messageElementRefs.length - num)]);
+    }
     if (update) this.sendClientUpdate(messageContent, isHistory);
   }
 
@@ -323,10 +326,9 @@ export class Messages extends MessagesBase {
   // WORK - update all message classes to use deep-chat prefix
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
-    const retainedTextElemenets: [MessageElements, string][] = [];
+    const retainedTextElements: [MessageElements, string][] = [];
     this.messageElementRefs.forEach((message) => {
-      const bubbleClasslist = message.bubbleElement.classList;
-      if (Messages.isActiveElement(bubbleClasslist)) {
+      if (Messages.isActiveElement(message.bubbleElement.classList)) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
@@ -334,7 +336,7 @@ export class Messages extends MessagesBase {
     });
     this.textElementsToText.forEach((textElementToText) => {
       const bubbleClasslist = textElementToText[0].bubbleElement.classList;
-      if (Messages.isActiveElement(bubbleClasslist)) retainedTextElemenets.push(textElementToText);
+      if (Messages.isActiveElement(bubbleClasslist)) retainedTextElements.push(textElementToText);
     });
     // this is a form of cleanup as this.messageElementRefs does not contain error messages
     // and can only be deleted by direct search
@@ -345,12 +347,19 @@ export class Messages extends MessagesBase {
       }
     });
     this.messageElementRefs = retainedElements;
-    this.messages.splice(0, this.messages.length);
+    const retainedMessageToElements = this.messageToElements.filter((elToMessage) => {
+      if (elToMessage[0].text !== undefined || elToMessage[0].html !== undefined) {
+        // safe because streamed messages can't contain multiple props (text, html)
+        return elToMessage[1].find((els) => Messages.isActiveElement(els.bubbleElement.classList));
+      }
+      return false;
+    });
+    this.messageToElements.splice(0, this.messageToElements.length, ...retainedMessageToElements);
     if (isReset !== false) {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessages();
     }
-    this.textElementsToText = retainedTextElemenets;
+    this.textElementsToText = retainedTextElements;
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }
@@ -363,7 +372,7 @@ export class Messages extends MessagesBase {
       return console.error('The second argument of updateHTMLMessage must be of type Number');
     }
     const processedIndex = Math.floor(index);
-    const message = this.messages[processedIndex];
+    const message = this.messageToElements[processedIndex][0];
     if (!message?.html) {
       return console.error(`The message at index ${processedIndex} does not contain a 'html' message`);
     }

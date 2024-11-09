@@ -1,5 +1,5 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
-import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
+import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
@@ -24,8 +24,8 @@ export class MessagesBase {
   submitUserMessage?: (content: UserContent) => void;
   readonly elementRef: HTMLElement;
   readonly messageStyles?: MessageStyles;
-  readonly messages: MessageContentI[] = [];
   readonly htmlClassUtilities: HTMLClassUtilities = {};
+  readonly messageToElements: MessageToElements = [];
   textElementsToText: [MessageElements, string][] = [];
   htmlElementsToMessage: [MessageElements, MessageContentI][] = [];
   protected _introPanel?: IntroPanel;
@@ -71,13 +71,13 @@ export class MessagesBase {
   }
 
   private overwriteText(role: string, text: string, elementRefs: MessageElements[]) {
-    const elements = MessageUtils.overwriteMessage(this.messages, elementRefs, text, role, 'text', 'text-message');
-    if (elements) {
-      this.renderText(elements.bubbleElement, text);
-      const elementToText = MessageUtils.getLastTextToElement(this.textElementsToText, elements);
+    const elems = MessageUtils.overwriteMessage(this.messageToElements, elementRefs, text, role, 'text', 'text-message');
+    if (elems) {
+      this.renderText(elems.bubbleElement, text);
+      const elementToText = MessageUtils.getLastTextToElement(this.textElementsToText, elems);
       if (elementToText) elementToText[1] = text;
     }
-    return elements;
+    return elems;
   }
 
   protected createAndAppendNewMessageElement(text: string, role: string) {
@@ -124,7 +124,7 @@ export class MessagesBase {
     if ((this._avatars || this._names) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
       // if prev message before temp has a different role to the new one, make sure its avatar is revealed
       const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
-      if (prevMessageElements && this.messages[this.messages.length - 1]
+      if (prevMessageElements && this.messageToElements.length > 0
           && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
         MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this._avatars, this._names);
       }
@@ -160,7 +160,7 @@ export class MessagesBase {
 
   // prettier-ignore
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
-    if (this.messages[this.messages.length - 1]?.role === role && !this.isLastMessageError()) {
+    if (this.messageToElements[this.messageToElements.length - 1]?.[0].role === role && !this.isLastMessageError()) {
       MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
     }
     bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),

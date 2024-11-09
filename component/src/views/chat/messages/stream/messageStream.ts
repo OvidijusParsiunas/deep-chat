@@ -58,7 +58,7 @@ export class MessageStream {
     this._streamedContent = content;
     this._activeMessageRole = role;
     this._message = {role: this._activeMessageRole, [streamType]: this._streamedContent};
-    this._messages.messages.push(this._message);
+    this._messages.messageToElements.push([this._message, [this._elements]]);
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {

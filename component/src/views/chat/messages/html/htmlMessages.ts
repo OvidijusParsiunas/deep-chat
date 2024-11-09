@@ -25,8 +25,8 @@ export class HTMLMessages {
   }
 
   private static overwriteLast(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
-    const {messages: aMessages} = messages;
-    const overwrittenElements = MessageUtils.overwriteMessage(aMessages, messagesEls, html, role, 'html', 'html-message');
+    const {messageToElements: msgToEls} = messages;
+    const overwrittenElements = MessageUtils.overwriteMessage(msgToEls, messagesEls, html, role, 'html', 'html-message');
     if (overwrittenElements) HTMLMessages.overwrite(messages, html, overwrittenElements);
     return overwrittenElements;
   }

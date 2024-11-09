@@ -1,5 +1,5 @@
+import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {MessageContent} from '../../../types/messages';
 import {Avatars} from '../../../types/avatars';
 import {MessageElements} from './messages';
@@ -33,13 +33,13 @@ export class MessageUtils {
     return undefined;
   }
 
-  public static getLastMessage(messages: MessageContentI[], role: string, content?: keyof Omit<MessageContent, 'role'>) {
-    for (let i = messages.length - 1; i >= 0; i -= 1) {
-      if (messages[i].role === role) {
+  public static getLastMessage(msgToEls: MessageToElements, role: string, content?: keyof Omit<MessageContent, 'role'>) {
+    for (let i = msgToEls.length - 1; i >= 0; i -= 1) {
+      if (msgToEls[i][0].role === role) {
         if (content) {
-          if (messages[i][content]) return messages[i];
+          if (msgToEls[i][0][content]) return msgToEls[i][0];
         } else {
-          return messages[i];
+          return msgToEls[i][0];
         }
       }
     }
@@ -58,12 +58,12 @@ export class MessageUtils {
   // IMPORTANT: If the overwrite message does not contain a role property it will look for the last 'ai' role message
   // and if messages have custom roles, it will still look to update the last 'ai' role message
   // prettier-ignore
-  public static overwriteMessage(messages: MessageContentI[], messagesElements: MessageElements[],
+  public static overwriteMessage(messageToElements: MessageToElements, messagesElements: MessageElements[],
       content: string, role: string, contentType: 'text' | 'html', className: string) {
     // not sure if LoadingStyle.LOADING_MESSAGE_TEXT_CLASS is needed
     const elements = MessageUtils.getLastElementsByClass(
       messagesElements, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
-    const lastMessage = MessageUtils.getLastMessage(messages, role, contentType);
+    const lastMessage = MessageUtils.getLastMessage(messageToElements, role, contentType);
     if (lastMessage) lastMessage[contentType] = content;
     return elements;
   }
@@ -131,6 +131,14 @@ export class MessageUtils {
       MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS
     );
     messageEls.outerContainer.classList.add(...classes);
+  }
+
+  public static getNumberOfElements(messageContent: MessageContentI) {
+    let length = 0;
+    if (messageContent.text !== undefined) length += 1;
+    if (messageContent.html !== undefined) length += 1;
+    if (messageContent.files) length += messageContent.files.length;
+    return length;
   }
 
   public static classifyMessages(role: string, messageElementRefs: MessageElements[]) {
