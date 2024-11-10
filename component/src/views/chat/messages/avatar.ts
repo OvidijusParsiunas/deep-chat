@@ -38,6 +38,7 @@ export class Avatar {
       avatar.src = avatars?.[role]?.src || avatars?.ai?.src || avatars?.default?.src || aiLogoUrl;
     }
     avatar.classList.add('avatar');
+    avatar.alt = `${role} avatar`;
     const avatarContainer = document.createElement('div');
     avatarContainer.classList.add(Avatar.CONTAINER_CLASS);
     avatarContainer.appendChild(avatar);
