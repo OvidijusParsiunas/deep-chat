@@ -18,16 +18,14 @@ export class HTMLMessages {
     return messageElements;
   }
 
-  public static overwrite(messages: MessagesBase, html: string, elements: MessageElements) {
-    elements.bubbleElement.innerHTML = html;
-    HTMLUtils.apply(messages, elements.outerContainer);
-    Legacy.flagHTMLUpdateClass(elements.bubbleElement);
-  }
-
-  private static overwriteLast(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
+  private static overwrite(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(msgToEls, messagesEls, html, role, 'html', 'html-message');
-    if (overwrittenElements) HTMLMessages.overwrite(messages, html, overwrittenElements);
+    if (overwrittenElements) {
+      overwrittenElements.bubbleElement.innerHTML = html;
+      HTMLUtils.apply(messages, overwrittenElements.outerContainer);
+      Legacy.flagHTMLUpdateClass(overwrittenElements.bubbleElement);
+    }
     return overwrittenElements;
   }
 
@@ -36,7 +34,7 @@ export class HTMLMessages {
       messages: MessagesBase, html: string, role: string,
       messagesEls: MessageElements[], overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
-      const overwrittenElements = this.overwriteLast(messages, html, role, messagesEls);
+      const overwrittenElements = this.overwrite(messages, html, role, messagesEls);
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
     }

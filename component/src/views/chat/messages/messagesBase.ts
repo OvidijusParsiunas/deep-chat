@@ -27,7 +27,6 @@ export class MessagesBase {
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   readonly messageToElements: MessageToElements = [];
   textElementsToText: [MessageElements, string][] = [];
-  htmlElementsToMessage: [MessageElements, MessageContentI][] = [];
   protected _introPanel?: IntroPanel;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;

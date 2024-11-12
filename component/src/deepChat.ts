@@ -159,8 +159,6 @@ export class DeepChat extends InternalHTML {
 
   setPlaceholderText: (text: string) => void = () => {};
 
-  updateHTMLMessage: (html: string, index: number) => void = () => {};
-
   @Property('function')
   onMessage?: OnMessage;
 
