@@ -67,7 +67,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
-  filesToolType?: OpenAIAssistant['files_tool_type'];
+  filesToolType: OpenAIAssistant['files_tool_type'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
