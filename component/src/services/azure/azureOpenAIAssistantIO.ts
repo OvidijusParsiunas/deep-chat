@@ -40,7 +40,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       const {function_handler} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
       const {files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
-      if (files_tool_type) this._filesToolType = files_tool_type;
+      if (files_tool_type) this.filesToolType = files_tool_type;
     }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;

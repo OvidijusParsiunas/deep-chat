@@ -18568,7 +18568,7 @@
             },
             {
               "kind": "field",
-              "name": "_filesToolType",
+              "name": "filesToolType",
               "type": {
                 "text": "OpenAIAssistant['files_tool_type']"
               },
