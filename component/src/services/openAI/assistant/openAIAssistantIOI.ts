@@ -67,7 +67,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
-  private readonly filesToolType: OpenAIAssistant['files_tool_type'];
+  _filesToolType?: OpenAIAssistant['files_tool_type'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
@@ -80,7 +80,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       Object.assign(this.newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
-      this.filesToolType = config.files_tool_type;
     }
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
@@ -129,15 +128,15 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const processedMessage = MessageLimitUtils.getCharacterLimitMessages(pMessages, totalMessagesMaxCharLength)[0];
     // https://platform.openai.com/docs/api-reference/messages/createMessage
     if (uploadedFiles && uploadedFiles.length > 0) {
-      let toolType = this.filesToolType;
+      let toolType = this._filesToolType;
       // OpenAI also allows multiple tool types for a message but not doing it here as we don't process multiple responses.
       // https://platform.openai.com/docs/assistants/migration/what-has-changed
       // "tools": [
       //   { "type": "file_search" },
       //   { "type": "code_interpreter" }
       // ]
-      if (typeof this.filesToolType === 'function') {
-        const rToolType = this.filesToolType(uploadedFiles.map(({name}) => name));
+      if (typeof this._filesToolType === 'function') {
+        const rToolType = this._filesToolType(uploadedFiles.map(({name}) => name));
         if (rToolType === 'code_interpreter' || rToolType === 'file_search' || rToolType === 'images') {
           toolType = rToolType;
         } else {
