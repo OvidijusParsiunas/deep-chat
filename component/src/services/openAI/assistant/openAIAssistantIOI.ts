@@ -55,8 +55,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 800;
-  _functionHandler?: AssistantFunctionHandler;
   permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
+  functionHandler?: AssistantFunctionHandler;
+  filesToolType: OpenAIAssistant['files_tool_type'];
   readonly shouldFetchHistory: boolean = false;
   private messages?: Messages;
   private run_id?: string;
@@ -67,7 +68,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
-  filesToolType: OpenAIAssistant['files_tool_type'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
@@ -293,7 +293,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
-    if (!this._functionHandler) {
+    if (!this.functionHandler) {
       throw Error(
         'Please define the `function_handler` property inside' +
           ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Assistant) object.'
@@ -302,7 +302,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this._functionHandler(functions);
+    const handlerResponse = await this.functionHandler(functions);
     if (!Array.isArray(handlerResponse) || toolCalls.length !== handlerResponse.length) {
       throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }

@@ -36,10 +36,9 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
     super(deepChat, config?.assistant, urlSegments,
       AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
-    if (typeof config === 'object') {
-      const {function_handler} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
-      if (function_handler) this._functionHandler = function_handler;
-      const {files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
+    if (typeof config?.assistant === 'object') {
+      const {function_handler, files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
+      if (function_handler) this.functionHandler = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
     }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {

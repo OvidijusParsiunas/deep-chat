@@ -29,9 +29,8 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
     if (typeof config === 'object') {
-      const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
-      if (function_handler) this._functionHandler = function_handler;
-      const {files_tool_type} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      const {function_handler, files_tool_type} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      if (function_handler) this.functionHandler = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
     }
   }
