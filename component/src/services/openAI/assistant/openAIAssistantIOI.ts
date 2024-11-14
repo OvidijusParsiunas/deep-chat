@@ -67,7 +67,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
   private messageStream: MessageStream | undefined;
-  private readonly filesToolType: OpenAIAssistant['files_tool_type'];
+  filesToolType: OpenAIAssistant['files_tool_type'];
 
   // prettier-ignore
   constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
@@ -80,7 +80,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       Object.assign(this.newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
-      this.filesToolType = config.files_tool_type;
     }
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
     this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));

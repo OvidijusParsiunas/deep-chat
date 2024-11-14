@@ -31,6 +31,8 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     if (typeof config === 'object') {
       const {function_handler} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this._functionHandler = function_handler;
+      const {files_tool_type} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
+      if (files_tool_type) this.filesToolType = files_tool_type;
     }
   }
 }
