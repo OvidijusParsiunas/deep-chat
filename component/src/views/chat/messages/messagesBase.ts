@@ -4,7 +4,6 @@ import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
-import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
@@ -16,7 +15,6 @@ import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
-import {Remarkable} from 'remarkable';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -30,13 +28,11 @@ export class MessagesBase {
   protected _introPanel?: IntroPanel;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
-  private _remarkable: Remarkable;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = deepChat.messageStyles;
-    this._remarkable = RemarkableConfig.createNew();
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
@@ -212,15 +208,11 @@ export class MessagesBase {
   }
 
   public renderText(bubbleElement: HTMLElement, text: string) {
-    bubbleElement.innerHTML = this._remarkable.render(text);
-    // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
-    // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
     if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages() {
-    this._remarkable = RemarkableConfig.createNew();
     this.textElementsToText.forEach((elementToText) => {
       this.renderText(elementToText[0].bubbleElement, elementToText[1]);
     });

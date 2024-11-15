@@ -1,25 +1,25 @@
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {ValidationHandler} from '../../../../../types/validationHandler';
-import {CustomButtonInnerElements} from '../customButtonInnerElements';
-import {FileAttachments} from '../../fileAttachments/fileAttachments';
-import {SubmitButtonStyles} from '../../../../../types/submitButton';
-import {SpeechToText} from '../microphone/speechToText/speechToText';
-import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {UserContentI} from '../../../../../types/messagesInternal';
-import {SubmitButtonStateStyle} from './submitButtonStateStyle';
-import {MicrophoneButton} from '../microphone/microphoneButton';
-import {ServiceIO} from '../../../../../services/serviceIO';
-import {MessageUtils} from '../../../messages/messageUtils';
-import {UserContent} from '../../../../../types/messages';
-import {Legacy} from '../../../../../utils/legacy/legacy';
-import {Response} from '../../../../../types/response';
-import {TextInputEl} from '../../textInput/textInput';
-import {Signals} from '../../../../../types/handler';
-import {Messages} from '../../../messages/messages';
-import {DeepChat} from '../../../../../deepChat';
-import {InputButton} from '../inputButton';
-import {Buttons} from '../../input';
+import { FileAttachmentsType } from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import { ValidationHandler } from '../../../../../types/validationHandler';
+import { CustomButtonInnerElements } from '../customButtonInnerElements';
+import { FileAttachments } from '../../fileAttachments/fileAttachments';
+import { SubmitButtonStyles } from '../../../../../types/submitButton';
+import { SpeechToText } from '../microphone/speechToText/speechToText';
+import { SUBMIT_ICON_STRING } from '../../../../../icons/submitIcon';
+import { SVGIconUtils } from '../../../../../utils/svg/svgIconUtils';
+import { UserContentI } from '../../../../../types/messagesInternal';
+import { SubmitButtonStateStyle } from './submitButtonStateStyle';
+import { MicrophoneButton } from '../microphone/microphoneButton';
+import { ServiceIO } from '../../../../../services/serviceIO';
+import { MessageUtils } from '../../../messages/messageUtils';
+import { UserContent } from '../../../../../types/messages';
+import { Legacy } from '../../../../../utils/legacy/legacy';
+import { Response } from '../../../../../types/response';
+import { TextInputEl } from '../../textInput/textInput';
+import { Signals } from '../../../../../types/handler';
+import { Messages } from '../../../messages/messages';
+import { DeepChat } from '../../../../../deepChat';
+import { InputButton } from '../inputButton';
+import { Buttons } from '../../input';
 import {
   DefinedButtonInnerElements,
   DefinedButtonStateStyles,
@@ -44,11 +44,11 @@ export class SubmitButton extends InputButton<Styles> {
   private _stopSTTAfterSubmit?: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
-  readonly status = {requestInProgress: false, loadingActive: false};
+  readonly status = { requestInProgress: false, loadingActive: false };
 
   // prettier-ignore
   constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
-      fileAttachments: FileAttachments, buttons: Buttons) {
+    fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     super(SubmitButton.createButtonContainerElement(), submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
@@ -56,7 +56,7 @@ export class SubmitButton extends InputButton<Styles> {
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElements();
     this._abortStream = new AbortController();
-    this._stopClicked = {listener: () => {}};
+    this._stopClicked = { listener: () => { } };
     this._serviceIO = serviceIO;
     this._alwaysEnabled = !!submitButtonStyles?.alwaysEnabled;
     deepChat.disableSubmitButton = this.disableSubmitButton.bind(this, serviceIO);
@@ -70,7 +70,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createInnerElements() {
-    const {submit, loading, stop} = this.createCustomElements();
+    const { submit, loading, stop } = this.createCustomElements();
     const submitElement = submit || SubmitButton.createSubmitIconElement();
     return {
       submit: submitElement,
@@ -82,7 +82,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private createCustomElements() {
     const submit = CustomButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this._customStyles);
-    const states: {[key in keyof Styles]: ButtonInnerElement} = {loading: undefined, stop: undefined};
+    const states: { [key in keyof Styles]: ButtonInnerElement } = { loading: undefined, stop: undefined };
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
       const element = CustomButtonInnerElements.createCustomElement(styleState, this._customStyles);
@@ -124,7 +124,7 @@ export class SubmitButton extends InputButton<Styles> {
   // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
     if (this._customStyles?.submit?.svg
-        || this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
+      || this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       const styleElement = document.createElement('style');
       styleElement.textContent = `
@@ -147,7 +147,7 @@ export class SubmitButton extends InputButton<Styles> {
       abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
-    const {stream} = this._serviceIO;
+    const { stream } = this._serviceIO;
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
       this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
     }
@@ -168,20 +168,20 @@ export class SubmitButton extends InputButton<Styles> {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     if (this._textInput.isTextInputEmpty()) {
-      this.attemptSubmit({text: '', files: uploadedFilesData});
+      this.attemptSubmit({ text: '', files: uploadedFilesData });
     } else {
       // not using textContent as it ignores new line spaces
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
-      this.attemptSubmit({text: inputText, files: uploadedFilesData});
+      this.attemptSubmit({ text: inputText, files: uploadedFilesData });
     }
   }
 
   public async programmaticSubmit(content: UserContent) {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
-    const newContent: UserContentI = {text: content.text};
+    const newContent: UserContentI = { text: content.text };
     if (content.files) {
       newContent.files = Array.from(content.files).map((file) => {
-        return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
+        return { file, type: FileAttachmentsType.getTypeFromBlob(file) };
       });
     }
     // in timeout to prevent adding multiple messages before validation+file addition finishes
@@ -196,13 +196,13 @@ export class SubmitButton extends InputButton<Styles> {
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
     this._textInput.clear();
     const filesData = content.files?.map((fileData) => fileData.file);
-    const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
+    const requestContents = { text: content.text === '' ? undefined : content.text, files: filesData };
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.removeAllFiles();
   }
 
-  private async addNewMessage({text, files}: UserContentI) {
-    const data: Response = {role: MessageUtils.USER_ROLE};
+  private async addNewMessage({ text, files }: UserContentI) {
+    const data: Response = { role: MessageUtils.USER_ROLE };
     if (text) data.text = text;
     if (files) data.files = await this._messages.addMultipleFiles(files);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;
@@ -231,7 +231,7 @@ export class SubmitButton extends InputButton<Styles> {
     this.elementRef.classList.remove(SubmitButton.SUBMIT_CLASS, SubmitButton.DISABLED_CLASS);
     this.elementRef.classList.add(SubmitButton.LOADING_CLASS);
     this.reapplyStateStyle('loading', ['submit']);
-    this.elementRef.onclick = () => {};
+    this.elementRef.onclick = () => { };
     this.status.requestInProgress = true;
     this.status.loadingActive = true;
   }
@@ -260,7 +260,7 @@ export class SubmitButton extends InputButton<Styles> {
       this.elementRef.classList.add(SubmitButton.DISABLED_CLASS);
       this.elementRef.replaceChildren(this._innerElements.disabled);
       this.reapplyStateStyle('disabled', ['submit']);
-      this.elementRef.onclick = () => {};
+      this.elementRef.onclick = () => { };
     }
   }
 
