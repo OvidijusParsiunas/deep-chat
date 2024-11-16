@@ -10,6 +10,7 @@ import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
 import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
+import {Legacy} from '../../../utils/legacy/legacy';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {MessageUtils} from './messageUtils';
@@ -35,7 +36,7 @@ export class MessagesBase {
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
-    this.messageStyles = deepChat.messageStyles;
+    this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew();
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;

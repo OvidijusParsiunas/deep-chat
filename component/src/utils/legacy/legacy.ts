@@ -1,5 +1,5 @@
+import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
-import {MessageContent, OnMessage} from '../../types/messages';
 import {ValidateInput} from '../../types/validateInput';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
@@ -115,5 +115,17 @@ export class Legacy {
       console.error('Please use the connect property instead: https://deepchat.dev/docs/files');
       if (!legacyConfig.connect) legacyConfig.connect = legacyConfig.request;
     }
+  }
+
+  public static processMessageStyles(messageStyles?: MessageStyles) {
+    if (!messageStyles) return;
+    const messageStylesCp = structuredClone(messageStyles);
+    const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
+    if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
+      console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.0.2.');
+      console.error('Check it out here: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
+      messageStylesCp.loading = {message: {styles: loading}};
+    }
+    return messageStylesCp;
   }
 }
