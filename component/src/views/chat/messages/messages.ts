@@ -321,17 +321,12 @@ export class Messages extends MessagesBase {
   // WORK - update all message classes to use deep-chat prefix
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
-    const retainedTextElements: [MessageElements, string][] = [];
     this.messageElementRefs.forEach((message) => {
       if (Messages.isActiveElement(message.bubbleElement.classList)) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
       }
-    });
-    this.textElementsToText.forEach((textElementToText) => {
-      const bubbleClasslist = textElementToText[0].bubbleElement.classList;
-      if (Messages.isActiveElement(bubbleClasslist)) retainedTextElements.push(textElementToText);
     });
     // this is a form of cleanup as this.messageElementRefs does not contain error messages
     // and can only be deleted by direct search
@@ -342,10 +337,10 @@ export class Messages extends MessagesBase {
       }
     });
     this.messageElementRefs = retainedElements;
-    const retainedMessageToElements = this.messageToElements.filter((elToMessage) => {
-      if (elToMessage[0].text !== undefined || elToMessage[0].html !== undefined) {
+    const retainedMessageToElements = this.messageToElements.filter((msgToEls) => {
+      if (msgToEls[0].text !== undefined || msgToEls[0].html !== undefined) {
         // safe because streamed messages can't contain multiple props (text, html)
-        return elToMessage[1].find((els) => Messages.isActiveElement(els.bubbleElement.classList));
+        return msgToEls[1].find((els) => Messages.isActiveElement(els.bubbleElement.classList));
       }
       return false;
     });
@@ -354,7 +349,6 @@ export class Messages extends MessagesBase {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessages();
     }
-    this.textElementsToText = retainedTextElements;
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }

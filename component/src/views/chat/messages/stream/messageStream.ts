@@ -67,7 +67,6 @@ export class MessageStream {
   private updateText(text: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
     if (!this._message) return;
     this._message.text = isOverwrite ? text : this._message.text + text;
-    this._messages.textElementsToText[this._messages.textElementsToText.length - 1][1] = this._message.text;
     this._messages.renderText(bubbleElement, this._message.text);
   }
 
@@ -85,13 +84,11 @@ export class MessageStream {
   }
 
   public finaliseStreamedMessage() {
-    const {textElementsToText} = this._messages;
     if (this._endStreamAfterOperation || !this._message) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
     if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
     if (this._streamType === 'text') {
-      textElementsToText[textElementsToText.length - 1][1] = this._message.text || '';
       if (this._messages.textToSpeech) TextToSpeech.speak(this._message.text || '', this._messages.textToSpeech);
     } else if (this._streamType === 'html') {
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);

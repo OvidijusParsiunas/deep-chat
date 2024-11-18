@@ -27,7 +27,6 @@ export class MessagesBase {
   readonly messageStyles?: MessageStyles;
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   readonly messageToElements: MessageToElements = [];
-  textElementsToText: [MessageElements, string][] = [];
   protected _introPanel?: IntroPanel;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
@@ -65,18 +64,12 @@ export class MessagesBase {
     messageElements.bubbleElement.classList.add('text-message');
     this.applyCustomStyles(messageElements, role, false);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
-    const textElements: [MessageElements, string] = [messageElements, text];
-    MessageUtils.updateRefArr(this.textElementsToText, textElements, isTop);
     return messageElements;
   }
 
   private overwriteText(role: string, text: string, elementRefs: MessageElements[]) {
     const elems = MessageUtils.overwriteMessage(this.messageToElements, elementRefs, text, role, 'text', 'text-message');
-    if (elems) {
-      this.renderText(elems.bubbleElement, text);
-      const elementToText = MessageUtils.getLastTextToElement(this.textElementsToText, elems);
-      if (elementToText) elementToText[1] = text;
-    }
+    if (elems) this.renderText(elems.bubbleElement, text);
     return elems;
   }
 
@@ -224,8 +217,9 @@ export class MessagesBase {
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages() {
     this._remarkable = RemarkableConfig.createNew();
-    this.textElementsToText.forEach((elementToText) => {
-      this.renderText(elementToText[0].bubbleElement, elementToText[1]);
+    this.messageToElements.forEach((msgToEls) => {
+      // important for text bubble to be first if multiple message content properties are used
+      if (msgToEls[0].text) this.renderText(msgToEls[1][0].bubbleElement, msgToEls[0].text);
     });
   }
 }
