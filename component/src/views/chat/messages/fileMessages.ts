@@ -7,6 +7,10 @@ import {MessageUtils} from './messageUtils';
 import {Messages} from './messages';
 
 export class FileMessages {
+  private static readonly IMAGE_BUBBLE_CLASS = 'image-message';
+  private static readonly AUDIO_BUBBLE_CLASS = 'audio-message';
+  private static readonly ANY_FILE_BUBBLE_CLASS = 'any-file-message';
+
   private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, isTop: boolean) {
     const imageElement = new Image();
     imageElement.src = imageData.src as string;
@@ -19,7 +23,7 @@ export class FileMessages {
     const image = FileMessages.createImage(imageData, messages.elementRef, isTop);
     const elements = messages.createNewMessageElement('', role);
     elements.bubbleElement.appendChild(image);
-    elements.bubbleElement.classList.add('image-message');
+    elements.bubbleElement.classList.add(FileMessages.IMAGE_BUBBLE_CLASS);
     FileMessageUtils.addMessage(messages, elements, 'image', role, isTop);
   }
 
@@ -41,7 +45,7 @@ export class FileMessages {
     const audioElement = FileMessages.createAudioElement(audioData, role);
     const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     elements.bubbleElement.appendChild(audioElement);
-    elements.bubbleElement.classList.add('audio-message');
+    elements.bubbleElement.classList.add(FileMessages.AUDIO_BUBBLE_CLASS);
     FileMessageUtils.addMessage(messages, elements, 'audio', role, isTop);
   }
 
@@ -64,7 +68,7 @@ export class FileMessages {
   private static addNewAnyFileMessage(messages: Messages, data: MessageFile, role: string, isTop: boolean) {
     const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     const anyFile = FileMessages.createAnyFile(data);
-    elements.bubbleElement.classList.add('any-file-message-bubble');
+    elements.bubbleElement.classList.add(FileMessages.ANY_FILE_BUBBLE_CLASS);
     elements.bubbleElement.appendChild(anyFile);
     FileMessageUtils.addMessage(messages, elements, 'file', role, isTop);
   }

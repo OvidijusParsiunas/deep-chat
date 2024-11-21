@@ -6,6 +6,8 @@ import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';
 
 export class HTMLMessages {
+  public static readonly HTML_BUBBLE_CLASS = 'html-message';
+
   private static addElement(messages: MessagesBase, outerElement: HTMLElement) {
     messages.elementRef.appendChild(outerElement);
     messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
@@ -13,14 +15,16 @@ export class HTMLMessages {
 
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop);
-    messageElements.bubbleElement.classList.add('html-message');
+    messageElements.bubbleElement.classList.add(HTMLMessages.HTML_BUBBLE_CLASS);
     messageElements.bubbleElement.innerHTML = html;
     return messageElements;
   }
 
+  // prettier-ignore
   private static overwrite(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
-    const overwrittenElements = MessageUtils.overwriteMessage(msgToEls, messagesEls, html, role, 'html', 'html-message');
+    const overwrittenElements = MessageUtils.overwriteMessage(
+      msgToEls, messagesEls, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
     if (overwrittenElements) {
       overwrittenElements.bubbleElement.innerHTML = html;
       HTMLUtils.apply(messages, overwrittenElements.outerContainer);

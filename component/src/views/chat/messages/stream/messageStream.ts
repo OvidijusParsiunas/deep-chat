@@ -55,7 +55,7 @@ export class MessageStream {
     this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
     this._activeMessageRole = role;
     this._message = {role: this._activeMessageRole, [streamType]: content};
-    this._messages.messageToElements.push([this._message, [this._elements]]);
+    this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {

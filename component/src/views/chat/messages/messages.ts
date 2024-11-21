@@ -179,8 +179,8 @@ export class Messages extends MessagesBase {
 
   private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, isHistory = false) {
     if (!overwritten) {
-      const num = MessageUtils.getNumberOfElements(messageContent);
-      this.messageToElements.push([messageContent, this.messageElementRefs.slice(this.messageElementRefs.length - num)]);
+      const messageBody = MessageUtils.generateMessageBody(messageContent, this.messageElementRefs);
+      this.messageToElements.push([messageContent, messageBody]);
     }
     if (update) this.sendClientUpdate(messageContent, isHistory);
   }
@@ -338,11 +338,11 @@ export class Messages extends MessagesBase {
     });
     this.messageElementRefs = retainedElements;
     const retainedMessageToElements = this.messageToElements.filter((msgToEls) => {
-      if (msgToEls[0].text !== undefined || msgToEls[0].html !== undefined) {
-        // safe because streamed messages can't contain multiple props (text, html)
-        return msgToEls[1].find((els) => Messages.isActiveElement(els.bubbleElement.classList));
-      }
-      return false;
+      // safe because streamed messages can't contain multiple props (text, html)
+      return (
+        (msgToEls[1].text && Messages.isActiveElement(msgToEls[1].text.bubbleElement.classList)) ||
+        (msgToEls[1].html && Messages.isActiveElement(msgToEls[1].html.bubbleElement.classList))
+      );
     });
     this.messageToElements.splice(0, this.messageToElements.length, ...retainedMessageToElements);
     if (isReset !== false) {

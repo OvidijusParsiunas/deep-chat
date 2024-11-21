@@ -5,12 +5,14 @@ import {MessageElements} from './messages';
 
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
+  public static readonly FILE_BUBBLE_CLASS = 'file-message';
 
   // prettier-ignore
   public static addMessage(
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
     if (styles === 'loading') return;
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
+    elements.bubbleElement.classList.add(FileMessageUtils.FILE_BUBBLE_CLASS);
     if (!isTop) {
       messages.elementRef.appendChild(elements.outerContainer);
       messages.elementRef.scrollTop = messages.elementRef.scrollHeight;

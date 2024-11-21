@@ -42,8 +42,8 @@ export class History {
         if (message) {
           const messageContent = addAnyMessage({...message, sendUpdate: true}, true, true);
           if (messageContent) {
-            const num = MessageUtils.getNumberOfElements(messageContent);
-            messageToElements.unshift([messageContent, messageElementRefs.slice(0, num)]);
+            const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs);
+            messageToElements.unshift([messageContent, messageBody]);
           }
           return messageContent;
         } else {

@@ -1,7 +1,10 @@
-import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
+import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {MessageContent} from '../../../types/messages';
+import {FileMessageUtils} from './fileMessageUtils';
+import {HTMLMessages} from './html/htmlMessages';
 import {Avatars} from '../../../types/avatars';
+import {MessagesBase} from './messagesBase';
 import {MessageElements} from './messages';
 import {Names} from '../../../types/names';
 import {Avatar} from './avatar';
@@ -133,12 +136,36 @@ export class MessageUtils {
     messageEls.outerContainer.classList.add(...classes);
   }
 
-  public static getNumberOfElements(messageContent: MessageContentI) {
+  private static getNumberOfElements(messageContent: MessageContentI) {
     let length = 0;
     if (messageContent.text !== undefined) length += 1;
     if (messageContent.html !== undefined) length += 1;
     if (messageContent.files) length += messageContent.files.length;
     return length;
+  }
+
+  private static filterdMessageElements(elements: MessageElements[], className: string) {
+    return elements.filter((msgElements) => msgElements.bubbleElement.classList.contains(className));
+  }
+
+  private static findMessageElements(elements: MessageElements[], className: string) {
+    return elements.find((msgElements) => msgElements.bubbleElement.classList.contains(className));
+  }
+
+  private static generateMessageBodyElements(messageContent: MessageContentI, elements: MessageElements[]) {
+    const msgBodyEls: MessageBodyElements = {};
+    if (messageContent.text) msgBodyEls.text = MessageUtils.findMessageElements(elements, MessagesBase.TEXT_BUBBLE_CLASS);
+    if (messageContent.html) msgBodyEls.html = MessageUtils.findMessageElements(elements, HTMLMessages.HTML_BUBBLE_CLASS);
+    if (messageContent.files) {
+      msgBodyEls.files = MessageUtils.filterdMessageElements(elements, FileMessageUtils.FILE_BUBBLE_CLASS);
+    }
+    return msgBodyEls;
+  }
+
+  public static generateMessageBody(messageContent: MessageContentI, messageElementRefs: MessageElements[]) {
+    const numberOfMessageContentElement = MessageUtils.getNumberOfElements(messageContent);
+    const elements = messageElementRefs.slice(messageElementRefs.length - numberOfMessageContentElement);
+    return MessageUtils.generateMessageBodyElements(messageContent, elements);
   }
 
   public static classifyMessages(role: string, messageElementRefs: MessageElements[]) {
