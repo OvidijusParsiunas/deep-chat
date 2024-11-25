@@ -42,6 +42,7 @@ export class MessagesBase {
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
+    deepChat.changeMessage = this.changeMessage.bind(this);
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -131,7 +132,7 @@ export class MessagesBase {
     return MessagesBase.isLoadingMessage(elements) || HTMLDeepChatElements.isElementTemporary(elements);
   }
 
-  private createElements(text: string, role: string) {
+  public createElements(text: string, role: string) {
     const messageElements = MessagesBase.createBaseElements(role);
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
@@ -228,5 +229,10 @@ export class MessagesBase {
     this.messageToElements.forEach((msgToEls) => {
       if (msgToEls[1].text && msgToEls[0].text) this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text);
     });
+  }
+
+  private changeMessage(index: number, newContent: Response) {
+    const messageToEls = this.messageToElements[index];
+    MessageUtils.changeMessage(this, messageToEls, newContent);
   }
 }

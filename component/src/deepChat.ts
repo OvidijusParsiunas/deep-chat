@@ -15,6 +15,7 @@ import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
+import {MessageBody} from './types/messagesInternal';
 import {SpeechToTextConfig} from './types/microphone';
 import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
@@ -152,6 +153,8 @@ export class DeepChat extends InternalHTML {
   refreshMessages: () => void = () => {};
 
   clearMessages: (isReset?: boolean) => void = () => {};
+
+  changeMessage: (index: number, newContent: MessageBody) => void = () => {};
 
   scrollToBottom: () => void = () => {};
 
