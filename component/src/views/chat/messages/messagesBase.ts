@@ -1,5 +1,5 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
-import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
+import {MessageBody, MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
@@ -231,8 +231,8 @@ export class MessagesBase {
     });
   }
 
-  private changeMessage(index: number, newContent: Response) {
+  private changeMessage(index: number, messageBody: MessageBody) {
     const messageToEls = this.messageToElements[index];
-    MessageUtils.changeMessage(this, messageToEls, newContent);
+    MessageUtils.changeMessage(this, messageToEls, messageBody);
   }
 }

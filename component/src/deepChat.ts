@@ -154,7 +154,7 @@ export class DeepChat extends InternalHTML {
 
   clearMessages: (isReset?: boolean) => void = () => {};
 
-  changeMessage: (index: number, newContent: MessageBody) => void = () => {};
+  changeMessage: (index: number, messageBody: MessageBody) => void = () => {};
 
   scrollToBottom: () => void = () => {};
 

@@ -1,9 +1,8 @@
-import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../types/messagesInternal';
+import {MessageBody, MessageBodyElements, MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {MessageContent} from '../../../types/messages';
 import {FileMessageUtils} from './fileMessageUtils';
 import {HTMLMessages} from './html/htmlMessages';
-import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
 import {MessagesBase} from './messagesBase';
 import {MessageElements} from './messages';
@@ -209,10 +208,10 @@ export class MessageUtils {
     messageToEls[0].text = newText;
   }
 
-  public static changeMessage(msg: MessagesBase, messageToEls: MessageToElements[0], newContent: Response) {
+  public static changeMessage(msg: MessagesBase, messageToEls: MessageToElements[0], messageBody: MessageBody) {
     if (messageToEls) {
-      if (newContent.text) {
-        MessageUtils.changeText(msg, messageToEls, newContent.text);
+      if (messageBody.text) {
+        MessageUtils.changeText(msg, messageToEls, messageBody.text);
       }
     } else {
       console.error('Message index not found. Please use the `getMessages` method to find the correct index');
