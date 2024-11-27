@@ -95,6 +95,8 @@ export class SubmitButton extends InputButton<Styles> {
   private static createButtonContainerElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
+    buttonElement.role = 'button';
+    buttonElement.setAttribute('tabindex', '0');
     return buttonElement;
   }
 
