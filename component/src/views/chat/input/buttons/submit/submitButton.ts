@@ -221,6 +221,8 @@ export class SubmitButton extends InputButton<Styles> {
   private changeToStopIcon() {
     if (this._serviceIO.websocket) return; // stop not used for streaming messages in websocket
     this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
+    this.elementRef.removeAttribute('aria-busy');
+    this.elementRef.removeAttribute('aria-disabled');
     this.elementRef.replaceChildren(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);
     this.elementRef.onclick = this.stopStream.bind(this);
@@ -231,7 +233,9 @@ export class SubmitButton extends InputButton<Styles> {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.elementRef.replaceChildren(this._innerElements.loading);
     this.elementRef.classList.remove(SubmitButton.SUBMIT_CLASS, SubmitButton.DISABLED_CLASS);
+    this.elementRef.removeAttribute('aria-disabled');
     this.elementRef.classList.add(SubmitButton.LOADING_CLASS);
+    this.elementRef.setAttribute('aria-busy', 'true');
     this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};
     this.status.requestInProgress = true;
@@ -242,6 +246,8 @@ export class SubmitButton extends InputButton<Styles> {
   public changeToSubmitIcon() {
     if (this.elementRef.classList.contains(SubmitButton.SUBMIT_CLASS)) return;
     this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS);
+    this.elementRef.removeAttribute('aria-busy');
+    this.elementRef.removeAttribute('aria-disabled');
     this.elementRef.classList.add(SubmitButton.SUBMIT_CLASS);
     this.elementRef.replaceChildren(this._innerElements.submit);
     SubmitButtonStateStyle.resetSubmit(this, this.status.loadingActive);
@@ -259,7 +265,9 @@ export class SubmitButton extends InputButton<Styles> {
       this.changeToSubmitIcon();
     } else if (!this.elementRef.classList.contains(SubmitButton.DISABLED_CLASS)) {
       this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.SUBMIT_CLASS);
+      this.elementRef.removeAttribute('aria-busy');
       this.elementRef.classList.add(SubmitButton.DISABLED_CLASS);
+      this.elementRef.setAttribute('aria-disabled', 'true');
       this.elementRef.replaceChildren(this._innerElements.disabled);
       this.reapplyStateStyle('disabled', ['submit']);
       this.elementRef.onclick = () => {};
