@@ -201,8 +201,10 @@ export class MessageUtils {
       msg.renderText(messageToEls[1].text.bubbleElement, newText);
     } else {
       const messageElements = msg.createElements(newText, messageToEls[0].role);
-      msg.elementRef.insertBefore(messageElements.outerContainer, msg.elementRef.firstChild);
-      // update messageElementRefs element reference
+      const nextElements = (messageToEls[1].html || messageToEls[1].files?.[0]) as MessageElements;
+      msg.elementRef.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
+      const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);
+      msg.messageElementRefs.splice(nextMsgElsIndex, 0, messageElements);
       messageToEls[1].text = messageElements;
     }
     messageToEls[0].text = newText;
