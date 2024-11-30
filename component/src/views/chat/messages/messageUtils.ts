@@ -196,6 +196,15 @@ export class MessageUtils {
     });
   }
 
+  private static removeText(msg: MessagesBase, messageToEls: MessageToElements[0]) {
+    const elemsToRemove = messageToEls[1].text;
+    const removalElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === elemsToRemove);
+    msg.messageElementRefs.splice(removalElsIndex, 1);
+    elemsToRemove?.outerContainer.remove();
+    delete messageToEls[0].text;
+    delete messageToEls[1].text;
+  }
+
   private static changeText(msg: MessagesBase, messageToEls: MessageToElements[0], newText: string) {
     if (messageToEls[1].text) {
       msg.renderText(messageToEls[1].text.bubbleElement, newText);
@@ -214,6 +223,8 @@ export class MessageUtils {
     if (messageToEls) {
       if (messageBody.text) {
         MessageUtils.changeText(msg, messageToEls, messageBody.text);
+      } else if (messageToEls[1].text) {
+        MessageUtils.removeText(msg, messageToEls);
       }
     } else {
       console.error('Message index not found. Please use the `getMessages` method to find the correct index');
