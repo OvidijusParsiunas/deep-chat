@@ -20,15 +20,19 @@ export class HTMLMessages {
     return messageElements;
   }
 
+  public static overwriteElements(messages: MessagesBase, html: string, overwrittenElements: MessageElements) {
+    overwrittenElements.bubbleElement.innerHTML = html;
+    HTMLUtils.apply(messages, overwrittenElements.outerContainer);
+    Legacy.flagHTMLUpdateClass(overwrittenElements.bubbleElement);
+  }
+
   // prettier-ignore
   private static overwrite(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(
       msgToEls, messagesEls, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
     if (overwrittenElements) {
-      overwrittenElements.bubbleElement.innerHTML = html;
-      HTMLUtils.apply(messages, overwrittenElements.outerContainer);
-      Legacy.flagHTMLUpdateClass(overwrittenElements.bubbleElement);
+      HTMLMessages.overwriteElements(messages, html, overwrittenElements);
     }
     return overwrittenElements;
   }
