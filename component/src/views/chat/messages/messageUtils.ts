@@ -200,7 +200,13 @@ export class MessageUtils {
     if (messageToEls[1].html) {
       HTMLMessages.overwriteElements(msg, newHTML, messageToEls[1].html);
     } else {
-      // add new
+      const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
+      const previousElements = (messageToEls[1].files?.[messageToEls[1].files?.length - 1] ||
+        messageToEls[1].text) as MessageElements;
+      msg.elementRef.insertBefore(messageElements.outerContainer, previousElements.outerContainer.nextSibling);
+      const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
+      msg.messageElementRefs.splice(prevMsgElsIndex + 1, 0, messageElements);
+      messageToEls[1].html = messageElements;
     }
     messageToEls[0].html = newHTML;
   }

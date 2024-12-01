@@ -37,6 +37,15 @@ export class HTMLMessages {
     return overwrittenElements;
   }
 
+  public static create(messages: MessagesBase, html: string, role: string, isTop = false) {
+    const messageElements = HTMLMessages.createElements(messages, html, role, isTop);
+    MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, html);
+    HTMLUtils.apply(messages, messageElements.outerContainer);
+    Legacy.flagHTMLUpdateClass(messageElements.bubbleElement);
+    messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
+    return messageElements;
+  }
+
   // prettier-ignore
   public static add(
       messages: MessagesBase, html: string, role: string,
@@ -46,11 +55,7 @@ export class HTMLMessages {
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
     }
-    const messageElements = HTMLMessages.createElements(messages, html, role, isTop);
-    MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, html);
-    HTMLUtils.apply(messages, messageElements.outerContainer);
-    Legacy.flagHTMLUpdateClass(messageElements.bubbleElement);
-    messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
+    const messageElements = HTMLMessages.create(messages, html, role, isTop);
     if (!isTop) HTMLMessages.addElement(messages, messageElements.outerContainer);
     return messageElements;
   }
