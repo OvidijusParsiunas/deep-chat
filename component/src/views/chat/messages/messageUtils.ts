@@ -214,6 +214,7 @@ export class MessageUtils {
       const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
       const previousElements = (messageToEls[1].files?.[messageToEls[1].files?.length - 1] ||
         messageToEls[1].text) as MessageElements;
+      // does this work when there is no next sibling???????
       msg.elementRef.insertBefore(messageElements.outerContainer, previousElements.outerContainer.nextSibling);
       const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
       msg.messageElementRefs.splice(prevMsgElsIndex + 1, 0, messageElements);
@@ -222,6 +223,7 @@ export class MessageUtils {
     messageToEls[0].html = newHTML;
   }
 
+  // finds beforeElement, creates new elements, remove old and adds new ones
   private static changeFileMessages(msg: MessagesBase, messageToEls: MessageToElements[0], newFiles: MessageFile[]) {
     const role = messageToEls[0].role;
     const typeToElements = FileMessages.createMessages(msg, newFiles, role);
@@ -234,9 +236,13 @@ export class MessageUtils {
       msg.elementRef.insertBefore(elements.outerContainer, beforeElement as Node);
     });
     if (messageToEls[1].files) {
-      // remove the existing ones
-    } else {
-      // const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);
+      messageToEls[1].files?.forEach((file) => {
+        const removalElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === file);
+        msg.messageElementRefs.splice(removalElsIndex, 1);
+        file.outerContainer.remove();
+      });
+      delete messageToEls[0].files;
+      delete messageToEls[1].files;
     }
     messageToEls[1].files = typeToElements.map(({elements}) => elements);
     messageToEls[0].files = newFiles;
@@ -264,6 +270,7 @@ export class MessageUtils {
       if (messageBody.html) {
         MessageUtils.changeHTMLMessage(msg, messageToEls, messageBody.html);
       }
+      // adds and removes
       if (messageBody.files) {
         MessageUtils.changeFileMessages(msg, messageToEls, messageBody.files);
       }
