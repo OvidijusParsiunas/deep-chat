@@ -310,7 +310,8 @@ export class Messages extends MessagesBase {
     );
   }
 
-  private static isActiveElement(bubbleClasslist: DOMTokenList) {
+  public static isActiveElement(bubbleClasslist?: DOMTokenList) {
+    if (!bubbleClasslist) return false;
     return (
       bubbleClasslist.contains(LoadingStyle.BUBBLE_CLASS) ||
       bubbleClasslist.contains(LoadingHistory.CLASS) ||
