@@ -1,6 +1,6 @@
 import {Overwrite} from '../../../../types/messagesInternal';
 import {Legacy} from '../../../../utils/legacy/legacy';
-import {MessageUtils} from '../messageUtils';
+import {MessageUtils} from '../utils/messageUtils';
 import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {HTMLUtils} from './htmlUtils';

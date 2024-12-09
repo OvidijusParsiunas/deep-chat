@@ -1,8 +1,8 @@
 import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
-import {MessageUtils} from '../../views/chat/messages/messageUtils';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';

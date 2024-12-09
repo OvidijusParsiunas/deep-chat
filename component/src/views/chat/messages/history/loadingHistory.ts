@@ -1,9 +1,9 @@
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {MessageElementsStyles} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
+import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
 import {MessagesBase} from '../messagesBase';
-import {MessageUtils} from '../messageUtils';
 
 export class LoadingHistory {
   public static readonly CLASS = 'loading-history-message';

@@ -1,4 +1,4 @@
-import {FileMessageUtils} from '../../views/chat/messages/fileMessageUtils';
+import {FileMessageUtils} from '../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {DeepChat} from '../../deepChat';
 import {Legacy} from '../legacy/legacy';

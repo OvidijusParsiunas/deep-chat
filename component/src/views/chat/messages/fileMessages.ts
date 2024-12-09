@@ -1,10 +1,10 @@
 import {MessageFile, MessageFiles} from '../../../types/messageFile';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
+import {FileMessageUtils} from './utils/fileMessageUtils';
 import {FILE_ICON_STRING} from '../../../icons/fileIcon';
 import {Browser} from '../../../utils/browser/browser';
 import {MessageStyles} from '../../../types/messages';
-import {FileMessageUtils} from './fileMessageUtils';
-import {MessageUtils} from './messageUtils';
+import {MessageUtils} from './utils/messageUtils';
 import {MessagesBase} from './messagesBase';
 
 export class FileMessages {

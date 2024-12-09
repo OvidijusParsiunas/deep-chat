@@ -1,17 +1,14 @@
-import {MessageBody, MessageBodyElements, MessageContentI, MessageToElements} from '../../../types/messagesInternal';
-import {MessageContent, MessageStyles} from '../../../types/messages';
-import {LoadingStyle} from '../../../utils/loading/loadingStyle';
-import {MessageFile} from '../../../types/messageFile';
+import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../../types/messagesInternal';
+import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
+import {MessageContent} from '../../../../types/messages';
 import {FileMessageUtils} from './fileMessageUtils';
-import {HTMLMessages} from './html/htmlMessages';
-import {Avatars} from '../../../types/avatars';
-import {MessagesBase} from './messagesBase';
-import {FileMessages} from './fileMessages';
-import {MessageElements, Messages} from './messages';
-import {Names} from '../../../types/names';
-import {Avatar} from './avatar';
-import {Name} from './name';
-import {MessageStream} from './stream/messageStream';
+import {HTMLMessages} from '../html/htmlMessages';
+import {Avatars} from '../../../../types/avatars';
+import {Names} from '../../../../types/names';
+import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
+import {Avatar} from '../avatar';
+import {Name} from '../name';
 
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
@@ -197,115 +194,5 @@ export class MessageUtils {
         }
       }
     });
-  }
-
-  private static removeElements(messageElementRefs: MessageElements[], elemsToRemove?: MessageElements) {
-    if (!elemsToRemove) return;
-    const removalElsIndex = messageElementRefs.findIndex((messageElements) => messageElements === elemsToRemove);
-    messageElementRefs.splice(removalElsIndex, 1);
-    elemsToRemove?.outerContainer.remove();
-  }
-
-  private static removeFilesMessages(msg: MessagesBase, messageToEls: MessageToElements[0]) {
-    messageToEls[1].files?.forEach((file) => {
-      MessageUtils.removeElements(msg.messageElementRefs, file);
-    });
-    delete messageToEls[0].files;
-    delete messageToEls[1].files;
-  }
-
-  private static removeTextHTMLMessage(msg: MessagesBase, messageToEls: MessageToElements[0], type: 'text' | 'html') {
-    const elemsToRemove = messageToEls[1][type];
-    MessageUtils.removeElements(msg.messageElementRefs, elemsToRemove);
-    delete messageToEls[0][type];
-    delete messageToEls[1][type];
-  }
-
-  private static changeHTMLMessage(msg: MessagesBase, messageToEls: MessageToElements[0], newHTML: string) {
-    if (messageToEls[1].html) {
-      HTMLMessages.overwriteElements(msg, newHTML, messageToEls[1].html);
-    } else {
-      const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
-      const previousElements = (messageToEls[1].files?.[messageToEls[1].files?.length - 1] ||
-        messageToEls[1].text) as MessageElements;
-      msg.elementRef.insertBefore(messageElements.outerContainer, previousElements.outerContainer.nextSibling);
-      msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
-      const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
-      msg.messageElementRefs.splice(prevMsgElsIndex + 1, 0, messageElements);
-      messageToEls[1].html = messageElements;
-    }
-    messageToEls[0].html = newHTML;
-  }
-
-  // finds beforeElement, creates new elements, remove old and adds new ones
-  private static changeFileMessages(msg: MessagesBase, messageToEls: MessageToElements[0], newFiles: MessageFile[]) {
-    const role = messageToEls[0].role;
-    const typeToElements = FileMessages.createMessages(msg, newFiles, role);
-    const nextElement = messageToEls[1].html;
-    const prevElement = messageToEls[1].files?.[messageToEls[1].files?.length - 1] || messageToEls[1].text;
-    const siblingElement = (nextElement || prevElement) as MessageElements;
-    let siblingElementIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === siblingElement);
-    if (prevElement) siblingElementIndex += 1;
-    const beforeElement = (nextElement?.outerContainer || prevElement?.outerContainer.nextSibling) as Node;
-    typeToElements.forEach(({type, elements}, index) => {
-      FileMessageUtils.setElementProps(msg, elements, type as keyof MessageStyles, role);
-      msg.elementRef.insertBefore(elements.outerContainer, beforeElement);
-      msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
-      msg.messageElementRefs.splice(siblingElementIndex + index, 0, elements);
-    });
-    MessageUtils.removeFilesMessages(msg, messageToEls);
-    messageToEls[1].files = typeToElements.map(({elements}) => elements);
-    messageToEls[0].files = newFiles;
-  }
-
-  private static changeTextMessage(msg: MessagesBase, messageToEls: MessageToElements[0], newText: string) {
-    if (messageToEls[1].text) {
-      msg.renderText(messageToEls[1].text.bubbleElement, newText);
-    } else {
-      const messageElements = msg.createElements(newText, messageToEls[0].role);
-      const nextElements = (messageToEls[1].files?.[0] || messageToEls[1].html) as MessageElements;
-      msg.elementRef.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
-      const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);
-      msg.messageElementRefs.splice(nextMsgElsIndex, 0, messageElements);
-      messageToEls[1].text = messageElements;
-    }
-    messageToEls[0].text = newText;
-  }
-
-  private static isElementActive(elements: MessageBodyElements) {
-    return (
-      Messages.isActiveElement(elements.text?.bubbleElement.classList) ||
-      Messages.isActiveElement(elements.html?.bubbleElement.classList)
-    );
-  }
-
-  public static changeMessage(msg: MessagesBase, messageToEls: MessageToElements[0], messageBody: MessageBody) {
-    if (messageToEls) {
-      if (MessageUtils.isElementActive(messageToEls[1])) {
-        return console.error('Cannot update a message that is being streamed');
-      }
-      if (messageBody.text) {
-        MessageUtils.changeTextMessage(msg, messageToEls, messageBody.text);
-      }
-      if (messageBody.html) {
-        MessageUtils.changeHTMLMessage(msg, messageToEls, messageBody.html);
-      }
-      if (messageBody.files) {
-        // adds and removes
-        MessageUtils.changeFileMessages(msg, messageToEls, messageBody.files);
-      } else {
-        // removes elements
-        MessageUtils.removeFilesMessages(msg, messageToEls);
-      }
-      // Important to remove after elements are changed as existing element indexes are used
-      if (!messageBody.text && messageToEls[1].text) {
-        MessageUtils.removeTextHTMLMessage(msg, messageToEls, 'text');
-      }
-      if (!messageBody.html && messageToEls[1].html) {
-        MessageUtils.removeTextHTMLMessage(msg, messageToEls, 'html');
-      }
-    } else {
-      console.error('Message index not found. Please use the `getMessages` method to find the correct index');
-    }
   }
 }
