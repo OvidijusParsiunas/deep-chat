@@ -1,4 +1,4 @@
-import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
+import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesInternal';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
@@ -17,6 +17,7 @@ import {IntroMessage} from '../../../types/messages';
 import {MessageStream} from './stream/messageStream';
 import {IntroPanel} from '../introPanel/introPanel';
 import {WebModel} from '../../../webModel/webModel';
+import {UpdateMessage} from './utils/updateMessage';
 import {CustomStyle} from '../../../types/styles';
 import {MessageUtils} from './utils/messageUtils';
 import {HTMLMessages} from './html/htmlMessages';
@@ -65,6 +66,7 @@ export class Messages extends MessagesBase {
     deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
       this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
     };
+    deepChat.updateMessage = (index: number, messageBody: MessageBody) => UpdateMessage.update(this, index, messageBody);
     // interface - setUpMessagesForService
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
     if (demo) this.prepareDemo(demo);
