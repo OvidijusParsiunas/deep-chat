@@ -61,7 +61,7 @@ export class Messages extends MessagesBase {
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
     deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messageToElements.map(([msg]) => msg)));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
-    deepChat.refreshMessages = this.refreshTextMessages.bind(this);
+    deepChat.refreshMessages = this.refreshTextMessages.bind(this, deepChat.remarkableConfig);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
     deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
       this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);

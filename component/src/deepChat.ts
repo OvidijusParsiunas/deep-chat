@@ -21,6 +21,7 @@ import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
+import type { RemarkableOptions } from 'remarkable';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
@@ -49,6 +50,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   webModel?: WebModel;
+
+  @Property('object')
+  remarkableConfig?: RemarkableOptions;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;

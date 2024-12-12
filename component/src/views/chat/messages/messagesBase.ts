@@ -7,6 +7,7 @@ import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
+import {Remarkable, RemarkableOptions} from 'remarkable';
 import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
 import {IntroPanel} from '../introPanel/introPanel';
@@ -17,7 +18,6 @@ import {Avatars} from '../../../types/avatars';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
-import {Remarkable} from 'remarkable';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -37,7 +37,7 @@ export class MessagesBase {
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
-    this._remarkable = RemarkableConfig.createNew();
+    this._remarkable = RemarkableConfig.createNew(deepChat.remarkableConfig);
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
@@ -223,8 +223,8 @@ export class MessagesBase {
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
-  protected refreshTextMessages() {
-    this._remarkable = RemarkableConfig.createNew();
+  protected refreshTextMessages(config?: RemarkableOptions) {
+    this._remarkable = RemarkableConfig.createNew(config);
     this.messageToElements.forEach((msgToEls) => {
       if (msgToEls[1].text && msgToEls[0].text) this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text);
     });
