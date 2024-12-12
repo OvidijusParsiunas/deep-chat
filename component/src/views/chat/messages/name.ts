@@ -1,5 +1,5 @@
 import {Names, Name as NameT, CustomNames} from '../../../types/names';
-import {MessageUtils} from './messageUtils';
+import {MessageUtils} from './utils/messageUtils';
 
 export class Name {
   private static readonly NAME_CLASS = 'name';

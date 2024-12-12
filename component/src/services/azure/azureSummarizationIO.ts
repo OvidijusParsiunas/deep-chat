@@ -12,18 +12,30 @@ import {DeepChat} from '../../deepChat';
 type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
 export class AzureSummarizationIO extends AzureLanguageIO {
+  private static readonly ENDPOINT_ERROR_MESSAGE =
+    // eslint-disable-next-line max-len
+    'Please define the azure endpoint. [More Information](https://deepchat.dev/docs/directConnection/Azure#Summarization)';
+  override permittedErrorPrefixes: string[] = [AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE];
   url = '';
   textInputPlaceholderText = 'Insert text to summarize';
+  isTextInputDisabled = false;
   private messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.summarization as NonNullable<Azure['summarization']>;
     const apiKey = deepChat.directConnection?.azure;
     super(deepChat, AzureUtils.buildSummarizationHeader, config.endpoint, apiKey);
-    this.rawBody.language ??= 'en';
-    Object.assign(this.rawBody, config);
-
-    this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
+    if (!config.endpoint) {
+      this.isTextInputDisabled = true;
+      this.canSendMessage = () => false;
+      setTimeout(() => {
+        deepChat.addMessage({error: AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE});
+      });
+    } else {
+      this.rawBody.language ??= 'en';
+      Object.assign(this.rawBody, config);
+      this.url = `${config.endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`;
+    }
   }
 
   preprocessBody(body: RawBody, messages: MessageContentI[]) {

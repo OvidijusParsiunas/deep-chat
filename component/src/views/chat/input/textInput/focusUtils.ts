@@ -1,3 +1,4 @@
+import {Browser} from '../../../../utils/browser/browser';
 import {TextInputEl} from './textInput';
 
 export class FocusUtils {
@@ -11,7 +12,10 @@ export class FocusUtils {
   }
 
   public static focusFromParentElement(parentElement: HTMLElement) {
-    const inputElement = parentElement.querySelector(`#${TextInputEl.TEXT_INPUT_ID}`);
-    if (inputElement) FocusUtils.focusEndOfInput(inputElement as HTMLElement);
+    const inputElement = parentElement.querySelector(`#${TextInputEl.TEXT_INPUT_ID}`) as HTMLElement;
+    if (inputElement) {
+      if (Browser.IS_SAFARI) inputElement.focus(); // can only focus the start of the input in Safari
+      FocusUtils.focusEndOfInput(inputElement);
+    }
   }
 }

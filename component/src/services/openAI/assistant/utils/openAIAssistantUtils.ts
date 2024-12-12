@@ -1,10 +1,11 @@
-import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../types/openAIResult';
-import {MessageFileType, MessageFile} from '../../../types/messageFile';
-import {Messages} from '../../../views/chat/messages/messages';
-import {RequestUtils} from '../../../utils/HTTP/requestUtils';
-import {DirectServiceIO} from '../../utils/directServiceIO';
-import {OpenAIUtils} from './openAIUtils';
-import {ServiceIO} from '../../serviceIO';
+import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
+import {MessageFileType, MessageFile} from '../../../../types/messageFile';
+import {Messages} from '../../../../views/chat/messages/messages';
+import {RequestUtils} from '../../../../utils/HTTP/requestUtils';
+import {DirectServiceIO} from '../../../utils/directServiceIO';
+import {OpenAIUtils} from '../../utils/openAIUtils';
+import {URLSegments} from '../openAIAssistantIOI';
+import {ServiceIO} from '../../../serviceIO';
 
 type FileDetails = {fileId: string; path?: string; name?: string}[];
 
@@ -18,10 +19,10 @@ export class OpenAIAssistantUtils {
     'Response must contain an array of strings for each individual function/tool_call, ' +
     'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.';
 
-  public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[]) {
+  public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[], storeFilesUrl: string) {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
-    serviceIO.url = 'https://api.openai.com/v1/files'; // stores files
+    serviceIO.url = storeFilesUrl; // stores files
     const previousContentType = headers[RequestUtils.CONTENT_TYPE];
     delete headers[RequestUtils.CONTENT_TYPE];
     const requests = files.map(async (file) => {
@@ -54,10 +55,10 @@ export class OpenAIAssistantUtils {
     return 'any';
   }
 
-  private static async getFiles(serviceIO: ServiceIO, fileDetails: FileDetails) {
+  private static async getFiles(serviceIO: ServiceIO, fileDetails: FileDetails, urlPrefix: string, urlPosfix: string) {
     const fileRequests = fileDetails.map(({fileId}) => {
       // https://platform.openai.com/docs/api-reference/files/retrieve-contents
-      serviceIO.url = `https://api.openai.com/v1/files/${fileId}/content`;
+      serviceIO.url = `${urlPrefix}${fileId}${urlPosfix}`;
       return new Promise<Blob>((resolve) => {
         resolve(OpenAIUtils.directFetch(serviceIO, undefined, 'GET', false));
       });
@@ -86,10 +87,11 @@ export class OpenAIAssistantUtils {
 
   // prettier-ignore
   private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails,
-      role?: string, content?: OpenAIAssistantContent) {
+      urls: URLSegments, role?: string, content?: OpenAIAssistantContent) {
     let files: MessageFile[] | undefined;
+    const {getFilesPrefix, getFilesPostfix} = urls;
     if (fileDetails.length > 0) {
-      files = await OpenAIAssistantUtils.getFiles(io, fileDetails);
+      files = await OpenAIAssistantUtils.getFiles(io, fileDetails, getFilesPrefix, getFilesPostfix);
       if (content?.text?.value) {
         files.forEach((file, index) => {
           if (!file.src) return;
@@ -132,10 +134,12 @@ export class OpenAIAssistantUtils {
     return fileDetails;
   }
 
-  public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData, content?: OpenAIAssistantContent) {
+  // prettier-ignore
+  public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData,
+      urls: URLSegments, content?: OpenAIAssistantContent) {
     const fileDetails = OpenAIAssistantUtils.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
-    return await OpenAIAssistantUtils.getFilesAndNewText(io, fileDetails, message.role, content);
+    return await OpenAIAssistantUtils.getFilesAndNewText(io, fileDetails, urls, message.role, content);
   }
 
   private static parseResult(result: OpenAIAssistantMessagesResult, isHistory: boolean) {
@@ -157,7 +161,7 @@ export class OpenAIAssistantUtils {
 
   // test this using this prompt and it should give 2 text mesages and a file:
   // "give example data for a csv and create a suitable bar chart"
-  private static parseMessages(io: DirectServiceIO, messages: OpenAIAssistantData[]) {
+  private static parseMessages(io: DirectServiceIO, messages: OpenAIAssistantData[], urls: URLSegments) {
     const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
     messages.forEach(async (data) => {
       data.content
@@ -168,18 +172,20 @@ export class OpenAIAssistantUtils {
           return 0;
         })
         .forEach(async (content) => {
-          parsedContent.push(OpenAIAssistantUtils.getFilesAndText(io, data, content));
+          parsedContent.push(OpenAIAssistantUtils.getFilesAndText(io, data, urls, content));
         });
     });
     return Promise.all(parsedContent);
   }
 
-  public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[]) {
-    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}]);
+  public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[], urls: URLSegments) {
+    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}], urls);
   }
 
-  public static async processAPIMessages(io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean) {
+  // prettier-ignore
+  public static async processAPIMessages(
+      io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean, urls: URLSegments) {
     const messages = OpenAIAssistantUtils.parseResult(result, isHistory);
-    return OpenAIAssistantUtils.parseMessages(io, messages);
+    return OpenAIAssistantUtils.parseMessages(io, messages, urls);
   }
 }

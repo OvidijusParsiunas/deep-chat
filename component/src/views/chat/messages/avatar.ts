@@ -1,7 +1,7 @@
 import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
 import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
-import {MessageUtils} from './messageUtils';
+import {MessageUtils} from './utils/messageUtils';
 
 export class Avatar {
   private static readonly CONTAINER_CLASS = 'avatar-container';
@@ -38,6 +38,7 @@ export class Avatar {
       avatar.src = avatars?.[role]?.src || avatars?.ai?.src || avatars?.default?.src || aiLogoUrl;
     }
     avatar.classList.add('avatar');
+    avatar.alt = `${role} avatar`;
     const avatarContainer = document.createElement('div');
     avatarContainer.classList.add(Avatar.CONTAINER_CLASS);
     avatarContainer.appendChild(avatar);

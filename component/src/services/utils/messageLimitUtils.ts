@@ -22,7 +22,6 @@ export class MessageLimitUtils {
     return messages.slice(Math.max(messages.length - maxMessages, 0));
   }
 
-  // prettier-ignore
   // if maxMessages is not defined we send all messages
   // if maxMessages above 0 we send that number
   // if maxMessages 0 or below we send only what is in the request

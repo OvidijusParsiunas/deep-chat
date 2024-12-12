@@ -12,13 +12,17 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
     // eslint-disable-next-line max-len
     'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';
+  private static readonly REGION_ERROR_MESSAGE =
+    // eslint-disable-next-line max-len
+    'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#TextToSpeech)';
+  permittedErrorPrefixes: string[] = [AzureTextToSpeechIO.REGION_ERROR_MESSAGE];
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Text To Speech</b></div>
     <p>Insert text to synthesize it to audio.
     <p>
       Click <a href="${AzureTextToSpeechIO.HELP_LINK}">here</a> for more info.
     </p>`;
-
+  isTextInputDisabled = false;
   url = '';
 
   // prettier-ignore
@@ -28,11 +32,19 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     super(deepChat,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config.region, apiKey);
-    Object.assign(this.rawBody, config);
-    this.rawBody.lang ??= 'en-US';
-    this.rawBody.name ??= 'en-US-JennyNeural';
-    this.rawBody.gender ??= 'Female';
-    this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+    if (!config.region) {
+      this.isTextInputDisabled = true;
+      this.canSendMessage = () => false;
+      setTimeout(() => {
+        deepChat.addMessage({error: AzureTextToSpeechIO.REGION_ERROR_MESSAGE});
+      });
+    } else {
+      Object.assign(this.rawBody, config);
+      this.rawBody.lang ??= 'en-US';
+      this.rawBody.name ??= 'en-US-JennyNeural';
+      this.rawBody.gender ??= 'Female';
+      this.url = `https://${config.region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+    }
   }
 
   preprocessBody(body: AzureTextToSpeechConfig, messages: MessageContentI[]) {

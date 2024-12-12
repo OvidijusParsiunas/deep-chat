@@ -1,6 +1,13 @@
-import {MessageFileType} from './messageFile';
+import {MessageElements} from '../views/chat/messages/messages';
+import {MessageFile, MessageFileType} from './messageFile';
 import {PropsRequired} from './utilityTypes';
 import {MessageContent} from './messages';
+
+export type MessageBody = {text?: string; files?: MessageFile[]; html?: string};
+
+export type MessageBodyElements = {text?: MessageElements; files?: MessageElements[]; html?: MessageElements};
+
+export type MessageToElements = [MessageContentI, MessageBodyElements][];
 
 export type MessageContentI = PropsRequired<MessageContent, 'role'>;
 

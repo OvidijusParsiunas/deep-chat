@@ -1,1 +1,1 @@
-export type FILE_TYPES = 'images' | 'gifs' | 'audio' | 'mixedFiles';
+export type FILE_TYPE = 'images' | 'gifs' | 'audio' | 'mixedFiles';

@@ -1,9 +1,3 @@
-:warning: Note from developer (05/10/2024): :warning:
-
-:airplane: I have recently relocated to another country and am currently focusing on settling into my new home and sorting out various logistics. As a result, progress on new features for Deep Chat has slowed down, and I apologize for the delays in responding to issues.
-
-:heart: Deep Chat has been one of my most rewarding projects, and I’m eager to get back to my usual development pace as soon as possible. Thank you for your understanding and patience during this time.
-
 <br />
 
 ![Deep Chat](./assets/readme/banner-2.png)

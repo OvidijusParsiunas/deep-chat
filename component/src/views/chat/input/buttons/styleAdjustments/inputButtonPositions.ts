@@ -2,17 +2,17 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {ButtonContainers, ButtonContainersT} from '../../buttonContainers/buttonContainers';
 import {BUTTON_ORDER} from '../../../../../utils/buttons/inputButtons';
 import {DropupStyles} from '../../../../../types/dropupStyles';
-import {BUTTON_TYPES} from '../../../../../types/buttonTypes';
+import {BUTTON_TYPE} from '../../../../../types/buttonTypes';
 import {ButtonPosition} from '../../../../../types/button';
 import {InputButton} from '../inputButton';
 import {Dropup} from '../../dropup/dropup';
 
 export type Positions = {[key in ButtonPosition]: ButtonProps[]};
 
-type ButtonProps = {button: InputButton; buttonType?: BUTTON_TYPES; fileType?: FileAttachmentsType};
+type ButtonProps = {button: InputButton; buttonType?: BUTTON_TYPE; fileType?: FileAttachmentsType};
 
 type Buttons = {
-  [key in BUTTON_TYPES]?: ButtonProps;
+  [key in BUTTON_TYPE]?: ButtonProps;
 };
 
 export class InputButtonPositions {

@@ -15,7 +15,7 @@ import {RecordAudio} from './buttons/microphone/recordAudio';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
 import {DropupStyles} from '../../../types/dropupStyles';
-import {BUTTON_TYPES} from '../../../types/buttonTypes';
+import {BUTTON_TYPE} from '../../../types/buttonTypes';
 import {InputButton} from './buttons/inputButton';
 import {CustomStyle} from '../../../types/styles';
 import {TextInputEl} from './textInput/textInput';
@@ -23,7 +23,7 @@ import {Messages} from '../messages/messages';
 import {DeepChat} from '../../../deepChat';
 
 export type Buttons = {
-  [key in BUTTON_TYPES]?: {button: InputButton; fileType?: FileAttachmentsType};
+  [key in BUTTON_TYPE]?: {button: InputButton; fileType?: FileAttachmentsType};
 };
 
 export class Input {

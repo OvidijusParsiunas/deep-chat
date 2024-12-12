@@ -2,10 +2,10 @@ import {MIXED_FILES_ICON_STRING} from '../../icons/mixedFilesIcon';
 import {IMAGE_ICON_STRING} from '../../icons/imageIcon';
 import {AUDIO_ICON_STRING} from '../../icons/audioIcon';
 import {GIF_ICON_STRING} from '../../icons/gifIcon';
-import {FILE_TYPES} from '../../types/fileTypes';
+import {FILE_TYPE} from '../../types/fileTypes';
 
 type ServiceFileTypes = {
-  [key in FILE_TYPES]: {
+  [key in FILE_TYPE]: {
     id: string;
     svgString: string;
     dropupText: string;

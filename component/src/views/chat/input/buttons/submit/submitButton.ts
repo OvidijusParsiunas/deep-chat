@@ -7,10 +7,10 @@ import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {UserContentI} from '../../../../../types/messagesInternal';
+import {MessageUtils} from '../../../messages/utils/messageUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {MicrophoneButton} from '../microphone/microphoneButton';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {MessageUtils} from '../../../messages/messageUtils';
 import {UserContent} from '../../../../../types/messages';
 import {Legacy} from '../../../../../utils/legacy/legacy';
 import {Response} from '../../../../../types/response';
@@ -126,6 +126,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (this._customStyles?.submit?.svg
         || this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
+      // this gets triggered when alwaysEnabled is set to true
       const styleElement = document.createElement('style');
       styleElement.textContent = `
         .loading-button > * {

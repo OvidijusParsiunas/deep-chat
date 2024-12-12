@@ -1,7 +1,7 @@
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
+import {MessageUtils} from '../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../utils/errorMessages/errorMessages';
-import {MessageUtils} from '../views/chat/messages/messageUtils';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {WebModelIntroMessage} from './webModelIntroMessage';

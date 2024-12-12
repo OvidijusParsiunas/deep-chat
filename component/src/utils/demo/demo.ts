@@ -1,5 +1,5 @@
+import {MessageContentI, MessageToElements} from '../../types/messagesInternal';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
-import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DemoResponse} from '../../types/demo';
 import {Response} from '../../types/response';
@@ -8,8 +8,8 @@ import {Stream} from '../HTTP/stream';
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
 
-  private static generateResponse(messages: Messages) {
-    const requestMessage = messages.messages[messages.messages.length - 1];
+  private static generateResponse(messageToElements: MessageToElements) {
+    const requestMessage = messageToElements[messageToElements.length - 1][0];
     if (requestMessage.files && requestMessage.files.length > 0) {
       if (requestMessage.files.length > 1) {
         return 'These are interesting files!';
@@ -42,10 +42,10 @@ export class Demo {
     return customResponse;
   }
 
-  private static getResponse(messages: Messages): Response {
-    return messages.customDemoResponse
-      ? Demo.getCustomResponse(messages.customDemoResponse, messages.messages[messages.messages.length - 1])
-      : {text: Demo.generateResponse(messages)};
+  private static getResponse({customDemoResponse, messageToElements}: Messages): Response {
+    return customDemoResponse
+      ? Demo.getCustomResponse(customDemoResponse, messageToElements[messageToElements.length - 1][0])
+      : {text: Demo.generateResponse(messageToElements)};
   }
 
   // timeout is used to simulate a timeout for a response to come back

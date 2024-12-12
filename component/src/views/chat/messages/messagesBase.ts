@@ -1,19 +1,20 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
-import {MessageContentI, Overwrite} from '../../../types/messagesInternal';
+import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {Remarkable, RemarkableOptions} from 'remarkable';
 import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
-import {MessageStyleUtils} from './messageStyleUtils';
 import {IntroPanel} from '../introPanel/introPanel';
+import {Legacy} from '../../../utils/legacy/legacy';
+import {MessageUtils} from './utils/messageUtils';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
-import {MessageUtils} from './messageUtils';
 import {DeepChat} from '../../../deepChat';
 import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
@@ -24,25 +25,25 @@ export class MessagesBase {
   submitUserMessage?: (content: UserContent) => void;
   readonly elementRef: HTMLElement;
   readonly messageStyles?: MessageStyles;
-  readonly messages: MessageContentI[] = [];
   readonly htmlClassUtilities: HTMLClassUtilities = {};
-  textElementsToText: [MessageElements, string][] = [];
+  readonly messageToElements: MessageToElements = [];
   protected _introPanel?: IntroPanel;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
   private _remarkable: Remarkable;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
+  public static readonly TEXT_BUBBLE_CLASS = 'text-message';
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
-    this.messageStyles = deepChat.messageStyles;
+    this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkableConfig);
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     setTimeout(() => {
-      this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available
+      this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
   }
 
@@ -61,22 +62,18 @@ export class MessagesBase {
     const messageElements = isTop
       ? this.createAndPrependNewMessageElement(text, role, isTop)
       : this.createAndAppendNewMessageElement(text, role);
-    messageElements.bubbleElement.classList.add('text-message');
+    messageElements.bubbleElement.classList.add(MessagesBase.TEXT_BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, role, false);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
-    const textElements: [MessageElements, string] = [messageElements, text];
-    MessageUtils.updateRefArr(this.textElementsToText, textElements, isTop);
     return messageElements;
   }
 
+  // prettier-ignore
   private overwriteText(role: string, text: string, elementRefs: MessageElements[]) {
-    const elements = MessageUtils.overwriteMessage(this.messages, elementRefs, text, role, 'text', 'text-message');
-    if (elements) {
-      this.renderText(elements.bubbleElement, text);
-      const elementToText = MessageUtils.getLastTextToElement(this.textElementsToText, elements);
-      if (elementToText) elementToText[1] = text;
-    }
-    return elements;
+    const elems = MessageUtils.overwriteMessage(
+      this.messageToElements, elementRefs, text, role, 'text', MessagesBase.TEXT_BUBBLE_CLASS);
+    if (elems) this.renderText(elems.bubbleElement, text);
+    return elems;
   }
 
   protected createAndAppendNewMessageElement(text: string, role: string) {
@@ -123,7 +120,7 @@ export class MessagesBase {
     if ((this._avatars || this._names) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
       // if prev message before temp has a different role to the new one, make sure its avatar is revealed
       const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
-      if (prevMessageElements && this.messages[this.messages.length - 1]
+      if (prevMessageElements && this.messageToElements.length > 0
           && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
         MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this._avatars, this._names);
       }
@@ -134,21 +131,28 @@ export class MessagesBase {
     return MessagesBase.isLoadingMessage(elements) || HTMLDeepChatElements.isElementTemporary(elements);
   }
 
-  public createMessageElements(text: string, role: string, isTop = false) {
-    const messageElements = MessagesBase.createBaseElements();
+  public createElements(text: string, role: string) {
+    const messageElements = MessagesBase.createBaseElements(role);
     const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, role);
-    MessageUtils.updateRefArr(this.messageElementRefs, messageElements, isTop);
     return messageElements;
   }
 
-  protected static createBaseElements(): MessageElements {
+  public createMessageElements(text: string, role: string, isTop = false) {
+    const messageElements = this.createElements(text, role);
+    MessageUtils.updateRefArr(this.messageElementRefs, messageElements, isTop);
+    MessageUtils.classifyMessages(role, this.messageElementRefs);
+    return messageElements;
+  }
+
+  protected static createBaseElements(role: string): MessageElements {
     const outerContainer = document.createElement('div');
     const innerContainer = document.createElement('div');
     innerContainer.classList.add('inner-message-container');
     outerContainer.appendChild(innerContainer);
     outerContainer.classList.add('outer-message-container');
+    outerContainer.classList.add(MessageUtils.buildRoleContainerClass(role));
     const bubbleElement = document.createElement('div');
     bubbleElement.classList.add('message-bubble');
     innerContainer.appendChild(bubbleElement);
@@ -157,7 +161,7 @@ export class MessagesBase {
 
   // prettier-ignore
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
-    if (this.messages[this.messages.length - 1]?.role === role && !this.isLastMessageError()) {
+    if (this.messageToElements[this.messageToElements.length - 1]?.[0].role === role && !this.isLastMessageError()) {
       MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
     }
     bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
@@ -221,8 +225,8 @@ export class MessagesBase {
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages(config?: RemarkableOptions) {
     this._remarkable = RemarkableConfig.createNew(config);
-    this.textElementsToText.forEach((elementToText) => {
-      this.renderText(elementToText[0].bubbleElement, elementToText[1]);
+    this.messageToElements.forEach((msgToEls) => {
+      if (msgToEls[1].text && msgToEls[0].text) this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text);
     });
   }
 }
