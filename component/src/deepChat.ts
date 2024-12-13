@@ -15,13 +15,12 @@ import {ValidationHandler} from './types/validationHandler';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
-import {MessageBody} from './types/messagesInternal';
 import {SpeechToTextConfig} from './types/microphone';
+import {MessageBody} from './types/messagesInternal';
 import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
-import type { RemarkableOptions } from 'remarkable';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
@@ -29,6 +28,7 @@ import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
+import {RemarkableOptions} from 'remarkable';
 import {TextInput} from './types/textInput';
 import {LoadHistory} from './types/history';
 import {CustomStyle} from './types/styles';
@@ -50,9 +50,6 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   webModel?: WebModel;
-
-  @Property('object')
-  remarkableConfig?: RemarkableOptions;
 
   @Property('object')
   requestBodyLimits?: RequestBodyLimits;
@@ -143,6 +140,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   htmlClassUtilities?: HTMLClassUtilities;
+
+  @Property('object')
+  remarkable?: RemarkableOptions;
 
   getMessages: () => MessageContent[] = () => [];
 

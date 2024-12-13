@@ -141,7 +141,7 @@ export class SetFileTypes {
   public static set(deepChat: DeepChat, serviceIO: ServiceIO, existingFileTypes?: ServiceFileTypes) {
     SetFileTypes.populateDefaultFileIO(existingFileTypes?.audio, '.4a,.mp3,.webm,.mp4,.mpga,.wav,.mpeg,.m4a');
     SetFileTypes.populateDefaultFileIO(existingFileTypes?.images, '.png,.jpg');
-    const remarkable = RemarkableConfig.createNew(deepChat.remarkableConfig);
+    const remarkable = RemarkableConfig.createNew(deepChat.remarkable);
     SetFileTypes.processImagesConfig(serviceIO, remarkable, deepChat.images, existingFileTypes?.images);
     SetFileTypes.processCamera(serviceIO, remarkable, deepChat.camera, deepChat.images);
     SetFileTypes.processGifConfig(serviceIO, remarkable, deepChat.gifs, existingFileTypes?.gifs);

@@ -7,7 +7,7 @@ declare module 'remarkable' {
     public inline: {validateLink: () => boolean};
   }
 
-  export interface RemarkableOptions {
+  interface RemarkableOptions {
     xhtmlOut?: boolean;
     html?: boolean;
     breaks?: boolean;

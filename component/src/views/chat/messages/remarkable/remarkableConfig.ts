@@ -1,4 +1,5 @@
-import {Remarkable, RemarkableOptions} from 'remarkable';
+import {RemarkableOptions} from '../../../../types/remarkable';
+import {Remarkable} from 'remarkable';
 import hljs from 'highlight.js';
 
 declare global {
@@ -8,9 +9,9 @@ declare global {
 }
 
 export class RemarkableConfig {
-  private static instantiate(config?: RemarkableOptions) {
-    if (config) {
-      return new Remarkable(config);
+  private static instantiate(customConfig?: RemarkableOptions) {
+    if (customConfig) {
+      return new Remarkable(customConfig);
     } else if (window.hljs) {
       const hljsModule = window.hljs;
       return new Remarkable({
@@ -36,7 +37,7 @@ export class RemarkableConfig {
         linkTarget: '_blank', // set target to open in a new tab
         typographer: true, // Enable smartypants and other sweet transforms
       });
-    } else {      
+    } else {
       return new Remarkable({
         breaks: true,
         linkTarget: '_blank', // set target to open in a new tab
@@ -44,8 +45,8 @@ export class RemarkableConfig {
     }
   }
 
-  public static createNew(config?: RemarkableOptions) {
-    const remarkable = RemarkableConfig.instantiate(config);
+  public static createNew(customConfig?: RemarkableOptions) {
+    const remarkable = RemarkableConfig.instantiate(customConfig);
     remarkable.inline.validateLink = () => true;
     return remarkable;
   }
