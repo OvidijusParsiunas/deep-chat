@@ -15,7 +15,8 @@
   height: 1.65em;
 }
 
-.input-button:hover {
+.input-button:hover,
+.input-button:focus-visible {
   background-color: #9c9c9c2e;
 }
 
