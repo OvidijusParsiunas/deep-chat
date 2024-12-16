@@ -34,6 +34,7 @@ export class MessagesBase {
   private _remarkable: Remarkable;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
+  public static readonly INTRO_CLASS = 'deep-chat-intro';
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
@@ -86,7 +87,7 @@ export class MessagesBase {
 
   private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean) {
     const messageElements = this.createNewMessageElement(text, role, isTop);
-    if (isTop && (this.elementRef.firstChild as HTMLElement)?.classList.contains('deep-chat-intro')) {
+    if (isTop && (this.elementRef.firstChild as HTMLElement)?.classList.contains(MessagesBase.INTRO_CLASS)) {
       (this.elementRef.firstChild as HTMLElement).insertAdjacentElement('afterend', messageElements.outerContainer);
       // swapping to place intro refs into correct position
       const introRefs = this.messageElementRefs[0];

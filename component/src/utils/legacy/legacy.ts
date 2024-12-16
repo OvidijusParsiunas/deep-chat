@@ -6,6 +6,7 @@ import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
 import {Stream} from '../../types/stream';
 import {DeepChat} from '../../deepChat';
+import {Demo} from '../../types/demo';
 
 interface LegacyDeepChat {
   request?: Connect;
@@ -122,10 +123,20 @@ export class Legacy {
     const messageStylesCp = structuredClone(messageStyles);
     const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
-      console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.0.2.');
+      console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.1.0.');
       console.error('Check it out here: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
       messageStylesCp.loading = {message: {styles: loading}};
     }
     return messageStylesCp;
+  }
+
+  public static processDemo(demo: Demo) {
+    if (typeof demo === 'boolean') return demo;
+    if ((demo as unknown as {displayLoadingBubble?: boolean}).displayLoadingBubble) {
+      console.error('The demo displayLoadingBubble property is deprecated since version 2.1.0.');
+      console.error('Please use displayLoading instead: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
+      demo.displayLoading = {message: true};
+    }
+    return demo;
   }
 }

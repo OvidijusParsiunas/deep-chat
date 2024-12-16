@@ -89,7 +89,7 @@ export class UpdateMessage {
   }
 
   // note that overwrite and 'deep-chat-temporary-message' are used to remove a message
-  public static update(msg: MessagesBase, index: number, messageBody: MessageBody) {
+  public static update(msg: MessagesBase, messageBody: MessageBody, index: number) {
     const messageToEls = msg.messageToElements[index];
     if (messageToEls) {
       if (UpdateMessage.isElementActive(messageToEls[1])) {
