@@ -9,9 +9,14 @@ declare global {
 }
 
 export class RemarkableConfig {
+  private static readonly DEFAULT_PROPERTIES = {
+    breaks: true,
+    linkTarget: '_blank', // set target to open in a new tab
+  };
+
   private static instantiate(customConfig?: RemarkableOptions) {
     if (customConfig) {
-      return new Remarkable(customConfig);
+      return new Remarkable({...RemarkableConfig.DEFAULT_PROPERTIES, ...customConfig});
     } else if (window.hljs) {
       const hljsModule = window.hljs;
       return new Remarkable({
@@ -38,10 +43,7 @@ export class RemarkableConfig {
         typographer: true, // Enable smartypants and other sweet transforms
       });
     } else {
-      return new Remarkable({
-        breaks: true,
-        linkTarget: '_blank', // set target to open in a new tab
-      });
+      return new Remarkable(RemarkableConfig.DEFAULT_PROPERTIES);
     }
   }
 
