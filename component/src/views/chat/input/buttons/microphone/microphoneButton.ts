@@ -43,6 +43,8 @@ export class MicrophoneButton extends InputButton<Styles> {
     const buttonElement = document.createElement('div');
     buttonElement.id = 'microphone-button';
     buttonElement.classList.add('input-button');
+    buttonElement.role = 'button';
+    buttonElement.setAttribute('tabindex', '0');
     return buttonElement;
   }
 

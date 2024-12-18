@@ -61,6 +61,8 @@ export class UploadFileButton extends InputButton<Styles> {
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button', 'upload-file-button');
+    buttonElement.role = 'button';
+    buttonElement.setAttribute('tabindex', '0');
     return buttonElement;
   }
 
