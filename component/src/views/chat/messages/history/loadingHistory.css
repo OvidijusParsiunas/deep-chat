@@ -33,7 +33,7 @@
   width: var(--loading-history-width);
   height: var(--loading-history-height);
   margin: var(--loading-history-margin);
-  border: var(--loading-history-border) solid;
+  border: var(--loading-history-border);
   border-radius: 50%;
   animation: loading-spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: var(--loading-history-color) transparent transparent transparent;

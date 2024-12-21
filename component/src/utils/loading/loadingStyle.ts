@@ -38,6 +38,6 @@ export class LoadingStyle {
     bubbleElement.style.setProperty('--loading-history-height', height || '57px');
     bubbleElement.style.setProperty('--loading-history-width', width || '57px');
     bubbleElement.style.setProperty('--loading-history-margin', margin || '7px');
-    bubbleElement.style.setProperty('--loading-history-border', border || '6px');
+    bubbleElement.style.setProperty('--loading-history-border', border || '6px solid');
   }
 }
