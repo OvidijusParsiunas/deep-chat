@@ -5,6 +5,10 @@ import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
 
 export class OpenAIUtils {
+  public static readonly FUNCTION_TOOL_RESP_ERROR =
+    'Response object must either be {response: string}[] for each individual function ' +
+    'or {text: string} for a direct response, see https://deepchat.dev/docs/directConnection/OpenAI#FunctionHandler.';
+
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,

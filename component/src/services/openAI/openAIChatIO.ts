@@ -146,14 +146,17 @@ export class OpenAIChatIO extends DirectServiceIO {
       return {name: call.function.name, arguments: call.function.arguments};
     });
     const handlerResponse = await this._functionHandler?.(functions);
-    if (handlerResponse.text) {
-      const response = {text: handlerResponse.text};
-      return await this.deepChat.responseInterceptor?.(response) || response;
+    if (!Array.isArray(handlerResponse)) {
+      if (handlerResponse.text) {
+        const response = {text: handlerResponse.text};
+        return await this.deepChat.responseInterceptor?.(response) || response;
+      }
+      throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
     }
+    const responses = await Promise.all(handlerResponse);
     bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if ((Array.isArray(handlerResponse) && !handlerResponse.find((response) => typeof response !== 'string'))
-        || functions.length === handlerResponse.length) {
-      handlerResponse.forEach((resp, index) => {
+    if (!responses.find((response) => typeof response !== 'string') && functions.length === responses.length) {
+      responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
           role: 'tool',
@@ -175,9 +178,5 @@ export class OpenAIChatIO extends DirectServiceIO {
         throw e;
       }
     }
-    throw Error(
-      'Response object must either be {response: string}[] for each individual function ' +
-        'or {text: string} for a direct response, see https://deepchat.dev/docs/directConnection/OpenAI#FunctionHandler.'
-    );
-  }
+    throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);}
 }

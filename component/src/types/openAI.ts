@@ -1,5 +1,3 @@
-import {InterfacesUnion} from './utilityTypes';
-
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
   model?: string;
@@ -81,11 +79,11 @@ export interface OpenAIAssistant {
   function_handler?: AssistantFunctionHandler;
 }
 
-export type ChatFunctionHandlerResponse = InterfacesUnion<{response: string}[] | {text: string}>;
+export type ChatFunctionHandlerResponse = {response: string}[] | {text: string};
 
 export type ChatFunctionHandler = (
   functionsDetails: FunctionsDetails
-) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse>;
+) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse> | Promise<{response: string}>[];
 
 export interface OpenAIChatFunctions {
   // parameters use the JSON Schema type
