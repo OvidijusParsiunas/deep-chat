@@ -526,7 +526,7 @@ Error handling must be done within the `handler` function.
 #### `Signals` {#Signals}
 
 - Type: \{ <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;[`onResponse: (response: Response) => void`](#Response), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;[`onResponse: (response: Response) => Promise<void>`](#Response), <br />
   &nbsp;&nbsp;&nbsp;&nbsp;`onOpen: () => void`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;`onClose: () => void`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;`stopClicked: {listener: () => void}`, <br />
