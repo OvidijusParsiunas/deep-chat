@@ -57,13 +57,22 @@ export class LoadingHistory {
     return messageElements;
   }
 
-  public static changeFullViewToSmall(messages: MessagesBase, messageElements?: MessageElements) {
+  private static tryChangeViewToSmall(messages: MessagesBase, messageElements?: MessageElements) {
     if (messageElements?.outerContainer.classList.contains(LoadingHistory.FULL_VIEW_CLASS)) {
       messageElements.outerContainer.classList.replace(LoadingHistory.FULL_VIEW_CLASS, LoadingHistory.SMALL_CLASS);
       const styles = messages.messageStyles?.loading?.history?.small?.styles;
       if (styles) LoadingHistory.apply(messages, messageElements, styles);
       const html = messages.messageStyles?.loading?.history?.small?.html;
       if (html) messageElements.bubbleElement.innerHTML = html;
+      return true;
     }
+    return false;
+  }
+
+  public static changeFullViewToSmall(messages: MessagesBase) {
+    const lastElement = messages.messageElementRefs[messages.messageElementRefs.length - 1];
+    const isChanged = LoadingHistory.tryChangeViewToSmall(messages, lastElement);
+    // last element is usually sufficient, however in demo the full view element is added before other elements
+    if (!isChanged) LoadingHistory.tryChangeViewToSmall(messages, messages.messageElementRefs[0]);
   }
 }

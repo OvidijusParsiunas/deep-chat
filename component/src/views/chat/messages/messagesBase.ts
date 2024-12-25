@@ -106,7 +106,7 @@ export class MessagesBase {
   public createNewMessageElement(text: string, role: string, isTop = false) {
     this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
-    LoadingHistory.changeFullViewToSmall(this, lastMessageElements);
+    LoadingHistory.changeFullViewToSmall(this);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       this.revealRoleElementsIfTempRemoved(lastMessageElements, role); // readding role elements to previous message
       lastMessageElements.outerContainer.remove();
