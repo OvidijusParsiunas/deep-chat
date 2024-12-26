@@ -4,10 +4,11 @@ import {MessageContentI} from '../../../../types/messagesInternal';
 import {MessageContent} from '../../../../types/messages';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {Legacy} from '../../../../utils/legacy/legacy';
+import {MessageElements, Messages} from '../messages';
 import {MessageUtils} from '../utils/messageUtils';
 import {LoadingHistory} from './loadingHistory';
 import {DeepChat} from '../../../../deepChat';
-import {Messages} from '../messages';
+import {MessagesBase} from '../messagesBase';
 
 export class History {
   private readonly _messages: Messages;
@@ -33,27 +34,32 @@ export class History {
   }
 
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
-    const {messageElementRefs, messageToElements, elementRef, addAnyMessage, sendClientUpdate} = this._messages;
-    const firstMessageEl = messageElementRefs[0]?.outerContainer;
+    const {messageElementRefs, messageToElements, elementRef} = this._messages;
+    const preLoadFirstMessageEl = messageElementRefs.find(
+      (messageElRefs) => !messageElRefs.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)
+    )?.outerContainer;
     const currentScrollTop = elementRef.scrollTop;
     historyMessages
       ?.reverse()
       .map((message) => {
-        if (message) {
-          const messageContent = addAnyMessage({...message, sendUpdate: true}, true, true);
-          if (messageContent) {
-            const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs);
-            messageToElements.unshift([messageContent, messageBody]);
-          }
-          return messageContent;
-        } else {
-          this._isPaginationComplete = true;
+        const messageContent = this._messages.addAnyMessage({...message, sendUpdate: true}, true, true);
+        if (messageContent) {
+          const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs);
+          messageToElements.unshift([messageContent, messageBody]);
         }
+        return messageContent;
       })
       .filter((message) => !!message)
       .reverse()
-      .forEach((message) => sendClientUpdate(message as MessageContentI, true));
-    if (firstMessageEl) elementRef.scrollTop = currentScrollTop + firstMessageEl.offsetTop;
+      .forEach((message) => this._messages.sendClientUpdate(message as MessageContentI, true));
+    if (preLoadFirstMessageEl) elementRef.scrollTop = currentScrollTop + preLoadFirstMessageEl.offsetTop - 40;
+  }
+
+  private populateMessages(loadingElements: MessageElements, messages: HistoryMessage[]) {
+    this._messages.removeMessage(loadingElements);
+    this._isPaginationComplete = messages.findIndex((message) => !message) < 0;
+    const messageContent = messages.filter((message) => !!message);
+    this.processLoadedHistory(messageContent);
   }
 
   private async setupLoadHistoryOnScroll(loadHistory: LoadHistory) {
@@ -63,8 +69,7 @@ export class History {
         const loadingElements = LoadingHistory.addMessage(this._messages, false);
         try {
           const messages = await loadHistory(this._index++);
-          this._messages.removeMessage(loadingElements);
-          this.processLoadedHistory(messages);
+          this.populateMessages(loadingElements, messages);
           this._isLoading = false;
         } catch (e) {
           this._messages.removeMessage(loadingElements);
@@ -89,11 +94,8 @@ export class History {
     try {
       const messages = await loadHistory(this._index++);
       const scrollTop = this._messages.elementRef.scrollTop;
-      this._messages.removeMessage(loadingElements);
-      this._isPaginationComplete = !!messages.find((message) => !message);
-      const messageContent = messages.filter((message) => !!message);
-      this.processLoadedHistory(messageContent);
-      // force scroll to bottom if user has not scrolled anywhere themselves, otherwise keep at current location
+      this.populateMessages(loadingElements, messages);
+      // force scroll to bottom if user has not scrolled anywhere themselves (at start), otherwise keep at current location
       if (scrollTop === 0) {
         // https://github.com/OvidijusParsiunas/deep-chat/issues/84
         setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
