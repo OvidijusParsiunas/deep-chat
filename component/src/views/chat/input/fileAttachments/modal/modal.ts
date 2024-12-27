@@ -1,4 +1,5 @@
 import {KEYBOARD_KEY} from '../../../../../utils/buttons/keyboardKeys';
+import {ButtonAccessibility} from '../../buttons/buttonAccessility';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {CustomStyle} from '../../../../../types/styles';
@@ -59,8 +60,11 @@ export class Modal {
     return backgroundPanel;
   }
 
-  addButtons(...buttons: HTMLElement[]) {
-    buttons.forEach((button) => this._buttonPanel.appendChild(button));
+  public addButtons(...buttons: HTMLElement[]) {
+    buttons.forEach((button) => {
+      ButtonAccessibility.addAttributes(button);
+      this._buttonPanel.appendChild(button);
+    });
   }
 
   private static createTextButton(text: string) {
