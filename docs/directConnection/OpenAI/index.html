@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/fonts/inter.woff2" as="font" type="font/woff2">
 <link rel="preload" href="/fonts/inter-webfont.css" as="style">
 <link rel="stylesheet" href="/fonts/inter-webfont.css" as="style"><link rel="stylesheet" href="/assets/css/styles.4d5fb625.css">
-<script src="/assets/js/runtime~main.e9bd5337.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.5e495a1c.js" defer="defer"></script>
 <script src="/assets/js/main.1ac74f39.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -47,7 +47,7 @@
 }</li>
 <li>Default: <em>{system_prompt: &quot;You are a helpful assistant.&quot;, model: &quot;gpt-4o&quot;}</em></li>
 </ul>
-<p>Connect to Open AI&#x27;s <a href="https://platform.openai.com/docs/api-reference/chat" target="_blank" rel="noopener noreferrer"><code>chat</code></a> API. You can set this property to <em>true</em> or configure it using an object: <br>
+<p>Connect to OpenAI&#x27;s <a href="https://platform.openai.com/docs/api-reference/chat" target="_blank" rel="noopener noreferrer"><code>chat</code></a> API. You can set this property to <em>true</em> or configure it using an object: <br>
 <code>system_prompt</code> is used to set the <a href="https://platform.openai.com/docs/api-reference/chat/create" target="_blank" rel="noopener noreferrer"><em>&quot;system&quot;</em></a> message for the conversation context. <br>
 <code>model</code> is the name of the model to be used by the API. Check <a href="https://platform.openai.com/docs/models/model-endpoint-compatibility" target="_blank" rel="noopener noreferrer">/v1/chat/completions</a> for more. <br>
 <code>max_tokens</code> the maximum number of tokens to generate in the chat. Check <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener noreferrer">tokenizer</a> for more info. <br>
@@ -75,7 +75,7 @@ comprising the top 10% probability mass are considered. <br>
      <a href="#assistant-functions"><code>function_handler?: AssistantFunctionHandler</code></a> <br>
 }</li>
 </ul>
-<p>Connect to your Open AI <a href="https://platform.openai.com/docs/assistants/overview" target="_blank" rel="noopener noreferrer"><code>assistant</code></a>.
+<p>Connect to your OpenAI <a href="https://platform.openai.com/docs/assistants/overview" target="_blank" rel="noopener noreferrer"><code>assistant</code></a>.
 When set to <code>true</code> or the <code>assistant_id</code> is not defined, Deep Chat will automatically create a new assistant when the user sends the first message. <br>
 <code>assistant_id</code> is the id of your assistant. <br>
 <code>thread_id</code> allows you to communicate in the context of an already existing conversation/<a href="https://platform.openai.com/docs/api-reference/threads" target="_blank" rel="noopener noreferrer">thread</a>. <br>
@@ -112,7 +112,7 @@ stores the thread id and allows conversation to continue on a new session.</p></
 </li>
 </ul>
 <p>When <code>assistant_id</code> is not used, this object is used to define the details of the new assistant that will be created by Deep Chat when
-the user sends a new message. This object follows the <a href="https://platform.openai.com/docs/api-reference/assistants/createAssistant" target="_blank" rel="noopener noreferrer">Open AI Create Asssistant API</a>. <br>
+the user sends a new message. This object follows the <a href="https://platform.openai.com/docs/api-reference/assistants/createAssistant" target="_blank" rel="noopener noreferrer">OpenAI Create Asssistant API</a>. <br>
 <code>model</code> is the name of the model to be used by the API. Check the <a href="https://platform.openai.com/docs/models/overview" target="_blank" rel="noopener noreferrer">model overview</a> for more. <br>
 <code>name</code> and <code>description</code> are used to describe the new assistant. <br>
 <code>instructions</code> direct the assistant&#x27;s behaviour. <br>
@@ -152,7 +152,7 @@ technically not a tool but a way to indicate that image files will be sent direc
 <li>Type: <code>true</code> | <a href="#dall-e-2"><code>Dall-e-2</code></a> | <a href="#dall-e-3"><code>Dall-e-3</code></a></li>
 <li>Default: <em>Dall-e-2</em></li>
 </ul>
-<p>Connect to Open AI&#x27;s <a href="https://platform.openai.com/docs/api-reference/images" target="_blank" rel="noopener noreferrer"><code>Images</code></a> API.
+<p>Connect to OpenAI&#x27;s <a href="https://platform.openai.com/docs/api-reference/images" target="_blank" rel="noopener noreferrer"><code>Images</code></a> API.
 Set this property to <em>true</em> or use either of the <a href="#dall-e-2"><code>Dall-e-2</code></a> or <a href="#dall-e-3"><code>Dall-e-3</code></a> objects. <br></p>
 <p>You can automatically call any of the following three APIs by combining different inputs:</p>
 <ul>
@@ -203,7 +203,7 @@ Set this property to <em>true</em> or use either of the <a href="#dall-e-2"><cod
 }</li>
 <li>Default: <em>{model: &quot;tts-1&quot;, voice: &quot;alloy&quot;, speed: 1}</em></li>
 </ul>
-<p>Connect to Open AI&#x27;s <a href="https://platform.openai.com/docs/guides/text-to-speech" target="_blank" rel="noopener noreferrer"><code>Text To Speech</code></a> API.
+<p>Connect to OpenAI&#x27;s <a href="https://platform.openai.com/docs/guides/text-to-speech" target="_blank" rel="noopener noreferrer"><code>Text To Speech</code></a> API.
 You can set this property to <em>true</em> or <a href="https://platform.openai.com/docs/api-reference/audio/createSpeech" target="_blank" rel="noopener noreferrer">configure</a> it using an object: <br>
 <code>model</code> defines the target model used by the API. Check <a href="https://platform.openai.com/docs/models/model-endpoint-compatibility" target="_blank" rel="noopener noreferrer">/v1/audio/speech</a> for more. <br>
 <code>voice</code> is the name of the voice used in the generated audio. <br>
@@ -222,7 +222,7 @@ You can set this property to <em>true</em> or <a href="https://platform.openai.c
 }</li>
 <li>Default: <em>{model: &quot;whisper-1&quot;, type: &quot;transcription&quot;}</em></li>
 </ul>
-<p>Connect to Open AI&#x27;s <a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank" rel="noopener noreferrer"><code>Speech To Text</code></a> API.
+<p>Connect to OpenAI&#x27;s <a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank" rel="noopener noreferrer"><code>Speech To Text</code></a> API.
 You can set this property to <em>true</em> or <a href="https://platform.openai.com/docs/api-reference/audio/createTranscription" target="_blank" rel="noopener noreferrer">configure</a> it using an object: <br>
 <code>model</code> is the name of the model to use. <em>&quot;whisper-1&quot;</em> is currently the only one available. <br>
 <code>temperature</code> is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br>
