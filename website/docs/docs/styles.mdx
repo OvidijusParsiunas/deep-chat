@@ -699,8 +699,11 @@ however `hover` and `submit` need to be defined.
 
 - Type: `string`
 
-This string is primarily used to configure [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) which cannot be added through component's style properties. A great
-example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar) pseudo element which affects the style of the component's scrollbar.
+This value uses [CSS syntax](https://www.w3schools.com/css/css_syntax.ASP) as an alternative way to define styling in Deep Chat. <br />
+It can be used to configure [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions)
+which cannot be added through component's [`style`](/docs/styles#style) properties. A great example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
+pseudo element which affects the style of the component's scrollbar. <br />
+It can also be used to add custom styling to [`html`](/docs/messages/#MessageContent) messages and override Deep Chat CSS.
 
 #### Example
 

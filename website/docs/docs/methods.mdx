@@ -87,7 +87,7 @@ Send a new user message.
 
 #### Example
 
-<ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} argument={{text: 'User message'}}>
+<ComponentContainerMethods propertyName={'submitUserMessage'} displayResults={false} args={[{text: 'User message'}]}>
   <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
@@ -144,14 +144,7 @@ and [`textToSpeech`](/docs/speech#textToSpeech) be triggered.
 
 #### Example
 
-<ComponentContainerMethods
-  propertyName={'addMessage'}
-  displayResults={false}
-  argument={{
-    html: `<button class="deep-chat-button deep-chat-suggestion-button deep-chat-temporary-message">What is your name?</button>`,
-    role: 'user',
-  }}
->
+<ComponentContainerMethods propertyName={'addMessage'} displayResults={false} args={[{text: `New message`, role: 'user'}]}>
   <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
 </ComponentContainerMethods>
 
@@ -159,10 +152,7 @@ and [`textToSpeech`](/docs/speech#textToSpeech) be triggered.
 <TabItem value="js" label="Code">
 
 ```javascript
-chatElementRef.addMessage({
-  html: `<button class="deep-chat-button deep-chat-suggestion-button deep-chat-temporary-message">What is your name?</button>`,
-  role: 'user',
-});
+chatElementRef.addMessage({text: `New message`, role: 'user'});
 ```
 
 </TabItem>
@@ -173,6 +163,40 @@ chatElementRef.addMessage({
 :::tip
 This can be used to add [suggestion buttons](/docs/messages/HTML#moreExamples) after message.
 :::
+
+<LineBreak></LineBreak>
+
+### `updateMessage` {#updateMessage}
+
+- Type: ([`message: MessageContent`](/docs/messages#MessageContent), `index: number`) => `void`
+
+Updates an existing message in the chat. <br />
+`message` is an object containing new message details. If the previous version of message contains multiple properties such as `text` and `html`, this will overwrite them both. <br />
+`index` is the index number of the message to be updated from the top. If you are not sure about the index, use [`getMessages`](#getMessages) to find the index of your target message.
+
+#### Example
+
+<ComponentContainerMethods
+  propertyName={'updateMessage'}
+  displayResults={false}
+  args={[{text: `New text.`, role: 'user'}, 0]}
+>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    history={[{text: 'Message to be updated.', role: 'user'}]}
+  ></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```javascript
+chatElementRef.updateMessage({text: `New text.`}, 0);
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

@@ -21,13 +21,24 @@
 - Host a model on the browser
 - Everything is customizable!
 
-### :tada: :tada: 2.0 is now available :tada: :tada:
+### :tada: Latest Updates
 
-Announcing Deep Chat 2.0! We have redesigned and improved Deep Chat based on all of your generous feedback. It is now much easier to implement into any website and configure to provide the best possible chat experience for your users. Check out the [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.0.0) for more information.
+Deep Chat version `2.1.0` brings a ton of new features into the Deep Chat ecosystem:
+
+- [Azure OpenAI API](https://deepchat.dev/docs/directConnection/Azure#OpenAI)
+- [`loadHistory`](https://deepchat.dev/docs/interceptors#loadHistory) interceptor to asynchronously load history and pagination
+- [`updateMessage`](https://deepchat.dev/docs/methods#updateMessage) method to dynamically update messages
+- Custom configuration for message text [MarkDown](https://deepchat.dev/docs/messages/styles#remarkable) rendering
+- Ability to [group messages](https://deepchat.dev/docs/messages/styles#groupedMessages)
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.0) for more!
 
 <p align="center">
-    <img width="1200" src="https://github.com/user-attachments/assets/ea88cdd8-6197-4322-8e16-3908f69a7eb5" alt="version 2.0">
+    <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.0">
 </p>
+
+### :construction_worker: Note from developer
+
+https://github.com/user-attachments/assets/7ba01414-ca4d-4e17-b31b-403782d9d950
 
 ### :computer: Getting started
 

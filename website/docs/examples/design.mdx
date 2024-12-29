@@ -1669,6 +1669,102 @@ Dark orange color variation that is suitable for a dark screen mode.
 
 <LineBreak></LineBreak>
 
+### Grouped messages {#groupedMessages}
+
+Messages are grouped by the role their role. The styling is set via the `deep-chat-top-message`, `deep-chat-middle-message` and `deep-chat-bottom-message` classes
+using the [`auxiliaryStyle`](/docs/styles#auxiliaryStyle) property.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    history={[
+      {text: 'Group 1', role: 'group1'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 3', role: 'group3'},
+      {text: 'Group 3', role: 'group3'},
+    ]}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {
+            borderRadius: '0px',
+          },
+        },
+      },
+    }}
+    auxiliaryStyle="
+      .deep-chat-top-message .message-bubble {
+          border-top-left-radius: 5px !important;
+          border-top-right-radius: 5px !important;
+      }
+      .deep-chat-middle-message .message-bubble {
+          margin-top: 0px;
+      }
+      .deep-chat-bottom-message .message-bubble {
+          margin-top: 0px;
+          border-bottom-left-radius: 5px !important;
+          border-bottom-right-radius: 5px !important;
+      }
+      .deep-chat-top-message.deep-chat-bottom-message .message-bubble {
+        margin-top: 10px;
+      }
+    "
+
+> </DeepChatBrowser>
+
+</ComponentContainer>
+
+<CodeToggle>
+<TabItem value="js" label="Show code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  auxiliaryStyle="
+    .deep-chat-top-message .message-bubble {
+        border-top-left-radius: 5px !important;
+        border-top-right-radius: 5px !important;
+    }
+    .deep-chat-middle-message .message-bubble {
+        margin-top: 0px;
+    }
+    .deep-chat-bottom-message .message-bubble {
+        margin-top: 0px;
+        border-bottom-left-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+    .deep-chat-top-message.deep-chat-bottom-message .message-bubble {
+      margin-top: 10px;
+    }"
+  messageStyles='{
+    "default": {
+      "shared": {
+        "bubble": {
+          "borderRadius": "0px"
+        }
+      }
+    }
+  }'
+  history='[
+      {"text": "Group 1", "role": "group1"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 3", "role": "group3"},
+      {"text": "Group 3", "role": "group3"}
+    ]'
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</CodeToggle>
+
+<LineBreak></LineBreak>
+
 ### Full width input {#fullWidthInput}
 
 A simple text input area that covers the full width of the chat component.

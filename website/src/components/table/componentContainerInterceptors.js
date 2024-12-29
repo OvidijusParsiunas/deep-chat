@@ -32,7 +32,13 @@ const EventText = React.forwardRef(({displayConsole}, ref) => {
   );
 });
 
-export default function ComponentContainerInterceptors({children, propertyName, displayConsole}) {
+export default function ComponentContainerInterceptors({
+  children,
+  propertyName,
+  displayConsole,
+  customResponse,
+  timeoutMS,
+}) {
   const containerRef = React.useRef(null);
   const eventTextRef = React.useRef(null);
 
@@ -42,11 +48,21 @@ export default function ComponentContainerInterceptors({children, propertyName, 
         const syncReference = containerRef.current;
         if (containerRef.current && eventTextRef.current) {
           const deepChatReference = extractChildChatElement(containerRef.current.children[0]);
-          deepChatReference[propertyName] = eventTextRef.current?.updateText;
-        } else {
-          const deepChatReference = extractChildChatElement(syncReference.children[0]);
-          deepChatReference[propertyName] = () => {};
+          if (customResponse) {
+            if (timeoutMS) {
+              return (deepChatReference[propertyName] = () =>
+                new Promise((resolve) =>
+                  setTimeout(() => {
+                    resolve(customResponse);
+                  }, timeoutMS)
+                ));
+            }
+            return (deepChatReference[propertyName] = () => customResponse);
+          }
+          return (deepChatReference[propertyName] = eventTextRef.current?.updateText);
         }
+        const deepChatReference = extractChildChatElement(syncReference.children[0]);
+        deepChatReference[propertyName] = () => {};
       }
     }, 10); // in a timeout as containerRef.current not always set on start
   }, []);

@@ -70,15 +70,15 @@ import Tabs from '@theme/Tabs';
 
 - Type: \{<br />
   &nbsp;&nbsp;[`className: string`]: \{ <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`events?: {[eventType: string]?: (event) => void}`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`events?: {[eventType: string]?: (event) => void}`](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-app-configuration/1.1.0/interfaces/globaleventhandlerseventmap.html), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](/docs/styles/#StatefulStyles) <br />
   \}\}
 
 Because Deep Chat is a [shadow element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) and your html is rendered inside it - the resulting elements will not be able to access the CSS and JavaScript
 in your app. To help with this, you can use this object to declare reusable styling and bind your app's functions to the elements via their class names. <br />
-`events` is an object that accepts properties with keys from [GlobalEventHandlersEventMap](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.globaleventhandlerseventmap.html) (same as the string
+`events` is an object that accepts properties with keys from [GlobalEventHandlersEventMap](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-app-configuration/1.1.0/interfaces/globaleventhandlerseventmap.html) (same as the string
 used for _addEventListener(HERE)_, e.g. _"mousedown"_) or any custom event name and accepts a function as the value. <br />
-`styles` defines the styles applied to the element for different mouse states. <br />
+`styles` defines the styles applied to the element for different mouse states. You can alternatively define CSS styles using the [`auxiliaryStyle`](/docs/styles#auxiliaryStyle) property. <br />
 
 #### Example
 
@@ -579,7 +579,11 @@ Add feedback buttons to response messages.
         shared: {bubble: {maxWidth: '95%', width: '100%', marginTop: '10px'}},
       },
       loading: {
-        bubble: {width: '1em'},
+        message: {
+          styles: {
+            bubble: {width: '1em'},
+          },
+        },
       },
     }}
     htmlClassUtilities={{
@@ -696,7 +700,7 @@ chatElementRef.history = [
 
 chatElementRef.messageStyles = {
   default: {shared: {bubble: {maxWidth: '95%', width: '100%', marginTop: '10px'}}},
-  loading: {bubble: {width: '1em'}},
+  loading: {message: {styles: {bubble: {width: '1em'}}}},
 };
 
 chatElementRef.htmlClassUtilities = {

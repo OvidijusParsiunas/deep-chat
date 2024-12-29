@@ -151,6 +151,71 @@ chatElementRef.responseInterceptor = (response) => {
 
 <LineBreak></LineBreak>
 
+### `loadHistory` {#loadHistory}
+
+- Type: (`index: number`) => [`HistoryMessage[]`](#HistoryMessage) | [`Promise<HistoryMessage[]>`](#HistoryMessage)
+
+This method accepts an array of messages (optionally async) that are used to populate the chat. <br />
+It is triggered when the component is first rendered, however if the _last_ value in the returned array is `false`, it is also triggered
+when the user scrolls to the top of the chat which will prepend the new loaded messages. <br />
+The `index` parameter is used to indicate the amount of times this method has been triggered to help load correct messages for pagination.
+
+#### Example: Refresh Browser if already loaded (5s)
+
+<ComponentContainerInterceptors
+  propertyName={'loadHistory'}
+  customResponse={[
+    {text: "AI, help! My code's broken.", role: 'user'},
+    {text: 'Did you forget the brackets?', role: 'ai'},
+    {text: 'I didn’t! It’s something else!', role: 'user'},
+    {text: 'Try reinstalling your OS.', role: 'ai'},
+    {text: 'I’m not doing that again!', role: 'user'},
+    {text: 'Have you tried yelling at it?', role: 'ai'},
+    {text: 'What? That’s ridiculous!', role: 'user'},
+    {text: 'It works in movies, right?', role: 'ai'},
+    false,
+  ]}
+  timeoutMS={5000}
+>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainerInterceptors>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```js
+chatElementRef.loadHistory = (index) => {
+  return [
+    {text: "AI, help! My code's broken.", role: 'user'},
+    {text: 'Did you forget the brackets?', role: 'ai'},
+    {text: 'I didn’t! It’s something else!', role: 'user'},
+    {text: 'Try reinstalling your OS.', role: 'ai'},
+    {text: 'I’m not doing that again!', role: 'user'},
+    {text: 'Have you tried yelling at it?', role: 'ai'},
+    {text: 'What? That’s ridiculous!', role: 'user'},
+    {text: 'It works in movies, right?', role: 'ai'},
+    false,
+  ];
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### `HistoryMessage` {#HistoryMessage}
+
+- Type: [`MessageContent`](/docs/messages#MessageContent) | `false`
+
+<LineBreak></LineBreak>
+
+:::tip
+Use to style the loading spinner.
+:::
+
+<LineBreak></LineBreak>
+
 ### `validateInput` {#validateInput}
 
 - Type: (`text?: string`, `files?: File[]`) => `boolean`

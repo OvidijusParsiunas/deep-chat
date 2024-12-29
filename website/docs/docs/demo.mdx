@@ -10,22 +10,18 @@ This is used by default to demonstrate the component's capabilities without conn
 
 - Type: `true` | \{ <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `response?:` [`Response`](/docs/connect#Response) | ([`message: MessageContent`](/docs/messages/#MessageContent)) => [`Response`](/docs/connect#Response), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `displayLoadingBubble?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `displayFileAttachmentContainer?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `displayErrors?: {`<br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `default?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `service?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: boolean` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`displayErrors?: DisplayErrors`](#DisplayErrors), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`displayLoading?: DemoLoading`](#DemoLoading), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `displayFileAttachmentContainer?: boolean` <br />
   }\}
 
 Set this to _true_ or define an object with properties to remove the initial setup guidance message. <br />
 `response` is used to override the default demo response with a custom one. It can either be a [`Response`](/docs/connect#Response) object or a function that returns
 a [`Response`](/docs/connect#Response) object. <br />
 The following properties are used to toggle elements to showcase their design without making any user actions: <br />
-`displayLoadingBubble` is used to display the loading bubble. <br />
+`displayErrors` is used to display error messages. <br />
+`displayLoading` is used to display various loading spinners. <br />
 `displayFileAttachmentContainer` is used to display the element that encapsulates all of the files to be sent on the next message. <br />
-`displayErrors` is used to display error messages; for the component via `default`, an API error via `service` and a speech to text issue via `speechToText`.
-This is mainly used to showcase the override capabilities in [`errorMessages`](/docs/messages#errorMessages). <br />
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -143,30 +139,26 @@ chatElementRef.demo = {
 
 <LineBreak></LineBreak>
 
-#### Elements Example
+## Types
+
+### `DemoErrors` {#DemoErrors}
+
+- Type: \{`default?: boolean`, `service?: boolean`, `speechToText?: boolean`\}
+
+Display various error messages. This is mainly used to showcase the override capabilities in [`errorMessages`](/docs/messages#errorMessages). <br />
+`default` displays a default component error. <br />
+`service` is an API error. <br />
+`speechToText` is a speech to text issue error.
 
 <ComponentContainer>
-  <DeepChatBrowser
-    style={{borderRadius: '8px'}}
-    demo={{
-      displayLoadingBubble: true,
-      displayFileAttachmentContainer: true,
-      displayErrors: {service: true},
-    }}
-  ></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={{displayErrors: {service: true}}}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat
-  demo='{
-    "displayLoadingBubble": true,
-    "displayFileAttachmentContainer": true,
-    "displayErrors": {"service": true}
-  }'
-></deep-chat>
+<deep-chat demo='{"displayErrors": {"service": true}}'></deep-chat>
 ```
 
 </TabItem>
@@ -175,14 +167,49 @@ chatElementRef.demo = {
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat
-  demo='{
-    "displayLoadingBubble": true,
-    "displayFileAttachmentContainer": true,
-    "displayErrors": {"service": true}
-  }'
-  style="border-radius: 8px"
-></deep-chat>
+<deep-chat demo='{"displayErrors": {"service": true}}' style="border-radius: 8px"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `DemoLoading` {#DemoLoading}
+
+- Type: \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `message?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `history?:` \{`full?: boolean`, `small?: boolean`} <br />
+  \}
+
+Display various loading spinners. <br />
+`message` is a loading spinner inside a message bubble. <br />
+`history` is a loading spinner that is displayed when messages are being loading via [`loadHistory`](/docs/interceptors#loadHistory).
+`full` is a spinner that covers the entire chat message window on the initial load. `small` is displayed when there are messages
+already present inside the chat. If `full` is set to _true_ and messages are added, the chat will automatically display the `small`
+spinner. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={{displayLoading: {message: true, history: {small: true}}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat demo='{"displayLoading": {"message": true, "history": {"small": true}}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat demo='{"displayLoading": {"message": true, "history": {"small": true}}}' style="border-radius: 8px"></deep-chat>
 ```
 
 </TabItem>

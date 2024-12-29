@@ -16,7 +16,8 @@ Properties used to connect to [Azure Cognitive Services](https://learn.microsoft
   &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](#TextToSpeech), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](#SpeechToText), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`summarization?: Summarization`](#Summarization), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](#Translation)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`translation?: Translation`](#Translation),<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`openAI?: OpenAI`](#OpenAI)<br />
   \}
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -306,6 +307,74 @@ Connect to Azure's [`translation`](https://learn.microsoft.com/en-gb/azure/cogni
     "azure": {
       "key": "placeholder key",
       "translation": {"region": "eastus", "language": "ja"}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAI` {#OpenAI}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `urlDetails:` \{`endpoint: string`, `version: string`, `deploymentId: string`\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`chat?: OpenAIChat`](/docs/directConnection/OpenAI/#Chat), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`assistant?: OpenAIAssistant`](/docs/directConnection/OpenAI/#Assistant) <br />
+  \}
+
+Connect to the [`Azure OpenAI's`](https://platform.openai.com/docs/api-reference/chat) API: <br />
+`urlDetails` is used to define the [_url parameters_](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#uri-parameters) that will be used to connect to Azure.
+`endpoint` is a _url_ string for your OpenAI resource, `version` is the API version to be used and `deploymentId` is the deployment id of the model. <br />
+`chat` defines whether to connect to the [Chat Completions](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/chatgpt) API.
+It uses the same type as the [OpenAI Chat](/docs/directConnection/OpenAI/#Chat) property. <br />
+`assistant` defines whether to connect to the [Assistant](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/assistant) API.
+It uses the same type as the [OpenAI Assistant](/docs/directConnection/OpenAI/#Assistant) property. <br />
+
+#### Basic Example
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "azure": {
+      "key": "placeholder key",
+      "openAI": {
+        "urlDetails": {
+          "endpoint": "https://your-endpoint.com",
+          "version": "2024-10-21",
+          "deploymentId": "123123"
+        },
+        "chat": true
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "azure": {
+      "key": "placeholder key",
+      "openAI": {
+        "urlDetails": {
+          "endpoint": "https://your-endpoint.com",
+          "version": "2024-10-21",
+          "deploymentId": "123123"
+        },
+        "chat": true
+      }
     }
   }'
   style="border-radius: 8px"

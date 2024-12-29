@@ -24,8 +24,8 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; [`file?: MessageRoleStyles`](#MessageRoleStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`html?: MessageRoleStyles`](#MessageRoleStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`intro?: MessageElementsStyles`](#MessageElementsStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: MessageElementsStyles`](#MessageElementsStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`error?: MessageElementsStyles`](#MessageElementsStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`error?: MessageElementsStyles`](#MessageElementsStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: LoadingMessageStyles`](#LoadingMessageStyles) <br />
   \}
 
 Object defining the styling for various message types. <br />
@@ -35,8 +35,84 @@ Object defining the styling for various message types. <br />
 `file` is applied to messages that contain a file attachment. <br />
 `html` is applied to messages that contain custom elements - [more info](/docs/messages/HTML). <br />
 `intro` is applied to the [`introMessage`](/docs/messages#introMessage). <br />
-`loading` is applied to the loading bubble. <br />
 `error` is applied to error messages. <br />
+`loading` is applied to messages with loading elements. <br />
+
+<LineBreak></LineBreak>
+
+### `remarkable` {#remarkable}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `xhtmlOut?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `html?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `breaks?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `linkify?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `langPrefix?: "language-${string}"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `linkTarget?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `typographer?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `quotes?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `highlight?: (str: string, lang: string) => void` <br />
+  \}
+
+- Default: _\{ breaks: true, linkTarget: "\_blank" \}_
+
+Deep Chat uses the [remarkable](https://github.com/jonschlinkert/remarkable) library to render markdown for its `text` messages.
+Use this object to change its configuration. <br />
+`xhtmlOut` uses '/' to close single tags via \<br />\. <br />
+`html` enables HTML tags in source. <br />
+`breaks` converts '\n' in paragraphs into \<br>\. <br />
+`linkify` auto converts URL-like text to links. <br />
+`langPrefix` is a CSS language prefix for fenced blocks. <br />
+`linkTarget` sets the target to open links in. `"\_blank"` is used to open links in a new tab. <br />
+`typographer` enables some language-neutral replacement + quotes beautification. <br />
+`quotes` is double + single quotes replacement pairs. <br />
+`highlight` is a function that should return escaped HTML or '' if the source string is not changed. This is mostly used with [highlight.js](https://deepchat.dev/examples/externalModules). See [here](https://github.com/OvidijusParsiunas/deep-chat/blob/35ad0574ddcf45341585aeadf10e6cb4b9cf7eda/component/src/views/chat/messages/remarkable/remarkableConfig.ts#L16) on how you can set up this configuration. <br />
+
+:::tip
+Use [this playground](https://jonschlinkert.github.io/remarkable/demo) to find the configuration that suits you.
+:::
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    remarkable={{
+      html: true,
+      typographer: true,
+    }}
+    history={[
+      {text: 'Text containing <button>html</button>', role: 'user'},
+      {text: 'Typographic text: (c)', role: 'user'},
+    ]}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat remarkable='{"html": true, "typographer": true}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  remarkable='{"html": true, "typographer": true}'
+  history='[
+    {"text": "Text containing <button>html</button>", "role": "user"},
+    {"text": "Typographic text: (c)", "role": "user"}
+  ]'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
@@ -232,9 +308,274 @@ to display the file contents. <br />
 
 <LineBreak></LineBreak>
 
+### `LoadingMessageStyles` {#LoadingMessageStyles}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`message?: LoadingStyles`](/docs/styles#LoadingStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `history?:` \{[`full?: LoadingStyles`](/docs/styles#LoadingStyles), [`small?: LoadingStyles`](/docs/styles#LoadingStyles)\} <br />
+  \}
+
+Object defining the styling for various message loading elements. <br />
+`message` is the default loading element that is displayed when waiting for a response to a message request. <br />
+`history` is composed of two types of loading elements that are displayed when loading history via [`loadHistory`](/docs/interceptors#loadHistory):
+`full` is displayed when the initial chat history is being loaded on component render and `small` is displayed when user scrolls to the top of the chat to load more history. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    messageStyles={{
+      loading: {
+        message: {
+          styles: {
+            bubble: {backgroundColor: '#6decff', color: 'white'},
+          },
+        },
+        history: {
+          small: {
+            styles: {
+              outerContainer: {marginBottom: '60px'},
+              bubble: {color: '#6decff', border: '11px solid', height: '80px', width: '80px'},
+            },
+          },
+        },
+      },
+    }}
+    demo={{displayLoading: {message: true, history: {small: true}}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "message": {
+        "styles": {
+          "bubble": {"backgroundColor": "#6decff", "color": "white"}
+        }},
+      "history": {
+        "small": {
+          "styles": {
+            "outerContainer": {"marginBottom": "60px"},
+            "bubble": {"color": "#6decff", "border": "11px solid", "height": "80px", "width": "80px"}
+    }}}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "message": {
+        "styles": {
+          "bubble": {"backgroundColor": "#6decff", "color": "white"}
+        }},
+      "history": {
+        "small": {
+          "styles": {
+            "outerContainer": {"marginBottom": "60px"},
+            "bubble": {"color": "#6decff", "border": "11px solid", "height": "80px", "width": "80px"}
+    }}}}}'
+  style="border-radius: 8px"
+  demo='{"displayLoading": {"message": true, "history": {"small": true}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `LoadingStyles` {#LoadingStyles}
+
+- Type: \{[`styles?: MessageElementsStyles`](#MessageElementsStyles), `html?: string`}
+
+Object defining the styling for elements that contain a loading animation. <br />
+`styles` is applied to the various elements of a loading message. <br />
+`html` can be used to define your own loading animation via custom markdown. <br />
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    messageStyles={{
+      loading: {
+        history: {
+          full: {
+            styles: {outerContainer: {marginTop: '28px'}},
+            html: '<div class="lds-ripple"><div></div><div></div></div>',
+          },
+          small: {
+            styles: {outerContainer: {marginTop: '-10px', marginBottom: '50px'}},
+          },
+        },
+      },
+    }}
+    auxiliaryStyle={`.lds-ripple {
+          color: #1c4c5b
+        }
+        .lds-ripple,
+        .lds-ripple div {
+          box-sizing: border-box;
+        }
+        .lds-ripple {
+          display: inline-block;
+          position: relative;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ripple div {
+          position: absolute;
+          border: 4px solid currentColor;
+          opacity: 1;
+          border-radius: 50%;
+          animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+          0% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          4.9% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          5% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 1;
+          }
+          100% {
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+          }
+        }`}
+    demo={{displayLoading: {history: {full: true}}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "history": {
+        "full": {
+          "styles": {"outerContainer": {"marginTop": "28px"}},
+          "html": "<div class=\"lds-ripple\"><div></div><div></div></div>"
+        },
+        "small": {
+          "styles": {"outerContainer": {"marginTop": "-10px", "marginBottom": "50px"}}
+  }}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  messageStyles='{
+    "loading": {
+      "history": {
+        "full": {
+          "styles": {"outerContainer": {"marginTop": "28px"}},
+          "html": "<div class=\"lds-ripple\"><div></div><div></div></div>"
+        },
+        "small": {
+          "styles": {"outerContainer": {"marginTop": "-10px", "marginBottom": "50px"}}
+  }}}}'
+  auxiliaryStyle="
+    .lds-ripple {
+      color: #1c4c5b
+    }
+    .lds-ripple,
+    .lds-ripple div {
+      box-sizing: border-box;
+    }
+    .lds-ripple {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .lds-ripple div {
+      position: absolute;
+      border: 4px solid currentColor;
+      opacity: 1;
+      border-radius: 50%;
+      animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    .lds-ripple div:nth-child(2) {
+      animation-delay: -0.5s;
+    }
+    @keyframes lds-ripple {
+      0% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 0;
+      }
+      4.9% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 0;
+      }
+      5% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 1;
+      }
+      100% {
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+      }
+    }"
+  style="border-radius: 8px"
+  demo='{"displayLoading": {"history": {"full": true}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ## More Examples
 
-<h3>Files</h3>
+### Files
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -337,7 +678,138 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <LineBreak></LineBreak>
 
-<h3>Intro message</h3>
+### Grouped messages {#groupedMessages}
+
+Message elements have the following classes depending on their position in respect to their role: `deep-chat-top-message`, `deep-chat-middle-message` and `deep-chat-bottom-message`.
+You can use these classes to add custom grouping styling via the [`auxiliaryStyle`](/docs/styles#auxiliaryStyle) property.
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    history={[
+      {text: 'Group 1', role: 'group1'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 2', role: 'group2'},
+      {text: 'Group 3', role: 'group3'},
+      {text: 'Group 3', role: 'group3'},
+    ]}
+    messageStyles={{
+      default: {
+        shared: {
+          bubble: {
+            borderRadius: '0px',
+          },
+        },
+      },
+    }}
+    auxiliaryStyle="
+      .deep-chat-top-message .message-bubble {
+          border-top-left-radius: 5px !important;
+          border-top-right-radius: 5px !important;
+      }
+      .deep-chat-middle-message .message-bubble {
+          margin-top: 0px;
+      }
+      .deep-chat-bottom-message .message-bubble {
+          margin-top: 0px;
+          border-bottom-left-radius: 5px !important;
+          border-bottom-right-radius: 5px !important;
+      }
+      .deep-chat-top-message.deep-chat-bottom-message .message-bubble {
+        margin-top: 10px;
+      }
+    "
+
+> </DeepChatBrowser>
+
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  auxiliaryStyle="
+    .deep-chat-top-message .message-bubble {
+        border-top-left-radius: 5px !important;
+        border-top-right-radius: 5px !important;
+    }
+    .deep-chat-middle-message .message-bubble {
+        margin-top: 0px;
+    }
+    .deep-chat-bottom-message .message-bubble {
+        margin-top: 0px;
+        border-bottom-left-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+    .deep-chat-top-message.deep-chat-bottom-message .message-bubble {
+        margin-top: 10px;
+    }"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Frameworks) -->
+
+<deep-chat
+  auxiliaryStyle="
+    .deep-chat-top-message .message-bubble {
+        border-top-left-radius: 5px !important;
+        border-top-right-radius: 5px !important;
+    }
+    .deep-chat-middle-message .message-bubble {
+        margin-top: 0px;
+    }
+    .deep-chat-bottom-message .message-bubble {
+        margin-top: 0px;
+        border-bottom-left-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+    .deep-chat-top-message.deep-chat-bottom-message .message-bubble {
+        margin-top: 10px;
+    }"
+  messageStyles='{
+    "default": {
+      "shared": {
+        "bubble": {
+          "borderRadius": "0px"
+    }}}}'
+  history='[
+      {"text": "Group 1", "role": "group1"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 2", "role": "group2"},
+      {"text": "Group 3", "role": "group3"},
+      {"text": "Group 3", "role": "group3"}
+    ]'
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+:::tip
+If you are using [`avatars`](/docs/messages/#avatars), add the following css to the [`auxiliaryStyle`](/docs/styles#auxiliaryStyle):
+
+```
+.deep-chat-top-message.deep-chat-bottom-message .avatar-container {
+  margin-top: 10px;
+}
+.avatar-container {
+  margin-top: 0px;
+}
+```
+
+:::
+
+<LineBreak></LineBreak>
+
+### Intro message
 
 <ComponentContainer>
   <DeepChatBrowser
@@ -386,17 +858,21 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <LineBreak></LineBreak>
 
-<h3>Loading bubble</h3>
+### Loading bubble
 
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
     messageStyles={{
       loading: {
-        bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
+        message: {
+          styles: {
+            bubble: {backgroundColor: '#3793ff', fontSize: '20px', color: 'white'},
+          },
+        },
       },
     }}
-    demo={{displayLoadingBubble: true}}
+    demo={{displayLoading: {message: true}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -426,7 +902,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
     }
   }'
   style="border-radius: 8px"
-  demo='{"displayLoadingBubble": true}'
+  demo='{"displayLoading": {"message": true}}'
 ></deep-chat>
 ```
 
@@ -435,7 +911,7 @@ In the Safari browser, the _"audio"_ media player can be expanded by setting the
 
 <LineBreak></LineBreak>
 
-<h3>Error messages</h3>
+### Error messages
 
 <ComponentContainer>
   <DeepChatBrowser
