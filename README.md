@@ -30,7 +30,7 @@ Deep Chat version `2.1.1` brings a ton of new features into the Deep Chat ecosys
 - [`updateMessage`](https://deepchat.dev/docs/methods#updateMessage) method to dynamically update messages
 - Custom configuration for message text [MarkDown](https://deepchat.dev/docs/messages/styles#remarkable) rendering
 - Ability to [group messages](https://deepchat.dev/docs/messages/styles#groupedMessages)
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.0) for more!
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.1) for more!
 
 <p align="center">
     <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.0">
