@@ -532,54 +532,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/services/serviceIO.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/serviceIOFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ServiceIOFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "ServiceIO"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ServiceIOFactory",
-          "declaration": {
-            "name": "ServiceIOFactory",
-            "module": "src/services/serviceIOFactory.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/icons/audioIcon.ts",
       "declarations": [
         {
@@ -931,6 +883,54 @@
           "declaration": {
             "name": "VISIBLE_ICON_STRING",
             "module": "src/icons/visibleIcon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/serviceIO.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/serviceIOFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ServiceIOFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "ServiceIO"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ServiceIOFactory",
+          "declaration": {
+            "name": "ServiceIOFactory",
+            "module": "src/services/serviceIOFactory.ts"
           }
         }
       ]
@@ -11333,697 +11333,6 @@
           "declaration": {
             "name": "CohereTextGenerationIO",
             "module": "src/services/cohere/cohereTextGenerationIO.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/gemini/gemini.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "GeminiIO",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insertKeyPlaceholderText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'OpenAI API Key'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyHelpUrl",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://platform.openai.com/account/api-keys'",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "url",
-              "type": {
-                "text": "string"
-              },
-              "default": "'https://api.openai.com/v1/chat/completions'"
-            },
-            {
-              "kind": "field",
-              "name": "permittedErrorPrefixes",
-              "type": {
-                "text": "array"
-              },
-              "default": "['Incorrect']"
-            },
-            {
-              "kind": "field",
-              "name": "asyncCallInProgress",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_systemMessage",
-              "type": {
-                "text": "SystemMessageInternal"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "generateSystemMessage",
-              "privacy": "private",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "SystemMessageInternal"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "system_prompt",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "cleanConfig",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "config",
-                  "type": {
-                    "text": "OpenAIChat"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getContent",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "MessageContentI"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "preprocessBody",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "OpenAIConverseBodyInternal"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContentI[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "callServiceAPI",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContentI[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "maxMessages",
-              "type": {
-                "text": "number | undefined"
-              },
-              "default": "-1",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "model",
-              "type": {
-                "text": "string"
-              },
-              "default": "'gpt-4o'"
-            },
-            {
-              "kind": "field",
-              "name": "key",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "sessionId",
-              "type": {
-                "text": "string | undefined"
-              },
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "keyVerificationDetails",
-              "type": {
-                "text": "KeyVerificationDetails"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "keyVerificationDetails",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "buildHeadersFunc",
-              "type": {
-                "text": "BuildHeadersFunc"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "buildHeadersFunc",
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "setApiKeyProperties",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "apiKey",
-                  "type": {
-                    "text": "APIKey"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "buildConnectSettings",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "connectSettings",
-                  "optional": true,
-                  "type": {
-                    "text": "Connect"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "keyAuthenticated",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "() => void"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "DirectServiceIO",
-                "module": "src/services/utils/directServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "verifyKey",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "keyVerificationHandlers",
-                  "type": {
-                    "text": "KeyVerificationHandlers"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isDirectConnection",
-              "privacy": "public",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "connectSettings",
-              "type": {
-                "text": "Connect"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "rawBody",
-              "type": {
-                "text": "any"
-              },
-              "readonly": true,
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "deepChat",
-              "type": {
-                "text": "DeepChat"
-              },
-              "default": "deepChat",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validateKeyProperty",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "canSendMessage",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "text",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "files",
-                  "optional": true,
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "isProgrammatic",
-                  "optional": true,
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "type": {
-                "text": "ValidateInput"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "fileTypes",
-              "type": {
-                "text": "ServiceFileTypes"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "camera",
-              "type": {
-                "text": "CameraFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "recordAudio",
-              "type": {
-                "text": "MicrophoneFilesServiceConfig | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "totalMessagesMaxCharLength",
-              "type": {
-                "text": "number | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "demo",
-              "type": {
-                "text": "DemoT | undefined"
-              },
-              "default": "demo",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "stream",
-              "type": {
-                "text": "StreamI | undefined"
-              },
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "completionsHandlers",
-              "type": {
-                "text": "CompletionsHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "streamHandlers",
-              "type": {
-                "text": "StreamHandlers"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCustomFormDataBody",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "MessageContentI[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getServiceIOByType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "request",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "stringifyBody",
-                  "default": "true"
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPIWithText",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContentI[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callApiWithFiles",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "pMessages",
-                  "type": {
-                    "text": "MessageContentI[]"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callAPI",
-              "parameters": [
-                {
-                  "name": "requestContents",
-                  "type": {
-                    "text": "RequestContents"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "extractResultData",
-              "return": {
-                "type": {
-                  "text": "Promise<Response | {makingAnotherRequest: true}>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "any | Response"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isWebModel",
-              "privacy": "public",
-              "inheritedFrom": {
-                "name": "BaseServiceIO",
-                "module": "src/services/utils/baseServiceIO.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "DirectServiceIO",
-            "module": "/src/services/utils/directServiceIO"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "GeminiIO",
-          "declaration": {
-            "name": "GeminiIO",
-            "module": "src/services/gemini/gemini.ts"
           }
         }
       ]
@@ -27928,6 +27237,697 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/gemini/gemini.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "GeminiIO",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insertKeyPlaceholderText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'OpenAI API Key'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyHelpUrl",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://platform.openai.com/account/api-keys'",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://api.openai.com/v1/chat/completions'"
+            },
+            {
+              "kind": "field",
+              "name": "permittedErrorPrefixes",
+              "type": {
+                "text": "array"
+              },
+              "default": "['Incorrect']"
+            },
+            {
+              "kind": "field",
+              "name": "asyncCallInProgress",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_systemMessage",
+              "type": {
+                "text": "SystemMessageInternal"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "generateSystemMessage",
+              "privacy": "private",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "SystemMessageInternal"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "system_prompt",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "cleanConfig",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "config",
+                  "type": {
+                    "text": "OpenAIChat"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getContent",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "MessageContentI"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "preprocessBody",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "OpenAIConverseBodyInternal"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContentI[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callServiceAPI",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContentI[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "maxMessages",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              },
+              "default": "-1"
+            },
+            {
+              "kind": "field",
+              "name": "model",
+              "type": {
+                "text": "string"
+              },
+              "default": "'gpt-4o'"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "sessionId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "keyVerificationDetails",
+              "type": {
+                "text": "KeyVerificationDetails"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "keyVerificationDetails",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "buildHeadersFunc",
+              "type": {
+                "text": "BuildHeadersFunc"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "buildHeadersFunc",
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setApiKeyProperties",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "apiKey",
+                  "type": {
+                    "text": "APIKey"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "buildConnectSettings",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "connectSettings",
+                  "optional": true,
+                  "type": {
+                    "text": "Connect"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "keyAuthenticated",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "() => void"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "DirectServiceIO",
+                "module": "src/services/utils/directServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "verifyKey",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "keyVerificationHandlers",
+                  "type": {
+                    "text": "KeyVerificationHandlers"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isDirectConnection",
+              "privacy": "public",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "connectSettings",
+              "type": {
+                "text": "Connect"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "rawBody",
+              "type": {
+                "text": "any"
+              },
+              "readonly": true,
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "deepChat",
+              "type": {
+                "text": "DeepChat"
+              },
+              "default": "deepChat",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validateKeyProperty",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSendMessage",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "text",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "files",
+                  "optional": true,
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "isProgrammatic",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "type": {
+                "text": "ValidateInput"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fileTypes",
+              "type": {
+                "text": "ServiceFileTypes"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "camera",
+              "type": {
+                "text": "CameraFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "recordAudio",
+              "type": {
+                "text": "MicrophoneFilesServiceConfig | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "totalMessagesMaxCharLength",
+              "type": {
+                "text": "number | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "demo",
+              "type": {
+                "text": "DemoT | undefined"
+              },
+              "default": "demo",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "stream",
+              "type": {
+                "text": "StreamI | undefined"
+              },
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "completionsHandlers",
+              "type": {
+                "text": "CompletionsHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "streamHandlers",
+              "type": {
+                "text": "StreamHandlers"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createCustomFormDataBody",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "MessageContentI[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getServiceIOByType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "request",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "stringifyBody",
+                  "default": "true"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPIWithText",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContentI[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callApiWithFiles",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "pMessages",
+                  "type": {
+                    "text": "MessageContentI[]"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "callAPI",
+              "parameters": [
+                {
+                  "name": "requestContents",
+                  "type": {
+                    "text": "RequestContents"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "extractResultData",
+              "return": {
+                "type": {
+                  "text": "Promise<Response | {makingAnotherRequest: true}>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "any | Response"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isWebModel",
+              "privacy": "public",
+              "inheritedFrom": {
+                "name": "BaseServiceIO",
+                "module": "src/services/utils/baseServiceIO.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "DirectServiceIO",
+            "module": "/src/services/utils/directServiceIO"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "GeminiIO",
+          "declaration": {
+            "name": "GeminiIO",
+            "module": "src/services/gemini/gemini.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/views/chat/chatView.ts",
       "declarations": [
         {
@@ -31163,6 +31163,166 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/cohere/utils/cohereUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CohereUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CohereUtils",
+          "declaration": {
+            "name": "CohereUtils",
+            "module": "src/services/cohere/utils/cohereUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "HuggingFaceUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "HuggingFaceUtils",
+          "declaration": {
+            "name": "HuggingFaceUtils",
+            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/services/azure/utils/azureOpenAIUtils.ts",
       "declarations": [
         {
@@ -31483,276 +31643,6 @@
           "declaration": {
             "name": "AzureUtils",
             "module": "src/services/azure/utils/azureUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/cohere/utils/cohereUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CohereUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CohereUtils",
-          "declaration": {
-            "name": "CohereUtils",
-            "module": "src/services/cohere/utils/cohereUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/gemini/utils/geminiUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "GeminiUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "directFetch",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "body",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "method",
-                  "type": {
-                    "text": "'POST' | 'GET'"
-                  }
-                },
-                {
-                  "name": "stringify",
-                  "default": "true"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "GeminiUtils",
-          "declaration": {
-            "name": "GeminiUtils",
-            "module": "src/services/gemini/utils/geminiUtils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/huggingFace/utils/huggingFaceUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "HuggingFaceUtils",
-          "members": [
-            {
-              "kind": "method",
-              "name": "buildHeaders",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleVerificationResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "object"
-                  }
-                },
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "onSuccess",
-                  "type": {
-                    "text": "(key: string) => void"
-                  }
-                },
-                {
-                  "name": "onFail",
-                  "type": {
-                    "text": "(message: string) => void"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildKeyVerificationDetails",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "KeyVerificationDetails"
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "HuggingFaceUtils",
-          "declaration": {
-            "name": "HuggingFaceUtils",
-            "module": "src/services/huggingFace/utils/huggingFaceUtils.ts"
           }
         }
       ]
@@ -34123,6 +34013,221 @@
           "declaration": {
             "name": "StabilityAIUtils",
             "module": "src/services/stabilityAI/utils/stabilityAIUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/services/gemini/utils/geminiUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "GeminiUtils",
+          "members": [
+            {
+              "kind": "method",
+              "name": "buildHeaders",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleVerificationResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "object"
+                  }
+                },
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "onSuccess",
+                  "type": {
+                    "text": "(key: string) => void"
+                  }
+                },
+                {
+                  "name": "onFail",
+                  "type": {
+                    "text": "(message: string) => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildKeyVerificationDetails",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "KeyVerificationDetails"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "directFetch",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "body",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "method",
+                  "type": {
+                    "text": "'POST' | 'GET'"
+                  }
+                },
+                {
+                  "name": "stringify",
+                  "default": "true"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "GeminiUtils",
+          "declaration": {
+            "name": "GeminiUtils",
+            "module": "src/services/gemini/utils/geminiUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/introPanel/introPanel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "IntroPanel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_elementRef",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_isDisplayed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanel",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createIntroPanelWithChild",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "childElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createInternalIntroPanel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "introPanelMarkUp",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "introPanelStyle",
+                  "optional": true,
+                  "type": {
+                    "text": "CustomStyle"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "display",
+              "privacy": "public"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IntroPanel",
+          "declaration": {
+            "name": "IntroPanel",
+            "module": "src/views/chat/introPanel/introPanel.ts"
           }
         }
       ]
@@ -36698,6 +36803,348 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/services/openAI/assistant/utils/openAIAssistantUtils.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OpenAIAssistantUtils",
+          "members": [
+            {
+              "kind": "field",
+              "name": "FILES_WITH_TEXT_ERROR",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "static": true,
+              "readonly": true,
+              "default": "'content with type `text` must have `text` values'"
+            },
+            {
+              "kind": "field",
+              "name": "FUNCTION_TOOL_RESP_ERROR",
+              "privacy": "public",
+              "static": true,
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "storeFiles",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "Messages"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "File[]"
+                  }
+                },
+                {
+                  "name": "storeFilesUrl",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getType",
+              "privacy": "private",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "MessageFileType"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "fileDetails",
+                  "type": {
+                    "text": "FileDetails"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFiles",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "serviceIO",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "fileDetails",
+                  "type": {
+                    "text": "FileDetails"
+                  }
+                },
+                {
+                  "name": "urlPrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "urlPosfix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFileName",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "path",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFilesAndNewText",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "fileDetails",
+                  "type": {
+                    "text": "FileDetails"
+                  }
+                },
+                {
+                  "name": "urls",
+                  "type": {
+                    "text": "URLSegments"
+                  }
+                },
+                {
+                  "name": "role",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "content",
+                  "optional": true,
+                  "type": {
+                    "text": "OpenAIAssistantContent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFileDetails",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "lastMessage",
+                  "type": {
+                    "text": "OpenAIAssistantData"
+                  }
+                },
+                {
+                  "name": "content",
+                  "optional": true,
+                  "type": {
+                    "text": "OpenAIAssistantContent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFilesAndText",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "ServiceIO"
+                  }
+                },
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "OpenAIAssistantData"
+                  }
+                },
+                {
+                  "name": "urls",
+                  "type": {
+                    "text": "URLSegments"
+                  }
+                },
+                {
+                  "name": "content",
+                  "optional": true,
+                  "type": {
+                    "text": "OpenAIAssistantContent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parseResult",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIAssistantMessagesResult"
+                  }
+                },
+                {
+                  "name": "isHistory",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parseMessages",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "DirectServiceIO"
+                  }
+                },
+                {
+                  "name": "messages",
+                  "type": {
+                    "text": "OpenAIAssistantData[]"
+                  }
+                },
+                {
+                  "name": "urls",
+                  "type": {
+                    "text": "URLSegments"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "processStreamMessages",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "DirectServiceIO"
+                  }
+                },
+                {
+                  "name": "content",
+                  "type": {
+                    "text": "OpenAIAssistantContent[]"
+                  }
+                },
+                {
+                  "name": "urls",
+                  "type": {
+                    "text": "URLSegments"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "processAPIMessages",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "io",
+                  "type": {
+                    "text": "DirectServiceIO"
+                  }
+                },
+                {
+                  "name": "result",
+                  "type": {
+                    "text": "OpenAIAssistantMessagesResult"
+                  }
+                },
+                {
+                  "name": "isHistory",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "urls",
+                  "type": {
+                    "text": "URLSegments"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OpenAIAssistantUtils",
+          "declaration": {
+            "name": "OpenAIAssistantUtils",
+            "module": "src/services/openAI/assistant/utils/openAIAssistantUtils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/webModel/webLLM/webLLM.ts",
       "declarations": [],
       "exports": [
@@ -37211,453 +37658,6 @@
           "declaration": {
             "name": "prebuiltAppConfig",
             "module": "src/types/webModel/webLLM/webLLMShared.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/introPanel/introPanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "IntroPanel",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_elementRef",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "_isDisplayed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanel",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createIntroPanelWithChild",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "childElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createInternalIntroPanel",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "introPanelMarkUp",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "introPanelStyle",
-                  "optional": true,
-                  "type": {
-                    "text": "CustomStyle"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "display",
-              "privacy": "public"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "IntroPanel",
-          "declaration": {
-            "name": "IntroPanel",
-            "module": "src/views/chat/introPanel/introPanel.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/services/openAI/assistant/utils/openAIAssistantUtils.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "OpenAIAssistantUtils",
-          "members": [
-            {
-              "kind": "field",
-              "name": "FILES_WITH_TEXT_ERROR",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "public",
-              "static": true,
-              "readonly": true,
-              "default": "'content with type `text` must have `text` values'"
-            },
-            {
-              "kind": "field",
-              "name": "FUNCTION_TOOL_RESP_ERROR",
-              "privacy": "public",
-              "static": true,
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "storeFiles",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "Messages"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "File[]"
-                  }
-                },
-                {
-                  "name": "storeFilesUrl",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getType",
-              "privacy": "private",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "MessageFileType"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "fileDetails",
-                  "type": {
-                    "text": "FileDetails"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFiles",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "serviceIO",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "fileDetails",
-                  "type": {
-                    "text": "FileDetails"
-                  }
-                },
-                {
-                  "name": "urlPrefix",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "urlPosfix",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFileName",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "path",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFilesAndNewText",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "fileDetails",
-                  "type": {
-                    "text": "FileDetails"
-                  }
-                },
-                {
-                  "name": "urls",
-                  "type": {
-                    "text": "URLSegments"
-                  }
-                },
-                {
-                  "name": "role",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "content",
-                  "optional": true,
-                  "type": {
-                    "text": "OpenAIAssistantContent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFileDetails",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "lastMessage",
-                  "type": {
-                    "text": "OpenAIAssistantData"
-                  }
-                },
-                {
-                  "name": "content",
-                  "optional": true,
-                  "type": {
-                    "text": "OpenAIAssistantContent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFilesAndText",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "ServiceIO"
-                  }
-                },
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "OpenAIAssistantData"
-                  }
-                },
-                {
-                  "name": "urls",
-                  "type": {
-                    "text": "URLSegments"
-                  }
-                },
-                {
-                  "name": "content",
-                  "optional": true,
-                  "type": {
-                    "text": "OpenAIAssistantContent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parseResult",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "OpenAIAssistantMessagesResult"
-                  }
-                },
-                {
-                  "name": "isHistory",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parseMessages",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "DirectServiceIO"
-                  }
-                },
-                {
-                  "name": "messages",
-                  "type": {
-                    "text": "OpenAIAssistantData[]"
-                  }
-                },
-                {
-                  "name": "urls",
-                  "type": {
-                    "text": "URLSegments"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "processStreamMessages",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "DirectServiceIO"
-                  }
-                },
-                {
-                  "name": "content",
-                  "type": {
-                    "text": "OpenAIAssistantContent[]"
-                  }
-                },
-                {
-                  "name": "urls",
-                  "type": {
-                    "text": "URLSegments"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "processAPIMessages",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "io",
-                  "type": {
-                    "text": "DirectServiceIO"
-                  }
-                },
-                {
-                  "name": "result",
-                  "type": {
-                    "text": "OpenAIAssistantMessagesResult"
-                  }
-                },
-                {
-                  "name": "isHistory",
-                  "type": {
-                    "text": "boolean"
-                  }
-                },
-                {
-                  "name": "urls",
-                  "type": {
-                    "text": "URLSegments"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "OpenAIAssistantUtils",
-          "declaration": {
-            "name": "OpenAIAssistantUtils",
-            "module": "src/services/openAI/assistant/utils/openAIAssistantUtils.ts"
           }
         }
       ]
@@ -44986,870 +44986,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AudioFileAttachmentType",
-          "members": [
-            {
-              "kind": "field",
-              "name": "stopPlaceholderCallback",
-              "type": {
-                "text": "() => Promise<void> | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_activePlaceholderTimer",
-              "type": {
-                "text": "number | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_activePlaceholderAttachment",
-              "type": {
-                "text": "AttachmentObject | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "TIMER_LIMIT_S",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "5999"
-            },
-            {
-              "kind": "method",
-              "name": "createAudioContainer",
-              "privacy": "private",
-              "static": true
-            },
-            {
-              "kind": "method",
-              "name": "addAudioElements",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "oldContainer",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAudioAttachment",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createTimer",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "text",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createPlaceholderAudioAttachment",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addPlaceholderAudioAttachmentEvents",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "stop",
-                  "type": {
-                    "text": "SVGElement"
-                  }
-                },
-                {
-                  "name": "textContainer",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addPlaceholderAttachment",
-              "parameters": [
-                {
-                  "name": "stopCallback",
-                  "type": {
-                    "text": "() => Promise<void>"
-                  }
-                },
-                {
-                  "name": "customTimeLimit",
-                  "optional": true,
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "completePlaceholderAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removePlaceholderAttachment"
-            },
-            {
-              "kind": "method",
-              "name": "clearTimer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "stopAttachmentPlayback",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentContainerEl",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "_attachments",
-              "type": {
-                "text": "AttachmentObject[]"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "[]",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_fileCountLimit",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "99",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_toggleContainerDisplay",
-              "type": {
-                "text": "(display: boolean) => void"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "toggleContainer",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsContainerRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "container",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_acceptedFormat",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "''",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_validationHandler",
-              "type": {
-                "text": "ValidationHandler | undefined"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "attemptAddFile",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isFileTypeValid",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "accept",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getTypeFromBlob",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "MessageFileType"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addAttachmentBasedOnType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createImageAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "src",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createAnyFileAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "addFileAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileType",
-                  "type": {
-                    "text": "MessageFileType"
-                  }
-                },
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createRemoveAttachmentButton",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "removeAttachment",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getFiles",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "removeAllAttachments",
-              "inheritedFrom": {
-                "name": "FileAttachmentsType",
-                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "FileAttachmentsType",
-            "module": "/src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType"
-          }
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "AudioFileAttachmentType",
-          "declaration": {
-            "name": "AudioFileAttachmentType",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachmentTypeFactory",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create",
-              "privacy": "public",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "deepChat",
-                  "type": {
-                    "text": "DeepChat"
-                  }
-                },
-                {
-                  "name": "files",
-                  "type": {
-                    "text": "FileAttachments"
-                  }
-                },
-                {
-                  "name": "toggleContainer",
-                  "type": {
-                    "text": "(display: boolean) => void"
-                  }
-                },
-                {
-                  "name": "container",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "keyof ServiceFileTypes"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachmentTypeFactory",
-          "declaration": {
-            "name": "FileAttachmentTypeFactory",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "FileAttachmentsType",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_attachments",
-              "type": {
-                "text": "AttachmentObject[]"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "_fileCountLimit",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "99"
-            },
-            {
-              "kind": "field",
-              "name": "_toggleContainerDisplay",
-              "type": {
-                "text": "(display: boolean) => void"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "toggleContainer"
-            },
-            {
-              "kind": "field",
-              "name": "_fileAttachmentsContainerRef",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "container"
-            },
-            {
-              "kind": "field",
-              "name": "_acceptedFormat",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true,
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "_validationHandler",
-              "type": {
-                "text": "ValidationHandler | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "attemptAddFile",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isFileTypeValid",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "accept",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getTypeFromBlob",
-              "privacy": "public",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "MessageFileType"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addAttachmentBasedOnType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileReaderResult",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createImageAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "src",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createAnyFileAttachment",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "fileName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "addFileAttachment",
-              "parameters": [
-                {
-                  "name": "file",
-                  "type": {
-                    "text": "File"
-                  }
-                },
-                {
-                  "name": "fileType",
-                  "type": {
-                    "text": "MessageFileType"
-                  }
-                },
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "removable",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createContainer",
-              "privacy": "private",
-              "static": true,
-              "parameters": [
-                {
-                  "name": "attachmentElement",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "createRemoveAttachmentButton",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "removeAttachment",
-              "parameters": [
-                {
-                  "name": "attachmentObject",
-                  "type": {
-                    "text": "AttachmentObject"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getFiles"
-            },
-            {
-              "kind": "method",
-              "name": "removeAllAttachments"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FileAttachmentsType",
-          "declaration": {
-            "name": "FileAttachmentsType",
-            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/views/chat/input/fileAttachments/modal/cameraModal.ts",
       "declarations": [
         {
@@ -46780,6 +45916,870 @@
           "declaration": {
             "name": "Modal",
             "module": "src/views/chat/input/fileAttachments/modal/modal.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AudioFileAttachmentType",
+          "members": [
+            {
+              "kind": "field",
+              "name": "stopPlaceholderCallback",
+              "type": {
+                "text": "() => Promise<void> | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_activePlaceholderTimer",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_activePlaceholderAttachment",
+              "type": {
+                "text": "AttachmentObject | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "TIMER_LIMIT_S",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "5999"
+            },
+            {
+              "kind": "method",
+              "name": "createAudioContainer",
+              "privacy": "private",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "addAudioElements",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "oldContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAudioAttachment",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createTimer",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "text",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createPlaceholderAudioAttachment",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addPlaceholderAudioAttachmentEvents",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "stop",
+                  "type": {
+                    "text": "SVGElement"
+                  }
+                },
+                {
+                  "name": "textContainer",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addPlaceholderAttachment",
+              "parameters": [
+                {
+                  "name": "stopCallback",
+                  "type": {
+                    "text": "() => Promise<void>"
+                  }
+                },
+                {
+                  "name": "customTimeLimit",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "completePlaceholderAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removePlaceholderAttachment"
+            },
+            {
+              "kind": "method",
+              "name": "clearTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "stopAttachmentPlayback",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentContainerEl",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_attachments",
+              "type": {
+                "text": "AttachmentObject[]"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "[]",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_fileCountLimit",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "99",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_toggleContainerDisplay",
+              "type": {
+                "text": "(display: boolean) => void"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "toggleContainer",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsContainerRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "container",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_acceptedFormat",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "''",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_validationHandler",
+              "type": {
+                "text": "ValidationHandler | undefined"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "attemptAddFile",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isFileTypeValid",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "accept",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getTypeFromBlob",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "MessageFileType"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addAttachmentBasedOnType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createImageAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createAnyFileAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addFileAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileType",
+                  "type": {
+                    "text": "MessageFileType"
+                  }
+                },
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createRemoveAttachmentButton",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "removeAttachment",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getFiles",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "removeAllAttachments",
+              "inheritedFrom": {
+                "name": "FileAttachmentsType",
+                "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FileAttachmentsType",
+            "module": "/src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AudioFileAttachmentType",
+          "declaration": {
+            "name": "AudioFileAttachmentType",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/audioFileAttachmentType.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachmentTypeFactory",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "deepChat",
+                  "type": {
+                    "text": "DeepChat"
+                  }
+                },
+                {
+                  "name": "files",
+                  "type": {
+                    "text": "FileAttachments"
+                  }
+                },
+                {
+                  "name": "toggleContainer",
+                  "type": {
+                    "text": "(display: boolean) => void"
+                  }
+                },
+                {
+                  "name": "container",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "keyof ServiceFileTypes"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachmentTypeFactory",
+          "declaration": {
+            "name": "FileAttachmentTypeFactory",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentTypeFactory.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "FileAttachmentsType",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_attachments",
+              "type": {
+                "text": "AttachmentObject[]"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_fileCountLimit",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "99"
+            },
+            {
+              "kind": "field",
+              "name": "_toggleContainerDisplay",
+              "type": {
+                "text": "(display: boolean) => void"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "toggleContainer"
+            },
+            {
+              "kind": "field",
+              "name": "_fileAttachmentsContainerRef",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "container"
+            },
+            {
+              "kind": "field",
+              "name": "_acceptedFormat",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true,
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "_validationHandler",
+              "type": {
+                "text": "ValidationHandler | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "attemptAddFile",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isFileTypeValid",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "accept",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getTypeFromBlob",
+              "privacy": "public",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "MessageFileType"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addAttachmentBasedOnType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileReaderResult",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createImageAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "src",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createAnyFileAttachment",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "fileName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addFileAttachment",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                },
+                {
+                  "name": "fileType",
+                  "type": {
+                    "text": "MessageFileType"
+                  }
+                },
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "removable",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createContainer",
+              "privacy": "private",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "attachmentElement",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createRemoveAttachmentButton",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeAttachment",
+              "parameters": [
+                {
+                  "name": "attachmentObject",
+                  "type": {
+                    "text": "AttachmentObject"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getFiles"
+            },
+            {
+              "kind": "method",
+              "name": "removeAllAttachments"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FileAttachmentsType",
+          "declaration": {
+            "name": "FileAttachmentsType",
+            "module": "src/views/chat/input/fileAttachments/fileAttachmentTypes/fileAttachmentsType.ts"
           }
         }
       ]

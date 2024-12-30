@@ -23,7 +23,7 @@
 
 ### :tada: Latest Updates
 
-Deep Chat version `2.1.0` brings a ton of new features into the Deep Chat ecosystem:
+Deep Chat version `2.1.1` brings a ton of new features into the Deep Chat ecosystem:
 
 - [Azure OpenAI API](https://deepchat.dev/docs/directConnection/Azure#OpenAI)
 - [`loadHistory`](https://deepchat.dev/docs/interceptors#loadHistory) interceptor to asynchronously load history and pagination

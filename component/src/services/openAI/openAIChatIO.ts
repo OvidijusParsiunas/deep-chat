@@ -155,7 +155,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
     const responses = await Promise.all(handlerResponse);
     bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if (!responses.find((response) => typeof response !== 'string') && functions.length === responses.length) {
+    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
