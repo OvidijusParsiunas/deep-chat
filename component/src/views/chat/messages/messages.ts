@@ -19,6 +19,7 @@ import {IntroPanel} from '../introPanel/introPanel';
 import {WebModel} from '../../../webModel/webModel';
 import {UpdateMessage} from './utils/updateMessage';
 import {Legacy} from '../../../utils/legacy/legacy';
+import {LoadHistory} from '../../../types/history';
 import {CustomStyle} from '../../../types/styles';
 import {MessageUtils} from './utils/messageUtils';
 import {HTMLMessages} from './html/htmlMessages';
@@ -57,6 +58,7 @@ export class Messages extends MessagesBase {
     if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
     }
+    if (demo) this.prepareDemo(Legacy.processDemo(demo), deepChat.loadHistory); // before intro/history for loading spinner
     this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
@@ -68,9 +70,7 @@ export class Messages extends MessagesBase {
       this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
     };
     deepChat.updateMessage = (messageBody: MessageBody, index: number) => UpdateMessage.update(this, messageBody, index);
-    // interface - setUpMessagesForService
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
-    if (demo) this.prepareDemo(Legacy.processDemo(demo));
     if (deepChat.textToSpeech) {
       TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
         this.textToSpeech = processedConfig;
@@ -83,28 +83,25 @@ export class Messages extends MessagesBase {
     return deepChat.displayLoadingBubble ?? true;
   }
 
-  private prepareDemo(demo: Demo): void {
+  private prepareDemo(demo: Demo, loadHistory?: LoadHistory): void {
     if (typeof demo === 'object') {
-      // added here to not overlay error message and loading message bubbles
-      if (demo.displayLoading?.history?.full) LoadingHistory.addMessage(this);
-      if (demo.response) this.customDemoResponse = demo.response;
+      if (!loadHistory && demo.displayLoading) {
+        const {history} = demo.displayLoading;
+        if (history?.small) LoadingHistory.addMessage(this, false);
+        if (history?.full) LoadingHistory.addMessage(this);
+      }
       if (demo.displayErrors) {
         if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
         if (demo.displayErrors.speechToText) this.addNewErrorMessage('speechToText', '');
       }
-      // Needs to be here for message loading bubble to not disappear after error
-      if (demo.displayLoading) {
-        const {history} = demo.displayLoading;
-        // check used to make sure that not creating another small loading message
-        if (history?.small && !history.full) LoadingHistory.addMessage(this, false);
-        if (demo.displayLoading.message) this.addLoadingMessage();
-      }
+      // needs to be here for message loading bubble to not disappear after error
+      if (demo.displayLoading?.message) this.addLoadingMessage();
+      if (demo.response) this.customDemoResponse = demo.response;
     }
   }
 
   private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
-    // interface - getSetUpMessage
     const text = SetupMessages.getText(deepChat, serviceIO);
     if (text) {
       const elements = this.createAndAppendNewMessageElement(text, MessageUtils.AI_ROLE);
@@ -117,7 +114,6 @@ export class Messages extends MessagesBase {
   private addIntroductoryMessages(deepChat?: DeepChat, serviceIO?: ServiceIO) {
     if (deepChat?.shadowRoot) this._introMessage = deepChat.introMessage;
     let introMessage = this._introMessage;
-    // interface - introMessage
     if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
     if (introMessage) {
       if (Array.isArray(introMessage)) {
