@@ -115,19 +115,20 @@ export class Messages extends MessagesBase {
     if (deepChat?.shadowRoot) this._introMessage = deepChat.introMessage;
     let introMessage = this._introMessage;
     if (serviceIO?.isWebModel()) introMessage ??= (serviceIO as WebModel).getIntroMessage(introMessage);
+    const shouldHide = !deepChat?.history && !!(deepChat?.loadHistory || serviceIO?.fetchHistory);
     if (introMessage) {
       if (Array.isArray(introMessage)) {
         introMessage.forEach((intro, index) => {
           if (index !== 0) MessageUtils.hideRoleElements(this.messageElementRefs, !!this._avatars, !!this._names);
-          this.addIntroductoryMessage(intro);
+          this.addIntroductoryMessage(intro, shouldHide);
         });
       } else {
-        this.addIntroductoryMessage(introMessage);
+        this.addIntroductoryMessage(introMessage, shouldHide);
       }
     }
   }
 
-  private addIntroductoryMessage(introMessage: IntroMessage) {
+  private addIntroductoryMessage(introMessage: IntroMessage, shouldHide: boolean) {
     let elements;
     if (introMessage?.text) {
       elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
@@ -137,7 +138,9 @@ export class Messages extends MessagesBase {
     if (elements) {
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
       elements.outerContainer.classList.add(MessagesBase.INTRO_CLASS);
+      if (shouldHide) elements.outerContainer.style.display = 'none';
     }
+    return elements;
   }
 
   public removeIntroductoryMessage() {

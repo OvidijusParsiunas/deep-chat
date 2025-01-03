@@ -28,6 +28,7 @@ export class History {
     const loadingElements = LoadingHistory.addMessage(this._messages);
     const history = await ioFetchHistory();
     this._messages.removeMessage(loadingElements);
+    History.displayIntroMessages(this._messages.messageElementRefs);
     history.forEach((message) => this._messages.addAnyMessage(message, true));
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
@@ -106,6 +107,7 @@ export class History {
       this._messages.addNewErrorMessage('service', History.FAILED_ERROR_MESSAGE, true);
       console.error(e);
     }
+    History.displayIntroMessages(this._messages.messageElementRefs);
     this._isLoading = false;
   }
 
@@ -123,5 +125,16 @@ export class History {
   public static addErrorPrefix(io: ServiceIO) {
     io.permittedErrorPrefixes ??= [];
     io.permittedErrorPrefixes.push(History.FAILED_ERROR_MESSAGE);
+  }
+
+  private static displayIntroMessages(messageElementRefs: MessageElements[]) {
+    for (let i = 0; i < messageElementRefs.length; i += 1) {
+      const messageEls = messageElementRefs[0];
+      if (messageEls.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)) {
+        messageEls.outerContainer.style.display = '';
+      } else {
+        break;
+      }
+    }
   }
 }
