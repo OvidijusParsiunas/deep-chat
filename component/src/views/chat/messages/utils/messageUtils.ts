@@ -18,14 +18,14 @@ export class MessageUtils {
   private static readonly POSITION_MIDDLE_MESSAGE_CLASS = 'deep-chat-middle-message';
   private static readonly POSITION_BOTTOM_MESSAGE_CLASS = 'deep-chat-bottom-message';
 
-  public static getLastElementsByClass(messagesElements: MessageElements[], classes: string[], avoidedClasses?: string[]) {
-    for (let i = messagesElements.length - 1; i >= 0; i -= 1) {
-      const elements = messagesElements[i];
+  public static getLastElementsByClass(messageElementRefs: MessageElements[], classes: string[], avoidClasses?: string[]) {
+    for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
+      const elements = messageElementRefs[i];
       if (elements.bubbleElement.classList.contains(classes[0])) {
         const notFound = classes.slice(1).find((className) => !elements.bubbleElement.classList.contains(className));
         if (!notFound) {
-          if (avoidedClasses) {
-            const avoided = avoidedClasses.find((className) => elements.bubbleElement.classList.contains(className));
+          if (avoidClasses) {
+            const avoided = avoidClasses.find((className) => elements.bubbleElement.classList.contains(className));
             if (!avoided) return elements;
           } else {
             return elements;
@@ -61,11 +61,11 @@ export class MessageUtils {
   // IMPORTANT: If the overwrite message does not contain a role property it will look for the last 'ai' role message
   // and if messages have custom roles, it will still look to update the last 'ai' role message
   // prettier-ignore
-  public static overwriteMessage(messageToElements: MessageToElements, messagesElements: MessageElements[],
+  public static overwriteMessage(messageToElements: MessageToElements, messageElementRefs: MessageElements[],
       content: string, role: string, contentType: 'text' | 'html', className: string) {
     // not sure if LoadingStyle.LOADING_MESSAGE_TEXT_CLASS is needed
     const elements = MessageUtils.getLastElementsByClass(
-      messagesElements, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
+      messageElementRefs, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
     const lastMessage = MessageUtils.getLastMessage(messageToElements, role, contentType);
     if (lastMessage) lastMessage[contentType] = content;
     return elements;

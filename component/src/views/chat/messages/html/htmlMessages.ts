@@ -27,10 +27,10 @@ export class HTMLMessages {
   }
 
   // prettier-ignore
-  private static overwrite(messages: MessagesBase, html: string, role: string, messagesEls: MessageElements[]) {
+  private static overwrite(messages: MessagesBase, html: string, role: string, messageElementRefs: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(
-      msgToEls, messagesEls, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
+      msgToEls, messageElementRefs, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
     if (overwrittenElements) {
       HTMLMessages.overwriteElements(messages, html, overwrittenElements);
     }
@@ -49,9 +49,9 @@ export class HTMLMessages {
   // prettier-ignore
   public static add(
       messages: MessagesBase, html: string, role: string,
-      messagesEls: MessageElements[], overwrite?: Overwrite, isTop = false) {
+      messageElementRefs: MessageElements[], overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
-      const overwrittenElements = this.overwrite(messages, html, role, messagesEls);
+      const overwrittenElements = this.overwrite(messages, html, role, messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
     }
