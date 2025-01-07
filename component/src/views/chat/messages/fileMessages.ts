@@ -12,16 +12,16 @@ export class FileMessages {
   private static readonly AUDIO_BUBBLE_CLASS = 'audio-message';
   private static readonly ANY_FILE_BUBBLE_CLASS = 'any-file-message';
 
-  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, isTop: boolean, scroll = true) {
+  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, scroll: boolean) {
     const imageElement = new Image();
     imageElement.src = imageData.src as string;
-    if (!isTop && scroll) FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
+    if (scroll) FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl);
     return FileMessageUtils.processContent('image', imageElement, imageElement.src, imageData.name);
   }
 
   // WORK - image still does not scroll down when loaded
-  private static createImageMessage(msg: MessagesBase, imageD: MessageFile, role: string, isTop: boolean, scroll = true) {
-    const image = FileMessages.createImage(imageD, msg.elementRef, isTop, scroll);
+  private static createImageMessage(msg: MessagesBase, imageD: MessageFile, role: string, isTop: boolean) {
+    const image = FileMessages.createImage(imageD, msg.elementRef, !isTop && !msg.focusMode);
     const elements = msg.createNewMessageElement('', role);
     elements.bubbleElement.appendChild(image);
     elements.bubbleElement.classList.add(FileMessages.IMAGE_BUBBLE_CLASS);
@@ -74,14 +74,14 @@ export class FileMessages {
     return {type: 'file', elements};
   }
 
-  public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, isTop = false, scroll = true) {
+  public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, isTop = false) {
     return files.map((fileData) => {
       if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
       if (FileMessageUtils.isAudioFile(fileData)) {
         return FileMessages.createNewAudioMessage(msg, fileData, role, isTop);
       }
       if (FileMessageUtils.isImageFile(fileData)) {
-        return FileMessages.createImageMessage(msg, fileData, role, isTop, scroll);
+        return FileMessages.createImageMessage(msg, fileData, role, isTop);
       }
       return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
     });

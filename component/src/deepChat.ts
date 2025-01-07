@@ -144,6 +144,9 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   remarkable?: RemarkableOptions;
 
+  @Property('boolean')
+  focusMode?: boolean;
+
   getMessages: () => MessageContent[] = () => [];
 
   submitUserMessage: (content: UserContent) => void = () =>

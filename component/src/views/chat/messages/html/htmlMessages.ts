@@ -9,8 +9,8 @@ export class HTMLMessages {
   public static readonly HTML_BUBBLE_CLASS = 'html-message';
 
   private static addElement(messages: MessagesBase, outerElement: HTMLElement) {
-    messages.elementRef.appendChild(outerElement);
-    messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
+    messages.appendOuterContainerElemet(outerElement);
+    if (!messages.focusMode) messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {

@@ -40,7 +40,7 @@ export class MessageStream {
     } else {
       this.updateBasedOnType(content, streamType, this._elements?.bubbleElement as HTMLElement, response?.overwrite);
     }
-    if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages.elementRef);
+    if (!this._messages.focusMode && isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages.elementRef);
   }
 
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {

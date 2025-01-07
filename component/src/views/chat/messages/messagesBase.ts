@@ -25,25 +25,30 @@ export class MessagesBase {
   textToSpeech?: ProcessedTextToSpeechConfig;
   submitUserMessage?: (content: UserContent) => void;
   readonly elementRef: HTMLElement;
+  readonly focusMode: boolean;
   readonly messageStyles?: MessageStyles;
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   readonly messageToElements: MessageToElements = [];
   protected _introPanel?: IntroPanel;
+  private _remarkable: Remarkable;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
-  private _remarkable: Remarkable;
+  private _lastGroupMessagesElement: HTMLElement;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
   public static readonly INTRO_CLASS = 'deep-chat-intro';
+  public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
+    this._lastGroupMessagesElement = document.createElement('div');
     this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkable);
     this._avatars = deepChat.avatars;
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
+    this.focusMode = !!deepChat.focusMode;
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -79,10 +84,39 @@ export class MessagesBase {
   }
 
   protected createAndAppendNewMessageElement(text: string, role: string) {
+    if (!this.focusMode) {
+      return this.appendNewMessageElementFocusMode(text, role);
+    }
+    return this.createAndAppendNewMessageElementDefault(text, role);
+  }
+
+  private appendNewMessageElementFocusMode(text: string, role: string) {
+    if (role === 'user') {
+      this._lastGroupMessagesElement.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+      this._lastGroupMessagesElement = document.createElement('div');
+      this._lastGroupMessagesElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    }
     const messageElements = this.createNewMessageElement(text, role);
-    this.elementRef.appendChild(messageElements.outerContainer);
+    this.appendOuterContainerElemet(messageElements.outerContainer);
+    if (role === 'user') {
+      setTimeout(() => ElementUtils.scrollToBottom(this.elementRef)); // timeout neeed when bubble font is large
+    } else {
+      // prevents a browser bug where a long response from AI would sometimes scroll down
+      this.messageElementRefs[this.messageElementRefs.length - 2]?.outerContainer.scrollIntoView();
+    }
+    return messageElements;
+  }
+
+  private createAndAppendNewMessageElementDefault(text: string, role: string) {
+    const messageElements = this.createNewMessageElement(text, role);
+    this.appendOuterContainerElemet(messageElements.outerContainer);
     setTimeout(() => ElementUtils.scrollToBottom(this.elementRef)); // timeout neeed when bubble font is large
     return messageElements;
+  }
+
+  public appendOuterContainerElemet(outerContainer: HTMLElement) {
+    this._lastGroupMessagesElement.appendChild(outerContainer);
+    this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
   }
 
   private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean) {

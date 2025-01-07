@@ -38,3 +38,7 @@
   margin-left: 0px;
   margin-right: auto;
 }
+
+.deep-chat-last-group-messages-active {
+  height: 100%;
+}

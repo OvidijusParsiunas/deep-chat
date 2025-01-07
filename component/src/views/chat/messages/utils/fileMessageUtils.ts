@@ -20,8 +20,8 @@ export class FileMessageUtils {
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
     FileMessageUtils.setElementProps(messages, elements, styles, role);
     if (!isTop) {
-      messages.elementRef.appendChild(elements.outerContainer);
-      messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
+      messages.appendOuterContainerElemet(elements.outerContainer);
+      if (!messages.focusMode) messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
     }
   }
 

@@ -217,7 +217,7 @@ export class Messages extends MessagesBase {
       this.messageStyles?.default);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
-    if (!isTop) this.elementRef.appendChild(outerContainer);
+    if (!isTop) this.appendOuterContainerElemet(outerContainer);
     if (this.textToSpeech) TextToSpeech.speak(text, this.textToSpeech);
     this._onError?.(text);
   }
@@ -283,10 +283,10 @@ export class Messages extends MessagesBase {
     const messageElements = html
       ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, false)
       : this.addDefaultLoadingMessage();
-    this.elementRef.appendChild(messageElements.outerContainer);
+    this.appendOuterContainerElemet(messageElements.outerContainer);
     messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
-    ElementUtils.scrollToBottom(this.elementRef);
+    if (!this.focusMode) ElementUtils.scrollToBottom(this.elementRef);
   }
 
   private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
