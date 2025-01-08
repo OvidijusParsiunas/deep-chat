@@ -84,7 +84,7 @@ export class MessagesBase {
   }
 
   protected createAndAppendNewMessageElement(text: string, role: string) {
-    if (!this.focusMode) {
+    if (this.focusMode) {
       return this.appendNewMessageElementFocusMode(text, role);
     }
     return this.createAndAppendNewMessageElementDefault(text, role);

@@ -37,7 +37,8 @@ export class UpdateMessage {
       const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
       const previousElements = (messageToEls[1].files?.[messageToEls[1].files?.length - 1] ||
         messageToEls[1].text) as MessageElements;
-      msg.elementRef.insertBefore(messageElements.outerContainer, previousElements.outerContainer.nextSibling);
+      const {nextSibling} = previousElements.outerContainer;
+      nextSibling?.parentElement?.insertBefore(messageElements.outerContainer, nextSibling);
       msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
       const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
       msg.messageElementRefs.splice(prevMsgElsIndex + 1, 0, messageElements);
@@ -58,7 +59,7 @@ export class UpdateMessage {
     const beforeElement = (nextElement?.outerContainer || prevElement?.outerContainer.nextSibling) as Node;
     typeToElements.forEach(({type, elements}, index) => {
       FileMessageUtils.setElementProps(msg, elements, type as keyof MessageStyles, role);
-      msg.elementRef.insertBefore(elements.outerContainer, beforeElement);
+      beforeElement.parentElement?.insertBefore(elements.outerContainer, beforeElement);
       msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
       msg.messageElementRefs.splice(siblingElementIndex + index, 0, elements);
     });
@@ -73,7 +74,7 @@ export class UpdateMessage {
     } else {
       const messageElements = msg.createElements(newText, messageToEls[0].role);
       const nextElements = (messageToEls[1].files?.[0] || messageToEls[1].html) as MessageElements;
-      msg.elementRef.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
+      nextElements.outerContainer.parentElement?.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
       const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);
       msg.messageElementRefs.splice(nextMsgElsIndex, 0, messageElements);
       messageToEls[1].text = messageElements;
