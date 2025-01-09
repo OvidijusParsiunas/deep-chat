@@ -2,6 +2,7 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
+import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
@@ -195,9 +196,12 @@ export class SubmitButton extends InputButton<Styles> {
   public async attemptSubmit(content: UserContentI, isProgrammatic = false) {
     if ((await this._validationHandler?.(isProgrammatic ? content : undefined)) === false) return;
     this.changeToLoadingIcon();
+    this._textInput.clear();
+    if (typeof this._messages.focusMode !== 'boolean' && this._messages.focusMode?.fade) {
+      await FocusModeUtils.fadeAnimation(this._messages.elementRef, this._messages.focusMode.fade);
+    }
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    this._textInput.clear();
     const filesData = content.files?.map((fileData) => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);

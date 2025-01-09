@@ -31,6 +31,7 @@ import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
 import {TextInput} from './types/textInput';
 import {LoadHistory} from './types/history';
+import {FocusMode} from './types/focusMode';
 import {CustomStyle} from './types/styles';
 import {Response} from './types/response';
 import style from './deepChat.css?inline';
@@ -145,7 +146,7 @@ export class DeepChat extends InternalHTML {
   remarkable?: RemarkableOptions;
 
   @Property('boolean')
-  focusMode?: boolean;
+  focusMode?: FocusMode;
 
   getMessages: () => MessageContent[] = () => [];
 

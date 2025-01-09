@@ -10,8 +10,10 @@ import {FireEvents} from '../../../utils/events/fireEvents';
 import {RemarkableOptions} from '../../../types/remarkable';
 import {LoadingHistory} from './history/loadingHistory';
 import {HTMLClassUtilities} from '../../../types/html';
+import {FocusModeUtils} from './utils/focusModeUtils';
 import {IntroPanel} from '../introPanel/introPanel';
 import {Legacy} from '../../../utils/legacy/legacy';
+import {FocusMode} from '../../../types/focusMode';
 import {MessageUtils} from './utils/messageUtils';
 import {Response} from '../../../types/response';
 import {Avatars} from '../../../types/avatars';
@@ -25,7 +27,7 @@ export class MessagesBase {
   textToSpeech?: ProcessedTextToSpeechConfig;
   submitUserMessage?: (content: UserContent) => void;
   readonly elementRef: HTMLElement;
-  readonly focusMode: boolean;
+  readonly focusMode?: FocusMode;
   readonly messageStyles?: MessageStyles;
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   readonly messageToElements: MessageToElements = [];
@@ -48,7 +50,10 @@ export class MessagesBase {
     this._names = deepChat.names;
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
-    this.focusMode = !!deepChat.focusMode;
+    this.focusMode = deepChat.focusMode;
+    if (typeof this.focusMode !== 'boolean' && this.focusMode?.fade) {
+      FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
+    }
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -99,7 +104,9 @@ export class MessagesBase {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
     if (role === 'user') {
-      setTimeout(() => ElementUtils.scrollToBottom(this.elementRef)); // timeout neeed when bubble font is large
+      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.isScroll;
+      // timeout neeed when bubble font is large
+      setTimeout(() => ElementUtils.scrollToBottom(this.elementRef, isAnimation));
     } else {
       // prevents a browser bug where a long response from AI would sometimes scroll down
       this.messageElementRefs[this.messageElementRefs.length - 2]?.outerContainer.scrollIntoView();
