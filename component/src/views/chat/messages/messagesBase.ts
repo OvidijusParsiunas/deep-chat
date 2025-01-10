@@ -35,7 +35,7 @@ export class MessagesBase {
   private _remarkable: Remarkable;
   protected readonly _avatars?: Avatars;
   protected readonly _names?: Names;
-  private _lastGroupMessagesElement: HTMLElement;
+  private _lastGroupMessagesElement?: HTMLElement;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
   public static readonly INTRO_CLASS = 'deep-chat-intro';
@@ -43,7 +43,6 @@ export class MessagesBase {
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
-    this._lastGroupMessagesElement = document.createElement('div');
     this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkable);
     this._avatars = deepChat.avatars;
@@ -51,6 +50,7 @@ export class MessagesBase {
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this.focusMode = deepChat.focusMode;
+    if (!this.focusMode) this._lastGroupMessagesElement = document.createElement('div');
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.fade) {
       FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
     }
@@ -97,9 +97,11 @@ export class MessagesBase {
 
   private appendNewMessageElementFocusMode(text: string, role: string) {
     if (role === 'user') {
-      this._lastGroupMessagesElement.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
-      this._lastGroupMessagesElement = document.createElement('div');
-      this._lastGroupMessagesElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+      this._lastGroupMessagesElement?.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+      const lastGroupMessageElement = document.createElement('div');
+      // first group should not have height 100% to not create a partial chat scroll bar
+      if (this._lastGroupMessagesElement) lastGroupMessageElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+      this._lastGroupMessagesElement = lastGroupMessageElement;
     }
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
@@ -122,7 +124,7 @@ export class MessagesBase {
   }
 
   public appendOuterContainerElemet(outerContainer: HTMLElement) {
-    this._lastGroupMessagesElement.appendChild(outerContainer);
+    this._lastGroupMessagesElement?.appendChild(outerContainer);
     this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
   }
 
