@@ -18,23 +18,27 @@ export interface IWebsocketHandler {
 export class CustomHandler {
   public static async request(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
-    const onResponse = async (response: Response) => {
+    const onResponse = async (response: Response | Response[]) => {
       if (!isHandlerActive) return;
       isHandlerActive = false; // need to set it here due to asynchronous code below
       const result = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (!RequestUtils.validateResponseFormat(result)) {
+      if (!RequestUtils.validateResponseFormat(result, !!io.stream)) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage('service', 'Error in server message');
         io.completionsHandlers.onFinish();
-      } else if (typeof result.error === 'string') {
-        console.error(result.error);
-        messages.addNewErrorMessage('service', result.error);
-        io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulatable(io.stream, result)) {
-        Stream.simulate(messages, io.streamHandlers, result);
       } else {
-        messages.addNewMessage(result);
-        io.completionsHandlers.onFinish();
+        const messageDataArr = Array.isArray(result) ? result : [result];
+        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        if (errorMessage) {
+          console.error(errorMessage.error);
+          messages.addNewErrorMessage('service', errorMessage.error);
+          io.completionsHandlers.onFinish();
+        } else if (Stream.isSimulatable(io.stream, result as Response)) {
+          Stream.simulate(messages, io.streamHandlers, result as Response);
+        } else {
+          messageDataArr.forEach((message) => messages.addNewMessage(message));
+          io.completionsHandlers.onFinish();
+        }
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
@@ -72,16 +76,15 @@ export class CustomHandler {
       io.streamHandlers.onClose();
       isHandlerActive = false;
     };
-    const onResponse = async (response: Response) => {
+    const onResponse = async (response: Response | Response[]) => {
       if (!isHandlerActive) return;
-      const result = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (!RequestUtils.validateResponseFormat(result)) {
-        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+      const result = ((await io.deepChat.responseInterceptor?.(response)) || response) as Response; // array not supported
+      if (!RequestUtils.validateResponseFormat(result, !!io.stream)) {
+        const errorMessage = ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
+        CustomHandler.streamError(errorMessage, stream, io, messages);
+        isHandlerActive = false;
       } else if (result.error) {
-        console.error(result.error);
-        stream.finaliseStreamedMessage();
-        messages.addNewErrorMessage('service', result.error);
-        io.streamHandlers.onClose();
+        CustomHandler.streamError(result.error, stream, io, messages);
         isHandlerActive = false;
       } else {
         Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
@@ -97,6 +100,13 @@ export class CustomHandler {
       {...signals, onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked});
   }
 
+  private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
+    console.error(errorMessage);
+    stream.finaliseStreamedMessage();
+    messages.addNewErrorMessage('service', errorMessage);
+    io.streamHandlers.onClose();
+  }
+
   // prettier-ignore
   public static websocket(io: ServiceIO, messages: Messages) {
     const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}, roleToStream: {}};
@@ -108,21 +118,26 @@ export class CustomHandler {
     const onClose = () => {
       internalConfig.isOpen = false;
     };
-    const onResponse = async (response: Response) => {
+    const onResponse = async (response: Response | Response[]) => {
       if (!internalConfig.isOpen) return;
       const result = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (!RequestUtils.validateResponseFormat(result)) {
+      if (!RequestUtils.validateResponseFormat(result, !!io.stream)) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage('service', 'Error in server message');
-      } else if (typeof result.error === 'string') {
-        console.error(result.error);
-        if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', result.error);
-      } else if (Stream.isSimulation(io.stream)) {
-        const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
-        const stream = (internalConfig.roleToStream as RoleToStream)[response.role || MessageUtils.AI_ROLE];
-        Stream.upsertWFiles(messages, upsertFunc, stream, response);
       } else {
-        messages.addNewMessage(result);
+        const messageDataArr = Array.isArray(result) ? result : [result];
+        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        if (errorMessage) {
+          console.error(errorMessage.error);
+          if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', errorMessage.error);
+        } else if (Stream.isSimulation(io.stream)) {
+          const message = result as Response; // array not supported for streaming
+          const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
+          const stream = (internalConfig.roleToStream as RoleToStream)[message.role || MessageUtils.AI_ROLE];
+          Stream.upsertWFiles(messages, upsertFunc, stream, message);
+        } else {
+          messageDataArr.forEach((message) => messages.addNewMessage(message));
+        }
       }
     };
     const signals = CustomHandler.generateOptionalSignals();

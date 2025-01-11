@@ -52,6 +52,7 @@ export const ErrorMessages = {
   INVALID_RESPONSE: getInvalidResponseMessage,
   INVALID_MODEL_REQUEST: getModelRequestMessage,
   INVALID_MODEL_RESPONSE: getModelResponseMessage,
+  INVALID_STREAM_ARRAY_RESPONSE: 'Multi-response arrays are not supported for streaming',
   INVALID_STREAM_EVENT,
   INVALID_STREAM_EVENT_MIX: 'Cannot mix {text: string} and {html: string} responses.',
   NO_VALID_STREAM_EVENTS_SENT: `No valid stream events were sent.\n${INVALID_STREAM_EVENT}`,

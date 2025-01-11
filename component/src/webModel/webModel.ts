@@ -207,7 +207,7 @@ export class WebModel extends BaseServiceIO {
   private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
     const output = {text: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
     const response = await WebModel.processResponse(this.deepChat, messages, output);
-    if (response) messages.addNewMessage(response);
+    if (response) response.forEach((data) => messages.addNewMessage(data));
     this.completionsHandlers.onFinish();
   }
 
@@ -219,7 +219,7 @@ export class WebModel extends BaseServiceIO {
     const stream = new MessageStream(messages);
     await chat.generate(text, async (_: number, message: string) => {
       const response = await WebModel.processResponse(this.deepChat, messages, {text: message});
-      if (response) stream.upsertStreamedMessage({text: response.text, overwrite: true});
+      if (response) stream.upsertStreamedMessage({text: response[0].text, overwrite: true});
     });
     stream.finaliseStreamedMessage();
     this.streamHandlers.onClose();
@@ -282,16 +282,26 @@ export class WebModel extends BaseServiceIO {
   }
 
   private static async processResponse(deepChat: DeepChat, messages: Messages, output: ResponseI) {
-    const result: ResponseI = (await deepChat.responseInterceptor?.(output)) || output;
-    if (result.error) {
-      RequestUtils.displayError(messages, new Error(result.error));
+    const result = (await deepChat.responseInterceptor?.(output)) || output;
+    if (deepChat.connect?.stream)
+      if (Array.isArray(result) && result.length > 1) {
+        console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);
+        return;
+      }
+    const messageDataArr = Array.isArray(result) ? result : [result];
+    const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+    if (errorMessage) {
+      RequestUtils.displayError(messages, new Error(errorMessage.error));
       return;
-    } else if (!result || !result.text) {
-      const error = ErrorMessages.INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
-      RequestUtils.displayError(messages, new Error(error));
-      return;
+    } else {
+      const errorMessage = messageDataArr.find((message) => !message || !message.text);
+      if (errorMessage) {
+        const error = ErrorMessages.INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
+        RequestUtils.displayError(messages, new Error(error));
+        return;
+      }
     }
-    return result;
+    return messageDataArr;
   }
 
   override isWebModel() {

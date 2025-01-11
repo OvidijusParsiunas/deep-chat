@@ -52,14 +52,16 @@ export class Demo {
   public static request(io: ServiceIO, messages: Messages) {
     const response = Demo.getResponse(messages);
     setTimeout(async () => {
-      const processedResponse = (await io.deepChat.responseInterceptor?.(response)) || response;
-      if (processedResponse.error) {
-        messages.addNewErrorMessage('service', processedResponse.error);
+      const finalResult = (await io.deepChat.responseInterceptor?.(response)) || response;
+      const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
+      const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+      if (errorMessage) {
+        messages.addNewErrorMessage('service', errorMessage.error);
         io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulatable(io.stream, processedResponse)) {
-        Stream.simulate(messages, io.streamHandlers, processedResponse);
+      } else if (Stream.isSimulatable(io.stream, finalResult as Response)) {
+        Stream.simulate(messages, io.streamHandlers, finalResult as Response);
       } else {
-        messages.addNewMessage(processedResponse);
+        messageDataArr.forEach((data) => messages.addNewMessage(data));
         io.completionsHandlers.onFinish();
       }
     }, 400);

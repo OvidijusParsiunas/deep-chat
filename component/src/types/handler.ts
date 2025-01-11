@@ -2,7 +2,7 @@
 import {Response} from './response';
 
 export interface Signals {
-  onResponse: (response: Response) => Promise<void>;
+  onResponse: (response: Response | Response[]) => Promise<void>;
   onOpen: () => void;
   onClose: () => void;
   stopClicked: {listener: () => void};

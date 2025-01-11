@@ -34,13 +34,14 @@ export class HTTPRequest {
         const resultData = await io.extractResultData(finalResult, fetchFunc, interceptedBody);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
-        if (!resultData || typeof resultData !== 'object')
+        if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.makingAnotherRequest) return;
         if (Stream.isSimulatable(io.stream, resultData)) {
           Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
-          messages.addNewMessage(resultData);
+          const messageDataArr = Array.isArray(resultData) ? resultData : [resultData];
+          messageDataArr.forEach((message) => messages.addNewMessage(message));
           onFinish();
         }
       })

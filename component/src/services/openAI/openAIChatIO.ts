@@ -149,7 +149,9 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (!Array.isArray(handlerResponse)) {
       if (handlerResponse.text) {
         const response = {text: handlerResponse.text};
-        return await this.deepChat.responseInterceptor?.(response) || response;
+        const processedResponse = await this.deepChat.responseInterceptor?.(response) || response;
+        if (Array.isArray(processedResponse)) throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ARR_ERROR);
+        return processedResponse;
       }
       throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
     }

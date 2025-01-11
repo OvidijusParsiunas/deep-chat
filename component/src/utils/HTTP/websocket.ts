@@ -71,14 +71,15 @@ export class Websocket {
         const result: Response = JSON.parse(message.data);
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
         const resultData = await io.extractResultData(finalResult);
-        if (!resultData || typeof resultData !== 'object')
+        if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
           const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
           Stream.upsertWFiles(messages, upsertFunc, stream, resultData);
         } else {
-          messages.addNewMessage(resultData);
+          const messageDataArr = Array.isArray(resultData) ? resultData : [resultData];
+          messageDataArr.forEach((data) => messages.addNewMessage(data));
         }
       } catch (error) {
         RequestUtils.displayError(messages, error as object, 'Error in server message');

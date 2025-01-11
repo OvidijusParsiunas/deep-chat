@@ -145,7 +145,7 @@ export class BaseServiceIO implements ServiceIO {
     if (result.error) throw result.error;
     if (result.result) return Legacy.handleResponseProperty(result);
     // if invalid - process later in HTTPRequest.request
-    if (!RequestUtils.validateResponseFormat(result)) return undefined as unknown as Response;
+    if (!RequestUtils.validateResponseFormat(result, !!this.stream)) return undefined as unknown as Response;
     return result;
   }
 

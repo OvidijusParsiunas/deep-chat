@@ -1,3 +1,4 @@
+import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
@@ -80,15 +81,24 @@ export class RequestUtils {
     return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
   }
 
-  public static validateResponseFormat(response: ResponseI) {
-    return (
-      response &&
-      typeof response === 'object' &&
-      (typeof response.error === 'string' ||
-        typeof response.text === 'string' ||
-        typeof response.html === 'string' ||
-        Array.isArray(response.files))
+  public static validateResponseFormat(response: ResponseI | ResponseI[], isStreaming: boolean) {
+    if (!response) false;
+    const dataArr = Array.isArray(response) ? response : [response];
+    if (isStreaming && dataArr.length > 1) {
+      console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);
+      return false;
+    }
+    const invalidFound = dataArr.find(
+      (data) =>
+        typeof data !== 'object' ||
+        !(
+          typeof data.error === 'string' ||
+          typeof data.text === 'string' ||
+          typeof data.html === 'string' ||
+          Array.isArray(data.files)
+        )
     );
+    return !invalidFound;
   }
 
   public static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {

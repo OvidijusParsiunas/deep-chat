@@ -8,6 +8,7 @@ export class OpenAIUtils {
   public static readonly FUNCTION_TOOL_RESP_ERROR =
     'Response object must either be {response: string}[] for each individual function ' +
     'or {text: string} for a direct response, see https://deepchat.dev/docs/directConnection/OpenAI#FunctionHandler.';
+  public static readonly FUNCTION_TOOL_RESP_ARR_ERROR = 'Arrays are not accepted in handler responses';
 
   public static buildHeaders(key: string) {
     return {
