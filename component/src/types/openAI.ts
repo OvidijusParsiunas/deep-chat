@@ -104,6 +104,7 @@ export type OpenAIChat = {
 export interface OpenAI {
   chat?: true | OpenAIChat;
   assistant?: true | OpenAIAssistant;
+  realtime?: true;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;

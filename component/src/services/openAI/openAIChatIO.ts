@@ -180,5 +180,6 @@ export class OpenAIChatIO extends DirectServiceIO {
         throw e;
       }
     }
-    throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);}
+    throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
+  }
 }
