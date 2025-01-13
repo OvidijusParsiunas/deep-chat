@@ -108,6 +108,8 @@ export interface ServiceIO {
 
   isWebModel(): boolean;
 
+  isCustomView(): boolean;
+
   isSubmitProgrammaticallyDisabled?: boolean;
 
   sessionId?: string;

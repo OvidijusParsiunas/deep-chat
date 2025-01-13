@@ -1,9 +1,13 @@
+import {ChatFunctionHandler, OpenAIRealTime} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
+import avatarUrl from '../../../assets/person-avatar.png';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
+// https://platform.openai.com/docs/guides/realtime-webrtc
+// https://platform.openai.com/docs/api-reference/realtime-server-events/conversation
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -11,14 +15,50 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Incorrect'];
   _functionHandler?: ChatFunctionHandler;
   asyncCallInProgress = false; // used when streaming tools
+  private readonly _avatarConfig: OpenAIRealTime['avatar'];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.openAI;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
-    this.maxMessages ??= -1;
+    const {key} = directConnectionCopy.openAI as APIKey;
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, {key: key || 'asdsd'});
+    const config = directConnectionCopy.openAI?.realtime as OpenAIRealTime;
+    if (typeof config === 'object') {
+      if (config.avatar) this._avatarConfig = config.avatar;
+    }
     this.rawBody.model ??= 'gpt-4o';
     this.init();
+  }
+
+  public setUpView(containerElement: HTMLElement, parentElement: HTMLElement) {
+    containerElement.style.display = 'none';
+    parentElement.appendChild(this.createContainer());
+  }
+
+  private createContainer() {
+    const container = document.createElement('div');
+    container.id = 'deep-chat-openai-realtime-container';
+    container.appendChild(this.avatarContainer());
+    return container;
+  }
+
+  private avatarContainer() {
+    const avatarContainer = document.createElement('div');
+    avatarContainer.id = 'deep-chat-openai-realtime-avatar-container';
+    Object.assign(avatarContainer.style, this._avatarConfig?.styles?.container);
+    avatarContainer.appendChild(this.createAvatar());
+    return avatarContainer;
+  }
+
+  private createAvatar() {
+    const avatar = document.createElement('img');
+    avatar.id = 'deep-chat-openai-realtime-avatar';
+    Object.assign(avatar.style, this._avatarConfig?.styles?.avatar);
+    avatar.src = this._avatarConfig?.src || avatarUrl;
+    return avatar;
+  }
+
+  override isCustomView() {
+    return true;
   }
 
   private async init() {

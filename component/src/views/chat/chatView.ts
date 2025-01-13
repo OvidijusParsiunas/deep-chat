@@ -1,3 +1,4 @@
+import {OpenAIRealtimeIO} from '../../services/openAI/openAIRealtimeIO';
 import {ElementUtils} from '../../utils/element/elementUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {ServiceIO} from '../../services/serviceIO';
@@ -19,5 +20,6 @@ export class ChatView {
   public static render(deepChat: DeepChat, containerRef: HTMLElement, serviceIO: ServiceIO, panel?: HTMLElement) {
     const containerElement = ChatView.createElements(deepChat, serviceIO, panel);
     containerRef.replaceChildren(containerElement);
+    if (serviceIO.isCustomView()) (serviceIO as OpenAIRealtimeIO).setUpView(containerElement, containerRef);
   }
 }

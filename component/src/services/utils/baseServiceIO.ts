@@ -156,4 +156,8 @@ export class BaseServiceIO implements ServiceIO {
   public isWebModel() {
     return false;
   }
+
+  public isCustomView() {
+    return false;
+  }
 }

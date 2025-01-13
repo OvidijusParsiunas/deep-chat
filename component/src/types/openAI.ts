@@ -1,3 +1,5 @@
+import {CustomStyle} from './styles';
+
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
   model?: string;
@@ -33,6 +35,17 @@ export interface OpenAIImagesDalle3 {
   response_format?: 'url' | 'b64_json';
   user?: string;
 }
+
+// https://platform.openai.com/docs/api-reference/realtime
+export type OpenAIRealTime = {
+  avatar?: {
+    src?: string;
+    styles?: {
+      avatar?: CustomStyle;
+      container?: CustomStyle;
+    };
+  };
+};
 
 export type FunctionsDetails = {name: string; arguments: string}[];
 
@@ -104,7 +117,7 @@ export type OpenAIChat = {
 export interface OpenAI {
   chat?: true | OpenAIChat;
   assistant?: true | OpenAIAssistant;
-  realtime?: true;
+  realtime?: true | OpenAIRealTime;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;

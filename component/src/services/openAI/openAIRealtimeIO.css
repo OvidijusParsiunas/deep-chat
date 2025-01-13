@@ -1,0 +1,17 @@
+#deep-chat-openai-realtime-container {
+  height: 100%;
+  width: 100%;
+}
+
+#deep-chat-openai-realtime-avatar-container {
+  height: 70%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#deep-chat-openai-realtime-avatar {
+  border-radius: 50%;
+  height: 120px;
+}

@@ -1,4 +1,5 @@
 @import url('./views/validateKeyProperty/validateKeyPropertyView.css');
+@import url('./services/openAI/openAIRealtimeIO.css');
 @import url('./views/insertKey/insertKeyView.css');
 @import url('./views/error/errorView.css');
 @import url('./utils/loading/loading.css');
