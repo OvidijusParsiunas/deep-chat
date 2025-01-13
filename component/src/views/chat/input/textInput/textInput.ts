@@ -73,12 +73,15 @@ export class TextInputEl {
     const inputElement = document.createElement('div');
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-styling');
+    inputElement.role = 'textbox';
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof this._config.disabled === 'boolean' && this._config.disabled === true) {
       inputElement.contentEditable = 'false';
       inputElement.classList.add('text-input-disabled');
+      inputElement.setAttribute('aria-disabled', 'true');
     } else {
       inputElement.contentEditable = 'true';
+      inputElement.removeAttribute('aria-disabled');
       this.addEventListeners(inputElement);
     }
     Object.assign(inputElement.style, this._config.styles?.text);
@@ -127,6 +130,7 @@ export class TextInputEl {
 
   private setPlaceholderText(text: string) {
     this.inputElementRef.setAttribute('deep-chat-placeholder-text', text);
+    this.inputElementRef.setAttribute('aria-label', text);
   }
 
   public isTextInputEmpty() {
