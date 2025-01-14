@@ -40,6 +40,7 @@ export interface OpenAIImagesDalle3 {
 export type OpenAIRealTime = {
   avatar?: {
     src?: string;
+    maxScale?: number;
     styles?: {
       avatar?: CustomStyle;
       container?: CustomStyle;
