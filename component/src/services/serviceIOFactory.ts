@@ -28,6 +28,7 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
+import {OllamaOpenAIChatIO } from './ollama/ollamaOpenAIChatIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
 import {ServiceIO} from './serviceIO';
@@ -135,6 +136,13 @@ export class ServiceIOFactory {
       }
       if (directConnection.mistral) {
         return new MistralIO(deepChat);
+      }
+      if (directConnection.ollama) {
+        if (directConnection.ollama.openAI) {
+          if (directConnection.ollama.openAI.chat) {
+            return new OllamaOpenAIChatIO(deepChat);
+          }
+        }
       }
     }
     // if connect, make sure it is not a demo stream

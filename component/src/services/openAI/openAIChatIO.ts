@@ -41,7 +41,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     const config = configArg || directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
-      const {function_handler} = deepChat.directConnection?.openAI?.chat as OpenAIChat;
+      const {function_handler} = config as OpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
