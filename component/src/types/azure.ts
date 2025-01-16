@@ -46,9 +46,9 @@ export interface AzureOpenAI {
 }
 
 export interface Azure {
-  openAI?: AzureOpenAI;
   textToSpeech?: AzureRegion & AzureTextToSpeechConfig;
   speechToText?: AzureRegion & AzureSpeechToTextConfig;
   summarization?: AzureEndpoint & AzureSummarizationConfig;
   translation?: Partial<AzureRegion> & AzureTranslationConfig;
+  openAI?: AzureOpenAI;
 }
