@@ -1,8 +1,8 @@
+import {OpenAIRealtimeButtonConsts} from './realtime/openAIRealtimeButtonConsts';
 import {ChatFunctionHandler, OpenAIRealTime} from '../../types/openAI';
+import {OpenAIRealtimeButton} from './realtime/openAIRealtimeButton';
 import {DirectConnection} from '../../types/directConnection';
-import {MICROPHONE_ICON_STRING} from '../../icons/microphone';
 import avatarUrl from '../../../assets/person-avatar.png';
-import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {APIKey} from '../../types/APIKey';
@@ -68,23 +68,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static createMuteButton() {
-    const muteButton = document.createElement('div');
-    muteButton.classList.add('deep-chat-openai-option-button');
-    muteButton.appendChild(OpenAIRealtimeIO.createMicSVGIconElement());
-    return muteButton;
-  }
-
-  private static createMicSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(MICROPHONE_ICON_STRING);
-    svgIconElement.id = 'deep-chat-openai-realtime-mute';
-    return svgIconElement;
+    const realtimeButton = new OpenAIRealtimeButton(OpenAIRealtimeButtonConsts.MICROPHONE_ICON);
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-option-button');
+    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    return realtimeButton.elementRef;
   }
 
   private static createToggleButton() {
-    const muteButton = document.createElement('div');
-    muteButton.classList.add('deep-chat-openai-option-button');
-    muteButton.appendChild(OpenAIRealtimeIO.createMicSVGIconElement());
-    return muteButton;
+    const realtimeButton = new OpenAIRealtimeButton(OpenAIRealtimeButtonConsts.MICROPHONE_ICON);
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-option-button');
+    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    return realtimeButton.elementRef;
   }
 
   private static createAvatarContainer(avatarEl: HTMLImageElement, config?: OpenAIRealTime['avatar']) {
