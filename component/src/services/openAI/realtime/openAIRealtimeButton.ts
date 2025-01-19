@@ -1,24 +1,18 @@
 import {CustomButtonInnerElements} from '../../../views/chat/input/buttons/customButtonInnerElements';
 import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../types/buttonInternal';
+import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
-import {ButtonStyles} from '../../../types/button';
 
-type DefStyles = {
-  default?: ButtonStyles;
-  active?: ButtonStyles;
-  unsupported?: ButtonStyles;
-};
-
-type Styles = DefinedButtonStateStyles<DefStyles>;
+type Styles = DefinedButtonStateStyles<OpenAIRealtimeButtonT>;
 
 export class OpenAIRealtimeButton extends InputButton<Styles> {
   private static readonly EMPTY_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"></svg>';
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   isActive = false;
 
-  constructor(styles?: DefStyles) {
+  constructor(styles?: OpenAIRealtimeButtonT) {
     super(OpenAIRealtimeButton.createMicrophoneElement(), undefined, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
     this.changeToDefault();

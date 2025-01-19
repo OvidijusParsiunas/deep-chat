@@ -1,4 +1,4 @@
-import {CustomStyle} from './styles';
+import {OpenAIRealTime} from './openAIRealtime';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
@@ -35,18 +35,6 @@ export interface OpenAIImagesDalle3 {
   response_format?: 'url' | 'b64_json';
   user?: string;
 }
-
-// https://platform.openai.com/docs/api-reference/realtime
-export type OpenAIRealTime = {
-  avatar?: {
-    src?: string;
-    maxScale?: number;
-    styles?: {
-      avatar?: CustomStyle;
-      container?: CustomStyle;
-    };
-  };
-};
 
 export type FunctionsDetails = {name: string; arguments: string}[];
 
