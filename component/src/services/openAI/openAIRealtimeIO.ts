@@ -1,6 +1,8 @@
 import {ChatFunctionHandler, OpenAIRealTime} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
+import {MICROPHONE_ICON_STRING} from '../../icons/microphone';
 import avatarUrl from '../../../assets/person-avatar.png';
+import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {APIKey} from '../../types/APIKey';
@@ -27,9 +29,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (config.avatar) this._avatarConfig = config.avatar;
     }
     this.rawBody.model ??= 'gpt-4o';
-    this._avatarEl = OpenAIRealtimeIO.createAvatarEl(this._avatarConfig);
-    this._containerEl = OpenAIRealtimeIO.createContainerEl(this._avatarEl, this._avatarConfig);
-    if (this._avatarConfig?.maxScale && this._avatarConfig.maxScale > 1) {
+    this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
+    this._containerEl = OpenAIRealtimeIO.createContainer(this._avatarEl, this._avatarConfig);
+    if (this._avatarConfig?.maxScale && this._avatarConfig.maxScale >= 1) {
       this._avatarMaxScale = this._avatarConfig.maxScale;
     }
     this.init();
@@ -40,14 +42,52 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     parentElement.appendChild(this._containerEl);
   }
 
-  private static createContainerEl(avatarEl: HTMLImageElement, config?: OpenAIRealTime['avatar']) {
+  private static createContainer(avatarEl: HTMLImageElement, config?: OpenAIRealTime['avatar']) {
     const container = document.createElement('div');
     container.id = 'deep-chat-openai-realtime-container';
-    container.appendChild(this.createAvatarContainerEl(avatarEl, config));
+    container.appendChild(this.createAvatarContainer(avatarEl, config));
+    container.appendChild(this.createOptionsContainer());
     return container;
   }
 
-  private static createAvatarContainerEl(avatarEl: HTMLImageElement, config?: OpenAIRealTime['avatar']) {
+  private static createOptionsContainer() {
+    const optionsContainer = document.createElement('div');
+    optionsContainer.id = 'deep-chat-openai-options-container';
+    const muteOption = OpenAIRealtimeIO.createOptionContainer(OpenAIRealtimeIO.createMuteButton());
+    const muteOption2 = OpenAIRealtimeIO.createOptionContainer(OpenAIRealtimeIO.createToggleButton());
+    optionsContainer.appendChild(muteOption);
+    optionsContainer.appendChild(muteOption2);
+    return optionsContainer;
+  }
+
+  private static createOptionContainer(optionChildElement: HTMLElement) {
+    const optionContainer = document.createElement('div');
+    optionContainer.classList.add('deep-chat-openai-option-container');
+    optionContainer.appendChild(optionChildElement);
+    return optionContainer;
+  }
+
+  private static createMuteButton() {
+    const muteButton = document.createElement('div');
+    muteButton.classList.add('deep-chat-openai-option-button');
+    muteButton.appendChild(OpenAIRealtimeIO.createMicSVGIconElement());
+    return muteButton;
+  }
+
+  private static createMicSVGIconElement() {
+    const svgIconElement = SVGIconUtils.createSVGElement(MICROPHONE_ICON_STRING);
+    svgIconElement.id = 'deep-chat-openai-realtime-mute';
+    return svgIconElement;
+  }
+
+  private static createToggleButton() {
+    const muteButton = document.createElement('div');
+    muteButton.classList.add('deep-chat-openai-option-button');
+    muteButton.appendChild(OpenAIRealtimeIO.createMicSVGIconElement());
+    return muteButton;
+  }
+
+  private static createAvatarContainer(avatarEl: HTMLImageElement, config?: OpenAIRealTime['avatar']) {
     const avatarContainer = document.createElement('div');
     avatarContainer.id = 'deep-chat-openai-realtime-avatar-container';
     Object.assign(avatarContainer.style, config?.styles?.container);
@@ -55,7 +95,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return avatarContainer;
   }
 
-  private static createAvatarEl(config?: OpenAIRealTime['avatar']) {
+  private static createAvatar(config?: OpenAIRealTime['avatar']) {
     const avatar = document.createElement('img');
     avatar.id = 'deep-chat-openai-realtime-avatar';
     Object.assign(avatar.style, config?.styles?.avatar);
@@ -148,8 +188,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       const maxLoudness = frequencyData.length * 255; // Maximum possible loudness
       const normalizedLoudness = (totalLoudness / maxLoudness) * 100; // Scale to 100p
 
-      // const hasAudio = frequencyData.some((value) => value > 0);
-      // if (hasAudio) console.log('Non-zero frequency data detected');
+      const hasAudio = frequencyData.some((value) => value > 0);
+      if (hasAudio) console.log('Non-zero frequency data detected');
 
       // Update the avatar scale
       const minScale = 1;

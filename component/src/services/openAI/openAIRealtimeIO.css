@@ -4,7 +4,7 @@
 }
 
 #deep-chat-openai-realtime-avatar-container {
-  height: 70%;
+  height: 60%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -13,5 +13,46 @@
 
 #deep-chat-openai-realtime-avatar {
   border-radius: 50%;
-  height: 120px;
+  height: 110px;
+  border: 1px solid rgb(215, 215, 215);
+  padding: 8px;
+  user-select: none;
+  margin-top: 20px;
+}
+
+#deep-chat-openai-options-container {
+  height: 40%;
+  display: flex;
+}
+
+.deep-chat-openai-option-container {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deep-chat-openai-option-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgb(227, 227, 227);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.deep-chat-openai-option-button:hover {
+  background-color: rgb(212, 212, 212);
+}
+
+.deep-chat-openai-option-button:active {
+  background-color: rgb(197, 197, 197);
+}
+
+#deep-chat-openai-realtime-mute {
+  height: 30px;
+  width: 30px;
 }
