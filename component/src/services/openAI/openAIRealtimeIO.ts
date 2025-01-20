@@ -17,9 +17,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   asyncCallInProgress = false; // used when streaming tools
   private readonly _avatarConfig: OpenAIRealTime['avatar'];
-  private readonly _avatarMaxScale: number = 2.5;
-  private readonly _microphoneConfig: OpenAIRealtimeButtonT;
-  private readonly _toggleConfig: OpenAIRealtimeButtonT;
+  private readonly _buttonsConfig: OpenAIRealTime['buttons'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
 
@@ -31,34 +29,33 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof config === 'object') {
       this._avatarConfig = config.avatar;
     }
-    this._microphoneConfig = OpenAIRealtimeIO.buildMicrophoneConfig(config);
-    this._toggleConfig = OpenAIRealtimeIO.buildToggleConfig(config);
     this.rawBody.model ??= 'gpt-4o';
+    this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
+    this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
     this._containerEl = this.createContainer();
-    if (this._avatarConfig?.maxScale && this._avatarConfig.maxScale >= 1) {
-      this._avatarMaxScale = this._avatarConfig.maxScale;
-    }
     this.init();
   }
 
-  private static buildMicrophoneConfig(config?: OpenAIRealTime) {
-    const newConfig =
-      typeof config === 'object' && config.buttons?.microphone ? structuredClone(config.buttons?.microphone) : {};
-    if (!newConfig.default?.text?.content) {
-      newConfig.default ??= {};
-      newConfig.default.svg ??= {};
-      newConfig.default.svg.content = MICROPHONE_ICON_STRING;
-    }
+  private static buildAvatarConfig(config?: OpenAIRealTime) {
+    const newConfig = typeof config === 'object' && config.avatar ? structuredClone(config.avatar) : {};
+    newConfig.maxScale = newConfig.maxScale && newConfig.maxScale >= 1 ? newConfig.maxScale : 2.5;
     return newConfig;
   }
 
-  private static buildToggleConfig(config?: OpenAIRealTime) {
-    const newConfig = typeof config === 'object' && config.buttons?.toggle ? structuredClone(config.buttons?.toggle) : {};
-    if (!newConfig.default?.text?.content) {
-      newConfig.default ??= {};
-      newConfig.default.svg ??= {};
-      newConfig.default.svg.content = MICROPHONE_ICON_STRING;
+  private static buildButtonsConfig(config?: OpenAIRealTime) {
+    const newConfig = typeof config === 'object' && config.buttons ? structuredClone(config.buttons) : {};
+    if (!newConfig.microphone?.default?.text?.content) {
+      newConfig.microphone ??= {};
+      newConfig.microphone.default ??= {};
+      newConfig.microphone.default.svg ??= {};
+      newConfig.microphone.default.svg.content = MICROPHONE_ICON_STRING;
+    }
+    if (!newConfig.toggle?.default?.text?.content) {
+      newConfig.toggle ??= {};
+      newConfig.toggle.default ??= {};
+      newConfig.toggle.default.svg ??= {};
+      newConfig.toggle.default.svg.content = MICROPHONE_ICON_STRING;
     }
     return newConfig;
   }
@@ -67,44 +64,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const container = document.createElement('div');
     container.id = 'deep-chat-openai-realtime-container';
     container.appendChild(this.createAvatarContainer());
-    container.appendChild(this.createOptionsContainer());
+    container.appendChild(this.createButtonsContainer());
     return container;
   }
 
   public setUpView(oldContainerElement: HTMLElement, parentElement: HTMLElement) {
     oldContainerElement.style.display = 'none';
     parentElement.appendChild(this._containerEl);
-  }
-
-  private createOptionsContainer() {
-    const optionsContainer = document.createElement('div');
-    optionsContainer.id = 'deep-chat-openai-options-container';
-    const muteOption = OpenAIRealtimeIO.createOptionContainer(this.createMuteButton());
-    const muteOption2 = OpenAIRealtimeIO.createOptionContainer(this.createToggleButton());
-    optionsContainer.appendChild(muteOption);
-    optionsContainer.appendChild(muteOption2);
-    return optionsContainer;
-  }
-
-  private static createOptionContainer(optionChildElement: HTMLElement) {
-    const optionContainer = document.createElement('div');
-    optionContainer.classList.add('deep-chat-openai-option-container');
-    optionContainer.appendChild(optionChildElement);
-    return optionContainer;
-  }
-
-  private createMuteButton() {
-    const realtimeButton = new OpenAIRealtimeButton(this._microphoneConfig);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-option-button');
-    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
-    return realtimeButton.elementRef;
-  }
-
-  private createToggleButton() {
-    const realtimeButton = new OpenAIRealtimeButton(this._toggleConfig);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-option-button');
-    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
-    return realtimeButton.elementRef;
   }
 
   private createAvatarContainer() {
@@ -121,6 +87,38 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     Object.assign(avatar.style, config?.styles?.avatar);
     avatar.src = config?.src || avatarUrl;
     return avatar;
+  }
+
+  private createButtonsContainer() {
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.id = 'deep-chat-openai-buttons-container';
+    Object.assign(buttonsContainer.style, this._buttonsConfig?.container);
+    const muteButton = OpenAIRealtimeIO.createButtonContainer(this.createMuteButton());
+    const toggleButton = OpenAIRealtimeIO.createButtonContainer(this.createToggleButton());
+    buttonsContainer.appendChild(muteButton);
+    buttonsContainer.appendChild(toggleButton);
+    return buttonsContainer;
+  }
+
+  private static createButtonContainer(optionChildElement: HTMLElement) {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('deep-chat-openai-button-container');
+    buttonContainer.appendChild(optionChildElement);
+    return buttonContainer;
+  }
+
+  private createMuteButton() {
+    const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-button');
+    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    return realtimeButton.elementRef;
+  }
+
+  private createToggleButton() {
+    const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-button');
+    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    return realtimeButton.elementRef;
   }
 
   private async init() {
@@ -213,7 +211,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
       // Update the avatar scale
       const minScale = 1;
-      const scale = minScale + (normalizedLoudness / 100) * (this._avatarMaxScale - minScale);
+      const scale = minScale + (normalizedLoudness / 100) * ((this._avatarConfig?.maxScale as number) - minScale);
       this._avatarEl.style.transform = `scale(${scale})`;
 
       requestAnimationFrame(updateFrequencyData);

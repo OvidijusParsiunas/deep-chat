@@ -20,12 +20,12 @@
   margin-top: 20px;
 }
 
-#deep-chat-openai-options-container {
+#deep-chat-openai-buttons-container {
   height: 40%;
   display: flex;
 }
 
-.deep-chat-openai-option-container {
+.deep-chat-openai-button-container {
   height: 100%;
   width: 50%;
   display: flex;
@@ -33,7 +33,7 @@
   align-items: center;
 }
 
-.deep-chat-openai-option-button {
+.deep-chat-openai-button {
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -44,11 +44,11 @@
   cursor: pointer;
 }
 
-.deep-chat-openai-option-button:hover {
+.deep-chat-openai-button:hover {
   background-color: rgb(212, 212, 212);
 }
 
-.deep-chat-openai-option-button:active {
+.deep-chat-openai-button:active {
   background-color: rgb(197, 197, 197);
 }
 

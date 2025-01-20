@@ -13,11 +13,12 @@ export type OpenAIRealTime = {
     src?: string;
     maxScale?: number;
     styles?: {
-      avatar?: CustomStyle;
       container?: CustomStyle;
+      avatar?: CustomStyle;
     };
   };
   buttons?: {
+    container?: CustomStyle;
     microphone?: OpenAIRealtimeButton;
     toggle?: OpenAIRealtimeButton;
   };
