@@ -20,6 +20,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
+  private _mediaStream: MediaStream | null = null;
+  private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
+  private static readonly BUTTON_ACTIVE = 'deep-chat-openai-realtime-button-active';
+  private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -91,7 +95,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private createButtonsContainer() {
     const buttonsContainer = document.createElement('div');
-    buttonsContainer.id = 'deep-chat-openai-buttons-container';
+    buttonsContainer.id = 'deep-chat-openai-realtime-buttons-container';
     Object.assign(buttonsContainer.style, this._buttonsConfig?.container);
     const muteButton = OpenAIRealtimeIO.createButtonContainer(this.createMuteButton());
     const toggleButton = OpenAIRealtimeIO.createButtonContainer(this.createToggleButton());
@@ -102,22 +106,35 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private static createButtonContainer(optionChildElement: HTMLElement) {
     const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('deep-chat-openai-button-container');
+    buttonContainer.classList.add('deep-chat-openai-realtime-button-container');
     buttonContainer.appendChild(optionChildElement);
     return buttonContainer;
   }
 
   private createMuteButton() {
     const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-button');
-    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
+    realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
+    realtimeButton.elementRef.onclick = () => {
+      if (realtimeButton.isActive) {
+        this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = true));
+        realtimeButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
+        realtimeButton.elementRef.classList.remove(OpenAIRealtimeIO.MUTE_ACTIVE);
+        realtimeButton.changeToDefault();
+      } else {
+        this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = false));
+        realtimeButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.BUTTON_ACTIVE);
+        realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.MUTE_ACTIVE);
+        realtimeButton.changeToActive();
+      }
+    };
     return realtimeButton.elementRef;
   }
 
   private createToggleButton() {
     const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-button');
-    realtimeButton.elementRef.children[0].id = 'deep-chat-openai-realtime-mute';
+    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
+    realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
     return realtimeButton.elementRef;
   }
 
@@ -157,10 +174,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     };
 
     // Add local audio track for microphone input in the browser
-    const ms = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
-    pc.addTrack(ms.getTracks()[0]);
+    await navigator.mediaDevices
+      .getUserMedia({
+        audio: true,
+      })
+      .then((stream) => {
+        this._mediaStream = stream;
+        pc.addTrack(this._mediaStream.getTracks()[0]);
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error);
+      });
 
     // Set up data channel for sending and receiving events
     const dc = pc.createDataChannel('oai-events');

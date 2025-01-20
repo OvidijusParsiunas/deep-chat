@@ -20,12 +20,12 @@
   margin-top: 20px;
 }
 
-#deep-chat-openai-buttons-container {
+#deep-chat-openai-realtime-buttons-container {
   height: 40%;
   display: flex;
 }
 
-.deep-chat-openai-button-container {
+.deep-chat-openai-realtime-button-container {
   height: 100%;
   width: 50%;
   display: flex;
@@ -33,26 +33,46 @@
   align-items: center;
 }
 
-.deep-chat-openai-button {
+.deep-chat-openai-realtime-button {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background-color: rgb(227, 227, 227);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
-.deep-chat-openai-button:hover {
+.deep-chat-openai-realtime-button-default {
+  background-color: rgb(227, 227, 227);
+}
+
+.deep-chat-openai-realtime-button-default:hover {
   background-color: rgb(212, 212, 212);
 }
 
-.deep-chat-openai-button:active {
+.deep-chat-openai-realtime-button-default:active {
   background-color: rgb(197, 197, 197);
 }
 
-#deep-chat-openai-realtime-mute {
+.deep-chat-openai-realtime-button-active {
+  background-color: rgb(255 231 231);
+}
+
+.deep-chat-openai-realtime-button-active:hover {
+  background-color: rgb(255, 222, 222);
+}
+
+.deep-chat-openai-realtime-button-active:active {
+  background-color: rgb(255, 210, 210);
+}
+
+.deep-chat-openai-realtime-mute > * {
   height: 30px;
   width: 30px;
+}
+
+.deep-chat-openai-realtime-mute-active > * {
+  filter: brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(1360%) hue-rotate(325deg) brightness(95%)
+    contrast(92%);
 }

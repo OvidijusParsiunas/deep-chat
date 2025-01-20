@@ -3,6 +3,7 @@ import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../typ
 import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
+import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
 
 type Styles = DefinedButtonStateStyles<OpenAIRealtimeButtonT>;
@@ -19,11 +20,13 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   }
 
   private createInnerElements(customStyles?: Styles) {
-    const baseButton = SVGIconUtils.createSVGElement(OpenAIRealtimeButton.EMPTY_SVG);
+    const baseInnerElement = SVGIconUtils.createSVGElement(
+      customStyles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG
+    );
     return {
-      default: this.createInnerElement(baseButton, 'default', customStyles),
-      active: this.createInnerElement(baseButton, 'active', customStyles),
-      unsupported: this.createInnerElement(baseButton, 'unsupported', customStyles),
+      default: this.createInnerElement(baseInnerElement, 'default', customStyles),
+      active: this.createInnerElement(baseInnerElement, 'active', customStyles),
+      unsupported: this.createInnerElement(baseInnerElement, 'unsupported', customStyles),
     };
   }
 
@@ -42,14 +45,13 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   public changeToActive() {
     this.elementRef.replaceChildren(this._innerElements.active);
-    this.toggleIconFilter('active');
     this.reapplyStateStyle('active', ['default']);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
-    this.toggleIconFilter('default');
+    if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
     this.reapplyStateStyle('default', ['active']);
     this.isActive = false;
   }
@@ -57,21 +59,5 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   public changeToUnsupported() {
     this.elementRef.replaceChildren(this._innerElements.unsupported);
     this.reapplyStateStyle('unsupported', ['active']);
-  }
-
-  private toggleIconFilter(mode: 'default' | 'active') {
-    const iconElement = this.elementRef.children[0];
-    if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
-      switch (mode) {
-        case 'default':
-          // iconElement.classList.remove('active-microphone-icon', 'command-microphone-icon');
-          // iconElement.classList.add('default-microphone-icon');
-          break;
-        case 'active':
-          // iconElement.classList.remove('default-microphone-icon', 'command-microphone-icon');
-          // iconElement.classList.add('active-microphone-icon');
-          break;
-      }
-    }
   }
 }
