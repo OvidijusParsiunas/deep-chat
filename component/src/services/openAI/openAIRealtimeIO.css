@@ -55,15 +55,19 @@
   background-color: rgb(197, 197, 197);
 }
 
-.deep-chat-openai-realtime-button-active {
+.deep-chat-openai-realtime-button-loading {
+  opacity: 0.86;
+}
+
+.deep-chat-openai-realtime-mute-active {
   background-color: rgb(255 231 231);
 }
 
-.deep-chat-openai-realtime-button-active:hover {
+.deep-chat-openai-realtime-mute-active:hover {
   background-color: rgb(255, 222, 222);
 }
 
-.deep-chat-openai-realtime-button-active:active {
+.deep-chat-openai-realtime-mute-active:active {
   background-color: rgb(255, 210, 210);
 }
 
@@ -75,4 +79,12 @@
 .deep-chat-openai-realtime-mute-active > * {
   filter: brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(1360%) hue-rotate(325deg) brightness(95%)
     contrast(92%);
+}
+
+.deep-chat-openai-realtime-toggle > * {
+  height: 32px;
+  width: 32px;
+  padding-left: 3px;
+  filter: brightness(0) saturate(100%) invert(22%) sepia(0%) saturate(4537%) hue-rotate(208deg) brightness(105%)
+    contrast(91%);
 }

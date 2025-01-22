@@ -22,4 +22,5 @@ export type OpenAIRealTime = {
     microphone?: OpenAIRealtimeButton;
     toggle?: OpenAIRealtimeButton;
   };
+  autoStart?: boolean;
 };

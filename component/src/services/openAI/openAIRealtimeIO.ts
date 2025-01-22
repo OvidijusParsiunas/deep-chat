@@ -5,6 +5,8 @@ import {MICROPHONE_ICON_STRING} from '../../icons/microphone';
 import avatarUrl from '../../../assets/person-avatar.png';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {PLAY_ICON_STRING} from '../../icons/playIcon';
+import {STOP_ICON_STRING} from '../../icons/stopIcon';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -20,9 +22,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
+  private _pc: RTCPeerConnection | null = null;
   private _mediaStream: MediaStream | null = null;
+  private _isMuted = false;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
-  private static readonly BUTTON_ACTIVE = 'deep-chat-openai-realtime-button-active';
+  private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
 
   constructor(deepChat: DeepChat) {
@@ -38,7 +42,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
     this._containerEl = this.createContainer();
-    this.init();
+    if (typeof config === 'object' && config.autoStart) this.init();
   }
 
   private static buildAvatarConfig(config?: OpenAIRealTime) {
@@ -59,7 +63,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       newConfig.toggle ??= {};
       newConfig.toggle.default ??= {};
       newConfig.toggle.default.svg ??= {};
-      newConfig.toggle.default.svg.content = MICROPHONE_ICON_STRING;
+      newConfig.toggle.default.svg.content = PLAY_ICON_STRING;
+      newConfig.toggle.active ??= {};
+      newConfig.toggle.active.svg ??= {};
+      newConfig.toggle.active.svg.content = STOP_ICON_STRING;
     }
     return newConfig;
   }
@@ -112,30 +119,56 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private createMuteButton() {
-    const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
-    realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
-    realtimeButton.elementRef.onclick = () => {
-      if (realtimeButton.isActive) {
-        this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = true));
-        realtimeButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
-        realtimeButton.elementRef.classList.remove(OpenAIRealtimeIO.MUTE_ACTIVE);
-        realtimeButton.changeToDefault();
+    const muteButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
+    muteButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
+    muteButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
+    muteButton.elementRef.onclick = () => {
+      if (muteButton.isActive) {
+        this.toggleMute(true);
+        muteButton.elementRef.classList.replace(OpenAIRealtimeIO.MUTE_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
+        muteButton.changeToDefault();
+        this._isMuted = false;
       } else {
-        this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = false));
-        realtimeButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.BUTTON_ACTIVE);
-        realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.MUTE_ACTIVE);
-        realtimeButton.changeToActive();
+        this.toggleMute(false);
+        muteButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.MUTE_ACTIVE);
+        muteButton.changeToActive();
+        this._isMuted = true;
       }
     };
-    return realtimeButton.elementRef;
+    return muteButton.elementRef;
+  }
+
+  private toggleMute(isMute: boolean) {
+    this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = isMute));
   }
 
   private createToggleButton() {
-    const realtimeButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
-    realtimeButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
-    realtimeButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
-    return realtimeButton.elementRef;
+    const toggleButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
+    toggleButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
+    toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
+    toggleButton.elementRef.onclick = async () => {
+      if (toggleButton.isActive) {
+        toggleButton.changeToDefault();
+        this._mediaStream?.getTracks().forEach((track) => track.stop());
+        this._mediaStream = null;
+        if (this._pc) {
+          this._pc.close();
+          this._pc = null;
+        }
+      } else {
+        toggleButton.changeToActive();
+        toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+        try {
+          await this.init();
+          console.log('Conversation started');
+        } catch (error) {
+          console.error('Failed to start conversation:', error);
+          toggleButton.changeToDefault(); // Revert toggle state on failure
+        }
+        toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      }
+    };
+    return toggleButton.elementRef;
   }
 
   private async init() {
@@ -145,7 +178,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const EPHEMERAL_KEY = 'key';
 
     // Create a peer connection
-    const pc = new RTCPeerConnection();
+    this._pc = new RTCPeerConnection();
 
     // Set up to play remote audio from the model
     const audioEl = document.createElement('audio');
@@ -157,7 +190,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
     // Monitor when tracks are added to the peer connection
-    pc.ontrack = async (e) => {
+    this._pc.ontrack = async (e) => {
       if (e.streams[0]) {
         audioEl.srcObject = e.streams[0];
 
@@ -180,14 +213,15 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       })
       .then((stream) => {
         this._mediaStream = stream;
-        pc.addTrack(this._mediaStream.getTracks()[0]);
+        this._pc?.addTrack(this._mediaStream.getTracks()[0]);
+        if (this._isMuted) this.toggleMute(false);
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error);
       });
 
     // Set up data channel for sending and receiving events
-    const dc = pc.createDataChannel('oai-events');
+    const dc = this._pc.createDataChannel('oai-events');
     dc.addEventListener('message', (e) => {
       // Realtime server events appear here!
       const response = JSON.parse(e.data);
@@ -198,8 +232,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     });
 
     // Start the session using the Session Description Protocol (SDP)
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
+    const offer = await this._pc.createOffer();
+    await this._pc.setLocalDescription(offer);
 
     const baseUrl = 'https://api.openai.com/v1/realtime';
     const model = 'gpt-4o-realtime-preview-2024-12-17';
@@ -216,7 +250,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       type: 'answer',
       sdp: await sdpResponse.text(),
     };
-    await pc.setRemoteDescription(answer);
+    await this._pc.setRemoteDescription(answer);
   }
 
   // there is a bug where sometimes upon refreshing the browser too many times the frequencyData is all 0s
