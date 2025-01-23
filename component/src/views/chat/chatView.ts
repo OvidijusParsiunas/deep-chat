@@ -1,4 +1,4 @@
-import {OpenAIRealtimeIO} from '../../services/openAI/openAIRealtimeIO';
+import {OpenAIRealtimeIO} from '../../services/openAI/realtime/openAIRealtimeIO';
 import {ElementUtils} from '../../utils/element/elementUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {ServiceIO} from '../../services/serviceIO';

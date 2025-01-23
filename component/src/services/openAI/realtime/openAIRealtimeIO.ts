@@ -1,15 +1,15 @@
-import {OpenAIRealTime, OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../types/openAIRealtime';
-import {OpenAIRealtimeButton} from './realtime/openAIRealtimeButton';
-import {DirectConnection} from '../../types/directConnection';
-import {MICROPHONE_ICON_STRING} from '../../icons/microphone';
-import avatarUrl from '../../../assets/person-avatar.png';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
-import {PLAY_ICON_STRING} from '../../icons/playIcon';
-import {STOP_ICON_STRING} from '../../icons/stopIcon';
-import {OpenAIUtils} from './utils/openAIUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import {OpenAIRealTime, OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
+import {DirectConnection} from '../../../types/directConnection';
+import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
+import avatarUrl from '../../../../assets/person-avatar.png';
+import {OpenAIRealtimeButton} from './openAIRealtimeButton';
+import {DirectServiceIO} from '../../utils/directServiceIO';
+import {ChatFunctionHandler} from '../../../types/openAI';
+import {PLAY_ICON_STRING} from '../../../icons/playIcon';
+import {STOP_ICON_STRING} from '../../../icons/stopIcon';
+import {OpenAIUtils} from '../utils/openAIUtils';
+import {APIKey} from '../../../types/APIKey';
+import {DeepChat} from '../../../deepChat';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
