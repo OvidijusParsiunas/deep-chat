@@ -26,7 +26,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
     return {
       default: this.createInnerElement(baseInnerElement, 'default', customStyles),
       active: this.createInnerElement(baseInnerElement, 'active', customStyles),
-      unsupported: this.createInnerElement(baseInnerElement, 'unsupported', customStyles),
+      unavailable: this.createInnerElement(baseInnerElement, 'unavailable', customStyles),
     };
   }
 
@@ -56,8 +56,8 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
     this.isActive = false;
   }
 
-  public changeToUnsupported() {
-    this.elementRef.replaceChildren(this._innerElements.unsupported);
-    this.reapplyStateStyle('unsupported', ['active']);
+  public changeToUnavailable() {
+    this.elementRef.replaceChildren(this._innerElements.unavailable);
+    this.reapplyStateStyle('unavailable', ['active']);
   }
 }

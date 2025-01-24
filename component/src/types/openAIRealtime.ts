@@ -4,7 +4,7 @@ import {CustomStyle} from './styles';
 export type OpenAIRealtimeButton = {
   default?: ButtonStyles;
   active?: ButtonStyles;
-  unsupported?: ButtonStyles;
+  unavailable?: ButtonStyles;
 };
 
 // https://platform.openai.com/docs/api-reference/realtime
@@ -23,4 +23,6 @@ export type OpenAIRealTime = {
     toggle?: OpenAIRealtimeButton;
   };
   autoStart?: boolean;
+  ephemeralKey?: string;
+  retrieveEphemeralKey?: () => string | Promise<string>;
 };

@@ -88,3 +88,8 @@
   filter: brightness(0) saturate(100%) invert(22%) sepia(0%) saturate(4537%) hue-rotate(208deg) brightness(105%)
     contrast(91%);
 }
+
+.deep-chat-openai-realtime-button-unavailable {
+  opacity: 0.45;
+  pointer-events: none;
+}
