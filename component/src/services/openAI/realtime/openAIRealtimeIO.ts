@@ -43,8 +43,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof config === 'object') {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
+      Object.assign(this.rawBody, config.config);
     }
-    this.rawBody.model ??= 'gpt-4o';
+    this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
     this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
@@ -58,7 +59,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (openAI?.key) return openAI.key;
     const openAIRealtime = openAI?.realtime;
     if (typeof openAIRealtime === 'object' && (openAIRealtime.ephemeralKey || openAIRealtime.retrieveEphemeralKey)) {
-      return 'stub-key';
+      return 'placeholder';
     }
     return undefined;
   }
@@ -86,7 +87,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           }
           this._ephemeralKey = await retrievingEphemeralKey;
         } else if (key) {
-          this._retrievingEphemeralKey = OpenAIRealtimeIO.getEphemeralKey(key);
+          this._retrievingEphemeralKey = this.getEphemeralKey(key);
           this._ephemeralKey = await this._retrievingEphemeralKey;
         }
       }
@@ -96,19 +97,16 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       }
     } else {
       if (key) {
-        this._retrievingEphemeralKey = OpenAIRealtimeIO.getEphemeralKey(key);
+        this._retrievingEphemeralKey = this.getEphemeralKey(key);
         this._ephemeralKey = await this._retrievingEphemeralKey;
       }
     }
   }
 
-  private static async getEphemeralKey(key: string) {
+  private async getEphemeralKey(key: string) {
     const result = await fetch('https://api.openai.com/v1/realtime/sessions', {
       method: 'POST',
-      body: JSON.stringify({
-        model: 'gpt-4o-realtime-preview-2024-12-17',
-        voice: 'verse',
-      }),
+      body: JSON.stringify(this.rawBody),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${key}`,
@@ -306,10 +304,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     // Start the session using the Session Description Protocol (SDP)
     const offer = await this._pc.createOffer();
     await this._pc.setLocalDescription(offer);
-
-    const baseUrl = 'https://api.openai.com/v1/realtime';
-    const model = 'gpt-4o-realtime-preview-2024-12-17';
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+    const sdpResponse = await fetch(`https://api.openai.com/v1/realtime?model=${this.rawBody.model}`, {
       method: 'POST',
       body: offer.sdp,
       headers: {
