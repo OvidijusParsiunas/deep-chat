@@ -56,7 +56,7 @@
 }
 
 .deep-chat-openai-realtime-button-loading {
-  opacity: 0.86;
+  opacity: 0.7;
 }
 
 .deep-chat-openai-realtime-mute-active {
@@ -92,4 +92,13 @@
 .deep-chat-openai-realtime-button-unavailable {
   opacity: 0.45;
   pointer-events: none;
+}
+
+#deep-chat-openai-realtime-error {
+  color: red;
+  position: absolute;
+  top: calc(50% + 40px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 17px;
 }

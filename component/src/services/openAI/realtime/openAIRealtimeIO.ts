@@ -11,6 +11,12 @@ import {OpenAIUtils} from '../utils/openAIUtils';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 
+// tools
+// loading text
+// aria attributes
+
+// https://platform.openai.com/docs/guides/realtime-webrtc
+// https://platform.openai.com/docs/api-reference/realtime-server-events/conversation
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -20,16 +26,19 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   asyncCallInProgress = false; // used when streaming tools
   private readonly _avatarConfig: OpenAIRealTime['avatar'];
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
+  private readonly _errorConfig: OpenAIRealTime['error'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
   private readonly _deepChat: DeepChat;
   private _muteButton: OpenAIRealtimeButton | null = null;
   private _toggleButton: OpenAIRealtimeButton | null = null;
+  private _errorElement: HTMLDivElement | null = null;
   private _pc: RTCPeerConnection | null = null;
   private _mediaStream: MediaStream | null = null;
   private _isMuted = false;
   private _ephemeralKey?: string;
   private _retrievingEphemeralKey?: Promise<string>;
+  private _togglePendingKeyObj?: {} = {}; // this is used to prevent starting multiple connections if user spams button
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
@@ -43,6 +52,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof config === 'object') {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
+      this._errorConfig = config.error;
       Object.assign(this.rawBody, config.config);
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
@@ -57,7 +67,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const openAI = (deepChat.directConnection as DirectConnection).openAI;
     if (openAI?.key) return openAI.key;
     const openAIRealtime = openAI?.realtime;
-    if (typeof openAIRealtime === 'object' && (openAIRealtime.ephemeralKey || openAIRealtime.retrieveEphemeralKey)) {
+    if (typeof openAIRealtime === 'object' && (openAIRealtime.ephemeralKey || openAIRealtime.fetchEphemeralKey)) {
       return 'placeholder';
     }
     return undefined;
@@ -73,31 +83,50 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private async setup() {
     const openAI = this._deepChat.directConnection?.openAI;
     if (!openAI) return;
-    const retrieveEphemeralKey = typeof openAI?.realtime === 'object' ? openAI?.realtime.retrieveEphemeralKey : undefined;
     const config = openAI?.realtime as OpenAIRealTime;
+    if (!config.autoFetchEphemeralKey) return;
+    const fetchEphemeralKey = typeof openAI?.realtime === 'object' ? openAI?.realtime.fetchEphemeralKey : undefined;
+    const key = this.key || (openAI as APIKey).key;
+    if ((fetchEphemeralKey || key) && config.autoStart) this.changeToUnavailable();
+    this.fetchEphemeralKey(config.autoStart);
+  }
+
+  private async fetchEphemeralKey(start?: boolean) {
+    const openAI = this._deepChat.directConnection?.openAI;
+    const fetchEphemeralKey = typeof openAI?.realtime === 'object' ? openAI?.realtime.fetchEphemeralKey : undefined;
+    const config = openAI?.realtime;
     const key = this.key || (openAI as APIKey).key;
     if (typeof config === 'object') {
       if (!this._ephemeralKey) {
-        if ((retrieveEphemeralKey || key) && config.autoStart) this.changeToUnavailable();
-        if (retrieveEphemeralKey) {
-          const retrievingEphemeralKey = retrieveEphemeralKey();
-          if ((retrievingEphemeralKey as Promise<string>).then) {
-            this._retrievingEphemeralKey = retrievingEphemeralKey as Promise<string>;
+        try {
+          if (fetchEphemeralKey) {
+            const retrievingEphemeralKey = fetchEphemeralKey();
+            if ((retrievingEphemeralKey as Promise<string>).then) {
+              this._retrievingEphemeralKey = retrievingEphemeralKey as Promise<string>;
+            }
+            this._ephemeralKey = await retrievingEphemeralKey;
+          } else if (key) {
+            this._retrievingEphemeralKey = this.getEphemeralKey(key);
+            this._ephemeralKey = await this._retrievingEphemeralKey;
           }
-          this._ephemeralKey = await retrievingEphemeralKey;
-        } else if (key) {
-          this._retrievingEphemeralKey = this.getEphemeralKey(key);
-          this._ephemeralKey = await this._retrievingEphemeralKey;
+        } catch (e) {
+          this.displayFailedToRetrieveEphemeralKey(e);
         }
       }
       if (this._ephemeralKey) {
-        this.changeToAvailable();
-        if (config.autoStart) this.init(this._ephemeralKey);
+        if (start) {
+          this.init(this._ephemeralKey);
+        } else {
+          this.changeToAvailable();
+        }
       }
-    } else {
-      if (key) {
+    } else if (key) {
+      try {
         this._retrievingEphemeralKey = this.getEphemeralKey(key);
         this._ephemeralKey = await this._retrievingEphemeralKey;
+        if (start) this.init(this._ephemeralKey);
+      } catch (e) {
+        this.displayFailedToRetrieveEphemeralKey(e);
       }
     }
   }
@@ -146,6 +175,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     container.id = 'deep-chat-openai-realtime-container';
     container.appendChild(this.createAvatarContainer());
     container.appendChild(this.createButtonsContainer());
+    container.appendChild(this.createError());
     return container;
   }
 
@@ -227,16 +257,26 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       } else {
         try {
           if (this._ephemeralKey) {
+            this._toggleButton?.changeToActive();
+            this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
             await this.init(this._ephemeralKey);
           } else if (this._retrievingEphemeralKey) {
+            const togglePendingKeyObj = {};
+            this._togglePendingKeyObj = togglePendingKeyObj;
             this._toggleButton?.changeToActive();
             this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
             const ephemeralKey = await this._retrievingEphemeralKey;
-            await this.init(ephemeralKey);
+            if (this._toggleButton?.isActive && this._togglePendingKeyObj === togglePendingKeyObj) {
+              await this.init(ephemeralKey);
+            }
+          } else {
+            this._toggleButton?.changeToActive();
+            this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+            await this.fetchEphemeralKey(true);
           }
         } catch (error) {
           console.error('Failed to start conversation:', error);
-          toggleButton.changeToUnavailable();
+          this.displayError('Error');
         }
         toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
       }
@@ -245,8 +285,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private async init(ephemeralKey: string) {
-    this._toggleButton?.changeToActive();
-    this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
     // Create a peer connection
     this._pc = new RTCPeerConnection();
 
@@ -273,6 +311,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         this.monitorFrequencies(analyser, frequencyData);
       } else {
         console.error('No streams found in the ontrack event.');
+        this.displayError('Error');
       }
     };
 
@@ -288,6 +327,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error);
+        this.displayError('Error');
       });
 
     // Set up data channel for sending and receiving events
@@ -301,23 +341,29 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     // });
 
     // Start the session using the Session Description Protocol (SDP)
-    const offer = await this._pc.createOffer();
-    await this._pc.setLocalDescription(offer);
-    const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
-      method: 'POST',
-      body: offer.sdp,
-      headers: {
-        Authorization: `Bearer ${ephemeralKey}`,
-        'Content-Type': 'application/sdp',
-      },
-    });
-
-    this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
-    const answer: RTCSessionDescriptionInit = {
-      type: 'answer',
-      sdp: await sdpResponse.text(),
-    };
-    if (this._pc) await this._pc.setRemoteDescription(answer);
+    try {
+      const offer = await this._pc.createOffer();
+      await this._pc.setLocalDescription(offer);
+      const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
+        method: 'POST',
+        body: offer.sdp,
+        headers: {
+          Authorization: `Bearer ${ephemeralKey}`,
+          'Content-Type': 'application/sdp',
+        },
+      });
+      this.removeInactive();
+      this._toggleButton?.changeToActive();
+      this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      const answer: RTCSessionDescriptionInit = {
+        type: 'answer',
+        sdp: await sdpResponse.text(),
+      };
+      if (this._pc) await this._pc.setRemoteDescription(answer);
+    } catch (e) {
+      console.error(e);
+      this.displayError('Error');
+    }
   }
 
   // there is a bug where sometimes upon refreshing the browser too many times the frequencyData is all 0s
@@ -325,14 +371,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private monitorFrequencies(analyser: AnalyserNode, frequencyData: Uint8Array) {
     const updateFrequencyData = () => {
       analyser.getByteFrequencyData(frequencyData);
-
       // Calculate loudness (sum of all frequency amplitudes)
       const totalLoudness = frequencyData.reduce((sum, value) => sum + value, 0);
       const maxLoudness = frequencyData.length * 255; // Maximum possible loudness
       const normalizedLoudness = (totalLoudness / maxLoudness) * 100; // Scale to 100p
 
-      // const hasAudio = frequencyData.some((value) => value > 0);
-      // if (hasAudio) console.log('Non-zero frequency data detected');
+      const hasAudio = frequencyData.some((value) => value > 0);
+      if (hasAudio) console.log('Non-zero frequency data detected');
 
       // Update the avatar scale
       const minScale = 1;
@@ -360,9 +405,36 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._toggleButton) OpenAIRealtimeIO.changeButtonToAvailable(this._toggleButton);
   }
 
+  private removeInactive() {
+    if (this._muteButton) this._muteButton.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
+    if (this._toggleButton) this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
+  }
+
   private static changeButtonToAvailable(button: OpenAIRealtimeButton) {
     button.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
     button.changeToDefault();
+  }
+
+  private createError() {
+    const error = document.createElement('div');
+    error.id = 'deep-chat-openai-realtime-error';
+    Object.assign(error.style, this._errorConfig?.style);
+    this._errorElement = error;
+    return error;
+  }
+
+  private displayFailedToRetrieveEphemeralKey(e: unknown) {
+    console.error('Failed to retrieve ephemeral key');
+    console.error(e);
+    this.displayError('Error');
+  }
+
+  private displayError(text: string) {
+    if (this._errorElement) {
+      this._errorElement.style.display = 'block';
+      this._errorElement.textContent = this._errorConfig?.text || text;
+      this.changeToUnavailable();
+    }
   }
 
   override isCustomView() {

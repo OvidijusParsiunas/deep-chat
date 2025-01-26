@@ -15,6 +15,11 @@ export type OpenAIRealtimeConfig = {
   };
 };
 
+export type OpenAIRealtimeError = {
+  text?: string;
+  style?: CustomStyle;
+};
+
 export type OpenAIRealtimeButton = {
   default?: ButtonStyles;
   active?: ButtonStyles;
@@ -42,6 +47,8 @@ export type OpenAIRealTime = {
   buttons?: OpenAIRealtimeButtons;
   autoStart?: boolean;
   ephemeralKey?: string;
-  retrieveEphemeralKey?: () => string | Promise<string>;
+  fetchEphemeralKey?: () => string | Promise<string>;
+  autoFetchEphemeralKey?: boolean;
   config?: OpenAIRealtimeConfig;
+  error?: OpenAIRealtimeError;
 };
