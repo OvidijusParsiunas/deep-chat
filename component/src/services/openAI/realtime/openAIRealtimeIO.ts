@@ -51,7 +51,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
     this._containerEl = this.createContainer();
     this._deepChat = deepChat;
-    this.setup();
   }
 
   private static getKey(deepChat: DeepChat) {
@@ -304,7 +303,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     // Start the session using the Session Description Protocol (SDP)
     const offer = await this._pc.createOffer();
     await this._pc.setLocalDescription(offer);
-    const sdpResponse = await fetch(`https://api.openai.com/v1/realtime?model=${this.rawBody.model}`, {
+    const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
       method: 'POST',
       body: offer.sdp,
       headers: {

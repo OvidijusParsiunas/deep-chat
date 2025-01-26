@@ -45,19 +45,23 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   public changeToActive() {
     this.elementRef.replaceChildren(this._innerElements.active);
-    this.reapplyStateStyle('active', ['default']);
+    this.reapplyStateStyle('active', ['unavailable', 'default']);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
     if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
-    this.reapplyStateStyle('default', ['active']);
+    if (this._customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.unavailable);
+    this.reapplyStateStyle('default', ['active', 'unavailable']);
     this.isActive = false;
   }
 
   public changeToUnavailable() {
     this.elementRef.replaceChildren(this._innerElements.unavailable);
-    this.reapplyStateStyle('unavailable', ['active']);
+    if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
+    if (this._customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.default);
+    this.reapplyStateStyle('unavailable', ['default', 'active']);
+    this.isActive = false;
   }
 }
