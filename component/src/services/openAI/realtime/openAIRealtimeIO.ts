@@ -11,12 +11,6 @@ import {OpenAIUtils} from '../utils/openAIUtils';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 
-// tools
-// loading text
-// aria attributes
-
-// https://platform.openai.com/docs/guides/realtime-webrtc
-// https://platform.openai.com/docs/api-reference/realtime-server-events/conversation
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -38,7 +32,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private _isMuted = false;
   private _ephemeralKey?: string;
   private _retrievingEphemeralKey?: Promise<string>;
-  private _togglePendingKeyObj?: {} = {}; // this is used to prevent starting multiple connections if user spams button
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
@@ -84,10 +77,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const openAI = this._deepChat.directConnection?.openAI;
     if (!openAI) return;
     const config = openAI?.realtime as OpenAIRealTime;
-    if (!config.autoFetchEphemeralKey) return;
-    const fetchEphemeralKey = typeof openAI?.realtime === 'object' ? openAI?.realtime.fetchEphemeralKey : undefined;
+    if (typeof config !== 'object' || (!config.autoStart && !config.autoFetchEphemeralKey)) return;
     const key = this.key || (openAI as APIKey).key;
-    if ((fetchEphemeralKey || key) && config.autoStart) this.changeToUnavailable();
+    if ((config.fetchEphemeralKey || key) && config.autoStart) this.changeToUnavailable();
     this.fetchEphemeralKey(config.autoStart);
   }
 
@@ -132,6 +124,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private async getEphemeralKey(key: string) {
+    // https://platform.openai.com/docs/api-reference/realtime-sessions/create
     const result = await fetch('https://api.openai.com/v1/realtime/sessions', {
       method: 'POST',
       body: JSON.stringify(this.rawBody),
@@ -261,12 +254,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
             this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
             await this.init(this._ephemeralKey);
           } else if (this._retrievingEphemeralKey) {
-            const togglePendingKeyObj = {};
-            this._togglePendingKeyObj = togglePendingKeyObj;
             this._toggleButton?.changeToActive();
             this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
             const ephemeralKey = await this._retrievingEphemeralKey;
-            if (this._toggleButton?.isActive && this._togglePendingKeyObj === togglePendingKeyObj) {
+            if (this._toggleButton?.isActive) {
               await this.init(ephemeralKey);
             }
           } else {
@@ -285,8 +276,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private async init(ephemeralKey: string) {
-    // Create a peer connection
-    this._pc = new RTCPeerConnection();
+    const peerConnection = new RTCPeerConnection();
+    this._pc = peerConnection;
 
     // Set up to play remote audio from the model
     const audioEl = document.createElement('audio');
@@ -321,9 +312,12 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         audio: true,
       })
       .then((stream) => {
-        this._mediaStream = stream;
-        this._pc?.addTrack(this._mediaStream.getTracks()[0]);
-        if (this._isMuted) this.toggleMute(false);
+        // prevent using stale pc when user spams toggle button
+        if (peerConnection === this._pc) {
+          this._mediaStream = stream;
+          this._pc?.addTrack(this._mediaStream.getTracks()[0]);
+          if (this._isMuted) this.toggleMute(false);
+        }
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error);
@@ -343,7 +337,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     // Start the session using the Session Description Protocol (SDP)
     try {
       const offer = await this._pc.createOffer();
+      if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setLocalDescription(offer);
+      if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
         method: 'POST',
         body: offer.sdp,
@@ -352,14 +348,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           'Content-Type': 'application/sdp',
         },
       });
-      this.removeInactive();
-      this._toggleButton?.changeToActive();
-      this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       const answer: RTCSessionDescriptionInit = {
         type: 'answer',
         sdp: await sdpResponse.text(),
       };
-      if (this._pc) await this._pc.setRemoteDescription(answer);
+      if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
+      await this._pc.setRemoteDescription(answer);
+      if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
+      this.removeInactive();
+      this._toggleButton?.changeToActive();
+      this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
     } catch (e) {
       console.error(e);
       this.displayError('Error');
@@ -376,8 +375,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       const maxLoudness = frequencyData.length * 255; // Maximum possible loudness
       const normalizedLoudness = (totalLoudness / maxLoudness) * 100; // Scale to 100p
 
-      const hasAudio = frequencyData.some((value) => value > 0);
-      if (hasAudio) console.log('Non-zero frequency data detected');
+      // const hasAudio = frequencyData.some((value) => value > 0);
+      // if (hasAudio) console.log('Non-zero frequency data detected');
 
       // Update the avatar scale
       const minScale = 1;
