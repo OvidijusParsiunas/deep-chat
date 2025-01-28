@@ -23,6 +23,7 @@
 #deep-chat-openai-realtime-buttons-container {
   height: 40%;
   display: flex;
+  position: relative;
 }
 
 .deep-chat-openai-realtime-button-container {
@@ -57,6 +58,7 @@
 
 .deep-chat-openai-realtime-button-loading {
   opacity: 0.7;
+  pointer-events: none;
 }
 
 .deep-chat-openai-realtime-mute-active {
@@ -101,4 +103,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 17px;
+}
+
+#deep-chat-openai-realtime-loading {
+  position: absolute;
+  font-size: 15px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

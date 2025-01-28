@@ -15,6 +15,13 @@ export type OpenAIRealtimeConfig = {
   };
 };
 
+export type OpenAIRealtimeLoading = {
+  text?: string;
+  html?: string;
+  display?: boolean;
+  style?: CustomStyle;
+};
+
 export type OpenAIRealtimeError = {
   text?: string;
   style?: CustomStyle;
@@ -51,4 +58,5 @@ export type OpenAIRealTime = {
   autoFetchEphemeralKey?: boolean;
   config?: OpenAIRealtimeConfig;
   error?: OpenAIRealtimeError;
+  loading?: OpenAIRealtimeLoading;
 };

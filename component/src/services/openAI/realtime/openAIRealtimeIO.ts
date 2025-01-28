@@ -21,12 +21,14 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private readonly _avatarConfig: OpenAIRealTime['avatar'];
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
   private readonly _errorConfig: OpenAIRealTime['error'];
+  private readonly _loadingConfig: OpenAIRealTime['loading'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
   private readonly _deepChat: DeepChat;
   private _muteButton: OpenAIRealtimeButton | null = null;
   private _toggleButton: OpenAIRealtimeButton | null = null;
   private _errorElement: HTMLDivElement | null = null;
+  private _loadingElement: HTMLDivElement | null = null;
   private _pc: RTCPeerConnection | null = null;
   private _mediaStream: MediaStream | null = null;
   private _isMuted = false;
@@ -35,7 +37,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
-  private static readonly INACTIVE = 'deep-chat-openai-realtime-button-unavailable';
+  private static readonly UNAVAILABLE = 'deep-chat-openai-realtime-button-unavailable';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -46,6 +48,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
       this._errorConfig = config.error;
+      this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
@@ -198,6 +201,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const toggleButtonEl = OpenAIRealtimeIO.createButtonContainer(this._toggleButton.elementRef);
     buttonsContainer.appendChild(muteButtonEl);
     buttonsContainer.appendChild(toggleButtonEl);
+    buttonsContainer.appendChild(this.createLoading());
     return buttonsContainer;
   }
 
@@ -250,26 +254,23 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       } else {
         try {
           if (this._ephemeralKey) {
-            this._toggleButton?.changeToActive();
-            this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+            this.displayLoading();
             await this.init(this._ephemeralKey);
           } else if (this._retrievingEphemeralKey) {
-            this._toggleButton?.changeToActive();
-            this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+            this.displayLoading();
             const ephemeralKey = await this._retrievingEphemeralKey;
             if (this._toggleButton?.isActive) {
               await this.init(ephemeralKey);
             }
           } else {
-            this._toggleButton?.changeToActive();
-            this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+            this.displayLoading();
             await this.fetchEphemeralKey(true);
           }
         } catch (error) {
           console.error('Failed to start conversation:', error);
           this.displayError('Error');
         }
-        toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+        this.hideLoading();
       }
     };
     return toggleButton;
@@ -356,9 +357,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setRemoteDescription(answer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
-      this.removeInactive();
+      this.removeUnavailable();
       this._toggleButton?.changeToActive();
-      this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      this.hideLoading();
     } catch (e) {
       console.error(e);
       this.displayError('Error');
@@ -395,7 +396,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static changeButtonToUnavailable(button: OpenAIRealtimeButton) {
-    button.elementRef.classList.add(OpenAIRealtimeIO.INACTIVE);
+    button.elementRef.classList.add(OpenAIRealtimeIO.UNAVAILABLE);
     button.changeToUnavailable();
   }
 
@@ -404,13 +405,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._toggleButton) OpenAIRealtimeIO.changeButtonToAvailable(this._toggleButton);
   }
 
-  private removeInactive() {
-    if (this._muteButton) this._muteButton.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
-    if (this._toggleButton) this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
+  private removeUnavailable() {
+    if (this._muteButton) this._muteButton.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
+    if (this._toggleButton) this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
   }
 
   private static changeButtonToAvailable(button: OpenAIRealtimeButton) {
-    button.elementRef.classList.remove(OpenAIRealtimeIO.INACTIVE);
+    button.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
     button.changeToDefault();
   }
 
@@ -433,6 +434,32 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._errorElement.style.display = 'block';
       this._errorElement.textContent = this._errorConfig?.text || text;
       this.changeToUnavailable();
+    }
+  }
+
+  private createLoading() {
+    const loading = document.createElement('div');
+    loading.id = 'deep-chat-openai-realtime-loading';
+    this._loadingElement = loading;
+    if (this._loadingConfig?.html) this._loadingElement.innerHTML = this._loadingConfig.html;
+    Object.assign(loading.style, this._loadingConfig?.style);
+    loading.style.display = 'none';
+    return loading;
+  }
+
+  private displayLoading() {
+    this._toggleButton?.changeToActive();
+    this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+    if ((typeof this._loadingConfig?.display !== 'boolean' || this._loadingConfig.display) && this._loadingElement) {
+      this._loadingElement.style.display = 'block';
+      if (!this._loadingConfig?.html) this._loadingElement.textContent = this._loadingConfig?.text || 'Loading';
+    }
+  }
+
+  private hideLoading() {
+    this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+    if (this._loadingElement) {
+      this._loadingElement.style.display = 'none';
     }
   }
 
