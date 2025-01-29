@@ -1,6 +1,8 @@
 import {ButtonStyles} from './button';
 import {CustomStyle} from './styles';
 
+export type OpenAIRealtimeFunctionHandler = (details: {name: string; arguments: string}) => object | Promise<object>;
+
 export type OpenAIRealtimeConfig = {
   model?: string;
   instructions?: string;
@@ -13,6 +15,14 @@ export type OpenAIRealtimeConfig = {
     prefix_padding_ms?: number;
     silence_duration_ms?: number;
   };
+  tools?: {
+    type: 'function' | 'code_interpreter' | 'file_search';
+    name?: string;
+    description?: string;
+    parameters?: object;
+  }[];
+  tool_choice?: string;
+  function_handler?: OpenAIRealtimeFunctionHandler;
 };
 
 export type OpenAIRealtimeLoading = {

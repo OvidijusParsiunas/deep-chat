@@ -1,22 +1,25 @@
-import {OpenAIRealTime, OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../../types/openAI';
+import {ObjectUtils} from '../../../utils/data/objectUtils';
 import {PLAY_ICON_STRING} from '../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../icons/stopIcon';
 import {OpenAIUtils} from '../utils/openAIUtils';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
+import {
+  OpenAIRealtimeButton as OpenAIRealtimeButtonT,
+  OpenAIRealtimeFunctionHandler,
+  OpenAIRealTime,
+} from '../../../types/openAIRealtime';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
+  // WORK - remove?
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
-  _functionHandler?: ChatFunctionHandler;
   asyncCallInProgress = false; // used when streaming tools
   private readonly _avatarConfig: OpenAIRealTime['avatar'];
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
@@ -34,6 +37,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private _isMuted = false;
   private _ephemeralKey?: string;
   private _retrievingEphemeralKey?: Promise<string>;
+  private readonly _functionHandler?: OpenAIRealtimeFunctionHandler;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
@@ -50,6 +54,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._errorConfig = config.error;
       this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
+      const {function_handler} = (deepChat.directConnection?.openAI?.realtime as OpenAIRealTime).config || {};
+      if (function_handler) this._functionHandler = function_handler;
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
@@ -82,7 +88,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const config = openAI?.realtime as OpenAIRealTime;
     if (typeof config !== 'object' || (!config.autoStart && !config.autoFetchEphemeralKey)) return;
     const key = this.key || (openAI as APIKey).key;
-    if ((config.fetchEphemeralKey || key) && config.autoStart) this.changeToUnavailable();
+    if ((config.fetchEphemeralKey || key) && config.autoStart) {
+      this.changeToUnavailable();
+      this.displayLoading();
+    }
     this.fetchEphemeralKey(config.autoStart);
   }
 
@@ -245,12 +254,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     toggleButton.elementRef.onclick = async () => {
       if (toggleButton.isActive) {
         toggleButton.changeToDefault();
-        this._mediaStream?.getTracks().forEach((track) => track.stop());
-        this._mediaStream = null;
-        if (this._pc) {
-          this._pc.close();
-          this._pc = null;
-        }
+        this.stop();
       } else {
         try {
           if (this._ephemeralKey) {
@@ -269,8 +273,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         } catch (error) {
           console.error('Failed to start conversation:', error);
           this.displayError('Error');
+          this.hideLoading();
         }
-        this.hideLoading();
       }
     };
     return toggleButton;
@@ -326,14 +330,31 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       });
 
     // Set up data channel for sending and receiving events
-    // const dc = this._pc.createDataChannel('oai-events');
-    // dc.addEventListener('message', (e) => {
-    //   // Realtime server events appear here!
-    //   const response = JSON.parse(e.data);
-    //   if (response.type === 'response.audio_transcript.delta') {
-    //     // console.log(response.delta);
-    //   }
-    // });
+    const dc = this._pc.createDataChannel('oai-events');
+    dc.addEventListener('message', async (e) => {
+      // Realtime server events appear here!
+      const response = JSON.parse(e.data);
+      if (response.type === 'session.created') {
+        this.removeUnavailable();
+        this._toggleButton?.changeToActive();
+        this.hideLoading();
+      } else if (response.type === 'response.done') {
+        const message = JSON.parse(e.data);
+        const output = message.response.output?.[0];
+        if (output?.type === 'function_call') {
+          const {name, call_id} = output;
+          try {
+            await this.handleTool(name, output.arguments, call_id, dc);
+          } catch (e) {
+            this.stop();
+            console.error(e);
+            this.displayError('Error');
+          }
+        }
+      } else if (response.type === 'response.audio_transcript.delta') {
+        // console.log(response.delta);
+      }
+    });
 
     // Start the session using the Session Description Protocol (SDP)
     try {
@@ -357,9 +378,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setRemoteDescription(answer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
-      this.removeUnavailable();
-      this._toggleButton?.changeToActive();
-      this.hideLoading();
     } catch (e) {
       console.error(e);
       this.displayError('Error');
@@ -388,6 +406,15 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     };
 
     updateFrequencyData();
+  }
+
+  private stop() {
+    this._mediaStream?.getTracks().forEach((track) => track.stop());
+    this._mediaStream = null;
+    if (this._pc) {
+      this._pc.close();
+      this._pc = null;
+    }
   }
 
   private changeToUnavailable() {
@@ -460,6 +487,35 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
     if (this._loadingElement) {
       this._loadingElement.style.display = 'none';
+    }
+  }
+
+  private async handleTool(name: string, functionArguments: string, call_id: string, dc: RTCDataChannel) {
+    if (!this._functionHandler) {
+      // WORK - change
+      throw Error(
+        'Please define the `function_handler` property inside' +
+          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
+      );
+    }
+    const result = await this._functionHandler({name, arguments: functionArguments});
+    if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
+      throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
+    }
+    if (name === 'generate_horoscope') {
+      const eventMessage = JSON.stringify({
+        type: 'conversation.item.create',
+        item: {
+          type: 'function_call_output',
+          call_id,
+          output: JSON.stringify(result),
+        },
+      });
+      dc.send(eventMessage);
+      const responseCreatePayload = {
+        type: 'response.create',
+      };
+      dc.send(JSON.stringify(responseCreatePayload));
     }
   }
 

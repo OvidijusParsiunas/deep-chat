@@ -37,4 +37,13 @@ export class ObjectUtils {
       ObjectUtils.setPropertyValue(target, nestedKeys, newObject);
     }
   }
+
+  public static isJson(obj: object) {
+    try {
+      JSON.stringify(obj);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
