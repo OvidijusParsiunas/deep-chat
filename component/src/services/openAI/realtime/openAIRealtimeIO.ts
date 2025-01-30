@@ -346,11 +346,15 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           try {
             await this.handleTool(name, output.arguments, call_id, dc);
           } catch (e) {
-            this.stop();
-            console.error(e);
-            this.displayError('Error');
+            this.stopOnError(e as string);
           }
         }
+        // https://platform.openai.com/docs/api-reference/realtime-server-events/error
+      } else if (response.type === 'error') {
+        this.stopOnError(response.error.message);
+        // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
+      } else if (response.type === 'invalid_request_error') {
+        this.stopOnError(response.message);
       } else if (response.type === 'response.audio_transcript.delta') {
         // console.log(response.delta);
       }
@@ -406,6 +410,12 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     };
 
     updateFrequencyData();
+  }
+
+  private stopOnError(error: string) {
+    this.stop();
+    console.error(error);
+    this.displayError('Error');
   }
 
   private stop() {
