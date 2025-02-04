@@ -16,6 +16,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   constructor(styles?: OpenAIRealtimeButtonT) {
     super(OpenAIRealtimeButton.createMicrophoneElement(), undefined, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
+    ButtonAccessibility.addAttributes(this.elementRef);
     this.changeToDefault();
   }
 

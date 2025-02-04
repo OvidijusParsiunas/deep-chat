@@ -1,3 +1,4 @@
+import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
@@ -235,6 +236,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       } else {
         this.toggleMute(false);
         muteButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.MUTE_ACTIVE);
+        ButtonAccessibility.removeAriaAttributes(muteButton.elementRef);
         muteButton.changeToActive();
         this._isMuted = true;
       }
@@ -336,7 +338,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       const response = JSON.parse(e.data);
       if (response.type === 'session.created') {
         this.removeUnavailable();
-        this._toggleButton?.changeToActive();
+        if (this._toggleButton) {
+          ButtonAccessibility.removeAriaAttributes(this._toggleButton.elementRef);
+          this._toggleButton.changeToActive();
+        }
         this.hideLoading();
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
@@ -434,6 +439,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private static changeButtonToUnavailable(button: OpenAIRealtimeButton) {
     button.elementRef.classList.add(OpenAIRealtimeIO.UNAVAILABLE);
+    ButtonAccessibility.removeAriaBusy(button.elementRef);
+    ButtonAccessibility.addAriaDisabled(button.elementRef);
     button.changeToUnavailable();
   }
 
@@ -442,14 +449,19 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._toggleButton) OpenAIRealtimeIO.changeButtonToAvailable(this._toggleButton);
   }
 
-  private removeUnavailable() {
-    if (this._muteButton) this._muteButton.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
-    if (this._toggleButton) this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
+  private static changeButtonToAvailable(button: OpenAIRealtimeButton) {
+    OpenAIRealtimeIO.removeButtonUnavailable(button);
+    button.changeToDefault();
   }
 
-  private static changeButtonToAvailable(button: OpenAIRealtimeButton) {
+  private removeUnavailable() {
+    if (this._muteButton) OpenAIRealtimeIO.removeButtonUnavailable(this._muteButton);
+    if (this._toggleButton) OpenAIRealtimeIO.removeButtonUnavailable(this._toggleButton);
+  }
+
+  private static removeButtonUnavailable(button: OpenAIRealtimeButton) {
+    ButtonAccessibility.removeAriaDisabled(button.elementRef);
     button.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
-    button.changeToDefault();
   }
 
   private createError() {
@@ -485,8 +497,12 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private displayLoading() {
-    this._toggleButton?.changeToActive();
-    this._toggleButton?.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+    if (this._toggleButton) {
+      this._toggleButton.changeToActive();
+      this._toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+      ButtonAccessibility.removeAriaDisabled(this._toggleButton.elementRef);
+      ButtonAccessibility.addAriaBusy(this._toggleButton.elementRef);
+    }
     if ((typeof this._loadingConfig?.display !== 'boolean' || this._loadingConfig.display) && this._loadingElement) {
       this._loadingElement.style.display = 'block';
       if (!this._loadingConfig?.html) this._loadingElement.textContent = this._loadingConfig?.text || 'Loading';
@@ -494,7 +510,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private hideLoading() {
-    this._toggleButton?.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+    if (this._toggleButton) {
+      this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      ButtonAccessibility.removeAriaBusy(this._toggleButton.elementRef);
+    }
     if (this._loadingElement) {
       this._loadingElement.style.display = 'none';
     }
