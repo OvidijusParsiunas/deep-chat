@@ -17,11 +17,8 @@ import {
 } from '../../../types/openAIRealtime';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
-  // WORK - remove?
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  permittedErrorPrefixes = ['Incorrect'];
-  asyncCallInProgress = false; // used when streaming tools
   private readonly _avatarConfig: OpenAIRealTime['avatar'];
   private readonly _buttonsConfig: OpenAIRealTime['buttons'];
   private readonly _errorConfig: OpenAIRealTime['error'];
