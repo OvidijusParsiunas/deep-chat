@@ -14,7 +14,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: OpenAIRealtimeButtonT) {
-    super(OpenAIRealtimeButton.createMicrophoneElement(), undefined, styles);
+    super(OpenAIRealtimeButton.createButtonElement(), undefined, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
     ButtonAccessibility.addAttributes(this.elementRef);
     this.changeToDefault();
@@ -37,9 +37,8 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
     return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
-  private static createMicrophoneElement() {
+  private static createButtonElement() {
     const buttonElement = document.createElement('div');
-    // buttonElement.classList.add('input-button');
     ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }

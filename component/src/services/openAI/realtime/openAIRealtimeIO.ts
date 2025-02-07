@@ -223,7 +223,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const muteButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
     muteButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
     muteButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
-    // OpenAIRealtimeIO.changeButtonToUnavailable(muteButton);
     muteButton.elementRef.onclick = () => {
       if (muteButton.isActive) {
         this.toggleMute(true);
@@ -249,7 +248,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const toggleButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
     toggleButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
     toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
-    // OpenAIRealtimeIO.changeButtonToUnavailable(toggleButton);
     toggleButton.elementRef.onclick = async () => {
       if (toggleButton.isActive) {
         toggleButton.changeToDefault();
@@ -516,12 +514,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     }
   }
 
+  // https://platform.openai.com/docs/guides/realtime-model-capabilities#function-calling
   private async handleTool(name: string, functionArguments: string, call_id: string, dc: RTCDataChannel) {
     if (!this._functionHandler) {
       // WORK - change
       throw Error(
         'Please define the `function_handler` property inside' +
-          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
+          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Realtime) object.'
       );
     }
     const result = await this._functionHandler({name, arguments: functionArguments});

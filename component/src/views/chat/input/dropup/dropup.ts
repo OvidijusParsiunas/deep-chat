@@ -15,7 +15,7 @@ export class Dropup extends InputButton<Styles> {
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
-    super(Dropup.createButtonElement(), undefined, {styles: styles?.button?.styles} || {});
+    super(Dropup.createButtonElement(), undefined, {styles: styles?.button?.styles});
     const innerElements = this.createInnerElements(this._customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
