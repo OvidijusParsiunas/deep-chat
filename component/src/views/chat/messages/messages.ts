@@ -41,7 +41,7 @@ export class Messages extends MessagesBase {
   private readonly _errorMessageOverrides?: ErrorMessageOverrides;
   private readonly _onClearMessages?: () => void;
   private readonly _onError?: (error: string) => void;
-  private readonly _displayLoadingMessage?: boolean;
+  private readonly _isLoadingMessageAllowed?: boolean;
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
   private _introMessage?: IntroMessage | IntroMessage[];
@@ -53,7 +53,10 @@ export class Messages extends MessagesBase {
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._onError = FireEvents.onError.bind(this, deepChat);
-    this._displayLoadingMessage = Messages.getDisplayLoadingMessage(deepChat, serviceIO);
+    this._isLoadingMessageAllowed = Messages.getDefaultDisplayLoadingMessage(deepChat, serviceIO);
+    if (typeof deepChat.displayLoadingBubble === 'object' && !!deepChat.displayLoadingBubble.toggleLoading) {
+      deepChat.displayLoadingBubble.toggleLoading = this.setToggleLoading.bind(this);
+    }
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
       this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
@@ -78,9 +81,21 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private static getDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
-    if (serviceIO.websocket) return false;
-    return deepChat.displayLoadingBubble ?? true;
+  private static getDefaultDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
+    // if displayLoadingBubble is {} then treat it as true.
+    if (serviceIO.websocket) {
+      return !!deepChat.displayLoadingBubble;
+    }
+    return (typeof deepChat.displayLoadingBubble === 'object' || deepChat.displayLoadingBubble) ?? true;
+  }
+
+  private setToggleLoading() {
+    const lastMessageEls = this.messageElementRefs[this.messageElementRefs.length - 1];
+    if (MessagesBase.isLoadingMessage(lastMessageEls)) {
+      this.removeLastMessage();
+    } else {
+      this.addLoadingMessage(true);
+    }
   }
 
   private prepareDemo(demo: Demo, loadHistory?: LoadHistory): void {
@@ -277,8 +292,9 @@ export class Messages extends MessagesBase {
     return messageElements;
   }
 
-  public addLoadingMessage() {
-    if (!this._displayLoadingMessage) return;
+  public addLoadingMessage(override = false) {
+    const lastMessageEls = this.messageElementRefs[this.messageElementRefs.length - 1];
+    if (MessagesBase.isLoadingMessage(lastMessageEls) || (!override && !this._isLoadingMessageAllowed)) return;
     const html = this.messageStyles?.loading?.message?.html;
     const messageElements = html
       ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, false)

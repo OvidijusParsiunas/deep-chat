@@ -22,6 +22,7 @@ import {ErrorMessages, OnError} from './types/error';
 import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
+import {DisplayLoadingBubble} from './types/loading';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
@@ -100,8 +101,8 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   names?: Names;
 
-  @Property('boolean')
-  displayLoadingBubble?: boolean;
+  @Property('object')
+  displayLoadingBubble?: DisplayLoadingBubble;
 
   @Property('object')
   errorMessages?: ErrorMessages;
