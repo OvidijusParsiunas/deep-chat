@@ -54,8 +54,8 @@ export class Messages extends MessagesBase {
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._onError = FireEvents.onError.bind(this, deepChat);
     this._isLoadingMessageAllowed = Messages.getDefaultDisplayLoadingMessage(deepChat, serviceIO);
-    if (typeof deepChat.displayLoadingBubble === 'object' && !!deepChat.displayLoadingBubble.toggleLoading) {
-      deepChat.displayLoadingBubble.toggleLoading = this.setToggleLoading.bind(this);
+    if (typeof deepChat.displayLoadingBubble === 'object' && !!deepChat.displayLoadingBubble.toggle) {
+      deepChat.displayLoadingBubble.toggle = this.setLoadingToggle.bind(this);
     }
     this._permittedErrorPrefixes = permittedErrorPrefixes;
     if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
@@ -89,7 +89,7 @@ export class Messages extends MessagesBase {
     return (typeof deepChat.displayLoadingBubble === 'object' || deepChat.displayLoadingBubble) ?? true;
   }
 
-  private setToggleLoading() {
+  private setLoadingToggle() {
     const lastMessageEls = this.messageElementRefs[this.messageElementRefs.length - 1];
     if (MessagesBase.isLoadingMessage(lastMessageEls)) {
       this.removeLastMessage();
