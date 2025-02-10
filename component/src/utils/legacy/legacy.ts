@@ -134,7 +134,7 @@ export class Legacy {
     if (typeof demo === 'boolean') return demo;
     if ((demo as unknown as {displayLoadingBubble?: boolean}).displayLoadingBubble) {
       console.error('The demo displayLoadingBubble property is deprecated since version 2.1.0.');
-      console.error('Please use displayLoading instead: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
+      console.error('Please use displayLoading instead: https://deepchat.dev/docs/demo#demo');
       demo.displayLoading = {message: true};
     }
     return demo;
