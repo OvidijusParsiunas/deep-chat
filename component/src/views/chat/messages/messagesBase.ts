@@ -152,8 +152,7 @@ export class MessagesBase {
     LoadingHistory.changeFullViewToSmall(this);
     if (MessagesBase.isTemporaryElement(lastMessageElements)) {
       this.revealRoleElementsIfTempRemoved(lastMessageElements, role); // readding role elements to previous message
-      lastMessageElements.outerContainer.remove();
-      this.messageElementRefs.pop();
+      this.removeLastMessage();
     }
     return this.createMessageElements(text, role, isTop);
   }
@@ -224,6 +223,7 @@ export class MessagesBase {
     }
   }
 
+  // WORK - add a customProps to allow devs to add custom properties
   public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
     const {text, files, html, _sessionId, role} = content;
