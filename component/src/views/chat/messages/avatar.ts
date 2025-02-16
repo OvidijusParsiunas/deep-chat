@@ -6,6 +6,12 @@ import {MessageUtils} from './utils/messageUtils';
 export class Avatar {
   private static readonly CONTAINER_CLASS = 'avatar-container';
 
+  private static errorFallback(fallbackLogo: string, e: Event | string) {
+    const target = (e as Event).target as HTMLImageElement;
+    target.onerror = null; // Prevent infinite loop if fallback also fails
+    target.src = fallbackLogo;
+  }
+
   public static hide(innerContainer: HTMLElement) {
     (innerContainer.getElementsByClassName(Avatar.CONTAINER_CLASS)[0] as HTMLElement).style.visibility ||= 'hidden';
   }
@@ -34,8 +40,10 @@ export class Avatar {
     const avatar = document.createElement('img');
     if (role === MessageUtils.USER_ROLE) {
       avatar.src = avatars?.user?.src || avatars?.default?.src || avatarUrl;
+      avatar.onerror = Avatar.errorFallback.bind(this, avatarUrl);
     } else {
       avatar.src = avatars?.[role]?.src || avatars?.ai?.src || avatars?.default?.src || aiLogoUrl;
+      avatar.onerror = Avatar.errorFallback.bind(this, aiLogoUrl);
     }
     avatar.classList.add('avatar');
     avatar.alt = `${role} avatar`;
