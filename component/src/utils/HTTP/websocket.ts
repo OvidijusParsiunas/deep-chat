@@ -15,10 +15,8 @@ export type RoleToStream = {[role: string]: MessageStream};
 
 export class Websocket {
   public static setup(io: ServiceIO) {
-    if (io.connectSettings.url !== Demo.URL) {
-      io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
-      io.websocket = 'pending'; // main reason why not connecting here is because messages is not available yet
-    }
+    io.permittedErrorPrefixes = ['Connection error', 'Error in server message'];
+    io.websocket = 'pending'; // main reason why not connecting here is because messages is not available yet
   }
 
   private static isElementPresentInDOM(deepChat: DeepChat) {
@@ -95,6 +93,7 @@ export class Websocket {
   }
 
   public static async sendWebsocket(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
+    if (io.connectSettings?.url === Demo.URL) return Demo.request(io, messages);
     const ws = io.websocket;
     if (!ws || ws === 'pending') return;
     const requestDetails = {body, headers: io.connectSettings?.headers};
@@ -102,9 +101,6 @@ export class Websocket {
     if (error) return messages.addNewErrorMessage('service', error);
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
-    if (io.connectSettings?.url === Demo.URL) {
-      return Demo.request(io, messages);
-    }
     if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
