@@ -91,8 +91,8 @@ export class Input {
       fileAttachments: FileAttachments, dropupStyles?: DropupStyles) {
     ElementUtils.addElements(panel, textInput.elementRef);
     const buttonContainers = ButtonContainers.create();
-    const positions = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
-    InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, positions);
+    const pToBs = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
+    InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, pToBs);
     ButtonContainers.add(panel, buttonContainers);
   }
 }

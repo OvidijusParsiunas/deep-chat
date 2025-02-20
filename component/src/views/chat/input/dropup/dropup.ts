@@ -1,6 +1,6 @@
+import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {CustomButtonInnerElements} from '../buttons/customButtonInnerElements';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
-import {Positions} from '../buttons/styleAdjustments/inputButtonPositions';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
@@ -70,11 +70,13 @@ export class Dropup extends InputButton<Styles> {
     });
   }
 
-  static getPosition(positions: Positions, dropupStyles?: DropupStyles) {
+  static getPosition(pToBs: PositionToButtons, dropupStyles?: DropupStyles) {
     if (dropupStyles?.button?.position) {
       return dropupStyles?.button?.position;
     }
-    if (positions['outside-left'].length > 0 && positions['outside-right'].length === 0) return 'outside-right';
+    if (pToBs['outside-left'].length > 0 && pToBs['outside-right'].length === 0) {
+      return 'outside-right';
+    }
     return 'outside-left';
   }
 }

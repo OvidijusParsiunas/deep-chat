@@ -1,5 +1,5 @@
 import {ButtonContainersT} from '../../buttonContainers/buttonContainers';
-import {Positions} from './inputButtonPositions';
+import {PositionToButtons} from './inputButtonPositions';
 
 export class InputButtonStyleAdjustments {
   private static readonly INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS = 'text-input-container-left-adjustment';
@@ -7,20 +7,20 @@ export class InputButtonStyleAdjustments {
   private static readonly INPUT_OUTSIDE_LEFT_SMALL_ADJUSTMENT_CLASS = 'text-input-container-left-small-adjustment';
   private static readonly INPUT_OUTSIDE_RIGHT_SMALL_ADJUSTMENT_CLASS = 'text-input-container-right-small-adjustment';
 
-  private static adjustInputPadding(textInputEl: HTMLElement, positions: Positions) {
-    if (positions['inside-left'].length > 0) {
+  private static adjustInputPadding(textInputEl: HTMLElement, pToBs: PositionToButtons) {
+    if (pToBs['inside-left'].length > 0) {
       textInputEl.classList.add('text-input-inner-left-adjustment');
     }
-    if (positions['inside-right'].length > 0) {
+    if (pToBs['inside-right'].length > 0) {
       textInputEl.classList.add('text-input-inner-right-adjustment');
     }
   }
 
-  private static adjustForOutsideButton(containers: ButtonContainersT, fileAtt: HTMLElement, positions: Positions) {
-    if (positions['outside-right'].length === 0 && positions['outside-left'].length > 0) {
+  private static adjustForOutsideButton(containers: ButtonContainersT, fileAtt: HTMLElement, pToBs: PositionToButtons) {
+    if (pToBs['outside-right'].length === 0 && pToBs['outside-left'].length > 0) {
       containers[0].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_SMALL_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_SMALL_ADJUSTMENT_CLASS);
-    } else if (positions['outside-left'].length === 0 && positions['outside-right'].length > 0) {
+    } else if (pToBs['outside-left'].length === 0 && pToBs['outside-right'].length > 0) {
       containers[3].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_SMALL_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_SMALL_ADJUSTMENT_CLASS);
     }
@@ -28,25 +28,25 @@ export class InputButtonStyleAdjustments {
 
   // when submit is the only button
   // when submit button is outside by itself - we increase the height for a better look
-  private static adjustOutsideSubmit(containers: ButtonContainersT, fileAtt: HTMLElement, positions: Positions) {
-    if (positions['inside-left'].length > 0 || positions['inside-right'].length > 0) return;
-    if (positions['outside-right'].length === 0 && positions['outside-left'].length > 0) {
+  private static adjustOutsideSubmit(containers: ButtonContainersT, fileAtt: HTMLElement, pToBs: PositionToButtons) {
+    if (pToBs['inside-left'].length > 0 || pToBs['inside-right'].length > 0) return;
+    if (pToBs['outside-right'].length === 0 && pToBs['outside-left'].length > 0) {
       containers[0].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS);
-      return positions['outside-left'].map((element) => element.button.elementRef.classList.add('submit-button-enlarged'));
-    } else if (positions['outside-left'].length === 0 && positions['outside-right'].length > 0) {
+      return pToBs['outside-left'].map((element) => element.button.elementRef.classList.add('submit-button-enlarged'));
+    } else if (pToBs['outside-left'].length === 0 && pToBs['outside-right'].length > 0) {
       containers[3].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS);
-      return positions['outside-right'].map((element) =>
-        element.button.elementRef.classList.add('submit-button-enlarged')
-      );
+      return pToBs['outside-right'].map((element) => element.button.elementRef.classList.add('submit-button-enlarged'));
     }
     return undefined;
   }
 
-  public static set(textInputEl: HTMLElement, containers: ButtonContainersT, fileAtt: HTMLElement, positions: Positions) {
-    const adjustedForSubmit = !!InputButtonStyleAdjustments.adjustOutsideSubmit(containers, fileAtt, positions);
-    if (!adjustedForSubmit) InputButtonStyleAdjustments.adjustForOutsideButton(containers, fileAtt, positions);
-    InputButtonStyleAdjustments.adjustInputPadding(textInputEl, positions);
+  // prettier-ignore
+  public static set(textInputEl: HTMLElement, containers: ButtonContainersT, fileAtt: HTMLElement,
+      pToBs: PositionToButtons) {
+    const adjustedForSubmit = !!InputButtonStyleAdjustments.adjustOutsideSubmit(containers, fileAtt, pToBs);
+    if (!adjustedForSubmit) InputButtonStyleAdjustments.adjustForOutsideButton(containers, fileAtt, pToBs);
+    InputButtonStyleAdjustments.adjustInputPadding(textInputEl, pToBs);
   }
 }
