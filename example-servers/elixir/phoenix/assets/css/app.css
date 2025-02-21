@@ -1,0 +1,63 @@
+/* Main layout styles */
+main {
+  padding: 5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  main {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.main-container {
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Home page styles */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 65ch;
+}
+
+.chat-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.clear-button {
+  background-color: rgb(24, 24, 27);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.clear-button:hover {
+  background-color: rgb(63, 63, 70);
+}
+
+.clear-button-icon {
+  width: 1rem;
+  height: 1rem;
+  color: white;
+}
+
+.chat-wrapper {
+  display: flex;
+  width: 100%;
+}
