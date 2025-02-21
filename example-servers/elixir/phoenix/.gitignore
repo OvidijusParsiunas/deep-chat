@@ -23,7 +23,7 @@ erl_crash.dump
 /tmp/
 
 # Ignore package tarball (built via "mix hex.build").
-deep_chat_phoenix_lw-*.tar
+deep_chat_phoenixlv_ex-*.tar
 
 # Ignore assets that are produced by build tools.
 /priv/static/assets/

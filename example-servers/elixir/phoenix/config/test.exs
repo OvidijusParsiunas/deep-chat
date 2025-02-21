@@ -1,30 +1,11 @@
 import Config
 
-# Configure your database
-#
-# The MIX_TEST_PARTITION environment variable can be used
-# to provide built-in test partitioning in CI environment.
-# Run `mix help test` for more information.
-config :deep_chat_phoenix_lw, DeepChatPhoenixLw.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "deep_chat_phoenix_lw_test#{System.get_env("MIX_TEST_PARTITION")}",
-  pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: System.schedulers_online() * 2
-
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :deep_chat_phoenix_lw, DeepChatPhoenixLwWeb.Endpoint,
+config :deep_chat_phoenixlv_ex, DeepChatPhoenixlvExWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "Ha0yrZpUzFNYMp2JRtWlcLlmjjR9j1goIuFzki41Ghj3VAuM8oFYkdCT5KZZG+jl",
+  secret_key_base: "hOG4XBcMcMlI5uj+i/BBnQmPOzJW15aSRFqnippwvk+Fh60eeD/LiYfJOp9m4yke",
   server: false
-
-# In test we don't send emails
-config :deep_chat_phoenix_lw, DeepChatPhoenixLw.Mailer, adapter: Swoosh.Adapters.Test
-
-# Disable swoosh api client as it is only required for production adapters
-config :swoosh, :api_client, false
 
 # Print only warnings and errors during test
 config :logger, level: :warning

@@ -1,32 +1,22 @@
 import Config
 
-# Configure your database
-config :deep_chat_phoenix_lw, DeepChatPhoenixLw.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "deep_chat_phoenix_lw_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
-
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-config :deep_chat_phoenix_lw, DeepChatPhoenixLwWeb.Endpoint,
+config :deep_chat_phoenixlv_ex, DeepChatPhoenixlvExWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "YdORx3p1ZNfYdlUpstB035YWim/izLuMRjR6EdRVy0mVLC1mEFPEFdrkFFvkyl47",
+  secret_key_base: "bBAE9W4h2S68D/I+pNydcdkg54nv1x/I44NtJVIlpyO2413k88YAirLE8D33KzLq",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:deep_chat_phoenix_lw, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:deep_chat_phoenix_lw, ~w(--watch)]}
+    esbuild:
+      {Esbuild, :install_and_run, [:deep_chat_phoenixlv_ex, ~w(--sourcemap=inline --watch)]}
   ]
 
 # ## SSL Support
@@ -53,17 +43,16 @@ config :deep_chat_phoenix_lw, DeepChatPhoenixLwWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :deep_chat_phoenix_lw, DeepChatPhoenixLwWeb.Endpoint,
+config :deep_chat_phoenixlv_ex, DeepChatPhoenixlvExWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/deep_chat_phoenix_lw_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/deep_chat_phoenixlv_ex_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :deep_chat_phoenix_lw, dev_routes: true
+config :deep_chat_phoenixlv_ex, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -80,6 +69,3 @@ config :phoenix_live_view,
   debug_heex_annotations: true,
   # Enable helpful, but potentially expensive runtime checks
   enable_expensive_runtime_checks: true
-
-# Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false
