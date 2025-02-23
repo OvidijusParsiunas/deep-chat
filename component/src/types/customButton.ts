@@ -15,8 +15,8 @@ export type CustomButtonStyles = {
 export type CustomButton = {
   styles?: CustomButtonStyles;
   position?: ButtonPosition;
-  startingState?: keyof CustomButtonStyles;
   dropupText?: string;
+  initialState?: keyof CustomButtonStyles;
   onClick?: (lastState: keyof CustomButtonStyles) => keyof CustomButtonStyles | undefined;
-  changeState?: CustomButtonChangeState;
+  setState?: CustomButtonChangeState;
 };

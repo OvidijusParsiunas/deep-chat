@@ -97,7 +97,6 @@ export class SubmitButton extends InputButton<Styles> {
   private static createButtonContainerElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
-    ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }
 

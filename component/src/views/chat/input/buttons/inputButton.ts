@@ -1,5 +1,6 @@
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {StatefulStyles} from '../../../../types/styles';
+import {ButtonAccessibility} from './buttonAccessility';
 import {ButtonStyles} from '../../../../types/button';
 import {ButtonCSS} from './buttonCSS';
 
@@ -15,6 +16,7 @@ export class InputButton<T extends {[key: string]: ButtonStyles} = {}> {
   readonly dropupText?: string;
 
   constructor(buttonElement: HTMLElement, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
+    ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
     this._customStyles = customStyles;
     this.position = position;

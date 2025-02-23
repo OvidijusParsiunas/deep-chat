@@ -6,7 +6,6 @@ import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {ButtonAccessibility} from '../buttonAccessility';
 import {CameraFiles} from '../../../../../types/camera';
 import {CustomStyle} from '../../../../../types/styles';
 import {InputButton} from '../inputButton';
@@ -38,7 +37,6 @@ export class CameraButton extends InputButton<Styles> {
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
-    ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }
 

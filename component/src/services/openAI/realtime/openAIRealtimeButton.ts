@@ -1,7 +1,6 @@
 import {CustomButtonInnerElements} from '../../../views/chat/input/buttons/customButtonInnerElements';
 import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../types/buttonInternal';
 import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
-import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
 import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
@@ -16,7 +15,6 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   constructor(styles?: OpenAIRealtimeButtonT) {
     super(OpenAIRealtimeButton.createButtonElement(), undefined, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
-    ButtonAccessibility.addAttributes(this.elementRef);
     this.changeToDefault();
   }
 
@@ -39,7 +37,6 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
-    ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }
 

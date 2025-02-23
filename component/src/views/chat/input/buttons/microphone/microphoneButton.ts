@@ -4,7 +4,6 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonStyles} from '../../../../../types/button';
-import {ButtonAccessibility} from '../buttonAccessility';
 import {InputButton} from '../inputButton';
 
 // commandMode is used for speech to text
@@ -44,7 +43,6 @@ export class MicrophoneButton extends InputButton<Styles> {
     const buttonElement = document.createElement('div');
     buttonElement.id = 'microphone-button';
     buttonElement.classList.add('input-button');
-    ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }
 

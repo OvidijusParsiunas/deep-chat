@@ -53,3 +53,25 @@ export class RemarkableConfig {
     return remarkable;
   }
 }
+
+// The following are examples of how to use other MarkDown to HTML converters
+
+// https://github.com/rehypejs/rehype-sanitize?tab=readme-ov-file#use
+// import {unified} from 'unified';
+// import rehypeSanitize from 'rehype-sanitize';
+// import rehypeStringify from 'rehype-stringify';
+// import remarkParse from 'remark-parse';
+// import remarkRehype from 'remark-rehype';
+// import markdownit from 'markdown-it';
+
+// const result = await unified()
+//   .use(remarkParse)
+//   .use(remarkRehype)
+//   .use(rehypeSanitize)
+//   .use(rehypeStringify)
+//   .process('# Hello, Neptune!');
+// }
+
+// https://github.com/markdown-it/markdown-it?tab=readme-ov-file#usage-examples
+// const md = markdownit();
+// md.renderInline('__markdown-it__ rulezz!');

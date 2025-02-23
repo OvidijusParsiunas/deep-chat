@@ -5,7 +5,6 @@ import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
-import {ButtonAccessibility} from '../buttonAccessility';
 import {Modal} from '../../fileAttachments/modal/modal';
 import {InputButton} from '../inputButton';
 
@@ -62,7 +61,6 @@ export class UploadFileButton extends InputButton<Styles> {
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button', 'upload-file-button');
-    ButtonAccessibility.addAttributes(buttonElement);
     return buttonElement;
   }
 
