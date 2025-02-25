@@ -1,8 +1,8 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
-import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/microphone';
+import {ButtonInnerElements} from '../buttonInnerElements';
 import {ButtonStyles} from '../../../../../types/button';
 import {InputButton} from '../inputButton';
 
@@ -36,7 +36,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   // prettier-ignore
   private createInnerElement(baseButton: SVGGraphicsElement,
       state: keyof MicrophoneButton['_innerElements'], customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
+    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createMicrophoneElement() {

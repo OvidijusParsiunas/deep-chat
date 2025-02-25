@@ -3,10 +3,6 @@ import {ButtonStyles} from './button';
 
 export type ButtonInnerElement = HTMLElement | SVGGraphicsElement;
 
-export type ButtonInnerElements<T> = {
-  [P in keyof T]?: ButtonInnerElement;
-};
-
 export type ButtonStateStyles<T> = {
   [P in keyof T]: ButtonStyles;
 };

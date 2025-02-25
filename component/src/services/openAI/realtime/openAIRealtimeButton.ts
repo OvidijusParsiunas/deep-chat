@@ -1,6 +1,6 @@
-import {CustomButtonInnerElements} from '../../../views/chat/input/buttons/customButtonInnerElements';
 import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../types/buttonInternal';
 import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
+import {ButtonInnerElements} from '../../../views/chat/input/buttons/buttonInnerElements';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
 import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
@@ -13,7 +13,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: OpenAIRealtimeButtonT) {
-    super(OpenAIRealtimeButton.createButtonElement(), undefined, styles);
+    super(document.createElement('div'), undefined, styles);
     this._innerElements = this.createInnerElements(this._customStyles);
     this.changeToDefault();
   }
@@ -32,12 +32,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   // prettier-ignore
   private createInnerElement(baseButton: SVGGraphicsElement,
       state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
-  }
-
-  private static createButtonElement() {
-    const buttonElement = document.createElement('div');
-    return buttonElement;
+    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   public changeToActive() {

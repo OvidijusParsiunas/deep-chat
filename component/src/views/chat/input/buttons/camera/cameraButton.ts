@@ -1,11 +1,11 @@
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {ButtonInnerElements} from '../buttonInnerElements';
 import {CameraFiles} from '../../../../../types/camera';
 import {CustomStyle} from '../../../../../types/styles';
 import {InputButton} from '../inputButton';
@@ -29,7 +29,7 @@ export class CameraButton extends InputButton<Styles> {
   // prettier-ignore
   private createInnerElements(customStyles?: Styles, isDropup = false) {
     return {
-      styles: CustomButtonInnerElements.createInnerElement(
+      styles: ButtonInnerElements.createInnerElement(
         this.elementRef, CameraButton.createSVGIconElement(), 'styles', customStyles, isDropup),
     };
   }

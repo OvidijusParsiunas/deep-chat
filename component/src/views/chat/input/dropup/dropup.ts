@@ -1,7 +1,7 @@
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
-import {CustomButtonInnerElements} from '../buttons/customButtonInnerElements';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
+import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
@@ -42,7 +42,7 @@ export class Dropup extends InputButton<Styles> {
   }
 
   private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return CustomButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
+    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
   }
 
   private static createSVGIconElement() {

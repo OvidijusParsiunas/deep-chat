@@ -1,6 +1,5 @@
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {ValidationHandler} from '../../../../../types/validationHandler';
-import {CustomButtonInnerElements} from '../customButtonInnerElements';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
@@ -12,6 +11,7 @@ import {MessageUtils} from '../../../messages/utils/messageUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {MicrophoneButton} from '../microphone/microphoneButton';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {ButtonInnerElements} from '../buttonInnerElements';
 import {UserContent} from '../../../../../types/messages';
 import {Legacy} from '../../../../../utils/legacy/legacy';
 import {ButtonAccessibility} from '../buttonAccessility';
@@ -83,11 +83,11 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createCustomElements() {
-    const submit = CustomButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this._customStyles);
+    const submit = ButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this._customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement} = {loading: undefined, stop: undefined};
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
-      const element = CustomButtonInnerElements.createCustomElement(styleState, this._customStyles);
+      const element = ButtonInnerElements.createCustomElement(styleState, this._customStyles);
       if (element) states[styleState] = element;
     });
     states.submit = submit;
@@ -119,7 +119,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createDisabledIconElement(submitElement: ButtonInnerElement) {
-    const element = CustomButtonInnerElements.createCustomElement('disabled', this._customStyles);
+    const element = ButtonInnerElements.createCustomElement('disabled', this._customStyles);
     return element || (submitElement.cloneNode(true) as ButtonInnerElement);
   }
 
