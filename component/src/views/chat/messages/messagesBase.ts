@@ -96,15 +96,8 @@ export class MessagesBase {
   }
 
   private appendNewMessageElementFocusMode(text: string, role: string) {
-    if (role === 'user') {
-      this._lastGroupMessagesElement?.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
-      const lastGroupMessageElement = document.createElement('div');
-      // first group should not have height 100% to not create a partial chat scroll bar
-      if (this._lastGroupMessagesElement) lastGroupMessageElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
-      this._lastGroupMessagesElement = lastGroupMessageElement;
-    }
     const messageElements = this.createNewMessageElement(text, role);
-    this.appendOuterContainerElemet(messageElements.outerContainer);
+    this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === 'user') {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.isScroll;
       // timeout neeed when bubble font is large
@@ -116,6 +109,14 @@ export class MessagesBase {
     return messageElements;
   }
 
+  private createNewGroupElementFocusMode() {
+    this._lastGroupMessagesElement?.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    const lastGroupMessageElement = document.createElement('div');
+    // first group should not have height 100% to not create a partial chat scroll bar
+    if (this._lastGroupMessagesElement) lastGroupMessageElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    this._lastGroupMessagesElement = lastGroupMessageElement;
+  }
+
   private createAndAppendNewMessageElementDefault(text: string, role: string) {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
@@ -123,7 +124,8 @@ export class MessagesBase {
     return messageElements;
   }
 
-  public appendOuterContainerElemet(outerContainer: HTMLElement) {
+  public appendOuterContainerElemet(outerContainer: HTMLElement, role?: string) {
+    if (this.focusMode && (role === 'user' || !this._lastGroupMessagesElement)) this.createNewGroupElementFocusMode();
     this._lastGroupMessagesElement?.appendChild(outerContainer);
     this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
   }
