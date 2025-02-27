@@ -79,6 +79,7 @@ export interface OpenAIAssistant {
   // images can be used without a file tool type
   files_tool_type?: FileToolType | ((fileNames: string[]) => FileToolType);
   function_handler?: AssistantFunctionHandler;
+  custom_base_url?: string;
 }
 
 export type ChatFunctionHandlerResponse = {response: string}[] | {text: string};
