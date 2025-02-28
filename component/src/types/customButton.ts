@@ -3,13 +3,13 @@ import {ButtonPosition, ButtonStyles} from './button';
 export type CustomButtonChangeState = {
   setActive?: () => void;
   setDefault?: () => void;
-  setUnavailable?: () => void;
+  setDisabled?: () => void;
 };
 
 export type CustomButtonStyles = {
   default?: ButtonStyles;
   active?: ButtonStyles;
-  unavailable?: ButtonStyles;
+  disabled?: ButtonStyles;
 };
 
 export type CustomButton = {
@@ -17,6 +17,6 @@ export type CustomButton = {
   position?: ButtonPosition;
   dropupText?: string;
   initialState?: keyof CustomButtonStyles;
-  onClick?: (lastState: keyof CustomButtonStyles) => keyof CustomButtonStyles | undefined;
   setState?: CustomButtonChangeState;
+  onClick?: (lastState: keyof CustomButtonStyles) => keyof CustomButtonStyles | void;
 };
