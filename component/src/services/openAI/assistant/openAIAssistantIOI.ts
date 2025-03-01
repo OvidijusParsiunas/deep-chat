@@ -54,7 +54,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
-  private static readonly POLLING_TIMEOUT_MS = 800;
+  private static readonly POLLING_TIMEOUT_MS = 500;
   permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
   functionHandler?: AssistantFunctionHandler;
   filesToolType: OpenAIAssistant['files_tool_type'];
