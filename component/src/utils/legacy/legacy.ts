@@ -120,7 +120,7 @@ export class Legacy {
 
   public static processMessageStyles(messageStyles?: MessageStyles) {
     if (!messageStyles) return;
-    const messageStylesCp = structuredClone(messageStyles);
+    const messageStylesCp = JSON.parse(JSON.stringify(messageStyles));
     const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
       console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.1.0.');

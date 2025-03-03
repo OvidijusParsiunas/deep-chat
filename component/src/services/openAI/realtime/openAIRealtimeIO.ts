@@ -148,13 +148,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static buildAvatarConfig(config?: OpenAIRealTime) {
-    const newConfig = typeof config === 'object' && config.avatar ? structuredClone(config.avatar) : {};
+    const newConfig = typeof config === 'object' && config.avatar ? JSON.parse(JSON.stringify(config.avatar)) : {};
     newConfig.maxScale = newConfig.maxScale && newConfig.maxScale >= 1 ? newConfig.maxScale : 2.5;
     return newConfig;
   }
 
   private static buildButtonsConfig(config?: OpenAIRealTime) {
-    const newConfig = typeof config === 'object' && config.buttons ? structuredClone(config.buttons) : {};
+    const newConfig = typeof config === 'object' && config.buttons ? JSON.parse(JSON.stringify(config.buttons)) : {};
     if (!newConfig.microphone?.default?.text?.content) {
       newConfig.microphone ??= {};
       newConfig.microphone.default ??= {};
