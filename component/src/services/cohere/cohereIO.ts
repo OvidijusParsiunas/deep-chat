@@ -10,7 +10,7 @@ export class CohereIO extends DirectServiceIO {
   permittedErrorPrefixes = ['invalid'];
   url: string;
 
-  constructor(deepChat: DeepChat, url: string, inputPlaceholder: string, config?: true | Object, apiKey?: APIKey) {
+  constructor(deepChat: DeepChat, url: string, inputPlaceholder: string, config?: true | object, apiKey?: APIKey) {
     super(deepChat, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, apiKey);
     this.url = url;
     this.textInputPlaceholderText = inputPlaceholder;

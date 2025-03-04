@@ -24,7 +24,7 @@ export class WebComponentStyleUtils {
     if (!shadowRoot) return;
     try {
       WebComponentStyleUtils.applyStyleSheet(style, shadowRoot);
-    } catch (err) {
+    } catch (_) {
       // fallback for if CSSStyleSheet is not supported (Safari)
       WebComponentStyleUtils.addStyleElement(style, shadowRoot);
     }

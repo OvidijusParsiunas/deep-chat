@@ -11,7 +11,7 @@ type InternalHTML = {
 // IMPORTANT - these are called ONCE for each property and for multiple component instances
 // used to monitor property changes and automatically view them as attributes
 export function Property(type: AvailableTypes) {
-  return function (target: Object, propertyKey: string) {
+  return function (target: object, propertyKey: string) {
     // this is primarily used for the react wrapper to infer properties, but can be put inside a condition
     // if it is causing issues for other frameworks
     Object.defineProperty(target, propertyKey, {});

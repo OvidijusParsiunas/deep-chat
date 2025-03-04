@@ -93,7 +93,7 @@ export class SpeechToText extends MicrophoneButton {
         events?.onStop?.();
       },
       onPauseTrigger: (isStart: boolean) => {
-        this._silenceSubmit?.onPause(isStart, textInput, this.elementRef.onclick as Function);
+        this._silenceSubmit?.onPause(isStart, textInput, this.elementRef.onclick as () => void);
         events?.onPauseTrigger?.(isStart);
       },
       onPreResult: (text: string, isFinal: boolean) => {
@@ -101,7 +101,7 @@ export class SpeechToText extends MicrophoneButton {
       },
       onResult: (text: string, isFinal: boolean) => {
         if (isFinal) this._validationHandler?.();
-        this._silenceSubmit?.resetSilenceTimeout(textInput, this.elementRef.onclick as Function);
+        this._silenceSubmit?.resetSilenceTimeout(textInput, this.elementRef.onclick as () => void);
         events?.onResult?.(text, isFinal);
       },
       onCommandModeTrigger: (isStart: boolean) => {

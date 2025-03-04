@@ -13,7 +13,7 @@ export class SilenceSubmit {
     if (typeof submitAfterSilence === 'number') this.silenceMS = submitAfterSilence;
   }
 
-  private setSilenceTimeout(textInput: TextInputEl, buttonClick: Function) {
+  private setSilenceTimeout(textInput: TextInputEl, buttonClick: () => void) {
     this._silenceTimeout = setTimeout(() => {
       textInput.submit?.();
       SpeechToElement.stop();
@@ -29,12 +29,12 @@ export class SilenceSubmit {
     }
   }
 
-  public resetSilenceTimeout(textInput: TextInputEl, buttonClick: Function) {
+  public resetSilenceTimeout(textInput: TextInputEl, buttonClick: () => void) {
     this.clearSilenceTimeout();
     this.setSilenceTimeout(textInput, buttonClick);
   }
 
-  public onPause(isStart: boolean, textInput: TextInputEl, buttonClick: Function) {
+  public onPause(isStart: boolean, textInput: TextInputEl, buttonClick: () => void) {
     if (isStart) {
       this.resetSilenceTimeout(textInput, buttonClick);
     } else {

@@ -43,7 +43,7 @@ export class Stream {
           let eventData: object;
           try {
             eventData = JSON.parse(message.data);
-          } catch(e) {
+          } catch (_) {
             eventData = {};
           }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;

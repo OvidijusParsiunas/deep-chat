@@ -82,7 +82,7 @@ export class RequestUtils {
   }
 
   public static validateResponseFormat(response: ResponseI | ResponseI[], isStreaming: boolean) {
-    if (!response) false;
+    if (!response) return false;
     const dataArr = Array.isArray(response) ? response : [response];
     if (isStreaming && dataArr.length > 1) {
       console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);

@@ -24,13 +24,13 @@ export class RemarkableConfig {
           if (lang && hljsModule.getLanguage(lang)) {
             try {
               return hljsModule.highlight(lang, str).value;
-            } catch (err) {
+            } catch (_) {
               console.error('failed to setup the highlight dependency');
             }
           }
           try {
             return hljsModule.highlightAuto(str).value;
-          } catch (err) {
+          } catch (_) {
             console.error('failed to automatically highlight messages');
           }
           return ''; // use external default escaping

@@ -51,17 +51,17 @@
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/dom-speech-recognition": "^0.0.4",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^8.57.1",
     "highlight.js": "^11.9.0",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "rollup": "^4.34.8",
     "rollup-plugin-summary": "^3.0.0",
-    "typescript": "~5.3.3",
-    "vite": "^6.1.1",
-    "vite-plugin-dts": "^4.5.0",
-    "eslint": "^8.57.1"
+    "typescript": "^5.7.2",
+    "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.3"
   },
   "customElements": "custom-elements.json",
   "files": [

@@ -8,8 +8,10 @@ interface MouseState {
   state: keyof StatefulStyles;
 }
 
-export class InputButton<T extends {[key: string]: ButtonStyles} = {}> {
-  readonly elementRef: HTMLElement;
+type Styles = {[key: string]: ButtonStyles};
+
+export class InputButton<T extends Styles = Styles> {
+  elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
   protected readonly _customStyles?: T;
   readonly position?: ButtonPositionT;

@@ -91,7 +91,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       const threadMessages = await this.getThreadMessages(this.sessionId as string, true);
       this.deepChat.disableSubmitButton(false);
       return threadMessages;
-    } catch (e) {
+    } catch (_) {
       return [{error: 'Failed to fetch history'}];
     }
   }

@@ -22,7 +22,7 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
     return !!files?.[0];
   }
 
-  override preprocessBody(_: {}, __: MessageContentI[], files: File[]) {
+  override preprocessBody(_: object, __: MessageContentI[], files: File[]) {
     return files[0] as unknown as {inputs: string};
   }
 

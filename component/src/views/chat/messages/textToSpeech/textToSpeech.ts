@@ -26,6 +26,7 @@ export class TextToSpeech {
 
   public static processConfig(config: boolean | TextToSpeechConfig, set: (config: ProcessedTextToSpeechConfig) => void) {
     const processedConfig: ProcessedTextToSpeechConfig = {};
+    // eslint-disable-next-line
     window.speechSynthesis; // this is required for the browser to start loading voices
     setTimeout(() => {
       if (typeof config === 'object') {

@@ -70,7 +70,7 @@ export class FileMessageUtils {
           .finally(() => {
             FileMessageUtils.waitToLoadThenScroll(messagesContainerEl);
           });
-      } catch (err) {
+      } catch (_) {
         messagesContainerEl.scrollTop = messagesContainerEl.scrollHeight;
       }
     }

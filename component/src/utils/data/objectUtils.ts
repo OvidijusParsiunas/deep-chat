@@ -42,7 +42,7 @@ export class ObjectUtils {
     try {
       JSON.stringify(obj);
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
