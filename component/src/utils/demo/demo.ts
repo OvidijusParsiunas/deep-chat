@@ -1,6 +1,7 @@
 import {MessageContentI, MessageToElements} from '../../types/messagesInternal';
-import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {Messages} from '../../views/chat/messages/messages';
+import {ServiceIO} from '../../services/serviceIO';
+import {RequestUtils} from '../HTTP/requestUtils';
 import {DemoResponse} from '../../types/demo';
 import {Response} from '../../types/response';
 import {Stream} from '../HTTP/stream';
@@ -52,14 +53,15 @@ export class Demo {
   public static request(io: ServiceIO, messages: Messages) {
     const response = Demo.getResponse(messages);
     setTimeout(async () => {
-      const finalResult = (await io.deepChat.responseInterceptor?.(response)) || response;
-      const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
+      const result = await RequestUtils.basicResponseProcessing(messages, response, {io});
+      if (!result) return io.completionsHandlers.onFinish();
+      const messageDataArr = Array.isArray(result) ? result : [result];
       const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
       if (errorMessage) {
         messages.addNewErrorMessage('service', errorMessage.error);
         io.completionsHandlers.onFinish();
-      } else if (Stream.isSimulatable(io.stream, finalResult as Response)) {
-        Stream.simulate(messages, io.streamHandlers, finalResult as Response);
+      } else if (Stream.isSimulatable(io.stream, result as Response)) {
+        Stream.simulate(messages, io.streamHandlers, result as Response);
       } else {
         messageDataArr.forEach((data) => messages.addNewMessage(data));
         io.completionsHandlers.onFinish();
@@ -68,10 +70,10 @@ export class Demo {
   }
 
   // timeout is used to simulate a timeout for a response to come back
-  public static requestStream(messages: Messages, sh: StreamHandlers) {
+  public static requestStream(messages: Messages, io: ServiceIO) {
     setTimeout(() => {
       const response = Demo.getResponse(messages);
-      Stream.simulate(messages, sh, response);
+      Stream.simulate(messages, io.streamHandlers, response, io);
     }, 400);
   }
 }

@@ -67,16 +67,16 @@ export class Websocket {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: Response = JSON.parse(message.data);
-        const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
-        const resultData = await io.extractResultData(finalResult);
-        if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
+        const finalResult = await RequestUtils.basicResponseProcessing(messages, result, {io, displayError: false});
+        if (!finalResult) {
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
+        }
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
           const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
-          Stream.upsertWFiles(messages, upsertFunc, stream, resultData);
+          Stream.upsertWFiles(messages, upsertFunc, stream, finalResult);
         } else {
-          const messageDataArr = Array.isArray(resultData) ? resultData : [resultData];
+          const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
           messageDataArr.forEach((data) => messages.addNewMessage(data));
         }
       } catch (error) {

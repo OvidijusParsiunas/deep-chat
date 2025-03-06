@@ -16,6 +16,12 @@ export type InterceptorResult = RequestDetails & {error?: string};
 
 type InterceptorResultP = Promise<InterceptorResult>;
 
+interface RespProcessingOptions {
+  io?: ServiceIO;
+  useRI?: boolean;
+  displayError?: boolean;
+}
+
 export class RequestUtils {
   public static readonly CONTENT_TYPE = 'Content-Type';
 
@@ -104,5 +110,23 @@ export class RequestUtils {
   public static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
     messages.addNewErrorMessage('service', error);
     onFinish?.();
+  }
+
+  // prettier-ignore
+  public static async basicResponseProcessing(
+      messages: Messages, resp: ResponseI | ResponseI[], options: RespProcessingOptions = {}) {
+    const {io, displayError = true, useRI = true} = options;
+    if (!io?.extractResultData) return resp;
+    const responseInterceptor = useRI ? io.deepChat.responseInterceptor : undefined;
+    const result = (await responseInterceptor?.(resp)) || resp;
+    const finalResult = await io.extractResultData(result);
+    if (!finalResult || (typeof finalResult !== 'object' && !Array.isArray(finalResult))) {
+      if (displayError) {
+        const err = ErrorMessages.INVALID_RESPONSE(resp, 'response', !!responseInterceptor, result);
+        RequestUtils.displayError(messages, err);
+      }
+      return undefined;
+    }
+    return finalResult;
   }
 }
