@@ -137,8 +137,7 @@ export class ServiceIOFactory {
         return new MistralIO(deepChat);
       }
     }
-    // if connect, make sure it is not a demo stream or websocket
-    if (connect && (!demo || (!connect.stream && !connect.websocket))) {
+    if (connect && Object.keys(connect).length > 0 && !demo) {
       return new BaseServiceIO(deepChat);
     }
     // when not directConnection and connect connection, we default to demo
