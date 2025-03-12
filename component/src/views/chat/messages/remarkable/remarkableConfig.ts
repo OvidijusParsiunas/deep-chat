@@ -20,10 +20,10 @@ export class RemarkableConfig {
     } else if (window.hljs) {
       const hljsModule = window.hljs;
       return new Remarkable({
-        highlight: function (str, lang) {
-          if (lang && hljsModule.getLanguage(lang)) {
+        highlight: function (str, language) {
+          if (language && hljsModule.getLanguage(language)) {
             try {
-              return hljsModule.highlight(lang, str).value;
+              return hljsModule.highlight(str, {language}).value;
             } catch (_) {
               console.error('failed to setup the highlight dependency');
             }
