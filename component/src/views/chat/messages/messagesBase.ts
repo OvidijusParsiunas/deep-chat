@@ -207,9 +207,9 @@ export class MessagesBase {
 
   // prettier-ignore
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
-    if (this.messageToElements[this.messageToElements.length - 1]?.[0].role === role && !this.isLastMessageError()) {
-      const innerContainer = this.messageElementRefs[this.messageElementRefs.length - 1].innerContainer;
-      MessageUtils.hideRoleElements(innerContainer, !!this.avatars, !!this.names);
+    const previousElement = this.messageElementRefs[this.messageElementRefs.length - 1];
+    if (MessageUtils.areOuterContainerClassRolesSame(role, previousElement) && !this.isLastMessageError()) {
+      MessageUtils.hideRoleElements(previousElement.innerContainer, !!this.avatars, !!this.names);
     }
     bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
       role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
