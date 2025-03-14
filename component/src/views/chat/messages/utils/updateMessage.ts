@@ -6,6 +6,7 @@ import {FileMessageUtils} from './fileMessageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
 import {FileMessages} from '../fileMessages';
 import {MessagesBase} from '../messagesBase';
+import {MessageUtils} from './messageUtils';
 
 export class UpdateMessage {
   private static removeElements(messageElementRefs: MessageElements[], elemsToRemove?: MessageElements) {
@@ -99,15 +100,15 @@ export class UpdateMessage {
       if (messageBody.text) {
         UpdateMessage.updateTextMessage(msg, messageToEls, messageBody.text);
       }
-      if (messageBody.html) {
-        UpdateMessage.updateHTMLMessage(msg, messageToEls, messageBody.html);
-      }
       if (messageBody.files) {
         // adds and removes
         UpdateMessage.updateFileMessages(msg, messageToEls, messageBody.files);
       } else {
         // removes elements
         UpdateMessage.removeFilesMessages(msg, messageToEls);
+      }
+      if (messageBody.html) {
+        UpdateMessage.updateHTMLMessage(msg, messageToEls, messageBody.html);
       }
       // Important to remove after elements are changed as existing element indexes are used
       if (!messageBody.text && messageToEls[1].text) {
@@ -116,6 +117,9 @@ export class UpdateMessage {
       if (!messageBody.html && messageToEls[1].html) {
         UpdateMessage.removeTextHTMLMessage(msg, messageToEls, 'html');
       }
+      const {messageElementRefs, avatars, names} = msg;
+      MessageUtils.classifyRoleMessages(messageElementRefs);
+      MessageUtils.resetAllRoleElements(messageElementRefs, !!avatars, !!names);
     } else {
       console.error('Message index not found. Please use the `getMessages` method to find the correct index');
     }

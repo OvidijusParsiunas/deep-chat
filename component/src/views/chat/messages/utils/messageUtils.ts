@@ -169,13 +169,21 @@ export class MessageUtils {
     return MessageUtils.generateMessageBodyElements(messageContent, elements);
   }
 
-  public static classifyRoleMessages(role: string, messageElementRefs: MessageElements[]) {
-    const currentRole = MessageUtils.buildRoleOuterContainerClass(role);
-    messageElementRefs.forEach((messageEls, index) => {
+  // if role not present - traverse all, if present - traverse last messages
+  public static classifyRoleMessages(messageElementRefs: MessageElements[], role?: string) {
+    let currentRole = role ? MessageUtils.buildRoleOuterContainerClass(role) : undefined;
+    for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
+      if (!role) {
+        currentRole = Array.from(messageElementRefs[i].outerContainer.classList).find((className) =>
+          className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
+        );
+      }
+      if (!currentRole) continue; // will always be true if role is available
+      const messageEls = messageElementRefs[i];
       const hasCurrentRole = messageEls.outerContainer.classList.contains(currentRole);
 
-      const prevMessageEls = messageElementRefs[index - 1];
-      const nextMessageEls = messageElementRefs[index + 1];
+      const prevMessageEls = messageElementRefs[i - 1];
+      const nextMessageEls = messageElementRefs[i + 1];
 
       const hasPrevRole = prevMessageEls?.outerContainer.classList.contains(currentRole);
       const hasNextRole = nextMessageEls?.outerContainer.classList.contains(currentRole);
@@ -193,8 +201,10 @@ export class MessageUtils {
             MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS,
           ]);
         }
+      } else if (role) {
+        break;
       }
-    });
+    }
   }
 
   public static areOuterContainerClassRolesSame(comparedRole: string, message?: MessageElements) {
@@ -206,6 +216,7 @@ export class MessageUtils {
   }
 
   public static resetAllRoleElements(messageElementRefs: MessageElements[], avatars: boolean, names: boolean) {
+    if (!avatars && !names) return;
     let lastRoleClass: string | undefined = '';
     messageElementRefs.forEach((message, index) => {
       if (!message.bubbleElement.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {

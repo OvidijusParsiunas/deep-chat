@@ -188,7 +188,7 @@ export class MessagesBase {
   public createMessageElements(text: string, role: string, isTop = false) {
     const messageElements = this.createElements(text, role);
     MessageUtils.updateRefArr(this.messageElementRefs, messageElements, isTop);
-    MessageUtils.classifyRoleMessages(role, this.messageElementRefs);
+    MessageUtils.classifyRoleMessages(this.messageElementRefs, role);
     return messageElements;
   }
 
