@@ -163,9 +163,11 @@ export class MessageUtils {
     return msgBodyEls;
   }
 
-  public static generateMessageBody(messageContent: MessageContentI, messageElementRefs: MessageElements[]) {
+  public static generateMessageBody(messageContent: MessageContentI, messageElementRefs: MessageElements[], top = false) {
     const numberOfMessageContentElement = MessageUtils.getNumberOfElements(messageContent);
-    const elements = messageElementRefs.slice(messageElementRefs.length - numberOfMessageContentElement);
+    const elements = top
+      ? messageElementRefs.slice(0, numberOfMessageContentElement)
+      : messageElementRefs.slice(messageElementRefs.length - numberOfMessageContentElement);
     return MessageUtils.generateMessageBodyElements(messageContent, elements);
   }
 

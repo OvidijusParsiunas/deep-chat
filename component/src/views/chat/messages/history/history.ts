@@ -45,7 +45,7 @@ export class History {
       .map((message) => {
         const messageContent = this._messages.addAnyMessage({...message, sendUpdate: true}, true, true);
         if (messageContent) {
-          const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs);
+          const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs, true);
           messageToElements.unshift([messageContent, messageBody]);
         }
         return messageContent;

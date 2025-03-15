@@ -176,22 +176,40 @@ export class Messages extends MessagesBase {
     return this.addNewMessage(message, isHistory, isTop);
   }
 
+  private tryAddTextMessage(msg: MessageContentI, overwrite: Overwrite, data: ResponseI, history = false, isTop = false) {
+    if (!data.ignoreText && msg.text !== undefined && data.text !== null) {
+      this.addNewTextMessage(msg.text, msg.role, overwrite, isTop);
+      if (!history && this.textToSpeech && msg.role !== MessageUtils.USER_ROLE) {
+        TextToSpeech.speak(msg.text, this.textToSpeech);
+      }
+    }
+  }
+
+  private tryAddFileMessages(message: MessageContentI, isTop = false) {
+    if (message.files && Array.isArray(message.files)) {
+      FileMessages.addMessages(this, message.files, message.role, isTop);
+    }
+  }
+
+  private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
+    if (message.html !== undefined && message.html !== null) {
+      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite, isTop);
+      if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+    }
+  }
+
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
     const message = Messages.createMessageContent(data);
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
-    if (!data.ignoreText && message.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(message.text, message.role, overwrite, isTop);
-      if (!isHistory && this.textToSpeech && message.role !== MessageUtils.USER_ROLE) {
-        TextToSpeech.speak(message.text, this.textToSpeech);
-      }
-    }
-    if (message.files && Array.isArray(message.files)) {
-      FileMessages.addMessages(this, message.files, message.role, isTop);
-    }
-    if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite, isTop);
-      if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+    if (isTop) {
+      this.tryAddHTMLMessage(message, overwrite, isTop);
+      this.tryAddFileMessages(message, isTop);
+      this.tryAddTextMessage(message, overwrite, data, isHistory, isTop);
+    } else {
+      this.tryAddTextMessage(message, overwrite, data, isHistory, isTop);
+      this.tryAddFileMessages(message, isTop);
+      this.tryAddHTMLMessage(message, overwrite, isTop);
     }
     if (this.isValidMessageContent(message) && !isTop) {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
