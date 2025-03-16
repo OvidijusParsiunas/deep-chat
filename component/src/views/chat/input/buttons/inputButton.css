@@ -24,6 +24,12 @@
   background-color: #9c9c9c5e;
 }
 
+/* Bug fix for when the user clicks on a button then drags away the mouse which used to still display :active css */
+/* which applied default active css instead of user custom active css */
+.input-button:active:not(:hover) {
+  background-color: transparent;
+}
+
 .loading-button {
   cursor: auto;
 }

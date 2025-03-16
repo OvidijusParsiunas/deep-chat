@@ -37,6 +37,21 @@
   position: relative;
 }
 
+.dropup-menu-item:hover,
+.dropup-menu-item:focus-visible {
+  background-color: #f3f3f3;
+}
+
+.dropup-menu-item:active {
+  background-color: #ebebeb;
+}
+
+/* Bug fix for when the user clicks on an item then drags away the mouse which used to still display :active css */
+/* which applied default active css instead of user custom active css */
+.dropup-menu-item:active:not(:hover) {
+  background-color: transparent;
+}
+
 .dropup-menu-item:first-child {
   padding-top: 0.49em;
   border-top-left-radius: inherit;

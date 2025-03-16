@@ -45,15 +45,13 @@ export class DropupItem {
     }
   }
 
-  // prettier-ignore
   public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
     const {elementRef, dropupText} = inputButton;
     const item = document.createElement('div');
     Object.assign(item.style, styles?.item?.default);
     DropupItem.populateItem(elementRef, item, dropupText, styles);
     item.classList.add('dropup-menu-item');
-    const statefulStyles = StyleUtils.processStateful(
-      styles?.item || {}, {backgroundColor: '#f3f3f3'}, {backgroundColor: '#ebebeb'});
+    const statefulStyles = StyleUtils.processStateful(styles?.item || {});
     DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
     return item;
   }

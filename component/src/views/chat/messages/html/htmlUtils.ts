@@ -7,7 +7,7 @@ import {MessagesBase} from '../messagesBase';
 
 export class HTMLUtils {
   public static applyStylesToElement(element: HTMLElement, styles: StatefulStyles) {
-    const statefulStyles = StyleUtils.processStateful(styles, {}, {});
+    const statefulStyles = StyleUtils.processStateful(styles);
     StatefulEvents.add(element, statefulStyles);
     Object.assign(element.style, statefulStyles.default);
   }

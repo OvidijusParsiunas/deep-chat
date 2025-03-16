@@ -20,10 +20,11 @@ export class StyleUtils {
     if (statefulStyle.default) StyleUtils.unsetStyle(element, statefulStyle.default);
   }
 
-  public static processStateful(styles: StatefulStyles, defHover: CustomStyle, defClick: CustomStyle): StatefulStyles {
+  // if you want to asdd default styling - use pure css classes
+  public static processStateful(styles: StatefulStyles): StatefulStyles {
     const defaultStyle = styles.default || {};
-    const hoverStyle = Object.assign(JSON.parse(JSON.stringify({...defaultStyle, ...defHover})), styles?.hover);
-    const clickStyle = Object.assign(JSON.parse(JSON.stringify({...hoverStyle, ...defClick})), styles?.click);
+    const hoverStyle = Object.assign(JSON.parse(JSON.stringify(defaultStyle)), styles?.hover);
+    const clickStyle = Object.assign(JSON.parse(JSON.stringify(hoverStyle)), styles?.click);
     return {default: defaultStyle, hover: hoverStyle, click: clickStyle};
   }
 
