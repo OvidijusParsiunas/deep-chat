@@ -1,8 +1,7 @@
+import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
 import {DirectConnection} from '../../types/directConnection';
 import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
-import {AzureOpenAI} from '../../types/azure';
-import {OpenAIChat} from '../../types/openAI';
 import {DeepChat} from '../../deepChat';
 
 export class AzureOpenAIChatIO extends OpenAIChatIO {
@@ -18,7 +17,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
 
     if (typeof config === 'object') {
-      const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as OpenAIChat;
+      const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
     }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
