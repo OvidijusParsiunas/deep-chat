@@ -41,7 +41,15 @@ export interface MessageStyles {
   loading?: LoadingMessageStyles;
 }
 
-export type MessageContent = {role?: string; text?: string; files?: MessageFile[]; html?: string; _sessionId?: string};
+export type MessageContent = {
+  role?: string;
+  text?: string;
+  files?: MessageFile[];
+  html?: string;
+  // eslint-disable-next-line
+  custom?: any;
+  _sessionId?: string;
+};
 
 export type OnMessage = (body: {message: MessageContent; isHistory: boolean}) => void;
 

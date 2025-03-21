@@ -226,15 +226,15 @@ export class MessagesBase {
     }
   }
 
-  // WORK - add a customProps to allow devs to add custom properties
   public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
-    const {text, files, html, _sessionId, role} = content;
+    const {text, files, html, custom, _sessionId, role} = content;
     const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
     if (text) messageContent.text = text;
     if (files) messageContent.files = files;
     if (html) messageContent.html = html;
     if (!text && !files && !html) messageContent.text = '';
+    if (custom) messageContent.custom = custom;
     if (_sessionId) messageContent._sessionId = _sessionId;
     return messageContent;
   }
