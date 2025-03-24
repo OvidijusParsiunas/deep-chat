@@ -62,4 +62,14 @@ export class HTMLUtils {
     });
     return topLevelElements;
   }
+
+  public static isTemporaryBasedOnHTML(html: string) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return HTMLDeepChatElements.isElementTemporary({
+      outerContainer: tempDiv,
+      bubbleElement: tempDiv,
+      innerContainer: tempDiv,
+    });
+  }
 }

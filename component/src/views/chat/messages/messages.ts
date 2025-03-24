@@ -151,7 +151,7 @@ export class Messages extends MessagesBase {
     if (introMessage?.text) {
       elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
     } else if (introMessage?.html) {
-      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, this.messageElementRefs);
+      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE);
     }
     if (elements) {
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
@@ -193,8 +193,8 @@ export class Messages extends MessagesBase {
 
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, this.messageElementRefs, overwrite, isTop);
-      if (HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+      const elements = HTMLMessages.add(this, message.html, message.role, overwrite, isTop);
+      if (isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
   }
 

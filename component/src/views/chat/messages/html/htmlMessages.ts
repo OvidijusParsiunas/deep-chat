@@ -46,14 +46,15 @@ export class HTMLMessages {
     return messageElements;
   }
 
-  // prettier-ignore
-  public static add(
-      messages: MessagesBase, html: string, role: string,
-      messageElementRefs: MessageElements[], overwrite?: Overwrite, isTop = false) {
+  public static add(messages: MessagesBase, html: string, role: string, overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
-      const overwrittenElements = this.overwrite(messages, html, role, messageElementRefs);
+      const overwrittenElements = this.overwrite(messages, html, role, messages.messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
       overwrite.status = false;
+    }
+    // if top history, temporary and there already are element refs, do not add message
+    if (isTop && messages.messageElementRefs.length > 0 && HTMLUtils.isTemporaryBasedOnHTML(html)) {
+      return;
     }
     const messageElements = HTMLMessages.create(messages, html, role, isTop);
     if (!isTop) HTMLMessages.addElement(messages, messageElements.outerContainer);
