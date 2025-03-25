@@ -13,8 +13,8 @@ export class HTMLMessages {
     if (!messages.focusMode) messages.elementRef.scrollTop = messages.elementRef.scrollHeight;
   }
 
-  public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean) {
-    const messageElements = messages.createMessageElementsOnOrientation('', role, isTop);
+  public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {
+    const messageElements = messages.createMessageElementsOnOrientation('', role, isTop, loading);
     messageElements.bubbleElement.classList.add(HTMLMessages.HTML_BUBBLE_CLASS);
     messageElements.bubbleElement.innerHTML = html;
     return messageElements;

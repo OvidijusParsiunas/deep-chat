@@ -51,7 +51,7 @@ export class LoadingHistory {
   public static addMessage(messages: Messages, isInitial = true) {
     const html = messages.messageStyles?.loading?.history?.full?.html;
     const messageElements = html
-      ? HTMLMessages.createElements(messages, html, MessageUtils.AI_ROLE, true)
+      ? HTMLMessages.createElements(messages, html, MessageUtils.AI_ROLE, true, true)
       : LoadingHistory.createDefaultElements(messages);
     LoadingHistory.addLoadHistoryMessage(messageElements, messages, isInitial);
     return messageElements;

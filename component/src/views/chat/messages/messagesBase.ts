@@ -130,8 +130,8 @@ export class MessagesBase {
     this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
   }
 
-  private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean) {
-    const messageElements = this.createNewMessageElement(text, role, isTop);
+  private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean, loading = false) {
+    const messageElements = this.createNewMessageElement(text, role, isTop, loading);
     if (isTop && (this.elementRef.firstChild as HTMLElement)?.classList.contains(MessagesBase.INTRO_CLASS)) {
       (this.elementRef.firstChild as HTMLElement).insertAdjacentElement('afterend', messageElements.outerContainer);
       // swapping to place intro refs into correct position
@@ -144,12 +144,14 @@ export class MessagesBase {
     return messageElements;
   }
 
-  public createMessageElementsOnOrientation(text: string, role: string, isTop: boolean) {
-    return isTop ? this.createAndPrependNewMessageElement(text, role, true) : this.createNewMessageElement(text, role);
+  public createMessageElementsOnOrientation(text: string, role: string, isTop: boolean, loading = false) {
+    return isTop
+      ? this.createAndPrependNewMessageElement(text, role, true, loading)
+      : this.createNewMessageElement(text, role, loading);
   }
 
-  public createNewMessageElement(text: string, role: string, isTop = false) {
-    this._introPanel?.hide();
+  public createNewMessageElement(text: string, role: string, isTop = false, loading = false) {
+    if (!loading) this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
     LoadingHistory.changeFullViewToSmall(this);
     if (!isTop && MessagesBase.isTemporaryElement(lastMessageElements)) {
