@@ -3,8 +3,6 @@ import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {MessageContent} from '../../../../types/messages';
 import {FileMessageUtils} from './fileMessageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
-import {Avatars} from '../../../../types/avatars';
-import {Names} from '../../../../types/names';
 import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {Avatar} from '../avatar';
@@ -101,19 +99,24 @@ export class MessageUtils {
     return messagesEl.children[messagesEl.children.length - 1];
   }
 
-  public static addRoleElements(bubbleElement: HTMLElement, role: string, avatars?: Avatars, names?: Names) {
-    if (avatars) Avatar.add(bubbleElement, role, avatars);
-    if (names) Name.add(bubbleElement, role, names);
+  public static addRoleElements(bubbleElement: HTMLElement, role: string, avatar?: Avatar, name?: Name) {
+    avatar?.addBesideMsg(bubbleElement, role);
+    name?.addBesideMsg(bubbleElement, role);
   }
 
-  public static hideRoleElements(innerContainer: HTMLElement, avatars: boolean, names: boolean) {
-    if (avatars) Avatar.hide(innerContainer);
-    if (names) Name.hide(innerContainer);
+  public static hideRoleElements(innerContainer: HTMLElement, avatar?: Avatar, name?: Name) {
+    avatar?.tryHide(innerContainer);
+    name?.tryHide(innerContainer);
   }
 
-  public static revealRoleElements(innerContainer: HTMLElement, avatars?: boolean, names?: boolean) {
-    if (avatars) Avatar.reveal(innerContainer);
-    if (names) Name.reveal(innerContainer);
+  public static revealRoleElements(innerContainer: HTMLElement, avatar?: Avatar, name?: Name) {
+    avatar?.tryReveal(innerContainer);
+    name?.tryReveal(innerContainer);
+  }
+
+  public static softRemRoleElements(innerContainer: HTMLElement, avatar?: Avatar, name?: Name) {
+    avatar?.trySoftRem(innerContainer);
+    name?.trySoftRem(innerContainer);
   }
 
   public static updateRefArr<T>(arr: Array<T>, item: T, isTop: boolean) {
@@ -217,18 +220,18 @@ export class MessageUtils {
     return currentRoleClass === MessageUtils.buildRoleOuterContainerClass(comparedRole);
   }
 
-  public static resetAllRoleElements(messageElementRefs: MessageElements[], avatars: boolean, names: boolean) {
-    if (!avatars && !names) return;
+  public static resetAllRoleElements(messageElementRefs: MessageElements[], avatar?: Avatar, name?: Name) {
+    if (!avatar && !name) return;
     let lastRoleClass: string | undefined = '';
     messageElementRefs.forEach((message, index) => {
       if (!message.bubbleElement.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {
-        MessageUtils.revealRoleElements(message.innerContainer, avatars, names);
+        MessageUtils.revealRoleElements(message.innerContainer, avatar, name);
       }
       const currentRoleClass = Array.from(message.outerContainer.classList).find((className) =>
         className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
       );
       if (lastRoleClass === currentRoleClass) {
-        MessageUtils.hideRoleElements(messageElementRefs[index - 1].innerContainer, avatars, names);
+        MessageUtils.hideRoleElements(messageElementRefs[index - 1].innerContainer, avatar, name);
       }
       lastRoleClass = currentRoleClass;
     });

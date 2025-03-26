@@ -61,8 +61,8 @@ export class History {
     this._isPaginationComplete = messages.findIndex((message) => !message) < 0;
     const messageContent = messages.filter((message) => !!message);
     this.processLoadedHistory(messageContent);
-    const {messageElementRefs, avatars, names} = this._messages;
-    MessageUtils.resetAllRoleElements(messageElementRefs, !!avatars, !!names);
+    const {messageElementRefs, avatar, name} = this._messages;
+    MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
   }
 
   private async setupLoadHistoryOnScroll(loadHistory: LoadHistory) {

@@ -54,6 +54,7 @@ export class LoadingHistory {
       ? HTMLMessages.createElements(messages, html, MessageUtils.AI_ROLE, true, true)
       : LoadingHistory.createDefaultElements(messages);
     LoadingHistory.addLoadHistoryMessage(messageElements, messages, isInitial);
+    MessageUtils.softRemRoleElements(messageElements.innerContainer, messages.avatar, messages.name);
     return messageElements;
   }
 

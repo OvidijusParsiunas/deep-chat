@@ -117,9 +117,9 @@ export class UpdateMessage {
       if (!messageBody.html && messageToEls[1].html) {
         UpdateMessage.removeTextHTMLMessage(msg, messageToEls, 'html');
       }
-      const {messageElementRefs, avatars, names} = msg;
+      const {messageElementRefs, avatar, name} = msg;
       MessageUtils.classifyRoleMessages(messageElementRefs);
-      MessageUtils.resetAllRoleElements(messageElementRefs, !!avatars, !!names);
+      MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
     } else {
       console.error('Message index not found. Please use the `getMessages` method to find the correct index');
     }

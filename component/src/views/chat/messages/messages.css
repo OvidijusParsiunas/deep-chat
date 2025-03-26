@@ -193,3 +193,7 @@ pre {
 .right-item-position {
   margin-left: 10px;
 }
+
+.role-hidden {
+  display: none;
+}

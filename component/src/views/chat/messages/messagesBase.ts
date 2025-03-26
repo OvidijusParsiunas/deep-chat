@@ -16,11 +16,11 @@ import {Legacy} from '../../../utils/legacy/legacy';
 import {FocusMode} from '../../../types/focusMode';
 import {MessageUtils} from './utils/messageUtils';
 import {Response} from '../../../types/response';
-import {Avatars} from '../../../types/avatars';
 import {DeepChat} from '../../../deepChat';
-import {Names} from '../../../types/names';
 import {MessageElements} from './messages';
 import {Remarkable} from 'remarkable';
+import {Avatar} from './avatar';
+import {Name} from './name';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -31,8 +31,8 @@ export class MessagesBase {
   readonly messageStyles?: MessageStyles;
   readonly htmlClassUtilities: HTMLClassUtilities = {};
   readonly messageToElements: MessageToElements = [];
-  readonly avatars?: Avatars;
-  readonly names?: Names;
+  readonly avatar?: Avatar;
+  readonly name?: Name;
   protected _introPanel?: IntroPanel;
   private _remarkable: Remarkable;
   private _lastGroupMessagesElement?: HTMLElement;
@@ -45,8 +45,8 @@ export class MessagesBase {
     this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkable);
-    this.avatars = deepChat.avatars;
-    this.names = deepChat.names;
+    if (deepChat.avatars) this.avatar = new Avatar(deepChat.avatars);
+    if (deepChat.names) this.name = new Name(deepChat.names);
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this.focusMode = deepChat.focusMode;
@@ -165,12 +165,12 @@ export class MessagesBase {
   // https://github.com/OvidijusParsiunas/deep-chat/issues/258
   // prettier-ignore
   private revealRoleElementsIfTempRemoved(tempElements: MessageElements, newRole: string) {
-    if ((this.avatars || this.names) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
+    if ((!!this.avatar || !!this.name) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
       // if prev message before temp has a different role to the new one, make sure its avatar is revealed
       const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
       if (prevMessageElements && this.messageToElements.length > 0
           && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
-        MessageUtils.revealRoleElements(prevMessageElements.innerContainer, !!this.avatars, !!this.names);
+        MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this.avatar, this.name);
       }
     }
   }
@@ -211,12 +211,12 @@ export class MessagesBase {
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
     const previousElement = this.messageElementRefs[this.messageElementRefs.length - 1];
     if (MessageUtils.areOuterContainerClassRolesSame(role, previousElement) && !this.isLastMessageError()) {
-      MessageUtils.hideRoleElements(previousElement.innerContainer, !!this.avatars, !!this.names);
+      MessageUtils.hideRoleElements(previousElement.innerContainer, this.avatar, this.name);
     }
     bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
       role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
     this.renderText(bubbleElement, text);
-    MessageUtils.addRoleElements(bubbleElement, role, this.avatars, this.names);
+    MessageUtils.addRoleElements(bubbleElement, role, this.avatar, this.name);
     return {bubbleElement};
   }
 

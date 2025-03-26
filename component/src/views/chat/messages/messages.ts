@@ -136,7 +136,7 @@ export class Messages extends MessagesBase {
         introMessage.forEach((intro, index) => {
           if (index !== 0) {
             const innerContainer = this.messageElementRefs[this.messageElementRefs.length - 1].innerContainer;
-            MessageUtils.hideRoleElements(innerContainer, !!this.avatars, !!this.names);
+            MessageUtils.hideRoleElements(innerContainer, this.avatar, this.name);
           }
           this.addIntroductoryMessage(intro, shouldHide);
         });
@@ -245,7 +245,7 @@ export class Messages extends MessagesBase {
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
     const messageElements = this.createMessageElementsOnOrientation(text, 'error', isTop);
-    MessageUtils.hideRoleElements(messageElements.innerContainer, !!this.avatars, !!this.names);
+    MessageUtils.hideRoleElements(messageElements.innerContainer, this.avatar, this.name);
     const {bubbleElement, outerContainer} = messageElements;
     bubbleElement.classList.add(MessageUtils.ERROR_MESSAGE_TEXT_CLASS);
     this.renderText(bubbleElement, text);
