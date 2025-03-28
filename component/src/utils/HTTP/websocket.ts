@@ -3,8 +3,8 @@ import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
-import {StreamSimulation} from '../../types/stream';
 import {ServiceIO} from '../../services/serviceIO';
+import {StreamConfig} from '../../types/stream';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
 import {DeepChat} from '../../deepChat';
@@ -126,7 +126,7 @@ export class Websocket {
 
   public static stream(io: ServiceIO, messages: Messages, roleToStream: RoleToStream, result?: Response) {
     if (!result) return;
-    const simulation = (io.stream as StreamSimulation).simulation;
+    const simulation = (io.stream as StreamConfig).simulation;
     if (typeof simulation === 'string') {
       const role = result.role || MessageUtils.AI_ROLE;
       const stream = roleToStream[role];
