@@ -114,7 +114,8 @@ export class TextInputEl {
 
   private onKeydown(event: KeyboardEvent) {
     // ctrlKey && shiftKey allow the creation of a new line
-    if (event.key === KEYBOARD_KEY.ENTER && !event.ctrlKey && !event.shiftKey) {
+    // user needs to click the submit button on mobile as return should be used for a new line
+    if (event.key === KEYBOARD_KEY.ENTER && !event.ctrlKey && !event.shiftKey && !Browser.IS_MOBILE) {
       event.preventDefault();
       this.submit?.();
     }
