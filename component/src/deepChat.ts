@@ -146,7 +146,7 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   remarkable?: RemarkableOptions;
 
-  @Property('boolean')
+  @Property('object')
   focusMode?: FocusMode;
 
   getMessages: () => MessageContent[] = () => [];
