@@ -6,6 +6,10 @@ import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
 export class DropupItem {
+  public static MENU_ITEM_CLASS = 'dropup-menu-item';
+  public static DISABLED_ITEM_CLASS = 'dropup-menu-item-disabled';
+  public static ACTIVE_ITEM_CLASS = 'dropup-menu-item-active';
+
   private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
     StatefulEvents.add(item, styles);
     item.addEventListener('click', () => {
@@ -50,7 +54,7 @@ export class DropupItem {
     const item = document.createElement('div');
     Object.assign(item.style, styles?.item?.default);
     DropupItem.populateItem(elementRef, item, dropupText, styles);
-    item.classList.add('dropup-menu-item');
+    item.classList.add(DropupItem.MENU_ITEM_CLASS);
     const statefulStyles = StyleUtils.processStateful(styles?.item || {});
     DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
     return item;

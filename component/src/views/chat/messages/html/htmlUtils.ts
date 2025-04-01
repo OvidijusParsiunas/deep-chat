@@ -72,4 +72,11 @@ export class HTMLUtils {
       innerContainer: tempDiv,
     });
   }
+
+  // useful for removing event listeners
+  public static replaceElementWithNewClone(oldElement: HTMLElement, elementToBeCloned?: HTMLElement) {
+    const newElement = (elementToBeCloned || oldElement).cloneNode(true) as HTMLElement;
+    oldElement.parentNode?.replaceChild(newElement, oldElement);
+    return newElement;
+  }
 }

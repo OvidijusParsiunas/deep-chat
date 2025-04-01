@@ -26,6 +26,7 @@ import {DisplayLoadingBubble} from './types/loading';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
+import {CustomButton} from './types/customButton';
 import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
@@ -85,6 +86,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   submitButtonStyles?: SubmitButtonStyles;
+
+  @Property('object')
+  customButtons?: CustomButton[];
 
   @Property('string')
   auxiliaryStyle?: string;

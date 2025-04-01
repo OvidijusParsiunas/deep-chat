@@ -7,11 +7,13 @@ import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
+import {DropupItem} from './dropupItem';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class Dropup extends InputButton<Styles> {
   private readonly _menu: DropupMenu;
+  public static BUTTON_ICON_CLASS = 'dropup-icon';
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
@@ -22,7 +24,7 @@ export class Dropup extends InputButton<Styles> {
     this.buttonContainer = Dropup.createButtonContainer();
     this.elementRef.appendChild(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
-    this.elementRef.classList.add('dropup-icon', 'upload-file-button');
+    this.elementRef.classList.add(Dropup.BUTTON_ICON_CLASS, 'upload-file-button');
     this.elementRef.children[0].id = 'dropup-icon';
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
@@ -66,7 +68,10 @@ export class Dropup extends InputButton<Styles> {
 
   private addContainerEvents(containerElement: HTMLElement) {
     containerElement.addEventListener('click', (event) => {
-      if (!(event.target as HTMLElement).classList.contains('dropup-icon')) this._menu.close();
+      const classes = (event.target as HTMLElement).classList;
+      if (!classes.contains(Dropup.BUTTON_ICON_CLASS) && !classes.contains(DropupItem.DISABLED_ITEM_CLASS)) {
+        this._menu.close();
+      }
     });
   }
 
