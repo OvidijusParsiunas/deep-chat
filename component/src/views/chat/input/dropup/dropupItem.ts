@@ -9,6 +9,8 @@ export class DropupItem {
   public static MENU_ITEM_CLASS = 'dropup-menu-item';
   public static DISABLED_ITEM_CLASS = 'dropup-menu-item-disabled';
   public static ACTIVE_ITEM_CLASS = 'dropup-menu-item-active';
+  public static TEXT_CLASS = 'dropup-menu-item-text';
+  public static ICON_CLASS = 'dropup-menu-item-icon';
 
   private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
     StatefulEvents.add(item, styles);
@@ -26,7 +28,7 @@ export class DropupItem {
   private static createItemText(dropupText?: string, textStyle?: CustomStyle) {
     const textElement = document.createElement('div');
     Object.assign(textElement.style, textStyle);
-    textElement.classList.add('dropup-menu-item-text');
+    textElement.classList.add(DropupItem.TEXT_CLASS);
     textElement.textContent = dropupText || 'File';
     return textElement;
   }
@@ -34,7 +36,7 @@ export class DropupItem {
   private static createItemIcon(inputButtonElement: HTMLElement, iconContainerStyle?: CustomStyle) {
     const iconContainer = document.createElement('div');
     Object.assign(iconContainer.style, iconContainerStyle);
-    iconContainer.classList.add('dropup-menu-item-icon');
+    iconContainer.classList.add(DropupItem.ICON_CLASS);
     iconContainer.appendChild(inputButtonElement.children[0]);
     return iconContainer;
   }

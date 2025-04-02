@@ -1,4 +1,4 @@
-import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../../../types/buttonInternal';
+import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
@@ -97,26 +97,35 @@ export class CustomButton extends InputButton<Styles> {
     }
   }
 
+  private applyContentStyles(styles?: CustomDropupItemStateStyles) {
+    const childrenEls = Array.from(this.elementRef.children);
+    if (styles?.text) {
+      const textElement = childrenEls.find((element) => element.classList.contains(DropupItem.TEXT_CLASS)) as HTMLElement;
+      if (textElement) Object.assign(textElement.style, styles.text);
+    }
+    if (styles?.iconContainer) {
+      const iconElement = childrenEls.find((element) => element.classList.contains(DropupItem.ICON_CLASS)) as HTMLElement;
+      if (iconElement) Object.assign(iconElement.style, styles.iconContainer);
+    }
+  }
+
   private assignDropupItemStyle(styles?: CustomDropupItemStateStyles) {
     // doesn't have a parent element when inserted at the start
     if (this.elementRef.parentElement && this._originalElementRef) {
       // creating a new item as need to reapply event listeners in stateful events
       this.elementRef = HTMLUtils.replaceElementWithNewClone(this.elementRef, this._originalElementRef);
     }
+    this.applyContentStyles(styles);
     Object.assign(this.elementRef.style, styles?.item?.default);
     const statefulStyles = StyleUtils.processStateful(styles?.item || {});
     StatefulEvents.add(this.elementRef, statefulStyles);
     this.addClickListener();
-    const iconContainerElement = this.elementRef.children[0] as HTMLElement;
-    if (!iconContainerElement.classList.contains('text-button')) {
-      Object.assign(iconContainerElement.style, styles?.iconContainer);
-    }
   }
 
   private changeToDefault(override?: boolean) {
     if (!override && this._state === 'default') return;
     if (this.elementRef.classList.contains(DropupItem.MENU_ITEM_CLASS)) {
-      this.assignDropupItemStyle(this._dropupStyles.default as Required<CustomDropupItemStateStyles>);
+      this.assignDropupItemStyle(this._dropupStyles.default);
       this.elementRef.classList.remove(DropupItem.DISABLED_ITEM_CLASS, DropupItem.ACTIVE_ITEM_CLASS);
     } else {
       this.elementRef.replaceChildren(this._innerElements.default);
@@ -131,7 +140,7 @@ export class CustomButton extends InputButton<Styles> {
   private changeToActive(override?: boolean) {
     if (!override && this._state === 'active') return;
     if (this.elementRef.classList.contains(DropupItem.MENU_ITEM_CLASS)) {
-      this.assignDropupItemStyle(this._dropupStyles.active as Required<CustomDropupItemStateStyles>);
+      this.assignDropupItemStyle(this._dropupStyles.active);
       this.elementRef.classList.remove(DropupItem.DISABLED_ITEM_CLASS);
       this.elementRef.classList.add(DropupItem.ACTIVE_ITEM_CLASS);
     } else {
@@ -145,7 +154,7 @@ export class CustomButton extends InputButton<Styles> {
   private changeToDisabled(override?: boolean) {
     if (!override && this._state === 'disabled') return;
     if (this.elementRef.classList.contains(DropupItem.MENU_ITEM_CLASS)) {
-      this.assignDropupItemStyle(this._dropupStyles.disabled as Required<CustomDropupItemStateStyles>);
+      this.assignDropupItemStyle(this._dropupStyles.disabled);
       this.elementRef.classList.remove(DropupItem.ACTIVE_ITEM_CLASS);
       this.elementRef.classList.add(DropupItem.DISABLED_ITEM_CLASS);
     } else {
