@@ -29,14 +29,23 @@ export class CustomButton extends InputButton<Styles> {
   private readonly _dropupStyles: CustomDropupItemStyles;
 
   constructor(customButton: CustomButtonT, index: number) {
-    const dropupText = customButton?.styles?.dropup?.text || `Custom ${index}`;
-    super(CustomButton.createButtonElement(), customButton?.position, customButton?.styles?.button, dropupText);
-    this._innerElements = this.createInnerElements(this._customStyles);
+    const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
+    const svg = CustomButton.createSVGIconElement(customButton?.styles?.button);
+    super(CustomButton.createButtonElement(), svg, customButton?.position, customButton?.styles?.button, dropupText);
+    this._innerElements = this.createInnerElements(this.customStyles);
     this._onClick = customButton.onClick;
     this._dropupStyles = CustomButtonDropupStyle.createDropupStyles(customButton.styles?.dropup);
     this.setSetState(customButton);
     this.addClickListener();
     this.changeState(customButton.initialState, true);
+  }
+
+  private static createSVGIconElement(customStyles?: Styles) {
+    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
+    svgIconElement.id = 'submit-icon';
+    return customStyles?.default?.svg?.content
+      ? SVGIconUtils.createSVGElement(customStyles?.default?.svg?.content)
+      : svgIconElement;
   }
 
   private static createButtonElement() {
@@ -46,22 +55,15 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   private createInnerElements(customStyles?: Styles) {
-    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
-    svgIconElement.id = 'submit-icon';
-    const baseInnerElement = customStyles?.default?.svg?.content
-      ? SVGIconUtils.createSVGElement(customStyles?.default?.svg?.content)
-      : svgIconElement;
     return {
-      default: this.createInnerElement(baseInnerElement, 'default', customStyles),
-      active: this.createInnerElement(baseInnerElement, 'active', customStyles),
-      disabled: this.createInnerElement(baseInnerElement, 'disabled', customStyles),
+      default: this.createInnerElement('default', customStyles),
+      active: this.createInnerElement('active', customStyles),
+      disabled: this.createInnerElement('disabled', customStyles),
     };
   }
 
-  // prettier-ignore
-  private createInnerElement(baseButton: SVGGraphicsElement,
-      state: keyof CustomButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
+  private createInnerElement(state: keyof CustomButton['_innerElements'], customStyles?: Styles) {
+    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || this.svg;
   }
 
   private setSetState(customButton: CustomButtonT) {
@@ -129,8 +131,8 @@ export class CustomButton extends InputButton<Styles> {
       this.elementRef.classList.remove(DropupItem.DISABLED_ITEM_CLASS, DropupItem.ACTIVE_ITEM_CLASS);
     } else {
       this.elementRef.replaceChildren(this._innerElements.default);
-      if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
-      if (this._customStyles?.disabled) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.disabled);
+      if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
+      if (this.customStyles?.disabled) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.disabled);
       this.reapplyStateStyle('default', ['active', 'disabled']);
     }
     ButtonAccessibility.removeAriaDisabled(this.elementRef);
@@ -159,8 +161,8 @@ export class CustomButton extends InputButton<Styles> {
       this.elementRef.classList.add(DropupItem.DISABLED_ITEM_CLASS);
     } else {
       this.elementRef.replaceChildren(this._innerElements.disabled);
-      if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
-      if (this._customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.default);
+      if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
+      if (this.customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.default);
       this.reapplyStateStyle('disabled', ['default', 'active']);
     }
     ButtonAccessibility.addAriaDisabled(this.elementRef);

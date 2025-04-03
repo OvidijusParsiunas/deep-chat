@@ -13,14 +13,23 @@ type Styles = {[key: string]: ButtonStyles};
 export class InputButton<T extends Styles = Styles> {
   elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
-  protected readonly _customStyles?: T;
+  readonly svg: SVGGraphicsElement;
+  readonly customStyles?: T;
   readonly position?: ButtonPositionT;
   readonly dropupText?: string;
 
-  constructor(buttonElement: HTMLElement, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
+  constructor(
+    buttonElement: HTMLElement,
+    // this will only be used if button is in dropup, user has not defined custom svg and svg text is not ''
+    svg: SVGGraphicsElement,
+    position?: ButtonPositionT,
+    customStyles?: T,
+    dropupText?: string
+  ) {
     ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
-    this._customStyles = customStyles;
+    this.svg = svg;
+    this.customStyles = customStyles;
     this.position = position;
     this.dropupText = dropupText;
   }
@@ -57,18 +66,18 @@ export class InputButton<T extends Styles = Styles> {
   }
 
   public unsetCustomStateStyles(unsetTypes: (keyof T)[]) {
-    if (!this._customStyles) return;
+    if (!this.customStyles) return;
     for (let i = 0; i < unsetTypes.length; i += 1) {
       const type = unsetTypes[i];
-      const style = type && this._customStyles[type];
+      const style = type && this.customStyles[type];
       if (style) ButtonCSS.unsetActionCSS(this.elementRef, style);
     }
   }
 
   public reapplyStateStyle(setType: keyof T, unsetTypes?: (keyof T)[]) {
-    if (!this._customStyles) return;
+    if (!this.customStyles) return;
     if (unsetTypes) this.unsetCustomStateStyles(unsetTypes);
-    const setStyle = this._customStyles[setType];
+    const setStyle = this.customStyles[setType];
     if (setStyle) ButtonCSS.setElementCssUpToState(this.elementRef, setStyle, this._mouseState.state);
     this.setEvents(setStyle);
   }

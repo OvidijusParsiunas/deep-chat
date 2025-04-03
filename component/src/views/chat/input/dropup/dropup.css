@@ -67,7 +67,6 @@
 .dropup-menu-item-icon {
   width: 1.39em;
   position: relative;
-  margin-right: 0.56em;
 }
 
 .dropup-menu-item-icon > svg {
@@ -78,6 +77,7 @@
 }
 
 .dropup-menu-item-text {
+  margin-left: 0.56em;
   margin-top: 0.08em;
   width: max-content;
 }

@@ -33,30 +33,33 @@ export class DropupItem {
     return textElement;
   }
 
-  private static createItemIcon(inputButtonElement: HTMLElement, iconContainerStyle?: CustomStyle) {
+  private static createItemIcon(inputButtonElement: Element, iconContainerStyle?: CustomStyle) {
     const iconContainer = document.createElement('div');
     Object.assign(iconContainer.style, iconContainerStyle);
     iconContainer.classList.add(DropupItem.ICON_CLASS);
-    iconContainer.appendChild(inputButtonElement.children[0]);
+    iconContainer.appendChild(inputButtonElement);
     return iconContainer;
   }
 
-  private static populateItem(elementRef: HTMLElement, item: HTMLElement, dropupText?: string, styles?: DropupMenuStyles) {
+  private static populateItem(inputButton: InputButton, item: HTMLElement, styles?: DropupMenuStyles) {
+    const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
+    const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
     if (buttonInnerElement.classList.contains('text-button')) {
+      if (!emptySVG) item.appendChild(DropupItem.createItemIcon(svg, styles?.iconContainer));
       item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.text));
     } else {
-      item.appendChild(DropupItem.createItemIcon(elementRef, styles?.iconContainer));
+      if (!emptySVG) item.appendChild(DropupItem.createItemIcon(elementRef.children[0], styles?.iconContainer));
       item.appendChild(DropupItem.createItemText(dropupText, styles?.text));
     }
   }
 
   public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
-    const {elementRef, dropupText} = inputButton;
     const item = document.createElement('div');
     Object.assign(item.style, styles?.item?.default);
-    DropupItem.populateItem(elementRef, item, dropupText, styles);
+    DropupItem.populateItem(inputButton, item, styles);
     item.classList.add(DropupItem.MENU_ITEM_CLASS);
+    const {elementRef} = inputButton;
     const statefulStyles = StyleUtils.processStateful(styles?.item || {});
     DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
     return item;

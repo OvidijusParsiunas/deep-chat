@@ -16,8 +16,9 @@ export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     const buttonPosition = fileService?.button?.position;
     const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
-    super(CameraButton.createButtonElement(), buttonPosition, fileService?.button || {}, dropupText);
-    const innerElements = this.createInnerElements(this._customStyles, buttonPosition === 'dropup-menu');
+    const svg = CameraButton.createSVGIconElement();
+    super(CameraButton.createButtonElement(), svg, buttonPosition, fileService?.button || {}, dropupText);
+    const innerElements = this.createInnerElements(this.customStyles, buttonPosition === 'dropup-menu');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
@@ -26,11 +27,15 @@ export class CameraButton extends InputButton<Styles> {
     this.reapplyStateStyle('styles');
   }
 
-  // prettier-ignore
+  private static createSVGIconElement() {
+    const svgIconElement = SVGIconUtils.createSVGElement(CAMERA_ICON_STRING);
+    svgIconElement.id = 'camera-icon';
+    return svgIconElement;
+  }
+
   private createInnerElements(customStyles?: Styles, isDropup = false) {
     return {
-      styles: ButtonInnerElements.createInnerElement(
-        this.elementRef, CameraButton.createSVGIconElement(), 'styles', customStyles, isDropup),
+      styles: ButtonInnerElements.createInnerElement(this.elementRef, this.svg, 'styles', customStyles, isDropup),
     };
   }
 
@@ -38,12 +43,6 @@ export class CameraButton extends InputButton<Styles> {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
     return buttonElement;
-  }
-
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(CAMERA_ICON_STRING);
-    svgIconElement.id = 'camera-icon';
-    return svgIconElement;
   }
 
   // prettier-ignore

@@ -14,7 +14,6 @@ export type CustomDropupItemStateStyles = {
 };
 
 export type CustomDropupItemStyles = {
-  text?: string;
   default?: CustomDropupItemStateStyles;
   active?: CustomDropupItemStateStyles;
   disabled?: CustomDropupItemStateStyles;

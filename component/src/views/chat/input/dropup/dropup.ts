@@ -17,8 +17,9 @@ export class Dropup extends InputButton<Styles> {
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
-    super(Dropup.createButtonElement(), undefined, {styles: styles?.button?.styles});
-    const innerElements = this.createInnerElements(this._customStyles);
+    const svg = Dropup.createSVGIconElement();
+    super(Dropup.createButtonElement(), svg, undefined, {styles: styles?.button?.styles});
+    const innerElements = this.createInnerElements(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
     this.buttonContainer = Dropup.createButtonContainer();
@@ -31,6 +32,11 @@ export class Dropup extends InputButton<Styles> {
     this.addContainerEvents(containerElement);
   }
 
+  private static createSVGIconElement() {
+    const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
+    return svgIconElement;
+  }
+
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
@@ -39,17 +45,12 @@ export class Dropup extends InputButton<Styles> {
 
   private createInnerElements(customStyles?: Styles) {
     return {
-      styles: this.createInnerElement(Dropup.createSVGIconElement(), 'styles', customStyles),
+      styles: this.createInnerElement(this.svg, 'styles', customStyles),
     };
   }
 
   private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
     return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
-  }
-
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
-    return svgIconElement;
   }
 
   private addClickEvent() {

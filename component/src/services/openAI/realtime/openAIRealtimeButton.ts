@@ -13,26 +13,24 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: OpenAIRealtimeButtonT) {
-    super(document.createElement('div'), undefined, styles);
-    this._innerElements = this.createInnerElements(this._customStyles);
+    const baseInnerElement = SVGIconUtils.createSVGElement(
+      styles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG
+    );
+    super(document.createElement('div'), baseInnerElement, undefined, styles);
+    this._innerElements = this.createInnerElements(this.customStyles);
     this.changeToDefault();
   }
 
   private createInnerElements(customStyles?: Styles) {
-    const baseInnerElement = SVGIconUtils.createSVGElement(
-      customStyles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG
-    );
     return {
-      default: this.createInnerElement(baseInnerElement, 'default', customStyles),
-      active: this.createInnerElement(baseInnerElement, 'active', customStyles),
-      unavailable: this.createInnerElement(baseInnerElement, 'unavailable', customStyles),
+      default: this.createInnerElement('default', customStyles),
+      active: this.createInnerElement('active', customStyles),
+      unavailable: this.createInnerElement('unavailable', customStyles),
     };
   }
 
-  // prettier-ignore
-  private createInnerElement(baseButton: SVGGraphicsElement,
-      state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
+  private createInnerElement(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
+    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || this.svg;
   }
 
   public changeToActive() {
@@ -43,16 +41,16 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   public changeToDefault() {
     this.elementRef.replaceChildren(this._innerElements.default);
-    if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
-    if (this._customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.unavailable);
+    if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
+    if (this.customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.unavailable);
     this.reapplyStateStyle('default', ['active', 'unavailable']);
     this.isActive = false;
   }
 
   public changeToUnavailable() {
     this.elementRef.replaceChildren(this._innerElements.unavailable);
-    if (this._customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.active);
-    if (this._customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this._customStyles?.default);
+    if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
+    if (this.customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.default);
     this.reapplyStateStyle('unavailable', ['default', 'active']);
     this.isActive = false;
   }

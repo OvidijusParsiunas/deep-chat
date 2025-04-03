@@ -52,7 +52,8 @@ export class SubmitButton extends InputButton<Styles> {
   constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
-    super(SubmitButton.createButtonContainerElement(), submitButtonStyles?.position, submitButtonStyles);
+    const svg = SubmitButton.createSubmitIconElement();
+    super(SubmitButton.createButtonContainerElement(), svg, submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
     this._textInput = textInput;
     this._fileAttachments = fileAttachments;
@@ -71,9 +72,15 @@ export class SubmitButton extends InputButton<Styles> {
     });
   }
 
+  private static createSubmitIconElement() {
+    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
+    svgIconElement.id = 'submit-icon';
+    return svgIconElement;
+  }
+
   private createInnerElements() {
     const {submit, loading, stop} = this.createCustomElements();
-    const submitElement = submit || SubmitButton.createSubmitIconElement();
+    const submitElement = submit || this.svg;
     return {
       submit: submitElement,
       loading: loading || SubmitButton.createLoadingIconElement(),
@@ -83,11 +90,11 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createCustomElements() {
-    const submit = ButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this._customStyles);
+    const submit = ButtonInnerElements.createSpecificStateElement(this.elementRef, 'submit', this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement} = {loading: undefined, stop: undefined};
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
-      const element = ButtonInnerElements.createCustomElement(styleState, this._customStyles);
+      const element = ButtonInnerElements.createCustomElement(styleState, this.customStyles);
       if (element) states[styleState] = element;
     });
     states.submit = submit;
@@ -98,12 +105,6 @@ export class SubmitButton extends InputButton<Styles> {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
     return buttonElement;
-  }
-
-  private static createSubmitIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
-    svgIconElement.id = 'submit-icon';
-    return svgIconElement;
   }
 
   private static createLoadingIconElement() {
@@ -119,14 +120,14 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createDisabledIconElement(submitElement: ButtonInnerElement) {
-    const element = ButtonInnerElements.createCustomElement('disabled', this._customStyles);
+    const element = ButtonInnerElements.createCustomElement('disabled', this.customStyles);
     return element || (submitElement.cloneNode(true) as ButtonInnerElement);
   }
 
   // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
-    if (this._customStyles?.submit?.svg
-        || this._customStyles?.loading?.svg?.content || this._customStyles?.loading?.text?.content) return;
+    if (this.customStyles?.submit?.svg
+        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.text?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
       const styleElement = document.createElement('style');
