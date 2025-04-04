@@ -25,7 +25,7 @@ export class DropupItem {
     });
   }
 
-  private static createItemText(dropupText?: string, textStyle?: CustomStyle) {
+  public static createItemText(dropupText?: string, textStyle?: CustomStyle) {
     const textElement = document.createElement('div');
     Object.assign(textElement.style, textStyle);
     textElement.classList.add(DropupItem.TEXT_CLASS);
@@ -33,7 +33,7 @@ export class DropupItem {
     return textElement;
   }
 
-  private static createItemIcon(inputButtonElement: Element, iconContainerStyle?: CustomStyle) {
+  public static createItemIcon(inputButtonElement: Element, iconContainerStyle?: CustomStyle) {
     const iconContainer = document.createElement('div');
     Object.assign(iconContainer.style, iconContainerStyle);
     iconContainer.classList.add(DropupItem.ICON_CLASS);
