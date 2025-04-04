@@ -227,7 +227,7 @@ export class DeepChat extends InternalHTML {
   override onRender() {
     GoogleFont.attemptAppendStyleSheetToHead(this.style);
     Legacy.processConnect(this);
-    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
+    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this);
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
