@@ -88,6 +88,8 @@ import Tabs from '@theme/Tabs';
 - Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `webSpeech?:` `true` | [`WebSpeechOptions`](#WebSpeechOptions), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`azure?: AzureOptions`](#AzureOptions), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`externalHandler?: (audioBlob: Blob) => void`](#ExternalHandler), <br /> {/* ADDED */}
+  &nbsp;&nbsp;&nbsp;&nbsp; `externalAudioFormat?: 'wav' | 'mp3' | 'ogg'`, <br /> {/* ADDED */}
   &nbsp;&nbsp;&nbsp;&nbsp; [`textColor?: TextColor`](#TextColor), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `displayInterimResults?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `translations?: {[key: string]: string}`, <br />
@@ -101,10 +103,13 @@ import Tabs from '@theme/Tabs';
 - Default: _\{webSpeech: true, stopAfterSubmit: true\}_
 
 Transcribe your voice into text and control chat with commands.<br />
-`webSpeech` utilises [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to transcribe your speech. <br />
-`azure` utilises [`Azure Cognitive Speech Services API`](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-to-text) to transcribe your speech. <br />
-`textColor` is used to set the color of interim and final results text. <br />
-`displayInterimResults` controls whether interim results are displayed. <br />
+This property accepts multiple configuration options to control the STT behavior: <br />
+`webSpeech` utilises the browser's built-in [`Web Speech API`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) for transcription. This is the default if no other service is specified. <br />
+`azure` utilises [`Azure Cognitive Speech Services API`](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-to-text). Note: The `azure` option within `speechToText` currently only supports transcribing uploaded audio files, not direct microphone input. For real-time Azure transcription from the microphone, consider using the `externalHandler`. <br />
+`externalHandler` provides a mechanism for **agnostic STT**. It's a callback function that receives the raw recorded audio `Blob` directly from the microphone, bypassing internal services like `webSpeech` or `azure`. This allows you to implement custom STT processing, such as sending the audio to your own backend or a different cloud service. If `externalHandler` is provided, it takes precedence, and the `webSpeech` and `azure` configurations within `speechToText` are ignored for microphone input processing. <br />
+`externalAudioFormat` (used only with `externalHandler`) specifies the desired audio format ('wav', 'mp3', 'ogg') for the `Blob` passed to the handler. Defaults to 'wav'. Note that browser support for recording directly to certain formats (like MP3) may vary. <br />
+`textColor` is used to set the color of interim and final results text when using `webSpeech` or `azure`. <br />
+`displayInterimResults` controls whether interim results (from `webSpeech` or `azure`) are displayed in the text input area. <br />
 `translations` is a case-sensitive one-to-one mapping of words that will automatically be translated to others. <br />
 `commands` is used to set the phrases that will trigger various chat functionality. <br />
 `button` defines the styling used for the microphone button. <br />
@@ -172,17 +177,78 @@ Transcribe your voice into text and control chat with commands.<br />
 <LineBreak></LineBreak>
 
 :::info
-If the [`microphone`](/docs/files#microphone) recorder is set - this will not be enabled. <br />
+**Priority:** If the [`microphone`](/docs/files#microphone) property is configured (for the dedicated audio recording button), the `speechToText` property might be ignored to prevent displaying two microphone-related buttons. The exact priority depends on the internal implementation order. Similarly, if `externalHandler` is provided within `speechToText`, it takes priority over `webSpeech` and `azure` settings within the same object for microphone input. <br />
 :::
 
 :::info
-Speech to text functionality is provided by the [`Speech To Element`](https://github.com/OvidijusParsiunas/speech-to-element) library.
+**Underlying Libraries:** The default `webSpeech` functionality relies on the [`Speech To Element`](https://github.com/OvidijusParsiunas/speech-to-element) library. The `azure` option uses the Azure Speech SDK (when available) for file uploads within this context. The `externalHandler` uses the browser's native `MediaRecorder` API for capturing audio.
 :::
 
 :::caution
 Support for `webSpeech` varies across different browsers, please check the [`Can I use`](https://caniuse.com/?search=Web%20Speech%20API) Speech Recognition API section.
 (The yellow bars indicate that it is supported)
 :::
+
+<LineBreak></LineBreak>
+
+#### External Handler Example {#ExternalHandler}
+
+This example demonstrates how to use the `externalHandler` to receive the audio blob and potentially send it elsewhere (e.g., your backend).
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  speechToText='{
+    "externalHandler": "handleAudioBlob",
+    "externalAudioFormat": "wav"
+  }'
+></deep-chat>
+
+<script>
+  function handleAudioBlob(audioBlob) {
+    console.log('Received audio blob:', audioBlob);
+    // Example: Send blob to a backend API using fetch
+    // const formData = new FormData();
+    // formData.append('audio', audioBlob, 'recording.wav');
+    // fetch('/your-backend-endpoint', { method: 'POST', body: formData })
+    //  .then(response => response.json())
+    //  .then(data => console.log('Backend response:', data))
+    //  .catch(error => console.error('Error sending audio:', error));
+  }
+  // Make the handler globally accessible if using string reference in HTML
+  window.handleAudioBlob = handleAudioBlob;
+</script>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```jsx
+import React from 'react';
+import {DeepChat} from 'deep-chat-react';
+
+function App() {
+  const handleAudio = (audioBlob) => {
+    console.log('Received audio blob:', audioBlob);
+    // Send blob to backend (e.g., via WebSocket or fetch)
+  };
+
+  return (
+    <DeepChat
+      speechToText={{
+        externalHandler: handleAudio,
+        externalAudioFormat: 'wav',
+      }}
+      // other props...
+    />
+  );
+}
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 

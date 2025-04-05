@@ -41,6 +41,12 @@
   "peerDependencies": {
     "react": ">=16.8.0"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/deepChat.js",
+      "require": "./dist/deepChat.js"
+    }
+  },
   "files": [
     "dist/**/*"
   ]

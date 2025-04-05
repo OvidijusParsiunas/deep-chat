@@ -3,3 +3,5 @@ dist
 bundle
 local_assets
 .vscode
+component/custom-elements.json
+*.tgz

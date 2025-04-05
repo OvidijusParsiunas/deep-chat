@@ -28,6 +28,6 @@
       }
     ]
   },
-  "include": ["src/deepChat.ts"],
+  "include": ["src/**/*"],
   "exclude": []
 }

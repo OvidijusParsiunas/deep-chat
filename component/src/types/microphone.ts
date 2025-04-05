@@ -39,4 +39,15 @@ export type SpeechToTextConfig = {
   submitAfterSilence?: SubmitAfterSilence;
   button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
   events?: SpeechEvents;
+  /**
+   * @description Callback function to handle the recorded audio blob externally.
+   * If provided, Deep Chat will capture audio and pass the resulting Blob to this handler
+   * instead of using internal or Azure STT services.
+   */
+  externalHandler?: (audioBlob: Blob) => void;
+  /**
+   * @description Specifies the desired audio format for the blob passed to the externalHandler.
+   * @default 'wav'
+   */
+  externalAudioFormat?: 'wav' | 'mp3' | 'ogg';
 };

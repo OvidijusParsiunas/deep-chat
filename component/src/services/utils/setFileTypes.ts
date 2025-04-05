@@ -49,29 +49,44 @@ export class SetFileTypes {
   // needs to be set after audio to overwrite maxNumberOfFiles
   // prettier-ignore
   private static processMicrophone(
-    serviceIO: ServiceIO, remark: Remarkable, microphone: DeepChat['microphone'], audio: DeepChat['audio']) {
-  const files = serviceIO.fileTypes.audio?.files || {};
-  const defaultFormats = {acceptedFormats: 'audio/*', ...files};
-  if (!microphone) return;
-  if (navigator.mediaDevices.getUserMedia !== undefined) {
-    serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, microphone);
-    // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
-    if (typeof microphone === 'object') {
-      if (microphone.files) {
-        serviceIO.recordAudio.files ??= {}; // for typescript
-        serviceIO.recordAudio.files.format = microphone.files?.format;
-        // this.recordAudio.files.newFilePrefix = customService.microphone.files?.newFilePrefix;
-        serviceIO.recordAudio.files.maxDurationSeconds = microphone.files?.maxDurationSeconds;
-        if (serviceIO.fileTypes.audio?.files) {
-          serviceIO.fileTypes.audio.files.maxNumberOfFiles ??= microphone.files.maxNumberOfFiles;
+    serviceIO: ServiceIO,
+    remark: Remarkable,
+    microphone: DeepChat['microphone'],
+    audio: DeepChat['audio'],
+    deepChat: DeepChat)
+  {
+
+      // Added deepChat parameter to access speechToText config
+      // If externalHandler is set in deepChat.speechToText, DO NOT process microphone config for recording
+      if (typeof deepChat.speechToText === 'object' && deepChat.speechToText.externalHandler) return;
+
+      const files = serviceIO.fileTypes.audio?.files || {};
+      const defaultFormats = {acceptedFormats: 'audio/*', ...files};
+      if (!microphone) return;
+      if (navigator.mediaDevices.getUserMedia !== undefined) {
+        serviceIO.recordAudio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, microphone);
+        // adding configuration that parseConfig does not add (don't want to overwrite as it may have processed properties)
+        if (typeof microphone === 'object') {
+          if (microphone.files) {
+            serviceIO.recordAudio.files ??= {}; // for typescript
+            serviceIO.recordAudio.files.format = microphone.files?.format;
+            // this.recordAudio.files.newFilePrefix = customService.microphone.files?.newFilePrefix;
+            serviceIO.recordAudio.files.maxDurationSeconds = microphone.files?.maxDurationSeconds;
+            if (serviceIO.fileTypes.audio?.files) {
+              serviceIO.fileTypes.audio.files.maxNumberOfFiles ??= microphone.files.maxNumberOfFiles;
+            }
+          }
         }
+        // if microphone is not available - fallback to normal audio upload
+      } else if (!audio) {
+        serviceIO.fileTypes.audio = SetFileTypes.parseConfig(
+          serviceIO.connectSettings,
+          defaultFormats,
+          remark,
+          microphone
+        );
       }
     }
-    // if microphone is not available - fallback to normal audio upload
-  } else if (!audio) {
-    serviceIO.fileTypes.audio = SetFileTypes.parseConfig(serviceIO.connectSettings, defaultFormats, remark, microphone);
-  }
-}
 
   // prettier-ignore
   private static processAudioConfig(
@@ -146,7 +161,7 @@ export class SetFileTypes {
     SetFileTypes.processCamera(serviceIO, remarkable, deepChat.camera, deepChat.images);
     SetFileTypes.processGifConfig(serviceIO, remarkable, deepChat.gifs, existingFileTypes?.gifs);
     SetFileTypes.processAudioConfig(serviceIO, remarkable, deepChat.audio, existingFileTypes?.audio);
-    SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphone, deepChat.audio);
+    SetFileTypes.processMicrophone(serviceIO, remarkable, deepChat.microphone, deepChat.audio, deepChat);
     SetFileTypes.processMixedFiles(serviceIO, remarkable, deepChat.mixedFiles);
   }
 }
