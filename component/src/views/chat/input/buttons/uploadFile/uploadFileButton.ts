@@ -26,7 +26,7 @@ export class UploadFileButton extends InputButton<Styles> {
     const innerElements = this.createInnerElements(this.customStyles, isDropup);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
-    this.elementRef.replaceChildren(innerElements.styles);
+    this.elementRef.replaceChildren(...innerElements.styles);
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce === false
@@ -41,7 +41,7 @@ export class UploadFileButton extends InputButton<Styles> {
 
   private createInnerElements(customStyles?: Styles, isDropup = false) {
     return {
-      styles: ButtonInnerElements.createInnerElement(this.elementRef, this.svg, 'styles', customStyles, isDropup),
+      styles: ButtonInnerElements.createInnerElements(this.elementRef, this.svg, 'styles', customStyles, isDropup),
     };
   }
 

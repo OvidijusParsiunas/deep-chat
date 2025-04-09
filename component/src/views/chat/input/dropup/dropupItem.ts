@@ -1,5 +1,6 @@
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {CustomStyle, StatefulStyles} from '../../../../types/styles';
+import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {InputButton} from '../buttons/inputButton';
@@ -45,7 +46,7 @@ export class DropupItem {
     const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
     const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
-    if (buttonInnerElement.classList.contains('text-button')) {
+    if (buttonInnerElement.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
       if (!emptySVG) item.appendChild(DropupItem.createItemIcon(svg, styles?.iconContainer));
       item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.text));
     } else {

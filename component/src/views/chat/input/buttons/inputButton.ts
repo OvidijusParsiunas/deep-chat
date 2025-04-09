@@ -1,4 +1,6 @@
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
+import {ButtonInnerElement} from '../../../../types/buttonInternal';
+import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonAccessibility} from './buttonAccessility';
 import {ButtonStyles} from '../../../../types/button';
@@ -80,5 +82,10 @@ export class InputButton<T extends Styles = Styles> {
     const setStyle = this.customStyles[setType];
     if (setStyle) ButtonCSS.setElementCssUpToState(this.elementRef, setStyle, this._mouseState.state);
     this.setEvents(setStyle);
+  }
+
+  protected changeElementsByState(newChildElements: ButtonInnerElement[]) {
+    this.elementRef.replaceChildren(...newChildElements);
+    ButtonInnerElements.reassignClassBasedOnChildren(this.elementRef, newChildElements);
   }
 }

@@ -13,6 +13,10 @@
   filter: brightness(0) saturate(100%) invert(54%) sepia(0%) saturate(724%) hue-rotate(6deg) brightness(92%) contrast(90%);
 }
 
+.dropup-button > * {
+  pointer-events: none;
+}
+
 #dropup-menu {
   background-color: white;
   position: absolute;

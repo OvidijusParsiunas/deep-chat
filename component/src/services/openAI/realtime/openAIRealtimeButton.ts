@@ -17,30 +17,30 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
       styles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG
     );
     super(document.createElement('div'), baseInnerElement, undefined, styles);
-    this._innerElements = this.createInnerElements(this.customStyles);
+    this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this.changeToDefault();
   }
 
-  private createInnerElements(customStyles?: Styles) {
+  private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      default: this.createInnerElement('default', customStyles),
-      active: this.createInnerElement('active', customStyles),
-      unavailable: this.createInnerElement('unavailable', customStyles),
+      default: this.createInnerElements('default', customStyles),
+      active: this.createInnerElements('active', customStyles),
+      unavailable: this.createInnerElements('unavailable', customStyles),
     };
   }
 
-  private createInnerElement(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || this.svg;
+  private createInnerElements(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
+    return ButtonInnerElements.createCustomElements(state, customStyles) || [this.svg];
   }
 
   public changeToActive() {
-    this.elementRef.replaceChildren(this._innerElements.active);
+    this.changeElementsByState(this._innerElements.active);
     this.reapplyStateStyle('active', ['unavailable', 'default']);
     this.isActive = true;
   }
 
   public changeToDefault() {
-    this.elementRef.replaceChildren(this._innerElements.default);
+    this.changeElementsByState(this._innerElements.default);
     if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
     if (this.customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.unavailable);
     this.reapplyStateStyle('default', ['active', 'unavailable']);
@@ -48,7 +48,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   }
 
   public changeToUnavailable() {
-    this.elementRef.replaceChildren(this._innerElements.unavailable);
+    this.changeElementsByState(this._innerElements.unavailable);
     if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
     if (this.customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.default);
     this.reapplyStateStyle('unavailable', ['default', 'active']);

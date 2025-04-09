@@ -1,46 +1,44 @@
-import {ButtonStateStyles} from '../../../../types/buttonInternal';
+import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 
 export class ButtonInnerElements {
+  private static readonly INPUT_BUTTON_SVG_CLASS = 'input-button-svg';
+  private static readonly INPUT_BUTTON_SVG_TEXT_CLASS = 'input-button-svg-text';
+  public static readonly INPUT_BUTTON_INNER_TEXT_CLASS = 'text-button';
+
   private static createTextElement(text: string) {
     const textElement = document.createElement('div');
-    textElement.classList.add('text-button');
+    textElement.classList.add(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS);
     textElement.innerText = text;
     return textElement;
   }
 
-  private static createElement(string: string, isText: boolean) {
-    return isText ? ButtonInnerElements.createTextElement(string) : SVGIconUtils.createSVGElement(string);
-  }
-
-  public static createCustomElement<T>(state: keyof T, customStyles?: ButtonStateStyles<T>) {
+  public static createCustomElements<T>(state: keyof T, customStyles?: ButtonStateStyles<T>) {
+    const elements: ButtonInnerElement[] = [];
     const stateStyle = customStyles?.[state];
-    if (stateStyle?.svg?.content) return ButtonInnerElements.createElement(stateStyle?.svg?.content, false);
-    if (stateStyle?.text?.content) return ButtonInnerElements.createElement(stateStyle?.text?.content, true);
-    return;
+    if (stateStyle?.svg?.content) elements.push(SVGIconUtils.createSVGElement(stateStyle?.svg?.content));
+    if (stateStyle?.text?.content) elements.push(ButtonInnerElements.createTextElement(stateStyle?.text?.content));
+    return elements.length > 0 ? elements : undefined;
   }
 
-  private static processElement(parentEl: HTMLElement, element?: Element) {
-    if (!element?.classList.contains('text-button')) {
-      parentEl.classList.add('input-button-svg');
+  public static reassignClassBasedOnChildren(parentEl: HTMLElement, elements: ButtonInnerElement[]) {
+    parentEl.classList.remove(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS, ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
+    if (!elements.find((element) => element.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS))) {
+      parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS);
+    } else if (elements.length > 1) {
+      parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
     }
-  }
-
-  // publicly used for creating elements that do not change state in a sequence
-  public static createSpecificStateElement<T>(parentEl: HTMLElement, state: keyof T, customStyles?: ButtonStateStyles<T>) {
-    let element: HTMLDivElement | SVGGraphicsElement | undefined;
-    if (customStyles) element = ButtonInnerElements.createCustomElement(state, customStyles);
-    ButtonInnerElements.processElement(parentEl, element);
-    return element;
   }
 
   // https://github.com/OvidijusParsiunas/deep-chat/issues/175
   // isDropup here is only determined by the user and not when moved to dropup automatically
   // prettier-ignore
-  public static createInnerElement<T>(parentEl: HTMLElement,
+  public static createInnerElements<T>(parentEl: HTMLElement,
       baseButton: SVGGraphicsElement, state: keyof T, customStyles?: ButtonStateStyles<T>, isDropup = false) {
     // if the destination is specified to be dropup and content is not defined - use baseButton
-    if (isDropup && !customStyles?.[state]?.svg?.content) return baseButton;
-    return ButtonInnerElements.createSpecificStateElement(parentEl, state, customStyles) || baseButton;
+    if (isDropup && !customStyles?.[state]?.svg?.content) return [baseButton];
+    const elements = ButtonInnerElements.createCustomElements(state, customStyles);
+    if (elements) ButtonInnerElements.reassignClassBasedOnChildren(parentEl, elements);
+    return elements || [baseButton];
   }
 }

@@ -15,6 +15,20 @@
   height: 1.65em;
 }
 
+.input-button-svg-text {
+  padding: 1px;
+  height: 1.65em;
+  display: flex;
+}
+
+.input-button-svg-text > svg {
+  padding: 0.2rem;
+}
+
+.input-button-svg-text > div {
+  margin-left: 2px;
+}
+
 .input-button:hover,
 .input-button:focus-visible {
   background-color: #9c9c9c2e;

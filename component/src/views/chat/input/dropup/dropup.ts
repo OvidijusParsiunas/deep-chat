@@ -13,20 +13,19 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class Dropup extends InputButton<Styles> {
   private readonly _menu: DropupMenu;
-  public static BUTTON_ICON_CLASS = 'dropup-icon';
+  public static BUTTON_ICON_CLASS = 'dropup-button';
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
     const svg = Dropup.createSVGIconElement();
     super(Dropup.createButtonElement(), svg, undefined, {styles: styles?.button?.styles});
-    const innerElements = this.createInnerElements(this.customStyles);
+    const innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
     this.buttonContainer = Dropup.createButtonContainer();
-    this.elementRef.appendChild(innerElements.styles);
+    this.changeElementsByState(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
     this.elementRef.classList.add(Dropup.BUTTON_ICON_CLASS, 'upload-file-button');
-    this.elementRef.children[0].id = 'dropup-icon';
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
@@ -34,6 +33,7 @@ export class Dropup extends InputButton<Styles> {
 
   private static createSVGIconElement() {
     const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
+    svgIconElement.id = 'dropup-icon';
     return svgIconElement;
   }
 
@@ -43,14 +43,14 @@ export class Dropup extends InputButton<Styles> {
     return buttonElement;
   }
 
-  private createInnerElements(customStyles?: Styles) {
+  private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: this.createInnerElement(this.svg, 'styles', customStyles),
+      styles: this.createInnerElements(this.svg, 'styles', customStyles),
     };
   }
 
-  private createInnerElement(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return ButtonInnerElements.createSpecificStateElement(this.elementRef, state, customStyles) || baseButton;
+  private createInnerElements(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
+    return ButtonInnerElements.createCustomElements(state, customStyles) || [baseButton];
   }
 
   private addClickEvent() {

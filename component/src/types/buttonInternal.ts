@@ -10,5 +10,5 @@ export type ButtonStateStyles<T> = {
 export type DefinedButtonStateStyles<T extends object> = Omit<T, 'position'>;
 
 export type DefinedButtonInnerElements<T extends object> = Required<
-  OverrideTypes<Omit<T, 'position'>, ButtonInnerElement>
+  OverrideTypes<Omit<T, 'position'>, ButtonInnerElement[]>
 >;
