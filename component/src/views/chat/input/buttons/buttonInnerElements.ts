@@ -13,11 +13,22 @@ export class ButtonInnerElements {
     return textElement;
   }
 
-  public static createCustomElements<T>(state: keyof T, customStyles?: ButtonStateStyles<T>) {
-    const elements: ButtonInnerElement[] = [];
+  private static tryAddSVGElement(elements: ButtonInnerElement[], base: SVGGraphicsElement, svg?: string, text?: string) {
+    // add svg element if custom or add a base svg only if svg string is not set to empty
+    if (svg) {
+      elements.push(SVGIconUtils.createSVGElement(svg));
+    } else if (svg !== '' && text) {
+      elements.push(base);
+    }
+  }
+
+  public static createCustomElements<T>(state: keyof T, base: SVGGraphicsElement, customStyles?: ButtonStateStyles<T>) {
     const stateStyle = customStyles?.[state];
-    if (stateStyle?.svg?.content) elements.push(SVGIconUtils.createSVGElement(stateStyle?.svg?.content));
-    if (stateStyle?.text?.content) elements.push(ButtonInnerElements.createTextElement(stateStyle?.text?.content));
+    const text = stateStyle?.text?.content;
+    const svg = stateStyle?.svg?.content;
+    const elements: ButtonInnerElement[] = [];
+    ButtonInnerElements.tryAddSVGElement(elements, base, svg, text);
+    if (text) elements.push(ButtonInnerElements.createTextElement(text));
     return elements.length > 0 ? elements : undefined;
   }
 
@@ -33,12 +44,19 @@ export class ButtonInnerElements {
   // https://github.com/OvidijusParsiunas/deep-chat/issues/175
   // isDropup here is only determined by the user and not when moved to dropup automatically
   // prettier-ignore
-  public static createInnerElements<T>(parentEl: HTMLElement,
+  public static createInnerElements<T>(parentEl: HTMLElement, iconId: string, 
       baseButton: SVGGraphicsElement, state: keyof T, customStyles?: ButtonStateStyles<T>, isDropup = false) {
     // if the destination is specified to be dropup and content is not defined - use baseButton
-    if (isDropup && !customStyles?.[state]?.svg?.content) return [baseButton];
-    const elements = ButtonInnerElements.createCustomElements(state, customStyles);
-    if (elements) ButtonInnerElements.reassignClassBasedOnChildren(parentEl, elements);
-    return elements || [baseButton];
+    if (isDropup && !customStyles?.[state]?.svg?.content) {
+      baseButton.id = iconId;
+      return [baseButton];
+    }
+    const elements = ButtonInnerElements.createCustomElements(state, baseButton, customStyles);
+    if (elements) {
+      ButtonInnerElements.reassignClassBasedOnChildren(parentEl, elements);
+      return elements;
+    }
+    baseButton.id = iconId;
+    return [baseButton];
   }
 }

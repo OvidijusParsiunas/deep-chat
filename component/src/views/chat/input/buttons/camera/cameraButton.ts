@@ -2,7 +2,6 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {ButtonInnerElements} from '../buttonInnerElements';
@@ -16,8 +15,7 @@ export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     const buttonPosition = fileService?.button?.position;
     const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
-    const svg = CameraButton.createSVGIconElement();
-    super(CameraButton.createButtonElement(), svg, buttonPosition, fileService?.button || {}, dropupText);
+    super(CameraButton.createButtonElement(), CAMERA_ICON_STRING, buttonPosition, fileService?.button || {}, dropupText);
     const innerElements = this.createInnerElements(this.customStyles, buttonPosition === 'dropup-menu');
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
@@ -27,15 +25,11 @@ export class CameraButton extends InputButton<Styles> {
     this.reapplyStateStyle('styles');
   }
 
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(CAMERA_ICON_STRING);
-    svgIconElement.id = 'camera-icon';
-    return svgIconElement;
-  }
-
+  // prettier-ignore
   private createInnerElements(customStyles?: Styles, isDropup = false) {
     return {
-      styles: ButtonInnerElements.createInnerElements(this.elementRef, this.svg, 'styles', customStyles, isDropup),
+      styles: ButtonInnerElements.createInnerElements(
+        this.elementRef, 'camera-icon', this.svg, 'styles', customStyles, isDropup),
     };
   }
 

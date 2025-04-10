@@ -2,7 +2,6 @@ import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPosition
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonInnerElements} from '../buttons/buttonInnerElements';
-import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {InputButton} from '../buttons/inputButton';
@@ -17,8 +16,7 @@ export class Dropup extends InputButton<Styles> {
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
-    const svg = Dropup.createSVGIconElement();
-    super(Dropup.createButtonElement(), svg, undefined, {styles: styles?.button?.styles});
+    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, {styles: styles?.button?.styles});
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
@@ -31,12 +29,6 @@ export class Dropup extends InputButton<Styles> {
     this.addContainerEvents(containerElement);
   }
 
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(PLUS_ICON_STRING);
-    svgIconElement.id = 'dropup-icon';
-    return svgIconElement;
-  }
-
   private static createButtonElement() {
     const buttonElement = document.createElement('div');
     buttonElement.classList.add('input-button');
@@ -45,12 +37,14 @@ export class Dropup extends InputButton<Styles> {
 
   private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: this.createInnerElements(this.svg, 'styles', customStyles),
+      styles: this.createInnerElements('styles', customStyles),
     };
   }
 
-  private createInnerElements(baseButton: SVGGraphicsElement, state: 'styles', customStyles?: Styles) {
-    return ButtonInnerElements.createCustomElements(state, customStyles) || [baseButton];
+  private createInnerElements(state: 'styles', customStyles?: Styles) {
+    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
+    if (customButton) return customButton;
+    return this.buildDefaultIconElement('dropup-icon');
   }
 
   private addClickEvent() {

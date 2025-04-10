@@ -2,7 +2,6 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {ButtonInnerElements} from '../buttonInnerElements';
 import {Modal} from '../../fileAttachments/modal/modal';
@@ -20,10 +19,9 @@ export class UploadFileButton extends InputButton<Styles> {
       fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
     const buttonPosition = fileService?.button?.position;
     const dropupItemText = fileService?.button?.styles?.text?.content || dropupText;
-    const svg = UploadFileButton.createSVGIconElement(iconId, iconSVGString);
-    super(UploadFileButton.createButtonElement(), svg, buttonPosition, fileService.button, dropupItemText);
+    super(UploadFileButton.createButtonElement(), iconSVGString, buttonPosition, fileService.button, dropupItemText);
     const isDropup = buttonPosition === 'dropup-menu';
-    const innerElements = this.createInnerElements(this.customStyles, isDropup);
+    const innerElements = this.createInnerElements(iconId, this.customStyles, isDropup);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
     this.elementRef.replaceChildren(...innerElements.styles);
@@ -33,15 +31,9 @@ export class UploadFileButton extends InputButton<Styles> {
       ? undefined : fileService.files?.infoModal?.openModalOnce;
   }
 
-  private static createSVGIconElement(iconId: string, iconSVGString: string) {
-    const svgIconElement = SVGIconUtils.createSVGElement(iconSVGString);
-    svgIconElement.id = iconId;
-    return svgIconElement;
-  }
-
-  private createInnerElements(customStyles?: Styles, isDropup = false) {
+  private createInnerElements(iconId: string, customStyles?: Styles, isDropup = false) {
     return {
-      styles: ButtonInnerElements.createInnerElements(this.elementRef, this.svg, 'styles', customStyles, isDropup),
+      styles: ButtonInnerElements.createInnerElements(this.elementRef, iconId, this.svg, 'styles', customStyles, isDropup),
     };
   }
 

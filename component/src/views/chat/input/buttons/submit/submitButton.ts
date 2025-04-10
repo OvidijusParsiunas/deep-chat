@@ -5,7 +5,6 @@ import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {UserContentI} from '../../../../../types/messagesInternal';
 import {MessageUtils} from '../../../messages/utils/messageUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
@@ -52,7 +51,7 @@ export class SubmitButton extends InputButton<Styles> {
   constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
       fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
-    const svg = SubmitButton.createSubmitIconElement();
+    const svg = SUBMIT_ICON_STRING;
     super(SubmitButton.createButtonContainerElement(), svg, submitButtonStyles?.position, submitButtonStyles);
     this._messages = messages;
     this._textInput = textInput;
@@ -72,32 +71,25 @@ export class SubmitButton extends InputButton<Styles> {
     });
   }
 
-  private static createSubmitIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
-    svgIconElement.id = 'submit-icon';
-    return svgIconElement;
-  }
-
   private createInnerElementsForStates() {
     const {submit, loading, stop} = this.createCustomElements();
-    const submitElement = !submit || submit.length === 0 ? [this.svg] : submit;
     return {
-      submit: submitElement,
+      submit: submit as ButtonInnerElement[],
       loading: loading || [SubmitButton.createLoadingIconElement()],
       stop: stop || [SubmitButton.createStopIconElement()],
-      disabled: this.createDisabledIconElement(submitElement),
+      disabled: this.createDisabledIconElement(submit as ButtonInnerElement[]),
     };
   }
 
   private createCustomElements() {
-    const submit = ButtonInnerElements.createCustomElements('submit', this.customStyles);
+    const submit = ButtonInnerElements.createCustomElements('submit', this.svg, this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
-      const elements = ButtonInnerElements.createCustomElements(styleState, this.customStyles);
+      const elements = ButtonInnerElements.createCustomElements(styleState, this.svg, this.customStyles);
       if (elements) states[styleState] = elements;
     });
-    states.submit = submit;
+    states.submit = submit || this.buildDefaultIconElement('submit-icon');
     return states;
   }
 
@@ -120,7 +112,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createDisabledIconElement(submitElement: ButtonInnerElement[]) {
-    const elements = ButtonInnerElements.createCustomElements('disabled', this.customStyles);
+    const elements = ButtonInnerElements.createCustomElements('disabled', this.svg, this.customStyles);
     return elements || [submitElement[0].cloneNode(true) as ButtonInnerElement];
   }
 

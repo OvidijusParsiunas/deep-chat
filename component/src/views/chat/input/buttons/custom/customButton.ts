@@ -1,7 +1,6 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
 import {CustomButtonDropupStyle} from './customButtonDropupStyle';
@@ -33,7 +32,7 @@ export class CustomButton extends InputButton<Styles> {
 
   constructor(customButton: CustomButtonT, index: number, menuStyles?: DropupMenuStyles) {
     const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
-    const svg = CustomButton.createSVGIconElement(customButton?.styles?.button);
+    const svg = SUBMIT_ICON_STRING;
     super(CustomButton.createButtonElement(), svg, customButton?.position, customButton?.styles?.button, dropupText);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menuStyles = menuStyles;
@@ -42,14 +41,6 @@ export class CustomButton extends InputButton<Styles> {
     this.setSetState(customButton);
     this.addClickListener();
     this.changeState(customButton.initialState, true);
-  }
-
-  private static createSVGIconElement(customStyles?: Styles) {
-    const svgIconElement = SVGIconUtils.createSVGElement(SUBMIT_ICON_STRING);
-    svgIconElement.id = 'submit-icon';
-    return customStyles?.default?.svg?.content
-      ? SVGIconUtils.createSVGElement(customStyles?.default?.svg?.content)
-      : svgIconElement;
   }
 
   private static createButtonElement() {
@@ -67,7 +58,9 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   private createInnerElements(state: keyof CustomButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createCustomElements(state, customStyles) || [this.svg];
+    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
+    if (customButton) return customButton;
+    return this.buildDefaultIconElement('submit-icon');
   }
 
   private setSetState(customButton: CustomButtonT) {

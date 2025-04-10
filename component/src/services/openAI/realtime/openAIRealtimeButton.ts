@@ -3,7 +3,6 @@ import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/open
 import {ButtonInnerElements} from '../../../views/chat/input/buttons/buttonInnerElements';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
 import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
-import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
 
 type Styles = DefinedButtonStateStyles<OpenAIRealtimeButtonT>;
 
@@ -13,10 +12,8 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: OpenAIRealtimeButtonT) {
-    const baseInnerElement = SVGIconUtils.createSVGElement(
-      styles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG
-    );
-    super(document.createElement('div'), baseInnerElement, undefined, styles);
+    const svg = styles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG;
+    super(document.createElement('div'), svg, undefined, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this.changeToDefault();
   }
@@ -30,7 +27,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   }
 
   private createInnerElements(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createCustomElements(state, customStyles) || [this.svg];
+    return ButtonInnerElements.createCustomElements(state, this.svg, customStyles) || [this.svg];
   }
 
   public changeToActive() {

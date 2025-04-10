@@ -1,6 +1,5 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonInnerElements} from '../buttonInnerElements';
 import {ButtonStyles} from '../../../../../types/button';
@@ -18,16 +17,9 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   constructor(styles?: AllMicrophoneStyles) {
     if (styles?.position === 'dropup-menu') styles.position = 'outside-right'; // not allowed to be in dropup for UX
-    const svg = MicrophoneButton.createSVGIconElement();
-    super(MicrophoneButton.createMicrophoneElement(), svg, styles?.position, styles);
+    super(MicrophoneButton.createMicrophoneElement(), MICROPHONE_ICON_STRING, styles?.position, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this.changeToDefault();
-  }
-
-  private static createSVGIconElement() {
-    const svgIconElement = SVGIconUtils.createSVGElement(MICROPHONE_ICON_STRING);
-    svgIconElement.id = 'microphone-icon';
-    return svgIconElement;
   }
 
   private createInnerElementsForStates(customStyles?: Styles) {
@@ -40,7 +32,9 @@ export class MicrophoneButton extends InputButton<Styles> {
   }
 
   private createInnerElements(state: keyof MicrophoneButton['_innerElements'], customStyles?: Styles) {
-    return ButtonInnerElements.createCustomElements(state, customStyles) || [this.svg];
+    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
+    if (customButton) return customButton;
+    return this.buildDefaultIconElement('microphone-icon');
   }
 
   private static createMicrophoneElement() {

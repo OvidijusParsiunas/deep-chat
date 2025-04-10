@@ -1,5 +1,6 @@
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {ButtonInnerElement} from '../../../../types/buttonInternal';
+import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonAccessibility} from './buttonAccessility';
@@ -20,17 +21,10 @@ export class InputButton<T extends Styles = Styles> {
   readonly position?: ButtonPositionT;
   readonly dropupText?: string;
 
-  constructor(
-    buttonElement: HTMLElement,
-    // this will only be used if button is in dropup, user has not defined custom svg and svg text is not ''
-    svg: SVGGraphicsElement,
-    position?: ButtonPositionT,
-    customStyles?: T,
-    dropupText?: string
-  ) {
+  constructor(buttonElement: HTMLElement, svg: string, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
     ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
-    this.svg = svg;
+    this.svg = SVGIconUtils.createSVGElement(svg);
     this.customStyles = customStyles;
     this.position = position;
     this.dropupText = dropupText;
@@ -87,5 +81,10 @@ export class InputButton<T extends Styles = Styles> {
   protected changeElementsByState(newChildElements: ButtonInnerElement[]) {
     this.elementRef.replaceChildren(...newChildElements);
     ButtonInnerElements.reassignClassBasedOnChildren(this.elementRef, newChildElements);
+  }
+
+  protected buildDefaultIconElement(id: string) {
+    this.svg.id = id;
+    return [this.svg];
   }
 }

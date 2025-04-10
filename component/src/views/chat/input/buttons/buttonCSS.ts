@@ -6,8 +6,8 @@ export class ButtonCSS {
   public static parseSVGTextElements(button: HTMLElement) {
     const children = Array.from(button.children);
     return {
-      svg: children.find((element) => element.tagName === 'svg'),
-      text: children.find((element) => element.tagName === 'div'),
+      svg: children.find((element) => element.tagName.toLowerCase() === 'svg'),
+      text: children.find((element) => element.tagName.toLowerCase() === 'div'),
     };
   }
 
