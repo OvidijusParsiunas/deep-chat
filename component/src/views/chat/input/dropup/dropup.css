@@ -80,6 +80,16 @@
   margin-top: auto;
 }
 
+#dropup-menu-item-icon-element-custom {
+  position: absolute;
+  pointer-events: none;
+  width: 1.21em;
+  height: 1.21em;
+  left: 0.28em;
+  filter: brightness(0) saturate(100%) invert(15%) sepia(0%) saturate(337%) hue-rotate(125deg) brightness(91%)
+    contrast(94%);
+}
+
 .dropup-menu-item-text {
   margin-left: 0.56em;
   margin-top: 0.08em;

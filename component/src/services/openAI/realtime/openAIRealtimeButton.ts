@@ -20,13 +20,13 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      default: this.createInnerElements('default', customStyles),
-      active: this.createInnerElements('active', customStyles),
-      unavailable: this.createInnerElements('unavailable', customStyles),
+      default: this.createInnerButtonElements('default', customStyles),
+      active: this.createInnerButtonElements('active', customStyles),
+      unavailable: this.createInnerButtonElements('unavailable', customStyles),
     };
   }
 
-  private createInnerElements(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
+  private createInnerButtonElements(state: keyof OpenAIRealtimeButton['_innerElements'], customStyles?: Styles) {
     return ButtonInnerElements.createCustomElements(state, this.svg, customStyles) || [this.svg];
   }
 

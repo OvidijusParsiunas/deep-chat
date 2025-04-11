@@ -1,7 +1,6 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {MicrophoneStyles} from '../../../../../types/microphone';
-import {ButtonInnerElements} from '../buttonInnerElements';
 import {ButtonStyles} from '../../../../../types/button';
 import {InputButton} from '../inputButton';
 
@@ -23,18 +22,13 @@ export class MicrophoneButton extends InputButton<Styles> {
   }
 
   private createInnerElementsForStates(customStyles?: Styles) {
+    const iconId = 'microphone-icon';
     return {
-      default: this.createInnerElements('default', customStyles),
-      active: this.createInnerElements('active', customStyles),
-      unsupported: this.createInnerElements('unsupported', customStyles),
-      commandMode: this.createInnerElements('commandMode', customStyles),
+      default: this.createInnerElements(iconId, 'default', customStyles),
+      active: this.createInnerElements(iconId, 'active', customStyles),
+      unsupported: this.createInnerElements(iconId, 'unsupported', customStyles),
+      commandMode: this.createInnerElements(iconId, 'commandMode', customStyles),
     };
-  }
-
-  private createInnerElements(state: keyof MicrophoneButton['_innerElements'], customStyles?: Styles) {
-    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
-    if (customButton) return customButton;
-    return this.buildDefaultIconElement('microphone-icon');
   }
 
   private static createMicrophoneElement() {

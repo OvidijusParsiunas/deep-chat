@@ -1,7 +1,6 @@
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
-import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {InputButton} from '../buttons/inputButton';
@@ -37,14 +36,8 @@ export class Dropup extends InputButton<Styles> {
 
   private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: this.createInnerElements('styles', customStyles),
+      styles: this.createInnerElements('dropup-icon', 'styles', customStyles),
     };
-  }
-
-  private createInnerElements(state: 'styles', customStyles?: Styles) {
-    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
-    if (customButton) return customButton;
-    return this.buildDefaultIconElement('dropup-icon');
   }
 
   private addClickEvent() {

@@ -4,7 +4,6 @@ import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
 import {CustomButtonDropupStyle} from './customButtonDropupStyle';
-import {ButtonInnerElements} from '../buttonInnerElements';
 import {HTMLUtils} from '../../../messages/html/htmlUtils';
 import {ButtonAccessibility} from '../buttonAccessility';
 import {ButtonStyles} from '../../../../../types/button';
@@ -50,17 +49,12 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   private createInnerElementsForStates(customStyles?: Styles) {
+    const iconId = 'submit-icon';
     return {
-      default: this.createInnerElements('default', customStyles),
-      active: this.createInnerElements('active', customStyles),
-      disabled: this.createInnerElements('disabled', customStyles),
+      default: this.createInnerElements(iconId, 'default', customStyles),
+      active: this.createInnerElements(iconId, 'active', customStyles),
+      disabled: this.createInnerElements(iconId, 'disabled', customStyles),
     };
-  }
-
-  private createInnerElements(state: keyof CustomButton['_innerElements'], customStyles?: Styles) {
-    const customButton = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
-    if (customButton) return customButton;
-    return this.buildDefaultIconElement('submit-icon');
   }
 
   private setSetState(customButton: CustomButtonT) {

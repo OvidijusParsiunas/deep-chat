@@ -40,23 +40,4 @@ export class ButtonInnerElements {
       parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
     }
   }
-
-  // https://github.com/OvidijusParsiunas/deep-chat/issues/175
-  // isDropup here is only determined by the user and not when moved to dropup automatically
-  // prettier-ignore
-  public static createInnerElements<T>(parentEl: HTMLElement, iconId: string, 
-      baseButton: SVGGraphicsElement, state: keyof T, customStyles?: ButtonStateStyles<T>, isDropup = false) {
-    // if the destination is specified to be dropup and content is not defined - use baseButton
-    if (isDropup && !customStyles?.[state]?.svg?.content) {
-      baseButton.id = iconId;
-      return [baseButton];
-    }
-    const elements = ButtonInnerElements.createCustomElements(state, baseButton, customStyles);
-    if (elements) {
-      ButtonInnerElements.reassignClassBasedOnChildren(parentEl, elements);
-      return elements;
-    }
-    baseButton.id = iconId;
-    return [baseButton];
-  }
 }

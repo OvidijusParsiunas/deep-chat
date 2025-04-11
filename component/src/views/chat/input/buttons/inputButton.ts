@@ -1,5 +1,5 @@
+import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
-import {ButtonInnerElement} from '../../../../types/buttonInternal';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
@@ -83,8 +83,20 @@ export class InputButton<T extends Styles = Styles> {
     ButtonInnerElements.reassignClassBasedOnChildren(this.elementRef, newChildElements);
   }
 
-  protected buildDefaultIconElement(id: string) {
-    this.svg.id = id;
+  protected buildDefaultIconElement(iconId: string) {
+    this.svg.id = iconId;
     return [this.svg];
+  }
+
+  protected createInnerElements(iconId: string, state: keyof T, customStyles?: ButtonStateStyles<T>) {
+    const elements = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
+    if (elements && elements.length > 0) {
+      if (this.position === 'dropup-menu') {
+        // if original svg - add original id, if custom use the custom id
+        elements[0].id = elements[0] === this.svg ? iconId : 'dropup-menu-item-icon-element-custom';
+      }
+      return elements;
+    }
+    return this.buildDefaultIconElement(iconId);
   }
 }

@@ -4,7 +4,6 @@ import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
-import {ButtonInnerElements} from '../buttonInnerElements';
 import {CameraFiles} from '../../../../../types/camera';
 import {CustomStyle} from '../../../../../types/styles';
 import {InputButton} from '../inputButton';
@@ -16,20 +15,18 @@ export class CameraButton extends InputButton<Styles> {
     const buttonPosition = fileService?.button?.position;
     const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
     super(CameraButton.createButtonElement(), CAMERA_ICON_STRING, buttonPosition, fileService?.button || {}, dropupText);
-    const innerElements = this.createInnerElements(this.customStyles, buttonPosition === 'dropup-menu');
+    const innerElements = this.createInnerElementsForStates(this.customStyles);
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
     this.elementRef.classList.add('upload-file-button');
-    this.elementRef.replaceChildren(...innerElements.styles);
+    this.changeElementsByState(innerElements.styles);
     this.reapplyStateStyle('styles');
   }
 
-  // prettier-ignore
-  private createInnerElements(customStyles?: Styles, isDropup = false) {
+  private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: ButtonInnerElements.createInnerElements(
-        this.elementRef, 'camera-icon', this.svg, 'styles', customStyles, isDropup),
+      styles: this.createInnerElements('camera-icon', 'styles', customStyles),
     };
   }
 

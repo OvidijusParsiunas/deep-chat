@@ -3,7 +3,6 @@ import {GenericInputButtonStyles} from '../../../../../types/genericInputButton'
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FileServiceIO} from '../../../../../services/serviceIO';
-import {ButtonInnerElements} from '../buttonInnerElements';
 import {Modal} from '../../fileAttachments/modal/modal';
 import {InputButton} from '../inputButton';
 
@@ -20,20 +19,19 @@ export class UploadFileButton extends InputButton<Styles> {
     const buttonPosition = fileService?.button?.position;
     const dropupItemText = fileService?.button?.styles?.text?.content || dropupText;
     super(UploadFileButton.createButtonElement(), iconSVGString, buttonPosition, fileService.button, dropupItemText);
-    const isDropup = buttonPosition === 'dropup-menu';
-    const innerElements = this.createInnerElements(iconId, this.customStyles, isDropup);
+    const innerElements = this.createInnerElementsForStates(iconId, this.customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
-    this.elementRef.replaceChildren(...innerElements.styles);
+    this.changeElementsByState(innerElements.styles);
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService.files?.infoModal?.openModalOnce === false
       ? undefined : fileService.files?.infoModal?.openModalOnce;
   }
 
-  private createInnerElements(iconId: string, customStyles?: Styles, isDropup = false) {
+  private createInnerElementsForStates(iconId: string, customStyles?: Styles) {
     return {
-      styles: ButtonInnerElements.createInnerElements(this.elementRef, iconId, this.svg, 'styles', customStyles, isDropup),
+      styles: this.createInnerElements(iconId, 'styles', customStyles),
     };
   }
 
