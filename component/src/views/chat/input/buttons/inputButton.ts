@@ -84,16 +84,19 @@ export class InputButton<T extends Styles = Styles> {
   }
 
   protected buildDefaultIconElement(iconId: string) {
-    this.svg.id = iconId;
-    return [this.svg];
+    const iconClone = this.svg.cloneNode(true) as SVGGraphicsElement;
+    iconClone.id = iconId;
+    return [iconClone];
   }
 
   protected createInnerElements(iconId: string, state: keyof T, customStyles?: ButtonStateStyles<T>) {
     const elements = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
     if (elements && elements.length > 0) {
       if (this.position === 'dropup-menu') {
+        const iconClone = this.svg.cloneNode(true) as SVGGraphicsElement;
         // if original svg - add original id, if custom use the custom id
-        elements[0].id = elements[0] === this.svg ? iconId : 'dropup-menu-item-icon-element-custom';
+        iconClone.id = elements[0] === this.svg ? iconId : 'dropup-menu-item-icon-element-custom';
+        elements[0] = iconClone;
       }
       return elements;
     }
