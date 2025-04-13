@@ -19,7 +19,6 @@ export class CameraButton extends InputButton<Styles> {
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
     }
-    this.elementRef.classList.add('upload-file-button');
     this.changeElementsByState(innerElements.styles);
     this.reapplyStateStyle('styles');
   }

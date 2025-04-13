@@ -22,7 +22,7 @@ export class Dropup extends InputButton<Styles> {
     this.buttonContainer = Dropup.createButtonContainer();
     this.changeElementsByState(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
-    this.elementRef.classList.add(Dropup.BUTTON_ICON_CLASS, 'upload-file-button');
+    this.elementRef.classList.add(Dropup.BUTTON_ICON_CLASS);
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
