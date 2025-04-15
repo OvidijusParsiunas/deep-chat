@@ -63,8 +63,7 @@
 }
 
 #custom-icon {
-  filter: brightness(0) saturate(100%) invert(51%) sepia(0%) saturate(1235%) hue-rotate(19deg) brightness(97%)
-    contrast(93%);
+  filter: brightness(0) saturate(100%) invert(39%) sepia(1%) saturate(0%) hue-rotate(83deg) brightness(93%) contrast(90%);
   height: 100%;
   width: 1.2em;
 }

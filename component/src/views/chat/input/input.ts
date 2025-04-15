@@ -12,6 +12,7 @@ import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {ValidationHandler} from './validation/validationHandler';
 import {RecordAudio} from './buttons/microphone/recordAudio';
+import {CustomButton} from './buttons/custom/customButton';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
 import {DropupStyles} from '../../../types/dropupStyles';
@@ -42,6 +43,7 @@ export class Input {
     ValidationHandler.attach(deepChat, serviceIO, textInput, fileAtts, submitButton);
     deepChat.submitUserMessage = submitButton.programmaticSubmit.bind(submitButton);
     buttons.submit = {button: submitButton};
+    if (deepChat.customButtons) CustomButton.add(deepChat.customButtons, buttons, deepChat.dropupStyles);
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAtts, deepChat.dropupStyles);
   }
 

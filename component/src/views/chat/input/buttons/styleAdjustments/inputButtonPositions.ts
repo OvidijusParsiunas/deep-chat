@@ -4,6 +4,7 @@ import {BUTTON_ORDER} from '../../../../../utils/buttons/inputButtons';
 import {DropupStyles} from '../../../../../types/dropupStyles';
 import {BUTTON_TYPE} from '../../../../../types/buttonTypes';
 import {ButtonPosition} from '../../../../../types/button';
+import {CustomButton} from '../custom/customButton';
 import {InputButton} from '../inputButton';
 import {Dropup} from '../../dropup/dropup';
 
@@ -28,6 +29,7 @@ export class InputButtonPositions {
         pToBs['dropup-menu'].splice(index, 1);
       }
     });
+    pToBs['dropup-menu'].forEach(({button}) => dropup.addItem(button));
     const position = Dropup.getPosition(pToBs, dropupStyles);
     ButtonContainers.addButton(buttonContainers, dropup.buttonContainer, position);
      // this is a quick workaround to get dropup recognised for InputButtonStyleAdjustments
@@ -81,6 +83,8 @@ export class InputButtonPositions {
         InputButtonPositions.setPosition(buttonsObj, 'microphone', pToBs['outside-right']);
       } else if (buttonsObj.camera) {
         InputButtonPositions.setPosition(buttonsObj, 'camera', pToBs['outside-right']);
+      } else if (buttonsObj[`${CustomButton.INDICATOR_PREFIX}1`]) {
+        InputButtonPositions.setPosition(buttonsObj, `${CustomButton.INDICATOR_PREFIX}1`, pToBs['outside-right']);
       }
     }
     // if submit still without a position - check if anything on outside-left - otherwise set outside-right
@@ -98,6 +102,13 @@ export class InputButtonPositions {
     if (buttonsWithoutPositions.length > 1 || pToBs['dropup-menu'].length > 0) {
       BUTTON_ORDER.forEach((buttonType) => {
         if (buttonsObj[buttonType]) pToBs['dropup-menu'].push({...buttonsObj[buttonType], buttonType} as ButtonProps);
+      });
+      // custom buttons are added at the bottom
+      buttonsWithoutPositions.forEach((buttonType) => {
+        const customType = buttonType as `custom${number}`;
+        if (customType.startsWith(CustomButton.INDICATOR_PREFIX) && buttonsObj[customType]) {
+          pToBs['dropup-menu'].push({...buttonsObj[customType], customType} as ButtonProps);
+        }
       });
       // if there is one button without a position
     } else if (buttonsWithoutPositions.length === 1) {

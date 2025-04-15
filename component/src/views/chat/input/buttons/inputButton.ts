@@ -20,6 +20,7 @@ export class InputButton<T extends Styles = Styles> {
   readonly customStyles?: T;
   readonly position?: ButtonPositionT;
   readonly dropupText?: string;
+  readonly isCustom: boolean = false;
 
   constructor(buttonElement: HTMLElement, svg: string, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
     ButtonAccessibility.addAttributes(buttonElement);

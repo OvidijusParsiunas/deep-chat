@@ -3,6 +3,7 @@ import {CustomStyle, StatefulStyles} from '../../../../types/styles';
 import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {CustomButton} from '../buttons/custom/customButton';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
@@ -61,8 +62,12 @@ export class DropupItem {
     DropupItem.populateItem(inputButton, item, styles);
     item.classList.add(DropupItem.MENU_ITEM_CLASS);
     const {elementRef} = inputButton;
-    const statefulStyles = StyleUtils.processStateful(styles?.item || {});
-    DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
+    if (inputButton.isCustom) {
+      (inputButton as CustomButton).setDropupItem(item);
+    } else {
+      const statefulStyles = StyleUtils.processStateful(styles?.item || {});
+      DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);
+    }
     return item;
   }
 }

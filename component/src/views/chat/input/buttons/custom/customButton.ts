@@ -1,6 +1,6 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
+import {DropupMenuStyles, DropupStyles} from '../../../../../types/dropupStyles';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
-import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
 import {HTMLUtils} from '../../../messages/html/htmlUtils';
@@ -9,6 +9,7 @@ import {ButtonStyles} from '../../../../../types/button';
 import {DropupItem} from '../../dropup/dropupItem';
 import {InputButton} from '../inputButton';
 import {ButtonCSS} from '../buttonCSS';
+import {Buttons} from '../../input';
 import {
   CustomButton as CustomButtonT,
   CustomDropupItemStateStyles,
@@ -29,6 +30,7 @@ export class CustomButton extends InputButton<Styles> {
   private readonly _onClick: CustomButtonT['onClick'];
   private readonly _dropupStyles?: CustomDropupItemStyles;
   private readonly _menuStyles?: DropupMenuStyles;
+  override isCustom = true;
 
   constructor(customButton: CustomButtonT, index: number, menuStyles?: DropupMenuStyles) {
     const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
@@ -171,5 +173,12 @@ export class CustomButton extends InputButton<Styles> {
     this.elementRef = dropupItem;
     this._originalElementRef = dropupItem.cloneNode(true) as HTMLElement;
     this.changeState(this._state, true);
+  }
+
+  public static add(customButtons: CustomButtonT[], buttons: Buttons, dropupStyles?: DropupStyles) {
+    customButtons.forEach((customButton, index) => {
+      const button = {button: new CustomButton(customButton, index + 1, dropupStyles?.menu)};
+      buttons[`${CustomButton.INDICATOR_PREFIX}${index + 1}`] = button;
+    });
   }
 }
