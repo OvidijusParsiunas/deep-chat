@@ -16,6 +16,8 @@ export class TextInputEl {
   readonly elementRef: HTMLElement;
   readonly inputElementRef: HTMLElement;
   private readonly _config: TextInput;
+  // detect if using a dropup for text input composition, e.g. hiragana to kanji symbols
+  private _isComposing: boolean = false;
   submit?: () => void;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAts: FileAttachments) {
@@ -105,6 +107,8 @@ export class TextInputEl {
     inputElement.addEventListener('keydown', this.onKeydown.bind(this));
     inputElement.addEventListener('input', this.onInput.bind(this));
     inputElement.addEventListener('paste', PasteUtils.sanitizePastedTextContent);
+    inputElement.addEventListener('compositionstart', () => (this._isComposing = true));
+    inputElement.addEventListener('compositionend', () => (this._isComposing = false));
   }
 
   private onBlur(focusStyle: CustomStyle, containerStyle?: CustomStyle) {
@@ -113,11 +117,13 @@ export class TextInputEl {
   }
 
   private onKeydown(event: KeyboardEvent) {
-    // ctrlKey && shiftKey allow the creation of a new line
     // user needs to click the submit button on mobile as return should be used for a new line
-    if (event.key === KEYBOARD_KEY.ENTER && !event.ctrlKey && !event.shiftKey && !Browser.IS_MOBILE) {
-      event.preventDefault();
-      this.submit?.();
+    if (event.key === KEYBOARD_KEY.ENTER && !Browser.IS_MOBILE && !this._isComposing) {
+      // ctrlKey && shiftKey allow the creation of a new line
+      if (!event.ctrlKey && !event.shiftKey) {
+        event.preventDefault();
+        this.submit?.();
+      }
     }
   }
 
