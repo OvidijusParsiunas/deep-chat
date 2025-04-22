@@ -1,12 +1,6 @@
 import {ButtonPosition, ButtonStyles} from './button';
 import {CustomStyle, StatefulStyles} from './styles';
 
-export type CustomButtonChangeState = {
-  setActive?: () => void;
-  setDefault?: () => void;
-  setDisabled?: () => void;
-};
-
 export type CustomDropupItemStateStyles = {
   item?: StatefulStyles;
   iconContainer?: CustomStyle;
@@ -29,6 +23,6 @@ export type CustomButton = {
   styles?: {button?: CustomButtonStyles; dropup?: CustomDropupItemStyles};
   position?: ButtonPosition;
   initialState?: keyof CustomButtonStyles;
-  setState?: CustomButtonChangeState;
+  setState?: (state: keyof CustomButtonStyles) => void;
   onClick?: (lastState: keyof CustomButtonStyles) => keyof CustomButtonStyles | void;
 };

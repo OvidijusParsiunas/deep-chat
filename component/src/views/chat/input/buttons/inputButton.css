@@ -60,10 +60,69 @@
   margin-left: 4px;
   margin-right: 4px;
   height: 1.6em;
+  width: max-content;
 }
 
 #custom-icon {
-  filter: brightness(0) saturate(100%) invert(39%) sepia(1%) saturate(0%) hue-rotate(83deg) brightness(93%) contrast(90%);
   height: 100%;
   width: 1.2em;
+}
+
+.custom-button-container-default {
+  color: #505050;
+}
+
+.custom-button-container-default > .dropup-menu-item-icon {
+  color: unset;
+}
+
+.custom-button-container-default > svg {
+  filter: brightness(0) saturate(100%) invert(39%) sepia(1%) saturate(0%) hue-rotate(83deg) brightness(93%) contrast(90%);
+}
+
+.custom-button-container-default > .dropup-menu-item-icon > svg {
+  position: absolute;
+  left: 0.2em;
+}
+
+.custom-button-container-active {
+  background-color: #edf7ff;
+  color: #0285ff;
+}
+
+.custom-button-container-active:hover,
+.custom-button-container-active:focus-visible {
+  background-color: #def0ff;
+}
+
+.custom-button-container-active:active {
+  background-color: #d2eaff;
+}
+
+.custom-button-container-active > svg {
+  filter: brightness(0) saturate(100%) invert(32%) sepia(34%) saturate(4196%) hue-rotate(196deg) brightness(107%)
+    contrast(104%);
+}
+
+.custom-button-container-disabled {
+  color: #aeaeae;
+  cursor: auto;
+}
+
+.custom-button-container-disabled > div {
+  pointer-events: none;
+}
+
+.custom-button-container-disabled:hover,
+.custom-button-container-disabled:focus-visible {
+  background-color: transparent;
+}
+
+.custom-button-container-disabled:active {
+  background-color: transparent;
+}
+
+.custom-button-container-disabled > svg {
+  filter: brightness(0) saturate(100%) invert(67%) sepia(0%) saturate(818%) hue-rotate(28deg) brightness(102%)
+    contrast(100%);
 }

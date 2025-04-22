@@ -9,8 +9,6 @@ import {DropupMenu} from './dropupMenu';
 
 export class DropupItem {
   public static MENU_ITEM_CLASS = 'dropup-menu-item';
-  public static DISABLED_ITEM_CLASS = 'dropup-menu-item-disabled';
-  public static ACTIVE_ITEM_CLASS = 'dropup-menu-item-active';
   public static TEXT_CLASS = 'dropup-menu-item-text';
   public static ICON_CLASS = 'dropup-menu-item-icon';
 

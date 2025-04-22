@@ -3,9 +3,9 @@ import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
+import {CustomButton} from '../buttons/custom/customButton';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
-import {DropupItem} from './dropupItem';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
@@ -57,7 +57,7 @@ export class Dropup extends InputButton<Styles> {
   private addContainerEvents(containerElement: HTMLElement) {
     containerElement.addEventListener('click', (event) => {
       const classes = (event.target as HTMLElement).classList;
-      if (!classes.contains(Dropup.BUTTON_ICON_CLASS) && !classes.contains(DropupItem.DISABLED_ITEM_CLASS)) {
+      if (!classes.contains(Dropup.BUTTON_ICON_CLASS) && !classes.contains(CustomButton.DISABLED_CONTAINER_CLASS)) {
         this._menu.close();
       }
     });
