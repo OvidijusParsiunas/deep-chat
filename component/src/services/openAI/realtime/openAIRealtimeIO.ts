@@ -13,16 +13,16 @@ import {DeepChat} from '../../../deepChat';
 import {
   OpenAIRealtimeButton as OpenAIRealtimeButtonT,
   OpenAIRealtimeFunctionHandler,
-  OpenAIRealTime,
+  OpenAIRealtime,
 } from '../../../types/openAIRealtime';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  private readonly _avatarConfig: OpenAIRealTime['avatar'];
-  private readonly _buttonsConfig: OpenAIRealTime['buttons'];
-  private readonly _errorConfig: OpenAIRealTime['error'];
-  private readonly _loadingConfig: OpenAIRealTime['loading'];
+  private readonly _avatarConfig: OpenAIRealtime['avatar'];
+  private readonly _buttonsConfig: OpenAIRealtime['buttons'];
+  private readonly _errorConfig: OpenAIRealtime['error'];
+  private readonly _loadingConfig: OpenAIRealtime['loading'];
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
   private readonly _deepChat: DeepChat;
@@ -45,14 +45,14 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const key = OpenAIRealtimeIO.getKey(deepChat);
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, {key});
-    const config = directConnectionCopy.openAI?.realtime as OpenAIRealTime;
+    const config = directConnectionCopy.openAI?.realtime as OpenAIRealtime;
     if (typeof config === 'object') {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
       this._errorConfig = config.error;
       this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
-      const {function_handler} = (deepChat.directConnection?.openAI?.realtime as OpenAIRealTime).config || {};
+      const {function_handler} = (deepChat.directConnection?.openAI?.realtime as OpenAIRealtime).config || {};
       if (function_handler) this._functionHandler = function_handler;
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
@@ -83,7 +83,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private async setup() {
     const openAI = this._deepChat.directConnection?.openAI;
     if (!openAI) return;
-    const config = openAI?.realtime as OpenAIRealTime;
+    const config = openAI?.realtime as OpenAIRealtime;
     if (typeof config !== 'object' || (!config.autoStart && !config.autoFetchEphemeralKey)) return;
     const key = this.key || (openAI as APIKey).key;
     if ((config.fetchEphemeralKey || key) && config.autoStart) {
@@ -147,13 +147,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return data.client_secret.value;
   }
 
-  private static buildAvatarConfig(config?: OpenAIRealTime) {
+  private static buildAvatarConfig(config?: OpenAIRealtime) {
     const newConfig = typeof config === 'object' && config.avatar ? JSON.parse(JSON.stringify(config.avatar)) : {};
     newConfig.maxScale = newConfig.maxScale && newConfig.maxScale >= 1 ? newConfig.maxScale : 2.5;
     return newConfig;
   }
 
-  private static buildButtonsConfig(config?: OpenAIRealTime) {
+  private static buildButtonsConfig(config?: OpenAIRealtime) {
     const newConfig = typeof config === 'object' && config.buttons ? JSON.parse(JSON.stringify(config.buttons)) : {};
     if (!newConfig.microphone?.default?.text?.content) {
       newConfig.microphone ??= {};
@@ -190,7 +190,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return avatarContainer;
   }
 
-  private static createAvatar(config?: OpenAIRealTime['avatar']) {
+  private static createAvatar(config?: OpenAIRealtime['avatar']) {
     const avatar = document.createElement('img');
     avatar.id = 'deep-chat-openai-realtime-avatar';
     Object.assign(avatar.style, config?.styles?.avatar);
@@ -221,7 +221,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private createMuteButton() {
     const muteButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
-    muteButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
     muteButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
     muteButton.elementRef.onclick = () => {
       if (muteButton.isActive) {
@@ -246,7 +245,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private createToggleButton() {
     const toggleButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
-    toggleButton.elementRef.classList.replace('input-button-svg', 'deep-chat-openai-realtime-button');
     toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
     toggleButton.elementRef.onclick = async () => {
       if (toggleButton.isActive) {

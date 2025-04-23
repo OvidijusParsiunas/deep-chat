@@ -1,4 +1,4 @@
-import {OpenAIRealTime} from './openAIRealtime';
+import {OpenAIRealtime} from './openAIRealtime';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
@@ -107,7 +107,7 @@ export type OpenAIChat = {
 export interface OpenAI {
   chat?: true | OpenAIChat;
   assistant?: true | OpenAIAssistant;
-  realtime?: true | OpenAIRealTime;
+  realtime?: true | OpenAIRealtime;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;

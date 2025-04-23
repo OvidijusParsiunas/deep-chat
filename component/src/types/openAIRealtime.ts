@@ -59,14 +59,14 @@ export type OpenAIRealtimeAvatar = {
 };
 
 // https://platform.openai.com/docs/api-reference/realtime
-export type OpenAIRealTime = {
-  avatar?: OpenAIRealtimeAvatar;
-  buttons?: OpenAIRealtimeButtons;
-  autoStart?: boolean;
+export type OpenAIRealtime = {
   ephemeralKey?: string;
   fetchEphemeralKey?: () => string | Promise<string>;
   autoFetchEphemeralKey?: boolean;
+  autoStart?: boolean;
+  avatar?: OpenAIRealtimeAvatar;
+  buttons?: OpenAIRealtimeButtons;
   config?: OpenAIRealtimeConfig;
-  error?: OpenAIRealtimeError;
   loading?: OpenAIRealtimeLoading;
+  error?: OpenAIRealtimeError;
 };
