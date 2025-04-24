@@ -2,9 +2,9 @@ import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInt
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 
 export class ButtonInnerElements {
-  private static readonly INPUT_BUTTON_SVG_CLASS = 'input-button-svg';
   private static readonly INPUT_BUTTON_SVG_TEXT_CLASS = 'input-button-svg-text';
   public static readonly INPUT_BUTTON_INNER_TEXT_CLASS = 'text-button';
+  public static readonly INPUT_BUTTON_SVG_CLASS = 'input-button-svg';
 
   private static createTextElement(text: string) {
     const textElement = document.createElement('div');

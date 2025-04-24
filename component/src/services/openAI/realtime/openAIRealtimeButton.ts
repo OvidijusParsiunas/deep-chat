@@ -1,4 +1,4 @@
-import {DefinedButtonStateStyles, DefinedButtonInnerElements} from '../../../types/buttonInternal';
+import {DefinedButtonStateStyles, DefinedButtonInnerElements, ButtonInnerElement} from '../../../types/buttonInternal';
 import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
 import {ButtonInnerElements} from '../../../views/chat/input/buttons/buttonInnerElements';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
@@ -30,14 +30,19 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
     return ButtonInnerElements.createCustomElements(state, this.svg, customStyles) || [this.svg];
   }
 
+  protected changeState(innerElements: ButtonInnerElement[]) {
+    this.changeElementsByState(innerElements);
+    this.elementRef.classList.replace(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS, 'deep-chat-openai-realtime-button');
+  }
+
   public changeToActive() {
-    this.changeElementsByState(this._innerElements.active);
+    this.changeState(this._innerElements.active);
     this.reapplyStateStyle('active', ['unavailable', 'default']);
     this.isActive = true;
   }
 
   public changeToDefault() {
-    this.changeElementsByState(this._innerElements.default);
+    this.changeState(this._innerElements.default);
     if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
     if (this.customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.unavailable);
     this.reapplyStateStyle('default', ['active', 'unavailable']);
@@ -45,7 +50,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
   }
 
   public changeToUnavailable() {
-    this.changeElementsByState(this._innerElements.unavailable);
+    this.changeState(this._innerElements.unavailable);
     if (this.customStyles?.active) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.active);
     if (this.customStyles?.default) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.default);
     this.reapplyStateStyle('unavailable', ['default', 'active']);
