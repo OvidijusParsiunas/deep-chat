@@ -77,6 +77,8 @@ export class Websocket {
           Stream.upsertWFiles(messages, upsertFunc, stream, finalResult);
         } else {
           const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
+          const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+          if (errorMessage) throw errorMessage.error;
           messageDataArr.forEach((data) => messages.addNewMessage(data));
         }
       } catch (error) {

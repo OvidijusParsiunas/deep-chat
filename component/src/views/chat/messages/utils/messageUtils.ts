@@ -90,9 +90,9 @@ export class MessageUtils {
   }
 
   public static getLastMessageBubbleElement(messagesEl: HTMLElement) {
-    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).find((element) => {
-      return element.classList.contains('message-bubble');
-    });
+    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).map((element) => {
+      return Array.from(element?.children || []).find((element) => element.classList.contains('message-bubble'));
+    })?.[0];
   }
 
   public static getLastMessageElement(messagesEl: HTMLElement) {

@@ -171,6 +171,10 @@ export class Stream {
       if (responseHTMLStrings.length === 0) responseHTMLStrings = result.html.split('');
       Stream.populateMessages(messages, responseHTMLStrings, new MessageStream(messages), simulationSH, 'html', 0, io);
     }
+    if (result.error) {
+      RequestUtils.displayError(messages, result.error);
+      sh.onClose();
+    }
   }
 
   // prettier-ignore

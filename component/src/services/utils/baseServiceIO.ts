@@ -143,7 +143,6 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   async extractResultData(result: any | Response): Promise<Response | {makingAnotherRequest: true}> {
-    if (result.error) throw result.error;
     if (result.result) return Legacy.handleResponseProperty(result);
     // if invalid - process later in HTTPRequest.request
     if (!RequestUtils.validateResponseFormat(result, !!this.stream)) return undefined as unknown as Response;
