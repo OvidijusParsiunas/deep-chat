@@ -26,7 +26,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private readonly _avatarEl: HTMLImageElement;
   private readonly _containerEl: HTMLDivElement;
   private readonly _deepChat: DeepChat;
-  private _muteButton: OpenAIRealtimeButton | null = null;
+  private _microphoneButton: OpenAIRealtimeButton | null = null;
   private _toggleButton: OpenAIRealtimeButton | null = null;
   private _errorElement: HTMLDivElement | null = null;
   private _loadingElement: HTMLDivElement | null = null;
@@ -38,7 +38,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private readonly _functionHandler?: OpenAIRealtimeFunctionHandler;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
-  private static readonly MUTE_ACTIVE = 'deep-chat-openai-realtime-mute-active';
+  private static readonly MICROPHONE_ACTIVE = 'deep-chat-openai-realtime-microphone-active';
   private static readonly UNAVAILABLE = 'deep-chat-openai-realtime-button-unavailable';
 
   constructor(deepChat: DeepChat) {
@@ -159,16 +159,16 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       newConfig.microphone ??= {};
       newConfig.microphone.default ??= {};
       newConfig.microphone.default.svg ??= {};
-      newConfig.microphone.default.svg.content = MICROPHONE_ICON_STRING;
+      newConfig.microphone.default.svg.content ??= MICROPHONE_ICON_STRING;
     }
     if (!newConfig.toggle?.default?.text?.content) {
       newConfig.toggle ??= {};
       newConfig.toggle.default ??= {};
       newConfig.toggle.default.svg ??= {};
-      newConfig.toggle.default.svg.content = PLAY_ICON_STRING;
+      newConfig.toggle.default.svg.content ??= PLAY_ICON_STRING;
       newConfig.toggle.active ??= {};
       newConfig.toggle.active.svg ??= {};
-      newConfig.toggle.active.svg.content = STOP_ICON_STRING;
+      newConfig.toggle.active.svg.content ??= STOP_ICON_STRING;
     }
     return newConfig;
   }
@@ -193,7 +193,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private static createAvatar(config?: OpenAIRealtime['avatar']) {
     const avatar = document.createElement('img');
     avatar.id = 'deep-chat-openai-realtime-avatar';
-    Object.assign(avatar.style, config?.styles?.avatar);
+    Object.assign(avatar.style, config?.styles?.image);
     avatar.src = config?.src || avatarUrl;
     return avatar;
   }
@@ -202,11 +202,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const buttonsContainer = document.createElement('div');
     buttonsContainer.id = 'deep-chat-openai-realtime-buttons-container';
     Object.assign(buttonsContainer.style, this._buttonsConfig?.container);
-    this._muteButton = this.createMuteButton();
-    const muteButtonEl = OpenAIRealtimeIO.createButtonContainer(this._muteButton.elementRef);
+    this._microphoneButton = this.createMicophoneButton();
+    const microphoneButtonEl = OpenAIRealtimeIO.createButtonContainer(this._microphoneButton.elementRef);
     this._toggleButton = this.createToggleButton();
     const toggleButtonEl = OpenAIRealtimeIO.createButtonContainer(this._toggleButton.elementRef);
-    buttonsContainer.appendChild(muteButtonEl);
+    buttonsContainer.appendChild(microphoneButtonEl);
     buttonsContainer.appendChild(toggleButtonEl);
     buttonsContainer.appendChild(this.createLoading());
     return buttonsContainer;
@@ -219,27 +219,27 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return buttonContainer;
   }
 
-  private createMuteButton() {
-    const muteButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
-    muteButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-mute');
-    muteButton.elementRef.onclick = () => {
-      if (muteButton.isActive) {
-        this.toggleMute(true);
-        muteButton.elementRef.classList.replace(OpenAIRealtimeIO.MUTE_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
-        muteButton.changeToDefault();
+  private createMicophoneButton() {
+    const micorphoneButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
+    micorphoneButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-microphone');
+    micorphoneButton.elementRef.onclick = () => {
+      if (micorphoneButton.isActive) {
+        this.toggleMicorphone(true);
+        micorphoneButton.elementRef.classList.replace(OpenAIRealtimeIO.MICROPHONE_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
+        micorphoneButton.changeToDefault();
         this._isMuted = false;
       } else {
-        this.toggleMute(false);
-        muteButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.MUTE_ACTIVE);
-        ButtonAccessibility.removeAriaAttributes(muteButton.elementRef);
-        muteButton.changeToActive();
+        this.toggleMicorphone(false);
+        micorphoneButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.MICROPHONE_ACTIVE);
+        ButtonAccessibility.removeAriaAttributes(micorphoneButton.elementRef);
+        micorphoneButton.changeToActive();
         this._isMuted = true;
       }
     };
-    return muteButton;
+    return micorphoneButton;
   }
 
-  private toggleMute(isMute: boolean) {
+  private toggleMicorphone(isMute: boolean) {
     this._mediaStream?.getAudioTracks().forEach((track) => (track.enabled = isMute));
   }
 
@@ -267,7 +267,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           }
         } catch (error) {
           console.error('Failed to start conversation:', error);
-          this.displayError('Error');
+          this.displayError();
           this.hideLoading();
         }
       }
@@ -302,7 +302,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         this.monitorFrequencies(analyser, frequencyData);
       } else {
         console.error('No streams found in the ontrack event.');
-        this.displayError('Error');
+        this.displayError();
       }
     };
 
@@ -316,12 +316,12 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         if (peerConnection === this._pc) {
           this._mediaStream = stream;
           this._pc?.addTrack(this._mediaStream.getTracks()[0]);
-          if (this._isMuted) this.toggleMute(false);
+          if (this._isMuted) this.toggleMicorphone(false);
         }
       })
       .catch((error) => {
         console.error('Error accessing microphone:', error);
-        this.displayError('Error');
+        this.displayError();
       });
 
     // Set up data channel for sending and receiving events
@@ -382,7 +382,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
     } catch (e) {
       console.error(e);
-      this.displayError('Error');
+      this.displayError();
     }
   }
 
@@ -413,7 +413,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private stopOnError(error: string) {
     this.stop();
     console.error(error);
-    this.displayError('Error');
+    this.displayError();
   }
 
   private stop() {
@@ -426,7 +426,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private changeToUnavailable() {
-    if (this._muteButton) OpenAIRealtimeIO.changeButtonToUnavailable(this._muteButton);
+    if (this._microphoneButton) OpenAIRealtimeIO.changeButtonToUnavailable(this._microphoneButton);
     if (this._toggleButton) OpenAIRealtimeIO.changeButtonToUnavailable(this._toggleButton);
   }
 
@@ -438,7 +438,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private changeToAvailable() {
-    if (this._muteButton) OpenAIRealtimeIO.changeButtonToAvailable(this._muteButton);
+    if (this._microphoneButton) OpenAIRealtimeIO.changeButtonToAvailable(this._microphoneButton);
     if (this._toggleButton) OpenAIRealtimeIO.changeButtonToAvailable(this._toggleButton);
   }
 
@@ -448,7 +448,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private removeUnavailable() {
-    if (this._muteButton) OpenAIRealtimeIO.removeButtonUnavailable(this._muteButton);
+    if (this._microphoneButton) OpenAIRealtimeIO.removeButtonUnavailable(this._microphoneButton);
     if (this._toggleButton) OpenAIRealtimeIO.removeButtonUnavailable(this._toggleButton);
   }
 
@@ -468,22 +468,25 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private displayFailedToRetrieveEphemeralKey(e: unknown) {
     console.error('Failed to retrieve ephemeral key');
     console.error(e);
-    this.displayError('Error');
+    this.displayError();
   }
 
-  private displayError(text: string) {
+  private displayError() {
     if (this._errorElement) {
       this._errorElement.style.display = 'block';
-      this._errorElement.textContent = this._errorConfig?.text || text;
+      this._errorElement.textContent = this._errorConfig?.text || 'Error';
       this.changeToUnavailable();
     }
+    this.hideLoading();
   }
 
   private createLoading() {
     const loading = document.createElement('div');
     loading.id = 'deep-chat-openai-realtime-loading';
     this._loadingElement = loading;
-    if (this._loadingConfig?.html) this._loadingElement.innerHTML = this._loadingConfig.html;
+    if (this._loadingConfig?.html) {
+      this._loadingElement.innerHTML = this._loadingConfig.html;
+    }
     Object.assign(loading.style, this._loadingConfig?.style);
     loading.style.display = 'none';
     return loading;
@@ -512,34 +515,31 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     }
   }
 
-  // https://platform.openai.com/docs/guides/realtime-model-capabilities#function-calling
+  // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
   private async handleTool(name: string, functionArguments: string, call_id: string, dc: RTCDataChannel) {
     if (!this._functionHandler) {
-      // WORK - change
       throw Error(
         'Please define the `function_handler` property inside' +
-          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Realtime) object.'
+          ' the [openAI](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeFunction) object.'
       );
     }
     const result = await this._functionHandler({name, arguments: functionArguments});
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }
-    if (name === 'generate_horoscope') {
-      const eventMessage = JSON.stringify({
-        type: 'conversation.item.create',
-        item: {
-          type: 'function_call_output',
-          call_id,
-          output: JSON.stringify(result),
-        },
-      });
-      dc.send(eventMessage);
-      const responseCreatePayload = {
-        type: 'response.create',
-      };
-      dc.send(JSON.stringify(responseCreatePayload));
-    }
+    const eventMessage = JSON.stringify({
+      type: 'conversation.item.create',
+      item: {
+        type: 'function_call_output',
+        call_id,
+        output: JSON.stringify(result),
+      },
+    });
+    dc.send(eventMessage);
+    const responseCreatePayload = {
+      type: 'response.create',
+    };
+    dc.send(JSON.stringify(responseCreatePayload));
   }
 
   override isCustomView() {

@@ -1,8 +1,10 @@
 import {ButtonStyles} from './button';
 import {CustomStyle} from './styles';
 
+// https://platform.openai.com/docs/guides/function-calling?api-mode=responses
 export type OpenAIRealtimeFunctionHandler = (details: {name: string; arguments: string}) => object | Promise<object>;
 
+// https://platform.openai.com/docs/api-reference/realtime-sessions/create
 export type OpenAIRealtimeConfig = {
   model?: string;
   instructions?: string;
@@ -54,7 +56,7 @@ export type OpenAIRealtimeAvatar = {
   maxScale?: number;
   styles?: {
     container?: CustomStyle;
-    avatar?: CustomStyle;
+    image?: CustomStyle;
   };
 };
 

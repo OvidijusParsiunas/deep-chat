@@ -61,24 +61,24 @@
   pointer-events: none;
 }
 
-.deep-chat-openai-realtime-mute-active {
+.deep-chat-openai-realtime-microphone-active {
   background-color: rgb(255 231 231);
 }
 
-.deep-chat-openai-realtime-mute-active:hover {
+.deep-chat-openai-realtime-microphone-active:hover {
   background-color: rgb(255, 222, 222);
 }
 
-.deep-chat-openai-realtime-mute-active:active {
+.deep-chat-openai-realtime-microphone-active:active {
   background-color: rgb(255, 210, 210);
 }
 
-.deep-chat-openai-realtime-mute > * {
+.deep-chat-openai-realtime-microphone > * {
   height: 30px;
   width: 30px;
 }
 
-.deep-chat-openai-realtime-mute-active > * {
+.deep-chat-openai-realtime-microphone-active > * {
   filter: brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(1360%) hue-rotate(325deg) brightness(95%)
     contrast(92%);
 }
