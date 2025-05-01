@@ -727,8 +727,8 @@ Chat style that uses the iMessage SMS theme.
             styles: {
               default: {
                 width: '1em',
-                left: '5px',
-                top: '0.2em',
+                marginLeft: '0.06em',
+                marginTop: '0.3em',
                 filter:
                   'brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(2755%) hue-rotate(104deg) brightness(96%) contrast(93%)',
               },
@@ -827,8 +827,8 @@ Chat style that uses the iMessage SMS theme.
           "styles": {
             "default": {
               "width": "1em",
-              "left": "5px",
-              "top": "0.2em",
+              "marginLeft": "0.06em",
+              "marginTop": "0.3em",
               "filter": "brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(2755%) hue-rotate(104deg) brightness(96%) contrast(93%)"
             }
           },
@@ -1250,13 +1250,17 @@ A violet color theme that uses a squared border styling approach.
           content: 'Send',
           styles: {default: {color: 'white', height: '1.78em', width: '3em', fontSize: '0.95em'}},
         },
+        svg: {
+          content: '',
+        },
       },
       loading: {
-        container: {
-          default: {backgroundColor: '#afafaf'},
-        },
+        container: {default: {backgroundColor: '#afafaf'}},
         text: {
           content: 'Wait',
+        },
+        svg: {
+          content: '',
         },
       },
       stop: {
@@ -1265,15 +1269,12 @@ A violet color theme that uses a squared border styling approach.
           hover: {backgroundColor: '#8c8c8c'},
           click: {backgroundColor: '#818181'},
         },
-        text: {
-          content: 'Stop',
+        text: {content: 'Stop'},
+        svg: {
+          content: '',
         },
       },
-      disabled: {
-        container: {
-          default: {backgroundColor: '#afafaf'},
-        },
-      },
+      disabled: {container: {default: {backgroundColor: '#afafaf'}}},
     }}
     avatars={true}
     textInput={{
@@ -1337,16 +1338,22 @@ A violet color theme that uses a squared border styling approach.
       "text": {
         "content": "Send",
         "styles": {"default": {"color": "white", "height": "1.78em", "width": "3em", "fontSize": "0.95em"}}
-      }
+      },
+      "svg": {"content": ""}
     },
-    "loading": {"container": {"default": {"backgroundColor": "#afafaf"}}},
+    "loading": {
+      "container": {"default": {"backgroundColor": "#afafaf"}},
+      "text": {"content": "Wait"},
+      "svg": {"content": ""}
+    },
     "stop": {
       "container": {
         "default": {"backgroundColor": "#919191"},
         "hover": {"backgroundColor": "#8c8c8c"},
         "click": {"backgroundColor": "#818181"}
       },
-      "text": {"content": "Stop"}
+      "text": {"content": "Stop"},
+      "svg": {"content": ""}
     },
     "disabled": {"container": {"default": {"backgroundColor": "#afafaf"}}}
   }'

@@ -1,0 +1,518 @@
+---
+sidebar_position: 5
+---
+
+# Styles
+
+Properties related to chat styling.
+
+### `style` | `chatStyle` {#style}
+
+- Type: [`CustomStyle`](#CustomStyle)
+
+Styling for the chat's container element. <br />
+It can either be defined via the [`style` attribute](https://www.w3schools.com/tags/att_style.asp)
+or a `chatStyle` property that accepts an object. Both of these have the SAME outcome
+and are to be chosen by developer preference or framework compatibility.<br />
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{backgroundColor: '#f7f7f7', borderRadius: '8px'}} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat style="background-color: #f7f7f7; border-radius: 8px"></deep-chat>
+
+<deep-chat chatStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat style="background-color: #f7f7f7; border-radius: 8px" demo="true"></deep-chat>
+
+<deep-chat chatStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}' demo="true"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `attachmentContainerStyle` {#attachmentContainerStyle}
+
+- Type: [`CustomStyle`](#CustomStyle)
+
+Object containing CSS styling properties for the element containing files attachments ready to be sent with the message. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    attachmentContainerStyle={{backgroundColor: '#b2e1ff57'}}
+    demo={{displayFileAttachmentContainer: true}}
+    style={{borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'
+  demo='{"displayFileAttachmentContainer": true}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `dropupStyles` {#dropupStyles}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `menu?:` \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`item?: StatefulStyles`](#StatefulStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`iconContainer?: CustomStyle`](#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`text?: CustomStyle`](#CustomStyle) <br />
+  \}\}
+
+Configuration for the dropup button and its menu element styles. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    introMessage={{text: 'Open the dropup by clicking the + button on bottom left of the input.'}}
+    dropupStyles={{
+      button: {
+        styles: {
+          container: {
+            default: {backgroundColor: '#eff8ff'},
+            hover: {backgroundColor: '#e4f3ff'},
+            click: {backgroundColor: '#d7edff'},
+          },
+        },
+      },
+      menu: {
+        container: {
+          boxShadow: '#e2e2e2 0px 1px 3px 2px',
+        },
+        item: {
+          hover: {
+            backgroundColor: '#e1f2ff',
+          },
+          click: {
+            backgroundColor: '#cfeaff',
+          },
+        },
+        iconContainer: {
+          width: '1.8em',
+        },
+        text: {
+          fontSize: '1.05em',
+        },
+      },
+    }}
+    demo={true}
+    audio={{button: {position: 'dropup-menu'}}}
+    images={{button: {position: 'dropup-menu'}}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  dropupStyles='{
+    "button": {
+      "styles": {
+        "container": {
+          "default": {"backgroundColor": "#eff8ff"},
+          "hover": {"backgroundColor": "#e4f3ff"},
+          "click": {"backgroundColor": "#d7edff"}
+        }
+      }
+    },
+    "menu": {
+      "container": {
+        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
+      },
+      "item": {
+        "hover": {
+          "backgroundColor": "#e1f2ff"
+        },
+        "click": {
+          "backgroundColor": "#cfeaff"
+        }
+      },
+      "iconContainer": {
+        "width": "1.8em"
+      },
+      "text": {
+        "fontSize": "1.05em"
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  dropupStyles='{
+    "button": {
+      "styles": {
+        "container": {
+          "default": {"backgroundColor": "#eff8ff"},
+          "hover": {"backgroundColor": "#e4f3ff"},
+          "click": {"backgroundColor": "#d7edff"}
+        }
+      }
+    },
+    "menu": {
+      "container": {
+        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
+      },
+      "item": {
+        "hover": {
+          "backgroundColor": "#e1f2ff"
+        },
+        "click": {
+          "backgroundColor": "#cfeaff"
+        }
+      },
+      "iconContainer": {
+        "width": "1.8em"
+      },
+      "text": {
+        "fontSize": "1.05em"
+      }
+    }
+  }'
+  demo="true"
+  style="border-radius: 8px"
+  audio='{"button": {"position": "dropup-menu"}}'
+  images='{"button": {"position": "dropup-menu"}}'
+  introMessage='{"text": "Open the dropup by clicking the + button on bottom left of the input."}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `inputAreaStyle` {#inputAreaStyle}
+
+- Type: [`CustomStyle`](#CustomStyle)
+
+Styling for the chat view's bottom area dedicated for text input and file buttons. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    inputAreaStyle={{backgroundColor: '#ebf5ff'}}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}' style="border-radius: 8px" demo="true"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `textInput` {#textInput}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle), [`focus?: CustomStyle`](#CustomStyle)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` \{`text?: string`, [`style?: CustomStyle`](#CustomStyle)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
+  \}
+
+Custom details for the chat's text input. <br />
+`styles` object defines the styling for the `text` element and its box `container`. The `focus` property is used to set the container style when it is focused. <br />
+`placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
+`style` can be used to customize it. Use [`setPlaceholderText`](/docs/methods#setPlaceholderText) to change it dynamically. <br />
+`characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
+`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling. <br />
+
+#### Generic example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    textInput={{
+      styles: {
+        text: {color: 'black'},
+        container: {maxHeight: '50px', backgroundColor: '#f5f9ff'},
+        focus: {border: '2px solid #a2a2ff'},
+      },
+      placeholder: {text: 'Insert text here...', style: {color: '#4459a4'}},
+      characterLimit: 10,
+    }}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  textInput='{
+    "styles": {
+      "text": {"color": "black"},
+      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
+      "focus": {"border": "2px solid #a2a2ff"}
+    },
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
+    "characterLimit": 10
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textInput='{
+    "styles": {
+      "text": {"color": "black"},
+      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
+      "focus": {"border": "2px solid #a2a2ff"}
+    },
+    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
+    "characterLimit": 10
+  }'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Disabled example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  textInput='{
+    "disabled": true,
+    "placeholder": {
+      "text": "Text not allowed..."
+  }}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  textInput='{
+    "disabled": true,
+    "placeholder": {
+      "text": "Text not allowed..."
+  }}'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `auxiliaryStyle` {#auxiliaryStyle}
+
+- Type: `string`
+
+This value uses [CSS syntax](https://www.w3schools.com/css/css_syntax.ASP) as an alternative way to define styling in Deep Chat. <br />
+It can be used to configure [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions)
+which cannot be added through component's [`style`](/docs/styles#style) properties. A great example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
+pseudo element which affects the style of the component's scrollbar. <br />
+It can also be used to add custom styling to [`html`](/docs/messages/#MessageContent) messages and override Deep Chat CSS.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    history={[
+      {text: 'Hey, how are you?', role: 'user'},
+      {text: 'I am doing great, how about you?', role: 'ai'},
+      {text: 'What is the meaning of life?', role: 'user'},
+      {
+        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
+        role: 'ai',
+      },
+      {text: 'I just feel like sleeping all day...', role: 'user'},
+      {text: 'As long as it makes you happy!', role: 'ai'},
+    ]}
+    auxiliaryStyle="
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #54a7ff;
+        border-radius: 5px;
+      }"
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  auxiliaryStyle="
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #54a7ff;
+      border-radius: 5px;
+    }"
+  history='[
+    {"text": "Hey, how are you?", "role": "user"},
+    {"text": "I am doing great, how about you?", "role": "ai"},
+    {"text": "What is the meaning of life?", "role": "user"},
+    {
+      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
+      "role": "ai"
+    },
+    {"text": "I just feel like sleeping all day...", "role": "user"},
+    {"text": "As long as it makes you happy!", "role": "ai"}
+  ]'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+:::danger
+[`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) is not standardised across all browsers, make sure to check the [`browser support`](https://caniuse.com/)
+for the property you are using.
+:::
+
+<LineBreak></LineBreak>
+
+## Types
+
+Types shared by styles properties:
+
+### `CustomStyle` {#CustomStyle}
+
+- Type: [`CSSStyleDeclaration`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
+
+Object containing properties defined in the CSSStyleDeclaration [`specification`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
+as optionals. A TypeScript example can be found in this [link](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/bf671e99615b06404db7a89fa9ae05bf14a8e47c/baselines/dom.generated.d.ts#L2737).
+
+<LineBreak></LineBreak>
+
+### `StatefulStyles` {#StatefulStyles}
+
+- Type: \{[`default?: CustomStyle`](#CustomStyle), [`hover?: CustomStyle`](#CustomStyle), [`click?: CustomStyle`](#CustomStyle)\}
+
+Object defining styling properties for different mouse states on the element.
+
+<LineBreak></LineBreak>

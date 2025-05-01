@@ -2,9 +2,7 @@
 sidebar_position: 13
 ---
 
-# Demo
-
-This is used by default to demonstrate the component's capabilities without connecting to any APIs.
+# Modes
 
 ### `demo` {#demo}
 
@@ -15,6 +13,7 @@ This is used by default to demonstrate the component's capabilities without conn
   &nbsp;&nbsp;&nbsp;&nbsp; `displayFileAttachmentContainer?: boolean` <br />
   }\}
 
+This is used by default to demonstrate the component's capabilities without connecting to any APIs. <br />
 Set this to _true_ or define an object with properties to remove the initial setup guidance message. <br />
 `response` is used to override the default demo response with a custom one. It can either be a [`Response`](/docs/connect#Response) object or a function that returns
 a [`Response`](/docs/connect#Response) object. <br />
@@ -23,7 +22,6 @@ The following properties are used to toggle elements to showcase their design wi
 `displayLoading` is used to display various loading spinners. <br />
 `displayFileAttachmentContainer` is used to display the element that encapsulates all of the files to be sent on the next message. <br />
 
-import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -132,6 +130,70 @@ chatElementRef.demo = {
     return {text: response};
   },
 };
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `focusMode` {#focusMode}
+
+- Type: `true` | \{`scroll?: boolean`, `fade?:` `true` | `number`\}
+
+This mode only displays the latest user request and AI response message bubbles, providing a modern AI chatbot experience.
+You can enable it by using the boolean `true` or an object with any of the following: <br />
+`scroll` toggles a scrolling animation when the user posts a new message. <br />
+`fade` toggles a fade effect when the user posts a new message.
+It can be enabled with a boolean `true` or a `number` which is the milliseconds duration of the fade. <br />
+
+#### Basic Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} focusMode={true} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat focusMode="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat focusMode="true" demo="true" style="border-radius: 8px"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Scroll Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} focusMode={{scroll: true}} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat focusMode='{"scroll": true}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat focusMode='{"scroll": true}' demo="true" style="border-radius: 8px"></deep-chat>
 ```
 
 </TabItem>

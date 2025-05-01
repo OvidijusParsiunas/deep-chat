@@ -5,20 +5,21 @@ import React from 'react';
 
 const getCurrentWeather = (location) => {
   location = location.toLowerCase();
+  console.log(location);
   if (location.includes('tokyo')) {
-    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+    return {location, temperature: '10', unit: 'celsius'};
   } else if (location.includes('san francisco')) {
-    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+    return {location, temperature: '72', unit: 'fahrenheit'};
   } else {
-    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+    return {location, temperature: '22', unit: 'celsius'};
   }
 };
 
-const chatConfiguration = {
-  tools: [
-    {
-      type: 'function',
-      function: {
+const realtimeConfiguration = {
+  config: {
+    tools: [
+      {
+        type: 'function',
         name: 'get_current_weather',
         description: 'Get the current weather in a given location',
         parameters: {
@@ -33,29 +34,24 @@ const chatConfiguration = {
           required: ['location'],
         },
       },
+    ],
+    function_handler: (functionsDetails) => {
+      const {location} = JSON.parse(functionsDetails.arguments);
+      return getCurrentWeather(location);
     },
-  ],
-  function_handler: (functionsDetails) => {
-    return functionsDetails.map((functionDetails) => {
-      return {
-        response: getCurrentWeather(functionDetails.arguments),
-      };
-    });
   },
 };
 
-export default function ContainersKeyToggleFunction() {
+export default function ContainersKeyToggleRealtimeFunction() {
   return (
     <ContainersKeyToggle>
       <ComponentContainer>
         <DeepChatBrowser
           style={{borderRadius: '8px'}}
-          introMessage={{text: 'Try asking about the weather in a certain location.'}}
-          textInput={{placeholder: {text: 'Weather in Tokyo today'}}}
           directConnection={{
             openAI: {
               key: 'placeholder key',
-              chat: chatConfiguration,
+              realtime: realtimeConfiguration,
             },
           }}
         ></DeepChatBrowser>
@@ -63,11 +59,9 @@ export default function ContainersKeyToggleFunction() {
       <ComponentContainer>
         <DeepChatBrowser
           style={{borderRadius: '8px'}}
-          introMessage={{text: 'Try asking about the weather in a certain location.'}}
-          textInput={{placeholder: {text: 'Weather in Tokyo today'}}}
           directConnection={{
             openAI: {
-              chat: chatConfiguration,
+              realtime: realtimeConfiguration,
             },
           }}
         ></DeepChatBrowser>

@@ -1,20 +1,12 @@
 ---
-sidebar_position: 5
+sidebar_position: 1
 ---
 
-# Styles
+# Buttons
 
-Properties related to messages.
+Properties related to button styling.
 
-### `style` | `chatStyle` {#style}
-
-- Type: [`CustomStyle`](#CustomStyle)
-
-Styling for the chat's container element. <br />
-It can either be defined via the [`style` attribute](https://www.w3schools.com/tags/att_style.asp)
-or a `chatStyle` property that accepts an object. Both of these have the SAME outcome
-and are to be chosen by developer preference or framework compatibility.<br />
-
+import ComponentContainerMethods from '@site/src/components/table/componentContainerMethods';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -24,287 +16,65 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser style={{backgroundColor: '#f7f7f7', borderRadius: '8px'}} demo={true}></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat style="background-color: #f7f7f7; border-radius: 8px"></deep-chat>
-
-<deep-chat chatStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}'></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat style="background-color: #f7f7f7; border-radius: 8px" demo="true"></deep-chat>
-
-<deep-chat chatStyle='{"backgroundColor": "#f7f7f7", "borderRadius": "8px"}' demo="true"></deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `attachmentContainerStyle` {#attachmentContainerStyle}
-
-- Type: [`CustomStyle`](#CustomStyle)
-
-Object containing CSS styling properties for the element containing files attachments ready to be sent with the message. <br />
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    attachmentContainerStyle={{backgroundColor: '#b2e1ff57'}}
-    demo={{displayFileAttachmentContainer: true}}
-    style={{borderRadius: '8px'}}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat
-  attachmentContainerStyle='{"backgroundColor": "#b2e1ff57"}'
-  demo='{"displayFileAttachmentContainer": true}'
-  style="border-radius: 8px"
-></deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `dropupStyles` {#dropupStyles}
+### `customButtons` {#customButtons}
 
 - Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](#Button), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `menu?:` \{ <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`item?: StatefulStyles`](#StatefulStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`iconContainer?: CustomStyle`](#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`text?: CustomStyle`](#CustomStyle) <br />
-  \}\}
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`button?: CustomButtonStyles`](#CustomButtonStyles), [`dropup?: CustomDropupItemStyles`](#CustomDropupItemStyles)\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`initialState?: CustomButtonState`](#CustomButtonState), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`setState?: SetCustomButtonState`](#SetCustomButtonState), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`onClick?: OnClickCustomButton`](#OnClickCustomButton) <br />
+  \}[]
 
-Configuration for the dropup button and its menu element styles. <br />
-
-#### Example
+Array defining object configs for custom buttons. <br />
+`styles` is used to define the styling options for [buttons](#CustomButtonStyles) and [dropup items](#CustomDropupItemStyles). <br />
+`position` is used to set the button location. <br />
+`initialState` is the initial button state when the chat loads. <br />
+`setState` is used to change the button state programmatically. <br />
+`onClick` is used to assign a function that is triggered when the button is clicked. <br />
 
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    introMessage={{text: 'Open the dropup by clicking the + button on bottom left of the input.'}}
-    dropupStyles={{
-      button: {
+    customButtons={[
+      {
+        position: 'inside-left',
+        onClick: (state) => (state === 'active' ? 'default' : 'active'),
         styles: {
-          container: {
-            default: {backgroundColor: '#eff8ff'},
-            hover: {backgroundColor: '#e4f3ff'},
-            click: {backgroundColor: '#d7edff'},
+          button: {
+            default: {
+              container: {
+                default: {
+                  border: '1px solid #e2e2e2',
+                  borderRadius: '10px',
+                  marginBottom: '4px',
+                },
+              },
+              svg: {
+                content: `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 0 25 25" fill="none">
+                  <path d="M12 22.3201C17.5228 22.3201 22 17.8429 22 12.3201C22 6.79722 17.5228 2.32007 12 2.32007C6.47715 2.32007 2 6.79722 2 12.3201C2 17.8429 6.47715 22.3201 12 22.3201Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 12.3201H22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 22.3201C13.933 22.3201 15.5 17.8429 15.5 12.3201C15.5 6.79722 13.933 2.32007 12 2.32007C10.067 2.32007 8.5 6.79722 8.5 12.3201C8.5 17.8429 10.067 22.3201 12 22.3201Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+              },
+              text: {
+                content: 'Search',
+              },
+            },
           },
         },
       },
-      menu: {
-        container: {
-          boxShadow: '#e2e2e2 0px 1px 3px 2px',
-        },
-        item: {
-          hover: {
-            backgroundColor: '#e1f2ff',
-          },
-          click: {
-            backgroundColor: '#cfeaff',
-          },
-        },
-        iconContainer: {
-          width: '1.8em',
-        },
-        text: {
-          fontSize: '1.05em',
-        },
-      },
-    }}
-    demo={true}
-    audio={{button: {position: 'dropup-menu'}}}
-    images={{button: {position: 'dropup-menu'}}}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat
-  dropupStyles='{
-    "button": {
-      "styles": {
-        "container": {
-          "default": {"backgroundColor": "#eff8ff"},
-          "hover": {"backgroundColor": "#e4f3ff"},
-          "click": {"backgroundColor": "#d7edff"}
-        }
-      }
-    },
-    "menu": {
-      "container": {
-        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
-      },
-      "item": {
-        "hover": {
-          "backgroundColor": "#e1f2ff"
-        },
-        "click": {
-          "backgroundColor": "#cfeaff"
-        }
-      },
-      "iconContainer": {
-        "width": "1.8em"
-      },
-      "text": {
-        "fontSize": "1.05em"
-      }
-    }
-  }'
-></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat
-  dropupStyles='{
-    "button": {
-      "styles": {
-        "container": {
-          "default": {"backgroundColor": "#eff8ff"},
-          "hover": {"backgroundColor": "#e4f3ff"},
-          "click": {"backgroundColor": "#d7edff"}
-        }
-      }
-    },
-    "menu": {
-      "container": {
-        "boxShadow": "#e2e2e2 0px 1px 3px 2px"
-      },
-      "item": {
-        "hover": {
-          "backgroundColor": "#e1f2ff"
-        },
-        "click": {
-          "backgroundColor": "#cfeaff"
-        }
-      },
-      "iconContainer": {
-        "width": "1.8em"
-      },
-      "text": {
-        "fontSize": "1.05em"
-      }
-    }
-  }'
-  demo="true"
-  style="border-radius: 8px"
-  audio='{"button": {"position": "dropup-menu"}}'
-  images='{"button": {"position": "dropup-menu"}}'
-  introMessage='{"text": "Open the dropup by clicking the + button on bottom left of the input."}'
-></deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `inputAreaStyle` {#inputAreaStyle}
-
-- Type: [`CustomStyle`](#CustomStyle)
-
-Styling for the chat view's bottom area dedicated for text input and file buttons. <br />
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    style={{borderRadius: '8px'}}
-    inputAreaStyle={{backgroundColor: '#ebf5ff'}}
-    demo={true}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}'></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat inputAreaStyle='{"backgroundColor": "#ebf5ff"}' style="border-radius: 8px" demo="true"></deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `textInput` {#textInput}
-
-- Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`text?: CustomStyle`](#CustomStyle), [`container?: CustomStyle`](#CustomStyle), [`focus?: CustomStyle`](#CustomStyle)\}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `placeholder?:` \{`text?: string`, [`style?: CustomStyle`](#CustomStyle)\}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `characterLimit?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `disabled?: boolean` <br />
-  \}
-
-Custom details for the chat's text input. <br />
-`styles` object defines the styling for the `text` element and its box `container`. The `focus` property is used to set the container style when it is focused. <br />
-`placeholder` object's `text` property is the initial text that is displayed on the input before the user makes any actions and
-`style` can be used to customize it. Use [`setPlaceholderText`](/docs/methods#setPlaceholderText) to change it dynamically. <br />
-`characterLimit` is the maximum number of charactes that can be inserted into the text input. <br />
-`disabled` is used to prevent the user from inserting text. This also comes with its own custom styling. <br />
-
-#### Generic example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    style={{borderRadius: '8px'}}
+    ]}
     textInput={{
       styles: {
-        text: {color: 'black'},
-        container: {maxHeight: '50px', backgroundColor: '#f5f9ff'},
-        focus: {border: '2px solid #a2a2ff'},
+        container: {
+          paddingBottom: '30px',
+        },
+        text: {
+          padding: '0.5rem 0.7rem',
+        },
       },
-      placeholder: {text: 'Insert text here...', style: {color: '#4459a4'}},
-      characterLimit: 10,
     }}
     demo={true}
   ></DeepChatBrowser>
@@ -314,17 +84,7 @@ Custom details for the chat's text input. <br />
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat
-  textInput='{
-    "styles": {
-      "text": {"color": "black"},
-      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
-      "focus": {"border": "2px solid #a2a2ff"}
-    },
-    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
-    "characterLimit": 10
-  }'
-></deep-chat>
+<deep-chat customButtons="[{}]"></deep-chat>
 ```
 
 </TabItem>
@@ -334,63 +94,34 @@ Custom details for the chat's text input. <br />
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
+  customButtons='[
+    {
+      "position": "inside-left",
+      "styles": {
+        "button": {
+          "default": {
+            "container": {
+              "default": {"border": "1px solid #e2e2e2", "borderRadius": "10px", "marginBottom": "4px"}
+            },
+            "svg": {
+              "content": "\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-0.5 0 25 25\" fill=\"none\">\n <path d=\"M12 22.3201C17.5228 22.3201 22 17.8429 22 12.3201C22 6.79722 17.5228 2.32007 12 2.32007C6.47715 2.32007 2 6.79722 2 12.3201C2 17.8429 6.47715 22.3201 12 22.3201Z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n <path d=\"M2 12.3201H22\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n <path d=\"M12 22.3201C13.933 22.3201 15.5 17.8429 15.5 12.3201C15.5 6.79722 13.933 2.32007 12 2.32007C10.067 2.32007 8.5 6.79722 8.5 12.3201C8.5 17.8429 10.067 22.3201 12 22.3201Z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  </svg>"
+            },
+            "text": {
+              "content": "Search"
+            }}}}}
+  ]'
   textInput='{
     "styles": {
-      "text": {"color": "black"},
-      "container": {"maxHeight": "50px", "backgroundColor": "#f5f9ff"},
-      "focus": {"border": "2px solid #a2a2ff"}
-    },
-    "placeholder": {"text": "Insert text here...", "style": {"color": "#4459a4"}},
-    "characterLimit": 10
+      "container": {"paddingBottom": "30px"},
+      "text": {"padding": "0.5rem 0.7rem"}
+    }
   }'
   style="border-radius: 8px"
   demo="true"
 ></deep-chat>
-```
 
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-#### Disabled example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    style={{borderRadius: '8px'}}
-    textInput={{disabled: true, placeholder: {text: 'Text not allowed...'}}}
-    demo={true}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat
-  textInput='{
-    "disabled": true,
-    "placeholder": {
-      "text": "Text not allowed..."
-  }}'
-></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat
-  textInput='{
-    "disabled": true,
-    "placeholder": {
-      "text": "Text not allowed..."
-  }}'
-  style="border-radius: 8px"
-  demo="true"
-></deep-chat>
+<!-- The onClick function can be constructed as follows -->
+const onClick = (state) => (state === 'active' ? 'default' : 'active')
 ```
 
 </TabItem>
@@ -532,7 +263,7 @@ however `hover` and `submit` need to be defined.
       alwaysEnabled: true,
       submit: {
         container: {
-          default: {backgroundColor: '#e3f0ff', width: '60px'},
+          default: {backgroundColor: '#ddedff'},
           hover: {backgroundColor: '#c6e1ff'},
           click: {backgroundColor: '#acd3ff'},
         },
@@ -540,10 +271,16 @@ however `hover` and `submit` need to be defined.
           content: 'Submit',
           styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
         },
+        svg: {
+          content: '',
+        },
       },
       loading: {
         text: {
           content: 'Loading',
+        },
+        svg: {
+          content: '',
         },
       },
       stop: {
@@ -553,6 +290,9 @@ however `hover` and `submit` need to be defined.
         },
         text: {
           content: 'Stop',
+        },
+        svg: {
+          content: '',
         },
       },
     }}
@@ -569,22 +309,27 @@ however `hover` and `submit` need to be defined.
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {"backgroundColor": "#e3f0ff", "width": "60px"},
+        "default": {"backgroundColor": "#ddedff"},
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
       "text": {
         "content": "Submit",
         "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
-      }
+      },
+      "svg": {"content": ""}
     },
-    "loading": {"text": {"content": "Loading"}},
+    "loading": {
+      "text": {"content": "Loading"},
+      "svg": {"content": ""}
+    },
     "stop": {
       "container": {
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
-      "text": {"content": "Stop"}
+      "text": {"content": "Stop"},
+      "svg": {"content": ""}
     },
     "alwaysEnabled": true
   }'
@@ -602,22 +347,27 @@ however `hover` and `submit` need to be defined.
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {"backgroundColor": "#e3f0ff", "width": "60px"},
+        "default": {"backgroundColor": "#ddedff"},
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
       "text": {
         "content": "Submit",
         "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
-      }
+      },
+      "svg": {"content": ""}
     },
-    "loading": {"text": {"content": "Loading"}},
+    "loading": {
+      "text": {"content": "Loading"},
+      "svg": {"content": ""}
+    },
     "stop": {
       "container": {
         "hover": {"backgroundColor": "#c6e1ff"},
         "click": {"backgroundColor": "#acd3ff"}
       },
-      "text": {"content": "Stop"}
+      "text": {"content": "Stop"},
+      "svg": {"content": ""}
     },
     "alwaysEnabled": true
   }'
@@ -695,42 +445,65 @@ however `hover` and `submit` need to be defined.
 
 <LineBreak></LineBreak>
 
-### `auxiliaryStyle` {#auxiliaryStyle}
-
-- Type: `string`
-
-This value uses [CSS syntax](https://www.w3schools.com/css/css_syntax.ASP) as an alternative way to define styling in Deep Chat. <br />
-It can be used to configure [`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions)
-which cannot be added through component's [`style`](/docs/styles#style) properties. A great example of this is the [`::-webkit-scrollbar`](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
-pseudo element which affects the style of the component's scrollbar. <br />
-It can also be used to add custom styling to [`html`](/docs/messages/#MessageContent) messages and override Deep Chat CSS.
-
-#### Example
+#### Combination Example
 
 <ComponentContainer>
   <DeepChatBrowser
     style={{borderRadius: '8px'}}
-    demo={true}
-    history={[
-      {text: 'Hey, how are you?', role: 'user'},
-      {text: 'I am doing great, how about you?', role: 'ai'},
-      {text: 'What is the meaning of life?', role: 'user'},
-      {
-        text: 'This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.',
-        role: 'ai',
+    textInput={{
+      styles: {
+        container: {
+          paddingBottom: '2px',
+        },
+        text: {
+          paddingRight: '74px',
+        },
       },
-      {text: 'I just feel like sleeping all day...', role: 'user'},
-      {text: 'As long as it makes you happy!', role: 'ai'},
-    ]}
-    auxiliaryStyle="
-      ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: #54a7ff;
-        border-radius: 5px;
-      }"
+    }}
+    submitButtonStyles={{
+      submit: {
+        container: {
+          default: {backgroundColor: '#ddedff'},
+          hover: {backgroundColor: '#c6e1ff'},
+          click: {backgroundColor: '#acd3ff'},
+        },
+        text: {
+          content: 'Send',
+          styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
+        },
+      },
+      loading: {
+        container: {
+          default: {backgroundColor: 'unset'},
+        },
+        text: {
+          content: 'Loading',
+        },
+        svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?>\n<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">\n<title>stop</title>\n<path d="M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z"></path>\n</svg>',
+        },
+      },
+      stop: {
+        container: {
+          default: {backgroundColor: 'unset'},
+        },
+        text: {
+          content: 'Stop',
+        },
+        svg: {
+          content:
+            '<?xml version="1.0" encoding="utf-8"?>\n<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">\n<title>stop</title>\n<path d="M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z"></path>\n</svg>',
+        },
+      },
+      disabled: {
+        text: {
+          content: 'Waiting',
+        },
+      },
+    }}
+    connect={{stream: true}}
+    demo={true}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -739,15 +512,36 @@ It can also be used to add custom styling to [`html`](/docs/messages/#MessageCon
 
 ```html
 <deep-chat
-  auxiliaryStyle="
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: #54a7ff;
-      border-radius: 5px;
-    }"
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {"backgroundColor": "#ddedff"},
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {
+        "content": "Send",
+        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
+      }
+    },
+    "loading": {
+      "container": {"default": {"backgroundColor": "unset"}},
+      "text": {"content": "Loading"},
+      "svg": {
+        "content":
+          "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg viewBox=\"0 0 32 32\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<title>stop</title>\n<path d=\"M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z\"></path>\n</svg>"
+      }
+    },
+    "stop": {
+      "container": {"default": {"backgroundColor": "unset"}},
+      "text": {"content": "Stop"},
+      "svg": {
+        "content":
+          "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg viewBox=\"0 0 32 32\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<title>stop</title>\n<path d=\"M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z\"></path>\n</svg>"
+      }
+    },
+    "disabled": {"text": {"content": "Waiting"}}
+  }'
 ></deep-chat>
 ```
 
@@ -758,27 +552,43 @@ It can also be used to add custom styling to [`html`](/docs/messages/#MessageCon
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  auxiliaryStyle="
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: #54a7ff;
-      border-radius: 5px;
-    }"
-  history='[
-    {"text": "Hey, how are you?", "role": "user"},
-    {"text": "I am doing great, how about you?", "role": "ai"},
-    {"text": "What is the meaning of life?", "role": "user"},
-    {
-      "text": "This ultimately depends on the person, but it could be the pursuit of happiness or fulfillment.",
-      "role": "ai"
+  submitButtonStyles='{
+    "submit": {
+      "container": {
+        "default": {"backgroundColor": "#ddedff"},
+        "hover": {"backgroundColor": "#c6e1ff"},
+        "click": {"backgroundColor": "#acd3ff"}
+      },
+      "text": {
+        "content": "Send",
+        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
+      }
     },
-    {"text": "I just feel like sleeping all day...", "role": "user"},
-    {"text": "As long as it makes you happy!", "role": "ai"}
-  ]'
+    "loading": {
+      "container": {"default": {"backgroundColor": "unset"}},
+      "text": {"content": "Loading"},
+      "svg": {
+        "content":
+          "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg viewBox=\"0 0 32 32\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<title>stop</title>\n<path d=\"M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z\"></path>\n</svg>"
+      }
+    },
+    "stop": {
+      "container": {"default": {"backgroundColor": "unset"}},
+      "text": {"content": "Stop"},
+      "svg": {
+        "content":
+          "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg viewBox=\"0 0 32 32\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<title>stop</title>\n<path d=\"M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z\"></path>\n</svg>"
+      }
+    },
+    "disabled": {"text": {"content": "Waiting"}}
+  }'
+  textInput='{
+    "styles": {
+      "container": {"paddingBottom": "2px"},
+      "text": {"paddingRight": "74px"}
+    }}'
   style="border-radius: 8px"
+  connect='{"stream": true}'
   demo="true"
 ></deep-chat>
 ```
@@ -786,42 +596,331 @@ It can also be used to add custom styling to [`html`](/docs/messages/#MessageCon
 </TabItem>
 </Tabs>
 
-:::danger
-[`Webkit CSS`](https://developer.mozilla.org/en-US/docs/Web/CSS/WebKit_Extensions) is not standardised across all browsers, make sure to check the [`browser support`](https://caniuse.com/)
-for the property you are using.
-:::
+<LineBreak></LineBreak>
+
+## Custom Button Types
+
+Types shared by custom button properties:
+
+### `CustomButtonState` {#CustomButtonState}
+
+- Type: `"default"` | `"active"` | `"disabled"`
+
+Available states for the custom button.
+
+### `CustomButtonStyles` {#CustomButtonStyles}
+
+- Type: \{[`default?: ButtonStyles`](#ButtonStyles), [`active?: ButtonStyles`](#ButtonStyles), [`disabled?: ButtonStyles`](#ButtonStyles)\}
+
+Styling for the states of a custom button.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    customButtons={[
+      {
+        styles: {
+          button: {
+            default: {
+              svg: {
+                styles: {
+                  default: {
+                    filter:
+                      'brightness(0) saturate(100%) invert(42%) sepia(81%) saturate(1870%) hue-rotate(85deg) brightness(106%) contrast(103%)',
+                  },
+                },
+              },
+              text: {
+                styles: {default: {color: '#09C000'}},
+                content: 'Button',
+              },
+            },
+          },
+        },
+      },
+    ]}
+    textInput={{
+      styles: {
+        container: {width: '200px', marginLeft: '-48px'},
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  customButtons='[
+    {
+      "styles": {
+        "button": {
+          "default": {
+            "svg": {
+              "styles": {
+                "default": {
+                  "filter":
+                    "brightness(0) saturate(100%) invert(42%) sepia(81%) saturate(1870%) hue-rotate(85deg) brightness(106%) contrast(103%)"
+                }
+              }
+            },
+            "text": {
+              "styles": {"default": {"color": "#09C000"}},
+              "content": "Button"
+            }}}}}
+  ]'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  demo="true"
+  style="border-radius: 8px"
+  customButtons='[
+    {
+      "styles": {
+        "button": {
+          "default": {
+            "svg": {
+              "styles": {
+                "default": {
+                  "filter":
+                    "brightness(0) saturate(100%) invert(42%) sepia(81%) saturate(1870%) hue-rotate(85deg) brightness(106%) contrast(103%)"
+                }
+              }
+            },
+            "text": {
+              "styles": {"default": {"color": "#09C000"}},
+              "content": "Button"
+            }}}}}
+  ]'
+  textInput='{
+    "styles": {
+      "container": { "width": "200px", "marginLeft": "-48px" }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `CustomDropupItemStyles` {#CustomDropupItemStyles}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`default?: CustomDropupItemStateStyles`](#CustomDropupItemStateStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`active?: CustomDropupItemStateStyles`](#CustomDropupItemStateStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`disabled?: CustomDropupItemStateStyles`](#CustomDropupItemStateStyles) <br />
+  \}
+
+Styling for the states of a custom dropup item.
+
+<LineBreak></LineBreak>
+
+### `CustomDropupItemStateStyles` {#CustomDropupItemStateStyles}
+
+- Type: \{[`item?: StatefulStyles`](#StatefulStyles), [`iconContainer?: CustomStyle`](#CustomStyle), [`text?: CustomStyle`](#CustomStyle)\}
+
+Styling for a custom item inside the dropup menu. <br />
+Tthe dropup item _svg icon_ and _text_ are defined via the `content` property in [`CustomButtonStyles`](#CustomButtonStyles). <br />
+For default and other dropup styles see [`dropupStyles`](/docs/styles/#dropupStyles). <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    customButtons={[
+      {
+        position: 'dropup-menu',
+        styles: {
+          dropup: {
+            default: {
+              text: {
+                color: 'green',
+              },
+              item: {
+                default: {
+                  border: '1px solid green',
+                },
+              },
+              iconContainer: {
+                filter:
+                  'brightness(0) saturate(100%) invert(23%) sepia(67%) saturate(2914%) hue-rotate(104deg) brightness(99%) contrast(103%)',
+              },
+            },
+          },
+          button: {
+            default: {
+              text: {
+                content: 'Button',
+              },
+            },
+          },
+        },
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  customButtons='[
+    {
+      "styles": {
+        "dropup": {
+          "default": {
+            "text": {"color": "green"},
+            "item": {"default": {"border": "1px solid green"}},
+            "iconContainer": {
+              "filter": "brightness(0) saturate(100%) invert(23%) sepia(67%) saturate(2914%) hue-rotate(104deg) brightness(99%) contrast(103%)"
+            }
+          }
+        },
+        "button": {
+          "default": {
+            "text": {
+              "content": "Button"
+            }}}}}
+  ]'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  demo="true"
+  style="border-radius: 8px"
+  customButtons='[
+    {
+      "position": "dropup-menu",
+      "styles": {
+        "dropup": {
+          "default": {
+            "text": {"color": "green"},
+            "item": {"default": {"border": "1px solid green"}},
+            "iconContainer": {
+              "filter": "brightness(0) saturate(100%) invert(23%) sepia(67%) saturate(2914%) hue-rotate(104deg) brightness(99%) contrast(103%)"
+            }
+          }
+        },
+        "button": {
+          "default": {
+            "text": {
+              "content": "Button"
+            }}}}}
+  ]'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `SetCustomButtonState` {#SetCustomButtonState}
+
+- Type: ([`newState: CustomButtonState`](#CustomButtonState)) => `void`
+
+Change button state programmatically. <br />
+
+#### Example
+
+<ComponentContainerMethods
+  onClick={(chatElementRef) => {
+    chatElementRef.customButtons[0].setState('active');
+  }}
+  displayResults={false}
+>
+  <DeepChatBrowser style={{borderRadius: '8px'}} customButtons={[{}]} demo={true}></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Code">
+
+```html
+chatElementRef.customButtons[0].setState('active');
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OnClickCustomButton` {#OnClickCustomButton}
+
+- Type: ([`currentState: CustomButtonState`](#CustomButtonState)) => [`CustomButtonState`](#CustomButtonState) | `void`
+
+Assign a function that is triggered when the custom button is clicked. <br />
+You can optionaly return a [`CustomButtonState`](#CustomButtonState) string to give the button a new state. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    customButtons={[
+      {
+        onClick: (state) => {
+          return state === 'default' ? 'active' : 'default';
+        },
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```js
+chatElementRef.customButtons[0].onClick = (state) => (state === 'default' ? 'active' : 'default');
+```
+
+</TabItem>
+<TabItem value="py" label="Named Function">
+
+```js
+chatElementRef.customButtons[0].onClick = function (state) {
+  return state === 'default' ? 'active' : 'default';
+};
+```
+
+</TabItem>
+</Tabs>
 
 <LineBreak></LineBreak>
 
 ## Types
 
-Types shared by styles properties:
-
-### `CustomStyle` {#CustomStyle}
-
-- Type: [`CSSStyleDeclaration`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
-
-Object containing properties defined in the CSSStyleDeclaration [`specification`](https://webplatform.github.io/docs/css/cssom/CSSStyleDeclaration/CSSStyleDeclaration/)
-as optionals. A TypeScript example can be found in this [link](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/bf671e99615b06404db7a89fa9ae05bf14a8e47c/baselines/dom.generated.d.ts#L2737).
-
-<LineBreak></LineBreak>
-
-### `StatefulStyles` {#StatefulStyles}
-
-- Type: \{[`default?: CustomStyle`](#CustomStyle), [`hover?: CustomStyle`](#CustomStyle), [`click?: CustomStyle`](#CustomStyle)\}
-
-Object defining styling properties for different mouse states on the element.
-
-<LineBreak></LineBreak>
+Types shared by button styles properties.
 
 ### `Button` {#Button}
 
 - Type: \{[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition)\}
 
-Styling for a button inside the chat view. <br />
-`container` is used to style the base element of the button for its various mouse states. <br />
-`svg` is used to style an svg icon (the default inner element) inside the button. <br />
-`text` is used to create and style a text icon inside the button.
+Styling preferences for a button inside the chat view. <br />
+`styles` defines the button styling. <br />
+`position` is used to set the button location. <br />
 
 #### Example
 
@@ -896,7 +995,7 @@ Styling for a button inside the chat view. <br />
 ### `ButtonStyles` {#ButtonStyles}
 
 - Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`container?: StatefulStyles`](#StatefulStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`container?: StatefulStyles`](/docs/styles#StatefulStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`svg?: ButtonInnerStyles`](#ButtonInnerStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`text?: ButtonInnerStyles`](#ButtonInnerStyles) <br />
   \}
@@ -915,13 +1014,19 @@ Styling for a button inside the chat view. <br />
     submitButtonStyles={{
       submit: {
         container: {
-          default: {backgroundColor: '#ddedff', width: '50px'},
-          hover: {backgroundColor: '#c6e1ff'},
-          click: {backgroundColor: '#acd3ff'},
+          default: {backgroundColor: 'black'},
+          hover: {backgroundColor: '#3D3D3D'},
+          click: {backgroundColor: '#555555'},
         },
-        text: {
-          content: 'Send',
-          styles: {default: {color: '#6c6c6c'}, hover: {color: '#2c2c2c'}},
+        svg: {
+          styles: {
+            default: {
+              filter:
+                'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(273deg) brightness(103%) contrast(103%)',
+            },
+          },
+          content:
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">\n<path d="M12 5V19M12 5L6 11M12 5L18 11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n</svg>',
         },
       },
       alwaysEnabled: true,
@@ -964,14 +1069,19 @@ Styling for a button inside the chat view. <br />
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {"backgroundColor": "#ddedff", "width": "50px"},
-        "hover": {"backgroundColor": "#c6e1ff"},
-        "click": {"backgroundColor": "#acd3ff"}
+        "default": {"backgroundColor": "black"},
+        "hover": {"backgroundColor": "#3D3D3D"},
+        "click": {"backgroundColor": "#555555"}
       },
-      "text": {
-        "content": "Send",
-        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
-      }
+      "svg": {
+        "styles": {
+          "default": {
+            "filter":
+              "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(273deg) brightness(103%) contrast(103%)"
+          }
+        },
+        "content":
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M12 5V19M12 5L6 11M12 5L18 11\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>"          }
     }
   }'
   images='{
@@ -1010,22 +1120,26 @@ Styling for a button inside the chat view. <br />
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
 <deep-chat
-  textInput='{"styles": {"text": {"paddingRight": "64px"}}}'
+  textInput='{"styles": {"text": {"paddingRight": "40px"}}}'
   style="border-radius: 8px"
   demo="true"
   submitButtonStyles='{
     "submit": {
       "container": {
-        "default": {"backgroundColor": "#ddedff", "width": "50px"},
-        "hover": {"backgroundColor": "#c6e1ff"},
-        "click": {"backgroundColor": "#acd3ff"}
+        "default": {"backgroundColor": "black"},
+        "hover": {"backgroundColor": "#3D3D3D"},
+        "click": {"backgroundColor": "#555555"}
       },
-      "text": {
-        "content": "Send",
-        "styles": {"default": {"color": "#6c6c6c"}, "hover": {"color": "#2c2c2c"}}
-      }
-    },
-    "alwaysEnabled": true
+      "svg": {
+        "styles": {
+          "default": {
+            "filter":
+              "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(273deg) brightness(103%) contrast(103%)"
+          }
+        },
+        "content":
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M12 5V19M12 5L6 11M12 5L18 11\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>"          }
+    }
   }'
   images='{
     "button": {
@@ -1069,15 +1183,16 @@ You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to 
 
 ### `ButtonInnerStyles` {#ButtonInnerStyles}
 
-- Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](#StatefulStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `content?: string` <br />
-  \}
+- Type: \{[`styles?: StatefulStyles`](/docs/styles#StatefulStyles), `content?: string` \}
 
 Styling for an element inside a button container. <br />
 `styles` is used to set the style of the element for its various mouse states. <br />
 `content` is a string that is used to generate the inner element. When it is inside a [`text`](#ButtonStyles) property - the string generates the element text.
 When inside an [`svg`](#ButtonStyles) property - the string needs to be a full inlined svg element HTML which will be used to generate the icon.
+
+:::info
+To not display an `svg` or `text`, set the `content` property to an empty string e.g. `content: ""`.
+:::
 
 :::info
 If the `content` string is used for an [`svg`](#ButtonStyles):
@@ -1094,7 +1209,7 @@ If the `content` string is used for an [`svg`](#ButtonStyles):
 
 - Type: `"inside-left"` | `"inside-right"` | `"outside-left"` | `"outside-right"` | `"dropup-menu"`
 
-Position for a button either _inside_ the [text input container](#textInput), _outside_ it (either _left_ or _right_) or inside the [`dropup menu`](#dropupStyles).
+Position for a button either _inside_ the [text input container](/docs/styles#textInput), _outside_ it (either _left_ or _right_) or inside the [`dropup menu`](/docs/styles#dropupStyles).
 
 #### Example
 
@@ -1315,3 +1430,4 @@ You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to 
 :::
 
 <LineBreak></LineBreak>
+````

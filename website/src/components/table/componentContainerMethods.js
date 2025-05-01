@@ -11,8 +11,10 @@ function ResultText(props) {
   );
 }
 
-function click(table, resultText, setResultText, propertyName, displayResults, args) {
+function click(table, resultText, setResultText, propertyName, displayResults, args, onClick) {
   const deepChatReference = extractChildChatElement(table);
+  onClick?.(deepChatReference);
+  if (!deepChatReference[propertyName]) return;
   const content = deepChatReference[propertyName](...(args || []));
   if (displayResults ?? true) {
     let newResultTextArr = [...resultText];
@@ -23,7 +25,7 @@ function click(table, resultText, setResultText, propertyName, displayResults, a
   }
 }
 
-export default function ComponentContainerMethods({children, propertyName, displayResults, args, withEvent}) {
+export default function ComponentContainerMethods({children, propertyName, displayResults, args, withEvent, onClick}) {
   const containerRef = React.useRef(null);
   const [resultText, setResultText] = React.useState(['']);
 
@@ -39,7 +41,7 @@ export default function ComponentContainerMethods({children, propertyName, displ
         <button
           className="documentation-button"
           onClick={() =>
-            click(containerRef.current.children[0], resultText, setResultText, propertyName, displayResults, args)
+            click(containerRef.current.children[0], resultText, setResultText, propertyName, displayResults, args, onClick)
           }
         >
           Call Method

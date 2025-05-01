@@ -131,7 +131,7 @@ const services = {
 };
 
 const SERVICE_TO_LINK = {
-  demo: 'https://deepchat.dev/docs/demo#demo',
+  demo: 'https://deepchat.dev/docs/modes#demo',
   custom: 'https://deepchat.dev/docs/connect',
   webModel: 'https://deepchat.dev/docs/webModel',
   openAI: 'https://openai.com/blog/openai-api',

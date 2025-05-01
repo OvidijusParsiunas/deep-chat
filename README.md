@@ -2,7 +2,7 @@
 
 ![Deep Chat](./assets/readme/banner-2.png)
 
-<b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with minimal to no effort. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
+<b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with just _one line of code_. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
 ### :rocket: Main Features
 
@@ -17,13 +17,30 @@
 - Support for MarkDown and custom elements to help structure text and render code
 - Introduction panel and dynamic modals to help describe functionality for your users
 - Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
+- Communicate with Speech to Speech models
 - Support for all major ui frameworks/libraries
 - Host a model on the browser
+- Focus mode to display only the latest messages
 - Everything is customizable!
 
 ### :tada: Latest Updates
 
-Deep Chat version `2.1.1` brings a ton of new features into the Deep Chat ecosystem:
+Deep Chat version `2.2.0` brings a ton of new features into the Deep Chat ecosystem:
+
+- [OpenAI Realtime API](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime) for Speech to Speech interactions
+- [Focus mode](https://deepchat.dev/docs/modes#focusMode) to only display the latest message exchanges and provide a modern AI Chatbot experience
+- [Custom buttons](https://deepchat.dev/docs/styles/buttons#customButtons)
+- A [Response](https://deepchat.dev/docs/connect#Response) can now have multiple messages
+- Ability to connect to [Readable Stream APIs](https://deepchat.dev/docs/connect#Stream)
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.2.0) for more!
+
+<p align="center">
+    <img width="1000" src="https://github.com/user-attachments/assets/6089a0b4-0fe6-43e9-b9ce-840a9cfda885" alt="version 2.2.0">
+</p>
+
+https://github.com/user-attachments/assets/d210b5fe-ee81-4b0b-8347-78d5ed7fb5af
+
+`2.1.1` update:
 
 - [Azure OpenAI API](https://deepchat.dev/docs/directConnection/Azure#OpenAI)
 - [`loadHistory`](https://deepchat.dev/docs/interceptors#loadHistory) interceptor to asynchronously load history and pagination
@@ -33,12 +50,8 @@ Deep Chat version `2.1.1` brings a ton of new features into the Deep Chat ecosys
 - See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.1) for more!
 
 <p align="center">
-    <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.0">
+    <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.1.0">
 </p>
-
-### :construction_worker: Note from developer
-
-https://github.com/user-attachments/assets/7ba01414-ca4d-4e17-b31b-403782d9d950
 
 ### :computer: Getting started
 

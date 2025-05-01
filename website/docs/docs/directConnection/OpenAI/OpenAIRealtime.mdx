@@ -1,0 +1,961 @@
+---
+sidebar_position: 1
+---
+
+# OpenAI Realtime
+
+import openAILogo from '/img/openAILogo.png';
+
+# <img src={openAILogo} className="adaptive-logo-filter" width="40" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title">OpenAI Realtime</span>
+
+Try this service with custom properties in the [Playground](/playground).
+
+import ContainersKeyToggleRealtimeFunction from '@site/src/components/table/containersKeyToggleRealtimeFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+### `realtime` {#realtime}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `ephemeralKey?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`fetchEphemeralKey?: FetchEphemeralKey`](#FetchEphemeralKey), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `autoFetchEphemeralKey?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `autoStart?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: OpenAIRealtimeAvatar`](#OpenAIRealtimeAvatar), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`buttons?: OpenAIRealtimeButtons`](#OpenAIRealtimeButtons), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`config?: OpenAIRealtimeConfig`](#OpenAIRealtimeConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: OpenAIRealtimeLoading`](#OpenAIRealtimeLoading) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`error?: OpenAIRealtimeError`](#OpenAIRealtimeError) <br />
+  \} | `true`
+
+Connect to [OpenAI Reatime API](https://platform.openai.com/docs/guides/realtime). You can either use `true` or an object: <br />
+`ephemeralKey` is the temporary [session key](https://platform.openai.com/docs/api-reference/realtime-sessions) used to connect from the browser safely. <br />
+`fetchEphemeralKey` is a function definition used to retrieve the `ephemeralKey`. <br />
+`autoFetchEphemeralKey` triggers `fetchEphemeralKey` on component render. <br />
+`autoStart` begins the conversation on component render. <br />
+`avatar` is used to configure the avatar. <br />
+`buttons` is used to configure the buttons. <br />
+`config` is as object that defines the connection properties. <br />
+`loading` defines the styling for the loading message. <br />
+`error` defines the styling for the error message. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {"key": "placeholder key", "realtime": true}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {"key": "placeholder key", "realtime": true}
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+If `ephemeralKey` or `fetchEphemeralKey` properties are used, the `key` property is not required. If the `key` property is used instead, the `ephemeralKey` will be fetched automatically.
+:::
+
+## Types
+
+### `FetchEphemeralKey` {#FetchEphemeralKey}
+
+- Type: () => `string` | `Promise<string>`
+
+This is a function definition that will return the `ephemeralKey` value programmatically. <br />
+Details on how to retrieve the key can be found [here](https://platform.openai.com/docs/api-reference/realtime-sessions).
+
+<Tabs>
+<TabItem value="js" label="Sample function">
+
+```js
+// There are many ways to define the function depending on your framework.
+// The following is a simple VanillaJs example:
+
+chatElementRef.directConnection.openAI.realtime.fetchEphemeralKey = () => 'my-key';
+```
+
+</TabItem>
+<TabItem value="py" label="OpenAI function">
+
+```js
+// There are many ways to define the function depending on your framework.
+// The following is a simple VanillaJs example:
+
+// Calls the OpenAI service to fetch your ephemeral key
+chatElementRef.directConnection.openAI.realtime.fetchEphemeralKey = async () => {
+  try {
+    const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer OPENAI-API-KEY',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-realtime-preview-2024-12-17',
+        voice: 'verse',
+      }),
+    });
+
+    const data = await response.json();
+    return data.client_secret.value;
+  } catch (error) {
+    console.error('Error fetching ephemeral key:', error);
+    throw error;
+  }
+};
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+See the [`OpenAIRealtimeConfig`](#OpenAIRealtimeConfig) to see available session configuration.
+:::
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeAvatar` {#OpenAIRealtimeAvatar}
+
+- Type: \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxScale?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`image?: CustomStyle`](/docs/styles#CustomStyle), [`container?: CustomStyle`](/docs/styles#CustomStyle)} <br />
+  \}
+- Default: _\{maxScale: 2.5\}_
+
+Configuration for the avatar. <br />
+`src` is the path for the image. <br />
+`maxScale` is the maximum size that the avatar is allowed to expand to when a response is spoken. <br />
+`styles` is an object that is used to style the avatar `image` and the `container` which is the area around the avatar. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            avatar: {
+              src: '/img/mrFresh.png',
+              maxScale: 3.5,
+              styles: {
+                image: {
+                  padding: '5px',
+                },
+                container: {
+                  height: '60%',
+                },
+              },
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            avatar: {
+              src: '/img/mrFresh.png',
+              maxScale: 3.5,
+              styles: {
+                image: {
+                  padding: '5px',
+                },
+                container: {
+                  height: '60%',
+                },
+              },
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "realtime": {
+        "avatar": {
+          "src": "path-to-file.png",
+          "maxScale": 3.5,
+          "styles": {
+            "image": {"padding": "5px"},
+            "container": {"height": "60%"}
+          }}}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "realtime": {
+        "avatar": {
+          "src": "path-to-file.png",
+          "maxScale": 3.5,
+          "styles": {
+            "image": {"padding": "5px"},
+            "container": {"height": "60%"}
+          }}}}}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeButtons` {#OpenAIRealtimeButtons}
+
+- Type: \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](/docs/styles#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`microphone?: OpenAIRealtimeButton`](#OpenAIRealtimeButton), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`toggle?: OpenAIRealtimeButton`](#OpenAIRealtimeButton) <br />
+  \}
+
+Configuration for the buttons section. <br />
+`container` is styling for the buttons area. <br />
+`microphone` is styling for the various states of the microphone button. <br />
+`toggle` is styling for the various states of the toggle button. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            buttons: {
+              container: {backgroundColor: '#f7f7f7'},
+              microphone: {
+                default: {
+                  svg: {
+                    content:
+                      '<svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none">\n<path d="M3 16.5C2.59 16.5 2.25 16.16 2.25 15.75V8.25C2.25 7.84 2.59 7.5 3 7.5C3.41 7.5 3.75 7.84 3.75 8.25V15.75C3.75 16.16 3.41 16.5 3 16.5Z" fill="#292D32"/>\n<path d="M7.5 19C7.09 19 6.75 18.66 6.75 18.25V5.75C6.75 5.34 7.09 5 7.5 5C7.91 5 8.25 5.34 8.25 5.75V18.25C8.25 18.66 7.91 19 7.5 19Z" fill="#292D32"/>\n<path d="M12 21.5C11.59 21.5 11.25 21.16 11.25 20.75V3.25C11.25 2.84 11.59 2.5 12 2.5C12.41 2.5 12.75 2.84 12.75 3.25V20.75C12.75 21.16 12.41 21.5 12 21.5Z" fill="#292D32"/>\n<path d="M16.5 19C16.09 19 15.75 18.66 15.75 18.25V5.75C15.75 5.34 16.09 5 16.5 5C16.91 5 17.25 5.34 17.25 5.75V18.25C17.25 18.66 16.91 19 16.5 19Z" fill="#292D32"/>\n<path d="M21 16.5C20.59 16.5 20.25 16.16 20.25 15.75V8.25C20.25 7.84 20.59 7.5 21 7.5C21.41 7.5 21.75 7.84 21.75 8.25V15.75C21.75 16.16 21.41 16.5 21 16.5Z" fill="#292D32"/>\n</svg>',
+                  },
+                },
+              },
+              toggle: {
+                default: {
+                  svg: {
+                    styles: {
+                      default: {
+                        filter:
+                          'brightness(0) saturate(100%) invert(58%) sepia(77%) saturate(282%) hue-rotate(172deg) brightness(91%) contrast(93%)',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            buttons: {
+              container: {backgroundColor: '#f7f7f7'},
+              microphone: {
+                default: {
+                  svg: {
+                    content:
+                      '<svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none">\n<path d="M3 16.5C2.59 16.5 2.25 16.16 2.25 15.75V8.25C2.25 7.84 2.59 7.5 3 7.5C3.41 7.5 3.75 7.84 3.75 8.25V15.75C3.75 16.16 3.41 16.5 3 16.5Z" fill="#292D32"/>\n<path d="M7.5 19C7.09 19 6.75 18.66 6.75 18.25V5.75C6.75 5.34 7.09 5 7.5 5C7.91 5 8.25 5.34 8.25 5.75V18.25C8.25 18.66 7.91 19 7.5 19Z" fill="#292D32"/>\n<path d="M12 21.5C11.59 21.5 11.25 21.16 11.25 20.75V3.25C11.25 2.84 11.59 2.5 12 2.5C12.41 2.5 12.75 2.84 12.75 3.25V20.75C12.75 21.16 12.41 21.5 12 21.5Z" fill="#292D32"/>\n<path d="M16.5 19C16.09 19 15.75 18.66 15.75 18.25V5.75C15.75 5.34 16.09 5 16.5 5C16.91 5 17.25 5.34 17.25 5.75V18.25C17.25 18.66 16.91 19 16.5 19Z" fill="#292D32"/>\n<path d="M21 16.5C20.59 16.5 20.25 16.16 20.25 15.75V8.25C20.25 7.84 20.59 7.5 21 7.5C21.41 7.5 21.75 7.84 21.75 8.25V15.75C21.75 16.16 21.41 16.5 21 16.5Z" fill="#292D32"/>\n</svg>',
+                  },
+                },
+              },
+              toggle: {
+                default: {
+                  svg: {
+                    styles: {
+                      default: {
+                        filter:
+                          'brightness(0) saturate(100%) invert(58%) sepia(77%) saturate(282%) hue-rotate(172deg) brightness(91%) contrast(93%)',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "realtime": {
+        "buttons": {
+          "container": {"backgroundColor": "#f7f7f7"},
+          "microphone": {
+            "default": {
+              "svg": {"content": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800px\" height=\"800px\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M3 16.5C2.59 16.5 2.25 16.16 2.25 15.75V8.25C2.25 7.84 2.59 7.5 3 7.5C3.41 7.5 3.75 7.84 3.75 8.25V15.75C3.75 16.16 3.41 16.5 3 16.5Z\" fill=\"#292D32\"/>\n<path d=\"M7.5 19C7.09 19 6.75 18.66 6.75 18.25V5.75C6.75 5.34 7.09 5 7.5 5C7.91 5 8.25 5.34 8.25 5.75V18.25C8.25 18.66 7.91 19 7.5 19Z\" fill=\"#292D32\"/>\n<path d=\"M12 21.5C11.59 21.5 11.25 21.16 11.25 20.75V3.25C11.25 2.84 11.59 2.5 12 2.5C12.41 2.5 12.75 2.84 12.75 3.25V20.75C12.75 21.16 12.41 21.5 12 21.5Z\" fill=\"#292D32\"/>\n<path d=\"M16.5 19C16.09 19 15.75 18.66 15.75 18.25V5.75C15.75 5.34 16.09 5 16.5 5C16.91 5 17.25 5.34 17.25 5.75V18.25C17.25 18.66 16.91 19 16.5 19Z\" fill=\"#292D32\"/>\n<path d=\"M21 16.5C20.59 16.5 20.25 16.16 20.25 15.75V8.25C20.25 7.84 20.59 7.5 21 7.5C21.41 7.5 21.75 7.84 21.75 8.25V15.75C21.75 16.16 21.41 16.5 21 16.5Z\" fill=\"#292D32\"/>\n</svg>"}
+            }},
+          "toggle": {
+            "default": {
+              "svg": {
+                "styles": {
+                  "default": {"filter": "brightness(0) saturate(100%) invert(58%) sepia(77%) saturate(282%) hue-rotate(172deg) brightness(91%) contrast(93%)" }
+                }}}}}}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "realtime": {
+        "buttons": {
+          "container": {"backgroundColor": "#f7f7f7"},
+          "microphone": {
+            "default": {
+              "svg": {"content": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800px\" height=\"800px\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M3 16.5C2.59 16.5 2.25 16.16 2.25 15.75V8.25C2.25 7.84 2.59 7.5 3 7.5C3.41 7.5 3.75 7.84 3.75 8.25V15.75C3.75 16.16 3.41 16.5 3 16.5Z\" fill=\"#292D32\"/>\n<path d=\"M7.5 19C7.09 19 6.75 18.66 6.75 18.25V5.75C6.75 5.34 7.09 5 7.5 5C7.91 5 8.25 5.34 8.25 5.75V18.25C8.25 18.66 7.91 19 7.5 19Z\" fill=\"#292D32\"/>\n<path d=\"M12 21.5C11.59 21.5 11.25 21.16 11.25 20.75V3.25C11.25 2.84 11.59 2.5 12 2.5C12.41 2.5 12.75 2.84 12.75 3.25V20.75C12.75 21.16 12.41 21.5 12 21.5Z\" fill=\"#292D32\"/>\n<path d=\"M16.5 19C16.09 19 15.75 18.66 15.75 18.25V5.75C15.75 5.34 16.09 5 16.5 5C16.91 5 17.25 5.34 17.25 5.75V18.25C17.25 18.66 16.91 19 16.5 19Z\" fill=\"#292D32\"/>\n<path d=\"M21 16.5C20.59 16.5 20.25 16.16 20.25 15.75V8.25C20.25 7.84 20.59 7.5 21 7.5C21.41 7.5 21.75 7.84 21.75 8.25V15.75C21.75 16.16 21.41 16.5 21 16.5Z\" fill=\"#292D32\"/>\n</svg>"}
+            }},
+          "toggle": {
+            "default": {
+              "svg": {
+                "styles": {
+                  "default": {"filter": "brightness(0) saturate(100%) invert(58%) sepia(77%) saturate(282%) hue-rotate(172deg) brightness(91%) contrast(93%)" }
+                }}}}}}}}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeButton` {#OpenAIRealtimeButton}
+
+- Type: \{[`default?: ButtonStyles`](/docs/styles/buttons#ButtonStyles), [`active?: ButtonStyles`](/docs/styles/buttons#ButtonStyles), [`unavailable?: ButtonStyles`](/docs/styles/buttons#ButtonStyles)}
+
+Configuration for the various sates of a button. <br />
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeConfig` {#OpenAIRealtimeConfig}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `instructions?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `voice?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_response_output_tokens?:` `number` | `"inf"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `turn_detection?:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `threshold?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `prefix_padding_ms?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `silence_duration_ms?: number`\} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tools?:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?:` `"function"`|`"code_interpreter"`|`"file_search"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `parameters?: object`\}[] <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_choice?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: OpenAIRealtimeFunction`](#OpenAIRealtimeFunction) <br />
+  \}
+- Default: _\{model: "gpt-4o-realtime-preview-2024-12-17"\}_
+
+Session configuration. This object follows the configuration referenced [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create). <br />
+**IMPORTANT:** If you are providing your own `ephemeralKey` or using the [`fetchEphemeralKey`](#FetchEphemeralKey) function, this configuration will need to be used there.
+However, this does not apply to the [`function_handler`](#OpenAIRealtimeFunction). <br />
+`model` is the model name used for the session. <br />
+`instructions` allows the model to be guided on desired responses (also known as system message). <br />
+`voice` is the model response's voice. See full list [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create#realtime-sessions-create-voice). <br />
+`temperature` is the sampling temperature for the model. <br />
+`max_response_output_tokens` is the maximum number of output tokens for a single assistant response. <br />
+`turn_detection` is configuration to detect when the model should start speaking. More info can be found [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create#realtime-sessions-create-turn_detection). <br />
+`tools` is a list of tools available to the model. More info can be found [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create#realtime-sessions-create-tools). <br />
+`tool_choice` is used to define how the model chooses tools. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            config: {
+              instructions: 'Answer only with yes or no',
+              voice: 'alloy',
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            config: {
+              instructions: 'Answer only with yes or no',
+              voice: 'alloy',
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "realtime": {
+        "config": {
+          "instructions": "Answer only with yes or no",
+          "voice": "alloy"
+    }}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+        "realtime": {
+          "config": {
+            "instructions": "Answer only with yes or no",
+            "voice": "alloy"
+      }}}}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeFunction` {#OpenAIRealtimeFunction}
+
+- Type: (\{`name: string`, `arguments: string`\}) => `object`
+
+The actual function that the component will call if the model wants a response from [OpenAIRealtimeConfig](#OpenAIRealtimeConfig) `tools` functions. <br />
+
+<ContainersKeyToggleRealtimeFunction></ContainersKeyToggleRealtimeFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  openAI: {
+    key: 'placeholder-key',
+    realtime: {
+      config: {
+        tools: [
+          {
+            type: 'function',
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        ],
+        function_handler: (functionsDetails) => {
+          const {location} = JSON.parse(functionsDetails.arguments);
+          return this.getCurrentWeather(location);
+        },
+      },
+    },
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  openAI: {
+    key: 'placeholder-key',
+    realtime: {
+      config: {
+        tools: [
+          {
+            type: 'function',
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        ],
+        function_handler: (functionsDetails) => {
+          const {location} = JSON.parse(functionsDetails.arguments);
+          return this.getCurrentWeather(location);
+        },
+      },
+    },
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return {location, temperature: '10', unit: 'celsius'};
+  } else if (location.includes('san francisco')) {
+    return {location, temperature: '72', unit: 'fahrenheit'};
+  } else {
+    return {location, temperature: '22', unit: 'celsius'};
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeLoading` {#OpenAIRealtimeLoading}
+
+- Type: \{`text?: string`, `html?: string`, `display?: boolean`, [`style?: CustomStyle`](/docs/styles#CustomStyle)\}
+- Default: _\{text: "Loading", "display": true\}_
+
+Configuration for the loading message. <br />
+`text` is the text that will be displayed when loading. <br />
+`html` can be used to render a special loading element. <br />
+`display` toggles whether the loading message is displayed. <br />
+`style` is the general styling for the loading message. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            loading: {
+              html: '<div class="lds-ripple"><div></div><div></div></div>',
+              style: {top: '20px'},
+            },
+          },
+        },
+      }}
+      auxiliaryStyle={`.lds-ripple {
+          color: #1c4c5b
+        }
+        .lds-ripple,
+        .lds-ripple div {
+          box-sizing: border-box;
+        }
+        .lds-ripple {
+          display: inline-block;
+          position: relative;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ripple div {
+          position: absolute;
+          border: 4px solid currentColor;
+          opacity: 1;
+          border-radius: 50%;
+          animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+          0% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          4.9% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          5% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 1;
+          }
+          100% {
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+          }
+        }
+        `}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            loading: {
+              html: '<div class="lds-ripple"><div></div><div></div></div>',
+              style: {top: '20px'},
+            },
+          },
+        },
+      }}
+      auxiliaryStyle={`.lds-ripple {
+          color: #1c4c5b
+        }
+        .lds-ripple,
+        .lds-ripple div {
+          box-sizing: border-box;
+        }
+        .lds-ripple {
+          display: inline-block;
+          position: relative;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ripple div {
+          position: absolute;
+          border: 4px solid currentColor;
+          opacity: 1;
+          border-radius: 50%;
+          animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+          0% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          4.9% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+          }
+          5% {
+            top: 36px;
+            left: 36px;
+            width: 8px;
+            height: 8px;
+            opacity: 1;
+          }
+          100% {
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+          }
+        }
+        `}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "realtime": {
+        "loading": {
+          "html": "<div class=\"lds-ripple\"><div></div><div></div></div>",
+          "style": {"top": "20px"}
+      }}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "realtime": {
+        "loading": {
+          "html": "<div class=\"lds-ripple\"><div></div><div></div></div>",
+          "style": {"top": "20px"}
+      }}}}'
+  auxiliaryStyle="
+    .lds-ripple {
+      color: #1c4c5b
+    }
+    .lds-ripple,
+    .lds-ripple div {
+      box-sizing: border-box;
+    }
+    .lds-ripple {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .lds-ripple div {
+      position: absolute;
+      border: 4px solid currentColor;
+      opacity: 1;
+      border-radius: 50%;
+      animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    .lds-ripple div:nth-child(2) {
+      animation-delay: -0.5s;
+    }
+    @keyframes lds-ripple {
+      0% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 0;
+      }
+      4.9% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 0;
+      }
+      5% {
+        top: 36px;
+        left: 36px;
+        width: 8px;
+        height: 8px;
+        opacity: 1;
+      }
+      100% {
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+      }
+    }"
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeError` {#OpenAIRealtimeError}
+
+- Type: \{`text?: string`, [`style?: CustomStyle`](/docs/styles#CustomStyle)\}
+- Default: _\{text: "Error"\}_
+
+Configuration for the error message. <br />
+`text` is the text that will be displayed for the error message. <br />
+`style` is the general styling for the error message. <br />
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            error: {
+              text: 'Custom Error!',
+              style: {color: 'orange'},
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            error: {
+              text: 'Custom Error!',
+              style: {color: 'orange'},
+            },
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "realtime": {
+        "error": {
+          "text": "Custom Error!",
+          "style": {"color": "orange"}
+        }}}}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+  "openAI": {
+    "key": "placeholder key",
+    "realtime": {
+      "error": {
+        "text": "Custom Error!",
+        "style": {"color": "orange"}
+      }}}}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

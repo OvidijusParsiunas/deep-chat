@@ -251,6 +251,9 @@ This service stops after a brief period of silence due to limitations in its API
   &nbsp;&nbsp;&nbsp;&nbsp; `subscriptionKey?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `token?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `language?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `autoLanguage?:` \{`type?: "AtStart" | "Continuous"`, `languages: string[]`\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `endpointId?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `deviceId?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stopAfterSilenceMs?: number` <br />
   \}
 
@@ -265,6 +268,10 @@ and [starter server templates](https://github.com/OvidijusParsiunas/speech-to-el
 `token` is a temporary token for the Azure speech resource. <br />
 `language` is a BCP-47 string value to denote the recognition language. You can find the full
 list [here](https://docs.microsoft.com/azure/cognitive-services/speech-service/supported-languages). <br />
+`autoLanguage` is used to configure automatic [language identification](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-identification?tabs=once&pivots=programming-language-javascript)
+based on a list of candidate `languages`. `type` defines if the language can be identified in the first 5 seconds (`"AtStart"`) or any time (`"Continuous"`). <br />
+`endpointId` is the id of a customized speech model. <br />
+`deviceId` is the id of specific media device. More info [here](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-select-audio-input-devices#audio-device-ids-in-javascript). <br />
 `stopAfterSilenceMs` is the milliseconds of silence required for the microphone to automatically turn off. <br />
 
 :::info
@@ -548,10 +555,10 @@ your speech as "Stop" it will not execute your command. On the other hand if it 
 
 ### `ButtonStyles` {#ButtonStyles}
 
-- Type: \{[`commandMode?: ButtonStyles`](/docs/styles/#ButtonStyles), [`MicrophoneStyles`](/docs/styles/#MicrophoneStyles)\}
+- Type: \{[`commandMode?: ButtonStyles`](/docs/styles/buttons#ButtonStyles), [`MicrophoneStyles`](/docs/styles/buttons#MicrophoneStyles)\}
 
 This object is used to define the styling for the microphone button. <br />
-It contains the same properties as the [`MicrophoneStyles`](/docs/styles/#MicrophoneStyles) object
+It contains the same properties as the [`MicrophoneStyles`](/docs/styles/buttons#MicrophoneStyles) object
 and an additional `commandMode` property which sets the button styling when the [`command mode`](#Commands) is activated. <br />
 
 #### Example

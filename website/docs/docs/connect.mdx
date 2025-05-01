@@ -187,7 +187,7 @@ Types shared with other component properties:
 
 ### `Response` {#Response}
 
-- Type: \{[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`\}
+- Type: \{[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`\} | `Array`
 
 Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with additional optional `error` and
 `overwrite` properties: <br />
@@ -197,6 +197,7 @@ Object containing response information from the target service. It has the same 
 `error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](/docs/messages#errorMessages)
 is set to _true_, the same message will be displayed in the chat's error bubble. <br />
 `overwrite` replaces last message from the same role or creates a new one if not found. [Status bubble](#status-bubble-example) example. <br />
+Deep Chat also accepts multiple `Response` objects inside an `Array`, however this is not supported for [`Stream`](#Stream).
 
 #### Examples:
 
@@ -305,15 +306,15 @@ Messages from the server:
 
 ### `Stream` {#Stream}
 
-- Type: `boolean` | \{`simulation?: boolean | number | string`\}
+- Type: `boolean` | \{`simulation?: boolean | number | string`, `readable?: boolean`\}
 
 Used to stream responses from the target service. <br />
 By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
 the server. See [`example`](https://deepchat.dev/examples/servers) server code. <br />
-The responses are expected to contain partial text, however you can use [`overwrite`](#Response) to overwrite each one. <br />
 You can alternatively use the `simulation` object property to facilitate a <b>stream-like</b> experience for any other connection type where the received content wil be
 gradually populated in the message bubble. You can control the millisecond interim of each word's appearance by assigning it a number with the default being _6_.
 A string value is used to act like an _end-phrase_ for individual websocket messages that act like a stream. <br />
+`readable` is used to handle responses from a server with a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream). <br />
 
 #### Stream Service Example
 
@@ -390,7 +391,7 @@ A string value is used to act like an _end-phrase_ for individual websocket mess
 <LineBreak></LineBreak>
 
 :::note
-`stream` can be used in [`connect`](connect) by itself when [`demo`](https://deepchat.dev/docs/demo) is defined.
+`stream` can be used in [`connect`](connect) by itself when [`demo`](https://deepchat.dev/docs/modes#demo) is defined.
 :::
 
 <LineBreak></LineBreak>

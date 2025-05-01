@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-<div></div>
+# OpenAI
 
 import openAILogo from '/img/openAILogo.png';
 
@@ -15,13 +15,14 @@ Properties used to connect to [OpenAI](https://openai.com/blog/openai-api).
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`chat?: Chat`](#Chat), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`assistant?: Assistant`](#Assistant), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`realtime?: OpenAIRealtime`](/docs/directConnection/OpenAI/OpenAIRealtime), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`images?: Images`](#Images), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](#TextToSpeech), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](#SpeechToText) <br />
   \}
 - Default: _\{chat: true\}_
 
-import ContainersKeyToggleFunction from '@site/src/components/table/containersKeyToggleFunction';
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -198,7 +199,8 @@ If `max_tokens` is not set, the component sets it to _300_ as otherwise the API 
   &nbsp;&nbsp;&nbsp;&nbsp; `load_thread_history?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`new_assistant?: NewAssistant`](#NewAssistant), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files_tool_type?: FileToolTypes`](#FileToolTypes), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: AssistantFunctionHandler`](#assistant-functions) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: AssistantFunctionHandler`](#assistant-functions), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `custom_base_url?: string` <br />
   \}
 
 Connect to your OpenAI [`assistant`](https://platform.openai.com/docs/assistants/overview).
@@ -209,6 +211,7 @@ When set to `true` or the `assistant_id` is not defined, Deep Chat will automati
 `new_assistant` defines the details for the newly created assistant. <br />
 `files_tool_type` defines the type of a tool to be used to process an uploaded file. <br />
 `function_handler` is the actual function used to handle the model's function response. Please navigate to [Assistant Functions](#assistant-functions) for more info. <br />
+`custom_base_url` is used to proxy the calls to the service through a custom API such as your service. <br />
 
 <ContainersKeyToggle>
   <ComponentContainer>
@@ -768,7 +771,7 @@ from their text and return it all in a standardized response for you to act on. 
 `tool_choice` controls which (if any) function should be called. <br />
 `function_handler` is the actual function that is called with the model's instructions.
 
-<ContainersKeyToggleFunction></ContainersKeyToggleFunction>
+<ContainersKeyToggleChatFunction></ContainersKeyToggleChatFunction>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -819,34 +822,39 @@ chatElementRef.directConnection = {
 // using JavaScript for a simplified example
 
 chatElementRef.directConnection = {
-    openAI: {
-      chat: {
-        tools: [{
-            type: "function",
-            function: {
-              name: "get_current_weather",
-              description: "Get the current weather in a given location",
-              parameters: {
-                type: "object",
-                properties: {
-                  location: {
-                    type: "string",
-                    description: "The city and state, e.g. San Francisco, CA",
-                  },
-                  unit: {type: "string", enum: ["celsius", "fahrenheit"]},
+  openAI: {
+    chat: {
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
                 },
-                required: ["location"],
-          }}}],
-        function_handler: (functionsDetails) => {
-          return functionsDetails.map((functionDetails) => {
-            return {
-              response: getCurrentWeather(functionDetails.arguments),
-        };});}
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        },
+      ],
+      function_handler: (functionsDetails) => {
+        return functionsDetails.map((functionDetails) => {
+          return {
+            response: getCurrentWeather(functionDetails.arguments),
+          };
+        });
       },
-      key: "placeholder-key",
     },
-  };
-}
+    key: 'placeholder-key',
+  },
+};
 
 function getCurrentWeather(location) {
   location = location.toLowerCase();
@@ -905,8 +913,6 @@ inside the [OpneAI assistants platform](https://platform.openai.com/assistants).
 [`functionsDetails`](#FunctionsDetails) contains information about what functions should be called. <br />
 This function should return an array of strings defining the response for each function described in `functionDetails` (in the same order)
 which will feed it back into the assistant to finalise a response.
-
-Try it out live in the Deep Chat [Playground](/playground).
 
 <Tabs>
 <TabItem value="js" label="Sample code">

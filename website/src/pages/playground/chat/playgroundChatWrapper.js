@@ -172,6 +172,7 @@ const SERVICE_TO_NAME = {
   openAI: {
     chat: 'OpenAI: Chat',
     assistant: 'OpenAI: Assistant',
+    realtime: 'OpenAI: Realtime',
     images: 'OpenAI: Dalle',
     textToSpeech: 'OpenAI: Text To Speech',
     speechToText: 'OpenAI: Speech To Text',

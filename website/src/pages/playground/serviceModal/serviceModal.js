@@ -432,7 +432,16 @@ const SERVICE_MODAL_FORM_CONFIG = {
       assistant_id: 'string',
       thread_id: 'string',
       load_thread_history: ['true', 'false'],
+      custom_base_url: 'string',
       allowMixedFiles: ['true', 'false'],
+    },
+    realtime: {
+      config: {
+        model: 'string',
+        instructions: 'string',
+        voice: 'string',
+        temperature: 'number',
+      },
     },
     images: {
       model: 'string',
@@ -657,7 +666,16 @@ const OPTIONAL_PARAM_TO_LINK = {
       assistant_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
       thread_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
       load_thread_history: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
+      custom_base_url: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
       allowMixedFiles: 'https://deepchat.dev/docs/files/#mixedFiles',
+    },
+    realtime: {
+      config: {
+        model: 'https://deepchat.dev/docs/directConnection/OpenAIRealtime#OpenAIRealtimeConfig',
+        instructions: 'https://deepchat.dev/docs/directConnection/OpenAIRealtime#OpenAIRealtimeConfig',
+        voice: 'https://deepchat.dev/docs/directConnection/OpenAIRealtime#OpenAIRealtimeConfig',
+        temperature: 'https://deepchat.dev/docs/directConnection/OpenAIRealtime#OpenAIRealtimeConfig',
+      },
     },
     images: {
       model: 'https://platform.openai.com/docs/api-reference/images/create#images-create-model',
@@ -796,6 +814,7 @@ const OPTIONAL_PARAM_TO_LINK = {
       language:
         'https://en.wikipedia.org/wiki/IETF_language_tag#:~:text=An%20IETF%20BCP%2047%20language,the%20IANA%20Language%20Subtag%20Registry.',
     },
+    // currently not offering the Azure OpenAI option as the playground is not set up to handle multiple required parameters
   },
   stabilityAI: {
     textToImage: {

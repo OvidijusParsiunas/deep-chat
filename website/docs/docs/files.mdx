@@ -339,7 +339,7 @@ Types shared by files properties:
 
 ### `FilesServiceConfig` {#FilesServiceConfig}
 
-- Type: \{[`connect?: Connect`](/docs/connect#connect-1), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](/docs/styles#Button)\}
+- Type: \{[`connect?: Connect`](/docs/connect#connect-1), [`files?: FileAttachments`](#FileAttachments), [`button?: Button`](/docs/styles/buttons#Button)\}
 
 Object used to configure the ability for the component to send files. <br />
 `connect` object is used to override the default service connection settings when sending a file. <br />
@@ -539,7 +539,7 @@ Use this [Playground](https://jonschlinkert.github.io/remarkable/demo/) to help 
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`connect?: Connect`](/docs/connect#connect-1), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: CameraFiles`](#CameraFiles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](/docs/styles#Button), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: Button`](/docs/styles/buttons#Button), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`modalContainerStyle?: CustomStyle`](/docs/styles#CustomStyle) <br />
   \}
 
@@ -605,7 +605,7 @@ Configuration for capturing images using a web camera and handling the resultant
 
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"png"` | `"jpeg"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `dimensions?:` {`width?: number`, `height?: number`} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `dimensions?:` \{`width?: number`, `height?: number`\} <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxNumberOfFiles?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `acceptedFormats?: string` <br />
   \}
@@ -688,7 +688,7 @@ the `acceptedFormats` property, it will override this one.<br />
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`connect?: Connect`](/docs/connect#connect-1), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`files?: AudioRecordingFiles`](#AudioRecordingFiles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](/docs/styles#MicrophoneStyles) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`button?: MicrophoneStyles`](/docs/styles/buttons#MicrophoneStyles) <br />
   \}
 
 Configuration for recording audio using a microphone and handling the resultant files. <br />
