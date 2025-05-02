@@ -27,7 +27,7 @@
 
 Deep Chat version `2.2.0` brings a ton of new features into the Deep Chat ecosystem:
 
-- [OpenAI Realtime API](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime) for Speech to Speech interactions
+- [OpenAI Realtime API](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime) for Speech to Speech communication
 - [Focus mode](https://deepchat.dev/docs/modes#focusMode) to only display the latest message exchanges and provide a modern AI Chatbot experience
 - [Custom buttons](https://deepchat.dev/docs/styles/buttons#customButtons)
 - A [Response](https://deepchat.dev/docs/connect#Response) can now have multiple messages
