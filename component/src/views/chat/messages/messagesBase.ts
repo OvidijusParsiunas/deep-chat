@@ -99,12 +99,9 @@ export class MessagesBase {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === 'user') {
-      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.isScroll;
+      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.scroll;
       // timeout neeed when bubble font is large
       setTimeout(() => ElementUtils.scrollToBottom(this.elementRef, isAnimation));
-    } else {
-      // prevents a browser bug where a long response from AI would sometimes scroll down
-      this.messageElementRefs[this.messageElementRefs.length - 2]?.outerContainer.scrollIntoView();
     }
     return messageElements;
   }
