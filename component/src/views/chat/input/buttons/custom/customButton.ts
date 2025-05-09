@@ -1,11 +1,12 @@
-import {DropupMenuStyles, DropupStyles} from '../../../../../types/dropupStyles';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
+import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
 import {HTMLUtils} from '../../../messages/html/htmlUtils';
 import {ButtonAccessibility} from '../buttonAccessility';
 import {ButtonStyles} from '../../../../../types/button';
 import {DropupItem} from '../../dropup/dropupItem';
+import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
 import {ButtonUtils} from '../buttonUtils';
 import {ButtonCSS} from '../buttonCSS';
@@ -40,7 +41,7 @@ export class CustomButton extends InputButton<Styles> {
   private readonly _menuStyles?: DropupMenuStyles;
   override isCustom = true;
 
-  constructor(customButton: CustomButtonT, index: number, menuStyles?: DropupMenuStyles) {
+  constructor(customButton: CustomButtonT, index: number, focusInput?: () => void, menuStyles?: DropupMenuStyles) {
     const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
     const svg = CUSTOM_ICON_STRING;
     super(CustomButton.createButtonElement(), svg, customButton?.position, customButton?.styles?.button, dropupText);
@@ -49,7 +50,7 @@ export class CustomButton extends InputButton<Styles> {
     this._onClick = customButton.onClick;
     this._dropupStyles = customButton.styles?.dropup;
     this.setSetState(customButton);
-    this.addClickListener();
+    this.addClickListener(focusInput);
     this.changeState(customButton.initialState, true);
   }
 
@@ -77,9 +78,10 @@ export class CustomButton extends InputButton<Styles> {
     };
   }
 
-  private addClickListener() {
+  private addClickListener(focusInput?: () => void) {
     this.elementRef.addEventListener('click', () => {
       const resultState = this._onClick?.(this._state);
+      focusInput?.();
       if (resultState === 'default' || resultState === 'active' || resultState === 'disabled') {
         this.changeState(resultState);
       }
@@ -203,9 +205,10 @@ export class CustomButton extends InputButton<Styles> {
     }
   }
 
-  public static add(customButtons: CustomButtonT[], buttons: Buttons, dropupStyles?: DropupStyles) {
-    customButtons.forEach((customButton, index) => {
-      const button = {button: new CustomButton(customButton, index + 1, dropupStyles?.menu)};
+  public static add(deepChat: DeepChat, buttons: Buttons) {
+    const {customButtons, focusInput, dropupStyles} = deepChat;
+    customButtons?.forEach((customButton, index) => {
+      const button = {button: new CustomButton(customButton, index + 1, focusInput, dropupStyles?.menu)};
       buttons[`${CustomButton.INDICATOR_PREFIX}${index + 1}`] = button;
     });
   }
