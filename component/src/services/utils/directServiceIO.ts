@@ -12,16 +12,16 @@ export class DirectServiceIO extends BaseServiceIO {
   insertKeyPlaceholderText = 'API Key';
   keyHelpUrl = '';
   sessionId?: string;
-  private readonly keyVerificationDetails: KeyVerificationDetails;
-  private readonly buildHeadersFunc: BuildHeadersFunc;
+  private readonly _keyVerificationDetails: KeyVerificationDetails;
+  private readonly _buildHeadersFunc: BuildHeadersFunc;
 
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
       buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, existingFileTypes);
     Object.assign(this.rawBody, deepChat.connect?.additionalBodyProps);
-    this.keyVerificationDetails = keyVerificationDetails;
-    this.buildHeadersFunc = buildHeadersFunc;
+    this._keyVerificationDetails = keyVerificationDetails;
+    this._buildHeadersFunc = buildHeadersFunc;
     if (apiKey) this.setApiKeyProperties(apiKey);
     this.connectSettings = this.buildConnectSettings(this.key || '', deepChat.connect);
   }
@@ -34,7 +34,7 @@ export class DirectServiceIO extends BaseServiceIO {
   private buildConnectSettings(key: string, connectSettings?: Connect) {
     const connectSettingsObj = connectSettings ?? {};
     connectSettingsObj.headers ??= {};
-    Object.assign(connectSettingsObj.headers, this.buildHeadersFunc(key));
+    Object.assign(connectSettingsObj.headers, this._buildHeadersFunc(key));
     return connectSettingsObj;
   }
 
@@ -46,8 +46,8 @@ export class DirectServiceIO extends BaseServiceIO {
 
   // prettier-ignore
   override verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers) {
-    const {url, method, handleVerificationResult, createHeaders, body} = this.keyVerificationDetails;
-    const headers = createHeaders?.(key) || this.buildHeadersFunc(key);
+    const {url, method, handleVerificationResult, createHeaders, body} = this._keyVerificationDetails;
+    const headers = createHeaders?.(key) || this._buildHeadersFunc(key);
     HTTPRequest.verifyKey(key, url, headers, method,
       this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
       keyVerificationHandlers.onLoad, handleVerificationResult, body);

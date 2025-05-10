@@ -5,22 +5,22 @@ import {SpeechToText} from './speechToText';
 
 export class SilenceSubmit {
   private _silenceTimeout?: number;
-  private readonly silenceMS: number = 2000;
-  private readonly stop: boolean = true;
+  private readonly _silenceMS: number = 2000;
+  private readonly _stop: boolean = true;
 
   constructor(submitAfterSilence: SubmitAfterSilence, stopAfterSubmit?: boolean) {
-    if (typeof stopAfterSubmit === 'boolean' && stopAfterSubmit === false) this.stop = false;
-    if (typeof submitAfterSilence === 'number') this.silenceMS = submitAfterSilence;
+    if (typeof stopAfterSubmit === 'boolean' && stopAfterSubmit === false) this._stop = false;
+    if (typeof submitAfterSilence === 'number') this._silenceMS = submitAfterSilence;
   }
 
   private setSilenceTimeout(textInput: TextInputEl, buttonClick: () => void) {
     this._silenceTimeout = setTimeout(() => {
       textInput.submit?.();
       SpeechToElement.stop();
-      if (!this.stop) {
+      if (!this._stop) {
         setTimeout(buttonClick, SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
       }
-    }, this.silenceMS);
+    }, this._silenceMS);
   }
 
   public clearSilenceTimeout() {

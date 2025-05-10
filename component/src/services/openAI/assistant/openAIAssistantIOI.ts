@@ -50,6 +50,8 @@ export type URLSegments = {
   getFilesPostfix: string;
 };
 
+// WORK - need to refactor to be in Responses API
+// https://platform.openai.com/docs/guides/responses-vs-chat-completions
 export class OpenAIAssistantIOI extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -59,15 +61,15 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   functionHandler?: AssistantFunctionHandler;
   filesToolType: OpenAIAssistant['files_tool_type'];
   readonly shouldFetchHistory: boolean = false;
-  private messages?: Messages;
+  private _messages?: Messages;
   private run_id?: string;
-  private searchedForThreadId = false;
-  private readonly config: OpenAIAssistant = {};
-  private readonly newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
-  private waitingForStreamResponse = false;
-  private readonly isSSEStream: boolean = false;
+  private _searchedForThreadId = false;
+  private readonly _config: OpenAIAssistant = {};
+  private readonly _newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
+  private _waitingForStreamResponse = false;
+  private readonly _isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
-  private messageStream: MessageStream | undefined;
+  private _messageStream: MessageStream | undefined;
 
   // prettier-ignore
   constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
@@ -75,14 +77,14 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     this.urlSegments = urlSegments;
     if (typeof config === 'object') {
-      this.config = config; // stored that assistant_id could be added
-      const {new_assistant, thread_id, load_thread_history} = this.config;
-      Object.assign(this.newAssistantDetails, new_assistant);
+      this._config = config; // stored that assistant_id could be added
+      const {new_assistant, thread_id, load_thread_history} = this._config;
+      Object.assign(this._newAssistantDetails, new_assistant);
       if (thread_id) this.sessionId = thread_id;
       if (load_thread_history) this.shouldFetchHistory = true;
     }
     this.maxMessages = 1; // messages are stored in OpenAI threads and can't create new thread with 'assistant' messages
-    this.isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
+    this._isSSEStream = Boolean(this.stream && (typeof this.stream !== 'object' || !this.stream.simulation));
   }
 
   public async fetchHistoryFunc() {
@@ -176,7 +178,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   }
 
   private callService(messages: Messages, pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
-    this.messages = messages;
+    this._messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/messages${this.urlSegments.createMessagePostfix}`;
@@ -186,7 +188,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
       this.url = `${this.urlSegments.threadsPrefix}/runs${this.urlSegments.threadsPosfix}`;
       const body = this.createNewThreadMessages(this.rawBody, pMessages, uploadedFiles);
-      if (this.isSSEStream) {
+      if (this._isSSEStream) {
         this.createStreamRun(body);
       } else {
         HTTPRequest.request(this, body, messages);
@@ -195,11 +197,11 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    this.waitingForStreamResponse = false;
+    this._waitingForStreamResponse = false;
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
-    this.rawBody.assistant_id ??= this.config.assistant_id || (await this.createNewAssistant());
+    this.rawBody.assistant_id ??= this._config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
-    if (!this.searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messageToElements);
+    if (!this._searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messageToElements);
     const uploadedFiles = files
       ? await OpenAIAssistantUtils.storeFiles(this, messages, files, this.urlSegments.storeFiles)
       : undefined;
@@ -210,9 +212,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async createNewAssistant() {
     try {
       this.url = this.urlSegments.newAssistantUrl;
-      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.newAssistantDetails)), 'POST');
-      this.config.assistant_id = (result as OpenAINewAssistantResult).id;
-      return this.config.assistant_id;
+      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), 'POST');
+      this._config.assistant_id = (result as OpenAINewAssistantResult).id;
+      return this._config.assistant_id;
     } catch (e) {
       console.error(e);
       console.error('Failed to create a new assistant'); // letting later calls throw and handle error
@@ -223,13 +225,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private searchPreviousMessagesForThreadId(messageToElements: MessageToElements) {
     const messageWithSession = messageToElements.find(([msgToEls]) => msgToEls._sessionId);
     if (messageWithSession) this.sessionId = messageWithSession[0]._sessionId;
-    this.searchedForThreadId = true;
+    this._searchedForThreadId = true;
   }
 
   // prettier-ignore
   override async extractResultData(result: OpenAIAssistantInitReqResult):
       Promise<ResponseI | {makingAnotherRequest: true}> {
-    if (this.waitingForStreamResponse || (this.isSSEStream && this.sessionId)) {
+    if (this._waitingForStreamResponse || (this._isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
     if (result.error) {
@@ -242,7 +244,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
-    HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
+    HTTPRequest.executePollRequest(this, url, requestInit, this._messages as Messages); // poll for run status
     return {makingAnotherRequest: true};
   }
 
@@ -257,8 +259,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.run_id = result.id;
       // updates the user sent message with the session id (the message event sent did not have this id)
       // user can clear the messages when they make a request, hence checking if messages length > 0
-      if (this.messages && this.messages.messageToElements.length > 0) {
-        this.messages.messageToElements[this.messages.messageToElements.length - 1][0]._sessionId = this.sessionId;
+      if (this._messages && this._messages.messageToElements.length > 0) {
+        this._messages.messageToElements[this._messages.messageToElements.length - 1][0]._sessionId = this.sessionId;
       }
     }
   }
@@ -276,7 +278,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   async extractPollResultData(result: OpenAIRunResult): PollResult {
     const {status, required_action} = result;
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
-    if (status === 'completed' && this.messages) {
+    if (status === 'completed' && this._messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
       const {text, files} = threadMessages.shift() as ResponseI;
       setTimeout(() => {
@@ -317,7 +319,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const prefix = `${this.urlSegments.threadsPrefix}/${this.sessionId}`;
     const postfix = `/runs/${this.run_id}/submit_tool_outputs${this.urlSegments.threadsPosfix}`;
     this.url = `${prefix}${postfix}`;
-    if (this.isSSEStream) {
+    if (this._isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
       await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
@@ -331,10 +333,10 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.run_id = result.id;
       return await this.handleTools(toolCalls);
     }
-    if (this.waitingForStreamResponse) {
+    if (this._waitingForStreamResponse) {
       return this.parseStreamResult(result);
     }
-    if (this.isSSEStream && this.sessionId) {
+    if (this._isSSEStream && this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
@@ -345,14 +347,14 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
-    if (result.content && result.content.length > 0 && this.messages) {
+    if (result.content && result.content.length > 0 && this._messages) {
       // if file is included and there is an annotation/link in text, process at the end
       const textContent = result.content.find((content) => content.text);
       if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
           this, {role: 'assistant', content: result.content}, this.urlSegments, textFileFirst);
-        this.messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
+        this._messageStream?.endStreamAfterFileDownloaded(this._messages, downloadCb);
         return {text: ''};
       }
     }
@@ -377,7 +379,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async createStreamRun(body: any) {
     body.stream = true;
-    this.waitingForStreamResponse = true;
-    this.messageStream = (await Stream.request(this, body, this.messages as Messages, true, true)) as MessageStream;
+    this._waitingForStreamResponse = true;
+    this._messageStream = (await Stream.request(this, body, this._messages as Messages, true, true)) as MessageStream;
   }
 }
