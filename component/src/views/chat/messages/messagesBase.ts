@@ -100,8 +100,7 @@ export class MessagesBase {
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === 'user') {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.scroll;
-      // timeout neeed when bubble font is large
-      setTimeout(() => ElementUtils.scrollToBottom(this.elementRef, isAnimation));
+      ElementUtils.scrollToBottom(this.elementRef, isAnimation);
     }
     return messageElements;
   }
