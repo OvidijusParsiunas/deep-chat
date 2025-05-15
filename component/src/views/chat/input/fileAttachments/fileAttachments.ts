@@ -7,7 +7,12 @@ import {CustomStyle} from '../../../../types/styles';
 import {DeepChat} from '../../../../deepChat';
 import {Demo} from '../../../../types/demo';
 
-export class FileAttachments {
+export interface HiddenFileAttachments {
+  removeHiddenFiles(): void;
+  readdHiddenFiles(): void;
+}
+
+export class FileAttachments implements HiddenFileAttachments {
   private readonly _fileAttachmentsTypes: FileAttachmentsType[] = [];
   readonly elementRef: HTMLElement;
 
@@ -71,10 +76,19 @@ export class FileAttachments {
     FileAttachments.addFilesToType(files, this._fileAttachmentsTypes);
   }
 
-  removeAllFiles() {
-    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.removeAllAttachments());
+  hideFiles() {
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.hideAttachments());
     this.elementRef.replaceChildren();
     this.toggleContainerDisplay(false);
+  }
+
+  removeHiddenFiles() {
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.removeAttachments());
+  }
+
+  readdHiddenFiles() {
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.readdAttachments());
+    this.toggleContainerDisplay(true);
   }
 
   getNumberOfTypes() {

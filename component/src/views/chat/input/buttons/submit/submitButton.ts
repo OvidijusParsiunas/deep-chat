@@ -197,13 +197,13 @@ export class SubmitButton extends InputButton<Styles> {
     const filesData = content.files?.map((fileData) => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
-    this._fileAttachments?.removeAllFiles();
+    this._fileAttachments?.hideFiles();
   }
 
   private async addNewMessage({text, files}: UserContentI) {
     const data: Response = {role: MessageUtils.USER_ROLE};
     if (text) data.text = text;
-    if (files) data.files = await this._messages.addMultipleFiles(files);
+    if (files) data.files = await this._messages.addMultipleFiles(files, this._fileAttachments);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;
     if (Object.keys(data).length > 0) this._messages.addNewMessage(data);
   }

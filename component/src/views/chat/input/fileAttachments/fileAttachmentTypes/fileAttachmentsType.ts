@@ -18,6 +18,7 @@ export class FileAttachmentsType {
   private readonly _toggleContainerDisplay: (display: boolean) => void;
   private readonly _fileAttachmentsContainerRef: HTMLElement;
   private readonly _acceptedFormat: string = '';
+  private readonly _hiddenAttachments: Set<AttachmentObject> = new Set();
   private _validationHandler?: ValidationHandler;
 
   // prettier-ignore
@@ -156,11 +157,29 @@ export class FileAttachmentsType {
     return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
   }
 
-  removeAllAttachments() {
+  hideAttachments() {
+    this._hiddenAttachments.clear();
+    // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
+    this._attachments.forEach((attachment) => {
+      setTimeout(() => attachment.removeButton?.click());
+      this._hiddenAttachments.add(attachment);
+    });
+  }
+
+  removeAttachments() {
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
     this._attachments.forEach((attachment) => {
       setTimeout(() => attachment.removeButton?.click());
     });
+    this._hiddenAttachments.clear();
+  }
+
+  readdAttachments() {
+    Array.from(this._hiddenAttachments).forEach((attachment) => {
+      this._fileAttachmentsContainerRef.appendChild(attachment.attachmentContainerElement);
+      this._attachments.push(attachment);
+    });
+    this._hiddenAttachments.clear();
   }
 }
 

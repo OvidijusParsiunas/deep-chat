@@ -1,4 +1,5 @@
 import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesInternal';
+import {HiddenFileAttachments} from '../input/fileAttachments/fileAttachments';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
@@ -45,6 +46,7 @@ export class Messages extends MessagesBase {
   private readonly _permittedErrorPrefixes?: CustomErrors;
   private readonly _displayServiceErrorMessages?: boolean;
   private _introMessage?: IntroMessage | IntroMessage[];
+  private _hiddenAttachments?: HiddenFileAttachments;
   customDemoResponse?: DemoResponse;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
@@ -200,6 +202,7 @@ export class Messages extends MessagesBase {
 
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
+    if (data.role !== MessageUtils.USER_ROLE) this._hiddenAttachments?.removeHiddenFiles();
     const message = Messages.createMessageContent(data);
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (isTop) {
@@ -241,6 +244,7 @@ export class Messages extends MessagesBase {
 
   // prettier-ignore
   public addNewErrorMessage(type: keyof Omit<ErrorMessageOverrides, 'default'>, message?: ErrorResp, isTop = false) {
+    this._hiddenAttachments?.readdHiddenFiles();
     this.removeMessageOnError();
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
       || this._errorMessageOverrides?.default || 'Error, please try again.';
@@ -336,7 +340,8 @@ export class Messages extends MessagesBase {
     }
   }
 
-  public async addMultipleFiles(filesData: {file: File; type: MessageFileType}[]) {
+  public async addMultipleFiles(filesData: {file: File; type: MessageFileType}[], hiddenAtts: HiddenFileAttachments) {
+    this._hiddenAttachments = hiddenAtts;
     return Promise.all<MessageFile>(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
