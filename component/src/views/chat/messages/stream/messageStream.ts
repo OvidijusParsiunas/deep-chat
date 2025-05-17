@@ -30,6 +30,7 @@ export class MessageStream {
     if (response?.text === undefined && response?.html === undefined) {
       return console.error(ErrorMessages.INVALID_STREAM_EVENT);
     }
+    if (response?.custom && this._message) this._message.custom = response.custom;
     const content = response?.text || response?.html || '';
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef);
     const streamType = response?.text !== undefined ? 'text' : 'html';
