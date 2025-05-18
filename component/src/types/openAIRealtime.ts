@@ -1,3 +1,4 @@
+import {SpeechToSpeechEvents} from './speechToSpeechEvents';
 import {ButtonStyles} from './button';
 import {CustomStyle} from './styles';
 
@@ -71,4 +72,5 @@ export type OpenAIRealtime = {
   config?: OpenAIRealtimeConfig;
   loading?: OpenAIRealtimeLoading;
   error?: OpenAIRealtimeError;
+  events: SpeechToSpeechEvents;
 };

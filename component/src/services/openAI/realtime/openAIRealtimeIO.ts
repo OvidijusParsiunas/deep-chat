@@ -1,4 +1,5 @@
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
+import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
@@ -35,6 +36,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private _isMuted = false;
   private _ephemeralKey?: string;
   private _retrievingEphemeralKey?: Promise<string>;
+  private readonly _events?: SpeechToSpeechEvents;
   private readonly _functionHandler?: OpenAIRealtimeFunctionHandler;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
@@ -54,6 +56,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       Object.assign(this.rawBody, config.config);
       const {function_handler} = (deepChat.directConnection?.openAI?.realtime as OpenAIRealtime).config || {};
       if (function_handler) this._functionHandler = function_handler;
+      this._events = config.events;
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
@@ -335,6 +338,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           ButtonAccessibility.removeAriaAttributes(this._toggleButton.elementRef);
           this._toggleButton.changeToActive();
         }
+        this._events?.started();
+        this._deepChat.dispatchEvent(new CustomEvent('sts-session-started'));
         this.hideLoading();
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
@@ -412,6 +417,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private stopOnError(error: string) {
     this.stop();
+    this._deepChat.dispatchEvent(new CustomEvent('sts-session-stopped'));
     console.error(error);
     this.displayError();
   }
@@ -422,6 +428,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._pc) {
       this._pc.close();
       this._pc = null;
+      this._events?.stopped();
     }
   }
 
@@ -484,9 +491,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const loading = document.createElement('div');
     loading.id = 'deep-chat-openai-realtime-loading';
     this._loadingElement = loading;
-    if (this._loadingConfig?.html) {
-      this._loadingElement.innerHTML = this._loadingConfig.html;
-    }
+    if (this._loadingConfig?.html) this._loadingElement.innerHTML = this._loadingConfig.html;
     Object.assign(loading.style, this._loadingConfig?.style);
     loading.style.display = 'none';
     return loading;
