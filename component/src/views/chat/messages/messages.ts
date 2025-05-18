@@ -67,7 +67,7 @@ export class Messages extends MessagesBase {
     this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
-    deepChat.getMessages = () => JSON.parse(JSON.stringify(this.messageToElements.map(([msg]) => msg)));
+    deepChat.getMessages = () => MessageUtils.deepCloneMessagesWithReferences(this.messageToElements.map(([msg]) => msg));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this, deepChat.remarkable);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);

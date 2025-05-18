@@ -236,4 +236,35 @@ export class MessageUtils {
       lastRoleClass = currentRoleClass;
     });
   }
+
+  // this is a workaround to prevent JSON.parse(JSON.stringify()) from removing the files' 'ref' property values
+  // and 'custom' property value if it is not shallow copyable
+  // note - structuredClone can fix this but it doesn't have good legacy compatibility
+  public static deepCloneMessagesWithReferences(messages: MessageContentI[]): MessageContentI[] {
+    return messages.map((message) => {
+      return MessageUtils.processMessageContent(message);
+    });
+  }
+
+  private static processMessageContent<T>(obj: T): T {
+    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => MessageUtils.processMessageContent(item)) as unknown as T;
+    }
+
+    const newObj = {} as Record<string, unknown>;
+    Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
+      if (key === 'ref' && value instanceof File) {
+        newObj[key] = value;
+      } else if (key === 'custom') {
+        newObj[key] = value;
+      } else if (value !== null && typeof value === 'object') {
+        newObj[key] = MessageUtils.processMessageContent(value);
+      } else {
+        newObj[key] = value;
+      }
+    });
+    return newObj as unknown as T;
+  }
 }
