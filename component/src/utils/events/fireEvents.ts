@@ -26,4 +26,14 @@ export class FireEvents {
     deepChat.onError?.(error);
     deepChat.dispatchEvent(new CustomEvent('error', {detail: error}));
   }
+
+  public static onRealtimeSessionStarted(deepChat: DeepChat) {
+    deepChat.onRealtimeSessionStarted?.();
+    deepChat.dispatchEvent(new CustomEvent('realtime-session-started'));
+  }
+
+  public static onRealtimeSessionEnded(deepChat: DeepChat) {
+    deepChat.onRealtimeSessionEnded?.();
+    deepChat.dispatchEvent(new CustomEvent('realtime-session-ended'));
+  }
 }

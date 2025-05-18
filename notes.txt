@@ -6,3 +6,76 @@ Update Installation
 Update CDN references - in doc Live VanillaJS Example sections and External Modules
 Update UI, SvelteKit and NextJS examples for servers
 Update package in GitHub
+
+OpenAI Realtime Session Events Example
+
+HTML example:
+```html
+<deep-chat 
+  directConnection='{"openAI":{"realtime":{"autoStart":true}}}'
+  id="chat">
+</deep-chat>
+
+<script>
+  // Example 1: Using callback properties
+  const chat = document.getElementById('chat');
+  
+  chat.onRealtimeSessionStarted = () => {
+    console.log('Realtime session started via callback property');
+    // Do something when session starts, like updating UI elements
+  };
+  
+  chat.onRealtimeSessionEnded = () => {
+    console.log('Realtime session ended via callback property');
+    // Do something when session ends, like resetting UI state
+  };
+  
+  // Example 2: Using event listeners
+  chat.addEventListener('realtime-session-started', () => {
+    console.log('Realtime session started via event listener');
+    // Alternative way to respond to session start
+  });
+  
+  chat.addEventListener('realtime-session-ended', () => {
+    console.log('Realtime session ended via event listener');
+    // Alternative way to respond to session end
+  });
+</script>
+
+React example:
+```jsx
+import { DeepChat } from 'deep-chat-react';
+
+function MyComponent() {
+  const handleSessionStart = () => {
+    console.log('Realtime session started');
+    // Update state or trigger other actions
+  };
+  
+  const handleSessionEnd = () => {
+    console.log('Realtime session ended');
+    // Clean up or reset state
+  };
+  
+  return (
+    <DeepChat
+      directConnection={{
+        openAI: {
+          realtime: {
+            autoStart: true
+          }
+        }
+      }}
+      onRealtimeSessionStarted={handleSessionStart}
+      onRealtimeSessionEnded={handleSessionEnd}
+    />
+  );
+}
+```
+
+These events can be used to:
+1. Update UI states to reflect current session status
+2. Log session analytics
+3. Restart sessions automatically when they end unexpectedly
+4. Synchronize with other application components
+5. Provide user feedback about connection state

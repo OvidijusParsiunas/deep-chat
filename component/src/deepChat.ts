@@ -187,6 +187,12 @@ export class DeepChat extends InternalHTML {
   @Property('function')
   onError?: OnError;
 
+  @Property('function')
+  onRealtimeSessionStarted?: () => void;
+
+  @Property('function')
+  onRealtimeSessionEnded?: () => void;
+
   @Property('object')
   demo?: Demo;
 

@@ -15,6 +15,7 @@ import {
   OpenAIRealtimeFunctionHandler,
   OpenAIRealtime,
 } from '../../../types/openAIRealtime';
+import {FireEvents} from '../../../utils/events/fireEvents';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -336,6 +337,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           this._toggleButton.changeToActive();
         }
         this.hideLoading();
+        FireEvents.onRealtimeSessionStarted(this._deepChat);
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
         const output = message.response.output?.[0];
@@ -422,6 +424,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._pc) {
       this._pc.close();
       this._pc = null;
+      FireEvents.onRealtimeSessionEnded(this._deepChat);
     }
   }
 
