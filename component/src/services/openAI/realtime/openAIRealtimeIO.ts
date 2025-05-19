@@ -6,6 +6,7 @@ import avatarUrl from '../../../../assets/person-avatar.png';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {ObjectUtils} from '../../../utils/data/objectUtils';
+import {SpeechToSpeech} from '../../utils/speechToSpeech';
 import {PLAY_ICON_STRING} from '../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../icons/stopIcon';
 import {OpenAIUtils} from '../utils/openAIUtils';
@@ -338,8 +339,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           ButtonAccessibility.removeAriaAttributes(this._toggleButton.elementRef);
           this._toggleButton.changeToActive();
         }
-        this._events?.started();
-        this._deepChat.dispatchEvent(new CustomEvent('sts-session-started'));
+        this._events?.started?.();
+        this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STARTED));
         this.hideLoading();
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
@@ -417,7 +418,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private stopOnError(error: string) {
     this.stop();
-    this._deepChat.dispatchEvent(new CustomEvent('sts-session-stopped'));
+    this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STOPPED));
     console.error(error);
     this.displayError();
   }
@@ -428,7 +429,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (this._pc) {
       this._pc.close();
       this._pc = null;
-      this._events?.stopped();
+      this._events?.stopped?.();
     }
   }
 

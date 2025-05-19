@@ -1,4 +1,4 @@
 export interface SpeechToSpeechEvents {
-  started: () => void;
-  stopped: () => void;
+  started?: () => void;
+  stopped?: () => void;
 }

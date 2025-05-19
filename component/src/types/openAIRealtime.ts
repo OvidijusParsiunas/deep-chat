@@ -72,5 +72,5 @@ export type OpenAIRealtime = {
   config?: OpenAIRealtimeConfig;
   loading?: OpenAIRealtimeLoading;
   error?: OpenAIRealtimeError;
-  events: SpeechToSpeechEvents;
+  events?: SpeechToSpeechEvents;
 };
