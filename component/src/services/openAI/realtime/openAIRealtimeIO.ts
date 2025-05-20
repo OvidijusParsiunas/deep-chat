@@ -15,6 +15,8 @@ import {DeepChat} from '../../../deepChat';
 import {
   OpenAIRealtimeButton as OpenAIRealtimeButtonT,
   OpenAIRealtimeFunctionHandler,
+  OpenAIRealtimeMethods,
+  OpenAIRealtimeConfig,
   OpenAIRealtime,
 } from '../../../types/openAIRealtime';
 
@@ -37,6 +39,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private _isMuted = false;
   private _ephemeralKey?: string;
   private _retrievingEphemeralKey?: Promise<string>;
+  private _dc?: RTCDataChannel;
   private readonly _events?: SpeechToSpeechEvents;
   private readonly _functionHandler?: OpenAIRealtimeFunctionHandler;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
@@ -55,9 +58,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._errorConfig = config.error;
       this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
-      const {function_handler} = (deepChat.directConnection?.openAI?.realtime as OpenAIRealtime).config || {};
+      const realtime = deepChat.directConnection?.openAI?.realtime as OpenAIRealtime;
+      const {function_handler} = realtime.config || {};
       if (function_handler) this._functionHandler = function_handler;
       this._events = config.events;
+      realtime.methods = this.generateMethods();
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
@@ -149,6 +154,22 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     });
     const data = await result.json();
     return data.client_secret.value;
+  }
+
+  private generateMethods(): OpenAIRealtimeMethods {
+    return {
+      updateConfig: (config: OpenAIRealtimeConfig) => {
+        // https://platform.openai.com/docs/api-reference/realtime-client-events/session
+        this._dc?.send(JSON.stringify({type: 'session.update', session: config}));
+      },
+      sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
+        // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
+        const messageRole = role || 'system';
+        const content = [{type: messageRole === 'system' || messageRole === 'user' ? 'input_text' : 'text', text}];
+        const item = {role: messageRole, type: 'message', content};
+        this.sendMessage(item);
+      },
+    };
   }
 
   private static buildAvatarConfig(config?: OpenAIRealtime) {
@@ -329,8 +350,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       });
 
     // Set up data channel for sending and receiving events
-    const dc = this._pc.createDataChannel('oai-events');
-    dc.addEventListener('message', async (e) => {
+    this._dc = this._pc.createDataChannel('oai-events');
+    this._dc.addEventListener('message', async (e) => {
       // Realtime server events appear here!
       const response = JSON.parse(e.data);
       if (response.type === 'session.created') {
@@ -348,7 +369,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         if (output?.type === 'function_call') {
           const {name, call_id} = output;
           try {
-            await this.handleTool(name, output.arguments, call_id, dc);
+            await this.handleTool(name, output.arguments, call_id);
           } catch (e) {
             this.stopOnError(e as string);
           }
@@ -430,6 +451,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._pc.close();
       this._pc = null;
       this._events?.stopped?.();
+      this._dc = undefined;
     }
   }
 
@@ -522,7 +544,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
-  private async handleTool(name: string, functionArguments: string, call_id: string, dc: RTCDataChannel) {
+  private async handleTool(name: string, functionArguments: string, call_id: string) {
     if (!this._functionHandler) {
       throw Error(
         'Please define the `function_handler` property inside' +
@@ -533,19 +555,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }
-    const eventMessage = JSON.stringify({
-      type: 'conversation.item.create',
-      item: {
-        type: 'function_call_output',
-        call_id,
-        output: JSON.stringify(result),
-      },
-    });
-    dc.send(eventMessage);
-    const responseCreatePayload = {
-      type: 'response.create',
-    };
-    dc.send(JSON.stringify(responseCreatePayload));
+    const item = {type: 'function_call_output', call_id, output: JSON.stringify(result)};
+    this.sendMessage(item);
+  }
+
+  // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
+  sendMessage(item: object) {
+    if (!this._dc) return;
+    const message = JSON.stringify({type: 'conversation.item.create', item});
+    this._dc.send(message);
+    const responseCreatePayload = {type: 'response.create'};
+    this._dc.send(JSON.stringify(responseCreatePayload));
   }
 
   override isCustomView() {

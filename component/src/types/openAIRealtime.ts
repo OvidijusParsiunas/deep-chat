@@ -28,6 +28,11 @@ export type OpenAIRealtimeConfig = {
   function_handler?: OpenAIRealtimeFunctionHandler;
 };
 
+export type OpenAIRealtimeMethods = {
+  updateConfig?: (config: OpenAIRealtimeConfig) => void;
+  sendMessage?: (text: string, role?: 'user' | 'assistant' | 'system') => void;
+};
+
 export type OpenAIRealtimeLoading = {
   text?: string;
   html?: string;
@@ -72,5 +77,6 @@ export type OpenAIRealtime = {
   config?: OpenAIRealtimeConfig;
   loading?: OpenAIRealtimeLoading;
   error?: OpenAIRealtimeError;
+  methods?: OpenAIRealtimeMethods;
   events?: SpeechToSpeechEvents;
 };
