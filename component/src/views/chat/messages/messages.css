@@ -80,11 +80,13 @@
   line-height: inherit;
 } */
 
-.message-bubble > p:first-child {
+.message-bubble > p:first-child,
+.message-bubble > .partial-render-message > p:first-child {
   margin-top: 0px;
 }
 
-.message-bubble > p:last-child {
+.message-bubble > p:last-child,
+.message-bubble > .partial-render-message:last-child > p {
   margin-bottom: 0px;
 }
 

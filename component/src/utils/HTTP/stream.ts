@@ -23,7 +23,7 @@ export class Stream {
     if (error) return RequestUtils.onInterceptorError(messages, error, io.streamHandlers.onClose);
     if (io.connectSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.connectSettings?.url === Demo.URL) return Demo.requestStream(messages, io);
-    const stream = new MessageStream(messages);
+    const stream = new MessageStream(messages, io.stream);
     const fetchFunc = RequestUtils.fetch.bind(this, io, interceptedHeaders, stringifyBody);
     const reqBody = {
       method: io.connectSettings?.method || 'POST',
@@ -163,7 +163,8 @@ export class Stream {
     if (result.text) {
       sh.onOpen();
       const responseTextStrings = result.text.split(''); // important to split by char for Chinese characters
-      Stream.populateMessages(messages, responseTextStrings, new MessageStream(messages), simulationSH, 'text', 0, io);
+      const stream = new MessageStream(messages, io?.stream);
+      Stream.populateMessages(messages, responseTextStrings, stream, simulationSH, 'text', 0, io);
     }
     if (result.html) {
       sh.onOpen();

@@ -7,11 +7,13 @@ import {MessageElements, Messages} from '../messages';
 import {Response} from '../../../../types/response';
 import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
+import {Stream} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
 import {HTMLUtils} from '../html/htmlUtils';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
+  private static readonly PARTIAL_RENDER_TEXT_MARK = '\n\n';
   private _fileAdded = false;
   private _streamType: 'text' | 'html' | '' = '';
   private _elements?: MessageElements;
@@ -20,9 +22,13 @@ export class MessageStream {
   private _message?: MessageContentI;
   private readonly _messages: MessagesBase;
   private _endStreamAfterOperation?: boolean;
+  private readonly _partialRender?: boolean;
+  private _partialText: string = '';
+  private _partialBubble?: HTMLDivElement;
 
-  constructor(messages: MessagesBase) {
+  constructor(messages: MessagesBase, stream?: Stream) {
     this._messages = messages;
+    this._partialRender = typeof stream === 'object' ? stream.partialRender : false;
   }
 
   public upsertStreamedMessage(response?: Response) {
@@ -62,7 +68,7 @@ export class MessageStream {
   }
 
   private updateBasedOnType(content: string, expectedType: string, bubbleElement: HTMLElement, isOverwrite = false) {
-    MessageUtils.unfillEmptyMessageElement(bubbleElement, content);
+    if (!this._partialRender) MessageUtils.unfillEmptyMessageElement(bubbleElement, content);
     const func = expectedType === 'text' ? this.updateText : this.updateHTML;
     func.bind(this)(content, bubbleElement, isOverwrite);
   }
@@ -70,7 +76,31 @@ export class MessageStream {
   private updateText(text: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
     if (!this._message) return;
     this._message.text = isOverwrite ? text : this._message.text + text;
-    this._messages.renderText(bubbleElement, this._message.text);
+    if (this._partialRender && this.isNewPartialRenderParagraph()) this.partialRenderNewParagraph(bubbleElement);
+    if (this._partialBubble) {
+      this.partialRenderBubbleUpdate(text);
+    } else {
+      this._messages.renderText(bubbleElement, this._message.text);
+    }
+  }
+
+  private isNewPartialRenderParagraph() {
+    if (!this._partialBubble) {
+      return this._message?.text && this._message.text.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK) > -1;
+    }
+    return this._partialText && this._partialText?.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK) > -1;
+  }
+
+  private partialRenderNewParagraph(bubbleElement: HTMLElement) {
+    this._partialText = '';
+    this._partialBubble = document.createElement('div');
+    this._partialBubble.classList.add('partial-render-message');
+    bubbleElement.appendChild(this._partialBubble);
+  }
+
+  private partialRenderBubbleUpdate(text: string) {
+    this._partialText += text;
+    this._messages.renderText(this._partialBubble as HTMLDivElement, this._partialText);
   }
 
   private updateHTML(html: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
