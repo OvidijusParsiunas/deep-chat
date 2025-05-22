@@ -180,6 +180,7 @@ export class SubmitButton extends InputButton<Styles> {
         return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
       });
     }
+    if (content.custom) newContent.custom = content.custom;
     // in timeout to prevent adding multiple messages before validation+file addition finishes
     setTimeout(() => this.attemptSubmit(newContent, true));
   }
@@ -200,8 +201,8 @@ export class SubmitButton extends InputButton<Styles> {
     this._fileAttachments?.hideFiles();
   }
 
-  private async addNewMessage({text, files}: UserContentI) {
-    const data: Response = {role: MessageUtils.USER_ROLE};
+  private async addNewMessage({text, files, custom}: UserContentI) {
+    const data: Response = {role: MessageUtils.USER_ROLE, custom};
     if (text) data.text = text;
     if (files) data.files = await this._messages.addMultipleFiles(files, this._fileAttachments);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;

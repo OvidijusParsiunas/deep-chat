@@ -55,4 +55,5 @@ export type OnMessage = (body: {message: MessageContent; isHistory: boolean}) =>
 
 export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 
-export type UserContent = {text?: string; files?: File[] | FileList};
+// eslint-disable-next-line
+export type UserContent = {text?: string; files?: File[] | FileList; custom?: any};

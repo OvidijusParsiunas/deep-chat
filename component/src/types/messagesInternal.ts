@@ -11,7 +11,8 @@ export type MessageToElements = [MessageContentI, MessageBodyElements][];
 
 export type MessageContentI = PropsRequired<MessageContent, 'role'>;
 
-export type UserContentI = {text?: string; files?: {file: File; type: MessageFileType}[]};
+// eslint-disable-next-line
+export type UserContentI = {text?: string; files?: {file: File; type: MessageFileType}[]; custom?: any};
 
 // if message did not overwrite, create a new message
 export interface Overwrite {
