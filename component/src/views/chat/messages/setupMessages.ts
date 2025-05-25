@@ -11,7 +11,7 @@ export class SetupMessages {
         '\n Host AI entirely on your browser via a [webModel](https://deepchat.dev/docs/webModel).' +
         '\n To get started checkout the [Start](https://deepchat.dev/start) page and ' +
         'live code [examples](https://deepchat.dev/examples/frameworks).' +
-        '\n To remove this message set the [demo](https://deepchat.dev/docs/demo#demo) property to true.'
+        '\n To remove this message set the [demo](https://deepchat.dev/docs/modes#demo) property to true.'
       );
     } else if (deepChat.directConnection) {
       if (!serviceIO.isDirectConnection()) {
