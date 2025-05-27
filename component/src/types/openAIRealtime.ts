@@ -14,7 +14,7 @@ export type OpenAIRealtimeConfig = {
   max_response_output_tokens?: number | 'inf';
   turn_detection?: {
     type?: string;
-    threshold?: string;
+    threshold?: number;
     prefix_padding_ms?: number;
     silence_duration_ms?: number;
   };
