@@ -89,10 +89,10 @@ used for _addEventListener(HERE)_, e.g. _"mousedown"_) or any custom event name 
       ['custom-button']: {
         events: {
           mouseenter: (event) => {
-            event.target.innerText = 'hovering';
+            event.target.innerText = 'Hovering';
           },
           mouseleave: (event) => {
-            event.target.innerText = 'hovered';
+            event.target.innerText = 'Hovered';
           },
         },
         styles: {
@@ -123,8 +123,8 @@ used for _addEventListener(HERE)_, e.g. _"mousedown"_) or any custom event name 
 chatElementRef.htmlClassUtilities = {
   ['custom-button']: {
     events: {
-      mouseenter: (event) => (event.target.innerText = 'hovering'),
-      mouseleave: (event) => (event.target.innerText = 'hovered'),
+      mouseenter: (event) => (event.target.innerText = 'Hovering'),
+      mouseleave: (event) => (event.target.innerText = 'Hovered'),
     },
     styles: {
       default: {padding: '3px 8px', cursor: 'pointer'},
@@ -152,8 +152,8 @@ chatElementRef.history = [
 chatElementRef.htmlClassUtilities = {
   ['custom-button']: {
     events: {
-      mouseenter: (event) => (event.target.innerText = 'hovering'),
-      mouseleave: (event) => (event.target.innerText = 'hovered'),
+      mouseenter: (event) => (event.target.innerText = 'Hovering'),
+      mouseleave: (event) => (event.target.innerText = 'Hovered'),
     },
     styles: {
       default: {padding: '3px 8px', cursor: 'pointer'},
