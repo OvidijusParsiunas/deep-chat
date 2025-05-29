@@ -136,7 +136,7 @@ export class Websocket {
         stream?.finaliseStreamedMessage();
         delete roleToStream[role];
       } else {
-        roleToStream[role] ??= new MessageStream(messages);
+        roleToStream[role] ??= new MessageStream(messages, io.stream);
         roleToStream[role].upsertStreamedMessage(result);
       }
     } else {

@@ -170,7 +170,8 @@ export class Stream {
       sh.onOpen();
       let responseHTMLStrings = HTMLUtils.splitHTML(result.html);
       if (responseHTMLStrings.length === 0) responseHTMLStrings = result.html.split('');
-      Stream.populateMessages(messages, responseHTMLStrings, new MessageStream(messages), simulationSH, 'html', 0, io);
+      const stream = new MessageStream(messages, io?.stream);
+      Stream.populateMessages(messages, responseHTMLStrings, stream, simulationSH, 'html', 0, io);
     }
     if (result.error) {
       RequestUtils.displayError(messages, result.error);

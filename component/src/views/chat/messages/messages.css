@@ -81,12 +81,14 @@
 } */
 
 .message-bubble > p:first-child,
-.message-bubble > .partial-render-message > p:first-child {
+.message-bubble > .partial-render-message > p:first-child,
+.stream-wrapper > p:first-child {
   margin-top: 0px;
 }
 
 .message-bubble > p:last-child,
-.message-bubble > .partial-render-message:last-child > p {
+.message-bubble > .partial-render-message:last-child > p,
+.stream-wrapper > p:last-child {
   margin-bottom: 0px;
 }
 
