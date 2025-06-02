@@ -33,6 +33,6 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
 
   private static buildURL(urlDetails: AzureOpenAI['urlDetails']) {
     const {endpoint, deploymentId, version} = urlDetails;
-    return `${endpoint}/openai/deployments/${deploymentId}/completions?api-version=${version}`;
+    return `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=${version}`;
   }
 }
