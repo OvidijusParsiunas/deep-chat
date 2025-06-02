@@ -118,4 +118,6 @@ export interface ServiceIO {
 
   // mostly used for streaming to not close the stream when it makes another request
   asyncCallInProgress?: boolean;
+
+  onInput?: (isUser: boolean) => void;
 }

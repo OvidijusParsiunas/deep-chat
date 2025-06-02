@@ -3,6 +3,7 @@ import {FileAttachments} from '../../../../../types/fileAttachments';
 import {AudioFileAttachmentType} from './audioFileAttachmentType';
 import {MessageFileType} from '../../../../../types/messageFile';
 import {Browser} from '../../../../../utils/browser/browser';
+import {ServiceIO} from '../../../../../services/serviceIO';
 import {DeepChat} from '../../../../../deepChat';
 
 export interface AttachmentObject {
@@ -20,21 +21,26 @@ export class FileAttachmentsType {
   private readonly _acceptedFormat: string = '';
   private readonly _hiddenAttachments: Set<AttachmentObject> = new Set();
   private _validationHandler?: ValidationHandler;
+  private _onInput: ((isUser: boolean) => void) | undefined;
 
   // prettier-ignore
-  constructor(deepChat: DeepChat, fileAttachments: FileAttachments, toggleContainer: (display: boolean) => void,
-      container: HTMLElement) {
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments,
+      toggleContainer: (display: boolean) => void, container: HTMLElement) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
     this._toggleContainerDisplay = toggleContainer;
     this._fileAttachmentsContainerRef = container;
     if (fileAttachments.acceptedFormats) this._acceptedFormat = fileAttachments.acceptedFormats;
      // in a timeout as deepChat._validationHandler initialised later
-    setTimeout(() => {this._validationHandler = deepChat._validationHandler;});
+    setTimeout(() => {
+      this._validationHandler = deepChat._validationHandler;
+      this._onInput = serviceIO.onInput;
+    });
   }
 
   attemptAddFile(file: File, fileReaderResult: string) {
     if (FileAttachmentsType.isFileTypeValid(file, this._acceptedFormat)) {
       this.addAttachmentBasedOnType(file, fileReaderResult, true);
+      this._onInput?.(true);
       return true;
     }
     return false;
@@ -143,7 +149,8 @@ export class FileAttachmentsType {
     return removeButtonElement;
   }
 
-  removeAttachment(attachmentObject: AttachmentObject) {
+  removeAttachment(attachmentObject: AttachmentObject, event?: MouseEvent) {
+    this._onInput?.(!!event?.isTrusted);
     const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
     const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
@@ -179,6 +186,7 @@ export class FileAttachmentsType {
       this._fileAttachmentsContainerRef.appendChild(attachment.attachmentContainerElement);
       this._attachments.push(attachment);
     });
+    this._onInput?.(false);
     this._hiddenAttachments.clear();
   }
 }

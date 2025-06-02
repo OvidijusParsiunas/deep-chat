@@ -23,6 +23,7 @@ import {RequestBodyLimits} from './types/chatLimits';
 import {Property} from './utils/decorators/property';
 import {FireEvents} from './utils/events/fireEvents';
 import {DisplayLoadingBubble} from './types/loading';
+import {OnInput, TextInput} from './types/textInput';
 import {ValidateInput} from './types/validateInput';
 import {WebModel} from './types/webModel/webModel';
 import {DropupStyles} from './types/dropupStyles';
@@ -31,7 +32,6 @@ import {HTMLClassUtilities} from './types/html';
 import {ChatView} from './views/chat/chatView';
 import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
-import {TextInput} from './types/textInput';
 import {LoadHistory} from './types/history';
 import {FocusMode} from './types/focusMode';
 import {CustomStyle} from './types/styles';
@@ -183,6 +183,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('function')
   onComponentRender?: (ref: DeepChat) => void;
+
+  @Property('function')
+  onInput?: OnInput;
 
   @Property('function')
   onError?: OnError;

@@ -18,9 +18,10 @@ export class TextInputEl {
   private readonly _config: TextInput;
   // detect if using a dropup for text input composition, e.g. hiragana to kanji symbols
   private _isComposing: boolean = false;
+  private _onInput: ((isUser: boolean) => void) | undefined;
   submit?: () => void;
 
-  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAts: FileAttachments) {
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments) {
     const processedConfig = TextInputEl.processConfig(serviceIO, deepChat.textInput);
     this.elementRef = TextInputEl.createContainerElement(processedConfig?.styles?.container);
     this._config = processedConfig;
@@ -30,7 +31,8 @@ export class TextInputEl {
     deepChat.setPlaceholderText(this._config.placeholder?.text || 'Ask me anything!');
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
-      TextInputEvents.add(this.inputElementRef, fileAts, this._config.characterLimit, deepChat._validationHandler);
+      TextInputEvents.add(this.inputElementRef, fileAttachments, this._config.characterLimit, deepChat._validationHandler);
+      this._onInput = serviceIO.onInput;
     });
   }
 
@@ -67,6 +69,7 @@ export class TextInputEl {
       Object.assign(this.inputElementRef.style, this._config.placeholder?.style);
       this.inputElementRef.textContent = '';
       FocusUtils.focusEndOfInput(this.inputElementRef);
+      this._onInput?.(false);
     }
     if (Browser.IS_CHROMIUM) window.scrollTo({top: scrollY});
   }
@@ -133,6 +136,7 @@ export class TextInputEl {
     } else {
       Object.assign(this.inputElementRef.style, this._config.placeholder?.style);
     }
+    this._onInput?.(true);
   }
 
   private setPlaceholderText(text: string) {

@@ -45,6 +45,7 @@ export class Input {
     buttons.submit = {button: submitButton};
     if (deepChat.customButtons) CustomButton.add(deepChat, buttons);
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAtts, deepChat.dropupStyles);
+    if (deepChat.onInput) Input.assignOnInput(deepChat, serviceIO, fileAtts, textInput);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -58,13 +59,15 @@ export class Input {
   private createFileUploadComponents(
       deepChat: DeepChat, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
     const fileAttachments = new FileAttachments(this.elementRef, deepChat.attachmentContainerStyle, serviceIO.demo);
-    Input.createUploadButtons(deepChat, serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
+    Input.createUploadButtons(deepChat, serviceIO, serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
     if (serviceIO.camera?.files) {
-      const cameraType = buttons.images?.fileType || fileAttachments.addType(deepChat, serviceIO.camera.files, 'images');
+      const cameraType = buttons.images?.fileType
+        || fileAttachments.addType(deepChat, serviceIO, serviceIO.camera.files, 'images');
       buttons.camera = {button: new CameraButton(containerElement, cameraType, serviceIO.camera)};
     }
     if (serviceIO.recordAudio?.files) {
-      const audioType = buttons.audio?.fileType || fileAttachments.addType(deepChat, serviceIO.recordAudio.files, 'audio');
+      const audioType = buttons.audio?.fileType
+        || fileAttachments.addType(deepChat, serviceIO, serviceIO.recordAudio.files, 'audio');
       buttons.microphone = {button: new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio)};
     }
     if (DragAndDrop.isEnabled(fileAttachments, deepChat.dragAndDrop)) {
@@ -74,13 +77,13 @@ export class Input {
   }
 
   // prettier-ignore
-  private static createUploadButtons(deepChat: DeepChat,
+  private static createUploadButtons(deepChat: DeepChat, serviceIO: ServiceIO,
       fileTypes: ServiceFileTypes, fileAtt: FileAttachments, containerEl: HTMLElement, buttons: Buttons) {
     Object.keys(fileTypes).forEach((key) => {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
       if (fileService.files) {
-        const fileAttachmentsType = fileAtt.addType(deepChat, fileService.files, fileType);
+        const fileAttachmentsType = fileAtt.addType(deepChat, serviceIO, fileService.files, fileType);
         const {id, svgString, dropupText} = FILE_TYPE_BUTTON_ICONS[fileType];
         const button = new UploadFileButton(containerEl, fileAttachmentsType, fileService, id, svgString, dropupText);
         buttons[fileType] = {button, fileType: fileAttachmentsType};
@@ -96,5 +99,18 @@ export class Input {
     const pToBs = InputButtonPositions.addButtons(buttonContainers, buttons, container, dropupStyles);
     InputButtonStyleAdjustments.set(textInput.inputElementRef, buttonContainers, fileAttachments.elementRef, pToBs);
     ButtonContainers.add(panel, buttonContainers);
+  }
+
+  private static assignOnInput(deepChat: DeepChat, io: ServiceIO, fileAtts: FileAttachments, textInput: TextInputEl) {
+    io.onInput = (isUser: boolean) => {
+      // In a timeout as when submitting files need to wait for their close events to be triggered
+      setTimeout(() => {
+        const uploadedFilesData = fileAtts.getAllFileData();
+        const inputText = textInput.inputElementRef.innerText.trim() as string;
+        const content: {text?: string; files?: File[]} = {text: inputText};
+        if (uploadedFilesData) content.files = uploadedFilesData.map((file) => file.file);
+        deepChat.onInput?.(content, isUser);
+      });
+    };
   }
 }

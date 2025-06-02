@@ -5,6 +5,7 @@ import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {PLAY_ICON_STRING} from '../../../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../../../icons/stopIcon';
 import {Browser} from '../../../../../utils/browser/browser';
+import {ServiceIO} from '../../../../../services/serviceIO';
 import {DeepChat} from '../../../../../deepChat';
 
 export class AudioFileAttachmentType extends FileAttachmentsType {
@@ -14,9 +15,9 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
   private static readonly TIMER_LIMIT_S = 5999;
 
   // prettier-ignore
-  constructor(deepChat: DeepChat, fileAttachments: FileAttachments,
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments,
       toggleContainer: (display: boolean) => void, container: HTMLElement) {
-    super(deepChat, fileAttachments, toggleContainer, container);
+    super(deepChat, serviceIO, fileAttachments, toggleContainer, container);
   }
 
   private static createAudioContainer() {
