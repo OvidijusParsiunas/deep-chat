@@ -80,9 +80,9 @@ export class FileMessageUtils {
   // But it is not actually used by anything in the chat, hence it is removed when adding a message
 
   // after the body has been stringified and parsed - the file reference will disappear, hence this readds it
-  public static reAddFileRefToObject(message: MessageContent, body: {message: MessageContent; isHistory: boolean}) {
+  public static reAddFileRefToObject(message: {files?: MessageFile[]}, targetMessage: MessageContent) {
     message.files?.forEach((file, index) => {
-      if (file.ref && body.message.files?.[index]) body.message.files[index].ref = file.ref;
+      if (file.ref && targetMessage.files?.[index]) targetMessage.files[index].ref = file.ref;
     });
   }
 

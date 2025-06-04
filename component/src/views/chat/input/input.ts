@@ -12,6 +12,7 @@ import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {ValidationHandler} from './validation/validationHandler';
 import {RecordAudio} from './buttons/microphone/recordAudio';
+import {FireEvents} from '../../../utils/events/fireEvents';
 import {CustomButton} from './buttons/custom/customButton';
 import {SubmitButton} from './buttons/submit/submitButton';
 import {CameraButton} from './buttons/camera/cameraButton';
@@ -45,7 +46,7 @@ export class Input {
     buttons.submit = {button: submitButton};
     if (deepChat.customButtons) CustomButton.add(deepChat, buttons);
     Input.addElements(this.elementRef, textInput, buttons, containerElement, fileAtts, deepChat.dropupStyles);
-    if (deepChat.onInput) Input.assignOnInput(deepChat, serviceIO, fileAtts, textInput);
+    Input.assignOnInput(deepChat, serviceIO, fileAtts, textInput);
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
@@ -109,7 +110,7 @@ export class Input {
         const inputText = textInput.inputElementRef.innerText.trim() as string;
         const content: {text?: string; files?: File[]} = {text: inputText};
         if (uploadedFilesData) content.files = uploadedFilesData.map((file) => file.file);
-        deepChat.onInput?.(content, isUser);
+        FireEvents.onInput(deepChat, content, isUser);
       });
     };
   }

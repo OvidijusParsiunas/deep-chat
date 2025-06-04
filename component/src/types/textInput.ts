@@ -18,4 +18,4 @@ export interface TextInput {
   disabled?: boolean;
 }
 
-export type OnInput = (content: {text?: string; files?: File[]}, isUser: boolean) => void;
+export type OnInput = (body: {content: {text?: string; files?: File[]}; isUser: boolean}) => void;
