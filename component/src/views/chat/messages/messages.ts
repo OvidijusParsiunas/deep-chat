@@ -196,7 +196,7 @@ export class Messages extends MessagesBase {
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
     if (message.html !== undefined && message.html !== null) {
       const elements = HTMLMessages.add(this, message.html, message.role, overwrite, isTop);
-      if (isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+      if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
   }
 
