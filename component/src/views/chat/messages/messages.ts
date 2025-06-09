@@ -216,6 +216,7 @@ export class Messages extends MessagesBase {
     }
     if (this.isValidMessageContent(message) && !isTop) {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
+      if (!isHistory) this.browserStorage?.addMessages(this.messageToElements.map(([msg]) => msg));
     }
     return message;
   }
@@ -401,6 +402,7 @@ export class Messages extends MessagesBase {
       if (this._introPanel?._elementRef) this._introPanel.display();
       this.addIntroductoryMessages();
     }
+    this.browserStorage?.clear();
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }

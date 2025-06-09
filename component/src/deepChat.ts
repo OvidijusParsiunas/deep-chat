@@ -16,6 +16,7 @@ import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
 import {SpeechToTextConfig} from './types/microphone';
+import {BrowserStorage} from './types/browserStorage';
 import {RemarkableOptions} from './types/remarkable';
 import {MessageBody} from './types/messagesInternal';
 import {ErrorMessages, OnError} from './types/error';
@@ -95,6 +96,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('array')
   history?: MessageContent[];
+
+  @Property('object')
+  browserStorage?: BrowserStorage;
 
   @Property('object')
   introMessage?: IntroMessage | IntroMessage[];

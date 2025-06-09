@@ -72,6 +72,7 @@ export class MessageStream {
       this._activeMessageRole = role;
       this._message = {role: this._activeMessageRole, [streamType]: initContent};
       this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
+      this._messages.browserStorage?.addMessages(this._messages.messageToElements.map(([msg]) => msg));
       if (customWrapper) this.setTargetWrapperIfNeeded(this._elements, content, this._streamType, customWrapper);
     }
   }

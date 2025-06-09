@@ -5,6 +5,7 @@ import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {BrowserStorage} from './browserStorage/browserStorage';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {RemarkableOptions} from '../../../types/remarkable';
@@ -37,6 +38,7 @@ export class MessagesBase {
   private _remarkable: Remarkable;
   private _lastGroupMessagesElement?: HTMLElement;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
+  public readonly browserStorage?: BrowserStorage;
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
   public static readonly INTRO_CLASS = 'deep-chat-intro';
   public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
@@ -47,6 +49,7 @@ export class MessagesBase {
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkable);
     if (deepChat.avatars) this.avatar = new Avatar(deepChat.avatars);
     if (deepChat.names) this.name = new Name(deepChat.names);
+    if (deepChat.browserStorage) this.browserStorage = new BrowserStorage(deepChat.browserStorage);
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this.focusMode = deepChat.focusMode;

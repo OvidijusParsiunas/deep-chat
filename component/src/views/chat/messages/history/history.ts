@@ -117,7 +117,7 @@ export class History {
     if (deepChat.loadHistory) {
       this.loadInitialHistory(deepChat.loadHistory);
     }
-    const history = deepChat.history || Legacy.processHistory(deepChat);
+    const history = deepChat.history || Legacy.processHistory(deepChat) || this._messages.browserStorage?.get();
     if (history) {
       this.populateInitialHistory(history);
       this._index += 1;
