@@ -93,10 +93,12 @@ export class MessageStream {
     func.bind(this)(content, bubbleElement, isOverwrite);
   }
 
-  private updateText(text: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
+  private updateText(text: string, bubbleElement: HTMLElement, overwrite: boolean) {
     if (!this._message) return;
-    this._message.text = isOverwrite ? text : this._message.text + text;
-    if (this._partialRender && this.isNewPartialRenderParagraph()) this.partialRenderNewParagraph(bubbleElement);
+    this._message.text = overwrite ? text : this._message.text + text;
+    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, overwrite)) {
+      this.partialRenderNewParagraph(bubbleElement);
+    }
     if (this._partialBubble) {
       this.partialRenderBubbleUpdate(text);
     } else {
@@ -104,7 +106,11 @@ export class MessageStream {
     }
   }
 
-  private isNewPartialRenderParagraph() {
+  private isNewPartialRenderParagraph(bubbleElement: HTMLElement, isOverwrite: boolean) {
+    if (isOverwrite) {
+      bubbleElement.innerHTML = '';
+      return true;
+    }
     if (!this._partialBubble) {
       return this._message?.text && this._message.text.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK) > -1;
     }
