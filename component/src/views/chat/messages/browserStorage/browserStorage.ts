@@ -3,10 +3,12 @@ import {MessageContentI} from '../../../../types/messagesInternal';
 
 export class BrowserStorage {
   private readonly storageKey: string = 'deep-chat-storage';
+  private readonly maxMessages: number = 1000;
 
   constructor(config: BrowserStorageT) {
     if (typeof config === 'object') {
       if (config.key) this.storageKey = config.key;
+      if (config.maxMessages) this.maxMessages = config.maxMessages;
       config.clear = this.clear.bind(this);
     }
   }
@@ -18,7 +20,8 @@ export class BrowserStorage {
   }
 
   public addMessages(messages: MessageContentI[]) {
-    localStorage.setItem(this.storageKey, JSON.stringify(messages));
+    const processedMessages = messages.slice(messages.length - this.maxMessages, messages.length);
+    localStorage.setItem(this.storageKey, JSON.stringify(processedMessages));
   }
 
   public clear() {
