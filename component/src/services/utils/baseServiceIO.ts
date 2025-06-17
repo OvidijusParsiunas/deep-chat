@@ -136,7 +136,11 @@ export class BaseServiceIO implements ServiceIO {
     // if handler is being used and demo is on, websocket calls should be directed to callServiceAPI
     if (this.connectSettings.websocket && (!this.connectSettings.handler || this.connectSettings.url !== Demo.URL)) {
       const body = {messages: processedMessages, ...this.rawBody};
-      Websocket.sendWebsocket(this, body, messages, false);
+      if (requestContents.files && this.getServiceIOByType(requestContents.files[0])?.connect) {
+        this.callApiWithFiles(messages, processedMessages, requestContents.files);
+      } else {
+        Websocket.sendWebsocket(this, body, messages, false);
+      }
     } else {
       this.callServiceAPI(messages, processedMessages, requestContents.files);
     }
