@@ -2,6 +2,7 @@
 @import url('./microphone/transcriptionText.css');
 @import url('./microphone/microphoneButton.css');
 @import url('./submit/submitButton.css');
+@import url('./tooltip/tooltip.css');
 
 .input-button {
   border-radius: 4px;

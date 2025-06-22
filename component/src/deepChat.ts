@@ -4,6 +4,7 @@ import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPr
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
+import {TooltipUtils} from './views/chat/input/buttons/tooltip/tooltipUtils';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {DirectServiceIO} from './services/utils/directServiceIO';
 import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
@@ -216,6 +217,7 @@ export class DeepChat extends InternalHTML {
     this._elementRef = document.createElement('div');
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
+    this.shadowRoot?.appendChild(TooltipUtils.buildElement());
     WebComponentStyleUtils.apply(style, this.shadowRoot);
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it

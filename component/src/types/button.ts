@@ -1,4 +1,5 @@
 import {StatefulStyles} from './styles';
+import {Tooltip} from './tooltip';
 
 interface ButtonInnerStyles {
   styles?: StatefulStyles;
@@ -16,4 +17,5 @@ export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | '
 export interface Button {
   styles?: ButtonStyles;
   position?: ButtonPosition;
+  tooltip?: true | Tooltip;
 }
