@@ -4,7 +4,6 @@ export class TooltipUtils {
   public static buildElement() {
     const container = document.createElement('div');
     container.classList.add('tooltip');
-    container.classList.add('tooltip-top');
     const text = document.createElement('span');
     text.classList.add('tooltip-text');
     container.appendChild(text);
@@ -13,10 +12,9 @@ export class TooltipUtils {
 
   public static tryCreateConfig(defaultText: string, tooltip?: true | Tooltip): Tooltip | undefined {
     if (!tooltip) return undefined;
-    if (typeof tooltip === 'boolean') return {text: defaultText, position: 'bottom'};
+    if (typeof tooltip === 'boolean') return {text: defaultText};
     return {
       text: tooltip.text || defaultText,
-      position: tooltip.position || 'bottom',
       timeout: tooltip.timeout || 0,
     };
   }
@@ -29,28 +27,32 @@ export class TooltipUtils {
     return currentElement;
   }
 
-  public static display(buttonElement: HTMLElement, config: Tooltip, element?: HTMLElement) {
-    if (!element) {
+  public static display(buttonElement: HTMLElement, config: Tooltip, tooltipElement?: HTMLElement) {
+    if (!tooltipElement) {
       const containerElement = TooltipUtils.traverseParentUntilContainer(buttonElement);
-      element = containerElement.nextSibling as HTMLElement;
+      tooltipElement = containerElement.nextSibling as HTMLElement;
     }
-    const shadowElement = (element.getRootNode() as ShadowRoot).host;
+    if (config.text) tooltipElement.children[0].textContent = config.text;
+    const shadowElement = (tooltipElement.getRootNode() as ShadowRoot).host;
     const timeout = setTimeout(() => {
-      if (element instanceof HTMLElement) {
-        element.style.visibility = 'visible';
+      if (tooltipElement instanceof HTMLElement) {
+        tooltipElement.style.visibility = 'visible';
         const shadowRect = shadowElement.getBoundingClientRect();
         const buttonRect = buttonElement.getBoundingClientRect();
-        element.style.left = `${buttonRect.left - 20 - shadowRect.left}px`;
-        element.style.top = `${buttonRect.top - 30 - shadowRect.top}px`;
-        const tooltipRect = element.getBoundingClientRect();
+        const tooltipRectOriginal = tooltipElement.getBoundingClientRect();
+        const tooltipHalf = tooltipRectOriginal.width / 2;
+        const buttonMiddle = buttonRect.left + buttonRect.width / 2;
+        tooltipElement.style.left = `${buttonMiddle - tooltipHalf - shadowRect.left}px`;
+        tooltipElement.style.top = `${buttonRect.top - 36 - shadowRect.top}px`;
+        const tooltipRect = tooltipElement.getBoundingClientRect();
         if (tooltipRect.left < shadowRect.left) {
-          element.style.left = '4px';
+          tooltipElement.style.left = '4px';
         } else if (tooltipRect.right > shadowRect.right) {
-          element.style.left = `${shadowRect.width - tooltipRect.width - 4}px`;
+          tooltipElement.style.left = `${shadowRect.width - tooltipRect.width - 4}px`;
         }
       }
     }, config.timeout || 0);
-    return {timeout, element};
+    return {timeout, element: tooltipElement};
   }
 
   public static hide(activeTooltip: ActiveTooltip) {

@@ -1,13 +1,9 @@
 .tooltip {
   position: absolute;
   visibility: hidden;
-}
-
-.tooltip-top {
-  top: 0;
-  width: 100px;
-  height: 20px;
+  padding: 5px;
   background-color: #333;
+  border-radius: 5px;
 }
 
 .tooltip-text {

@@ -1,6 +1,5 @@
 export interface Tooltip {
-  text: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  text?: string;
   timeout?: number;
 }
 
