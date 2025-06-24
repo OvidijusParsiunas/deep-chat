@@ -1,6 +1,8 @@
 import {ActiveTooltip, Tooltip} from '../../../../../types/tooltip';
 
 export class TooltipUtils {
+  private static readonly OVERFLOW_NEW_POSITION_PX = 4;
+
   public static buildElement() {
     const container = document.createElement('div');
     container.classList.add('tooltip');
@@ -16,6 +18,7 @@ export class TooltipUtils {
     return {
       text: tooltip.text || defaultText,
       timeout: tooltip.timeout || 0,
+      style: tooltip.style,
     };
   }
 
@@ -27,30 +30,33 @@ export class TooltipUtils {
     return currentElement;
   }
 
+  private static setPosition(buttonElement: HTMLElement, tooltipElement: HTMLElement) {
+    const shadowElement = (tooltipElement.getRootNode() as ShadowRoot).host;
+    const shadowRect = shadowElement.getBoundingClientRect();
+    const buttonRect = buttonElement.getBoundingClientRect();
+    const tooltipRectOriginal = tooltipElement.getBoundingClientRect();
+    const tooltipHalf = tooltipRectOriginal.width / 2;
+    const buttonMiddle = buttonRect.left + buttonRect.width / 2;
+    tooltipElement.style.left = `${buttonMiddle - tooltipHalf - shadowRect.left}px`;
+    tooltipElement.style.top = `${buttonRect.top - 36 - shadowRect.top}px`;
+    const tooltipRect = tooltipElement.getBoundingClientRect();
+    if (tooltipRect.left < shadowRect.left) {
+      tooltipElement.style.left = `${TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
+    } else if (tooltipRect.right > shadowRect.right) {
+      tooltipElement.style.left = `${shadowRect.width - tooltipRect.width - TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
+    }
+  }
+
   public static display(buttonElement: HTMLElement, config: Tooltip, tooltipElement?: HTMLElement) {
     if (!tooltipElement) {
       const containerElement = TooltipUtils.traverseParentUntilContainer(buttonElement);
       tooltipElement = containerElement.nextSibling as HTMLElement;
     }
     if (config.text) tooltipElement.children[0].textContent = config.text;
-    const shadowElement = (tooltipElement.getRootNode() as ShadowRoot).host;
     const timeout = setTimeout(() => {
-      if (tooltipElement instanceof HTMLElement) {
-        tooltipElement.style.visibility = 'visible';
-        const shadowRect = shadowElement.getBoundingClientRect();
-        const buttonRect = buttonElement.getBoundingClientRect();
-        const tooltipRectOriginal = tooltipElement.getBoundingClientRect();
-        const tooltipHalf = tooltipRectOriginal.width / 2;
-        const buttonMiddle = buttonRect.left + buttonRect.width / 2;
-        tooltipElement.style.left = `${buttonMiddle - tooltipHalf - shadowRect.left}px`;
-        tooltipElement.style.top = `${buttonRect.top - 36 - shadowRect.top}px`;
-        const tooltipRect = tooltipElement.getBoundingClientRect();
-        if (tooltipRect.left < shadowRect.left) {
-          tooltipElement.style.left = '4px';
-        } else if (tooltipRect.right > shadowRect.right) {
-          tooltipElement.style.left = `${shadowRect.width - tooltipRect.width - 4}px`;
-        }
-      }
+      tooltipElement.style.visibility = 'visible';
+      TooltipUtils.setPosition(buttonElement, tooltipElement);
+      if (config.style) Object.assign(tooltipElement.style, config.style);
     }, config.timeout || 0);
     return {timeout, element: tooltipElement};
   }

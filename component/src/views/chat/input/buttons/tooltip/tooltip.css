@@ -2,10 +2,13 @@
   position: absolute;
   visibility: hidden;
   padding: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
   background-color: #333;
   border-radius: 5px;
 }
 
 .tooltip-text {
   color: #fff;
+  font-size: 13px;
 }
