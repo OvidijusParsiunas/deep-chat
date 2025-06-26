@@ -1,11 +1,13 @@
 import {WebSpeechOptions, AzureOptions, Translations, TextColor, Commands} from 'speech-to-element/dist/types/options';
 import {ButtonStyles, ButtonPosition} from './button';
+import {Tooltip} from './tooltip';
 
 export interface MicrophoneStyles {
   default?: ButtonStyles;
   active?: ButtonStyles;
   unsupported?: ButtonStyles;
   position?: ButtonPosition;
+  tooltip?: true | Tooltip;
 }
 
 export type AudioFormat = 'mp3' | '4a' | 'webm' | 'mp4' | 'mpga' | 'wav' | 'mpeg' | 'm4a';

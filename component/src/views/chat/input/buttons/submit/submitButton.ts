@@ -17,6 +17,7 @@ import {ButtonAccessibility} from '../buttonAccessility';
 import {Response} from '../../../../../types/response';
 import {TextInputEl} from '../../textInput/textInput';
 import {Signals} from '../../../../../types/handler';
+import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {Messages} from '../../../messages/messages';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
@@ -27,7 +28,7 @@ import {
   ButtonInnerElement,
 } from '../../../../../types/buttonInternal';
 
-type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled'>;
+type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled' | 'tooltip'>;
 
 export class SubmitButton extends InputButton<Styles> {
   private static readonly SUBMIT_CLASS = 'submit-button';
@@ -52,7 +53,8 @@ export class SubmitButton extends InputButton<Styles> {
       fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     const svg = SUBMIT_ICON_STRING;
-    super(SubmitButton.createButtonContainerElement(), svg, submitButtonStyles?.position, submitButtonStyles);
+    const tooltip = TooltipUtils.tryCreateConfig('Submit', submitButtonStyles?.tooltip);
+    super(SubmitButton.createButtonContainerElement(), svg, submitButtonStyles?.position, tooltip, submitButtonStyles);
     this._messages = messages;
     this._textInput = textInput;
     this._fileAttachments = fileAttachments;

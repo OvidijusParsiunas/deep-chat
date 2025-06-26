@@ -13,7 +13,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   constructor(styles?: OpenAIRealtimeButtonT) {
     const svg = styles?.default?.svg?.content || OpenAIRealtimeButton.EMPTY_SVG;
-    super(document.createElement('div'), svg, undefined, styles);
+    super(document.createElement('div'), svg, undefined, undefined, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this.changeToDefault();
   }

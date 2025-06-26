@@ -1,6 +1,7 @@
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
+import {TooltipUtils} from '../buttons/tooltip/tooltipUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {CustomButton} from '../buttons/custom/customButton';
@@ -15,7 +16,8 @@ export class Dropup extends InputButton<Styles> {
   readonly buttonContainer: HTMLElement;
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
-    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, {styles: styles?.button?.styles});
+    const tooltip = TooltipUtils.tryCreateConfig('Options', styles?.button?.tooltip);
+    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, tooltip, {styles: styles?.button?.styles});
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();

@@ -2,13 +2,14 @@ import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonStyles} from '../../../../../types/button';
+import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {InputButton} from '../inputButton';
 
 // commandMode is used for speech to text
 // the reason why its called that instead of command is because it is used in SpeechToTextConfig
 type AllMicrophoneStyles = MicrophoneStyles & {commandMode?: ButtonStyles};
 
-type Styles = DefinedButtonStateStyles<AllMicrophoneStyles>;
+type Styles = Omit<DefinedButtonStateStyles<AllMicrophoneStyles>, 'tooltip'>;
 
 export class MicrophoneButton extends InputButton<Styles> {
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
@@ -16,7 +17,8 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   constructor(styles?: AllMicrophoneStyles) {
     if (styles?.position === 'dropup-menu') styles.position = 'outside-right'; // not allowed to be in dropup for UX
-    super(MicrophoneButton.createMicrophoneElement(), MICROPHONE_ICON_STRING, styles?.position, styles);
+    const tooltip = TooltipUtils.tryCreateConfig('Microphone', styles?.tooltip);
+    super(MicrophoneButton.createMicrophoneElement(), MICROPHONE_ICON_STRING, styles?.position, tooltip, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this.changeToDefault();
   }

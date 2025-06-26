@@ -1,4 +1,5 @@
 import {ActiveTooltip, Tooltip} from '../../../../../types/tooltip';
+import {StyleUtils} from '../../../../../utils/element/styleUtils';
 
 export class TooltipUtils {
   private static readonly OVERFLOW_NEW_POSITION_PX = 4;
@@ -61,8 +62,9 @@ export class TooltipUtils {
     return {timeout, element: tooltipElement};
   }
 
-  public static hide(activeTooltip: ActiveTooltip) {
+  public static hide(activeTooltip: ActiveTooltip, config: Tooltip) {
     clearTimeout(activeTooltip.timeout);
     activeTooltip.element.style.visibility = 'hidden';
+    if (config.style) StyleUtils.unsetStyle(activeTooltip.element, config.style);
   }
 }

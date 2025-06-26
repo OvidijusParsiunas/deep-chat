@@ -5,6 +5,7 @@ import {StyleUtils} from '../../../../../utils/element/styleUtils';
 import {HTMLUtils} from '../../../messages/html/htmlUtils';
 import {ButtonAccessibility} from '../buttonAccessility';
 import {ButtonStyles} from '../../../../../types/button';
+import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {DropupItem} from '../../dropup/dropupItem';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
@@ -41,10 +42,13 @@ export class CustomButton extends InputButton<Styles> {
   private readonly _menuStyles?: DropupMenuStyles;
   override isCustom = true;
 
+  // prettier-ignore
   constructor(customButton: CustomButtonT, index: number, focusInput?: () => void, menuStyles?: DropupMenuStyles) {
     const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
     const svg = CUSTOM_ICON_STRING;
-    super(CustomButton.createButtonElement(), svg, customButton?.position, customButton?.styles?.button, dropupText);
+    const tooltip = TooltipUtils.tryCreateConfig(`Custom ${index}`, customButton?.tooltip);  
+    super(CustomButton.createButtonElement(), svg, customButton?.position,
+      tooltip, customButton?.styles?.button || (tooltip && {}), dropupText);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menuStyles = menuStyles;
     this._onClick = customButton.onClick;

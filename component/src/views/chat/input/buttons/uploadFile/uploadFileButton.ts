@@ -4,6 +4,7 @@ import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {Modal} from '../../fileAttachments/modal/modal';
+import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {InputButton} from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
@@ -18,7 +19,10 @@ export class UploadFileButton extends InputButton<Styles> {
       fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
     const buttonPosition = fileService?.button?.position;
     const dropupItemText = fileService?.button?.styles?.text?.content || dropupText;
-    super(UploadFileButton.createButtonElement(), iconSVGString, buttonPosition, fileService.button, dropupItemText);
+    const tooltip = TooltipUtils.tryCreateConfig('Upload File', fileService?.button?.tooltip);
+    super(
+      UploadFileButton.createButtonElement(), iconSVGString, buttonPosition,
+      tooltip, fileService.button, dropupItemText);
     const innerElements = this.createInnerElementsForStates(iconId, this.customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);

@@ -1,4 +1,5 @@
 import {ButtonStyles} from './button';
+import {Tooltip} from './tooltip';
 
 export interface SubmitButtonStyles {
   submit?: ButtonStyles;
@@ -6,6 +7,7 @@ export interface SubmitButtonStyles {
   stop?: ButtonStyles;
   disabled?: ButtonStyles;
   position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
+  tooltip?: true | Tooltip;
   alwaysEnabled?: boolean;
 }
 

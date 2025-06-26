@@ -1,10 +1,12 @@
 import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
+import {ActiveTooltip, Tooltip} from '../../../../types/tooltip';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonAccessibility} from './buttonAccessility';
 import {ButtonStyles} from '../../../../types/button';
+import {TooltipUtils} from './tooltip/tooltipUtils';
 import {ButtonCSS} from './buttonCSS';
 
 interface MouseState {
@@ -19,20 +21,28 @@ export class InputButton<T extends Styles = Styles> {
   readonly svg: SVGGraphicsElement;
   readonly customStyles?: T;
   readonly position?: ButtonPositionT;
+  private readonly _tooltipSettings?: Tooltip;
+  private _activeTooltip?: ActiveTooltip;
   readonly dropupText?: string;
   readonly isCustom: boolean = false;
 
-  constructor(buttonElement: HTMLElement, svg: string, position?: ButtonPositionT, customStyles?: T, dropupText?: string) {
+  // prettier-ignore
+  constructor(buttonElement: HTMLElement, svg: string, position?: ButtonPositionT,
+      tooltip?: Tooltip, customStyles?: T, dropupText?: string) {
     ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
     this.svg = SVGIconUtils.createSVGElement(svg);
     this.customStyles = customStyles;
     this.position = position;
+    this._tooltipSettings = tooltip;
     this.dropupText = dropupText;
   }
 
   private buttonMouseLeave(customStyles?: ButtonStyles) {
     this._mouseState.state = 'default';
+    if (this._activeTooltip?.element.style.visibility === 'visible' && this._tooltipSettings) {
+      TooltipUtils.hide(this._activeTooltip, this._tooltipSettings);
+    }
     if (customStyles) {
       ButtonCSS.unsetAllCSS(this.elementRef, customStyles);
       ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'default');
@@ -41,6 +51,9 @@ export class InputButton<T extends Styles = Styles> {
 
   private buttonMouseEnter(customStyles?: ButtonStyles) {
     this._mouseState.state = 'hover';
+    if (this._tooltipSettings) {
+      this._activeTooltip = TooltipUtils.display(this.elementRef, this._tooltipSettings, this._activeTooltip?.element);
+    }
     if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
   }
 
