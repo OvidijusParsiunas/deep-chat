@@ -75,8 +75,8 @@ export type OpenAIRealtime = {
   avatar?: OpenAIRealtimeAvatar;
   buttons?: OpenAIRealtimeButtons;
   config?: OpenAIRealtimeConfig;
-  loading?: OpenAIRealtimeLoading;
-  error?: OpenAIRealtimeError;
   methods?: OpenAIRealtimeMethods;
   events?: SpeechToSpeechEvents;
+  loading?: OpenAIRealtimeLoading;
+  error?: OpenAIRealtimeError;
 };

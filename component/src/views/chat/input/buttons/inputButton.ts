@@ -18,11 +18,11 @@ type Styles = {[key: string]: ButtonStyles};
 export class InputButton<T extends Styles = Styles> {
   elementRef: HTMLElement;
   protected readonly _mouseState: MouseState = {state: 'default'};
+  private readonly _tooltipSettings?: Tooltip;
+  private _activeTooltip?: ActiveTooltip;
   readonly svg: SVGGraphicsElement;
   readonly customStyles?: T;
   readonly position?: ButtonPositionT;
-  private readonly _tooltipSettings?: Tooltip;
-  private _activeTooltip?: ActiveTooltip;
   readonly dropupText?: string;
   readonly isCustom: boolean = false;
 

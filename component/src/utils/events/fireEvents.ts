@@ -25,7 +25,7 @@ export class FireEvents {
   public static onInput(deepChat: DeepChat, content: {text?: string; files?: File[]}, isUser: boolean) {
     const updateBody = JSON.parse(JSON.stringify({content, isUser}));
     if (content.files) {
-      FileMessageUtils.reAddFileRefToObject({files: content.files?.map((file) => ({ref: file}))}, updateBody);
+      FileMessageUtils.reAddFileRefToObject({files: content.files?.map((file) => ({ref: file}))}, updateBody.content);
     }
     deepChat.onInput?.(updateBody);
     deepChat.dispatchEvent(new CustomEvent('input', {detail: updateBody}));
