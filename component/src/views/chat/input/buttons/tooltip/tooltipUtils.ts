@@ -66,5 +66,7 @@ export class TooltipUtils {
     clearTimeout(activeTooltip.timeout);
     activeTooltip.element.style.visibility = 'hidden';
     if (config.style) StyleUtils.unsetStyle(activeTooltip.element, config.style);
+    activeTooltip.element.style.left = '';
+    activeTooltip.element.style.top = '';
   }
 }
