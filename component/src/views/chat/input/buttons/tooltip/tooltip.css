@@ -1,11 +1,14 @@
 .tooltip {
   position: absolute;
   visibility: hidden;
+  z-index: 1;
+  pointer-events: none;
   padding: 5px;
   padding-left: 7px;
   padding-right: 7px;
   background-color: #333;
   border-radius: 5px;
+  width: max-content;
 }
 
 .tooltip-text {
