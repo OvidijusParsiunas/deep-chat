@@ -1,7 +1,7 @@
 import {ErrorMessages} from '../../../../utils/errorMessages/errorMessages';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
-import {Stream, StreamWrappers} from '../../../../types/stream';
+import {Stream, HTMLWrappers} from '../../../../types/stream';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
 import {MessageFile} from '../../../../types/messageFile';
 import {MessageElements, Messages} from '../messages';
@@ -16,7 +16,7 @@ export class MessageStream {
   private static readonly PARTIAL_RENDER_TEXT_MARK = '\n\n';
   private static readonly TARGET_WRAPPER_CLASS = 'stream-wrapper';
   private readonly _partialRender?: boolean;
-  private readonly _customWrappers?: StreamWrappers;
+  private readonly _customWrappers?: HTMLWrappers;
   private readonly _messages: MessagesBase;
   private _fileAdded = false;
   private _streamType: 'text' | 'html' | '' = '';
