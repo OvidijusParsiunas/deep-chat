@@ -11,6 +11,7 @@ import openAILogo from '/img/openAILogo.png';
 Try this service with custom properties in the [Playground](/playground).
 
 import ContainersKeyToggleRealtimeFunction from '@site/src/components/table/containersKeyToggleRealtimeFunction';
+import ComponentContainerEvents from '@site/src/components/table/componentContainerEvents';
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
@@ -31,6 +32,8 @@ import Tabs from '@theme/Tabs';
   &nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: OpenAIRealtimeAvatar`](#OpenAIRealtimeAvatar), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`buttons?: OpenAIRealtimeButtons`](#OpenAIRealtimeButtons), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`config?: OpenAIRealtimeConfig`](#OpenAIRealtimeConfig), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`methods?: OpenAIRealtimeMethods`](#OpenAIRealtimeMethods), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`events?: SpeechToSpeechEvents`](#SpeechToSpeechEvents), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`loading?: OpenAIRealtimeLoading`](#OpenAIRealtimeLoading) <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`error?: OpenAIRealtimeError`](#OpenAIRealtimeError) <br />
   \} | `true`
@@ -43,6 +46,8 @@ Connect to [OpenAI Reatime API](https://platform.openai.com/docs/guides/realtime
 `avatar` is used to configure the avatar. <br />
 `buttons` is used to configure the buttons. <br />
 `config` is as object that defines the connection properties. <br />
+`methods` are used to update the conversation context in real time. <br />
+`events` are triggered based on user activity. <br />
 `loading` defines the styling for the loading message. <br />
 `error` defines the styling for the error message. <br />
 
@@ -625,6 +630,104 @@ function getCurrentWeather(location) {
     return {location, temperature: '22', unit: 'celsius'};
   }
 }
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `OpenAIRealtimeMethods` {#OpenAIRealtimeMethods}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `updateConfig?:` ([`config?: OpenAIRealtimeConfig`](#OpenAIRealtimeConfig)) => `void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `sendMessage?:` (`text: string`, `role?: 'user' | 'assistant' | 'system'`) => `void` <br />
+  \}
+
+`updateConfig` updates the session configuration. [Info](https://platform.openai.com/docs/api-reference/realtime-client-events/session). <br />
+`sendMessage` sends a message to the session. [Info](https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create). <br />
+
+:::info
+These methods are automatically assigned and do not need to be defined. <br />
+To use these methods, the [`realtime`](#realtime) property must be an _object_ and not a _boolean_ (using realtime: `{}` is fine).
+:::
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+<deep-chat directConnection='{"openAI": {"key": "key","realtime": {}}}'></deep-chat>;
+
+// retrieve element reference via your framework of choice
+
+chatElementRef.openAI.realtime.methods.updateConfig({instructions: 'Respond with only yes or no'});
+
+chatElementRef.openAI.realtime.methods.sendMessage('Are you a real human?', 'user');
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `SpeechToSpeechEvents` {#SpeechToSpeechEvents}
+
+- Functions: \{ `started?:` () => `void`, `stopped?:` () => `void` \}
+- Events: `sts-session-started` | `sts-session-stopped`
+
+`started`/`sts-session-started` is triggered when the conversion has started. <br />
+`stopped`/`sts-session-stopped` is triggered when the conversion has stopped. <br />
+
+{' '}
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <ComponentContainerEvents eventNames={['sts-session-started', 'sts-session-stopped']}>
+      <DeepChatBrowser
+        style={{borderRadius: '8px'}}
+        directConnection={{
+          openAI: {
+            realtime: true,
+          },
+        }}
+      ></DeepChatBrowser>
+    </ComponentContainerEvents>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Functions">
+
+```js
+chatElementRef.directConnection.openAI.realtime.events = {
+  started: () => console.log('Session started'),
+  stopped: () => console.log('Session stopped'),
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Events">
+
+```js
+// This example is for Vanilla JS and should be tailored to your framework (see Examples)
+
+chatElementRef.addEventListener('sts-session-started', () => {
+  console.log('Session started');
+});
+
+chatElementRef.addEventListener('sts-session-stopped', () => {
+  console.log('Session stopped');
+});
 ```
 
 </TabItem>

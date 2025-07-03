@@ -74,6 +74,66 @@ import Tabs from '@theme/Tabs';
 
 <LineBreak></LineBreak>
 
+### `browserStorage` {#browserStorage}
+
+- Type: `true` | \{ `key?: string`, `maxMessages?: number`, `clear?: () => void` \}
+- Default: _\{ key: "deep-chat-storage", maxMessages: 1000 \}_
+
+Automatically store message history in the browser's local storage for future sessions.
+You can enable this by setting the value to _true_ or by defining an object with the following properties: <br />
+`key` is the storage key used to identify the stored message history in your browser. <br />
+`maxMessages` is the maximum number of messages that can be stored. <br />
+`clear` is a function used to clear the storage.
+
+:::info
+`clear` is automatically assigned and does not need to be defined. To use it,
+the [`browserStorage`](#browserStorage) property must be an _object_ and not a _boolean_ (using browserStorage: `{}` is fine).
+:::
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    browserStorage={{maxMessages: 10}}
+    introMessage={{text: 'Submit a message and refresh the website'}}
+    style={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+<deep-chat browserStorage='{"maxMessages": 10}'></deep-chat>;
+
+// to use the clear function first retrieve element reference via your framework of choice
+chatElementRef.browserStorage.clear();
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  browserStorage='{"maxMessages": 10}'
+  introMessage='{"text": "Submit a message and refresh the website"}'
+  style="height: 370px; border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+`browserStorage` does not work when [`history`](#history) is used.
+:::
+
+<LineBreak></LineBreak>
+
 ### `introMessage` {#introMessage}
 
 - Type: \{`text?: string`, `html?: string`\} | `Array`

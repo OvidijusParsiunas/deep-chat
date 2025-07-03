@@ -12,6 +12,7 @@
 - Send/Receive files
 - Capture photos via webcam
 - Record audio via microphone
+- Speech To Speech communication
 - Speech To Text for message input
 - Text To Speech to hear message responses
 - Support for MarkDown and custom elements to help structure text and render code
@@ -38,8 +39,6 @@ Deep Chat version `2.2.0` brings a ton of new features into the Deep Chat ecosys
     <img width="1000" src="https://github.com/user-attachments/assets/6089a0b4-0fe6-43e9-b9ce-840a9cfda885" alt="version 2.2.0">
 </p>
 
-https://github.com/user-attachments/assets/d210b5fe-ee81-4b0b-8347-78d5ed7fb5af
-
 `2.1.1` update:
 
 - [Azure OpenAI API](https://deepchat.dev/docs/directConnection/Azure#OpenAI)
@@ -51,6 +50,17 @@ https://github.com/user-attachments/assets/d210b5fe-ee81-4b0b-8347-78d5ed7fb5af
 
 <p align="center">
     <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.1.0">
+</p>
+
+`2.1.2` update:
+
+- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you store messages locally on your browser without worrying about a backend message integration.
+- Button [tooltips](https://deepchat.dev/docs/styles/buttons#Tooltip).
+- Place your streamed messages inside custom [`htmlWrappers`](https://deepchat.dev/docs/messages/HTML#htmlWrappers).
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.2) for more!
+
+<p align="center">
+    <img width="960" src="https://github.com/user-attachments/assets/51e900ea-43c6-41ca-b255-8b7d59285b26" alt="version 2.2.0">
 </p>
 
 ### :computer: Getting started

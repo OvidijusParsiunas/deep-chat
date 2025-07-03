@@ -1,6 +1,6 @@
 {
   "name": "deep-chat-react",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Customizable chat component for AI APIs",
   "main": "./dist/deepChat.js",
   "module": "./dist/deepChat.js",
@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "@lit-labs/react": "^2.1.3",
-    "deep-chat": "2.2.1"
+    "deep-chat": "2.2.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",

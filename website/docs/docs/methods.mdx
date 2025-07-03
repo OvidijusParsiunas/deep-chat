@@ -105,12 +105,13 @@ chatElementRef.submitUserMessage({text: "User message"});
 
 #### `UserMessage` {#UserMessage}
 
-- Type: \{`text?: string`, [`files?: File[] | FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList)\}
+- Type: \{`text?: string`, [`files?: File[] | FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList), `custom`: `any`\}
 
 `text` is the text content of the outgoing message. <br />
 `files` is an array containing files that are going to be part of the outgoing message. This can either be an array
 of [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications) objects or a [`FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList)
 object which typically comes from a [file input](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications). <br />
+`custom` encapsulates any custom data. <br />
 
 #### Files Example
 

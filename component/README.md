@@ -12,6 +12,7 @@
 - Send/Receive files
 - Capture photos via webcam
 - Record audio via microphone
+- Speech To Speech communication
 - Speech To Text for message input
 - Text To Speech to hear message responses
 - Support for MarkDown and custom elements to help structure text and render code

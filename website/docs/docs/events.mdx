@@ -138,6 +138,42 @@ as the component will re-render every time a property value is set. Use a flag v
 
 <LineBreak></LineBreak>
 
+### `onInput` {#onInput}
+
+- Function: (`body:` `{content: {text?: string; files?: File[]}, isUser: boolean}`) => `void`
+- Event: `input`
+
+Triggered when the user changes any of the input data. <br />
+`content` contains the input `text` or `files`. <br />
+`isUser` indicates whether the input change was triggered by the user or the component (e.g. clear on submit). <br />
+
+#### Example
+
+<ComponentContainerEvents propertyName={'onInput'}>
+  <DeepChatBrowser style={{borderRadius: '8px'}} demo={true} mixedFiles={true}></DeepChatBrowser>
+</ComponentContainerEvents>
+
+<Tabs>
+<TabItem value="js" label="Function">
+
+```html
+chatElementRef.onInput = (input) => { console.log(input); };
+```
+
+</TabItem>
+<TabItem value="py" label="Event">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+chatElementRef.addEventListener('render', () => { console.log("Finished rendering"); });
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `onError` {#onError}
 
 - Function: (error: string) => `void`

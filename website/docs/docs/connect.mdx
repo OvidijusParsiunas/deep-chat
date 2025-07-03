@@ -306,15 +306,21 @@ Messages from the server:
 
 ### `Stream` {#Stream}
 
-- Type: `boolean` | \{`simulation?: boolean | number | string`, `readable?: boolean`\}
+- Type: `true` | \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `simulation?: boolean | number | string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `readable?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `partialRender?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`htmlWrappers?: HTMLWrappers`](/docs/messages/HTML#htmlWrappers) <br />
+  \}
 
 Used to stream responses from the target service. <br />
 By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
 the server. See [`example`](https://deepchat.dev/examples/servers) server code. <br />
-You can alternatively use the `simulation` object property to facilitate a <b>stream-like</b> experience for any other connection type where the received content wil be
-gradually populated in the message bubble. You can control the millisecond interim of each word's appearance by assigning it a number with the default being _6_.
-A string value is used to act like an _end-phrase_ for individual websocket messages that act like a stream. <br />
+`simulation` facilitates a <b>stream-like</b> experience for non-stream connections by gradually populating the message bubble. Assign it a number to control the millisecond interim of each word's appearance (default is _6_)
+or a string value to act as an _end-phrase_ to stop populating message bubbles when using websockets. <br />
 `readable` is used to handle responses from a server with a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream). <br />
+`partialRender` prevents the entire message bubble from re-rendering every time a new stream event is received by instead only re-rendering the latest message paragraph
+that is created after `"\n\n"` syntax. <br />
 
 #### Stream Service Example
 

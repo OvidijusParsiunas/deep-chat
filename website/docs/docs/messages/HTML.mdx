@@ -359,6 +359,80 @@ When you do please provide us with either a [sandbox](https://codesandbox.io/) e
 
 <LineBreak></LineBreak>
 
+### `HTMLWrappers` {#htmlWrappers}
+
+- Type: \{`default?: string`, `ai?: string`, `role-name?: string`\}
+
+When a message is [streamed](/docs/connect#stream), its content will be populated _inside_ a custom HTML wrapper. <br />
+To denote the tag in which the content is going to be populated in use the `stream-wrapper` class. <br />
+You can define a string with HTML format for all roles using the `default` property, only ai responses using the `ai` role or
+any other custom roles using the `role-name` property.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    connect={{
+      stream: {
+        htmlWrappers: {
+          default: `
+            <div>
+              <b>Wrapper title</b>
+              <span class="stream-wrapper"></span>
+            </div>`,
+        },
+      },
+    }}
+    style={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.connect = {
+  stream: {
+    htmlWrappers: {
+      default: `
+        <div>
+          <b>Wrapper title</b>
+          <span class="stream-wrapper"></span>
+        </div>`,
+    },
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.connect = {
+  stream: {
+    htmlWrappers: {
+      default: `
+        <div>
+          <b>Wrapper title</b>
+          <span class="stream-wrapper"></span>
+        </div>`,
+    },
+  },
+};
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ## Examples {#moreExamples}
 
 <h3>Suggestion buttons</h3>

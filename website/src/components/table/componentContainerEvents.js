@@ -13,6 +13,14 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
           if (closureEventsText.length > 3) closureEventsText.pop();
           closureEventsText.unshift('Messages cleared');
           setEventsText([...closureEventsText]);
+        } else if (argument === 'sts-session-started') {
+          if (closureEventsText.length > 3) closureEventsText.pop();
+          closureEventsText.unshift('Session started');
+          setEventsText([...closureEventsText]);
+        } else if (argument === 'sts-session-stopped') {
+          if (closureEventsText.length > 3) closureEventsText.pop();
+          closureEventsText.unshift('Session stopped');
+          setEventsText([...closureEventsText]);
         } else if (propertyName !== 'onComponentRender') {
           if (!ref.current || argument === undefined) return;
           if (closureEventsText.length > 3) closureEventsText.pop();
@@ -30,7 +38,7 @@ const EventText = React.forwardRef(({propertyName}, ref) => {
   );
 });
 
-export default function ComponentContainerEvents({children, propertyName, withMethod}) {
+export default function ComponentContainerEvents({children, propertyName, eventNames, withMethod}) {
   const containerRef = React.useRef(null);
   const eventTextRef = React.useRef(null);
 
@@ -44,6 +52,10 @@ export default function ComponentContainerEvents({children, propertyName, withMe
             : containerRef.current.children[0];
           const deepChatReference = extractChildChatElement(container);
           deepChatReference[propertyName] = eventTextRef.current?.updateText;
+          const currentEventTextRef = eventTextRef.current;
+          eventNames?.forEach((name) => {
+            deepChatReference.addEventListener(name, () => currentEventTextRef.updateText(name));
+          });
         } else {
           const deepChatReference = extractChildChatElement(syncReference.children[0]);
           deepChatReference[propertyName] = () => {};

@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "deep-chat-react": "2.2.1",
+    "deep-chat-react": "2.2.2",
     "eventsource-parser": "^1.1.2",
     "next": "^14.2.14",
     "react": "^18",

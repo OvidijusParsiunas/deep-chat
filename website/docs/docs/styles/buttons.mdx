@@ -21,6 +21,7 @@ import Tabs from '@theme/Tabs';
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `styles?:` \{[`button?: CustomButtonStyles`](#CustomButtonStyles), [`dropup?: CustomDropupItemStyles`](#CustomDropupItemStyles)\}, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tooltip?: Tooltip`](#Tooltip), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`initialState?: CustomButtonState`](#CustomButtonState), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`setState?: SetCustomButtonState`](#SetCustomButtonState), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`onClick?: OnClickCustomButton`](#OnClickCustomButton) <br />
@@ -29,6 +30,7 @@ import Tabs from '@theme/Tabs';
 Array defining object configs for custom buttons. <br />
 `styles` is used to define the styling options for [buttons](#CustomButtonStyles) and [dropup items](#CustomDropupItemStyles). <br />
 `position` is used to set the button location. <br />
+`tooltip` adds a tooltip to the button. <br />
 `initialState` is the initial button state when the chat loads. <br />
 `setState` is used to change the button state programmatically. <br />
 `onClick` is used to assign a function that is triggered when the button is clicked. <br />
@@ -137,7 +139,8 @@ const onClick = (state) => (state === 'active' ? 'default' : 'active')
   &nbsp;&nbsp;&nbsp;&nbsp; [`stop?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`disabled?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `alwaysEnabled?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tooltip?: Tooltip`](#Tooltip) <br />
   \}
 
 Custom styling for the submit button. <br />
@@ -148,6 +151,7 @@ Custom styling for the submit button. <br />
 You can also set this state manually by calling the [`disableSubmitButton`](/docs/methods#disableSubmitButton) method. <br />
 `alwaysEnabled` prevents the `disabled` button state from being used. <br />
 `position` sets the button position within the input area. <br />
+`tooltip` adds a tooltip to the button.
 
 <LineBreak></LineBreak>
 
@@ -730,7 +734,7 @@ Styling for the states of a custom dropup item.
 
 ### `CustomDropupItemStateStyles` {#CustomDropupItemStateStyles}
 
-- Type: \{[`item?: StatefulStyles`](#StatefulStyles), [`iconContainer?: CustomStyle`](#CustomStyle), [`text?: CustomStyle`](#CustomStyle)\}
+- Type: \{[`item?: StatefulStyles`](/docs/styles#StatefulStyles), [`iconContainer?: CustomStyle`](/docs/styles#CustomStyle), [`text?: CustomStyle`](/docs/styles#CustomStyle)\}
 
 Styling for a custom item inside the dropup menu. <br />
 Tthe dropup item _svg icon_ and _text_ are defined via the `content` property in [`CustomButtonStyles`](#CustomButtonStyles). <br />
@@ -916,11 +920,12 @@ Types shared by button styles properties.
 
 ### `Button` {#Button}
 
-- Type: \{[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition)\}
+- Type: \{[`styles?: ButtonStyles`](#ButtonStyles), [`position?: ButtonPosition`](#ButtonPosition), [`tooltip?: Tooltip`](#Tooltip)\}
 
 Styling preferences for a button inside the chat view. <br />
 `styles` defines the button styling. <br />
 `position` is used to set the button location. <br />
+`tooltip` adds a tooltip to the button.
 
 #### Example
 
@@ -1260,13 +1265,60 @@ Position for a button either _inside_ the [text input container](/docs/styles#te
 
 <LineBreak></LineBreak>
 
+### `Tooltip` {#Tooltip}
+
+- Type: `true` | \{`text?: string`, `timeout?: number`, [`style?: CustomStyle`](/docs/styles#CustomStyle)\}
+- Default: _\{timeout: 0\}_
+
+Tooltip for a button. You can enable this by setting the value to _true_ or by defining an object
+with any of the following properties: <br />
+`text` is the tooltip text. <br />
+`timeout` is the milliseconds that it takes for the tooltip to appear. <br />
+`style` is used to add a custom style.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    images={{button: {tooltip: {text: 'Upload an image', style: {left: '200px'}}}}}
+    style={{borderRadius: '8px'}}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat images='{"button": {"tooltip": {"text": "Upload an image", "style": {"left": "200px"}}}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  demo="true"
+  style="border-radius: 8px"
+  images='{"button": {"tooltip": {"text": "Upload an image", "style": {"left": "200px"}}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `MicrophoneStyles` {#MicrophoneStyles}
 
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`default?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`active?: ButtonStyles`](#ButtonStyles), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`unsupported?: ButtonStyles`](#ButtonStyles), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`position?: ButtonPosition`](#ButtonPosition), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tooltip?: Tooltip`](#Tooltip) <br />
   \}
 
 Custom styling for the microphone button. <br />
@@ -1274,6 +1326,7 @@ Custom styling for the microphone button. <br />
 `active` is used when the microphone is active. <br />
 `unsupported` is used when recording is not supported on the user's browser. <br />
 `position` is the button position within the input area.
+`tooltip` adds a tooltip to the button.
 
 <ComponentContainer>
   <DeepChatBrowser
