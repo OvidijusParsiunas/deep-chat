@@ -13,8 +13,8 @@
 <link rel="stylesheet" href="/fonts/inter.woff2" as="font" type="font/woff2">
 <link rel="preload" href="/fonts/inter-webfont.css" as="style">
 <link rel="stylesheet" href="/fonts/inter-webfont.css" as="style"><link rel="stylesheet" href="/assets/css/styles.20731d31.css">
-<script src="/assets/js/runtime~main.1117543d.js" defer="defer"></script>
-<script src="/assets/js/main.6e8f6b24.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.df0d9355.js" defer="defer"></script>
+<script src="/assets/js/main.57777c93.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -55,12 +55,13 @@ a <em>false</em> argument to prevent this.</p>
 <div style="height:1px"></div>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="UserMessage"><code>UserMessage</code><a href="#UserMessage" class="hash-link" aria-label="Direct link to UserMessage" title="Direct link to UserMessage">​</a></h4>
 <ul>
-<li>Type: {<code>text?: string</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileList" target="_blank" rel="noopener noreferrer"><code>files?: File[] | FileList</code></a>}</li>
+<li>Type: {<code>text?: string</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileList" target="_blank" rel="noopener noreferrer"><code>files?: File[] | FileList</code></a>, <code>custom</code>: <code>any</code>}</li>
 </ul>
 <p><code>text</code> is the text content of the outgoing message. <br>
 <code>files</code> is an array containing files that are going to be part of the outgoing message. This can either be an array
 of <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications" target="_blank" rel="noopener noreferrer"><code>File</code></a> objects or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileList" target="_blank" rel="noopener noreferrer"><code>FileList</code></a>
-object which typically comes from a <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications" target="_blank" rel="noopener noreferrer">file input</a>. <br></p>
+object which typically comes from a <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications" target="_blank" rel="noopener noreferrer">file input</a>. <br>
+<code>custom</code> encapsulates any custom data. <br></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="files-example">Files Example<a href="#files-example" class="hash-link" aria-label="Direct link to Files Example" title="Direct link to Files Example">​</a></h4>
 <div class="tabs-container tabList__CuJ"><ul role="tablist" aria-orientation="horizontal" class="tabs"><li role="tab" tabindex="0" aria-selected="true" class="tabs__item tabItem_LNqP tabs__item--active">Code</li></ul><div class="margin-top--md"><div role="tabpanel" class="tabItem_Ymn6"><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">// html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&lt;input type=&quot;file&quot; id=&quot;files-input&quot; accept=&quot;image/png, image/jpeg&quot; /&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">// javascript</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">const filesInput = document.getElementById(&#x27;files-input&#x27;);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">filesInput.onchange = (event) =&gt; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  chatElement.submitUserMessage({files: event.target.files});</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">};</span><br></span></code></pre></div></div></div></div></div>
 <div style="height:1px"></div>
