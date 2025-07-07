@@ -1,14 +1,12 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {OpenAIConverseResult} from '../../../types/openAIResult';
+import {GeminiGenerateContentResult} from '../../../types/geminiResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
 
-// template
 export class GeminiUtils {
-  public static buildHeaders(key: string) {
+  public static buildHeaders() {
     return {
-      Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     };
   }
@@ -16,9 +14,9 @@ export class GeminiUtils {
   // prettier-ignore
   private static handleVerificationResult(result: object, key: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
-    const openAIResult = result as OpenAIConverseResult;
-    if (openAIResult.error) {
-      if (openAIResult.error.code === 'invalid_api_key') {
+    const geminiResult = result as GeminiGenerateContentResult;
+    if (geminiResult.error) {
+      if (geminiResult.error.code === 403 || geminiResult.error.message?.includes('API key')) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -28,9 +26,12 @@ export class GeminiUtils {
     }
   }
 
+  // https://ai.google.dev/api/models#method:-models.list
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models?key=';
     return {
-      url: 'https://api.openai.com/v1/models',
+      url,
+      augmentUrl: (key: string) => `${url}${key}`,
       method: 'GET',
       handleVerificationResult: GeminiUtils.handleVerificationResult,
     };

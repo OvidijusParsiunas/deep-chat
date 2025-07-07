@@ -46,9 +46,10 @@ export class DirectServiceIO extends BaseServiceIO {
 
   // prettier-ignore
   override verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers) {
-    const {url, method, handleVerificationResult, createHeaders, body} = this._keyVerificationDetails;
+    const {url, method, handleVerificationResult, createHeaders, body, augmentUrl} = this._keyVerificationDetails;
     const headers = createHeaders?.(key) || this._buildHeadersFunc(key);
-    HTTPRequest.verifyKey(key, url, headers, method,
+    const processedUrl = augmentUrl?.(key) || url;
+    HTTPRequest.verifyKey(key, processedUrl, headers, method,
       this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
       keyVerificationHandlers.onLoad, handleVerificationResult, body);
   }

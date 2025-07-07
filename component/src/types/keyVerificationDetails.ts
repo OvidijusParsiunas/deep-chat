@@ -5,6 +5,7 @@ export interface KeyVerificationDetails {
   method: string;
   body?: string;
   createHeaders?: (key: string) => GenericObject<string>;
+  augmentUrl?: (key: string) => string;
   handleVerificationResult: (
     result: object,
     key: string,

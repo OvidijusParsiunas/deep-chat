@@ -30,6 +30,7 @@ import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
+import {GeminiIO} from './gemini/gemini';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
@@ -135,6 +136,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.mistral) {
         return new MistralIO(deepChat);
+      }
+      if (directConnection.gemini) {
+        return new GeminiIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
