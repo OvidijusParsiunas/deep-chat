@@ -20,7 +20,9 @@ export class BrowserStorage {
   }
 
   public addMessages(messages: MessageContentI[]) {
-    const processedMessages = messages.slice(messages.length - this.maxMessages, messages.length);
+    let startIndex = messages.length - this.maxMessages;
+    if (startIndex < 0) startIndex = 0;
+    const processedMessages = messages.slice(startIndex, messages.length);
     localStorage.setItem(this.storageKey, JSON.stringify(processedMessages));
   }
 
