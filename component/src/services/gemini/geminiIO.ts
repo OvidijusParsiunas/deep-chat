@@ -1,5 +1,5 @@
-import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -9,7 +9,8 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {GeminiUtils} from './utils/geminiUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
-import {GeminiChat} from '../../types/gemini';
+import {Gemini} from '../../types/gemini';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 type GeminiContent = {
@@ -51,30 +52,28 @@ export class GeminiIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.gemini;
-    const config = directConnectionCopy.gemini?.chat;
+    const config = directConnectionCopy.gemini;
     let systemInstruction: string | undefined;
 
     super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, apiKey);
 
-    if (typeof config === 'object') {
-      if (config.systemInstruction) systemInstruction = config.systemInstruction;
-      if (config.model) {
-        this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
-      }
+    if (!config) return;
+    if (config.systemInstruction) systemInstruction = config.systemInstruction;
+    if (config.model) {
+      this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
     }
 
     Object.defineProperty(this, '_systemInstruction', {value: systemInstruction, writable: false});
 
-    if (typeof config === 'object') {
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    this.cleanConfig(config);
+    Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
   }
 
-  private cleanConfig(config: GeminiChat) {
+  private cleanConfig(config: Gemini & APIKey) {
     delete config.systemInstruction;
     delete config.model;
+    delete config.key;
   }
 
   private static getContent(message: MessageContentI): GeminiContent {

@@ -1,6 +1,6 @@
 import {GenericObject} from './object';
 
-export interface GeminiGenerationConfig {
+export interface GeminiGeneration {
   maxOutputTokens?: number;
   temperature?: number;
   topP?: number;
@@ -11,14 +11,12 @@ export interface GeminiGenerationConfig {
 }
 
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
-export interface GeminiChatConfig extends GeminiGenerationConfig {
+export interface GeminiChat extends GeminiGeneration {
   model?: string;
   stream?: boolean;
   systemInstruction?: string;
 }
 
-export type GeminiChat = GeminiChatConfig;
-
 export interface Gemini {
-  chat?: true | GeminiChatConfig;
+  chat?: true | GeminiChat;
 }

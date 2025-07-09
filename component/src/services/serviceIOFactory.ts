@@ -30,7 +30,7 @@ import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
-import {GeminiIO} from './gemini/gemini';
+import {GeminiIO} from './gemini/geminiIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
