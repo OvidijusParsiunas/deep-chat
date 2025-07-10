@@ -6,6 +6,7 @@ import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
 import {Gemini} from './gemini';
 import {OpenAI} from './openAI';
+import {Claude} from './claude';
 import {Azure} from './azure';
 
 export interface DirectConnection {
@@ -17,4 +18,5 @@ export interface DirectConnection {
   gemini?: Gemini & APIKey;
   azure?: Azure & APIKey;
   assemblyAI?: AssemblyAI & APIKey;
+  claude?: Claude & APIKey;
 }

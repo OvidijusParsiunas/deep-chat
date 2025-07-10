@@ -31,6 +31,7 @@ import {CohereChatIO} from './cohere/cohereChatIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
 import {GeminiIO} from './gemini/geminiIO';
+import {ClaudeIO} from './claude/claudeIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
@@ -139,6 +140,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.gemini) {
         return new GeminiIO(deepChat);
+      }
+      if (directConnection.claude) {
+        return new ClaudeIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
