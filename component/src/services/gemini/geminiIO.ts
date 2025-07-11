@@ -123,13 +123,16 @@ export class GeminiIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
-    this.url = `${this.urlPrefix}?key=${this.key}`;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
     if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
-      body.stream = true;
+      // https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
+      // https://www.googlecloudcommunity.com/gc/AI-ML/streamGenerateContent-Method-of-Gemini-Rest-APIs-giving-multiple/
+      // m-p/713681?lightbox-message-images-771198=116842i602BA042C49F4979
+      this.url = `${this.urlPrefix.replace(':generateContent', ':streamGenerateContent')}?alt=sse&key=${this.key}`;
       Stream.request(this, body, messages);
     } else {
+      this.url = `${this.urlPrefix}?key=${this.key}`;
       HTTPRequest.request(this, body, messages);
     }
   }

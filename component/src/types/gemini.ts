@@ -11,12 +11,7 @@ export interface GeminiGeneration {
 }
 
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
-export interface GeminiChat extends GeminiGeneration {
+export interface Gemini extends GeminiGeneration {
   model?: string;
-  stream?: boolean;
   systemInstruction?: string;
-}
-
-export interface Gemini {
-  chat?: true | GeminiChat;
 }
