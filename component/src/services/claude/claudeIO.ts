@@ -41,6 +41,27 @@ type ClaudeResponse = {
   };
 };
 
+type ClaudeStreamEvent = {
+  type:
+    | 'content_block_delta'
+    | 'message_start'
+    | 'content_block_start'
+    | 'content_block_stop'
+    | 'message_delta'
+    | 'message_stop';
+  delta?: {
+    type: 'text_delta';
+    text?: string;
+  };
+  content?: Array<{type: 'text'; text: string}>;
+  error?: {
+    type: string;
+    message: string;
+  };
+};
+
+type ClaudeAPIResult = ClaudeResponse | ClaudeStreamEvent;
+
 // https://docs.anthropic.com/en/api/messages
 export class ClaudeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Claude API Key';
@@ -100,16 +121,25 @@ export class ClaudeIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: ClaudeResponse): Promise<ResponseI> {
+  override async extractResultData(result: ClaudeAPIResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
+    // Handle streaming events
+    if (result.type === 'content_block_delta') {
+      if (result.delta && result.delta.type === 'text_delta') {
+        return {text: result.delta.text || ''};
+      }
+    }
+
+    // Handle non-streaming response (final response)
     if (result.content && result.content.length > 0) {
-      const textContent = result.content.find((item) => item.type === 'text');
+      const textContent = result.content.find((item: {type: string; text: string}) => item.type === 'text');
       if (textContent) {
         return {text: textContent.text};
       }
     }
 
+    // Return empty for other event types (message_start, content_block_start, etc.)
     return {text: ''};
   }
 }
