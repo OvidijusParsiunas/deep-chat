@@ -8,6 +8,7 @@ import {Gemini} from './gemini';
 import {OpenAI} from './openAI';
 import {Claude} from './claude';
 import {Azure} from './azure';
+import {DeepSeek} from './deepSeek';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -19,4 +20,5 @@ export interface DirectConnection {
   azure?: Azure & APIKey;
   assemblyAI?: AssemblyAI & APIKey;
   claude?: Claude & APIKey;
+  deepSeek?: DeepSeek & APIKey;
 }

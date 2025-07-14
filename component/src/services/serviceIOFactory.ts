@@ -28,6 +28,7 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
+import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
 import {GeminiIO} from './gemini/geminiIO';
@@ -143,6 +144,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.claude) {
         return new ClaudeIO(deepChat);
+      }
+      if (directConnection.deepSeek) {
+        return new DeepSeekIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
