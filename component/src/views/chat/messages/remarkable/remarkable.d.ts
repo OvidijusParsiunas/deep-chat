@@ -5,6 +5,7 @@ declare module 'remarkable' {
     constructor(options?: RemarkableOptions);
     public render: (markdown: string) => string;
     public inline: {validateLink: () => boolean};
+    public use: (plugin: unknown, options?: unknown) => Remarkable;
   }
 
   interface RemarkableOptions {

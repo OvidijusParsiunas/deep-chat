@@ -5,7 +5,6 @@ export interface RemarkableOptions {
   xhtmlOut?: boolean;
   html?: boolean;
   breaks?: boolean;
-  linkify?: boolean;
   langPrefix?: `language-${string}`;
   linkTarget?: string;
   typographer?: boolean;

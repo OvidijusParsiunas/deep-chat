@@ -5,6 +5,7 @@ import hljs from 'highlight.js';
 declare global {
   interface Window {
     hljs: typeof hljs;
+    remarkable_plugins: {plugin: unknown; options?: unknown}[];
   }
 }
 
@@ -13,6 +14,15 @@ export class RemarkableConfig {
     breaks: true,
     linkTarget: '_blank', // set target to open in a new tab
   };
+
+  private static addPlugins(remarkable: Remarkable) {
+    const plugins = window.remarkable_plugins;
+    if (plugins) {
+      plugins.forEach((plugin) => {
+        remarkable.use(plugin.plugin, plugin.options);
+      });
+    }
+  }
 
   private static instantiate(customConfig?: RemarkableOptions) {
     if (customConfig) {
@@ -49,6 +59,7 @@ export class RemarkableConfig {
 
   public static createNew(customConfig?: RemarkableOptions) {
     const remarkable = RemarkableConfig.instantiate(customConfig);
+    RemarkableConfig.addPlugins(remarkable);
     remarkable.inline.validateLink = () => true;
     return remarkable;
   }
