@@ -7,5 +7,4 @@ export interface Claude {
   top_k?: number;
   stop_sequences?: string[];
   system_prompt?: string;
-  stream?: boolean;
 }
