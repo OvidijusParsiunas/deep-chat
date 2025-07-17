@@ -439,7 +439,6 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private stopOnError(error: string) {
     this.stop();
-    this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STOPPED));
     console.error(error);
     this.displayError();
   }
@@ -451,6 +450,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._pc.close();
       this._pc = null;
       this._events?.stopped?.();
+      this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STOPPED));
       this._dc = undefined;
     }
   }
