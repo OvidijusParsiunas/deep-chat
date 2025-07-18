@@ -22,6 +22,7 @@ type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
+  // https://platform.openai.com/docs/api-reference/chat/create
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = ['Incorrect'];
   _functionHandler?: ChatFunctionHandler;
@@ -30,6 +31,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
 
+  // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetailsArg?: KeyVerificationDetails,
       buildHeadersFuncArg?: BuildHeadersFunc, apiKeyArg?: APIKey, configArg?: true | OpenAIChat) {
@@ -107,6 +109,14 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
         return this.handleTools(result.choices[0].message, fetchFunc, prevBody);
+      }
+      if (result.choices[0].message?.audio) {
+        const tts = this.deepChat.textToSpeech;
+        const displayText = typeof tts === 'object' && typeof tts?.service?.displayText === 'boolean';
+        return {
+          files: [{src: `data:audio/wav;base64,${result.choices[0].message.audio.data}`, type: 'audio'}],
+          text: displayText ? result.choices[0].message.audio.transcript : undefined,
+        };
       }
       return {text: result.choices[0].message.content};
     }

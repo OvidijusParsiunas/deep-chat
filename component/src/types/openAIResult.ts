@@ -59,6 +59,7 @@ export interface ToolAPI {
 export type OpenAIMessage = {
   role: 'user' | 'system' | 'ai' | 'tool';
   content: string;
+  audio?: {data: string; transcript: string};
 } & ToolAPI;
 
 export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};

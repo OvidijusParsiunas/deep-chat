@@ -204,6 +204,8 @@ export class Messages extends MessagesBase {
   public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
     if (data.role !== MessageUtils.USER_ROLE) this._hiddenAttachments?.removeHiddenFiles();
     const message = Messages.createMessageContent(data);
+    const displayText = this.textToSpeech?.service?.displayText;
+    if (typeof displayText === 'boolean' && !displayText) delete message.text;
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (isTop) {
       this.tryAddHTMLMessage(message, overwrite, isTop);

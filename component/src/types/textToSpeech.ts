@@ -1,5 +1,11 @@
-// https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance
+export interface TextToSpeechAudioConfig {
+  autoPlay?: boolean;
+  displayAudio?: boolean;
+  displayText?: boolean; // applies to services that offer transcript
+}
+
 export interface TextToSpeechConfig {
+  service?: TextToSpeechAudioConfig;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/lang
   lang?: string;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/pitch

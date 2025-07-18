@@ -1,6 +1,7 @@
-import {TextToSpeechConfig} from '../../../../types/textToSpeech';
+import {TextToSpeechAudioConfig, TextToSpeechConfig} from '../../../../types/textToSpeech';
 
 export type ProcessedTextToSpeechConfig = {
+  service?: TextToSpeechAudioConfig;
   lang?: string;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/pitch)
   pitch?: number;
@@ -17,7 +18,7 @@ export class TextToSpeech {
   private static readonly LOAD_VOICES_MS = 200;
 
   public static speak(text: string, config: ProcessedTextToSpeechConfig) {
-    if (window.SpeechSynthesisUtterance) {
+    if (!config.service && window.SpeechSynthesisUtterance) {
       const utterance = new SpeechSynthesisUtterance(text);
       Object.assign(utterance, config);
       speechSynthesis.speak(utterance);
@@ -30,6 +31,7 @@ export class TextToSpeech {
     window.speechSynthesis; // this is required for the browser to start loading voices
     setTimeout(() => {
       if (typeof config === 'object') {
+        if (config.service) processedConfig.service = config.service;
         if (config.lang) processedConfig.lang = config.lang;
         if (config.pitch) processedConfig.pitch = config.pitch;
         if (config.rate) processedConfig.rate = config.rate;

@@ -102,6 +102,8 @@ export type OpenAIChat = {
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
+  modalities?: ['text', 'audio'];
+  audio?: {format: string; voice: string};
 } & OpenAIChatFunctions;
 
 export interface OpenAI {
