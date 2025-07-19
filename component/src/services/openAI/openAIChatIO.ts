@@ -12,6 +12,7 @@ import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
+import {MessageFile} from '../../types/messageFile';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
@@ -61,11 +62,24 @@ export class OpenAIChatIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
-  private static getContent(message: MessageContentI) {
+  private static getFileContent(files: MessageFile[], canSendAudio: boolean): ImageContent {
+    const content: ImageContent = files.map((file) => {
+      // Last time I checked only wav and mp3 are supported
+      if (file.type === 'audio' && canSendAudio) {
+        // Extract base64 data from data URL (remove "data:audio/format;base64," prefix)
+        const base64Data = file.src?.split(',')[1];
+        // Extract format from data URL (e.g., "data:audio/wav;base64," -> "wav")
+        const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] || 'wav';
+        return {type: 'input_audio', input_audio: {data: base64Data, format}};
+      }
+      return {type: 'image_url', image_url: {url: file.src}};
+    });
+    return content;
+  }
+
+  private static getContent(message: MessageContentI, canSendAudio: boolean) {
     if (message.files && message.files.length > 0) {
-      const content: ImageContent = message.files.map((file) => {
-        return {type: 'image_url', image_url: {url: file.src}};
-      });
+      const content: ImageContent = OpenAIChatIO.getFileContent(message.files, canSendAudio);
       if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', text: message.text});
       return content;
     }
@@ -75,10 +89,11 @@ export class OpenAIChatIO extends DirectServiceIO {
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
+    const canSendAudio = bodyCopy.modalities?.includes('audio');
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
       .map((message) => {
-        return {content: OpenAIChatIO.getContent(message),
+        return {content: OpenAIChatIO.getContent(message, canSendAudio),
           role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
       bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
