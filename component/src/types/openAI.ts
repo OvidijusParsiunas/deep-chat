@@ -96,6 +96,7 @@ export interface OpenAIChatFunctions {
 }
 
 // https://platform.openai.com/docs/api-reference/chat
+// https://platform.openai.com/docs/guides/audio?example=audio-in
 export type OpenAIChat = {
   system_prompt?: string;
   model?: string;
