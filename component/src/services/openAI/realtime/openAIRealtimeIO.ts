@@ -64,7 +64,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._events = config.events;
       realtime.methods = this.generateMethods();
     }
-    this.rawBody.model ??= 'gpt-4o-realtime-preview-2024-12-17';
+    this.rawBody.model ??= 'gpt-4o-realtime-preview-2025-06-03';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
     this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
