@@ -1,6 +1,8 @@
 import {HuggingFace} from './huggingFace';
 import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
+import {OpenRouter} from './openRouter';
+import {DeepSeek} from './deepSeek';
 import {Mistral} from './mistral';
 import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
@@ -8,7 +10,6 @@ import {Gemini} from './gemini';
 import {OpenAI} from './openAI';
 import {Claude} from './claude';
 import {Azure} from './azure';
-import {DeepSeek} from './deepSeek';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -21,4 +22,5 @@ export interface DirectConnection {
   assemblyAI?: AssemblyAI & APIKey;
   claude?: Claude & APIKey;
   deepSeek?: DeepSeek & APIKey;
+  openRouter?: OpenRouter & APIKey;
 }

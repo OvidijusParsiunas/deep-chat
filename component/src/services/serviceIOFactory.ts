@@ -25,6 +25,7 @@ import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
 import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
+import {OpenRouterIO} from './openRouter/openRouterIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
@@ -147,6 +148,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.deepSeek) {
         return new DeepSeekIO(deepChat);
+      }
+      if (directConnection.openRouter) {
+        return new OpenRouterIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
