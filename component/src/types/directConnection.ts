@@ -10,6 +10,7 @@ import {Gemini} from './gemini';
 import {OpenAI} from './openAI';
 import {Claude} from './claude';
 import {Azure} from './azure';
+import {Grok} from './grok';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -23,4 +24,5 @@ export interface DirectConnection {
   claude?: Claude & APIKey;
   deepSeek?: DeepSeek & APIKey;
   openRouter?: OpenRouter & APIKey;
+  grok?: Grok & APIKey;
 }

@@ -30,8 +30,10 @@ import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
+import {GrokImagesIO} from './grok/grokImagesIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralO';
+import {GrokChatIO} from './grok/grokChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
 import {ServiceIO} from './serviceIO';
@@ -151,6 +153,12 @@ export class ServiceIOFactory {
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
+      }
+      if (directConnection.grok) {
+        if (directConnection.grok.images) {
+          return new GrokImagesIO(deepChat);
+        }
+        return new GrokChatIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {

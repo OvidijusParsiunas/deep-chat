@@ -11,6 +11,7 @@ import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
+// https://docs.mistral.ai/api/
 export class MistralIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Mistral API Key';
   override keyHelpUrl = 'https://console.mistral.ai/api-keys/';
