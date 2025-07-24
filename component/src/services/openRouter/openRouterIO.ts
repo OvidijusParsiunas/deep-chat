@@ -75,6 +75,7 @@ type OpenRouterStreamEvent = {
 
 type OpenRouterAPIResult = OpenRouterResponse | OpenRouterStreamEvent;
 
+// https://openrouter.ai/docs/api-reference/overview
 export class OpenRouterIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenRouter API Key';
   override keyHelpUrl = 'https://openrouter.ai/keys';

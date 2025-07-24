@@ -1,7 +1,5 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {RequestUtils} from '../../../utils/HTTP/requestUtils';
-import {ServiceIO} from '../../serviceIO';
 
 type DeepSeekErrorResponse = {
   error?: {
@@ -14,7 +12,7 @@ type DeepSeekErrorResponse = {
 export class DeepSeekUtils {
   public static buildHeaders(key: string) {
     return {
-      'Authorization': `Bearer ${key}`,
+      Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     };
   }
@@ -39,19 +37,9 @@ export class DeepSeekUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.deepseek.com/v1/chat/completions',
-      method: 'POST',
+      url: 'https://api.deepseek.com/models',
+      method: 'GET',
       handleVerificationResult: DeepSeekUtils.handleVerificationResult,
     };
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static async directFetch(serviceIO: ServiceIO, body: any, method: 'POST' | 'GET', stringify = true) {
-    serviceIO.connectSettings.method = method;
-    const result = await RequestUtils.fetch(serviceIO, serviceIO.connectSettings.headers, stringify, body).then((resp) =>
-      RequestUtils.processResponseByType(resp)
-    );
-    if (result.error) throw result.error.message;
-    return result;
   }
 }

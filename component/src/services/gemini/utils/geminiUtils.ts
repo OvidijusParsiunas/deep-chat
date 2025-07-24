@@ -1,8 +1,6 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {GeminiGenerateContentResult} from '../../../types/geminiResult';
-import {RequestUtils} from '../../../utils/HTTP/requestUtils';
-import {ServiceIO} from '../../serviceIO';
 
 export class GeminiUtils {
   public static buildHeaders() {
@@ -35,15 +33,5 @@ export class GeminiUtils {
       method: 'GET',
       handleVerificationResult: GeminiUtils.handleVerificationResult,
     };
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static async directFetch(serviceIO: ServiceIO, body: any, method: 'POST' | 'GET', stringify = true) {
-    serviceIO.connectSettings.method = method;
-    const result = await RequestUtils.fetch(serviceIO, serviceIO.connectSettings.headers, stringify, body).then((resp) =>
-      RequestUtils.processResponseByType(resp)
-    );
-    if (result.error) throw result.error.message;
-    return result;
   }
 }

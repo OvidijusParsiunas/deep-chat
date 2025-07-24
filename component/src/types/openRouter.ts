@@ -1,3 +1,4 @@
+// https://openrouter.ai/docs/api-reference/chat-completion
 export interface OpenRouter {
   model?: string;
   max_tokens?: number;
