@@ -32,6 +32,7 @@ import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {GrokImagesIO} from './grok/grokImagesIO';
 import {WebModel} from '../webModel/webModel';
+import {KimiChatIO} from './kimi/kimiChatIO';
 import {MistralIO} from './mistral/mistralO';
 import {GrokChatIO} from './grok/grokChatIO';
 import {GeminiIO} from './gemini/geminiIO';
@@ -153,6 +154,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
+      }
+      if (directConnection.kimi) {
+        return new KimiChatIO(deepChat);
       }
       if (directConnection.grok) {
         if (directConnection.grok.images) {
