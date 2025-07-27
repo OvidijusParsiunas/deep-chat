@@ -1,8 +1,9 @@
+import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Cohere, CohereChatConfig} from '../../types/cohere';
-import {CohereChatResult} from '../../types/cohereResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
@@ -12,7 +13,7 @@ export class CohereChatIO extends CohereIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const config = directConnectionCopy.cohere?.chat as Cohere['chat'];
     const apiKey = directConnectionCopy.cohere;
-    super(deepChat, 'https://api.cohere.ai/v1/chat', 'Ask me anything!', config, apiKey);
+    super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', config, apiKey);
     if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
   }
@@ -20,21 +21,68 @@ export class CohereChatIO extends CohereIO {
   private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
-    bodyCopy.query = textMessages[textMessages.length - 1].text;
-    bodyCopy.chat_history = textMessages
-      .slice(0, textMessages.length - 1)
-      .map((message) => ({text: message.text, user_name: message.role === 'ai' ? 'CHATBOT' : 'USER'}));
+    bodyCopy.messages = textMessages.map((message) => ({
+      role: message.role === 'ai' ? 'assistant' : 'user',
+      content: message.text,
+    }));
+    bodyCopy.model = bodyCopy.model || 'command-a-03-2025';
     return bodyCopy;
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body, messages);
+    const stream = this.stream;
+    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+      body.stream = true;
+      this.stream = {readable: true};
+      Stream.request(this, body, messages);
+    } else {
+      HTTPRequest.request(this, body, messages);
+    }
   }
 
   override async extractResultData(result: CohereChatResult): Promise<Response> {
-    if (result.message) throw result.message;
-    return {text: result.text};
+    if (typeof result.message === 'string') throw result.message;
+
+    // Handle streaming events
+    if (this.stream && result.text) {
+      const bundledEvents = CohereChatIO.parseBundledEvents(result.text);
+      const text = CohereChatIO.aggregateBundledEventsText(bundledEvents);
+      return {text};
+    }
+
+    // Handle non-streaming response (final response)
+    if ('message' in result && result.message?.content?.[0]?.text) {
+      return {text: result.message.content[0].text};
+    }
+
+    throw new Error('Invalid response format from Cohere API');
+  }
+
+  private static parseBundledEvents(bundledEventsStr: string) {
+    const lines = bundledEventsStr.trim().split('\n');
+    const parsedStreamEvents: CohereStreamEventBody[] = [];
+
+    for (const line of lines) {
+      if (line.trim()) {
+        // Skip empty lines
+        try {
+          const parsed = JSON.parse(line);
+          parsedStreamEvents.push(parsed);
+        } catch (error) {
+          console.error('Failed to parse line:', line, error);
+        }
+      }
+    }
+
+    return parsedStreamEvents;
+  }
+
+  private static aggregateBundledEventsText(bundledEvents: CohereStreamEventBody[]) {
+    return bundledEvents
+      .filter((obj) => obj.type === 'content-delta' && obj.delta?.message?.content?.text)
+      .map((obj) => obj.delta?.message?.content?.text)
+      .join('');
   }
 }

@@ -26,8 +26,7 @@ export interface CohereGenerateConfig {
   preset?: string;
 }
 
-// stream API only supported for server to server communication (application/stream+json)
-// https://docs.cohere.com/reference/chat
+// https://docs.cohere.com/v2/reference/chat
 export interface CohereChatConfig {
   model?: string;
   temperature?: number;
