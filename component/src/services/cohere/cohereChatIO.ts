@@ -1,24 +1,35 @@
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {Cohere, CohereChatConfig} from '../../types/cohere';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
+import {Cohere} from '../../types/cohere';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {CohereIO} from './cohereIO';
 
 export class CohereChatIO extends CohereIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
-    const config = directConnectionCopy.cohere?.chat as Cohere['chat'];
     const apiKey = directConnectionCopy.cohere;
-    super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', config, apiKey);
-    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', {}, apiKey);
+    const config = directConnectionCopy.cohere;
+    if (typeof config === 'object') {
+      const canSendMessage = Legacy.processCohere(config);
+      this.canSendMessage = () => canSendMessage;
+      this.cleanConfig(config);
+      Object.assign(this.rawBody, config);
+    }
     this.maxMessages ??= -1;
   }
 
-  private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
+  private cleanConfig(config: Cohere & APIKey) {
+    delete config.key;
+  }
+
+  private preprocessBody(body: Cohere, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
     bodyCopy.messages = textMessages.map((message) => ({

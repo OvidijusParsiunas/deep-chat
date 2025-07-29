@@ -4,10 +4,10 @@ import {Messages} from '../../views/chat/messages/messages';
 import {CohereChatResult} from '../../types/cohereResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {CohereChatConfig} from '../../types/cohere';
 import {MistralUtils} from './utils/mistralUtils';
 import {Response} from '../../types/response';
 import {Mistral} from '../../types/mistral';
+import {Cohere} from '../../types/cohere';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -35,7 +35,7 @@ export class MistralIO extends DirectServiceIO {
   }
 
   // build a single string for user
-  private preprocessBody(body: CohereChatConfig, pMessages: MessageContentI[]) {
+  private preprocessBody(body: Cohere, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
     bodyCopy.messages = textMessages

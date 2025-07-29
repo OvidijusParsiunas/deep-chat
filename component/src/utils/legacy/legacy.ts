@@ -5,6 +5,7 @@ import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
 import {Stream} from '../../types/stream';
+import {Cohere} from '../../types/cohere';
 import {DeepChat} from '../../deepChat';
 import {Demo} from '../../types/demo';
 
@@ -138,5 +139,28 @@ export class Legacy {
       demo.displayLoading = {message: true};
     }
     return demo;
+  }
+
+  public static processCohere(cohere: Cohere) {
+    const cohereObj = cohere as unknown as {chat?: object; textGeneration?: object; summarization?: object};
+    const documentationMsg = 'Please see the official documentation: https://deepchat.dev/docs/directConnection/Cohere';
+    if (cohereObj.chat) {
+      console.error('Cohere chat property is deprecated since version 2.2.3.');
+      console.error(documentationMsg);
+      delete cohereObj.chat;
+    }
+    if (cohereObj.textGeneration) {
+      console.error('Cohere textGeneration is not supported since version 2.2.3.');
+      console.error(documentationMsg);
+      delete cohereObj.textGeneration;
+      return false;
+    }
+    if (cohereObj.summarization) {
+      console.error('Cohere summarization is not supported since version 2.2.3.');
+      console.error(documentationMsg);
+      delete cohereObj.summarization;
+      return false;
+    }
+    return true;
   }
 }
