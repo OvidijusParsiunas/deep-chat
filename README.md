@@ -26,7 +26,18 @@
 
 ### :tada: Latest Updates
 
-Deep Chat version `2.2.0` brings a ton of new features into the Deep Chat ecosystem:
+Deep Chat version `2.2.2` brings a ton of new features into the Deep Chat ecosystem:
+
+- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you store messages locally on your browser without worrying about a backend message integration.
+- Button [tooltips](https://deepchat.dev/docs/styles/buttons#Tooltip).
+- Place your streamed messages inside custom [`htmlWrappers`](https://deepchat.dev/docs/messages/HTML#htmlWrappers).
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.2.2) for more!
+
+<p align="center">
+    <img width="960" src="https://github.com/user-attachments/assets/51e900ea-43c6-41ca-b255-8b7d59285b26" alt="version 2.2.2">
+</p>
+
+`2.2.0` update:
 
 - [OpenAI Realtime API](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime) for Speech to Speech communication
 - [Focus mode](https://deepchat.dev/docs/modes#focusMode) to only display the latest message exchanges and provide a modern AI Chatbot experience
@@ -50,17 +61,6 @@ Deep Chat version `2.2.0` brings a ton of new features into the Deep Chat ecosys
 
 <p align="center">
     <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.1.0">
-</p>
-
-`2.1.2` update:
-
-- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you store messages locally on your browser without worrying about a backend message integration.
-- Button [tooltips](https://deepchat.dev/docs/styles/buttons#Tooltip).
-- Place your streamed messages inside custom [`htmlWrappers`](https://deepchat.dev/docs/messages/HTML#htmlWrappers).
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.2) for more!
-
-<p align="center">
-    <img width="960" src="https://github.com/user-attachments/assets/51e900ea-43c6-41ca-b255-8b7d59285b26" alt="version 2.2.0">
 </p>
 
 ### :computer: Getting started
