@@ -1,4 +1,5 @@
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {KimiRequestBody, KimiMessage} from '../../types/kimiInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -6,57 +7,12 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {KimiResult} from '../../types/kimiResult';
 import {Stream} from '../../utils/HTTP/stream';
 import {KimiUtils} from './utils/kimiUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {Kimi} from '../../types/kimi';
-
-type KimiMessage = {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-};
-
-type KimiRequestBody = {
-  model: string;
-  messages: KimiMessage[];
-  stream?: boolean;
-  temperature?: number;
-  max_tokens?: number;
-  top_p?: number;
-  frequency_penalty?: number;
-  presence_penalty?: number;
-  stop?: string | string[];
-};
-
-type KimiResponse = {
-  id: string;
-  object: 'chat.completion' | 'chat.completion.chunk';
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    message?: {
-      role: 'assistant';
-      content: string;
-    };
-    delta?: {
-      role?: 'assistant';
-      content?: string;
-    };
-    finish_reason?: string;
-  }>;
-  usage?: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  error?: {
-    message: string;
-    type: string;
-    code?: string;
-  };
-};
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
 export class KimiChatIO extends DirectServiceIO {
@@ -113,7 +69,7 @@ export class KimiChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: KimiResponse): Promise<ResponseI> {
+  override async extractResultData(result: KimiResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     if (result.choices && result.choices.length > 0) {

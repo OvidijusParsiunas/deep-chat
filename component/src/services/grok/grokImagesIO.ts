@@ -1,24 +1,14 @@
-import {GrokImages} from '../../types/grok';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {GrokImageResult} from '../../types/grokResult';
 import {MessageFiles} from '../../types/messageFile';
-import {GrokUtils} from './utils/grokUtils';
 import {Response} from '../../types/response';
+import {GrokImages} from '../../types/grok';
+import {GrokUtils} from './utils/grokUtils';
 import {DeepChat} from '../../deepChat';
-
-type GrokImageResult = {
-  data: Array<{
-    url?: string;
-    b64_json?: string;
-  }>;
-  error?: {
-    message: string;
-    type: string;
-  };
-};
 
 export class GrokImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Grok API Key';

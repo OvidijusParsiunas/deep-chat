@@ -1,3 +1,4 @@
+import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -12,33 +13,6 @@ import {Response} from '../../types/response';
 import {Gemini} from '../../types/gemini';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-
-type GeminiContent = {
-  parts: {
-    text?: string;
-    inlineData?: {
-      mimeType: string;
-      data: string;
-    };
-  }[];
-  role?: string;
-};
-
-type GeminiRequestBody = {
-  contents: GeminiContent[];
-  systemInstruction?: {
-    parts: {text: string}[];
-  };
-  generationConfig?: {
-    maxOutputTokens?: number;
-    temperature?: number;
-    topP?: number;
-    topK?: number;
-    stopSequences?: string[];
-    responseMimeType?: string;
-    responseSchema?: object;
-  };
-};
 
 // https://ai.google.dev/api/generate-content
 export class GeminiIO extends DirectServiceIO {

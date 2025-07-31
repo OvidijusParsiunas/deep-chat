@@ -1,9 +1,11 @@
+import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
+import {DeepSeekResult} from '../../types/deepSeekResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {DeepSeekUtils} from './utils/deepSeekUtils';
@@ -11,52 +13,6 @@ import {Stream} from '../../utils/HTTP/stream';
 import {DeepSeek} from '../../types/deepSeek';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-
-type DeepSeekMessage = {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-};
-
-type DeepSeekRequestBody = {
-  model: string;
-  messages: DeepSeekMessage[];
-  stream?: boolean;
-  temperature?: number;
-  max_tokens?: number;
-  top_p?: number;
-  frequency_penalty?: number;
-  presence_penalty?: number;
-  stop?: string | string[];
-};
-
-type DeepSeekResponse = {
-  id: string;
-  object: 'chat.completion' | 'chat.completion.chunk';
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    message?: {
-      role: 'assistant';
-      content: string;
-    };
-    delta?: {
-      role?: 'assistant';
-      content?: string;
-    };
-    finish_reason?: string;
-  }>;
-  usage?: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  error?: {
-    message: string;
-    type: string;
-    code?: string;
-  };
-};
 
 // https://platform.deepseek.com/api-docs/
 export class DeepSeekIO extends DirectServiceIO {
@@ -115,7 +71,7 @@ export class DeepSeekIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: DeepSeekResponse): Promise<ResponseI> {
+  override async extractResultData(result: DeepSeekResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     if (result.choices && result.choices.length > 0) {

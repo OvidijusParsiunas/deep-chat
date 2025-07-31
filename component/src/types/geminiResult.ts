@@ -1,5 +1,5 @@
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
-export interface GeminiContent {
+interface GeminiContent {
   parts: {text?: string}[];
   role?: string;
 }

@@ -1,3 +1,4 @@
+import {ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -6,61 +7,12 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {ClaudeResult} from '../../types/claudeResult';
 import {ClaudeUtils} from './utils/claudeUtils';
 import {Stream} from '../../utils/HTTP/stream';
-import {DeepChat} from '../../deepChat';
 import {Claude} from '../../types/claude';
 import {APIKey} from '../../types/APIKey';
-
-type ClaudeMessage = {
-  role: 'user' | 'assistant';
-  content: string;
-};
-
-type ClaudeRequestBody = {
-  model: string;
-  max_tokens: number;
-  messages: ClaudeMessage[];
-  system?: string;
-  stream?: boolean;
-};
-
-type ClaudeResponse = {
-  id: string;
-  type: 'message';
-  role: 'assistant';
-  content: Array<{type: 'text'; text: string}>;
-  model: string;
-  usage?: {
-    input_tokens: number;
-    output_tokens: number;
-  };
-  error?: {
-    type: string;
-    message: string;
-  };
-};
-
-type ClaudeStreamEvent = {
-  type:
-    | 'content_block_delta'
-    | 'message_start'
-    | 'content_block_start'
-    | 'content_block_stop'
-    | 'message_delta'
-    | 'message_stop';
-  delta?: {
-    type: 'text_delta';
-    text?: string;
-  };
-  content?: Array<{type: 'text'; text: string}>;
-  error?: {
-    type: string;
-    message: string;
-  };
-};
-
-type ClaudeAPIResult = ClaudeResponse | ClaudeStreamEvent;
+import {DeepChat} from '../../deepChat';
 
 // https://docs.anthropic.com/en/api/messages
 export class ClaudeIO extends DirectServiceIO {
@@ -121,7 +73,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: ClaudeAPIResult): Promise<ResponseI> {
+  override async extractResultData(result: ClaudeResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     // Handle streaming events

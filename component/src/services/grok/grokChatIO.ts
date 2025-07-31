@@ -1,4 +1,5 @@
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {GrokMessage, GrokRequestBody} from '../../types/grokInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -6,69 +7,12 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {GrokResult} from '../../types/grokResult';
 import {Stream} from '../../utils/HTTP/stream';
 import {GrokUtils} from './utils/grokUtils';
 import {GrokChat} from '../../types/grok';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-
-type GrokMessage = {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-};
-
-type GrokRequestBody = {
-  model: string;
-  messages: GrokMessage[];
-  max_tokens?: number;
-  temperature?: number;
-  stream?: boolean;
-};
-
-type GrokResponse = {
-  id: string;
-  object: 'chat.completion';
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    message: {
-      role: 'assistant';
-      content: string;
-    };
-    finish_reason: string;
-  }>;
-  usage?: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  error?: {
-    message: string;
-    type: string;
-  };
-};
-
-type GrokStreamEvent = {
-  id: string;
-  object: 'chat.completion.chunk';
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    delta: {
-      role?: 'assistant';
-      content?: string;
-    };
-    finish_reason?: string;
-  }>;
-  error?: {
-    message: string;
-    type: string;
-  };
-};
-
-type GrokAPIResult = GrokResponse | GrokStreamEvent;
 
 export class GrokChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Grok API Key';
@@ -129,7 +73,7 @@ export class GrokChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: GrokAPIResult): Promise<ResponseI> {
+  override async extractResultData(result: GrokResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     // Handle streaming response
