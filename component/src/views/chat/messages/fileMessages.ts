@@ -83,22 +83,24 @@ export class FileMessages {
   }
 
   public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, isTop = false) {
-    return files.map((fileData) => {
-      if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
-      if (FileMessageUtils.isAudioFile(fileData)) {
-        const audioMessage = FileMessages.createNewAudioMessage(msg, fileData, role, isTop);
-        const ttsConfig = msg.textToSpeech?.service;
-        if (ttsConfig) {
-          if (ttsConfig.autoPlay) FileMessages.autoPlayAudio(audioMessage.audioElement);
-          if (typeof ttsConfig.displayAudio === 'boolean' && !ttsConfig.displayAudio) return undefined;
+    return files
+      .map((fileData) => {
+        if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
+        if (FileMessageUtils.isAudioFile(fileData)) {
+          const audioMessage = FileMessages.createNewAudioMessage(msg, fileData, role, isTop);
+          const ttsConfig = msg.textToSpeech?.service;
+          if (ttsConfig) {
+            if (ttsConfig.autoPlay) FileMessages.autoPlayAudio(audioMessage.audioElement);
+            if (typeof ttsConfig.displayAudio === 'boolean' && !ttsConfig.displayAudio) return undefined;
+          }
+          return audioMessage;
         }
-        return audioMessage;
-      }
-      if (FileMessageUtils.isImageFile(fileData)) {
-        return FileMessages.createImageMessage(msg, fileData, role, isTop);
-      }
-      return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
-    });
+        if (FileMessageUtils.isImageFile(fileData)) {
+          return FileMessages.createImageMessage(msg, fileData, role, isTop);
+        }
+        return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
+      })
+      .filter((element) => element !== undefined);
   }
 
   // no overwrite previous message logic as it is complex to track which files are to be overwritten
