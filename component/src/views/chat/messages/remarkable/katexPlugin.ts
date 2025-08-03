@@ -1,8 +1,8 @@
-// WORK - remove if no viable solution
+import {KatexOptions} from '../../../../types/remarkable';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class KatexPlugin {
-  public static katex(md: any, options?: any) {
+  public static katex(katexOptions: KatexOptions, md: any, options?: {delimiter?: string}) {
     const backslash = '\\';
     const dollar = '$';
     const opts = options || {};
@@ -11,10 +11,10 @@ export class KatexPlugin {
       throw new Error('invalid delimiter');
     }
 
-    const katex = (window as any).katex;
-
     const renderKatex = (source: any, displayMode: any) => {
-      return katex.renderToString(source, {displayMode: displayMode, throwOnError: false});
+      return (
+        window.katex?.renderToString(source, {displayMode, throwOnError: false, output: 'mathml', ...katexOptions}) || ''
+      );
     };
 
     /**

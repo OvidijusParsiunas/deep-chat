@@ -1,4 +1,5 @@
 import {RemarkableOptions} from '../../../../types/remarkable';
+import {KatexPlugin} from './katexPlugin';
 import {Remarkable} from 'remarkable';
 import hljs from 'highlight.js';
 
@@ -6,6 +7,9 @@ declare global {
   interface Window {
     hljs: typeof hljs;
     remarkable_plugins: {plugin: unknown; options?: unknown}[];
+    katex: {
+      renderToString: (source: string, options?: {displayMode: boolean; throwOnError: boolean; output: string}) => string;
+    };
   }
 }
 
@@ -15,12 +19,21 @@ export class RemarkableConfig {
     linkTarget: '_blank', // set target to open in a new tab
   };
 
-  private static addPlugins(remarkable: Remarkable) {
+  private static addPlugins(remarkable: Remarkable, customConfig?: RemarkableOptions) {
     const plugins = window.remarkable_plugins;
     if (plugins) {
       plugins.forEach((plugin) => {
         remarkable.use(plugin.plugin, plugin.options);
       });
+    }
+    if (customConfig?.math) {
+      if (!window.katex) {
+        // WORK - link to the documentation
+        console.warn('window.katex not found, use chatElementRef.refreshMessages to re-render messages');
+      }
+      const delimiter = typeof customConfig.math === 'object' ? customConfig.math.delimiter : '';
+      const options = typeof customConfig.math === 'object' && customConfig.math.options ? customConfig.math.options : {};
+      remarkable.use(KatexPlugin.katex.bind(this, options), {delimiter});
     }
   }
 
@@ -59,7 +72,7 @@ export class RemarkableConfig {
 
   public static createNew(customConfig?: RemarkableOptions) {
     const remarkable = RemarkableConfig.instantiate(customConfig);
-    RemarkableConfig.addPlugins(remarkable);
+    RemarkableConfig.addPlugins(remarkable, customConfig);
     remarkable.inline.validateLink = () => true;
     return remarkable;
   }
