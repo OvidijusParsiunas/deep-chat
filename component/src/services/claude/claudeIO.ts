@@ -1,4 +1,4 @@
-import {ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
+import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -8,6 +8,7 @@ import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ClaudeResult} from '../../types/claudeResult';
+import {MessageFile} from '../../types/messageFile';
 import {ClaudeUtils} from './utils/claudeUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {Claude} from '../../types/claude';
@@ -42,6 +43,28 @@ export class ClaudeIO extends DirectServiceIO {
     delete config.key;
   }
 
+  private static getFileContent(files: MessageFile[]): ClaudeContent[] {
+    return files.map((file) => {
+      if (file.type === 'image') {
+        const base64Data = file.src?.split(',')[1];
+        const mediaType = file.src?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
+        return {type: 'image', source: {type: 'base64', media_type: mediaType, data: base64Data || ''}};
+      }
+      return {type: 'text', text: `[Unsupported file type: ${file.type}]`};
+    });
+  }
+
+  private static getContent(message: MessageContentI): string | ClaudeContent[] {
+    if (message.files && message.files.length > 0) {
+      const content: ClaudeContent[] = ClaudeIO.getFileContent(message.files);
+      if (message.text && message.text.trim().length > 0) {
+        content.unshift({type: 'text', text: message.text});
+      }
+      return content;
+    }
+    return message.text || '';
+  }
+
   private preprocessBody(body: ClaudeRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as ClaudeRequestBody;
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
@@ -49,7 +72,7 @@ export class ClaudeIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
+        content: ClaudeIO.getContent(message),
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       } as ClaudeMessage;
     });
