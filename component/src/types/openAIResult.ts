@@ -38,6 +38,8 @@ export interface OpenAIAssistantMessagesResult {
   data: OpenAIAssistantData[];
 }
 
+export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
+
 export interface OpenAIRunResult {
   status: string;
   thread_id: string;
@@ -47,8 +49,6 @@ export interface OpenAIRunResult {
     };
   };
 }
-
-export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
 
 export interface ToolAPI {
   tool_calls?: ToolCalls;

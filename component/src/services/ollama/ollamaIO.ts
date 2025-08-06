@@ -1,4 +1,3 @@
-import {OllamaConverseBodyInternal, SystemMessageInternal, OllamaToolCall} from '../../types/ollamaInternal';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
@@ -10,10 +9,17 @@ import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {MessageFile} from '../../types/messageFile';
 import {OllamaUtils} from './utils/ollamaUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {OllamaChat} from '../../types/ollama';
 import {DeepChat} from '../../deepChat';
+import {
+  OllamaConverseBodyInternal,
+  SystemMessageInternal,
+  OllamaToolCall,
+  OllamaMessage,
+} from '../../types/ollamaInternal';
 
 export class OllamaIO extends DirectServiceIO {
   override insertKeyPlaceholderText = '';
@@ -53,16 +59,35 @@ export class OllamaIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
+  private static getImageData(files: MessageFile[]): string[] {
+    return files
+      .filter((file) => file.type === 'image')
+      .map((file) => {
+        const base64Data = file.src?.split(',')[1];
+        return base64Data || '';
+      })
+      .filter((data) => data.length > 0);
+  }
+
   private preprocessBody(body: OllamaConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
       pMessages,
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemMessage?.content.length || 0) : -1
     ).map((message) => {
-      return {
+      const ollamaMessage: OllamaMessage = {
         content: message.text || '',
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       };
+
+      if (message.files && message.files.length > 0) {
+        const images = OllamaIO.getImageData(message.files);
+        if (images.length > 0) {
+          ollamaMessage.images = images;
+        }
+      }
+
+      return ollamaMessage;
     });
 
     bodyCopy.messages = [...processedMessages];
@@ -94,8 +119,10 @@ export class OllamaIO extends DirectServiceIO {
     if (result.text) {
       const parsedStreamBody = JSON.parse(result.text) as OllamaStreamResult;
       if (parsedStreamBody.message?.tool_calls) {
+        this.asyncCallInProgress = true;
         return this.handleTools({tool_calls: parsedStreamBody.message.tool_calls}, fetchFunc, prevBody);
       }
+      this.asyncCallInProgress = false;
       return {text: parsedStreamBody.message?.content || ''};
     }
 

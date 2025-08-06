@@ -11,6 +11,7 @@ export interface OllamaMessage {
   tool_calls?: OllamaToolCall[];
   tool_call_id?: string;
   name?: string;
+  images?: string[];
 }
 
 export interface OllamaToolCall {
