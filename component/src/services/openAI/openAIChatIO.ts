@@ -31,6 +31,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   asyncCallInProgress = false; // used when streaming tools
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
+  private _messages?: Messages;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
@@ -104,6 +105,7 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
     if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
@@ -154,6 +156,7 @@ export class OpenAIChatIO extends DirectServiceIO {
         });
       }
     }
+    this.asyncCallInProgress = false;
     return {text: delta?.content || ''};
   }
 
@@ -192,10 +195,11 @@ export class OpenAIChatIO extends DirectServiceIO {
           content: resp.response,
         });
       });
-      delete bodyCp.tools;
-      delete bodyCp.tool_choice;
-      delete bodyCp.stream;
       try {
+        if (this.stream && this._messages) {
+          Stream.request(this, bodyCp, this._messages);
+          return {text: ''};
+        }
         let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
         result = await this.deepChat.responseInterceptor?.(result) || result;
         if (result.error) throw result.error.message;

@@ -57,7 +57,7 @@ export class Stream {
           const chunk = decoder.decode(value, { stream: true });
           const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
           const objEventData = typeof finalEventData === 'object' ? finalEventData : {text: chunk};
-          Stream.handleMessage(io, messages, stream, onClose, objEventData, fetchFunc, interceptedBody);
+          Stream.handleMessage(io, messages, stream, objEventData, fetchFunc, interceptedBody);
         } else {
           Stream.handleClose(io, stream, onClose, canBeEmpty);
         }
@@ -93,7 +93,7 @@ export class Stream {
             eventData = {};
           }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
-          Stream.handleMessage(io, messages, stream, onClose, finalEventData, fetchFunc, interceptedBody);
+          Stream.handleMessage(io, messages, stream, finalEventData, fetchFunc, interceptedBody);
         }
       },
       onerror(err) {
@@ -111,18 +111,11 @@ export class Stream {
 
   //prettier-ignore
   private static handleMessage(io: ServiceIO, messages: Messages, stream: MessageStream,
-      onClose: () => void, eventData: object, fetchFunc?: FetchFunc, interceptedBody?: object) {
+      eventData: object, fetchFunc?: FetchFunc, interceptedBody?: object) {
     io.extractResultData?.(eventData, fetchFunc, interceptedBody)
       .then((result?: ResponseI) => {
-        // when async call is happening - an event with text signals its over
-        if (io.asyncCallInProgress && result && result.text !== '') {
-          Stream.simulate(messages, io.streamHandlers, result);
-          onClose();
-          io.asyncCallInProgress = false;
-        } else {
-          // do not to stop the stream on one message failure to give other messages a change to display
-          Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
-        }
+        // do not to stop the stream on one message failure to give other messages a change to display
+        Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
       })
       .catch((e) => RequestUtils.displayError(messages, e));
   }
