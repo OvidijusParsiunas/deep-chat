@@ -111,9 +111,17 @@ export class MessageStream {
       return true;
     }
     if (!this._partialBubble) {
-      return this._message?.text && this._message.text.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK) > -1;
+      return this._message?.text && this.shouldCreateNewParagraph(this._message.text);
     }
-    return this._partialText && this._partialText?.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK) > -1;
+    return this._partialText && this.shouldCreateNewParagraph(this._partialText);
+  }
+
+  private shouldCreateNewParagraph(text: string): boolean {
+    const markIndex = text.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK);
+    if (markIndex === -1) return false;
+    // Check if this is part of a markdown horizontal rule pattern - "a \n\n---\n\n a"
+    const textAfterMark = text.substring(markIndex + MessageStream.PARTIAL_RENDER_TEXT_MARK.length);
+    return !textAfterMark.startsWith('---');
   }
 
   private partialRenderNewParagraph(bubbleElement: HTMLElement) {
