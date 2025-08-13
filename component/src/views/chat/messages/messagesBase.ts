@@ -268,9 +268,17 @@ export class MessagesBase {
 
   public renderText(bubbleElement: HTMLElement, text: string) {
     bubbleElement.innerHTML = this._remarkable.render(text);
-    // there is a bug in remarkable where text with only numbers and full stop after them causes the creation
-    // of a list which has no innert text and is instead prepended as a prefix in the start attribute (12.)
-    if (bubbleElement.innerText.trim().length === 0) bubbleElement.innerText = text;
+    // There is a bug in remarkable where text with only numbers and full stop after them causes the creation
+    // of a list which has no inner text and is instead prepended as a prefix in the start attribute (12.)
+    // We also check if the only child is not <p> because it could be an image
+    // https://github.com/OvidijusParsiunas/deep-chat/issues/435
+    if (
+      bubbleElement.innerText.trim().length === 0 &&
+      bubbleElement.children.length > 0 &&
+      bubbleElement.children[0].tagName !== 'P'
+    ) {
+      bubbleElement.innerText = text;
+    }
   }
 
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
