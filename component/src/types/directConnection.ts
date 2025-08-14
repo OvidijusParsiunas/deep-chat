@@ -9,6 +9,7 @@ import {Cohere} from './cohere';
 import {Gemini} from './gemini';
 import {OpenAI} from './openAI';
 import {Claude} from './claude';
+import {Ollama} from './ollama';
 import {Azure} from './azure';
 import {Kimi} from './kimi';
 import {Grok} from './grok';
@@ -27,4 +28,5 @@ export interface DirectConnection {
   kimi?: Kimi & APIKey;
   openRouter?: OpenRouter & APIKey;
   grok?: Grok & APIKey;
+  ollama?: Ollama;
 }

@@ -35,6 +35,7 @@ import {MistralIO} from './mistral/mistralO';
 import {GrokChatIO} from './grok/grokChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
+import {OllamaIO} from './ollama/ollamaIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
 
@@ -155,6 +156,9 @@ export class ServiceIOFactory {
           return new GrokImagesIO(deepChat);
         }
         return new GrokChatIO(deepChat);
+      }
+      if (directConnection.ollama) {
+        return new OllamaIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
