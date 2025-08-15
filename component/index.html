@@ -1,43 +1,49 @@
 <!doctype html>
 
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Deep Chat Development</title>
-    <script type="module" src="src/deepChat.ts"></script>
-    <!-- https://deepchat.dev/examples/externalModules -->
-    <!-- Need this when using azure for speech to text -->
-    <!-- <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script> -->
-    <!-- Need this to highlight code -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script> -->
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Attributes can be set as strings either directly on the element (demo/textInput) or via a `setAttribute` method on its reference (introMessage).
+
+<head>
+  <meta charset="utf-8" />
+  <title>Deep Chat Development</title>
+  <script type="module" src="src/deepChat.ts"></script>
+  <!-- https://deepchat.dev/examples/externalModules -->
+  <!-- Need this when using azure for speech to text -->
+  <!-- <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script> -->
+  <!-- Need this to highlight code -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script> -->
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Attributes can be set as strings either directly on the element (demo/textInput) or via a `setAttribute` method on its reference (introMessage).
       When passing JSON objects make sure that they are first correctly stringified (use the following tool https://jsonlint.com/), functions assigned
       to properties must not have external references and all regex values are properly escaped.
       You can also pass values into the component via properties by using the element reference (history).
+    
+      directConnection='{"openRouter":{"key": "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", "model":"moonshotai/kimi-k2:free"}}' 
       -->
-    <deep-chat id="chat-element" demo="true" textInput='{"placeholder":{"text": "Welcome to the demo!"}}'></deep-chat>
-    <script type="module">
-      const chatElementRef = document.getElementById('chat-element');
-      // Setting value via a property (easiest way)
-      chatElementRef.history = [
-        {role: 'user', text: 'Hey, how are you today?'},
-        {role: 'ai', text: 'I am doing very well!'},
-      ];
-      chatElementRef.setAttribute(
-        'introMessage',
-        JSON.stringify({
-          text: 'You are now running deep chat locally.',
-        })
-      );
-    </script>
-  </body>
+  <deep-chat id="chat-element" connect='{"url": "http://localhost:8080/chat"}'
+    textInput='{"placeholder":{"text": "Welcome to the demo!"}}'></deep-chat>
+  <script type="module">
+    const chatElementRef = document.getElementById('chat-element');
+    // Setting value via a property (easiest way)
+    chatElementRef.history = [
+      { role: 'user', text: 'Hey, how are you today?' },
+      { role: 'ai', text: 'I am doing very well!' },
+    ];
+    chatElementRef.setAttribute(
+      'introMessage',
+      JSON.stringify({
+        text: 'You are now running deep chat locally.',
+      })
+    );
+  </script>
+</body>
+
 </html>

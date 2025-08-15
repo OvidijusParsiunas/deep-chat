@@ -1,162 +1,162 @@
-import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage} from './types/messages';
-import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
-import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
-import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
-import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
-import {TooltipUtils} from './views/chat/input/buttons/tooltip/tooltipUtils';
-import {FocusUtils} from './views/chat/input/textInput/focusUtils';
-import {DirectServiceIO} from './services/utils/directServiceIO';
-import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
-import {InternalHTML} from './utils/webComponent/internalHTML';
-import {InsertKeyView} from './views/insertKey/insertKeyView';
-import {WebModel as WebModelClass} from './webModel/webModel';
-import {ServiceIOFactory} from './services/serviceIOFactory';
-import {ValidationHandler} from './types/validationHandler';
-import {GoogleFont} from './utils/webComponent/googleFont';
-import {DirectConnection} from './types/directConnection';
-import {TextToSpeechConfig} from './types/textToSpeech';
-import {SpeechToTextConfig} from './types/microphone';
-import {BrowserStorage} from './types/browserStorage';
-import {RemarkableOptions} from './types/remarkable';
-import {MessageBody} from './types/messagesInternal';
-import {ErrorMessages, OnError} from './types/error';
-import {RequestBodyLimits} from './types/chatLimits';
-import {Property} from './utils/decorators/property';
-import {FireEvents} from './utils/events/fireEvents';
-import {DisplayLoadingBubble} from './types/loading';
-import {OnInput, TextInput} from './types/textInput';
-import {ValidateInput} from './types/validateInput';
-import {WebModel} from './types/webModel/webModel';
-import {DropupStyles} from './types/dropupStyles';
-import {CustomButton} from './types/customButton';
-import {HTMLClassUtilities} from './types/html';
-import {ChatView} from './views/chat/chatView';
-import {ServiceIO} from './services/serviceIO';
-import {Legacy} from './utils/legacy/legacy';
-import {LoadHistory} from './types/history';
-import {FocusMode} from './types/focusMode';
-import {CustomStyle} from './types/styles';
-import {Response} from './types/response';
-import style from './deepChat.css?inline';
-import {Connect} from './types/connect';
-import {Avatars} from './types/avatars';
-import {Names} from './types/names';
-import {Demo} from './types/demo';
+import type { CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig } from './types/fileServiceConfigs'
+import type { MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage } from './types/messages'
+import { ValidateKeyPropertyView } from './views/validateKeyProperty/validateKeyPropertyView'
+import { WebComponentStyleUtils } from './utils/webComponent/webComponentStyleUtils'
+import type { DisableSubmitButton, SubmitButtonStyles } from './types/submitButton'
+import type { RequestInterceptor, ResponseInterceptor } from './types/interceptors'
+import { TooltipUtils } from './views/chat/input/buttons/tooltip/tooltipUtils'
+import { FocusUtils } from './views/chat/input/textInput/focusUtils'
+import { DirectServiceIO } from './services/utils/directServiceIO'
+import type { InsertKeyViewStyles } from './types/insertKeyViewStyles'
+import { InternalHTML } from './utils/webComponent/internalHTML'
+import { InsertKeyView } from './views/insertKey/insertKeyView'
+import { WebModel as WebModelClass } from './webModel/webModel'
+import { ServiceIOFactory } from './services/serviceIOFactory'
+import type { ValidationHandler } from './types/validationHandler'
+import { GoogleFont } from './utils/webComponent/googleFont'
+import type { DirectConnection } from './types/directConnection'
+import type { TextToSpeechConfig } from './types/textToSpeech'
+import type { SpeechToTextConfig } from './types/microphone'
+import type { BrowserStorage } from './types/browserStorage'
+import type { RemarkableOptions } from './types/remarkable'
+import type { MessageBody } from './types/messagesInternal'
+import type { ErrorMessages, OnError } from './types/error'
+import type { RequestBodyLimits } from './types/chatLimits'
+import { Property } from './utils/decorators/property'
+import { FireEvents } from './utils/events/fireEvents'
+import type { DisplayLoadingBubble } from './types/loading'
+import type { OnInput, TextInput } from './types/textInput'
+import type { ValidateInput } from './types/validateInput'
+import type { WebModel } from './types/webModel/webModel'
+import type { DropupStyles } from './types/dropupStyles'
+import type { CustomButton } from './types/customButton'
+import type { HTMLClassUtilities } from './types/html'
+import { ChatView } from './views/chat/chatView'
+import { ServiceIO } from './services/serviceIO'
+import { Legacy } from './utils/legacy/legacy'
+import type { LoadHistory } from './types/history'
+import type { FocusMode } from './types/focusMode'
+import type { CustomStyle } from './types/styles'
+import type { Response } from './types/response'
+import style from './deepChat.css?inline'
+import type { Connect } from './types/connect'
+import type { Avatars } from './types/avatars'
+import type { Names } from './types/names'
+import type { Demo } from './types/demo'
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class DeepChat extends InternalHTML {
   @Property('object')
-  connect?: Connect;
+  connect?: Connect
 
   @Property('object')
-  directConnection?: DirectConnection;
+  directConnection?: DirectConnection
 
   @Property('object')
-  webModel?: WebModel;
+  webModel?: WebModel
 
   @Property('object')
-  requestBodyLimits?: RequestBodyLimits;
+  requestBodyLimits?: RequestBodyLimits
 
   @Property('function')
-  requestInterceptor?: RequestInterceptor;
+  requestInterceptor?: RequestInterceptor
 
   @Property('function')
-  responseInterceptor?: ResponseInterceptor;
+  responseInterceptor?: ResponseInterceptor
 
   @Property('function')
-  validateInput?: ValidateInput;
+  validateInput?: ValidateInput
 
   @Property('function')
-  loadHistory?: LoadHistory;
+  loadHistory?: LoadHistory
 
   @Property('object')
-  chatStyle?: CustomStyle;
+  chatStyle?: CustomStyle
 
   @Property('object')
-  attachmentContainerStyle?: CustomStyle;
+  attachmentContainerStyle?: CustomStyle
 
   @Property('object')
-  dropupStyles?: DropupStyles;
+  dropupStyles?: DropupStyles
 
   @Property('object')
-  inputAreaStyle?: CustomStyle;
+  inputAreaStyle?: CustomStyle
 
   @Property('object')
-  textInput?: TextInput;
+  textInput?: TextInput
 
   @Property('object')
-  submitButtonStyles?: SubmitButtonStyles;
+  submitButtonStyles?: SubmitButtonStyles
 
   @Property('object')
-  customButtons?: CustomButton[];
+  customButtons?: CustomButton[]
 
   @Property('string')
-  auxiliaryStyle?: string;
+  auxiliaryStyle?: string
 
   @Property('array')
-  history?: MessageContent[];
+  history?: MessageContent[]
 
   @Property('object')
-  browserStorage?: BrowserStorage;
+  browserStorage?: BrowserStorage
 
   @Property('object')
-  introMessage?: IntroMessage | IntroMessage[];
+  introMessage?: IntroMessage | IntroMessage[]
 
   @Property('object')
-  avatars?: Avatars;
+  avatars?: Avatars
 
   @Property('object')
-  names?: Names;
+  names?: Names
 
   @Property('object')
-  displayLoadingBubble?: DisplayLoadingBubble;
+  displayLoadingBubble?: DisplayLoadingBubble
 
   @Property('object')
-  errorMessages?: ErrorMessages;
+  errorMessages?: ErrorMessages
 
   @Property('object')
-  messageStyles?: MessageStyles;
+  messageStyles?: MessageStyles
 
   @Property('object')
-  textToSpeech?: boolean | TextToSpeechConfig;
+  textToSpeech?: boolean | TextToSpeechConfig
 
   @Property('object')
-  speechToText?: boolean | SpeechToTextConfig; // only activated if not used for recording audio
+  speechToText?: boolean | SpeechToTextConfig // only activated if not used for recording audio
 
   @Property('object')
-  images?: boolean | FilesServiceConfig;
+  images?: boolean | FilesServiceConfig
 
   @Property('object')
-  gifs?: boolean | FilesServiceConfig;
+  gifs?: boolean | FilesServiceConfig
 
   @Property('object')
-  camera?: boolean | CameraFilesServiceConfig;
+  camera?: boolean | CameraFilesServiceConfig
 
   @Property('object')
-  audio?: boolean | FilesServiceConfig;
+  audio?: boolean | FilesServiceConfig
 
   @Property('object')
-  microphone?: boolean | MicrophoneFilesServiceConfig;
+  microphone?: boolean | MicrophoneFilesServiceConfig
 
   @Property('object')
-  mixedFiles?: boolean | FilesServiceConfig;
+  mixedFiles?: boolean | FilesServiceConfig
 
   @Property('object')
-  dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
+  dragAndDrop?: boolean | CustomStyle // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  introPanelStyle?: CustomStyle;
+  introPanelStyle?: CustomStyle
 
   @Property('object')
-  htmlClassUtilities?: HTMLClassUtilities;
+  htmlClassUtilities?: HTMLClassUtilities
 
   @Property('object')
-  remarkable?: RemarkableOptions;
+  remarkable?: RemarkableOptions
 
   @Property('object')
-  focusMode?: FocusMode;
+  focusMode?: FocusMode
 
   getMessages: () => MessageContent[] = () => [];
 
@@ -166,110 +166,110 @@ export class DeepChat extends InternalHTML {
   addMessage: (message: Response, isUpdate?: boolean) => void = () =>
     console.warn('addMessage failed - please wait for chat view to render before calling this property.');
 
-  updateMessage: (messageBody: MessageBody, index: number) => void = () => {};
+  updateMessage: (messageBody: MessageBody, index: number) => void = () => { };
 
-  clearMessages: (isReset?: boolean) => void = () => {};
+  clearMessages: (isReset?: boolean) => void = () => { };
 
   focusInput: () => void = () => FocusUtils.focusFromParentElement(this._elementRef);
 
-  refreshMessages: () => void = () => {};
+  refreshMessages: () => void = () => { };
 
-  scrollToBottom: () => void = () => {};
+  scrollToBottom: () => void = () => { };
 
-  disableSubmitButton: DisableSubmitButton = () => {};
+  disableSubmitButton: DisableSubmitButton = () => { };
 
-  setPlaceholderText: (text: string) => void = () => {};
-
-  @Property('function')
-  onMessage?: OnMessage;
+  setPlaceholderText: (text: string) => void = () => { };
 
   @Property('function')
-  onClearMessages?: () => void;
+  onMessage?: OnMessage
 
   @Property('function')
-  onComponentRender?: (ref: DeepChat) => void;
+  onClearMessages?: () => void
 
   @Property('function')
-  onInput?: OnInput;
+  onComponentRender?: (ref: DeepChat) => void
 
   @Property('function')
-  onError?: OnError;
+  onInput?: OnInput
+
+  @Property('function')
+  onError?: OnError
 
   @Property('object')
-  demo?: Demo;
+  demo?: Demo
 
   _hasBeenRendered = false;
 
   _auxiliaryStyleApplied = false;
 
-  _activeService?: ServiceIO;
+  _activeService?: ServiceIO
 
-  _childElement?: HTMLElement;
+  _childElement?: HTMLElement
 
-  _validationHandler?: ValidationHandler;
+  _validationHandler?: ValidationHandler
 
   // TO-DO - key view style
   @Property('object')
-  _insertKeyViewStyles?: InsertKeyViewStyles;
+  _insertKeyViewStyles?: InsertKeyViewStyles
 
   constructor() {
-    super();
-    this._elementRef = document.createElement('div');
-    this._elementRef.id = 'container';
-    this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
-    this.shadowRoot?.appendChild(TooltipUtils.buildElement());
-    WebComponentStyleUtils.apply(style, this.shadowRoot);
+    super()
+    this._elementRef = document.createElement('div')
+    this._elementRef.id = 'container'
+    this.attachShadow({ mode: 'open' }).appendChild(this._elementRef)
+    this.shadowRoot?.appendChild(TooltipUtils.buildElement())
+    WebComponentStyleUtils.apply(style, this.shadowRoot)
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it
-      if (!this._hasBeenRendered) this.onRender();
-    }, 20); // rendering takes time, hence this is a high value to be safe
+      if (!this._hasBeenRendered) this.onRender()
+    }, 20) // rendering takes time, hence this is a high value to be safe
   }
 
-  private readonly _elementRef: HTMLElement;
+  private readonly _elementRef: HTMLElement
 
   private changeToChatView() {
-    if (this._activeService) this._activeService.validateKeyProperty = false;
-    this.onRender();
+    if (this._activeService) this._activeService.validateKeyProperty = false
+    this.onRender()
   }
 
   // prettier-ignore
   override onRender() {
-    GoogleFont.attemptAppendStyleSheetToHead(this.style);
-    Legacy.processConnect(this);
-    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
+    GoogleFont.attemptAppendStyleSheetToHead(this.style)
+    Legacy.processConnect(this)
+    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this)
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
-      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
-      this._auxiliaryStyleApplied = true;
+      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot)
+      this._auxiliaryStyleApplied = true
     }
-    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle);
-    Legacy.checkForContainerStyles(this, this._elementRef);
+    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle)
+    Legacy.checkForContainerStyles(this, this._elementRef)
     if (this._activeService.key && this._activeService.validateKeyProperty) {
-      ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
+      ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService)
     } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child (test in official website)
-      this._childElement ??= this.children[0] as HTMLElement | undefined;
-      ChatView.render(this, this._elementRef, this._activeService, this._childElement);
+      this._childElement ??= this.children[0] as HTMLElement | undefined
+      ChatView.render(this, this._elementRef, this._activeService, this._childElement)
     } else if (this._activeService instanceof DirectServiceIO) { // when direct service with no key
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first appear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
-      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
+      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService)
     }
-    if (!this._hasBeenRendered) FireEvents.onRender(this);
-    this._hasBeenRendered = true;
+    if (!this._hasBeenRendered) FireEvents.onRender(this)
+    this._hasBeenRendered = true
   }
 
   disconnectedCallback() {
-    WebModelClass.chat = undefined;
+    WebModelClass.chat = undefined
   }
 }
 
-customElements.define('deep-chat', DeepChat);
+customElements.define('deep-chat', DeepChat)
 
 // The following type makes it easier for other projects to use this component with TypeScript
 declare global {
   interface HTMLElementTagNameMap {
-    'deep-chat': DeepChat;
+    'deep-chat': DeepChat
   }
 }
