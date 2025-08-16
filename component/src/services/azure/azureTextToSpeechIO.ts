@@ -20,7 +20,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Text To Speech</b></div>
     <p>Insert text to synthesize it to audio.
     <p>
-      Click <a href="${AzureTextToSpeechIO.HELP_LINK}">here</a> for more info.
+      Click <a href="${AzureTextToSpeechIO.HELP_LINK}" target="_blank">here</a> for more info.
     </p>`;
   isTextInputDisabled = false;
   url = '';

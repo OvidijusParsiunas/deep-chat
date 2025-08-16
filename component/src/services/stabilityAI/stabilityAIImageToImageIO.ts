@@ -19,7 +19,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI: Image to Image</b></div>
     <p>Upload an image to create a new one with the changes you have described.</p>
-    <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.stability.ai/" target="_blank">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));

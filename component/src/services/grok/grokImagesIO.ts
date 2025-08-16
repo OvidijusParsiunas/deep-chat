@@ -18,7 +18,8 @@ export class GrokImagesIO extends DirectServiceIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Grok Image Generation</b></div>
     <p><b>Insert text</b> to generate an image.</p>
-    <p>Click <a target="_blank" href="https://docs.x.ai/docs/api-reference#image-generations">here</a> for more info.</p>`;
+    <p>Click <a target="_blank" href="https://docs.x.ai/docs/api-reference#image-generations" target="_blank">
+      here</a> for more info.</p>`;
 
   url = GrokImagesIO.IMAGE_GENERATION_URL;
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
