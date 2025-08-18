@@ -145,8 +145,8 @@ export class MessagesBase {
 
   public createMessageElementsOnOrientation(text: string, role: string, isTop: boolean, loading = false) {
     return isTop
-      ? this.createAndPrependNewMessageElement(text, role, true, loading)
-      : this.createNewMessageElement(text, role, loading);
+      ? this.createAndPrependNewMessageElement(text, role, isTop, loading)
+      : this.createNewMessageElement(text, role, isTop, loading);
   }
 
   public createNewMessageElement(text: string, role: string, isTop = false, loading = false) {
