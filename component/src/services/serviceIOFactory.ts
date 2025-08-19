@@ -33,6 +33,7 @@ import {WebModel} from '../webModel/webModel';
 import {KimiChatIO} from './kimi/kimiChatIO';
 import {MistralIO} from './mistral/mistralO';
 import {GrokChatIO} from './grok/grokChatIO';
+import {QwenChatIO} from './qwen/qwenChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
 import {OllamaIO} from './ollama/ollamaIO';
@@ -156,6 +157,9 @@ export class ServiceIOFactory {
           return new GrokImagesIO(deepChat);
         }
         return new GrokChatIO(deepChat);
+      }
+      if (directConnection.qwen) {
+        return new QwenChatIO(deepChat);
       }
       if (directConnection.ollama) {
         return new OllamaIO(deepChat);
