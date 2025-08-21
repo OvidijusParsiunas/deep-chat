@@ -415,7 +415,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   // there is a bug where sometimes upon refreshing the browser too many times the frequencyData is all 0s
   // in such instance please wait and refresh at a later time
-  private monitorFrequencies(analyser: AnalyserNode, frequencyData: Uint8Array) {
+  private monitorFrequencies(analyser: AnalyserNode, frequencyData: Uint8Array<ArrayBuffer>) {
     const updateFrequencyData = () => {
       analyser.getByteFrequencyData(frequencyData);
       // Calculate loudness (sum of all frequency amplitudes)

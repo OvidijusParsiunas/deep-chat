@@ -38,8 +38,8 @@ export class ClaudeUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.anthropic.com/v1/messages',
-      method: 'POST',
+      url: 'https://api.anthropic.com/v1/models',
+      method: 'GET',
       handleVerificationResult: ClaudeUtils.handleVerificationResult,
     };
   }
