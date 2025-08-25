@@ -3,9 +3,12 @@ import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLDeepChatElements} from './htmlDeepChatElements';
 import {StatefulStyles} from '../../../../types/styles';
+import {HTMLWrappers} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
 
 export class HTMLUtils {
+  static readonly TARGET_WRAPPER_CLASS = 'html-wrapper';
+
   public static applyStylesToElement(element: HTMLElement, styles: StatefulStyles) {
     const statefulStyles = StyleUtils.processStateful(styles);
     StatefulEvents.add(element, statefulStyles);
@@ -78,5 +81,20 @@ export class HTMLUtils {
     const newElement = (elementToBeCloned || oldElement).cloneNode(true) as HTMLElement;
     oldElement.parentNode?.replaceChild(newElement, oldElement);
     return newElement;
+  }
+
+  public static tryAddWrapper(bubbleElement: HTMLElement, content: string, wrappers?: HTMLWrappers, role?: string) {
+    if (content && role) {
+      const customWrapper = wrappers?.[role] || wrappers?.['default'];
+      if (customWrapper) {
+        bubbleElement.innerHTML = customWrapper;
+        return {contentEl: HTMLUtils.getTargetWrapper(bubbleElement), wrapper: true};
+      }
+    }
+    return {contentEl: bubbleElement, wrapper: false};
+  }
+
+  public static getTargetWrapper(bubbleElement: HTMLElement) {
+    return (bubbleElement.getElementsByClassName(HTMLUtils.TARGET_WRAPPER_CLASS)[0] || bubbleElement) as HTMLElement;
   }
 }

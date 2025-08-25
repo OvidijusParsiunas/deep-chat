@@ -36,6 +36,7 @@ import {ServiceIO} from './services/serviceIO';
 import {Legacy} from './utils/legacy/legacy';
 import {LoadHistory} from './types/history';
 import {FocusMode} from './types/focusMode';
+import {HTMLWrappers} from './types/stream';
 import {CustomStyle} from './types/styles';
 import {Response} from './types/response';
 import style from './deepChat.css?inline';
@@ -148,6 +149,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   introPanelStyle?: CustomStyle;
+
+  @Property('object')
+  htmlWrappers?: HTMLWrappers;
 
   @Property('object')
   htmlClassUtilities?: HTMLClassUtilities;

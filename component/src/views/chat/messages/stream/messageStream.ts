@@ -1,22 +1,20 @@
 import {ErrorMessages} from '../../../../utils/errorMessages/errorMessages';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
-import {Stream, HTMLWrappers} from '../../../../types/stream';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
 import {MessageFile} from '../../../../types/messageFile';
 import {MessageElements, Messages} from '../messages';
 import {Response} from '../../../../types/response';
 import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
+import {Stream} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
 import {HTMLUtils} from '../html/htmlUtils';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
   private static readonly PARTIAL_RENDER_TEXT_MARK = '\n\n';
-  private static readonly TARGET_WRAPPER_CLASS = 'stream-wrapper';
   private readonly _partialRender?: boolean;
-  private readonly _customWrappers?: HTMLWrappers;
   private readonly _messages: MessagesBase;
   private _fileAdded = false;
   private _streamType: 'text' | 'html' | '' = '';
@@ -33,7 +31,6 @@ export class MessageStream {
     this._messages = messages;
     if (typeof stream === 'object') {
       this._partialRender = stream.partialRender;
-      this._customWrappers = stream.htmlWrappers;
     }
   }
 
@@ -59,7 +56,7 @@ export class MessageStream {
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {
     this._streamType = streamType;
     role ??= MessageUtils.AI_ROLE;
-    const customWrapper = this._customWrappers?.[role] || this._customWrappers?.['default'];
+    const customWrapper = this._messages._customWrappers?.[role] || this._messages._customWrappers?.['default'];
     const initContent = customWrapper ? '' : content;
     // does not overwrite previous message for simplicity as otherwise users would need to return first response with
     // {..., overwrite: false} and others as {..., ovewrite: true} which would be too complex on their end
@@ -76,11 +73,10 @@ export class MessageStream {
     }
   }
 
+  // not using existing htmlUtils htmlWrappers logic to be able to stream html
   private setTargetWrapperIfNeeded(elements: MessageElements, content: string, streamType: string, customWrapper: string) {
     elements.bubbleElement.innerHTML = customWrapper;
-    this._targetWrapper = elements.bubbleElement.getElementsByClassName(
-      MessageStream.TARGET_WRAPPER_CLASS
-    )[0] as HTMLElement;
+    this._targetWrapper = HTMLUtils.getTargetWrapper(elements.bubbleElement);
     if (this._elements) HTMLUtils.apply(this._messages, this._elements.bubbleElement);
     this.updateBasedOnType(content, streamType);
   }
@@ -161,11 +157,6 @@ export class MessageStream {
     }
     this._elements.bubbleElement.classList.remove(MessageStream.MESSAGE_CLASS);
     if (this._message) {
-      if (this._targetWrapper) {
-        // so that the user can get the message and add it again knowing they will get the same outcome
-        this._message.html = this._elements.bubbleElement.children[0].outerHTML;
-        if (this._streamType === 'text') delete this._message.text;
-      }
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
       this._messages.browserStorage?.addMessages(this._messages.messageToElements.map(([msg]) => msg));
     }
