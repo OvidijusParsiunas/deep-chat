@@ -11,6 +11,7 @@ import {StabilityAIImageToImageIO} from './stabilityAI/stabilityAIImageToImageIO
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
 import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
+import {GroqTextToSpeechIO} from './groq/groqTextToSpeechIO';
 import {OpenAIAssistantIO} from './openAI/assistant/openAIAssistantIO';
 import {AzureOpenAIAssistantIO} from './azure/azureOpenAIAssistantIO';
 import {OpenAIRealtimeIO} from './openAI/realtime/openAIRealtimeIO';
@@ -33,6 +34,7 @@ import {WebModel} from '../webModel/webModel';
 import {KimiChatIO} from './kimi/kimiChatIO';
 import {MistralIO} from './mistral/mistralO';
 import {GrokChatIO} from './grok/grokChatIO';
+import {GroqChatIO} from './groq/groqChatIO';
 import {QwenChatIO} from './qwen/qwenChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
@@ -160,6 +162,12 @@ export class ServiceIOFactory {
       }
       if (directConnection.qwen) {
         return new QwenChatIO(deepChat);
+      }
+      if (directConnection.groq) {
+        if (directConnection.groq.textToSpeech) {
+          return new GroqTextToSpeechIO(deepChat);
+        }
+        return new GroqChatIO(deepChat);
       }
       if (directConnection.ollama) {
         return new OllamaIO(deepChat);

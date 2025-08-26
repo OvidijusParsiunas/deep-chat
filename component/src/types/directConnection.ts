@@ -11,6 +11,7 @@ import {OpenAI} from './openAI';
 import {Claude} from './claude';
 import {Ollama} from './ollama';
 import {Azure} from './azure';
+import {Groq} from './groq';
 import {Kimi} from './kimi';
 import {Grok} from './grok';
 import {Qwen} from './qwen';
@@ -30,5 +31,6 @@ export interface DirectConnection {
   openRouter?: OpenRouter & APIKey;
   grok?: Grok & APIKey;
   qwen?: Qwen & APIKey;
+  groq?: Groq & APIKey;
   ollama?: Ollama;
 }
