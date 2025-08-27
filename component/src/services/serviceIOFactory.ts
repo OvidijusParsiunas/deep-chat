@@ -11,7 +11,7 @@ import {StabilityAIImageToImageIO} from './stabilityAI/stabilityAIImageToImageIO
 import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
 import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
-import {GroqTextToSpeechIO} from './groq/groqTextToSpeechIO';
+import {BigModelTextToSpeechIO} from './bigModel/bigModelTextToSpeechIO';
 import {OpenAIAssistantIO} from './openAI/assistant/openAIAssistantIO';
 import {AzureOpenAIAssistantIO} from './azure/azureOpenAIAssistantIO';
 import {OpenAIRealtimeIO} from './openAI/realtime/openAIRealtimeIO';
@@ -22,7 +22,10 @@ import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
 import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
 import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
 import {AzureTranslationIO} from './azure/azureTranslationIO';
+import {BigModelImagesIO} from './bigModel/bigModelImagesIO';
+import {GroqTextToSpeechIO} from './groq/groqTextToSpeechIO';
 import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
+import {BigModelChatIO} from './bigModel/bigModelChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
@@ -162,6 +165,15 @@ export class ServiceIOFactory {
       }
       if (directConnection.qwen) {
         return new QwenChatIO(deepChat);
+      }
+      if (directConnection.bigModel) {
+        if (directConnection.bigModel.images) {
+          return new BigModelImagesIO(deepChat);
+        }
+        if (directConnection.bigModel.textToSpeech) {
+          return new BigModelTextToSpeechIO(deepChat);
+        }
+        return new BigModelChatIO(deepChat);
       }
       if (directConnection.groq) {
         if (directConnection.groq.textToSpeech) {
