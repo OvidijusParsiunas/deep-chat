@@ -3,6 +3,7 @@ import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
 import {OpenRouter} from './openRouter';
 import {DeepSeek} from './deepSeek';
+import {Together} from './together';
 import {BigModel} from './bigModel';
 import {Mistral} from './mistral';
 import {APIKey} from './APIKey';
@@ -32,6 +33,7 @@ export interface DirectConnection {
   openRouter?: OpenRouter & APIKey;
   grok?: Grok & APIKey;
   qwen?: Qwen & APIKey;
+  together?: Together & APIKey;
   bigModel?: BigModel & APIKey;
   groq?: Groq & APIKey;
   ollama?: Ollama;
