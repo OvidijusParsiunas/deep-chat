@@ -236,32 +236,32 @@ export class DeepChat extends InternalHTML {
     this.onRender();
   }
 
-  // prettier-ignore
   override onRender() {
-    GoogleFont.attemptAppendStyleSheetToHead(this.style)
-    Legacy.processConnect(this)
-    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this)
+    GoogleFont.attemptAppendStyleSheetToHead(this.style);
+    Legacy.processConnect(this);
+    if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this);
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
-      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot)
-      this._auxiliaryStyleApplied = true
+      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
+      this._auxiliaryStyleApplied = true;
     }
-    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle)
-    Legacy.checkForContainerStyles(this, this._elementRef)
+    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle);
+    Legacy.checkForContainerStyles(this, this._elementRef);
     if (this._activeService.key && this._activeService.validateKeyProperty) {
-      ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService)
+      ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     } else if (!(this._activeService instanceof DirectServiceIO) || this._activeService.key) {
       // set before container populated, not available in constructor for react,
       // assigning to variable as it is added to panel and is no longer child (test in official website)
-      this._childElement ??= this.children[0] as HTMLElement | undefined
-      ChatView.render(this, this._elementRef, this._activeService, this._childElement)
-    } else if (this._activeService instanceof DirectServiceIO) { // when direct service with no key
+      this._childElement ??= this.children[0] as HTMLElement | undefined;
+      ChatView.render(this, this._elementRef, this._activeService, this._childElement);
+    } else if (this._activeService instanceof DirectServiceIO) {
+      // when direct service with no key
       // the reason why this is not initiated in the constructor is because properties/attributes are not available
       // when it is executed, meaning that if the user sets customService or key, this would first appear and
       // then the chatview would be rendered after it, which causes a blink and is bad UX
-      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService)
+      InsertKeyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);
     }
-    if (!this._hasBeenRendered) FireEvents.onRender(this)
-    this._hasBeenRendered = true
+    if (!this._hasBeenRendered) FireEvents.onRender(this);
+    this._hasBeenRendered = true;
   }
 
   disconnectedCallback() {
