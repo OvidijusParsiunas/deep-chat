@@ -26,9 +26,19 @@
       to properties must not have external references and all regex values are properly escaped.
       You can also pass values into the component via properties by using the element reference (history).
     
-      directConnection='{"openRouter":{"key": "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", "model":"moonshotai/kimi-k2:free"}}' 
+      directConnection='{"openRouter":{"key": "sk-or-v1-", "model":"moonshotai/kimi-k2:free"}}' 
+    directConnection='{"openRouter":{"key": "sk-or-v1-", "model":"qwen/qwen2.5-vl-32b-instruct:free"}}'
+
+    connect='{"url": "http://localhost:8080/openrouter-chat", "headers":{ "Content-Type": "application/json"}}'
+    
+    connect='{"url": "http://127.0.0.1:5001/supremedivinity/us-central1/api/openrouter-chat", "headers":{ "Content-Type": "application/json"}}'
+    
+{"messages":[{"role":"user","text":"hi"}],"model":"moonshotai/kimi-k2:free"}
+
       -->
-  <deep-chat id="chat-element" connect='{"url": "http://localhost:8080/chat"}'
+  <deep-chat id="chat-element"
+    connect='{"url": "http://127.0.0.1:5001/supremedivinity/us-central1/api/openrouter-chat", "headers":{ "Content-Type": "application/json"}}'
+    images="true" camera="true" gifs="true" audio="true" microphone="true" mixedFiles="true"
     textInput='{"placeholder":{"text": "Welcome to the demo!"}}'></deep-chat>
   <script type="module">
     const chatElementRef = document.getElementById('chat-element');

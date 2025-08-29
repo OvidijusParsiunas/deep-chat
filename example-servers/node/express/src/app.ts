@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express'
 import { HuggingFace } from './services/huggingFace'
 import { StabilityAI } from './services/stabilityAI'
 import { ErrorUtils } from './utils/errorUtils'
-// import { Custom } from './services/custom'
+import { Custom } from './services/custom'
 import { OpenRouter } from './services/openRouter'
 import { OpenAI } from './services/openAI'
 import { Cohere } from './services/cohere'
@@ -42,26 +42,29 @@ app.use(cors(corsOptions as any))
 
 app.use(express.json())
 
-const Custom = OpenRouter
+
+
+app.post('/openrouter-chat', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.chat(req, res, next)
+})
+
+app.post('/openrouter-chat-stream', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.chatStream(req.body, res, next)
+})
+
+app.post('/openrouter-list-models', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.listModels(req, res, next)
+})
+
 
 // ------------------ CUSTOM API ------------------
 
-app.post('/chat', async (req: Request, res: Response, next: NextFunction) => {
-  Custom.chat(req.body, res, next)
+app.post('/chat', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
+  Custom.chat(req.body, res)
 })
 
 app.post('/chat-stream', async (req: Request, res: Response, next: NextFunction) => {
-  Custom.chatStream(req.body, res, next)
-})
-
-app.post('/files', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
-  // Note: OpenRouter doesn't have a files method, using imageVariation for file handling
-  if (req.files && (req.files as Express.Multer.File[]).length > 0) {
-    OpenRouter.imageVariation(req, res, next)
-  } else {
-    // For text-only requests, use chat
-    OpenRouter.chat(req.body, res, next)
-  }
+  Custom.chatStream(req.body, res)
 })
 
 // ------------------ OPENAI API ------------------

@@ -3,6 +3,7 @@ import FormData from 'form-data'
 import https from 'https'
 import dotenv from 'dotenv'
 
+
 // Load environment variables
 dotenv.config()
 
@@ -22,21 +23,11 @@ console.log(`OpenRouter default image model: ${defaultImageModel}`)
 export class OpenRouter {
     private static readonly BASE_URL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
 
-    private static createChatBody(body: Request['body'], stream?: boolean) {
-        // Text messages are stored inside request body using the Deep Chat JSON format:
-        // https://deepchat.dev/docs/connect
-        const chatBody = {
-            messages: body.messages.map((message: { role: string; text: string }) => {
-                return { role: message.role === 'ai' ? 'assistant' : message.role, content: message.text }
-            }),
-            model: body.model || defaultModel, // Default model if none provided
-        } as { stream?: boolean }
-        if (stream) chatBody.stream = true
-        return chatBody
-    }
+    public static async chat(inReq: Request, res: Response, next: NextFunction) {
+        const body = inReq.body //OpenRouter.createChatBody(inReq)
+        const isImg = JSON.stringify(body).includes('image_url')
+        body.model = body.model || (isImg ? defaultImageModel : defaultModel)
 
-    public static async chat(body: Request['body'], res: Response, next: NextFunction) {
-        const chatBody = OpenRouter.createChatBody(body)
         // console.log(JSON.stringify(chatBody))
         const req = https.request(
             `${OpenRouter.BASE_URL}/chat/completions`,
@@ -73,12 +64,12 @@ export class OpenRouter {
         )
         req.on('error', next) // forwarded to error handler middleware in ErrorUtils.handle
         // Send the chat request to OpenRouter
-        req.write(JSON.stringify(chatBody))
+        req.write(JSON.stringify(body))
         req.end()
     }
 
-    public static async chatStream(body: Request['body'], res: Response, next: NextFunction) {
-        const chatBody = OpenRouter.createChatBody(body, true)
+    public static async chatStream(inReq: Request, res: Response, next: NextFunction) {
+        const { body } = inReq // OpenRouter.createChatBody(inReq, true)
         const req = https.request(
             `${OpenRouter.BASE_URL}/chat/completions`,
             {
@@ -128,7 +119,7 @@ export class OpenRouter {
         )
         req.on('error', next) // forwarded to error handler middleware in ErrorUtils.handle
         // Send the chat request to OpenRouter
-        req.write(JSON.stringify(chatBody))
+        req.write(JSON.stringify(body))
         req.end()
     }
 
@@ -179,66 +170,6 @@ export class OpenRouter {
         apiReq.on('error', next)
         apiReq.write(JSON.stringify(generationBody))
         apiReq.end()
-    }
-
-    // Alternative method for image variations if you want to use image files
-    // Note: Not all models support image variations, this is for compatible models
-    public static async imageVariation(req: Request, res: Response, next: NextFunction) {
-        // Files are stored inside a form using Deep Chat request FormData format:
-        // https://deepchat.dev/docs/connect
-        const formData = new FormData()
-
-        if ((req.files as Express.Multer.File[])?.[0]) {
-            const imageFile = (req.files as Express.Multer.File[])?.[0]
-            formData.append('image', imageFile.buffer, imageFile.originalname)
-        }
-
-        // Add additional parameters
-        formData.append('model', req.body.model ?? defaultImageModel)
-        if (req.body.n) {
-            formData.append('n', req.body.n)
-        }
-        if (req.body.size) {
-            formData.append('size', req.body.size)
-        }
-
-        const formReq = https.request(
-            `${OpenRouter.BASE_URL}/images/variations`,
-            {
-                method: 'POST',
-                headers: {
-                    ...formData.getHeaders(),
-                    'Authorization': 'Bearer ' + process.env.OPENROUTER_API_KEY,
-                    'HTTP-Referer': process.env.OPENROUTER_HTTP_REFERER || 'http://localhost:3000',
-                    'X-Title': process.env.OPENROUTER_X_TITLE || 'Deep Chat',
-                },
-            },
-            (reqResp) => {
-                let data = ''
-                reqResp.on('error', next)
-                reqResp.on('data', (chunk) => {
-                    data += chunk
-                })
-                reqResp.on('end', () => {
-                    try {
-                        const result = JSON.parse(data)
-                        if (result.error) {
-                            next(result.error)
-                        } else {
-                            // Sends response back to Deep Chat using the Response format:
-                            // https://deepchat.dev/docs/connect/#Response
-                            res.json({ files: [{ type: 'image', src: result.data[0].url }] })
-                        }
-                    } catch (error) {
-                        next(error)
-                    }
-                })
-            }
-        )
-        formReq.on('error', next)
-        // Send the request to OpenRouter
-        formData.pipe(formReq)
-        formReq.end()
     }
 
     // Method to list available models from OpenRouter
