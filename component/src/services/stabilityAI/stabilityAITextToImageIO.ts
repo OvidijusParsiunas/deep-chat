@@ -17,7 +17,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI: Text to Image</b></div>
     <p>Insert text to generate an image.</p>
-    <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.stability.ai/" target="_blank">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));

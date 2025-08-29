@@ -1,20 +1,17 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
-type ClaudeErrorResponse = {
+type BigModelErrorResponse = {
   error?: {
-    type: string;
     message: string;
   };
 };
 
-export class ClaudeUtils {
-  public static buildHeaders(key: string) {
+export class BigModelUtils {
+  public static buildHeaders(key?: string) {
     return {
-      'x-api-key': key,
       'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      Authorization: `Bearer ${key}`,
     };
   }
 
@@ -24,9 +21,9 @@ export class ClaudeUtils {
     onSuccess: (key: string) => void,
     onFail: (message: string) => void
   ) {
-    const claudeResult = result as ClaudeErrorResponse;
-    if (claudeResult.error) {
-      if (claudeResult.error.type === 'authentication_error') {
+    const bigModelResult = result as BigModelErrorResponse;
+    if (bigModelResult.error) {
+      if (bigModelResult.error.message === 'Unauthorized') {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -38,9 +35,9 @@ export class ClaudeUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.anthropic.com/v1/models',
+      url: 'https://open.bigmodel.cn/api/paas/v4/models',
       method: 'GET',
-      handleVerificationResult: ClaudeUtils.handleVerificationResult,
+      handleVerificationResult: BigModelUtils.handleVerificationResult,
     };
   }
 }

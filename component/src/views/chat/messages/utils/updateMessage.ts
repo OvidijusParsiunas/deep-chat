@@ -71,7 +71,7 @@ export class UpdateMessage {
 
   private static updateTextMessage(msg: MessagesBase, messageToEls: MessageToElements[0], newText: string) {
     if (messageToEls[1].text) {
-      msg.renderText(messageToEls[1].text.bubbleElement, newText);
+      msg.renderText(messageToEls[1].text.bubbleElement, newText, messageToEls[0].role);
     } else {
       const messageElements = msg.createElements(newText, messageToEls[0].role);
       const nextElements = (messageToEls[1].files?.[0] || messageToEls[1].html) as MessageElements;

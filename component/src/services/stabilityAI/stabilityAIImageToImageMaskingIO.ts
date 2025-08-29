@@ -20,7 +20,7 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI</b></div>
     <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 5px"><b>Image to Image Masking</b></div>
     <p>Upload an image, its mask image to create a new one based on the changes you have described for the mask area.</p>
-    <p>Click <a href="https://platform.stability.ai/">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.stability.ai/" target="_blank">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));

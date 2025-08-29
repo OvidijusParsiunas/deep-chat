@@ -20,7 +20,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Speech To Text</b></div>
     <p><b>Upload a .wav or .ogg audio file</b> to transcribe it into text.
     <p>
-      Click <a href="${AzureSpeechToTextIO.HELP_LINK}">here</a> for more info.
+      Click <a href="${AzureSpeechToTextIO.HELP_LINK}" target="_blank">here</a> for more info.
     </p>`;
   url = '';
   isTextInputDisabled = true;

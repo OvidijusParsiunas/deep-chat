@@ -1,20 +1,19 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
-type ClaudeErrorResponse = {
+type QwenErrorResponse = {
   error?: {
-    type: string;
     message: string;
+    type: string;
+    code?: string;
   };
 };
 
-export class ClaudeUtils {
+export class QwenUtils {
   public static buildHeaders(key: string) {
     return {
-      'x-api-key': key,
+      Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
     };
   }
 
@@ -24,9 +23,9 @@ export class ClaudeUtils {
     onSuccess: (key: string) => void,
     onFail: (message: string) => void
   ) {
-    const claudeResult = result as ClaudeErrorResponse;
-    if (claudeResult.error) {
-      if (claudeResult.error.type === 'authentication_error') {
+    const qwenResult = result as QwenErrorResponse;
+    if (qwenResult.error) {
+      if (qwenResult.error.type === 'invalid_request_error') {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -38,9 +37,9 @@ export class ClaudeUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.anthropic.com/v1/models',
+      url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models',
       method: 'GET',
-      handleVerificationResult: ClaudeUtils.handleVerificationResult,
+      handleVerificationResult: QwenUtils.handleVerificationResult,
     };
   }
 }

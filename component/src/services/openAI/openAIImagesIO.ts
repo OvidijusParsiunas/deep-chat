@@ -26,7 +26,8 @@ export class OpenAIImagesIO extends DirectServiceIO {
     <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>
     <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should
       take place and text to specify the edit.</p>
-    <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction" target="_blank">here</a>
+    for more info.</p>`;
 
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Incorrect', 'Invalid input image'];

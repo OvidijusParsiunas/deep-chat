@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig } from './types/fileServiceConfigs'
 import type { MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage } from './types/messages'
 import { ValidateKeyPropertyView } from './views/validateKeyProperty/validateKeyPropertyView'
@@ -43,6 +44,54 @@ import type { Connect } from './types/connect'
 import type { Avatars } from './types/avatars'
 import type { Names } from './types/names'
 import type { Demo } from './types/demo'
+=======
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
+import {MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage} from './types/messages';
+import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
+import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
+import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
+import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
+import {TooltipUtils} from './views/chat/input/buttons/tooltip/tooltipUtils';
+import {FocusUtils} from './views/chat/input/textInput/focusUtils';
+import {DirectServiceIO} from './services/utils/directServiceIO';
+import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
+import {InternalHTML} from './utils/webComponent/internalHTML';
+import {InsertKeyView} from './views/insertKey/insertKeyView';
+import {WebModel as WebModelClass} from './webModel/webModel';
+import {ServiceIOFactory} from './services/serviceIOFactory';
+import {ValidationHandler} from './types/validationHandler';
+import {GoogleFont} from './utils/webComponent/googleFont';
+import {DirectConnection} from './types/directConnection';
+import {TextToSpeechConfig} from './types/textToSpeech';
+import {SpeechToTextConfig} from './types/microphone';
+import {BrowserStorage} from './types/browserStorage';
+import {RemarkableOptions} from './types/remarkable';
+import {MessageBody} from './types/messagesInternal';
+import {ErrorMessages, OnError} from './types/error';
+import {RequestBodyLimits} from './types/chatLimits';
+import {Property} from './utils/decorators/property';
+import {FireEvents} from './utils/events/fireEvents';
+import {DisplayLoadingBubble} from './types/loading';
+import {OnInput, TextInput} from './types/textInput';
+import {ValidateInput} from './types/validateInput';
+import {WebModel} from './types/webModel/webModel';
+import {DropupStyles} from './types/dropupStyles';
+import {CustomButton} from './types/customButton';
+import {HTMLClassUtilities} from './types/html';
+import {ChatView} from './views/chat/chatView';
+import {ServiceIO} from './services/serviceIO';
+import {Legacy} from './utils/legacy/legacy';
+import {LoadHistory} from './types/history';
+import {FocusMode} from './types/focusMode';
+import {HTMLWrappers} from './types/stream';
+import {CustomStyle} from './types/styles';
+import {Response} from './types/response';
+import style from './deepChat.css?inline';
+import {Connect} from './types/connect';
+import {Avatars} from './types/avatars';
+import {Names} from './types/names';
+import {Demo} from './types/demo';
+>>>>>>> upstream/main
 
 // TO-DO - ability to export files
 // TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
@@ -150,7 +199,14 @@ export class DeepChat extends InternalHTML {
   introPanelStyle?: CustomStyle
 
   @Property('object')
+<<<<<<< HEAD
   htmlClassUtilities?: HTMLClassUtilities
+=======
+  htmlWrappers?: HTMLWrappers;
+
+  @Property('object')
+  htmlClassUtilities?: HTMLClassUtilities;
+>>>>>>> upstream/main
 
   @Property('object')
   remarkable?: RemarkableOptions

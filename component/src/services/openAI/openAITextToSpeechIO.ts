@@ -21,7 +21,8 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI : Text To Speech</b></div>
     <p>Generate an audio file based on your text input.</p>
-    <p>Click <a href="https://platform.openai.com/docs/guides/text-to-speech">here</a> for more information.</p>`;
+    <p>Click <a href="https://platform.openai.com/docs/guides/text-to-speech" target="_blank">here</a>
+      for more information.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

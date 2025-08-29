@@ -1,20 +1,17 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
-type ClaudeErrorResponse = {
+type GroqErrorResponse = {
   error?: {
-    type: string;
     message: string;
   };
 };
 
-export class ClaudeUtils {
-  public static buildHeaders(key: string) {
+export class GroqUtils {
+  public static buildHeaders(key?: string) {
     return {
-      'x-api-key': key,
       'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      Authorization: `Bearer ${key}`,
     };
   }
 
@@ -24,9 +21,9 @@ export class ClaudeUtils {
     onSuccess: (key: string) => void,
     onFail: (message: string) => void
   ) {
-    const claudeResult = result as ClaudeErrorResponse;
-    if (claudeResult.error) {
-      if (claudeResult.error.type === 'authentication_error') {
+    const groqResult = result as GroqErrorResponse;
+    if (groqResult.error) {
+      if (groqResult.error.message === 'Unauthorized') {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -38,9 +35,9 @@ export class ClaudeUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.anthropic.com/v1/models',
+      url: 'https://api.groq.com/openai/v1/models',
       method: 'GET',
-      handleVerificationResult: ClaudeUtils.handleVerificationResult,
+      handleVerificationResult: GroqUtils.handleVerificationResult,
     };
   }
 }

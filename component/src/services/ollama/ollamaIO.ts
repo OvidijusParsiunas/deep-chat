@@ -149,7 +149,7 @@ export class OllamaIO extends DirectServiceIO {
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
-      return {name: call.function.name, arguments: call.function.arguments};
+      return {name: call.function.name, arguments: JSON.stringify(call.function.arguments)};
     });
     const handlerResponse = await this._functionHandler?.(functions);
     if (!Array.isArray(handlerResponse)) {

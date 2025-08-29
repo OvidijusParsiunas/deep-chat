@@ -16,7 +16,8 @@ export class HTMLMessages {
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop, loading);
     messageElements.bubbleElement.classList.add(HTMLMessages.HTML_BUBBLE_CLASS);
-    messageElements.bubbleElement.innerHTML = html;
+    const {contentEl} = HTMLUtils.tryAddWrapper(messageElements.bubbleElement, html, messages._customWrappers, role);
+    contentEl.innerHTML = html;
     return messageElements;
   }
 

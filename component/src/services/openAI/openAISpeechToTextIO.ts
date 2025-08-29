@@ -20,7 +20,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI : Speech To Text</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio
       processing.
-    <p>Click <a href="https://platform.openai.com/docs/guides/speech-to-text">here</a> for more info.</p>`;
+    <p>Click <a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
   permittedErrorPrefixes = ['Invalid'];

@@ -14,7 +14,8 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>AssemblyAI Audio</b></div>
     <p><b>Upload an audio file</b> to transcribe it into text.
     <p>
-      Click <a href="https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started">here</a> for more info.
+      Click <a href="https://www.assemblyai.com/docs/Guides/transcribing_an_audio_file#get-started"
+        target="_blank">here</a> for more info.
     </p>`;
 
   url = 'https://api.assemblyai.com/v2/upload';

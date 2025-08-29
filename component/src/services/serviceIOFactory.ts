@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { HuggingFaceAudioClassificationIO } from './huggingFace/huggingFaceAudioClassificationIO'
 import { HuggingFaceImageClassificationIO } from './huggingFace/huggingFaceImageClassificationIO'
 import { StabilityAIImageToImageUpscaleIO } from './stabilityAI/stabilityAIImageToImageUpscaleIO'
@@ -37,6 +38,57 @@ import { GeminiIO } from './gemini/geminiIO'
 import { ClaudeIO } from './claude/claudeIO'
 import { ServiceIO } from './serviceIO'
 import { DeepChat } from '../deepChat'
+=======
+import {HuggingFaceAudioClassificationIO} from './huggingFace/huggingFaceAudioClassificationIO';
+import {HuggingFaceImageClassificationIO} from './huggingFace/huggingFaceImageClassificationIO';
+import {StabilityAIImageToImageUpscaleIO} from './stabilityAI/stabilityAIImageToImageUpscaleIO';
+import {StabilityAIImageToImageMaskingIO} from './stabilityAI/stabilityAIImageToImageMaskingIO';
+import {HuggingFaceAudioRecognitionIO} from './huggingFace/huggingFaceAudioRecognitionIO';
+import {HuggingFaceTextGenerationIO} from './huggingFace/huggingFaceTextGenerationIO';
+import {HuggingFaceQuestionAnswerIO} from './huggingFace/huggingFaceQuestionAnswerIO';
+import {HuggingFaceSummarizationIO} from './huggingFace/huggingFaceSummarizationIO';
+import {HuggingFaceConversationIO} from './huggingFace/huggingFaceConversationIO';
+import {StabilityAIImageToImageIO} from './stabilityAI/stabilityAIImageToImageIO';
+import {HuggingFaceTranslationIO} from './huggingFace/huggingFaceTranslationIO';
+import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
+import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
+import {BigModelTextToSpeechIO} from './bigModel/bigModelTextToSpeechIO';
+import {TogetherTextToSpeechIO} from './together/togetherTextToSpeechIO';
+import {OpenAIAssistantIO} from './openAI/assistant/openAIAssistantIO';
+import {AzureOpenAIAssistantIO} from './azure/azureOpenAIAssistantIO';
+import {OpenAIRealtimeIO} from './openAI/realtime/openAIRealtimeIO';
+import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
+import {OpenAISpeechToTextIO} from './openAI/openAISpeechToTextIO';
+import {AzureSummarizationIO} from './azure/azureSummarizationIO';
+import {AssemblyAIAudioIO} from './assemblyAI/assemblyAIAudioIO';
+import {AzureTextToSpeechIO} from './azure/azureTextToSpeechIO';
+import {AzureSpeechToTextIO} from './azure/azureSpeechToTextIO';
+import {AzureTranslationIO} from './azure/azureTranslationIO';
+import {BigModelImagesIO} from './bigModel/bigModelImagesIO';
+import {GroqTextToSpeechIO} from './groq/groqTextToSpeechIO';
+import {TogetherImagesIO} from './together/togetherImagesIO';
+import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
+import {BigModelChatIO} from './bigModel/bigModelChatIO';
+import {TogetherChatIO} from './together/togetherChatIO';
+import {OpenAIImagesIO} from './openAI/openAIImagesIO';
+import {OpenRouterIO} from './openRouter/openRouterIO';
+import {BaseServiceIO} from './utils/baseServiceIO';
+import {OpenAIChatIO} from './openAI/openAIChatIO';
+import {CohereChatIO} from './cohere/cohereChatIO';
+import {DeepSeekIO} from './deepSeek/deepSeekIO';
+import {GrokImagesIO} from './grok/grokImagesIO';
+import {WebModel} from '../webModel/webModel';
+import {KimiChatIO} from './kimi/kimiChatIO';
+import {MistralIO} from './mistral/mistralO';
+import {GrokChatIO} from './grok/grokChatIO';
+import {GroqChatIO} from './groq/groqChatIO';
+import {QwenChatIO} from './qwen/qwenChatIO';
+import {GeminiIO} from './gemini/geminiIO';
+import {ClaudeIO} from './claude/claudeIO';
+import {OllamaIO} from './ollama/ollamaIO';
+import {ServiceIO} from './serviceIO';
+import {DeepChat} from '../deepChat';
+>>>>>>> upstream/main
 
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
@@ -155,6 +207,36 @@ export class ServiceIOFactory {
           return new GrokImagesIO(deepChat)
         }
         return new GrokChatIO(deepChat)
+      }
+      if (directConnection.qwen) {
+        return new QwenChatIO(deepChat);
+      }
+      if (directConnection.together) {
+        if (directConnection.together.images) {
+          return new TogetherImagesIO(deepChat);
+        }
+        if (directConnection.together.textToSpeech) {
+          return new TogetherTextToSpeechIO(deepChat);
+        }
+        return new TogetherChatIO(deepChat);
+      }
+      if (directConnection.bigModel) {
+        if (directConnection.bigModel.images) {
+          return new BigModelImagesIO(deepChat);
+        }
+        if (directConnection.bigModel.textToSpeech) {
+          return new BigModelTextToSpeechIO(deepChat);
+        }
+        return new BigModelChatIO(deepChat);
+      }
+      if (directConnection.groq) {
+        if (directConnection.groq.textToSpeech) {
+          return new GroqTextToSpeechIO(deepChat);
+        }
+        return new GroqChatIO(deepChat);
+      }
+      if (directConnection.ollama) {
+        return new OllamaIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {

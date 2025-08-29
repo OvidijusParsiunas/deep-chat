@@ -1,10 +1,10 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {ValidateInput} from '../../types/validateInput';
+import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
-import {Stream} from '../../types/stream';
 import {Cohere} from '../../types/cohere';
 import {DeepChat} from '../../deepChat';
 import {Demo} from '../../types/demo';
@@ -162,5 +162,16 @@ export class Legacy {
       return false;
     }
     return true;
+  }
+
+  public static processStreamHTMLWrappers(stream?: Stream) {
+    if (!stream || typeof stream !== 'object') return;
+    const htmlWrappers = (stream as {htmlWrappers?: HTMLWrappers}).htmlWrappers;
+    if (htmlWrappers) {
+      console.error(`The htmlWrappers property has been moved to Deep Chat's base since version 2.3.0.`);
+      console.error('Check it out here: https://deepchat.dev/docs/messages/HTML#htmlWrappers');
+      return htmlWrappers;
+    }
+    return undefined;
   }
 }

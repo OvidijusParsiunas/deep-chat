@@ -1,20 +1,17 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
-type ClaudeErrorResponse = {
+type TogetherErrorResponse = {
   error?: {
-    type: string;
     message: string;
   };
 };
 
-export class ClaudeUtils {
-  public static buildHeaders(key: string) {
+export class TogetherUtils {
+  public static buildHeaders(key?: string) {
     return {
-      'x-api-key': key,
       'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      Authorization: `Bearer ${key}`,
     };
   }
 
@@ -24,9 +21,9 @@ export class ClaudeUtils {
     onSuccess: (key: string) => void,
     onFail: (message: string) => void
   ) {
-    const claudeResult = result as ClaudeErrorResponse;
-    if (claudeResult.error) {
-      if (claudeResult.error.type === 'authentication_error') {
+    const togetherResult = result as TogetherErrorResponse;
+    if (togetherResult.error) {
+      if (togetherResult.error.message === 'Unauthorized') {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -38,9 +35,9 @@ export class ClaudeUtils {
 
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
-      url: 'https://api.anthropic.com/v1/models',
+      url: 'https://api.together.xyz/v1/models',
       method: 'GET',
-      handleVerificationResult: ClaudeUtils.handleVerificationResult,
+      handleVerificationResult: TogetherUtils.handleVerificationResult,
     };
   }
 }
