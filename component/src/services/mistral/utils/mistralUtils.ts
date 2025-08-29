@@ -11,12 +11,9 @@ export class MistralUtils {
     };
   }
 
-  private static handleVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const mistralResult = result as MistralResult;
     // if the token is valid - it will simply error out that the prompt is wrong
     // using this approach to not cost anything to the user

@@ -10,12 +10,9 @@ export class HuggingFaceUtils {
     };
   }
 
-  private static handleVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const huggingFaceResult = result as HuggingFaceTextGenerationResult;
     // if the token is valid - it will simply error out that the pameters are required
     if (Array.isArray(huggingFaceResult.error) && huggingFaceResult.error[0] === 'Error in `parameters`: field required') {

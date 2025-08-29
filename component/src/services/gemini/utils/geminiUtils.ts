@@ -9,12 +9,9 @@ export class GeminiUtils {
     };
   }
 
-  private static handleVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const geminiResult = result as GeminiGenerateContentResult;
     if (geminiResult.error) {
       if (geminiResult.error.code === 403 || geminiResult.error.message?.includes('API key')) {

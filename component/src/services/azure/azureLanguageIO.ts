@@ -12,13 +12,10 @@ export class AzureLanguageIO extends DirectServiceIO {
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
   permittedErrorPrefixes = ['Access'];
 
-  constructor(
-    deepChat: DeepChat,
-    buildHeadersFunc: BuildHeadersFunc,
-    endpoint: string,
-    apiKey?: APIKey,
-    existingFileTypes?: ServiceFileTypes
-  ) {
-    super(deepChat, AzureUtils.buildLanguageKeyVerificationDetails(endpoint), buildHeadersFunc, apiKey, existingFileTypes);
+  // prettier-ignore
+  constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, endpoint: string, apiKey?: APIKey,
+      existingFileTypes?: ServiceFileTypes) {
+    super(deepChat,
+      AzureUtils.buildLanguageKeyVerificationDetails(endpoint), buildHeadersFunc, apiKey, existingFileTypes);
   }
 }

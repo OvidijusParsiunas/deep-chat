@@ -10,13 +10,9 @@ export class StabilityAIIO extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.stability.ai/docs/getting-started/authentication';
   permittedErrorPrefixes = ['Incorrect', 'invalid_'];
 
-  constructor(
-    deepChat: DeepChat,
-    keyVerificationDetails: KeyVerificationDetails,
-    buildHeadersFunc: BuildHeadersFunc,
-    apiKey?: APIKey,
-    existingFileTypes?: ServiceFileTypes
-  ) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
+      buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey, existingFileTypes);
   }
 }

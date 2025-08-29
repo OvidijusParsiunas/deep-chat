@@ -15,15 +15,14 @@ export class AzureTranslationIO extends DirectServiceIO {
     'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
   url = '';
 
+  // prettier-ignore
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.translation as NonNullable<Azure['translation']>;
     const apiKey = deepChat.directConnection?.azure;
     super(
       deepChat,
       AzureUtils.buildTranslationKeyVerificationDetails(config.region),
-      AzureUtils.buildTranslationHeaders.bind({}, config?.region),
-      apiKey
-    );
+      AzureUtils.buildTranslationHeaders.bind({}, config?.region), apiKey);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }
 

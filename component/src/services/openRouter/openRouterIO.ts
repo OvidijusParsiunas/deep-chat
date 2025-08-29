@@ -12,18 +12,9 @@ import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
-type OpenRouterContent = {
-  type: 'text' | 'image_url';
-  text?: string;
-  image_url?: {
-    url: string;
-    detail?: 'auto' | 'low' | 'high';
-  };
-};
-
 type OpenRouterMessage = {
   role: 'user' | 'assistant' | 'system';
-  content: string | OpenRouterContent[];
+  content: string;
 };
 
 type OpenRouterRequestBody = {
@@ -118,43 +109,9 @@ export class OpenRouterIO extends DirectServiceIO {
       pMessages,
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
-      const role = message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant';
-
-      // Handle multimodal messages with images
-      if (message.files && message.files.length > 0) {
-        const content: OpenRouterContent[] = [];
-
-        // Add text content if present
-        if (message.text) {
-          content.push({
-            type: 'text',
-            text: message.text,
-          });
-        }
-
-        // Add image content
-        message.files.forEach((file) => {
-          if (file.type === 'image' && file.src) {
-            content.push({
-              type: 'image_url',
-              image_url: {
-                url: file.src,
-                detail: 'auto',
-              },
-            });
-          }
-        });
-
-        return {
-          role,
-          content,
-        } as OpenRouterMessage;
-      }
-
-      // Handle text-only messages
       return {
         content: message.text || '',
-        role,
+        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       } as OpenRouterMessage;
     });
 
@@ -200,6 +157,6 @@ export class OpenRouterIO extends DirectServiceIO {
       }
     }
 
-    return {text: (result as any).text ?? ''};
+    return {text: ''};
   }
 }

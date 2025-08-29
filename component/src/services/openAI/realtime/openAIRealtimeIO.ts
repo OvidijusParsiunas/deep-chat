@@ -417,7 +417,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   // in such instance please wait and refresh at a later time
   private monitorFrequencies(analyser: AnalyserNode, frequencyData: Uint8Array<ArrayBuffer>) {
     const updateFrequencyData = () => {
-      analyser.getByteFrequencyData(frequencyData as any);
+      analyser.getByteFrequencyData(frequencyData);
       // Calculate loudness (sum of all frequency amplitudes)
       const totalLoudness = frequencyData.reduce((sum, value) => sum + value, 0);
       const maxLoudness = frequencyData.length * 255; // Maximum possible loudness

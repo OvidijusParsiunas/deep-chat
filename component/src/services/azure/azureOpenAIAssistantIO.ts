@@ -32,14 +32,9 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       getFilesPostfix: `/content${commonPostfix}`,
     };
 
-    super(
-      deepChat,
-      config?.assistant,
-      urlSegments,
-      AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails),
-      AzureOpenAIUtils.buildHeaders,
-      apiKey
-    );
+    // prettier-ignore
+    super(deepChat, config?.assistant, urlSegments,
+      AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
     if (typeof config?.assistant === 'object') {
       const {function_handler, files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;

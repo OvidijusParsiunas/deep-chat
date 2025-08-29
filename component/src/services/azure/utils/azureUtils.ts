@@ -19,12 +19,9 @@ export class AzureUtils {
     };
   }
 
-  private static handleSpeechVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleSpeechVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const azureResult = result as AzureKeyRetrievalResult;
     if (azureResult.error) {
       onFail(ErrorMessages.INVALID_KEY);
@@ -51,15 +48,12 @@ export class AzureUtils {
     };
   }
 
-  private static handleLanguageVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleLanguageVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const azureResult = result as AzureSummarizationResult;
     // if the token is valid - it will throw a different error than a 401
-    if (azureResult.error?.code === '401') {
+    if (azureResult.error?.code === "401") {
       onFail(ErrorMessages.INVALID_KEY);
     } else {
       onSuccess(key);
@@ -77,12 +71,9 @@ export class AzureUtils {
     };
   }
 
-  private static handleTranslationVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleTranslationVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const azureResult = result as Response;
     azureResult.json().then((result) => {
       // if the token is valid - it will throw a different error than a 401000

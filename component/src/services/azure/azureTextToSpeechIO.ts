@@ -25,15 +25,13 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   isTextInputDisabled = false;
   url = '';
 
+  // prettier-ignore
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
     const apiKey = deepChat.directConnection?.azure;
-    super(
-      deepChat,
+    super(deepChat,
       AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
-      config.region,
-      apiKey
-    );
+      config.region, apiKey);
     if (!config.region) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;

@@ -53,12 +53,9 @@ export class AssemblyAIUtils {
     };
   }
 
-  private static handleVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
+  // prettier-ignore
+  private static handleVerificationResult(result: object, key: string,
+      onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const openAIResult = result as OpenAIConverseResult;
     if (openAIResult.error) {
       if (openAIResult.error.code === 'invalid_api_key') {

@@ -11,14 +11,9 @@ import {DeepChat} from '../../deepChat';
 export class HuggingFaceFileIO extends HuggingFaceIO {
   isTextInputDisabled = true;
 
-  constructor(
-    deepChat: DeepChat,
-    placeholderText: string,
-    defaultModel: string,
-    config: true | HuggingFaceModel,
-    apiKey?: APIKey,
-    existingFileTypes?: ServiceFileTypes
-  ) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, placeholderText: string, defaultModel: string,
+      config: true | (HuggingFaceModel), apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat, placeholderText, defaultModel, config, apiKey, existingFileTypes);
     this.canSendMessage = HuggingFaceFileIO.canSendFile;
   }
@@ -31,6 +26,7 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
     return files[0] as unknown as {inputs: string};
   }
 
+  // prettier-ignore
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     if (!files?.[0]) throw new Error('No file was added');

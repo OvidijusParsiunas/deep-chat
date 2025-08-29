@@ -23,21 +23,11 @@ export class HuggingFaceIO extends DirectServiceIO {
   url: string;
   textInputPlaceholderText: string;
 
-  constructor(
-    deepChat: DeepChat,
-    textInputPlaceholderText: string,
-    defaultModel: string,
-    config?: HuggingFaceServiceConfig,
-    apiKey?: APIKey,
-    existingFileTypes?: ServiceFileTypes
-  ) {
-    super(
-      deepChat,
-      HuggingFaceUtils.buildKeyVerificationDetails(),
-      HuggingFaceUtils.buildHeaders,
-      apiKey,
-      existingFileTypes
-    );
+  // prettier-ignore
+  constructor(deepChat: DeepChat, textInputPlaceholderText: string, defaultModel: string,
+      config?: HuggingFaceServiceConfig, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
+    super(deepChat,
+      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, apiKey, existingFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct rawBody with individual props
@@ -48,10 +38,10 @@ export class HuggingFaceIO extends DirectServiceIO {
     }
   }
 
+  // prettier-ignore
   preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContentI[], _?: File[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as HuggingFaceServiceConfigObj & {
-      options?: {wait_for_model?: boolean};
-    };
+    const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
+      & {options?: {wait_for_model?: boolean}});
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     bodyCopy.options ??= {};

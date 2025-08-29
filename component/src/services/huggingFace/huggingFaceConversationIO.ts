@@ -14,16 +14,20 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     this.maxMessages ??= -1;
   }
 
+  // prettier-ignore
   private processMessages(messages: MessageContentI[]) {
     const textMessages = messages.filter((message) => message.text);
     const mostRecentMessageText = textMessages[textMessages.length - 1].text;
     const previousMessages = textMessages.slice(0, textMessages.length - 1);
     if (!mostRecentMessageText) return;
     const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
-    const generated_responses = previousMessages.filter((message) => message.role === 'ai').map((message) => message.text);
+    const generated_responses = previousMessages
+      .filter((message) => message.role === 'ai')
+      .map((message) => message.text);
     return {past_user_inputs, generated_responses, mostRecentMessageText};
   }
 
+  // prettier-ignore
   override preprocessBody(body: HuggingFaceQuestionAnswerConfig, messages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as HuggingFaceQuestionAnswerConfig & {
       options?: {wait_for_model?: boolean};
