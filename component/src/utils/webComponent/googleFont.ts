@@ -6,7 +6,7 @@ export class GoogleFont {
     if (cssStyle.fontFamily && cssStyle.fontFamily !== GoogleFont.DEFAULT_FONT_FAMILY) return;
     const head = document.getElementsByTagName('head')[0];
     const linkExists = Array.from(head.getElementsByTagName('link')).some(
-      link => link.getAttribute('href') === GoogleFont.FONT_URL
+      (link) => link.getAttribute('href') === GoogleFont.FONT_URL
     );
     if (!linkExists) {
       const link = document.createElement('link');

@@ -22,20 +22,14 @@ export class SubmitButtonStateStyle {
     (styles[style] as ButtonStyles) = newStyle;
   }
 
+  // prettier-ignore
   private static setUpDisabledButton(styles: SubmitButtonStyles) {
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', 'default', 'backgroundColor'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(
-      styles,
-      ['disabled', 'container', 'default', 'backgroundColor'],
-      'unset'
-    );
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', 'default', 'backgroundColor'], 'unset');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', 'default', 'filter'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(
-      styles.disabled,
-      ['svg', 'styles', 'default', 'filter'],
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles.disabled, ['svg', 'styles', 'default', 'filter'],
       'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(5564%)' +
-        ' hue-rotate(207deg) brightness(100%) contrast(97%)'
-    );
+      ' hue-rotate(207deg) brightness(100%) contrast(97%)');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.disabled, ['text', 'styles', 'default', 'color'], 'grey');
     SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'disabled');
   }

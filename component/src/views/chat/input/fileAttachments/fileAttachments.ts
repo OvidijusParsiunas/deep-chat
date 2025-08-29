@@ -24,15 +24,10 @@ export class FileAttachments implements HiddenFileAttachments {
     if (attachmentContainerStyle) Object.assign(this.elementRef.style, attachmentContainerStyle);
   }
 
+  // prettier-ignore
   addType(deepChat: DeepChat, serviceIO: ServiceIO, files: FileAttachmentsT, type: keyof ServiceFileTypes) {
     const fileAttachmentsType = FileAttachmentTypeFactory.create(
-      deepChat,
-      serviceIO,
-      files,
-      this.toggleContainerDisplay.bind(this),
-      this.elementRef,
-      type
-    );
+      deepChat, serviceIO, files, this.toggleContainerDisplay.bind(this), this.elementRef, type);
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }
@@ -52,13 +47,13 @@ export class FileAttachments implements HiddenFileAttachments {
   }
 
   getAllFileData() {
-    const files = this._fileAttachmentsTypes.map(fileAttachmentType => fileAttachmentType.getFiles()).flat();
+    const files = this._fileAttachmentsTypes.map((fileAttachmentType) => fileAttachmentType.getFiles()).flat();
     return files.length > 0 ? files : undefined;
   }
 
   async completePlaceholders() {
     await Promise.all(
-      this._fileAttachmentsTypes.map(async fileAttachmentsType =>
+      this._fileAttachmentsTypes.map(async (fileAttachmentsType) =>
         (fileAttachmentsType as AudioFileAttachmentType).stopPlaceholderCallback?.()
       )
     );
@@ -68,7 +63,7 @@ export class FileAttachments implements HiddenFileAttachments {
     files.forEach((file: File) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = event => {
+      reader.onload = (event) => {
         for (let i = 0; i < fileAttachmentTypes.length; i += 1) {
           const result = fileAttachmentTypes[i].attemptAddFile(file, (event.target as FileReader).result as string);
           if (result) break;
@@ -82,17 +77,17 @@ export class FileAttachments implements HiddenFileAttachments {
   }
 
   hideFiles() {
-    this._fileAttachmentsTypes.forEach(fileAttachmentsType => fileAttachmentsType.hideAttachments());
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.hideAttachments());
     this.elementRef.replaceChildren();
     this.toggleContainerDisplay(false);
   }
 
   removeHiddenFiles() {
-    this._fileAttachmentsTypes.forEach(fileAttachmentsType => fileAttachmentsType.removeAttachments());
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.removeAttachments());
   }
 
   readdHiddenFiles() {
-    this._fileAttachmentsTypes.forEach(fileAttachmentsType => fileAttachmentsType.readdAttachments());
+    this._fileAttachmentsTypes.forEach((fileAttachmentsType) => fileAttachmentsType.readdAttachments());
     this.toggleContainerDisplay(true);
   }
 

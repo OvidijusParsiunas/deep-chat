@@ -8,10 +8,7 @@ declare global {
     hljs: typeof hljs;
     remarkable_plugins: {plugin: unknown; options?: unknown}[];
     katex: {
-      renderToString: (
-        source: string,
-        options?: {displayMode: boolean; throwOnError: boolean; output: string}
-      ) => string;
+      renderToString: (source: string, options?: {displayMode: boolean; throwOnError: boolean; output: string}) => string;
     };
   }
 }
@@ -25,7 +22,7 @@ export class RemarkableConfig {
   private static addPlugins(remarkable: Remarkable, customConfig?: RemarkableOptions) {
     const plugins = window.remarkable_plugins;
     if (plugins) {
-      plugins.forEach(plugin => {
+      plugins.forEach((plugin) => {
         remarkable.use(plugin.plugin, plugin.options);
       });
     }
@@ -35,8 +32,7 @@ export class RemarkableConfig {
         console.warn('window.katex not found, use chatElementRef.refreshMessages to re-render messages');
       }
       const delimiter = typeof customConfig.math === 'object' ? customConfig.math.delimiter : '';
-      const options =
-        typeof customConfig.math === 'object' && customConfig.math.options ? customConfig.math.options : {};
+      const options = typeof customConfig.math === 'object' && customConfig.math.options ? customConfig.math.options : {};
       remarkable.use(KatexPlugin.katex.bind(this, options), {delimiter});
     }
   }

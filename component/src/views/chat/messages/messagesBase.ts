@@ -87,15 +87,10 @@ export class MessagesBase {
     return messageElements;
   }
 
+  // prettier-ignore
   private overwriteText(role: string, text: string, elementRefs: MessageElements[]) {
     const elems = MessageUtils.overwriteMessage(
-      this.messageToElements,
-      elementRefs,
-      text,
-      role,
-      'text',
-      MessagesBase.TEXT_BUBBLE_CLASS
-    );
+      this.messageToElements, elementRefs, text, role, 'text', MessagesBase.TEXT_BUBBLE_CLASS);
     if (elems) this.renderText(elems.bubbleElement, text, role);
     return elems;
   }
@@ -171,16 +166,13 @@ export class MessagesBase {
 
   // this can be tested by having an ai message, then a temp ai message with html that submits new user message:
   // https://github.com/OvidijusParsiunas/deep-chat/issues/258
-
+  // prettier-ignore
   private revealRoleElementsIfTempRemoved(tempElements: MessageElements, newRole: string) {
     if ((!!this.avatar || !!this.name) && HTMLDeepChatElements.isElementTemporary(tempElements)) {
       // if prev message before temp has a different role to the new one, make sure its avatar is revealed
       const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
-      if (
-        prevMessageElements &&
-        this.messageToElements.length > 0 &&
-        !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))
-      ) {
+      if (prevMessageElements && this.messageToElements.length > 0
+          && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
         MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this.avatar, this.name);
       }
     }
@@ -218,27 +210,22 @@ export class MessagesBase {
     return {outerContainer, innerContainer, bubbleElement};
   }
 
+  // prettier-ignore
   private addInnerContainerElements(bubbleElement: HTMLElement, text: string, role: string) {
     const previousElement = this.messageElementRefs[this.messageElementRefs.length - 1];
     if (MessageUtils.areOuterContainerClassRolesSame(role, previousElement) && !this.isLastMessageError()) {
       MessageUtils.hideRoleElements(previousElement.innerContainer, this.avatar, this.name);
     }
-    bubbleElement.classList.add(
-      'message-bubble',
-      MessageUtils.getRoleClass(role),
-      role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text'
-    );
+    bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
+      role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
     this.renderText(bubbleElement, text, role);
     MessageUtils.addRoleElements(bubbleElement, role, this.avatar, this.name);
     return {bubbleElement};
   }
 
-  public applyCustomStyles(
-    elements: MessageElements | undefined,
-    role: string,
-    media: boolean,
-    otherStyles?: MessageRoleStyles | MessageElementsStyles
-  ) {
+  // prettier-ignore
+  public applyCustomStyles(elements: MessageElements | undefined, role: string, media: boolean,
+      otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (elements && this.messageStyles) {
       MessageStyleUtils.applyCustomStyles(this.messageStyles, elements, role, media, otherStyles);
     }
@@ -259,7 +246,7 @@ export class MessagesBase {
 
   public removeMessage(messageElements: MessageElements) {
     messageElements.outerContainer.remove();
-    const messageElementsIndex = this.messageElementRefs.findIndex(elRefs => elRefs === messageElements);
+    const messageElementsIndex = this.messageElementRefs.findIndex((elRefs) => elRefs === messageElements);
     this.messageElementRefs.splice(messageElementsIndex, 1);
   }
 
@@ -300,7 +287,7 @@ export class MessagesBase {
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages(customConfig?: RemarkableOptions) {
     this._remarkable = RemarkableConfig.createNew(customConfig);
-    this.messageToElements.forEach(msgToEls => {
+    this.messageToElements.forEach((msgToEls) => {
       if (msgToEls[1].text && msgToEls[0].text) {
         this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text, msgToEls[0].role);
       }

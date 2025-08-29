@@ -26,14 +26,9 @@ export class InputButton<T extends Styles = Styles> {
   readonly dropupText?: string;
   readonly isCustom: boolean = false;
 
-  constructor(
-    buttonElement: HTMLElement,
-    svg: string,
-    position?: ButtonPositionT,
-    tooltip?: Tooltip,
-    customStyles?: T,
-    dropupText?: string
-  ) {
+  // prettier-ignore
+  constructor(buttonElement: HTMLElement, svg: string, position?: ButtonPositionT,
+      tooltip?: Tooltip, customStyles?: T, dropupText?: string) {
     ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
     this.svg = SVGIconUtils.createSVGElement(svg);

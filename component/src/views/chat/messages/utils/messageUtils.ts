@@ -18,18 +18,14 @@ export class MessageUtils {
   private static readonly POSITION_MIDDLE_MESSAGE_CLASS = 'deep-chat-middle-message';
   private static readonly POSITION_BOTTOM_MESSAGE_CLASS = 'deep-chat-bottom-message';
 
-  public static getLastElementsByClass(
-    messageElementRefs: MessageElements[],
-    classes: string[],
-    avoidClasses?: string[]
-  ) {
+  public static getLastElementsByClass(messageElementRefs: MessageElements[], classes: string[], avoidClasses?: string[]) {
     for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
       const elements = messageElementRefs[i];
       if (elements.bubbleElement.classList.contains(classes[0])) {
-        const notFound = classes.slice(1).find(className => !elements.bubbleElement.classList.contains(className));
+        const notFound = classes.slice(1).find((className) => !elements.bubbleElement.classList.contains(className));
         if (!notFound) {
           if (avoidClasses) {
-            const avoided = avoidClasses.find(className => elements.bubbleElement.classList.contains(className));
+            const avoided = avoidClasses.find((className) => elements.bubbleElement.classList.contains(className));
             if (!avoided) return elements;
           } else {
             return elements;
@@ -40,11 +36,7 @@ export class MessageUtils {
     return undefined;
   }
 
-  public static getLastMessage(
-    msgToEls: MessageToElements,
-    role: string,
-    content?: keyof Omit<MessageContent, 'role'>
-  ) {
+  public static getLastMessage(msgToEls: MessageToElements, role: string, content?: keyof Omit<MessageContent, 'role'>) {
     for (let i = msgToEls.length - 1; i >= 0; i -= 1) {
       if (msgToEls[i][0].role === role) {
         if (content) {
@@ -68,21 +60,12 @@ export class MessageUtils {
 
   // IMPORTANT: If the overwrite message does not contain a role property it will look for the last 'ai' role message
   // and if messages have custom roles, it will still look to update the last 'ai' role message
-
-  public static overwriteMessage(
-    messageToElements: MessageToElements,
-    messageElementRefs: MessageElements[],
-    content: string,
-    role: string,
-    contentType: 'text' | 'html',
-    className: string
-  ) {
+  // prettier-ignore
+  public static overwriteMessage(messageToElements: MessageToElements, messageElementRefs: MessageElements[],
+      content: string, role: string, contentType: 'text' | 'html', className: string) {
     // not sure if LoadingStyle.LOADING_MESSAGE_TEXT_CLASS is needed
     const elements = MessageUtils.getLastElementsByClass(
-      messageElementRefs,
-      [MessageUtils.getRoleClass(role), className],
-      [LoadingStyle.BUBBLE_CLASS]
-    );
+      messageElementRefs, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
     const lastMessage = MessageUtils.getLastMessage(messageToElements, role, contentType);
     if (lastMessage) lastMessage[contentType] = content;
     return elements;
@@ -107,8 +90,8 @@ export class MessageUtils {
   }
 
   public static getLastMessageBubbleElement(messagesEl: HTMLElement) {
-    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).map(element => {
-      return Array.from(element?.children || []).find(element => element.classList.contains('message-bubble'));
+    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).map((element) => {
+      return Array.from(element?.children || []).find((element) => element.classList.contains('message-bubble'));
     })?.[0];
   }
 
@@ -166,30 +149,24 @@ export class MessageUtils {
   }
 
   private static filterdMessageElements(elements: MessageElements[], className: string) {
-    return elements.filter(msgElements => msgElements.bubbleElement.classList.contains(className));
+    return elements.filter((msgElements) => msgElements.bubbleElement.classList.contains(className));
   }
 
   private static findMessageElements(elements: MessageElements[], className: string) {
-    return elements.find(msgElements => msgElements.bubbleElement.classList.contains(className));
+    return elements.find((msgElements) => msgElements.bubbleElement.classList.contains(className));
   }
 
   private static generateMessageBodyElements(messageContent: MessageContentI, elements: MessageElements[]) {
     const msgBodyEls: MessageBodyElements = {};
-    if (messageContent.text)
-      msgBodyEls.text = MessageUtils.findMessageElements(elements, MessagesBase.TEXT_BUBBLE_CLASS);
-    if (messageContent.html)
-      msgBodyEls.html = MessageUtils.findMessageElements(elements, HTMLMessages.HTML_BUBBLE_CLASS);
+    if (messageContent.text) msgBodyEls.text = MessageUtils.findMessageElements(elements, MessagesBase.TEXT_BUBBLE_CLASS);
+    if (messageContent.html) msgBodyEls.html = MessageUtils.findMessageElements(elements, HTMLMessages.HTML_BUBBLE_CLASS);
     if (messageContent.files) {
       msgBodyEls.files = MessageUtils.filterdMessageElements(elements, FileMessageUtils.FILE_BUBBLE_CLASS);
     }
     return msgBodyEls;
   }
 
-  public static generateMessageBody(
-    messageContent: MessageContentI,
-    messageElementRefs: MessageElements[],
-    top = false
-  ) {
+  public static generateMessageBody(messageContent: MessageContentI, messageElementRefs: MessageElements[], top = false) {
     const numberOfMessageContentElement = MessageUtils.getNumberOfElements(messageContent);
     const elements = top
       ? messageElementRefs.slice(0, numberOfMessageContentElement)
@@ -202,7 +179,7 @@ export class MessageUtils {
     let currentRole = role ? MessageUtils.buildRoleOuterContainerClass(role) : undefined;
     for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
       if (!role) {
-        currentRole = Array.from(messageElementRefs[i].outerContainer.classList).find(className =>
+        currentRole = Array.from(messageElementRefs[i].outerContainer.classList).find((className) =>
           className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
         );
       }
@@ -237,7 +214,7 @@ export class MessageUtils {
 
   public static areOuterContainerClassRolesSame(comparedRole: string, message?: MessageElements) {
     if (!message) return false;
-    const currentRoleClass = Array.from(message.outerContainer.classList).find(className =>
+    const currentRoleClass = Array.from(message.outerContainer.classList).find((className) =>
       className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
     );
     return currentRoleClass === MessageUtils.buildRoleOuterContainerClass(comparedRole);
@@ -250,7 +227,7 @@ export class MessageUtils {
       if (!message.bubbleElement.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {
         MessageUtils.revealRoleElements(message.innerContainer, avatar, name);
       }
-      const currentRoleClass = Array.from(message.outerContainer.classList).find(className =>
+      const currentRoleClass = Array.from(message.outerContainer.classList).find((className) =>
         className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
       );
       if (lastRoleClass === currentRoleClass) {
@@ -264,7 +241,7 @@ export class MessageUtils {
   // and 'custom' property value if it is not shallow copyable
   // note - structuredClone can fix this but it doesn't have good legacy compatibility
   public static deepCloneMessagesWithReferences(messages: MessageContentI[]): MessageContentI[] {
-    return messages.map(message => {
+    return messages.map((message) => {
       return MessageUtils.processMessageContent(message);
     });
   }
@@ -273,7 +250,7 @@ export class MessageUtils {
     if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
 
     if (Array.isArray(obj)) {
-      return obj.map(item => MessageUtils.processMessageContent(item)) as unknown as T;
+      return obj.map((item) => MessageUtils.processMessageContent(item)) as unknown as T;
     }
 
     const newObj = {} as Record<string, unknown>;

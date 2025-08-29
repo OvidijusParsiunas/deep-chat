@@ -24,11 +24,7 @@ export type BigModelFileContent = {
   };
 };
 
-export type BigModelContentItem =
-  | BigModelTextContent
-  | BigModelImageContent
-  | BigModelVideoContent
-  | BigModelFileContent;
+export type BigModelContentItem = BigModelTextContent | BigModelImageContent | BigModelVideoContent | BigModelFileContent;
 
 export type BigModelMessage = {
   role: 'system' | 'user' | 'assistant';

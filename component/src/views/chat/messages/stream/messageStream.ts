@@ -74,12 +74,7 @@ export class MessageStream {
   }
 
   // not using existing htmlUtils htmlWrappers logic to be able to stream html
-  private setTargetWrapperIfNeeded(
-    elements: MessageElements,
-    content: string,
-    streamType: string,
-    customWrapper: string
-  ) {
+  private setTargetWrapperIfNeeded(elements: MessageElements, content: string, streamType: string, customWrapper: string) {
     elements.bubbleElement.innerHTML = customWrapper;
     this._targetWrapper = HTMLUtils.getTargetWrapper(elements.bubbleElement);
     if (this._elements) HTMLUtils.apply(this._messages, this._elements.bubbleElement);
@@ -181,10 +176,9 @@ export class MessageStream {
     this._activeMessageRole = undefined;
   }
 
+  // prettier-ignore
   public async endStreamAfterFileDownloaded(
-    messages: Messages,
-    downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>
-  ) {
+      messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
     this._endStreamAfterOperation = true;
     const {text, files} = await downloadCb();
     if (text) this.updateBasedOnType(text, 'text', true);

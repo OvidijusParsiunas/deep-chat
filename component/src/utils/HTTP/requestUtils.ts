@@ -26,12 +26,9 @@ export class RequestUtils {
   public static readonly CONTENT_TYPE = 'Content-Type';
 
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-
-  public static async tempRemoveContentHeader(
-    connectSettings: Connect | undefined,
-    request: (stringifyBody?: boolean) => Promise<unknown>,
-    stringifyBody: boolean
-  ) {
+  // prettier-ignore
+  public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
+      request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
     if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
     const previousContetType = connectSettings.headers[RequestUtils.CONTENT_TYPE];
     delete connectSettings.headers[RequestUtils.CONTENT_TYPE];
@@ -83,10 +80,7 @@ export class RequestUtils {
     return response.blob();
   }
 
-  public static async processRequestInterceptor(
-    deepChat: DeepChat,
-    requestDetails: RequestDetails
-  ): InterceptorResultP {
+  public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResultP {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};
@@ -101,7 +95,7 @@ export class RequestUtils {
       return false;
     }
     const invalidFound = dataArr.find(
-      data =>
+      (data) =>
         typeof data !== 'object' ||
         !(
           typeof data.error === 'string' ||
@@ -118,11 +112,9 @@ export class RequestUtils {
     onFinish?.();
   }
 
+  // prettier-ignore
   public static async basicResponseProcessing(
-    messages: Messages,
-    resp: ResponseI | ResponseI[],
-    options: RespProcessingOptions = {}
-  ) {
+      messages: Messages, resp: ResponseI | ResponseI[], options: RespProcessingOptions = {}) {
     const {io, displayError = true, useRI = true} = options;
     if (!io?.extractResultData) return resp;
     const responseInterceptor = useRI ? io.deepChat.responseInterceptor : undefined;

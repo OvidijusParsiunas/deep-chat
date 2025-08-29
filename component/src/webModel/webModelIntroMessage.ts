@@ -7,11 +7,7 @@ export class WebModelIntroMessage {
   private static readonly FILE_INPUT_CLASS = 'deep-chat-file-input';
   private static readonly EXPORT_BUTTON_CLASS = 'deep-chat-export-button';
 
-  private static enableButtons(
-    dwnload: HTMLButtonElement | undefined,
-    upload: HTMLButtonElement | undefined,
-    rounds = 0
-  ) {
+  private static enableButtons(dwnload: HTMLButtonElement | undefined, upload: HTMLButtonElement | undefined, rounds = 0) {
     if (window.webLLM) {
       if (dwnload) dwnload.disabled = false;
       if (upload) upload.disabled = false;

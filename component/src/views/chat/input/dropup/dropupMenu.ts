@@ -52,6 +52,7 @@ export class DropupMenu {
     this.elementRef.appendChild(item);
   }
 
+  // prettier-ignore
   private addWindowEvents(containerElement: HTMLElement) {
     this.clickEvent = this.windowClick.bind(this, containerElement);
     window.addEventListener('click', this.clickEvent);
@@ -67,6 +68,7 @@ export class DropupMenu {
     }
   }
 
+  // prettier-ignore
   private windowKeyDown(containerElement: HTMLElement, event: KeyboardEvent) {
     if (!containerElement.isConnected && this.keyDownEvent) {
       window.removeEventListener('keydown', this.keyDownEvent);
@@ -80,15 +82,11 @@ export class DropupMenu {
       } else if (event.key === KEYBOARD_KEY.ARROW_DOWN) {
         DropupItemNavigation.focusSiblingItem(
           this.highlightedItem || (this.elementRef.children[this.elementRef.children.length - 1] as HTMLElement),
-          this.elementRef,
-          true
-        );
+          this.elementRef, true);
       } else if (event.key === KEYBOARD_KEY.ARROW_UP) {
         DropupItemNavigation.focusSiblingItem(
           this.highlightedItem || (this.elementRef.children[0] as HTMLElement),
-          this.elementRef,
-          false
-        );
+          this.elementRef, false);
       }
     }
   }

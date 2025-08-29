@@ -25,10 +25,7 @@ export class TextToSpeech {
     }
   }
 
-  public static processConfig(
-    config: boolean | TextToSpeechConfig,
-    set: (config: ProcessedTextToSpeechConfig) => void
-  ) {
+  public static processConfig(config: boolean | TextToSpeechConfig, set: (config: ProcessedTextToSpeechConfig) => void) {
     const processedConfig: ProcessedTextToSpeechConfig = {};
     // eslint-disable-next-line
     window.speechSynthesis; // this is required for the browser to start loading voices
@@ -40,7 +37,7 @@ export class TextToSpeech {
         if (config.rate) processedConfig.rate = config.rate;
         if (config.volume) processedConfig.volume = config.volume;
         if (config.voiceName) {
-          const voice = window.speechSynthesis.getVoices().find(voice => {
+          const voice = window.speechSynthesis.getVoices().find((voice) => {
             return voice.name.toLocaleLowerCase() === config.voiceName?.toLocaleLowerCase();
           });
           if (voice) processedConfig.voice = voice;

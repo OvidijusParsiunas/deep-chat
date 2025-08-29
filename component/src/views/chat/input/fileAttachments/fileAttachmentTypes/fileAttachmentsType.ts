@@ -23,18 +23,14 @@ export class FileAttachmentsType {
   private _validationHandler?: ValidationHandler;
   private _onInput: ((isUser: boolean) => void) | undefined;
 
-  constructor(
-    deepChat: DeepChat,
-    serviceIO: ServiceIO,
-    fileAttachments: FileAttachments,
-    toggleContainer: (display: boolean) => void,
-    container: HTMLElement
-  ) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments,
+      toggleContainer: (display: boolean) => void, container: HTMLElement) {
     if (fileAttachments.maxNumberOfFiles) this._fileCountLimit = fileAttachments.maxNumberOfFiles;
     this._toggleContainerDisplay = toggleContainer;
     this._fileAttachmentsContainerRef = container;
     if (fileAttachments.acceptedFormats) this._acceptedFormat = fileAttachments.acceptedFormats;
-    // in a timeout as deepChat._validationHandler initialised later
+     // in a timeout as deepChat._validationHandler initialised later
     setTimeout(() => {
       this._validationHandler = deepChat._validationHandler;
       this._onInput = serviceIO.onInput;
@@ -155,7 +151,7 @@ export class FileAttachmentsType {
 
   removeAttachment(attachmentObject: AttachmentObject, event?: MouseEvent) {
     this._onInput?.(!!event?.isTrusted);
-    const index = this._attachments.findIndex(attachment => attachment === attachmentObject);
+    const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
     const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
     AudioFileAttachmentType.stopAttachmentPlayback(containerElement);
@@ -165,13 +161,13 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map(attachment => ({file: attachment.file, type: attachment.fileType}));
+    return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
   }
 
   hideAttachments() {
     this._hiddenAttachments.clear();
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
-    this._attachments.forEach(attachment => {
+    this._attachments.forEach((attachment) => {
       setTimeout(() => attachment.removeButton?.click());
       this._hiddenAttachments.add(attachment);
     });
@@ -179,14 +175,14 @@ export class FileAttachmentsType {
 
   removeAttachments() {
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
-    this._attachments.forEach(attachment => {
+    this._attachments.forEach((attachment) => {
       setTimeout(() => attachment.removeButton?.click());
     });
     this._hiddenAttachments.clear();
   }
 
   readdAttachments() {
-    Array.from(this._hiddenAttachments).forEach(attachment => {
+    Array.from(this._hiddenAttachments).forEach((attachment) => {
       this._fileAttachmentsContainerRef.appendChild(attachment.attachmentContainerElement);
       this._attachments.push(attachment);
     });

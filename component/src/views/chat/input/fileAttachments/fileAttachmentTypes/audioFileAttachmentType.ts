@@ -14,13 +14,9 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
   private _activePlaceholderAttachment?: AttachmentObject;
   private static readonly TIMER_LIMIT_S = 5999;
 
-  constructor(
-    deepChat: DeepChat,
-    serviceIO: ServiceIO,
-    fileAttachments: FileAttachments,
-    toggleContainer: (display: boolean) => void,
-    container: HTMLElement
-  ) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments,
+      toggleContainer: (display: boolean) => void, container: HTMLElement) {
     super(deepChat, serviceIO, fileAttachments, toggleContainer, container);
   }
 
@@ -116,14 +112,13 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     this.stopPlaceholderCallback = stopCallback;
   }
 
+  // prettier-ignore
   completePlaceholderAttachment(file: File, fileReaderResult: string) {
     const attachmentObj = this._activePlaceholderAttachment;
     if (!attachmentObj) return;
     attachmentObj.file = file;
     AudioFileAttachmentType.addAudioElements(
-      attachmentObj.attachmentContainerElement.children[0] as HTMLElement,
-      fileReaderResult
-    );
+      attachmentObj.attachmentContainerElement.children[0] as HTMLElement, fileReaderResult);
     attachmentObj.removeButton = this.createRemoveAttachmentButton(attachmentObj);
     attachmentObj.attachmentContainerElement.appendChild(attachmentObj.removeButton);
     this._activePlaceholderAttachment = undefined;

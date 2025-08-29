@@ -11,7 +11,7 @@ export class LoadingStyle {
     document.body.appendChild(dummyElement);
     const computedColor = window.getComputedStyle(dummyElement).color;
     const hex = (computedColor.match(/\d+/g) as string[])
-      .map(value => parseInt(value).toString(16).padStart(2, '0'))
+      .map((value) => parseInt(value).toString(16).padStart(2, '0'))
       .join('');
     return `#${hex}`;
   }

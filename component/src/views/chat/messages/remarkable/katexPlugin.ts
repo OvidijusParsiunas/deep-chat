@@ -13,8 +13,7 @@ export class KatexPlugin {
 
     const renderKatex = (source: any, displayMode: any) => {
       return (
-        window.katex?.renderToString(source, {displayMode, throwOnError: false, output: 'mathml', ...katexOptions}) ||
-        ''
+        window.katex?.renderToString(source, {displayMode, throwOnError: false, output: 'mathml', ...katexOptions}) || ''
       );
     };
 

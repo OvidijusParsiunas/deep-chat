@@ -15,23 +15,19 @@ export class DragAndDrop {
     return fileDropElement;
   }
 
-  private static addEvents(
-    fileDropElement: HTMLElement,
-    containerElement: HTMLElement,
-    fileAttachments: FileAttachments
-  ) {
-    containerElement.ondragenter = event => {
+  private static addEvents(fileDropElement: HTMLElement, containerElement: HTMLElement, fileAttachments: FileAttachments) {
+    containerElement.ondragenter = (event) => {
       event.preventDefault();
       DragAndDrop.display(fileDropElement);
     };
-    fileDropElement.ondragleave = event => {
+    fileDropElement.ondragleave = (event) => {
       event.preventDefault();
       DragAndDrop.hide(fileDropElement);
     };
-    fileDropElement.ondragover = event => {
+    fileDropElement.ondragover = (event) => {
       event.preventDefault();
     };
-    fileDropElement.ondrop = event => {
+    fileDropElement.ondrop = (event) => {
       event.preventDefault();
       DragAndDrop.uploadFile(fileAttachments, event);
       DragAndDrop.hide(fileDropElement);

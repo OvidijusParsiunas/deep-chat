@@ -33,21 +33,18 @@ export class InputButtonStyleAdjustments {
     if (pToBs['outside-right'].length === 0 && pToBs['outside-left'].length > 0) {
       containers[0].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS);
-      return pToBs['outside-left'].map(element => element.button.elementRef.classList.add('submit-button-enlarged'));
+      return pToBs['outside-left'].map((element) => element.button.elementRef.classList.add('submit-button-enlarged'));
     } else if (pToBs['outside-left'].length === 0 && pToBs['outside-right'].length > 0) {
       containers[3].classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS);
       fileAtt.classList.add(InputButtonStyleAdjustments.INPUT_OUTSIDE_RIGHT_ADJUSTMENT_CLASS);
-      return pToBs['outside-right'].map(element => element.button.elementRef.classList.add('submit-button-enlarged'));
+      return pToBs['outside-right'].map((element) => element.button.elementRef.classList.add('submit-button-enlarged'));
     }
     return undefined;
   }
 
-  public static set(
-    textInputEl: HTMLElement,
-    containers: ButtonContainersT,
-    fileAtt: HTMLElement,
-    pToBs: PositionToButtons
-  ) {
+  // prettier-ignore
+  public static set(textInputEl: HTMLElement, containers: ButtonContainersT, fileAtt: HTMLElement,
+      pToBs: PositionToButtons) {
     const adjustedForSubmit = !!InputButtonStyleAdjustments.adjustOutsideSubmit(containers, fileAtt, pToBs);
     if (!adjustedForSubmit) InputButtonStyleAdjustments.adjustForOutsideButton(containers, fileAtt, pToBs);
     InputButtonStyleAdjustments.adjustInputPadding(textInputEl, pToBs);

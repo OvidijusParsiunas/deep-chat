@@ -15,19 +15,11 @@ type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: 
 type UpsertFunc = (response?: ResponseI) => MessageStream | void;
 
 export class Stream {
-  public static async request(
-    io: ServiceIO,
-    body: object,
-    messages: Messages,
-    stringifyBody = true,
-    canBeEmpty = false
-  ) {
+  // prettier-ignore
+  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true, canBeEmpty = false) {
     const requestDetails = {body, headers: io.connectSettings?.headers};
-    const {
-      body: interceptedBody,
-      headers: interceptedHeaders,
-      error,
-    } = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
+    const {body: interceptedBody, headers: interceptedHeaders, error} =
+      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     if (error) return RequestUtils.onInterceptorError(messages, error, io.streamHandlers.onClose);
     if (io.connectSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.connectSettings?.url === Demo.URL) return Demo.requestStream(messages, io);
@@ -47,54 +39,40 @@ export class Stream {
     return stream;
   }
 
-  private static handleReadableStream(
-    io: ServiceIO,
-    messages: Messages,
-    stream: MessageStream,
-    reqBody: RequestInit,
-    canBeEmpty: boolean,
-    fetchFunc?: FetchFunc,
-    interceptedBody?: object
-  ) {
+  // prettier-ignore
+  private static handleReadableStream(io: ServiceIO, messages: Messages, stream: MessageStream,
+      reqBody: RequestInit, canBeEmpty: boolean, fetchFunc?: FetchFunc, interceptedBody?: object) {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     let aborted = false;
-    fetch(io.connectSettings?.url || io.url || '', reqBody)
-      .then(async response => {
-        if (!response.body) throw new Error(ErrorMessages.READABLE_STREAM_CONNECTION_ERROR);
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        onOpen();
-        let done = false;
-        while (!done && !aborted) {
-          const {value, done: readerDone} = await reader.read();
-          done = readerDone;
-          if (!done) {
-            const chunk = decoder.decode(value, {stream: true});
-            const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
-            const objEventData = typeof finalEventData === 'object' ? finalEventData : {text: chunk};
-            Stream.handleMessage(io, messages, stream, objEventData, fetchFunc, interceptedBody);
-          } else {
-            Stream.handleClose(io, stream, onClose, canBeEmpty);
-          }
+    fetch(io.connectSettings?.url || io.url || '', reqBody).then(async (response) => {
+      if (!response.body) throw new Error(ErrorMessages.READABLE_STREAM_CONNECTION_ERROR);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      onOpen();
+      let done = false;
+      while (!done && !aborted) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        if (!done) {
+          const chunk = decoder.decode(value, { stream: true });
+          const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
+          const objEventData = typeof finalEventData === 'object' ? finalEventData : {text: chunk};
+          Stream.handleMessage(io, messages, stream, objEventData, fetchFunc, interceptedBody);
+        } else {
+          Stream.handleClose(io, stream, onClose, canBeEmpty);
         }
-      })
-      .catch(err => {
-        Stream.handleError(io, messages, err);
-      });
+      }
+    }).catch((err) => {
+      Stream.handleError(io, messages, err);
+    });
     abortStream.abort = () => {
       aborted = true;
     };
   }
 
-  private static handleEventStream(
-    io: ServiceIO,
-    messages: Messages,
-    stream: MessageStream,
-    reqBody: FetchEventSourceInit,
-    canBeEmpty: boolean,
-    fetchFunc?: FetchFunc,
-    interceptedBody?: object
-  ) {
+  // prettier-ignore
+  private static handleEventStream(io: ServiceIO, messages: Messages, stream: MessageStream,
+      reqBody: FetchEventSourceInit, canBeEmpty: boolean, fetchFunc?: FetchFunc, interceptedBody?: object) {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     fetchEventSource(io.connectSettings?.url || io.url || '', {
       ...reqBody,
@@ -126,31 +104,32 @@ export class Stream {
         Stream.handleClose(io, stream, onClose, canBeEmpty);
       },
       signal: abortStream.signal,
-    }).catch(err => {
+    }).catch((err) => {
       Stream.handleError(io, messages, err);
     });
   }
 
   //prettier-ignore
   private static handleMessage(io: ServiceIO, messages: Messages, stream: MessageStream,
-    eventData: object, fetchFunc?: FetchFunc, interceptedBody?: object) {
+      eventData: object, fetchFunc?: FetchFunc, interceptedBody?: object) {
     io.extractResultData?.(eventData, fetchFunc, interceptedBody)
       .then((result?: ResponseI) => {
         // do not to stop the stream on one message failure to give other messages a change to display
-        Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result)
+        Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
       })
-      .catch((e) => RequestUtils.displayError(messages, e))
+      .catch((e) => RequestUtils.displayError(messages, e));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static handleError(io: ServiceIO, messages: Messages, err: any) {
     if (messages.isLastMessageError()) return;
     // allowing extractResultData to attempt extract error message and throw it
-    io.extractResultData?.(err)
+    io
+      .extractResultData?.(err)
       .then(() => {
         RequestUtils.displayError(messages, err);
       })
-      .catch(parsedError => {
+      .catch((parsedError) => {
         RequestUtils.displayError(messages, parsedError);
       });
   }
@@ -193,16 +172,10 @@ export class Stream {
     }
   }
 
+  // prettier-ignore
   // io is only passed for demo to simulate a real stream
-  private static async populateMessages(
-    messages: Messages,
-    responseStrings: string[],
-    stream: MessageStream,
-    sh: SimulationSH,
-    type: 'text' | 'html',
-    charIndex: number,
-    io?: ServiceIO
-  ) {
+  private static async populateMessages(messages: Messages, responseStrings: string[], stream: MessageStream,
+      sh: SimulationSH, type: 'text'|'html', charIndex: number, io?: ServiceIO) {
     const character = responseStrings[charIndex];
     if (character) {
       const finalEventData = await RequestUtils.basicResponseProcessing(messages, {[type]: character}, {io});
@@ -233,12 +206,7 @@ export class Stream {
     onClose();
   }
 
-  public static upsertWFiles(
-    msgs: Messages,
-    upsert: UpsertFunc,
-    stream?: MessageStream,
-    resp?: ResponseI | ResponseI[]
-  ) {
+  public static upsertWFiles(msgs: Messages, upsert: UpsertFunc, stream?: MessageStream, resp?: ResponseI | ResponseI[]) {
     if (resp && Array.isArray(resp)) resp = resp[0]; // single array responses are supproted
     if (resp?.text || resp?.html) {
       const resultStream = upsert(resp);

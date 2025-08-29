@@ -28,7 +28,7 @@ export class CustomHandler {
         io.completionsHandlers.onFinish();
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
           messages.addNewErrorMessage('service', errorMessage.error);
@@ -36,7 +36,7 @@ export class CustomHandler {
         } else if (Stream.isSimulatable(io.stream, result as Response)) {
           Stream.simulate(messages, io.streamHandlers, result as Response);
         } else {
-          messageDataArr.forEach(message => messages.addNewMessage(message));
+          messageDataArr.forEach((message) => messages.addNewMessage(message));
           io.completionsHandlers.onFinish();
         }
       }
@@ -60,6 +60,7 @@ export class CustomHandler {
     }
   }
 
+  // prettier-ignore
   public static stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
@@ -77,17 +78,9 @@ export class CustomHandler {
     };
     const onResponse = async (response: Response | Response[]) => {
       if (!isHandlerActive) return;
-      const result = (await RequestUtils.basicResponseProcessing(messages, response, {
-        io,
-        displayError: false,
-      })) as Response;
+      const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false}) as Response;
       if (!result) {
-        const errorMessage = ErrorMessages.INVALID_RESPONSE(
-          response,
-          'server',
-          !!io.deepChat.responseInterceptor,
-          result
-        );
+        const errorMessage = ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
         CustomHandler.streamError(errorMessage, stream, io, messages);
         isHandlerActive = false;
       } else if (result.error) {
@@ -103,13 +96,8 @@ export class CustomHandler {
       isHandlerActive = false;
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.connectSettings.handler?.(body, {
-      ...signals,
-      onOpen,
-      onResponse,
-      onClose,
-      stopClicked: io.streamHandlers.stopClicked,
-    });
+    io.connectSettings.handler?.(body,
+      {...signals, onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked});
   }
 
   private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
@@ -119,6 +107,7 @@ export class CustomHandler {
     io.streamHandlers.onClose();
   }
 
+  // prettier-ignore
   public static websocket(io: ServiceIO, messages: Messages) {
     const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}, roleToStream: {}};
     io.websocket = internalConfig;
@@ -137,7 +126,7 @@ export class CustomHandler {
         messages.addNewErrorMessage('service', 'Error in server message');
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
           if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', errorMessage.error);
@@ -147,26 +136,16 @@ export class CustomHandler {
           const stream = (internalConfig.roleToStream as RoleToStream)[message.role || MessageUtils.AI_ROLE];
           Stream.upsertWFiles(messages, upsertFunc, stream, message);
         } else {
-          messageDataArr.forEach(message => messages.addNewMessage(message));
+          messageDataArr.forEach((message) => messages.addNewMessage(message));
         }
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.connectSettings.handler?.(undefined, {
-      ...signals,
-      onOpen,
-      onResponse,
-      onClose,
-      newUserMessage: internalConfig.newUserMessage,
-    });
+    io.connectSettings.handler?.(undefined,
+      {...signals, onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage});
   }
 
   private static generateOptionalSignals() {
-    return {
-      onClose: () => {},
-      onOpen: () => {},
-      stopClicked: {listener: () => {}},
-      newUserMessage: {listener: () => {}},
-    };
+    return {onClose: () => {}, onOpen: () => {}, stopClicked: {listener: () => {}}, newUserMessage: {listener: () => {}}};
   }
 }

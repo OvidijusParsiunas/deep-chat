@@ -23,12 +23,9 @@ export class CameraModal extends Modal {
   private readonly _newFilePrefix?: string;
   private readonly _dimensions?: CameraDimensions;
 
-  constructor(
-    viewContainerElement: HTMLElement,
-    fileAttachmentsType: FileAttachmentsType,
-    containerStyle?: CustomStyle,
-    cameraFiles?: CameraFiles
-  ) {
+  // prettier-ignore
+  constructor(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
+      containerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
     super(viewContainerElement, ['modal-content', 'modal-camera-content'], containerStyle);
     this._canvas = document.createElement('canvas');
     this._canvas.classList.add('camera-modal-canvas');
@@ -59,12 +56,9 @@ export class CameraModal extends Modal {
     return {captureButton, submitButton};
   }
 
-  private addButtonEvents(
-    captureButton: HTMLElement,
-    closeButton: HTMLElement,
-    submitButton: HTMLElement,
-    fileAttachmentsType: FileAttachmentsType
-  ) {
+  // prettier-ignore
+  private addButtonEvents(captureButton: HTMLElement, closeButton: HTMLElement, submitButton: HTMLElement,
+      fileAttachmentsType: FileAttachmentsType) {
     captureButton.onclick = () => {
       this.capture();
     };
@@ -79,7 +73,7 @@ export class CameraModal extends Modal {
 
   private stop() {
     if (this._mediaStream) {
-      this._mediaStream.getTracks().forEach(track => track.stop());
+      this._mediaStream.getTracks().forEach((track) => track.stop());
     }
     this._stopped = true;
     setTimeout(() => {
@@ -96,7 +90,7 @@ export class CameraModal extends Modal {
     this._stopped = false;
     navigator.mediaDevices
       .getUserMedia({video: this._dimensions || true})
-      .then(stream => {
+      .then((stream) => {
         this._mediaStream = stream;
         if (!this.isOpen()) return this.stop();
         const video = document.createElement('video');
@@ -104,7 +98,7 @@ export class CameraModal extends Modal {
         video.play();
         requestAnimationFrame(this.updateCanvas.bind(this, video, this._canvas));
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         this.stop();
         this.close();
@@ -157,12 +151,9 @@ export class CameraModal extends Modal {
     cameraModal.start();
   }
 
-  public static createCameraModalFunc(
-    viewContainerElement: HTMLElement,
-    fileAttachmentsType: FileAttachmentsType,
-    modalContainerStyle?: CustomStyle,
-    cameraFiles?: CameraFiles
-  ) {
+  // prettier-ignore
+  public static createCameraModalFunc(viewContainerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
+      modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
     const cameraModal = new CameraModal(viewContainerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
     return cameraModal.openCameraModal.bind(cameraModal, cameraModal);
   }

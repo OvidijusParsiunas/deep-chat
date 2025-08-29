@@ -48,14 +48,9 @@ export class SubmitButton extends InputButton<Styles> {
   private _validationHandler?: ValidationHandler;
   readonly status = {requestInProgress: false, loadingActive: false};
 
-  constructor(
-    deepChat: DeepChat,
-    textInput: TextInputEl,
-    messages: Messages,
-    serviceIO: ServiceIO,
-    fileAttachments: FileAttachments,
-    buttons: Buttons
-  ) {
+  // prettier-ignore
+  constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
+      fileAttachments: FileAttachments, buttons: Buttons) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     const svg = SUBMIT_ICON_STRING;
     const tooltip = TooltipUtils.tryCreateConfig('Submit', submitButtonStyles?.tooltip);
@@ -71,8 +66,7 @@ export class SubmitButton extends InputButton<Styles> {
     deepChat.disableSubmitButton = this.disableSubmitButton.bind(this, serviceIO);
     this.attemptOverwriteLoadingStyle(deepChat);
     if (buttons.microphone) this.setUpSpeechToText(buttons.microphone.button, deepChat.speechToText);
-    setTimeout(() => {
-      // in a timeout as deepChat._validationHandler initialised later
+    setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
       this._validationHandler = deepChat._validationHandler;
       this.assignHandlers(this._validationHandler as ValidationHandler);
       this._validationHandler?.();
@@ -92,7 +86,7 @@ export class SubmitButton extends InputButton<Styles> {
   private createCustomElements() {
     const submit = ButtonInnerElements.createCustomElements('submit', this.svg, this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
-    Object.keys(states).forEach(state => {
+    Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
       const elements = ButtonInnerElements.createCustomElements(styleState, this.svg, this.customStyles);
       if (elements) states[styleState] = elements;
@@ -124,13 +118,10 @@ export class SubmitButton extends InputButton<Styles> {
     return elements || [submitElement[0].cloneNode(true) as ButtonInnerElement];
   }
 
+  // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
-    if (
-      this.customStyles?.submit?.svg ||
-      this.customStyles?.loading?.svg?.content ||
-      this.customStyles?.loading?.text?.content
-    )
-      return;
+    if (this.customStyles?.submit?.svg
+        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.text?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
       const styleElement = document.createElement('style');
@@ -187,7 +178,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
     const newContent: UserContentI = {text: content.text};
     if (content.files) {
-      newContent.files = Array.from(content.files).map(file => {
+      newContent.files = Array.from(content.files).map((file) => {
         return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
       });
     }
@@ -206,7 +197,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    const filesData = content.files?.map(fileData => fileData.file);
+    const filesData = content.files?.map((fileData) => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.hideFiles();
@@ -229,11 +220,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private changeToStopIcon() {
     if (this._serviceIO.websocket) return; // stop not used for streaming messages in websocket
-    this.elementRef.classList.remove(
-      SubmitButton.LOADING_CLASS,
-      SubmitButton.DISABLED_CLASS,
-      SubmitButton.SUBMIT_CLASS
-    );
+    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
     this.changeElementsByState(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);

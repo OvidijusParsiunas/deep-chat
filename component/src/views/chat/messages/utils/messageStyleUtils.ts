@@ -6,19 +6,14 @@ import {MessageElements} from '../messages';
 import {MessageUtils} from './messageUtils';
 
 export class MessageStyleUtils {
-  public static applyCustomStylesToElements(
-    elements: MessageElements,
-    isMedia: boolean,
-    styles?: MessageElementsStyles
-  ) {
+  public static applyCustomStylesToElements(elements: MessageElements, isMedia: boolean, styles?: MessageElementsStyles) {
     if (!styles) return;
     Object.assign(elements.outerContainer.style, styles.outerContainer);
     Object.assign(elements.innerContainer.style, styles.innerContainer);
     Object.assign(elements.bubbleElement.style, styles.bubble);
     if (isMedia) {
       const bubbleContent = elements.bubbleElement.children[0] as HTMLElement;
-      const mediaElement =
-        bubbleContent.tagName.toLocaleLowerCase() !== 'a' ? bubbleContent : bubbleContent.children[0];
+      const mediaElement = bubbleContent.tagName.toLocaleLowerCase() !== 'a' ? bubbleContent : bubbleContent.children[0];
       Object.assign((mediaElement as HTMLElement).style, styles.media);
     }
   }
@@ -43,13 +38,9 @@ export class MessageStyleUtils {
     );
   }
 
-  public static applyCustomStyles(
-    messageStyles: MessageStyles,
-    elements: MessageElements,
-    role: string,
-    media: boolean,
-    otherStyles?: MessageRoleStyles | MessageElementsStyles
-  ) {
+  // prettier-ignore
+  public static applyCustomStyles(messageStyles: MessageStyles,
+      elements: MessageElements, role: string, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
     if (otherStyles && messageStyles.default !== otherStyles) {
       if (MessageStyleUtils.isElementsStyles(otherStyles)) {
         MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles.default?.shared);
@@ -64,10 +55,9 @@ export class MessageStyleUtils {
     }
   }
 
-  public static extractParticularSharedStyles(
-    specificStyles: (keyof CustomStyle)[],
-    otherStyles?: MessageRoleStyles
-  ): MessageElementsStyles | undefined {
+  // prettier-ignore
+  public static extractParticularSharedStyles(specificStyles: (keyof CustomStyle)[],
+      otherStyles?: MessageRoleStyles): MessageElementsStyles | undefined {
     if (!otherStyles?.shared) return undefined;
     const sharedStyles = otherStyles.shared;
     const newElementStyles: Required<OverrideTypes<MessageElementsStyles, GenericObject>> = {
@@ -76,15 +66,13 @@ export class MessageStyleUtils {
       bubble: {},
       media: {},
     };
-    specificStyles.forEach(style => {
-      newElementStyles.outerContainer[style as keyof GenericObject] =
-        (sharedStyles.outerContainer?.[style] as string) || '';
-      newElementStyles.innerContainer[style as keyof GenericObject] =
-        (sharedStyles.innerContainer?.[style] as string) || '';
-      newElementStyles.bubble[style as keyof GenericObject] = (sharedStyles.bubble?.[style] as string) || '';
-      newElementStyles.media[style as keyof GenericObject] = (sharedStyles.media?.[style] as string) || '';
+    specificStyles.forEach((style) => {
+      newElementStyles.outerContainer[style as keyof GenericObject] = sharedStyles.outerContainer?.[style] as string || '';
+      newElementStyles.innerContainer[style as keyof GenericObject] = sharedStyles.innerContainer?.[style] as string || '';
+      newElementStyles.bubble[style as keyof GenericObject] = sharedStyles.bubble?.[style] as string || '';
+      newElementStyles.media[style as keyof GenericObject] = sharedStyles.media?.[style] as string || '';
     });
-
+    
     return newElementStyles;
   }
 }

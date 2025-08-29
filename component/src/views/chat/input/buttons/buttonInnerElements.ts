@@ -13,12 +13,7 @@ export class ButtonInnerElements {
     return textElement;
   }
 
-  private static tryAddSVGElement(
-    elements: ButtonInnerElement[],
-    base: SVGGraphicsElement,
-    svg?: string,
-    text?: string
-  ) {
+  private static tryAddSVGElement(elements: ButtonInnerElement[], base: SVGGraphicsElement, svg?: string, text?: string) {
     // add svg element if custom or add a base svg only if svg string is not set to empty
     if (svg) {
       elements.push(SVGIconUtils.createSVGElement(svg));
@@ -38,11 +33,8 @@ export class ButtonInnerElements {
   }
 
   public static reassignClassBasedOnChildren(parentEl: HTMLElement, elements: ButtonInnerElement[]) {
-    parentEl.classList.remove(
-      ButtonInnerElements.INPUT_BUTTON_SVG_CLASS,
-      ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS
-    );
-    if (!elements.find(element => element.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS))) {
+    parentEl.classList.remove(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS, ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
+    if (!elements.find((element) => element.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS))) {
       parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS);
     } else if (elements.length > 1) {
       parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);

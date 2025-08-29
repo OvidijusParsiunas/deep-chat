@@ -56,14 +56,14 @@ export class Demo {
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io});
       if (!result) return io.completionsHandlers.onFinish();
       const messageDataArr = Array.isArray(result) ? result : [result];
-      const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
+      const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
       if (errorMessage) {
         messages.addNewErrorMessage('service', errorMessage.error);
         io.completionsHandlers.onFinish();
       } else if (Stream.isSimulatable(io.stream, result as Response)) {
         Stream.simulate(messages, io.streamHandlers, result as Response);
       } else {
-        messageDataArr.forEach(data => messages.addNewMessage(data));
+        messageDataArr.forEach((data) => messages.addNewMessage(data));
         io.completionsHandlers.onFinish();
       }
     }, 400);

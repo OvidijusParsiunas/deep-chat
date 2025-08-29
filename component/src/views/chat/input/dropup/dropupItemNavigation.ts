@@ -5,16 +5,11 @@ export class DropupItemNavigation {
   }
 
   // isEdgeItem means is it a start or end item
-
-  public static focusSiblingItem(
-    focusedItem: HTMLElement,
-    dropupElement: HTMLElement,
-    isNext: boolean,
-    isEdgeItem = false
-  ): void {
+  // prettier-ignore
+  public static focusSiblingItem(focusedItem: HTMLElement,
+      dropupElement: HTMLElement, isNext: boolean, isEdgeItem = false): void {
     const siblingElement = isEdgeItem
-      ? focusedItem
-      : (focusedItem[isNext ? 'nextSibling' : 'previousSibling'] as HTMLElement);
+      ? focusedItem : (focusedItem[isNext ? 'nextSibling' : 'previousSibling'] as HTMLElement);
     if (!siblingElement) {
       focusedItem.dispatchEvent(new MouseEvent('mouseleave'));
       DropupItemNavigation.focusItemWhenOnEdge(dropupElement, isNext);
@@ -22,5 +17,6 @@ export class DropupItemNavigation {
       focusedItem.dispatchEvent(new MouseEvent('mouseleave'));
       siblingElement.dispatchEvent(new MouseEvent('mouseenter'));
     }
+    
   }
 }

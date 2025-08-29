@@ -34,10 +34,9 @@ export class SpeechToText extends MicrophoneButton {
     });
   }
 
-  private processConfiguration(
-    textInput: TextInputEl,
-    config?: boolean | SpeechToTextConfig
-  ): {serviceName: string; processedConfig: ProcessedConfig} {
+  // prettier-ignore
+  private processConfiguration(textInput: TextInputEl, config?: boolean | SpeechToTextConfig):
+      {serviceName: string, processedConfig: ProcessedConfig} {
     const newConfig = typeof config === 'object' ? config : {};
     const webSpeechConfig = typeof newConfig.webSpeech === 'object' ? newConfig.webSpeech : {};
     const azureConfig = newConfig.azure || {};
