@@ -1,6 +1,6 @@
-import {Names, Name as NameT, CustomNames} from '../../../types/names';
-import {MessageUtils} from './utils/messageUtils';
-import {Role} from './role';
+import { Names, Name as NameT, CustomNames } from '../../../types/names';
+import { MessageUtils } from './utils/messageUtils';
+import { Role } from './role';
 
 export class Name extends Role {
   private readonly _names: Names;

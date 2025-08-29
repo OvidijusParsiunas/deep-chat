@@ -1,7 +1,7 @@
-import {ValidationHandler} from '../../../../types/validationHandler';
-import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
-import {FileAttachments} from '../fileAttachments/fileAttachments';
-import {FocusUtils} from './focusUtils';
+import { ValidationHandler } from '../../../../types/validationHandler';
+import { KEYBOARD_KEY } from '../../../../utils/buttons/keyboardKeys';
+import { FileAttachments } from '../fileAttachments/fileAttachments';
+import { FocusUtils } from './focusUtils';
 
 export class TextInputEvents {
   // prettier-ignore

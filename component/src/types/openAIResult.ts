@@ -1,4 +1,4 @@
-import {InterfacesUnion} from './utilityTypes';
+import { InterfacesUnion } from './utilityTypes';
 
 // when executing either create new message (only thread_id will be present)
 // https://platform.openai.com/docs/api-reference/messages/createMessage
@@ -6,7 +6,7 @@ import {InterfacesUnion} from './utilityTypes';
 // https://platform.openai.com/docs/api-reference/runs/createThreadAndRun
 export type OpenAIAssistantInitReqResult = OpenAIRunResult & {
   id: string; // run id
-  error?: {code: string; message: string};
+  error?: { code: string; message: string };
   // this is used exclusively for streams
   delta?: {
     content?: OpenAIAssistantContent[];
@@ -24,8 +24,8 @@ export interface OpenAINewAssistantResult {
 }
 
 export interface OpenAIAssistantContent {
-  image_file?: {file_id: string};
-  text?: {value: string; annotations?: {text?: string; file_path?: {file_id?: string}}[]};
+  image_file?: { file_id: string };
+  text?: { value: string; annotations?: { text?: string; file_path?: { file_id?: string } }[] };
 }
 
 export interface OpenAIAssistantData {
@@ -38,7 +38,7 @@ export interface OpenAIAssistantMessagesResult {
   data: OpenAIAssistantData[];
 }
 
-export type ToolCalls = {function: {name: string; arguments: string}; id: string}[];
+export type ToolCalls = { function: { name: string; arguments: string }; id: string }[];
 
 export interface OpenAIRunResult {
   status: string;
@@ -59,30 +59,30 @@ export interface ToolAPI {
 export type OpenAIMessage = {
   role: 'user' | 'system' | 'ai' | 'tool';
   content: string;
-  audio?: {data: string; transcript: string};
+  audio?: { data: string; transcript: string };
 } & ToolAPI;
 
-export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};
+export type OpenAITextToSpeechResult = Blob | { error?: { code: string; message: string } };
 
 // text for completion request & stream
 // message for chat completion request
 // delta for chat completion stream
 export type ResultChoice = InterfacesUnion<
-  {text: string} | {message: OpenAIMessage} | {delta: OpenAIMessage; finish_reason?: string}
+  { text: string } | { message: OpenAIMessage } | { delta: OpenAIMessage; finish_reason?: string }
 >;
 
 export interface OpenAIConverseResult {
   choices: ResultChoice[];
-  usage: {total_tokens: number};
-  error?: {code: string; message: string};
+  usage: { total_tokens: number };
+  error?: { code: string; message: string };
 }
 
 export interface OpenAIImageResult {
-  data: InterfacesUnion<{url: string} | {b64_json: string}>[];
-  error?: {code: string; message: string};
+  data: InterfacesUnion<{ url: string } | { b64_json: string }>[];
+  error?: { code: string; message: string };
 }
 
 export interface OpenAIAudioResult {
   text: string;
-  error?: {code: string; message: string};
+  error?: { code: string; message: string };
 }

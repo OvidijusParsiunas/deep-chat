@@ -1,8 +1,8 @@
-import {AudioFileAttachmentType} from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
-import {MicrophoneFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
-import {NewFileName} from '../../fileAttachments/newFileName';
-import {AudioFormat} from '../../../../../types/microphone';
-import {MicrophoneButton} from './microphoneButton';
+import { AudioFileAttachmentType } from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
+import { MicrophoneFilesServiceConfig } from '../../../../../types/fileServiceConfigs';
+import { NewFileName } from '../../fileAttachments/newFileName';
+import { AudioFormat } from '../../../../../types/microphone';
+import { MicrophoneButton } from './microphoneButton';
 
 export class RecordAudio extends MicrophoneButton {
   private _mediaRecorder?: MediaRecorder;
@@ -45,7 +45,7 @@ export class RecordAudio extends MicrophoneButton {
 
   private record() {
     navigator.mediaDevices
-      .getUserMedia({audio: true})
+      .getUserMedia({ audio: true })
       .then((stream) => {
         this.changeToActive();
         this._mediaRecorder = new MediaRecorder(stream);
@@ -67,9 +67,9 @@ export class RecordAudio extends MicrophoneButton {
   }
 
   private createFile(event: BlobEvent) {
-    const blob = new Blob([event.data], {type: `audio/${this._extension}`});
+    const blob = new Blob([event.data], { type: `audio/${this._extension}` });
     const filename = NewFileName.getFileName(this._newFilePrefix || 'audio', this._extension);
-    const file = new File([blob], filename, {type: blob.type});
+    const file = new File([blob], filename, { type: blob.type });
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event) => {

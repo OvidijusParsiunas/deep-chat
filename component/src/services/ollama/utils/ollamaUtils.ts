@@ -1,4 +1,4 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
 
 export class OllamaUtils {
   public static buildHeaders() {

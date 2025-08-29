@@ -1,10 +1,10 @@
-import {EventToFunction, HTMLClassUtility, HTMLClassUtilities} from '../../../../types/html';
-import {StatefulEvents} from '../../../../utils/element/statefulEvents';
-import {StyleUtils} from '../../../../utils/element/styleUtils';
-import {HTMLDeepChatElements} from './htmlDeepChatElements';
-import {StatefulStyles} from '../../../../types/styles';
-import {HTMLWrappers} from '../../../../types/stream';
-import {MessagesBase} from '../messagesBase';
+import { EventToFunction, HTMLClassUtility, HTMLClassUtilities } from '../../../../types/html';
+import { StatefulEvents } from '../../../../utils/element/statefulEvents';
+import { StyleUtils } from '../../../../utils/element/styleUtils';
+import { HTMLDeepChatElements } from './htmlDeepChatElements';
+import { StatefulStyles } from '../../../../types/styles';
+import { HTMLWrappers } from '../../../../types/stream';
+import { MessagesBase } from '../messagesBase';
 
 export class HTMLUtils {
   static readonly TARGET_WRAPPER_CLASS = 'html-wrapper';
@@ -23,7 +23,7 @@ export class HTMLUtils {
   }
 
   private static applyClassUtilitiesToElement(element: HTMLElement, classUtility: HTMLClassUtility) {
-    const {events, styles} = classUtility;
+    const { events, styles } = classUtility;
     if (events) HTMLUtils.applyEventsToElement(element, events);
     // if deep chat class then style was already applied
     if (styles && !HTMLDeepChatElements.doesElementContainDeepChatClass(element)) {
@@ -88,10 +88,10 @@ export class HTMLUtils {
       const customWrapper = wrappers?.[role] || wrappers?.['default'];
       if (customWrapper) {
         bubbleElement.innerHTML = customWrapper;
-        return {contentEl: HTMLUtils.getTargetWrapper(bubbleElement), wrapper: true};
+        return { contentEl: HTMLUtils.getTargetWrapper(bubbleElement), wrapper: true };
       }
     }
-    return {contentEl: bubbleElement, wrapper: false};
+    return { contentEl: bubbleElement, wrapper: false };
   }
 
   public static getTargetWrapper(bubbleElement: HTMLElement) {

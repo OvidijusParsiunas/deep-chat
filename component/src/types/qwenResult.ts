@@ -27,4 +27,3 @@ export type QwenResult = {
     code?: string;
   };
 };
-

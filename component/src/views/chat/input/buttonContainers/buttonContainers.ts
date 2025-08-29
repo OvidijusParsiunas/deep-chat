@@ -1,11 +1,11 @@
-import {ButtonPosition} from '../../../../types/button';
+import { ButtonPosition } from '../../../../types/button';
 
 // outside-left, inside-left, inside-right, outside-right
 export type ButtonContainersT = readonly [HTMLDivElement, HTMLDivElement, HTMLDivElement, HTMLDivElement];
 
 export class ButtonContainers {
   public static create() {
-    return Array.from({length: 4}).map((_, index: number) => {
+    return Array.from({ length: 4 }).map((_, index: number) => {
       const container = document.createElement('div');
       container.classList.add('input-button-container');
       if (index === 0 || index === 3) container.classList.add('outer-button-container');

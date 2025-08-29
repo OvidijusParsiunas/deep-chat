@@ -24,7 +24,7 @@ export type GroqRequestBody = {
   stop?: string[];
   seed?: number;
   tools?: object[];
-  tool_choice?: 'none' | 'auto' | 'required' | {type: 'function'; function: {name: string}};
+  tool_choice?: 'none' | 'auto' | 'required' | { type: 'function'; function: { name: string } };
   stream?: boolean;
 };
 

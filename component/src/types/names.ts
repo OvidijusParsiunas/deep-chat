@@ -1,4 +1,4 @@
-import {CustomStyle} from './styles';
+import { CustomStyle } from './styles';
 
 export interface Name {
   text?: string;
@@ -6,6 +6,6 @@ export interface Name {
   position?: 'left' | 'right';
 }
 
-export type CustomNames = {default?: Name; ai?: Name; user?: Name} & {[name: string]: Name};
+export type CustomNames = { default?: Name; ai?: Name; user?: Name } & { [name: string]: Name };
 
 export type Names = true | CustomNames;

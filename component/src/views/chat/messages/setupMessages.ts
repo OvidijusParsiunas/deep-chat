@@ -1,5 +1,5 @@
-import {ServiceIO} from '../../../services/serviceIO';
-import {DeepChat} from '../../../deepChat';
+import { ServiceIO } from '../../../services/serviceIO';
+import { DeepChat } from '../../../deepChat';
 
 export class SetupMessages {
   public static getText(deepChat: DeepChat, serviceIO: ServiceIO) {

@@ -1,18 +1,18 @@
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {QwenRequestBody, QwenMessage} from '../../types/qwenInternal';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {QwenResult} from '../../types/qwenResult';
-import {Stream} from '../../utils/HTTP/stream';
-import {QwenUtils} from './utils/qwenUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
-import {Qwen} from '../../types/qwen';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { QwenRequestBody, QwenMessage } from '../../types/qwenInternal';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageLimitUtils } from '../utils/messageLimitUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { QwenResult } from '../../types/qwenResult';
+import { Stream } from '../../utils/HTTP/stream';
+import { QwenUtils } from './utils/qwenUtils';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
+import { Qwen } from '../../types/qwen';
 
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
 export class QwenChatIO extends DirectServiceIO {
@@ -53,7 +53,7 @@ export class QwenChatIO extends DirectServiceIO {
       } as QwenMessage;
     });
 
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    bodyCopy.messages = [{ role: 'system', content: this._systemMessage }, ...processedMessages];
     return bodyCopy;
   }
 
@@ -77,15 +77,15 @@ export class QwenChatIO extends DirectServiceIO {
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return { text: choice.delta.content };
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return { text: choice.message.content };
       }
     }
 
-    return {text: ''};
+    return { text: '' };
   }
 }

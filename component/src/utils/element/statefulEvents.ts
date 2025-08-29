@@ -1,5 +1,5 @@
-import {StatefulStyles} from '../../types/styles';
-import {StyleUtils} from './styleUtils';
+import { StatefulStyles } from '../../types/styles';
+import { StyleUtils } from './styleUtils';
 
 export class StatefulEvents {
   private static mouseUp(element: HTMLElement, styles: StatefulStyles) {

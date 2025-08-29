@@ -1,18 +1,18 @@
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {KimiRequestBody, KimiMessage} from '../../types/kimiInternal';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {KimiResult} from '../../types/kimiResult';
-import {Stream} from '../../utils/HTTP/stream';
-import {KimiUtils} from './utils/kimiUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
-import {Kimi} from '../../types/kimi';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { KimiRequestBody, KimiMessage } from '../../types/kimiInternal';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageLimitUtils } from '../utils/messageLimitUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { KimiResult } from '../../types/kimiResult';
+import { Stream } from '../../utils/HTTP/stream';
+import { KimiUtils } from './utils/kimiUtils';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
+import { Kimi } from '../../types/kimi';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
 export class KimiChatIO extends DirectServiceIO {
@@ -53,7 +53,7 @@ export class KimiChatIO extends DirectServiceIO {
       } as KimiMessage;
     });
 
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    bodyCopy.messages = [{ role: 'system', content: this._systemMessage }, ...processedMessages];
     return bodyCopy;
   }
 
@@ -76,14 +76,14 @@ export class KimiChatIO extends DirectServiceIO {
       const choice = result.choices[0];
 
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return { text: choice.delta.content };
       }
 
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return { text: choice.message.content };
       }
     }
 
-    return {text: ''};
+    return { text: '' };
   }
 }

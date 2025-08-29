@@ -1,6 +1,6 @@
-import {HuggingFaceTextGenerationResult} from '../../../types/huggingFaceResult';
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import { HuggingFaceTextGenerationResult } from '../../../types/huggingFaceResult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
 
 export class HuggingFaceUtils {
   public static buildHeaders(key: string) {

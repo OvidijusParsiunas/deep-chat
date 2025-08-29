@@ -10,7 +10,7 @@ export interface RemarkableOptions {
   typographer?: boolean;
   quotes?: string;
   highlight?: (str: string, lang: string) => void;
-  math?: true | {delimiter?: string; options?: KatexOptions};
+  math?: true | { delimiter?: string; options?: KatexOptions };
 }
 
 // https://katex.org/docs/options

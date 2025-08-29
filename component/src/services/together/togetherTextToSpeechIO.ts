@@ -1,14 +1,14 @@
-import {TogetherTextToSpeechRequestBody} from '../../types/togetherInternal';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {TogetherTextToSpeech} from '../../types/together';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {TogetherUtils} from './utils/togetherUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { TogetherTextToSpeechRequestBody } from '../../types/togetherInternal';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { TogetherTextToSpeech } from '../../types/together';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { TogetherUtils } from './utils/togetherUtils';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 // https://docs.together.ai/reference/audio-speech
 export class TogetherTextToSpeechIO extends DirectServiceIO {
@@ -48,8 +48,8 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
-    const blob = new Blob([result], {type: 'audio/mpeg'});
+    const blob = new Blob([result], { type: 'audio/mpeg' });
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{src: audioUrl, type: 'audio'}]};
+    return { files: [{ src: audioUrl, type: 'audio' }] };
   }
 }

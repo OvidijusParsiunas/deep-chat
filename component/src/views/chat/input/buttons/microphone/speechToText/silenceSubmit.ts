@@ -1,7 +1,7 @@
-import {SubmitAfterSilence} from '../../../../../../types/microphone';
-import {TextInputEl} from '../../../textInput/textInput';
+import { SubmitAfterSilence } from '../../../../../../types/microphone';
+import { TextInputEl } from '../../../textInput/textInput';
 import SpeechToElement from 'speech-to-element';
-import {SpeechToText} from './speechToText';
+import { SpeechToText } from './speechToText';
 
 export class SilenceSubmit {
   private _silenceTimeout?: number;

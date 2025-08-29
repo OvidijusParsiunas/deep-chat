@@ -1,5 +1,5 @@
-import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
-import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import { ButtonInnerElement, ButtonStateStyles } from '../../../../types/buttonInternal';
+import { SVGIconUtils } from '../../../../utils/svg/svgIconUtils';
 
 export class ButtonInnerElements {
   private static readonly INPUT_BUTTON_SVG_TEXT_CLASS = 'input-button-svg-text';

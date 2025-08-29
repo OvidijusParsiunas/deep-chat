@@ -1,4 +1,4 @@
-import {MessageFiles} from './messageFile';
+import { MessageFiles } from './messageFile';
 
 export interface Response {
   text?: string;

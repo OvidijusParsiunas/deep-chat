@@ -1,14 +1,14 @@
-import {HistoryMessage, LoadHistory} from '../../../../types/history';
-import {ElementUtils} from '../../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../../types/messagesInternal';
-import {MessageContent} from '../../../../types/messages';
-import {ServiceIO} from '../../../../services/serviceIO';
-import {Legacy} from '../../../../utils/legacy/legacy';
-import {MessageElements, Messages} from '../messages';
-import {MessageUtils} from '../utils/messageUtils';
-import {LoadingHistory} from './loadingHistory';
-import {DeepChat} from '../../../../deepChat';
-import {MessagesBase} from '../messagesBase';
+import { HistoryMessage, LoadHistory } from '../../../../types/history';
+import { ElementUtils } from '../../../../utils/element/elementUtils';
+import { MessageContentI } from '../../../../types/messagesInternal';
+import { MessageContent } from '../../../../types/messages';
+import { ServiceIO } from '../../../../services/serviceIO';
+import { Legacy } from '../../../../utils/legacy/legacy';
+import { MessageElements, Messages } from '../messages';
+import { MessageUtils } from '../utils/messageUtils';
+import { LoadingHistory } from './loadingHistory';
+import { DeepChat } from '../../../../deepChat';
+import { MessagesBase } from '../messagesBase';
 
 export class History {
   private readonly _messages: Messages;
@@ -35,7 +35,7 @@ export class History {
   }
 
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
-    const {messageElementRefs, messageToElements, elementRef} = this._messages;
+    const { messageElementRefs, messageToElements, elementRef } = this._messages;
     const preLoadFirstMessageEl = messageElementRefs.find(
       (messageElRefs) => !messageElRefs.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)
     )?.outerContainer;
@@ -43,7 +43,7 @@ export class History {
     historyMessages
       ?.reverse()
       .map((message) => {
-        const messageContent = this._messages.addAnyMessage({...message, sendUpdate: true}, true, true);
+        const messageContent = this._messages.addAnyMessage({ ...message, sendUpdate: true }, true, true);
         if (messageContent) {
           const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs, true);
           messageToElements.unshift([messageContent, messageBody]);
@@ -61,7 +61,7 @@ export class History {
     this._isPaginationComplete = messages.findIndex((message) => !message) < 0;
     const messageContent = messages.filter((message) => !!message);
     this.processLoadedHistory(messageContent);
-    const {messageElementRefs, avatar, name} = this._messages;
+    const { messageElementRefs, avatar, name } = this._messages;
     MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
   }
 

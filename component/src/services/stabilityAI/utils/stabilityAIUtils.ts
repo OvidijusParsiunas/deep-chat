@@ -1,6 +1,6 @@
-import {StabilityAITextToImageResult} from '../../../types/stabilityAIResult';
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import { StabilityAITextToImageResult } from '../../../types/stabilityAIResult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
 
 export class StabilityAIUtils {
   public static buildHeaders(key: string) {

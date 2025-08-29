@@ -1,12 +1,12 @@
-import {AzureSpeechToTextResult} from '../../types/azureResult';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {AzureUtils} from './utils/azureUtils';
-import {AzureSpeechIO} from './azureSpeechIO';
-import {Response} from '../../types/response';
-import {DeepChat} from '../../deepChat';
-import {Azure} from '../../types/azure';
+import { AzureSpeechToTextResult } from '../../types/azureResult';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { AzureUtils } from './utils/azureUtils';
+import { AzureSpeechIO } from './azureSpeechIO';
+import { Response } from '../../types/response';
+import { DeepChat } from '../../deepChat';
+import { Azure } from '../../types/azure';
 
 export class AzureSpeechToTextIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
@@ -29,13 +29,13 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.speechToText as NonNullable<Azure['speechToText']>;
     const apiKey = deepChat.directConnection?.azure;
-    const defaultFile = {audio: {files: {acceptedFormats: '.wav,.ogg'}}};
+    const defaultFile = { audio: { files: { acceptedFormats: '.wav,.ogg' } } };
     super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, defaultFile);
     if (!config.region) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureSpeechToTextIO.REGION_ERROR_MESSAGE});
+        deepChat.addMessage({ error: AzureSpeechToTextIO.REGION_ERROR_MESSAGE });
       });
     } else {
       this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;
@@ -63,6 +63,6 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
 
   override async extractResultData(result: AzureSpeechToTextResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result.DisplayText || ''};
+    return { text: result.DisplayText || '' };
   }
 }

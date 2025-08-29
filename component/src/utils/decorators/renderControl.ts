@@ -1,4 +1,4 @@
-import {InternalHTML} from '../webComponent/internalHTML';
+import { InternalHTML } from '../webComponent/internalHTML';
 
 export class RenderControl {
   private static waitForPropertiesToBeUpdatedBeforeRender(deepChat: InternalHTML) {

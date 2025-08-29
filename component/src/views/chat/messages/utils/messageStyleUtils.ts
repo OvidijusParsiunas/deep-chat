@@ -1,9 +1,9 @@
-import {MessageElementsStyles, MessageRoleStyles, MessageStyles} from '../../../../types/messages';
-import {OverrideTypes} from '../../../../types/utilityTypes';
-import {GenericObject} from '../../../../types/object';
-import {CustomStyle} from '../../../../types/styles';
-import {MessageElements} from '../messages';
-import {MessageUtils} from './messageUtils';
+import { MessageElementsStyles, MessageRoleStyles, MessageStyles } from '../../../../types/messages';
+import { OverrideTypes } from '../../../../types/utilityTypes';
+import { GenericObject } from '../../../../types/object';
+import { CustomStyle } from '../../../../types/styles';
+import { MessageElements } from '../messages';
+import { MessageUtils } from './messageUtils';
 
 export class MessageStyleUtils {
   public static applyCustomStylesToElements(elements: MessageElements, isMedia: boolean, styles?: MessageElementsStyles) {

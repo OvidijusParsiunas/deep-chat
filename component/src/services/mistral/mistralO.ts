@@ -1,15 +1,15 @@
-import {DirectConnection} from '../../types/directConnection';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {MistralResult} from '../../types/mistralRsult';
-import {MistralUtils} from './utils/mistralUtils';
-import {Stream} from '../../utils/HTTP/stream';
-import {Response} from '../../types/response';
-import {Mistral} from '../../types/mistral';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { MistralResult } from '../../types/mistralRsult';
+import { MistralUtils } from './utils/mistralUtils';
+import { Stream } from '../../utils/HTTP/stream';
+import { Response } from '../../types/response';
+import { Mistral } from '../../types/mistral';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 // https://docs.mistral.ai/api/
 export class MistralIO extends DirectServiceIO {
@@ -63,15 +63,15 @@ export class MistralIO extends DirectServiceIO {
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return { text: choice.delta.content };
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return { text: choice.message.content };
       }
     }
 
-    return {text: ''};
+    return { text: '' };
   }
 }

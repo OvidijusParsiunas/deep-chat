@@ -1,11 +1,11 @@
-import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {BuildHeadersFunc} from '../../types/headers';
-import {BaseServiceIO} from './baseServiceIO';
-import {Connect} from '../../types/connect';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { KeyVerificationDetails } from '../../types/keyVerificationDetails';
+import { KeyVerificationHandlers, ServiceFileTypes } from '../serviceIO';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { BuildHeadersFunc } from '../../types/headers';
+import { BaseServiceIO } from './baseServiceIO';
+import { Connect } from '../../types/connect';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 export class DirectServiceIO extends BaseServiceIO {
   key?: string;

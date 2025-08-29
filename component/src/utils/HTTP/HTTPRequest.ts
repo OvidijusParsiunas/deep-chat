@@ -1,11 +1,11 @@
-import {ErrorMessages} from '../errorMessages/errorMessages';
-import {Messages} from '../../views/chat/messages/messages';
-import {RequestDetails} from '../../types/interceptors';
-import {ServiceIO} from '../../services/serviceIO';
-import {CustomHandler} from './customHandler';
-import {RequestUtils} from './requestUtils';
-import {Demo} from '../demo/demo';
-import {Stream} from './stream';
+import { ErrorMessages } from '../errorMessages/errorMessages';
+import { Messages } from '../../views/chat/messages/messages';
+import { RequestDetails } from '../../types/interceptors';
+import { ServiceIO } from '../../services/serviceIO';
+import { CustomHandler } from './customHandler';
+import { RequestUtils } from './requestUtils';
+import { Demo } from '../demo/demo';
+import { Stream } from './stream';
 
 // prettier-ignore
 export type HandleVerificationResult = (
@@ -53,7 +53,7 @@ export class HTTPRequest {
 
   public static executePollRequest(io: ServiceIO, url: string, requestInit: RequestInit, messages: Messages) {
     // console.log('polling');
-    const {onFinish} = io.completionsHandlers;
+    const { onFinish } = io.completionsHandlers;
     fetch(url, requestInit)
       .then((response) => response.json())
       .then(async (result: object) => {

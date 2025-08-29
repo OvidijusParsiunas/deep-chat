@@ -1,5 +1,5 @@
-import {CustomStyle} from '../../../../../types/styles';
-import {FileAttachments} from '../fileAttachments';
+import { CustomStyle } from '../../../../../types/styles';
+import { FileAttachments } from '../fileAttachments';
 
 export class DragAndDrop {
   public static create(containerElement: HTMLElement, fileAttachments: FileAttachments, dnd?: boolean | CustomStyle) {

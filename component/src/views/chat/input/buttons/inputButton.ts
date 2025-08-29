@@ -1,23 +1,23 @@
-import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
-import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
-import {ActiveTooltip, Tooltip} from '../../../../types/tooltip';
-import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
-import {ButtonInnerElements} from './buttonInnerElements';
-import {StatefulStyles} from '../../../../types/styles';
-import {ButtonAccessibility} from './buttonAccessility';
-import {ButtonStyles} from '../../../../types/button';
-import {TooltipUtils} from './tooltip/tooltipUtils';
-import {ButtonCSS} from './buttonCSS';
+import { ButtonInnerElement, ButtonStateStyles } from '../../../../types/buttonInternal';
+import { ButtonPosition as ButtonPositionT } from '../../../../types/button';
+import { ActiveTooltip, Tooltip } from '../../../../types/tooltip';
+import { SVGIconUtils } from '../../../../utils/svg/svgIconUtils';
+import { ButtonInnerElements } from './buttonInnerElements';
+import { StatefulStyles } from '../../../../types/styles';
+import { ButtonAccessibility } from './buttonAccessility';
+import { ButtonStyles } from '../../../../types/button';
+import { TooltipUtils } from './tooltip/tooltipUtils';
+import { ButtonCSS } from './buttonCSS';
 
 interface MouseState {
   state: keyof StatefulStyles;
 }
 
-type Styles = {[key: string]: ButtonStyles};
+type Styles = { [key: string]: ButtonStyles };
 
 export class InputButton<T extends Styles = Styles> {
   elementRef: HTMLElement;
-  protected readonly _mouseState: MouseState = {state: 'default'};
+  protected readonly _mouseState: MouseState = { state: 'default' };
   private readonly _tooltipSettings?: Tooltip;
   private _activeTooltip?: ActiveTooltip;
   readonly svg: SVGGraphicsElement;

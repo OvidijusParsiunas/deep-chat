@@ -1,14 +1,14 @@
-import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {BigModelTextToSpeech} from '../../types/bigModel';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {BigModelUtils} from './utils/bigModelUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { BigModelTextToSpeechRequestBody } from '../../types/bigModelInternal';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { BigModelTextToSpeech } from '../../types/bigModel';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { BigModelUtils } from './utils/bigModelUtils';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 // https://docs.bigmodel.cn/api-reference/%E6%A8%A1%E5%9E%8B-api/%E6%96%87%E6%9C%AC%E8%BD%AC%E8%AF%AD%E9%9F%B3
 export class BigModelTextToSpeechIO extends DirectServiceIO {
@@ -48,8 +48,8 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
-    const blob = new Blob([result], {type: 'audio/mpeg'});
+    const blob = new Blob([result], { type: 'audio/mpeg' });
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{src: audioUrl, type: 'audio'}]};
+    return { files: [{ src: audioUrl, type: 'audio' }] };
   }
 }

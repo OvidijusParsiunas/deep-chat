@@ -1,1 +1,1 @@
-export type DisplayLoadingBubble = boolean | {toggle: () => void};
+export type DisplayLoadingBubble = boolean | { toggle: () => void };

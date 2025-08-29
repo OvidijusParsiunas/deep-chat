@@ -1,8 +1,8 @@
-import {KatexOptions} from '../../../../types/remarkable';
+import { KatexOptions } from '../../../../types/remarkable';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class KatexPlugin {
-  public static katex(katexOptions: KatexOptions, md: any, options?: {delimiter?: string}) {
+  public static katex(katexOptions: KatexOptions, md: any, options?: { delimiter?: string }) {
     const backslash = '\\';
     const dollar = '$';
     const opts = options || {};
@@ -13,7 +13,7 @@ export class KatexPlugin {
 
     const renderKatex = (source: any, displayMode: any) => {
       return (
-        window.katex?.renderToString(source, {displayMode, throwOnError: false, output: 'mathml', ...katexOptions}) || ''
+        window.katex?.renderToString(source, { displayMode, throwOnError: false, output: 'mathml', ...katexOptions }) || ''
       );
     };
 
@@ -146,7 +146,7 @@ export class KatexPlugin {
                 .slice(spanStart, matchStart)
                 .replace(/[ \n]+/g, ' ')
                 .trim();
-              state.push({type: 'katex', content: content, block: marker.length > 1, level: state.level});
+              state.push({ type: 'katex', content: content, block: marker.length > 1, level: state.level });
             }
             state.pos = matchEnd;
             return true;

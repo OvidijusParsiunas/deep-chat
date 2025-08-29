@@ -1,25 +1,25 @@
-import { ErrorMessages } from '../errorMessages/errorMessages'
-import { Messages } from '../../views/chat/messages/messages'
-import { Response as ResponseI } from '../../types/response'
-import { RequestDetails } from '../../types/interceptors'
-import { ErrorResp } from '../../types/errorInternal'
-import { ServiceIO } from '../../services/serviceIO'
-import { GenericObject } from '../../types/object'
-import { Connect } from '../../types/connect'
-import { DeepChat } from '../../deepChat'
+import { ErrorMessages } from '../errorMessages/errorMessages';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { RequestDetails } from '../../types/interceptors';
+import { ErrorResp } from '../../types/errorInternal';
+import { ServiceIO } from '../../services/serviceIO';
+import { GenericObject } from '../../types/object';
+import { Connect } from '../../types/connect';
+import { DeepChat } from '../../deepChat';
 
 // this is mostly used for calling the request again for OpenAI API function calls
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FetchFunc = (body: any) => Promise<Response>
+export type FetchFunc = (body: any) => Promise<Response>;
 
-export type InterceptorResult = RequestDetails & { error?: string }
+export type InterceptorResult = RequestDetails & { error?: string };
 
-type InterceptorResultP = Promise<InterceptorResult>
+type InterceptorResultP = Promise<InterceptorResult>;
 
 interface RespProcessingOptions {
-  io?: ServiceIO
-  useRI?: boolean
-  displayError?: boolean
+  io?: ServiceIO;
+  useRI?: boolean;
+  displayError?: boolean;
 }
 
 export class RequestUtils {
@@ -44,55 +44,55 @@ export class RequestUtils {
   }
 
   public static displayError(messages: Messages, err: ErrorResp, defMessage = 'Service error, please try again.') {
-    console.error(err)
+    console.error(err);
     if (typeof err === 'object') {
       if (err instanceof Error) {
-        return messages.addNewErrorMessage('service', err.message)
+        return messages.addNewErrorMessage('service', err.message);
       }
       if (Array.isArray(err) || typeof err.error === 'string') {
-        return messages.addNewErrorMessage('service', err)
+        return messages.addNewErrorMessage('service', err);
       }
       if (Object.keys(err).length === 0) {
-        return messages.addNewErrorMessage('service', defMessage)
+        return messages.addNewErrorMessage('service', defMessage);
       }
-      return messages.addNewErrorMessage('service', JSON.stringify(err))
+      return messages.addNewErrorMessage('service', JSON.stringify(err));
     }
-    messages.addNewErrorMessage('service', err)
+    messages.addNewErrorMessage('service', err);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
-    const requestContent: RequestInit = { method: io.connectSettings?.method || 'POST', headers }
-    if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body
-    if (io.connectSettings.credentials) requestContent.credentials = io.connectSettings.credentials
-    return fetch(io.connectSettings?.url || io.url || '', requestContent)
+    const requestContent: RequestInit = { method: io.connectSettings?.method || 'POST', headers };
+    if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
+    if (io.connectSettings.credentials) requestContent.credentials = io.connectSettings.credentials;
+    return fetch(io.connectSettings?.url || io.url || '', requestContent);
   }
 
   public static processResponseByType(response: Response) {
-    const contentType = response.headers.get('content-type')
+    const contentType = response.headers.get('content-type');
     if (contentType?.includes('application/json')) {
-      return response.json()
+      return response.json();
     }
     // when no contentType - the response is returned primarily for azure summarization to allow examination of headers
     if (contentType?.includes('text/plain') || !contentType) {
-      return response
+      return response;
     }
-    return response.blob()
+    return response.blob();
   }
 
   public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResultP {
-    const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails
-    const resReqDetails = result as RequestDetails
-    const resErrDetails = result as { error?: string }
-    return { body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error }
+    const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
+    const resReqDetails = result as RequestDetails;
+    const resErrDetails = result as { error?: string };
+    return { body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error };
   }
 
   public static validateResponseFormat(response: ResponseI | ResponseI[], isStreaming: boolean) {
-    if (!response) return false
-    const dataArr = Array.isArray(response) ? response : [response]
+    if (!response) return false;
+    const dataArr = Array.isArray(response) ? response : [response];
     if (isStreaming && dataArr.length > 1) {
-      console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE)
-      return false
+      console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);
+      return false;
     }
     const invalidFound = dataArr.find(
       (data) =>
@@ -103,13 +103,13 @@ export class RequestUtils {
           typeof data.html === 'string' ||
           Array.isArray(data.files)
         )
-    )
-    return !invalidFound
+    );
+    return !invalidFound;
   }
 
   public static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
-    messages.addNewErrorMessage('service', error)
-    onFinish?.()
+    messages.addNewErrorMessage('service', error);
+    onFinish?.();
   }
 
   // prettier-ignore

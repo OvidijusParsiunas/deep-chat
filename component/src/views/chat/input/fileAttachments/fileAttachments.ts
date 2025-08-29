@@ -1,11 +1,11 @@
-import {FileAttachmentTypeFactory} from './fileAttachmentTypes/fileAttachmentTypeFactory';
-import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
-import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachmentType';
-import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
-import {ServiceFileTypes, ServiceIO} from '../../../../services/serviceIO';
-import {CustomStyle} from '../../../../types/styles';
-import {DeepChat} from '../../../../deepChat';
-import {Demo} from '../../../../types/demo';
+import { FileAttachmentTypeFactory } from './fileAttachmentTypes/fileAttachmentTypeFactory';
+import { FileAttachments as FileAttachmentsT } from '../../../../types/fileAttachments';
+import { AudioFileAttachmentType } from './fileAttachmentTypes/audioFileAttachmentType';
+import { FileAttachmentsType } from './fileAttachmentTypes/fileAttachmentsType';
+import { ServiceFileTypes, ServiceIO } from '../../../../services/serviceIO';
+import { CustomStyle } from '../../../../types/styles';
+import { DeepChat } from '../../../../deepChat';
+import { Demo } from '../../../../types/demo';
 
 export interface HiddenFileAttachments {
   removeHiddenFiles(): void;

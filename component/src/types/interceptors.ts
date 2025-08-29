@@ -1,5 +1,5 @@
-import {GenericObject} from './object';
-import {Response} from './response';
+import { GenericObject } from './object';
+import { Response } from './response';
 
 // WORK - change body to a type
 export interface RequestDetails {
@@ -8,7 +8,7 @@ export interface RequestDetails {
   headers?: GenericObject<string>;
 }
 
-export type ResponseDetails = RequestDetails | {error: string};
+export type ResponseDetails = RequestDetails | { error: string };
 
 export type RequestInterceptor = (details: RequestDetails) => ResponseDetails | Promise<ResponseDetails>;
 

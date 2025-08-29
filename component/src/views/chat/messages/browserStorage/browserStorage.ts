@@ -1,5 +1,5 @@
-import {BrowserStorage as BrowserStorageT} from '../../../../types/browserStorage';
-import {MessageContentI} from '../../../../types/messagesInternal';
+import { BrowserStorage as BrowserStorageT } from '../../../../types/browserStorage';
+import { MessageContentI } from '../../../../types/messagesInternal';
 
 export class BrowserStorage {
   private readonly storageKey: string = 'deep-chat-storage';

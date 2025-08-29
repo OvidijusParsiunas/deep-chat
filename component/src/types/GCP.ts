@@ -4,7 +4,7 @@ export interface GCPTextToSpeechConfig {
     languageCode?: string;
     name?: string;
     ssmlGender?: 'MALE' | 'FEMAL' | 'NEUTRAL';
-    customVoice?: {model: string};
+    customVoice?: { model: string };
   };
   audio?: {
     audioEncoding?: 'MP3' | 'LINEAR16' | 'OGG_OPUS' | 'MULAW' | 'ALAW';

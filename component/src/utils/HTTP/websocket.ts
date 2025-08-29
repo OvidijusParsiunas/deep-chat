@@ -1,17 +1,17 @@
-import {MessageStream} from '../../views/chat/messages/stream/messageStream';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {CustomHandler, IWebsocketHandler} from './customHandler';
-import {ErrorMessages} from '../errorMessages/errorMessages';
-import {Messages} from '../../views/chat/messages/messages';
-import {ServiceIO} from '../../services/serviceIO';
-import {StreamConfig} from '../../types/stream';
-import {Response} from '../../types/response';
-import {RequestUtils} from './requestUtils';
-import {DeepChat} from '../../deepChat';
-import {Demo} from '../demo/demo';
-import {Stream} from './stream';
+import { MessageStream } from '../../views/chat/messages/stream/messageStream';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { CustomHandler, IWebsocketHandler } from './customHandler';
+import { ErrorMessages } from '../errorMessages/errorMessages';
+import { Messages } from '../../views/chat/messages/messages';
+import { ServiceIO } from '../../services/serviceIO';
+import { StreamConfig } from '../../types/stream';
+import { Response } from '../../types/response';
+import { RequestUtils } from './requestUtils';
+import { DeepChat } from '../../deepChat';
+import { Demo } from '../demo/demo';
+import { Stream } from './stream';
 
-export type RoleToStream = {[role: string]: MessageStream};
+export type RoleToStream = { [role: string]: MessageStream };
 
 export class Websocket {
   public static setup(io: ServiceIO) {
@@ -23,7 +23,7 @@ export class Websocket {
     // to make sure that reconnection is not happening when component removed
     // this particular check also works if DeepChat is inside a shadow DOM elem
     // https://github.com/OvidijusParsiunas/deep-chat/pull/194
-    return !!(deepChat.getRootNode({composed: true}) instanceof Document);
+    return !!(deepChat.getRootNode({ composed: true }) instanceof Document);
   }
 
   public static createConnection(io: ServiceIO, messages: Messages) {
@@ -67,7 +67,7 @@ export class Websocket {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: Response = JSON.parse(message.data);
-        const finalResult = await RequestUtils.basicResponseProcessing(messages, result, {io, displayError: false});
+        const finalResult = await RequestUtils.basicResponseProcessing(messages, result, { io, displayError: false });
         if (!finalResult) {
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
         }
@@ -98,8 +98,8 @@ export class Websocket {
     if (io.connectSettings?.url === Demo.URL) return Demo.request(io, messages);
     const ws = io.websocket;
     if (!ws || ws === 'pending') return;
-    const requestDetails = {body, headers: io.connectSettings?.headers};
-    const {body: interceptedBody, error} = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
+    const requestDetails = { body, headers: io.connectSettings?.headers };
+    const { body: interceptedBody, error } = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     if (error) return messages.addNewErrorMessage('service', error);
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;

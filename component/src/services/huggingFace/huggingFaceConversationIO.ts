@@ -1,9 +1,9 @@
-import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
-import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
-import {MessageContentI} from '../../types/messagesInternal';
-import {HuggingFaceIO} from './huggingFaceIO';
-import {Response} from '../../types/response';
-import {DeepChat} from '../../deepChat';
+import { HuggingFaceConversationResult } from '../../types/huggingFaceResult';
+import { HuggingFaceQuestionAnswerConfig } from '../../types/huggingFace';
+import { MessageContentI } from '../../types/messagesInternal';
+import { HuggingFaceIO } from './huggingFaceIO';
+import { Response } from '../../types/response';
+import { DeepChat } from '../../deepChat';
 
 export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
@@ -48,6 +48,6 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceConversationResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result.generated_text || ''};
+    return { text: result.generated_text || '' };
   }
 }

@@ -1,5 +1,5 @@
-import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
-import {ErrorView} from '../error/errorView';
+import { KeyVerificationHandlers, ServiceIO } from '../../services/serviceIO';
+import { ErrorView } from '../error/errorView';
 
 export class ValidateKeyPropertyView {
   private static onLoad(startElement: HTMLElement) {

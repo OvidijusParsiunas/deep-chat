@@ -1,6 +1,6 @@
-import {InterfacesUnion} from './utilityTypes';
-import {MessageFile} from './messageFile';
-import {CustomStyle} from './styles';
+import { InterfacesUnion } from './utilityTypes';
+import { MessageFile } from './messageFile';
+import { CustomStyle } from './styles';
 
 export interface LoadingStyles {
   styles?: MessageElementsStyles;
@@ -28,7 +28,7 @@ export type MessageRoleStyles = {
   shared?: MessageElementsStyles;
   user?: MessageElementsStyles;
   ai?: MessageElementsStyles;
-} & {[role: string]: MessageElementsStyles};
+} & { [role: string]: MessageElementsStyles };
 
 export interface MessageStyles {
   default?: MessageRoleStyles;
@@ -51,9 +51,9 @@ export type MessageContent = {
   _sessionId?: string;
 };
 
-export type OnMessage = (body: {message: MessageContent; isHistory: boolean}) => void;
+export type OnMessage = (body: { message: MessageContent; isHistory: boolean }) => void;
 
-export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
+export type IntroMessage = InterfacesUnion<{ text: string } | { html: string }>;
 
 // eslint-disable-next-line
-export type UserContent = {text?: string; files?: File[] | FileList; custom?: any};
+export type UserContent = { text?: string; files?: File[] | FileList; custom?: any };

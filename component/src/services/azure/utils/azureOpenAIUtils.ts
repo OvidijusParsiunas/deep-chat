@@ -1,6 +1,6 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {OpenAIUtils} from '../../openAI/utils/openAIUtils';
-import {AzureOpenAI} from '../../../types/azure';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { OpenAIUtils } from '../../openAI/utils/openAIUtils';
+import { AzureOpenAI } from '../../../types/azure';
 
 export class AzureOpenAIUtils {
   public static readonly URL_DETAILS_ERROR_MESSAGE =
@@ -22,7 +22,7 @@ export class AzureOpenAIUtils {
   }
 
   public static validateURLDetails(urlDetails: AzureOpenAI['urlDetails']) {
-    const {endpoint, version, deploymentId} = urlDetails;
+    const { endpoint, version, deploymentId } = urlDetails;
     return endpoint && version && deploymentId;
   }
 }

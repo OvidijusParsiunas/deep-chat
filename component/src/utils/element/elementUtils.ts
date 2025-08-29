@@ -26,7 +26,7 @@ export class ElementUtils {
 
   public static scrollToBottom(element: HTMLElement, isAnimation = false) {
     if (isAnimation) {
-      element.scrollTo({left: 0, top: element.scrollHeight, behavior: 'smooth'});
+      element.scrollTo({ left: 0, top: element.scrollHeight, behavior: 'smooth' });
     } else {
       element.scrollTop = element.scrollHeight;
     }

@@ -1,15 +1,15 @@
-import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
-import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {RequestUtils} from '../../utils/HTTP/requestUtils';
-import {OpenAIImageResult} from '../../types/openAIResult';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {MessageFiles} from '../../types/messageFile';
-import {OpenAIUtils} from './utils/openAIUtils';
-import {Response} from '../../types/response';
-import {DeepChat} from '../../deepChat';
+import { OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3 } from '../../types/openAI';
+import { BASE_64_PREFIX } from '../../utils/element/imageUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { RequestUtils } from '../../utils/HTTP/requestUtils';
+import { OpenAIImageResult } from '../../types/openAIResult';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { MessageFiles } from '../../types/messageFile';
+import { OpenAIUtils } from './utils/openAIUtils';
+import { Response } from '../../types/response';
+import { DeepChat } from '../../deepChat';
 
 type OpenAIImagesDalle = OpenAIImagesDalle2 | OpenAIImagesDalle3;
 
@@ -33,14 +33,14 @@ export class OpenAIImagesIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Incorrect', 'Invalid input image'];
 
   constructor(deepChat: DeepChat) {
-    const {directConnection} = deepChat;
+    const { directConnection } = deepChat;
     const apiKey = directConnection?.openAI;
-    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
+    const defaultFile = { images: { files: { acceptedFormats: '.png', maxNumberOfFiles: 2 } } };
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
     const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
-      this.camera.files = {dimensions: {width: dimension, height: dimension}};
+      this.camera.files = { dimensions: { width: dimension, height: dimension } };
     }
     if (typeof config === 'object') Object.assign(this.rawBody, config);
     this.canSendMessage = OpenAIImagesIO.canFileSendMessage;
@@ -99,10 +99,10 @@ export class OpenAIImagesIO extends DirectServiceIO {
   override async extractResultData(result: OpenAIImageResult): Promise<Response> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return {src: imageData.url, type: 'image'};
-      return {src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
+      if (imageData.url) return { src: imageData.url, type: 'image' };
+      return { src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image' };
     }) as MessageFiles;
-    return {files};
+    return { files };
   }
 
   // private static readonly MODAL_MARKDOWN = `

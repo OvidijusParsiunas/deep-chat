@@ -1,18 +1,18 @@
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {GrokMessage, GrokRequestBody} from '../../types/grokInternal';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {GrokResult} from '../../types/grokResult';
-import {Stream} from '../../utils/HTTP/stream';
-import {GrokUtils} from './utils/grokUtils';
-import {GrokChat} from '../../types/grok';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { GrokMessage, GrokRequestBody } from '../../types/grokInternal';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageLimitUtils } from '../utils/messageLimitUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { GrokResult } from '../../types/grokResult';
+import { Stream } from '../../utils/HTTP/stream';
+import { GrokUtils } from './utils/grokUtils';
+import { GrokChat } from '../../types/grok';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 export class GrokChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Grok API Key';
@@ -80,16 +80,16 @@ export class GrokChatIO extends DirectServiceIO {
     if (result.object === 'chat.completion.chunk') {
       const choice = result.choices?.[0];
       if (choice?.delta?.content) {
-        return {text: choice.delta.content};
+        return { text: choice.delta.content };
       }
-      return {text: ''};
+      return { text: '' };
     }
 
     // Handle non-streaming response
     if (result.object === 'chat.completion' && result.choices?.[0]?.message) {
-      return {text: result.choices[0].message.content || ''};
+      return { text: result.choices[0].message.content || '' };
     }
 
-    return {text: ''};
+    return { text: '' };
   }
 }

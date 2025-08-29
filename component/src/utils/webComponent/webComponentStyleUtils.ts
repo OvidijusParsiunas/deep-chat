@@ -1,6 +1,6 @@
-import {StyleUtils} from '../element/styleUtils';
-import {CustomStyle} from '../../types/styles';
-import {GoogleFont} from './googleFont';
+import { StyleUtils } from '../element/styleUtils';
+import { CustomStyle } from '../../types/styles';
+import { GoogleFont } from './googleFont';
 
 export class WebComponentStyleUtils {
   private static readonly DEFAULT_COMPONENT_STYLE: Partial<CSSStyleDeclaration> = {

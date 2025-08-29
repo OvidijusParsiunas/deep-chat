@@ -1,5 +1,5 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
 
 type DeepSeekErrorResponse = {
   error?: {

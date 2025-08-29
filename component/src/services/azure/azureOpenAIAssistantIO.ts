@@ -1,9 +1,9 @@
-import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
-import {DirectConnection} from '../../types/directConnection';
-import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
-import {OpenAIAssistant} from '../../types/openAI';
-import {AzureOpenAI} from '../../types/azure';
-import {DeepChat} from '../../deepChat';
+import { OpenAIAssistantIOI } from '../openAI/assistant/openAIAssistantIOI';
+import { DirectConnection } from '../../types/directConnection';
+import { AzureOpenAIUtils } from './utils/azureOpenAIUtils';
+import { OpenAIAssistant } from '../../types/openAI';
+import { AzureOpenAI } from '../../types/azure';
+import { DeepChat } from '../../deepChat';
 
 export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
   private static readonly THREAD_RESOURCE = `threads`;
@@ -37,7 +37,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
     if (typeof config?.assistant === 'object') {
-      const {function_handler, files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
+      const { function_handler, files_tool_type } = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this.functionHandler = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
     }
@@ -45,7 +45,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+        deepChat.addMessage({ error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE });
       });
     } else {
       this.connectSettings.headers ??= {};

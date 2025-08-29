@@ -1,8 +1,8 @@
-import {StatefulStyles} from './styles';
+import { StatefulStyles } from './styles';
 
 export type EventToFunction = {
   [K in keyof GlobalEventHandlersEventMap]?: (event: Partial<GlobalEventHandlersEventMap[K]>) => void;
-} & {[eventName: string]: (event: CustomEvent) => void};
+} & { [eventName: string]: (event: CustomEvent) => void };
 
 export interface HTMLClassUtility {
   events?: EventToFunction;

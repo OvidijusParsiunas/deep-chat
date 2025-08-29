@@ -1,6 +1,6 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CohereChatResult} from '../../../types/cohereResult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
+import { CohereChatResult } from '../../../types/cohereResult';
 
 export class CohereUtils {
   public static buildHeaders(key: string) {

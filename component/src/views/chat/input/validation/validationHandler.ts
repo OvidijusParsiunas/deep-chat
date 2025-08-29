@@ -1,12 +1,12 @@
-import {FileAttachments} from '../fileAttachments/fileAttachments';
-import {UserContentI} from '../../../../types/messagesInternal';
-import {SubmitButton} from '../buttons/submit/submitButton';
-import {Websocket} from '../../../../utils/HTTP/websocket';
-import {ServiceIO} from '../../../../services/serviceIO';
-import {Legacy} from '../../../../utils/legacy/legacy';
-import {TextInputEl} from '../textInput/textInput';
-import {Demo} from '../../../../utils/demo/demo';
-import {DeepChat} from '../../../../deepChat';
+import { FileAttachments } from '../fileAttachments/fileAttachments';
+import { UserContentI } from '../../../../types/messagesInternal';
+import { SubmitButton } from '../buttons/submit/submitButton';
+import { Websocket } from '../../../../utils/HTTP/websocket';
+import { ServiceIO } from '../../../../services/serviceIO';
+import { Legacy } from '../../../../utils/legacy/legacy';
+import { TextInputEl } from '../textInput/textInput';
+import { Demo } from '../../../../utils/demo/demo';
+import { DeepChat } from '../../../../deepChat';
 
 type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) => boolean;
 
@@ -41,7 +41,7 @@ export class ValidationHandler {
   }
 
   private static validateWebsocket(serviceIO: ServiceIO, submitButton: SubmitButton) {
-    const {websocket, connectSettings} = serviceIO;
+    const { websocket, connectSettings } = serviceIO;
     if (websocket && connectSettings.url !== Demo.URL && !Websocket.canSendMessage(websocket)) {
       submitButton.changeToDisabledIcon();
       return false;

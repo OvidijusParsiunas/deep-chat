@@ -1,3 +1,3 @@
-import {Response} from './response';
+import { Response } from './response';
 
-export type ResponseI = Response & {sendUpdate?: boolean; ignoreText?: boolean};
+export type ResponseI = Response & { sendUpdate?: boolean; ignoreText?: boolean };

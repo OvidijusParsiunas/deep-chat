@@ -1,6 +1,6 @@
-import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
-import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
-import {VisibilityIcon} from './visibilityIcon';
+import { KeyVerificationHandlers, ServiceIO } from '../../services/serviceIO';
+import { KEYBOARD_KEY } from '../../utils/buttons/keyboardKeys';
+import { VisibilityIcon } from './visibilityIcon';
 
 export class InsertKeyView {
   private static createCautionText() {
@@ -43,7 +43,7 @@ export class InsertKeyView {
       helpTextContentsElement.appendChild(cautionTextElement);
     }
     helpTextContainerElement.appendChild(helpTextContentsElement);
-    return {helpTextContainerElement, failTextElement};
+    return { helpTextContainerElement, failTextElement };
   }
 
   private static onFail(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement, message: string) {

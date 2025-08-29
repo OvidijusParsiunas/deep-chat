@@ -1,6 +1,6 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {MistralResult} from '../../../types/mistralRsult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
+import { MistralResult } from '../../../types/mistralRsult';
 
 export class MistralUtils {
   public static buildHeaders(key: string) {

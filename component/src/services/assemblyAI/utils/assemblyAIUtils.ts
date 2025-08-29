@@ -1,6 +1,6 @@
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {OpenAIConverseResult} from '../../../types/openAIResult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
+import { OpenAIConverseResult } from '../../../types/openAIResult';
 
 export class AssemblyAIUtils {
   public static async poll(api_token: string, audio_url: string) {
@@ -13,7 +13,7 @@ export class AssemblyAIUtils {
     // Send a POST request to the transcription API with the audio URL in the request body
     const response = await fetch('https://api.assemblyai.com/v2/transcript', {
       method: 'POST',
-      body: JSON.stringify({audio_url}),
+      body: JSON.stringify({ audio_url }),
       headers,
     });
 
@@ -24,11 +24,11 @@ export class AssemblyAIUtils {
     // Construct the polling endpoint URL using the transcript ID
     const pollingEndpoint = `https://api.assemblyai.com/v2/transcript/${transcriptId}`;
 
-    let result: {text: string} | undefined;
+    let result: { text: string } | undefined;
     // Poll the transcription API until the transcript is ready
     while (!result) {
       // Send a GET request to the polling endpoint to retrieve the status of the transcript
-      const pollingResponse = await fetch(pollingEndpoint, {headers});
+      const pollingResponse = await fetch(pollingEndpoint, { headers });
       const transcriptionResult = await pollingResponse.json();
       // If the transcription is complete, return the transcript object
       if (transcriptionResult.status === 'completed') {
@@ -43,7 +43,7 @@ export class AssemblyAIUtils {
         await new Promise((resolve) => setTimeout(resolve, 3000));
       }
     }
-    return result as {text: string};
+    return result as { text: string };
   }
 
   public static buildHeaders(key: string) {

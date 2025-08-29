@@ -1,9 +1,9 @@
-import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
-import {MessageElementsStyles} from '../../../../types/messages';
-import {MessageElements, Messages} from '../messages';
-import {MessageUtils} from '../utils/messageUtils';
-import {HTMLMessages} from '../html/htmlMessages';
-import {MessagesBase} from '../messagesBase';
+import { LoadingStyle } from '../../../../utils/loading/loadingStyle';
+import { MessageElementsStyles } from '../../../../types/messages';
+import { MessageElements, Messages } from '../messages';
+import { MessageUtils } from '../utils/messageUtils';
+import { HTMLMessages } from '../html/htmlMessages';
+import { MessagesBase } from '../messagesBase';
 
 export class LoadingHistory {
   public static readonly CLASS = 'loading-history-message';
@@ -42,7 +42,7 @@ export class LoadingHistory {
 
   public static createDefaultElements(messages: Messages) {
     const messageElements = messages.createMessageElements('', MessageUtils.AI_ROLE);
-    const {bubbleElement} = messageElements;
+    const { bubbleElement } = messageElements;
     const loadingRingElement = LoadingHistory.generateLoadingRingElement();
     bubbleElement.appendChild(loadingRingElement);
     return messageElements;

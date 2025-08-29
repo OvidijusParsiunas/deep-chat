@@ -1,4 +1,4 @@
-import {CustomStyle} from './styles';
+import { CustomStyle } from './styles';
 
 export interface AvatarStyles {
   container?: CustomStyle;
@@ -11,6 +11,6 @@ export interface Avatar {
   styles?: AvatarStyles;
 }
 
-export type CustomAvatars = {default?: Avatar; user?: Avatar; ai?: Avatar} & {[name: string]: Avatar};
+export type CustomAvatars = { default?: Avatar; user?: Avatar; ai?: Avatar } & { [name: string]: Avatar };
 
 export type Avatars = true | CustomAvatars;

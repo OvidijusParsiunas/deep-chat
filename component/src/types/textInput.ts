@@ -1,4 +1,4 @@
-import {CustomStyle} from './styles';
+import { CustomStyle } from './styles';
 
 export interface TextInputStyles {
   text?: CustomStyle;
@@ -18,4 +18,4 @@ export interface TextInput {
   disabled?: boolean;
 }
 
-export type OnInput = (body: {content: {text?: string; files?: File[]}; isUser: boolean}) => void;
+export type OnInput = (body: { content: { text?: string; files?: File[] }; isUser: boolean }) => void;

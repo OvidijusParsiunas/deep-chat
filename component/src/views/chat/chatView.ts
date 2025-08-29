@@ -1,10 +1,10 @@
-import {OpenAIRealtimeIO} from '../../services/openAI/realtime/openAIRealtimeIO';
-import {ElementUtils} from '../../utils/element/elementUtils';
-import {Websocket} from '../../utils/HTTP/websocket';
-import {ServiceIO} from '../../services/serviceIO';
-import {Messages} from './messages/messages';
-import {DeepChat} from '../../deepChat';
-import {Input} from './input/input';
+import { OpenAIRealtimeIO } from '../../services/openAI/realtime/openAIRealtimeIO';
+import { ElementUtils } from '../../utils/element/elementUtils';
+import { Websocket } from '../../utils/HTTP/websocket';
+import { ServiceIO } from '../../services/serviceIO';
+import { Messages } from './messages/messages';
+import { DeepChat } from '../../deepChat';
+import { Input } from './input/input';
 
 export class ChatView {
   private static createElements(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {

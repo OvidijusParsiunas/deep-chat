@@ -1,27 +1,27 @@
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {ValidationHandler} from '../../../../../types/validationHandler';
-import {FileAttachments} from '../../fileAttachments/fileAttachments';
-import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
-import {SubmitButtonStyles} from '../../../../../types/submitButton';
-import {SpeechToText} from '../microphone/speechToText/speechToText';
-import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
-import {UserContentI} from '../../../../../types/messagesInternal';
-import {MessageUtils} from '../../../messages/utils/messageUtils';
-import {SubmitButtonStateStyle} from './submitButtonStateStyle';
-import {MicrophoneButton} from '../microphone/microphoneButton';
-import {ServiceIO} from '../../../../../services/serviceIO';
-import {ButtonInnerElements} from '../buttonInnerElements';
-import {UserContent} from '../../../../../types/messages';
-import {Legacy} from '../../../../../utils/legacy/legacy';
-import {ButtonAccessibility} from '../buttonAccessility';
-import {Response} from '../../../../../types/response';
-import {TextInputEl} from '../../textInput/textInput';
-import {Signals} from '../../../../../types/handler';
-import {TooltipUtils} from '../tooltip/tooltipUtils';
-import {Messages} from '../../../messages/messages';
-import {DeepChat} from '../../../../../deepChat';
-import {InputButton} from '../inputButton';
-import {Buttons} from '../../input';
+import { FileAttachmentsType } from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import { ValidationHandler } from '../../../../../types/validationHandler';
+import { FileAttachments } from '../../fileAttachments/fileAttachments';
+import { FocusModeUtils } from '../../../messages/utils/focusModeUtils';
+import { SubmitButtonStyles } from '../../../../../types/submitButton';
+import { SpeechToText } from '../microphone/speechToText/speechToText';
+import { SUBMIT_ICON_STRING } from '../../../../../icons/submitIcon';
+import { UserContentI } from '../../../../../types/messagesInternal';
+import { MessageUtils } from '../../../messages/utils/messageUtils';
+import { SubmitButtonStateStyle } from './submitButtonStateStyle';
+import { MicrophoneButton } from '../microphone/microphoneButton';
+import { ServiceIO } from '../../../../../services/serviceIO';
+import { ButtonInnerElements } from '../buttonInnerElements';
+import { UserContent } from '../../../../../types/messages';
+import { Legacy } from '../../../../../utils/legacy/legacy';
+import { ButtonAccessibility } from '../buttonAccessility';
+import { Response } from '../../../../../types/response';
+import { TextInputEl } from '../../textInput/textInput';
+import { Signals } from '../../../../../types/handler';
+import { TooltipUtils } from '../tooltip/tooltipUtils';
+import { Messages } from '../../../messages/messages';
+import { DeepChat } from '../../../../../deepChat';
+import { InputButton } from '../inputButton';
+import { Buttons } from '../../input';
 import {
   DefinedButtonInnerElements,
   DefinedButtonStateStyles,
@@ -46,7 +46,7 @@ export class SubmitButton extends InputButton<Styles> {
   private _stopSTTAfterSubmit?: boolean;
   private _isSVGLoadingIconOverriden = false;
   private _validationHandler?: ValidationHandler;
-  readonly status = {requestInProgress: false, loadingActive: false};
+  readonly status = { requestInProgress: false, loadingActive: false };
 
   // prettier-ignore
   constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
@@ -74,7 +74,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createInnerElementsForStates() {
-    const {submit, loading, stop} = this.createCustomElements();
+    const { submit, loading, stop } = this.createCustomElements();
     return {
       submit: submit as ButtonInnerElement[],
       loading: loading || [SubmitButton.createLoadingIconElement()],
@@ -85,7 +85,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private createCustomElements() {
     const submit = ButtonInnerElements.createCustomElements('submit', this.svg, this.customStyles);
-    const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
+    const states: { [key in keyof Styles]: ButtonInnerElement[] } = { loading: undefined, stop: undefined };
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
       const elements = ButtonInnerElements.createCustomElements(styleState, this.svg, this.customStyles);
@@ -145,7 +145,7 @@ export class SubmitButton extends InputButton<Styles> {
       abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
-    const {stream} = this._serviceIO;
+    const { stream } = this._serviceIO;
     if (typeof stream === 'object' && typeof stream.simulation === 'number') {
       this._serviceIO.streamHandlers.simulationInterim = stream.simulation;
     }
@@ -166,20 +166,20 @@ export class SubmitButton extends InputButton<Styles> {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     if (this._textInput.isTextInputEmpty()) {
-      this.attemptSubmit({text: '', files: uploadedFilesData});
+      this.attemptSubmit({ text: '', files: uploadedFilesData });
     } else {
       // not using textContent as it ignores new line spaces
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
-      this.attemptSubmit({text: inputText, files: uploadedFilesData});
+      this.attemptSubmit({ text: inputText, files: uploadedFilesData });
     }
   }
 
   public async programmaticSubmit(content: UserContent) {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
-    const newContent: UserContentI = {text: content.text};
+    const newContent: UserContentI = { text: content.text };
     if (content.files) {
       newContent.files = Array.from(content.files).map((file) => {
-        return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
+        return { file, type: FileAttachmentsType.getTypeFromBlob(file) };
       });
     }
     if (content.custom) newContent.custom = content.custom;
@@ -198,13 +198,13 @@ export class SubmitButton extends InputButton<Styles> {
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
     const filesData = content.files?.map((fileData) => fileData.file);
-    const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
+    const requestContents = { text: content.text === '' ? undefined : content.text, files: filesData };
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.hideFiles();
   }
 
-  private async addNewMessage({text, files, custom}: UserContentI) {
-    const data: Response = {role: MessageUtils.USER_ROLE, custom};
+  private async addNewMessage({ text, files, custom }: UserContentI) {
+    const data: Response = { role: MessageUtils.USER_ROLE, custom };
     if (text) data.text = text;
     if (files) data.files = await this._messages.addMultipleFiles(files, this._fileAttachments);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;

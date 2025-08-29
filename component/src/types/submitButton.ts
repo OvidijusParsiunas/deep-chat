@@ -1,5 +1,5 @@
-import {ButtonStyles} from './button';
-import {Tooltip} from './tooltip';
+import { ButtonStyles } from './button';
+import { Tooltip } from './tooltip';
 
 export interface SubmitButtonStyles {
   submit?: ButtonStyles;

@@ -1,1 +1,1 @@
-export type BrowserStorage = true | {key?: string; maxMessages?: number; clear?: () => void};
+export type BrowserStorage = true | { key?: string; maxMessages?: number; clear?: () => void };

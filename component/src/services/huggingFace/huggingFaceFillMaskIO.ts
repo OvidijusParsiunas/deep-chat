@@ -1,8 +1,8 @@
-import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
-import {HuggingFace} from '../../types/huggingFace';
-import {HuggingFaceIO} from './huggingFaceIO';
-import {Response} from '../../types/response';
-import {DeepChat} from '../../deepChat';
+import { HuggingFaceFillMaskResult } from '../../types/huggingFaceResult';
+import { HuggingFace } from '../../types/huggingFace';
+import { HuggingFaceIO } from './huggingFaceIO';
+import { Response } from '../../types/response';
+import { DeepChat } from '../../deepChat';
 
 export class HuggingFaceFillMaskIO extends HuggingFaceIO {
   override introPanelMarkUp = `
@@ -20,6 +20,6 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result[0]?.sequence || ''};
+    return { text: result[0]?.sequence || '' };
   }
 }

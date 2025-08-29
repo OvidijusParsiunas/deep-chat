@@ -1,21 +1,21 @@
-import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
-import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
-import {MessageFile} from '../../types/messageFile';
-import {ClaudeUtils} from './utils/claudeUtils';
-import {Stream} from '../../utils/HTTP/stream';
-import {Claude} from '../../types/claude';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { ClaudeContent, ClaudeMessage, ClaudeRequestBody } from '../../types/claudeInternal';
+import { ClaudeResult, ClaudeTextContent, ClaudeToolUse } from '../../types/claudeResult';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { FetchFunc, RequestUtils } from '../../utils/HTTP/requestUtils';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageLimitUtils } from '../utils/messageLimitUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { ChatFunctionHandler } from '../../types/openAI';
+import { MessageFile } from '../../types/messageFile';
+import { ClaudeUtils } from './utils/claudeUtils';
+import { Stream } from '../../utils/HTTP/stream';
+import { Claude } from '../../types/claude';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 // https://docs.anthropic.com/en/api/messages
 export class ClaudeIO extends DirectServiceIO {
@@ -26,7 +26,7 @@ export class ClaudeIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   asyncCallInProgress = false; // used when streaming tools
   private _messages?: Messages;
-  private _streamToolCalls: ClaudeToolUse = {type: 'tool_use', id: '', name: '', input: ''};
+  private _streamToolCalls: ClaudeToolUse = { type: 'tool_use', id: '', name: '', input: '' };
   private readonly _systemMessage: string = 'You are a helpful assistant.';
 
   constructor(deepChat: DeepChat) {
@@ -58,9 +58,9 @@ export class ClaudeIO extends DirectServiceIO {
       if (file.type === 'image') {
         const base64Data = file.src?.split(',')[1];
         const mediaType = file.src?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
-        return {type: 'image', source: {type: 'base64', media_type: mediaType, data: base64Data || ''}};
+        return { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data || '' } };
       }
-      return {type: 'text', text: `[Unsupported file type: ${file.type}]`};
+      return { type: 'text', text: `[Unsupported file type: ${file.type}]` };
     });
   }
 
@@ -68,7 +68,7 @@ export class ClaudeIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: ClaudeContent[] = ClaudeIO.getFileContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({ type: 'text', text: message.text });
       }
       return content;
     }
@@ -124,7 +124,7 @@ export class ClaudeIO extends DirectServiceIO {
 
       const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
       if (textContent) {
-        return {text: textContent.text};
+        return { text: textContent.text };
       }
     }
 
@@ -133,7 +133,7 @@ export class ClaudeIO extends DirectServiceIO {
       this.asyncCallInProgress = false;
     } else if (result.type === 'content_block_delta') {
       if (result.delta && result.delta.type === 'text_delta') {
-        return {text: result.delta.text || ''};
+        return { text: result.delta.text || '' };
       }
     }
 
@@ -150,7 +150,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
 
     // Return empty for other event types (message_start, content_block_start, etc.)
-    return {text: ''};
+    return { text: '' };
   }
 
   private async handleTools(
@@ -166,12 +166,12 @@ export class ClaudeIO extends DirectServiceIO {
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = toolUseBlocks.map((block) => {
-      return {name: block.name, arguments: JSON.stringify(block.input)};
+      return { name: block.name, arguments: JSON.stringify(block.input) };
     });
     const handlerResponse = await this._functionHandler?.(functions);
     if (!Array.isArray(handlerResponse)) {
       if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
+        const response = { text: handlerResponse.text };
         const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
         if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
         return processedResponse;
@@ -193,19 +193,19 @@ export class ClaudeIO extends DirectServiceIO {
     });
 
     // Add tool results
-    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
+    if (!responses.find(({ response }) => typeof response !== 'string') && functions.length === responses.length) {
       const toolResultContent = responses.map((resp, index) => ({
         type: 'tool_result' as const,
         tool_use_id: toolUseBlocks[index].id,
         content: resp.response,
       }));
 
-      bodyCp.messages.push({role: 'user' as const, content: toolResultContent});
+      bodyCp.messages.push({ role: 'user' as const, content: toolResultContent });
 
       try {
         if (this.stream && this._messages) {
           Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
+          return { text: '' };
         }
         let result: ClaudeResult = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
         result = ((await this.deepChat.responseInterceptor?.(result)) || result) as ClaudeResult;
@@ -215,10 +215,10 @@ export class ClaudeIO extends DirectServiceIO {
         if (result.content && result.content.length > 0) {
           const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
           if (textContent) {
-            return {text: textContent.text};
+            return { text: textContent.text };
           }
         }
-        return {text: ''};
+        return { text: '' };
       } catch (e) {
         this.asyncCallInProgress = false;
         throw e;

@@ -1,10 +1,10 @@
-import {ValidationHandler} from '../../../../../types/validationHandler';
-import {FileAttachments} from '../../../../../types/fileAttachments';
-import {AudioFileAttachmentType} from './audioFileAttachmentType';
-import {MessageFileType} from '../../../../../types/messageFile';
-import {Browser} from '../../../../../utils/browser/browser';
-import {ServiceIO} from '../../../../../services/serviceIO';
-import {DeepChat} from '../../../../../deepChat';
+import { ValidationHandler } from '../../../../../types/validationHandler';
+import { FileAttachments } from '../../../../../types/fileAttachments';
+import { AudioFileAttachmentType } from './audioFileAttachmentType';
+import { MessageFileType } from '../../../../../types/messageFile';
+import { Browser } from '../../../../../utils/browser/browser';
+import { ServiceIO } from '../../../../../services/serviceIO';
+import { DeepChat } from '../../../../../deepChat';
 
 export interface AttachmentObject {
   file: File;
@@ -68,7 +68,7 @@ export class FileAttachmentsType {
   }
 
   public static getTypeFromBlob(file: File): MessageFileType {
-    const {type} = file;
+    const { type } = file;
     if (type.startsWith('image')) return 'image';
     if (type.startsWith('audio')) return 'audio';
     return 'any';
@@ -119,7 +119,7 @@ export class FileAttachmentsType {
     } else {
       this._fileAttachmentsContainerRef.appendChild(containerElement);
     }
-    const attachmentObject: AttachmentObject = {file, attachmentContainerElement: containerElement, fileType};
+    const attachmentObject: AttachmentObject = { file, attachmentContainerElement: containerElement, fileType };
     if (removable) {
       attachmentObject.removeButton = this.createRemoveAttachmentButton(attachmentObject);
       containerElement.appendChild(attachmentObject.removeButton);
@@ -161,7 +161,7 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
+    return Array.from(this._attachments).map((attachment) => ({ file: attachment.file, type: attachment.fileType }));
   }
 
   hideAttachments() {

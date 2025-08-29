@@ -1,12 +1,12 @@
-import {AttachmentObject, FileAttachmentsType} from './fileAttachmentsType';
-import {ElementUtils} from '../../../../../utils/element/elementUtils';
-import {FileAttachments} from '../../../../../types/fileAttachments';
-import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {PLAY_ICON_STRING} from '../../../../../icons/playIcon';
-import {STOP_ICON_STRING} from '../../../../../icons/stopIcon';
-import {Browser} from '../../../../../utils/browser/browser';
-import {ServiceIO} from '../../../../../services/serviceIO';
-import {DeepChat} from '../../../../../deepChat';
+import { AttachmentObject, FileAttachmentsType } from './fileAttachmentsType';
+import { ElementUtils } from '../../../../../utils/element/elementUtils';
+import { FileAttachments } from '../../../../../types/fileAttachments';
+import { SVGIconUtils } from '../../../../../utils/svg/svgIconUtils';
+import { PLAY_ICON_STRING } from '../../../../../icons/playIcon';
+import { STOP_ICON_STRING } from '../../../../../icons/stopIcon';
+import { Browser } from '../../../../../utils/browser/browser';
+import { ServiceIO } from '../../../../../services/serviceIO';
+import { DeepChat } from '../../../../../deepChat';
 
 export class AudioFileAttachmentType extends FileAttachmentsType {
   stopPlaceholderCallback?: () => Promise<void>;

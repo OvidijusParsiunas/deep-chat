@@ -1,12 +1,12 @@
-import {MessageToElements, MessageBodyElements, MessageBody} from '../../../../types/messagesInternal';
-import {MessageFile} from '../../../../types/messageFile';
-import {MessageStyles} from '../../../../types/messages';
-import {MessageElements, Messages} from '../messages';
-import {FileMessageUtils} from './fileMessageUtils';
-import {HTMLMessages} from '../html/htmlMessages';
-import {FileMessages} from '../fileMessages';
-import {MessagesBase} from '../messagesBase';
-import {MessageUtils} from './messageUtils';
+import { MessageToElements, MessageBodyElements, MessageBody } from '../../../../types/messagesInternal';
+import { MessageFile } from '../../../../types/messageFile';
+import { MessageStyles } from '../../../../types/messages';
+import { MessageElements, Messages } from '../messages';
+import { FileMessageUtils } from './fileMessageUtils';
+import { HTMLMessages } from '../html/htmlMessages';
+import { FileMessages } from '../fileMessages';
+import { MessagesBase } from '../messagesBase';
+import { MessageUtils } from './messageUtils';
 
 export class UpdateMessage {
   private static removeElements(messageElementRefs: MessageElements[], elemsToRemove?: MessageElements) {
@@ -38,7 +38,7 @@ export class UpdateMessage {
       const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
       const previousElements = (messageToEls[1].files?.[messageToEls[1].files?.length - 1] ||
         messageToEls[1].text) as MessageElements;
-      const {nextSibling} = previousElements.outerContainer;
+      const { nextSibling } = previousElements.outerContainer;
       nextSibling?.parentElement?.insertBefore(messageElements.outerContainer, nextSibling);
       msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
       const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
@@ -58,14 +58,14 @@ export class UpdateMessage {
     let siblingElementIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === siblingElement);
     if (prevElement) siblingElementIndex += 1;
     const beforeElement = (nextElement?.outerContainer || prevElement?.outerContainer.nextSibling) as Node;
-    typeToElements.forEach(({type, elements}, index) => {
+    typeToElements.forEach(({ type, elements }, index) => {
       FileMessageUtils.setElementProps(msg, elements, type as keyof MessageStyles, role);
       beforeElement.parentElement?.insertBefore(elements.outerContainer, beforeElement);
       msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
       msg.messageElementRefs.splice(siblingElementIndex + index, 0, elements);
     });
     UpdateMessage.removeFilesMessages(msg, messageToEls);
-    messageToEls[1].files = typeToElements.map(({elements}) => elements);
+    messageToEls[1].files = typeToElements.map(({ elements }) => elements);
     messageToEls[0].files = newFiles;
   }
 
@@ -117,7 +117,7 @@ export class UpdateMessage {
       if (!messageBody.html && messageToEls[1].html) {
         UpdateMessage.removeTextHTMLMessage(msg, messageToEls, 'html');
       }
-      const {messageElementRefs, avatar, name} = msg;
+      const { messageElementRefs, avatar, name } = msg;
       MessageUtils.classifyRoleMessages(messageElementRefs);
       MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
     } else {

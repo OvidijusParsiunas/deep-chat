@@ -1,4 +1,4 @@
-import {InterfacesUnion} from './utilityTypes';
+import { InterfacesUnion } from './utilityTypes';
 
 type ErrorMessage = {
   message?: string;
@@ -10,7 +10,7 @@ type ChatResult =
     }
   | {
       message: {
-        content: Array<{text: string}>;
+        content: Array<{ text: string }>;
       };
     };
 
@@ -61,7 +61,7 @@ type CohereStreamEvent = {
 export type CohereChatResult = InterfacesUnion<ChatResult | ErrorMessage | CohereStreamEvent>;
 
 type CompletionsResult = {
-  generations: {id: string; text: string}[];
+  generations: { id: string; text: string }[];
 };
 
 export type CohereCompletionsResult = InterfacesUnion<CompletionsResult | ErrorMessage>;

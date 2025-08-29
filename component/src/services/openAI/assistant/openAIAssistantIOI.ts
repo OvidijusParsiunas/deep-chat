@@ -1,22 +1,22 @@
-import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
-import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
-import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
-import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
-import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
-import {History} from '../../../views/chat/messages/history/history';
-import {MessageLimitUtils} from '../../utils/messageLimitUtils';
-import {Messages} from '../../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../../types/response';
-import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../../utils/directServiceIO';
-import {BuildHeadersFunc} from '../../../types/headers';
-import {Stream} from '../../../utils/HTTP/stream';
-import {OpenAIUtils} from '../utils/openAIUtils';
-import {APIKey} from '../../../types/APIKey';
-import {DeepChat} from '../../../deepChat';
-import {PollResult} from '../../serviceIO';
+import { AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant } from '../../../types/openAI';
+import { FileMessageUtils } from '../../../views/chat/messages/utils/fileMessageUtils';
+import { MessageContentI, MessageToElements } from '../../../types/messagesInternal';
+import { OpenAIAssistantUtils, UploadedFile } from './utils/openAIAssistantUtils';
+import { MessageStream } from '../../../views/chat/messages/stream/messageStream';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { OpenAIConverseBodyInternal } from '../../../types/openAIInternal';
+import { History } from '../../../views/chat/messages/history/history';
+import { MessageLimitUtils } from '../../utils/messageLimitUtils';
+import { Messages } from '../../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../../types/response';
+import { HTTPRequest } from '../../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../../utils/directServiceIO';
+import { BuildHeadersFunc } from '../../../types/headers';
+import { Stream } from '../../../utils/HTTP/stream';
+import { OpenAIUtils } from '../utils/openAIUtils';
+import { APIKey } from '../../../types/APIKey';
+import { DeepChat } from '../../../deepChat';
+import { PollResult } from '../../serviceIO';
 import {
   OpenAIAssistantMessagesResult,
   OpenAIAssistantInitReqResult,
@@ -36,7 +36,7 @@ type MessageContentArr = {
 
 type FileAttachments = {
   file_id: string;
-  tools: {type: OpenAIAssistant['files_tool_type']}[];
+  tools: { type: OpenAIAssistant['files_tool_type'] }[];
 }[];
 
 export type URLSegments = {
@@ -65,7 +65,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private run_id?: string;
   private _searchedForThreadId = false;
   private readonly _config: OpenAIAssistant = {};
-  private readonly _newAssistantDetails: OpenAINewAssistant = {model: 'gpt-4'};
+  private readonly _newAssistantDetails: OpenAINewAssistant = { model: 'gpt-4' };
   private _waitingForStreamResponse = false;
   private readonly _isSSEStream: boolean = false;
   private readonly urlSegments: URLSegments;
@@ -94,7 +94,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.deepChat.disableSubmitButton(false);
       return threadMessages;
     } catch (_) {
-      return [{error: 'Failed to fetch history'}];
+      return [{ error: 'Failed to fetch history' }];
     }
   }
 
@@ -102,13 +102,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const contentArr: MessageContentArr | undefined = uploadedFiles
       ?.filter((file) => FileMessageUtils.isImageFileExtension(file.name))
       .map((file) => {
-        return {type: 'image_file', image_file: {file_id: file.id}};
+        return { type: 'image_file', image_file: { file_id: file.id } };
       });
     if (contentArr && contentArr.length > 0) {
       if (processedMessage.text && processedMessage.text.length > 0) {
-        contentArr.push({type: 'text', text: processedMessage.text});
+        contentArr.push({ type: 'text', text: processedMessage.text });
       }
-      return {content: contentArr, role: 'user'};
+      return { content: contentArr, role: 'user' };
     }
     return undefined;
   }
@@ -119,9 +119,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     toolType: OpenAIAssistant['files_tool_type']
   ) {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
-      return {tools: [{type: toolType}], file_id: file.id};
+      return { tools: [{ type: toolType }], file_id: file.id };
     });
-    return {attachments, content: [{type: 'text', text: processedMessage.text}], role: 'user'};
+    return { attachments, content: [{ type: 'text', text: processedMessage.text }], role: 'user' };
   }
 
   private processMessage(pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
@@ -138,7 +138,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       //   { "type": "code_interpreter" }
       // ]
       if (typeof this.filesToolType === 'function') {
-        const rToolType = this.filesToolType(uploadedFiles.map(({name}) => name));
+        const rToolType = this.filesToolType(uploadedFiles.map(({ name }) => name));
         if (rToolType === 'code_interpreter' || rToolType === 'file_search' || rToolType === 'images') {
           toolType = rToolType;
         } else {
@@ -152,7 +152,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       if (toolType === 'code_interpreter') {
         return OpenAIAssistantIOI.processAttachmentsMessage(processedMessage, uploadedFiles, 'code_interpreter');
       }
-      const notImage = uploadedFiles.find(({name}) => !FileMessageUtils.isImageFileExtension(name));
+      const notImage = uploadedFiles.find(({ name }) => !FileMessageUtils.isImageFileExtension(name));
       if (notImage) {
         console.error('The uploaded files contained a non-image file');
         console.error(
@@ -167,13 +167,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         if (imageMessage) return imageMessage;
       }
     }
-    return {content: processedMessage.text || '', role: 'user'};
+    return { content: processedMessage.text || '', role: 'user' };
   }
 
   private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], files?: UploadedFile[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessage = this.processMessage(pMessages, files);
-    bodyCopy.thread = {messages: [processedMessage]};
+    bodyCopy.thread = { messages: [processedMessage] };
     return bodyCopy;
   }
 
@@ -276,15 +276,15 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   }
 
   async extractPollResultData(result: OpenAIRunResult): PollResult {
-    const {status, required_action} = result;
-    if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
+    const { status, required_action } = result;
+    if (status === 'queued' || status === 'in_progress') return { timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS };
     if (status === 'completed' && this._messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
-      const {text, files} = threadMessages.shift() as ResponseI;
+      const { text, files } = threadMessages.shift() as ResponseI;
       setTimeout(() => {
         threadMessages.forEach((message) => this.deepChat.addMessage(message));
       });
-      return {text, _sessionId: this.sessionId, files};
+      return { text, _sessionId: this.sessionId, files };
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) {
@@ -342,7 +342,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
-    return {makingAnotherRequest: true};
+    return { makingAnotherRequest: true };
   }
 
   // prettier-ignore

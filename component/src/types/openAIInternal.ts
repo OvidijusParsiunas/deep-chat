@@ -1,5 +1,5 @@
-import {OpenAIMessage} from './openAIResult';
-import {OpenAIChat} from './openAI';
+import { OpenAIMessage } from './openAIResult';
+import { OpenAIChat } from './openAI';
 
 export interface SystemMessageInternal {
   role: 'system';

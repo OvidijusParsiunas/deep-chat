@@ -1,4 +1,4 @@
-import {AttributeTypeConverters} from '../../types/typeConverters';
+import { AttributeTypeConverters } from '../../types/typeConverters';
 
 export class TypeConverters {
   public static readonly attibutes: AttributeTypeConverters = {

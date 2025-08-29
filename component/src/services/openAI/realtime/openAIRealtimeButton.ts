@@ -1,8 +1,8 @@
-import {DefinedButtonStateStyles, DefinedButtonInnerElements, ButtonInnerElement} from '../../../types/buttonInternal';
-import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
-import {ButtonInnerElements} from '../../../views/chat/input/buttons/buttonInnerElements';
-import {InputButton} from '../../../views/chat/input/buttons/inputButton';
-import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
+import { DefinedButtonStateStyles, DefinedButtonInnerElements, ButtonInnerElement } from '../../../types/buttonInternal';
+import { OpenAIRealtimeButton as OpenAIRealtimeButtonT } from '../../../types/openAIRealtime';
+import { ButtonInnerElements } from '../../../views/chat/input/buttons/buttonInnerElements';
+import { InputButton } from '../../../views/chat/input/buttons/inputButton';
+import { ButtonCSS } from '../../../views/chat/input/buttons/buttonCSS';
 
 type Styles = DefinedButtonStateStyles<OpenAIRealtimeButtonT>;
 

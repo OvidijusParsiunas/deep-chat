@@ -1,11 +1,11 @@
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {FileAttachments} from '../../fileAttachments/fileAttachments';
-import {FileServiceIO} from '../../../../../services/serviceIO';
-import {Modal} from '../../fileAttachments/modal/modal';
-import {TooltipUtils} from '../tooltip/tooltipUtils';
-import {InputButton} from '../inputButton';
+import { FileAttachmentsType } from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import { GenericInputButtonStyles } from '../../../../../types/genericInputButton';
+import { DefinedButtonStateStyles } from '../../../../../types/buttonInternal';
+import { FileAttachments } from '../../fileAttachments/fileAttachments';
+import { FileServiceIO } from '../../../../../services/serviceIO';
+import { Modal } from '../../fileAttachments/modal/modal';
+import { TooltipUtils } from '../tooltip/tooltipUtils';
+import { InputButton } from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 

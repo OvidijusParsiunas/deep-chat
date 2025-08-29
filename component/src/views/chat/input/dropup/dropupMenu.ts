@@ -1,9 +1,9 @@
-import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
-import {DropupMenuStyles} from '../../../../types/dropupStyles';
-import {DropupItemNavigation} from './dropupItemNavigation';
-import {CustomStyle} from '../../../../types/styles';
-import {InputButton} from '../buttons/inputButton';
-import {DropupItem} from './dropupItem';
+import { KEYBOARD_KEY } from '../../../../utils/buttons/keyboardKeys';
+import { DropupMenuStyles } from '../../../../types/dropupStyles';
+import { DropupItemNavigation } from './dropupItemNavigation';
+import { CustomStyle } from '../../../../types/styles';
+import { InputButton } from '../buttons/inputButton';
+import { DropupItem } from './dropupItem';
 
 export class DropupMenu {
   readonly elementRef: HTMLElement;

@@ -1,35 +1,35 @@
-import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesInternal';
-import {HiddenFileAttachments} from '../input/fileAttachments/fileAttachments';
-import {MessageFile, MessageFileType} from '../../../types/messageFile';
-import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
-import {LoadingStyle} from '../../../utils/loading/loadingStyle';
-import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
-import {ElementUtils} from '../../../utils/element/elementUtils';
-import {FireEvents} from '../../../utils/events/fireEvents';
-import {MessageStyleUtils} from './utils/messageStyleUtils';
-import {ErrorMessageOverrides} from '../../../types/error';
-import {ResponseI} from '../../../types/responseInternal';
-import {FileMessageUtils} from './utils/fileMessageUtils';
-import {TextToSpeech} from './textToSpeech/textToSpeech';
-import {LoadingHistory} from './history/loadingHistory';
-import {ErrorResp} from '../../../types/errorInternal';
-import {Demo, DemoResponse} from '../../../types/demo';
-import {IntroMessage} from '../../../types/messages';
-import {MessageStream} from './stream/messageStream';
-import {IntroPanel} from '../introPanel/introPanel';
-import {WebModel} from '../../../webModel/webModel';
-import {UpdateMessage} from './utils/updateMessage';
-import {Legacy} from '../../../utils/legacy/legacy';
-import {LoadHistory} from '../../../types/history';
-import {CustomStyle} from '../../../types/styles';
-import {MessageUtils} from './utils/messageUtils';
-import {HTMLMessages} from './html/htmlMessages';
-import {SetupMessages} from './setupMessages';
-import {FileMessages} from './fileMessages';
-import {MessagesBase} from './messagesBase';
-import {DeepChat} from '../../../deepChat';
-import {HTMLUtils} from './html/htmlUtils';
-import {History} from './history/history';
+import { MessageBody, MessageContentI, Overwrite } from '../../../types/messagesInternal';
+import { HiddenFileAttachments } from '../input/fileAttachments/fileAttachments';
+import { MessageFile, MessageFileType } from '../../../types/messageFile';
+import { CustomErrors, ServiceIO } from '../../../services/serviceIO';
+import { LoadingStyle } from '../../../utils/loading/loadingStyle';
+import { HTMLDeepChatElements } from './html/htmlDeepChatElements';
+import { ElementUtils } from '../../../utils/element/elementUtils';
+import { FireEvents } from '../../../utils/events/fireEvents';
+import { MessageStyleUtils } from './utils/messageStyleUtils';
+import { ErrorMessageOverrides } from '../../../types/error';
+import { ResponseI } from '../../../types/responseInternal';
+import { FileMessageUtils } from './utils/fileMessageUtils';
+import { TextToSpeech } from './textToSpeech/textToSpeech';
+import { LoadingHistory } from './history/loadingHistory';
+import { ErrorResp } from '../../../types/errorInternal';
+import { Demo, DemoResponse } from '../../../types/demo';
+import { IntroMessage } from '../../../types/messages';
+import { MessageStream } from './stream/messageStream';
+import { IntroPanel } from '../introPanel/introPanel';
+import { WebModel } from '../../../webModel/webModel';
+import { UpdateMessage } from './utils/updateMessage';
+import { Legacy } from '../../../utils/legacy/legacy';
+import { LoadHistory } from '../../../types/history';
+import { CustomStyle } from '../../../types/styles';
+import { MessageUtils } from './utils/messageUtils';
+import { HTMLMessages } from './html/htmlMessages';
+import { SetupMessages } from './setupMessages';
+import { FileMessages } from './fileMessages';
+import { MessagesBase } from './messagesBase';
+import { DeepChat } from '../../../deepChat';
+import { HTMLUtils } from './html/htmlUtils';
+import { History } from './history/history';
 
 export interface MessageElements {
   outerContainer: HTMLElement;
@@ -51,7 +51,7 @@ export class Messages extends MessagesBase {
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     super(deepChat);
-    const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
+    const { permittedErrorPrefixes, introPanelMarkUp, demo } = serviceIO;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._onError = FireEvents.onError.bind(this, deepChat);
@@ -72,7 +72,7 @@ export class Messages extends MessagesBase {
     deepChat.refreshMessages = this.refreshTextMessages.bind(this, deepChat.remarkable);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
     deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
-      this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
+      this.addAnyMessage({ ...message, sendUpdate: !!isUpdate }, !isUpdate);
     };
     deepChat.updateMessage = (messageBody: MessageBody, index: number) => UpdateMessage.update(this, messageBody, index);
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
@@ -103,7 +103,7 @@ export class Messages extends MessagesBase {
   private prepareDemo(demo: Demo, loadHistory?: LoadHistory): void {
     if (typeof demo === 'object') {
       if (!loadHistory && demo.displayLoading) {
-        const {history} = demo.displayLoading;
+        const { history } = demo.displayLoading;
         if (history?.small) LoadingHistory.addMessage(this, false);
         if (history?.full) LoadingHistory.addMessage(this);
       }
@@ -206,7 +206,7 @@ export class Messages extends MessagesBase {
     const message = Messages.createMessageContent(data);
     const displayText = this.textToSpeech?.service?.displayText;
     if (typeof displayText === 'boolean' && !displayText) delete message.text;
-    const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
+    const overwrite: Overwrite = { status: data.overwrite }; // if did not overwrite, create a new message
     if (isTop) {
       this.tryAddHTMLMessage(message, overwrite, isTop);
       this.tryAddFileMessages(message, isTop);
@@ -312,7 +312,7 @@ export class Messages extends MessagesBase {
 
   private addDefaultLoadingMessage() {
     const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
-    const {bubbleElement} = messageElements;
+    const { bubbleElement } = messageElements;
     messageElements.bubbleElement.classList.add(LoadingStyle.DOTS_CONTAINER_CLASS);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-dots');
@@ -344,19 +344,19 @@ export class Messages extends MessagesBase {
     }
   }
 
-  public async addMultipleFiles(filesData: {file: File; type: MessageFileType}[], hiddenAtts: HiddenFileAttachments) {
+  public async addMultipleFiles(filesData: { file: File; type: MessageFileType }[], hiddenAtts: HiddenFileAttachments) {
     this._hiddenAttachments = hiddenAtts;
     return Promise.all<MessageFile>(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
           if (!fileData.type || fileData.type === 'any') {
             const fileName = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
-            resolve({name: fileName, type: 'any', ref: fileData.file});
+            resolve({ name: fileName, type: 'any', ref: fileData.file });
           } else {
             const reader = new FileReader();
             reader.readAsDataURL(fileData.file);
             reader.onload = () => {
-              resolve({src: reader.result as string, type: fileData.type, ref: fileData.file});
+              resolve({ src: reader.result as string, type: fileData.type, ref: fileData.file });
             };
           }
         });

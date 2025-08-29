@@ -1,7 +1,7 @@
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {CohereUtils} from './utils/cohereUtils';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { CohereUtils } from './utils/cohereUtils';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 export class CohereIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Cohere API Key';

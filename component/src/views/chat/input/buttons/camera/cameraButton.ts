@@ -1,13 +1,13 @@
-import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {CameraModal} from '../../fileAttachments/modal/cameraModal';
-import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
-import {ServiceIO} from '../../../../../services/serviceIO';
-import {CameraFiles} from '../../../../../types/camera';
-import {CustomStyle} from '../../../../../types/styles';
-import {TooltipUtils} from '../tooltip/tooltipUtils';
-import {InputButton} from '../inputButton';
+import { FileAttachmentsType } from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import { GenericInputButtonStyles } from '../../../../../types/genericInputButton';
+import { DefinedButtonStateStyles } from '../../../../../types/buttonInternal';
+import { CameraModal } from '../../fileAttachments/modal/cameraModal';
+import { CAMERA_ICON_STRING } from '../../../../../icons/cameraIcon';
+import { ServiceIO } from '../../../../../services/serviceIO';
+import { CameraFiles } from '../../../../../types/camera';
+import { CustomStyle } from '../../../../../types/styles';
+import { TooltipUtils } from '../tooltip/tooltipUtils';
+import { InputButton } from '../inputButton';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 

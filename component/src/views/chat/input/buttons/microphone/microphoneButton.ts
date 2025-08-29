@@ -1,13 +1,13 @@
-import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
-import {MicrophoneStyles} from '../../../../../types/microphone';
-import {ButtonStyles} from '../../../../../types/button';
-import {TooltipUtils} from '../tooltip/tooltipUtils';
-import {InputButton} from '../inputButton';
+import { DefinedButtonInnerElements, DefinedButtonStateStyles } from '../../../../../types/buttonInternal';
+import { MICROPHONE_ICON_STRING } from '../../../../../icons/microphone';
+import { MicrophoneStyles } from '../../../../../types/microphone';
+import { ButtonStyles } from '../../../../../types/button';
+import { TooltipUtils } from '../tooltip/tooltipUtils';
+import { InputButton } from '../inputButton';
 
 // commandMode is used for speech to text
 // the reason why its called that instead of command is because it is used in SpeechToTextConfig
-type AllMicrophoneStyles = MicrophoneStyles & {commandMode?: ButtonStyles};
+type AllMicrophoneStyles = MicrophoneStyles & { commandMode?: ButtonStyles };
 
 type Styles = Omit<DefinedButtonStateStyles<AllMicrophoneStyles>, 'tooltip'>;
 

@@ -1,4 +1,4 @@
-import {TextToSpeechAudioConfig, TextToSpeechConfig} from '../../../../types/textToSpeech';
+import { TextToSpeechAudioConfig, TextToSpeechConfig } from '../../../../types/textToSpeech';
 
 export type ProcessedTextToSpeechConfig = {
   service?: TextToSpeechAudioConfig;

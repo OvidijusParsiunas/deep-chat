@@ -1,12 +1,12 @@
-import {AzureTranslationResult} from '../../types/azureResult';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {AzureUtils} from './utils/azureUtils';
-import {Response} from '../../types/response';
-import {DeepChat} from '../../deepChat';
-import {Azure} from '../../types/azure';
+import { AzureTranslationResult } from '../../types/azureResult';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { AzureUtils } from './utils/azureUtils';
+import { Response } from '../../types/response';
+import { DeepChat } from '../../deepChat';
+import { Azure } from '../../types/azure';
 
 export class AzureTranslationIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Translate Subscription Key';
@@ -29,7 +29,7 @@ export class AzureTranslationIO extends DirectServiceIO {
   preprocessBody(messages: MessageContentI[]) {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
-    return [{Text: mostRecentMessageText}];
+    return [{ Text: mostRecentMessageText }];
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
@@ -40,7 +40,7 @@ export class AzureTranslationIO extends DirectServiceIO {
 
   override async extractResultData(result: AzureTranslationResult): Promise<Response> {
     if (Array.isArray(result)) {
-      return {text: result[0].translations?.[0].text || ''};
+      return { text: result[0].translations?.[0].text || '' };
     }
     throw result.error;
   }

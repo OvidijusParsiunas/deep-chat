@@ -1,4 +1,4 @@
-import {MessageContent} from './messages';
+import { MessageContent } from './messages';
 
 export type HistoryMessage = MessageContent | false;
 

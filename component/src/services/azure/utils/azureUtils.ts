@@ -1,7 +1,7 @@
-import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/azureResult';
-import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {GenericObject} from '../../../types/object';
+import { AzureKeyRetrievalResult, AzureSummarizationResult } from '../../../types/azureResult';
+import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
+import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
+import { GenericObject } from '../../../types/object';
 
 export class AzureUtils {
   public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
@@ -35,7 +35,7 @@ export class AzureUtils {
       url: `https://${region}.api.cognitive.microsoft.com/sts/v1.0/issuetoken`,
       method: 'POST',
       createHeaders: (key: string) => {
-        return {'Ocp-Apim-Subscription-Key': `${key}`};
+        return { 'Ocp-Apim-Subscription-Key': `${key}` };
       },
       handleVerificationResult: AzureUtils.handleSpeechVerificationResult,
     };
@@ -65,7 +65,7 @@ export class AzureUtils {
       url: `${endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`,
       method: 'POST',
       createHeaders: (key: string) => {
-        return {'Ocp-Apim-Subscription-Key': `${key}`};
+        return { 'Ocp-Apim-Subscription-Key': `${key}` };
       },
       handleVerificationResult: AzureUtils.handleLanguageVerificationResult,
     };

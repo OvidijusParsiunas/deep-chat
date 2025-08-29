@@ -1,15 +1,19 @@
-import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
-import {MessageFileType, MessageFile} from '../../../../types/messageFile';
-import {Messages} from '../../../../views/chat/messages/messages';
-import {RequestUtils} from '../../../../utils/HTTP/requestUtils';
-import {DirectServiceIO} from '../../../utils/directServiceIO';
-import {OpenAIUtils} from '../../utils/openAIUtils';
-import {URLSegments} from '../openAIAssistantIOI';
-import {ServiceIO} from '../../../serviceIO';
+import {
+  OpenAIAssistantData,
+  OpenAIAssistantContent,
+  OpenAIAssistantMessagesResult,
+} from '../../../../types/openAIResult';
+import { MessageFileType, MessageFile } from '../../../../types/messageFile';
+import { Messages } from '../../../../views/chat/messages/messages';
+import { RequestUtils } from '../../../../utils/HTTP/requestUtils';
+import { DirectServiceIO } from '../../../utils/directServiceIO';
+import { OpenAIUtils } from '../../utils/openAIUtils';
+import { URLSegments } from '../openAIAssistantIOI';
+import { ServiceIO } from '../../../serviceIO';
 
-type FileDetails = {fileId: string; path?: string; name?: string}[];
+type FileDetails = { fileId: string; path?: string; name?: string }[];
 
-export type UploadedFile = {id: string; name: string};
+export type UploadedFile = { id: string; name: string };
 
 export class OpenAIAssistantUtils {
   // triggered ONLY for file_search and code_interceptor
@@ -29,13 +33,13 @@ export class OpenAIAssistantUtils {
       const formData = new FormData();
       formData.append('purpose', 'assistants');
       formData.append('file', file);
-      return new Promise<{id: string; filename: string}>((resolve) => {
+      return new Promise<{ id: string; filename: string }>((resolve) => {
         resolve(OpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
       });
     });
     try {
       const uploadedFiles = (await Promise.all(requests)).map((result) => {
-        return {id: result.id, name: result.filename};
+        return { id: result.id, name: result.filename };
       });
       headers[RequestUtils.CONTENT_TYPE] = previousContentType;
       return uploadedFiles as UploadedFile[];
@@ -49,14 +53,14 @@ export class OpenAIAssistantUtils {
   }
 
   private static getType(fileDetails: FileDetails, index: number): MessageFileType {
-    const {path} = fileDetails[index];
+    const { path } = fileDetails[index];
     // images don't have a path
     if (!path || path.endsWith('png')) return 'image';
     return 'any';
   }
 
   private static async getFiles(serviceIO: ServiceIO, fileDetails: FileDetails, urlPrefix: string, urlPosfix: string) {
-    const fileRequests = fileDetails.map(({fileId}) => {
+    const fileRequests = fileDetails.map(({ fileId }) => {
       // https://platform.openai.com/docs/api-reference/files/retrieve-contents
       serviceIO.url = `${urlPrefix}${fileId}${urlPosfix}`;
       return new Promise<Blob>((resolve) => {
@@ -162,7 +166,7 @@ export class OpenAIAssistantUtils {
   // test this using this prompt and it should give 2 text mesages and a file:
   // "give example data for a csv and create a suitable bar chart"
   private static parseMessages(io: DirectServiceIO, messages: OpenAIAssistantData[], urls: URLSegments) {
-    const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
+    const parsedContent: Promise<{ text?: string; files?: MessageFile[] }>[] = [];
     messages.forEach(async (data) => {
       data.content
         .filter((content) => !!content.text || !!content.image_file)
@@ -179,7 +183,7 @@ export class OpenAIAssistantUtils {
   }
 
   public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[], urls: URLSegments) {
-    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}], urls);
+    return OpenAIAssistantUtils.parseMessages(io, [{ content, role: 'assistant' }], urls);
   }
 
   // prettier-ignore

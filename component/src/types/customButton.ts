@@ -1,6 +1,6 @@
-import {ButtonPosition, ButtonStyles} from './button';
-import {CustomStyle, StatefulStyles} from './styles';
-import {Tooltip} from './tooltip';
+import { ButtonPosition, ButtonStyles } from './button';
+import { CustomStyle, StatefulStyles } from './styles';
+import { Tooltip } from './tooltip';
 
 export type CustomDropupItemStateStyles = {
   item?: StatefulStyles;
@@ -21,7 +21,7 @@ export type CustomButtonStyles = {
 };
 
 export type CustomButton = {
-  styles?: {button?: CustomButtonStyles; dropup?: CustomDropupItemStyles};
+  styles?: { button?: CustomButtonStyles; dropup?: CustomDropupItemStyles };
   position?: ButtonPosition;
   tooltip?: true | Tooltip;
   initialState?: keyof CustomButtonStyles;

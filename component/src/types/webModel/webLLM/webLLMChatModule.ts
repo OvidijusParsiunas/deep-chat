@@ -1,4 +1,4 @@
-import {AppConfig, ChatInterface, ChatOptions, GenerateProgressCallback, InitProgressCallback} from './webLLMShared';
+import { AppConfig, ChatInterface, ChatOptions, GenerateProgressCallback, InitProgressCallback } from './webLLMShared';
 
 export declare class ChatModule implements ChatInterface {
   private readonly logger;

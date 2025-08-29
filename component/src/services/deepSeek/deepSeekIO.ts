@@ -1,18 +1,18 @@
-import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
-import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {DeepSeekResult} from '../../types/deepSeekResult';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {DeepSeekUtils} from './utils/deepSeekUtils';
-import {Stream} from '../../utils/HTTP/stream';
-import {DeepSeek} from '../../types/deepSeek';
-import {APIKey} from '../../types/APIKey';
-import {DeepChat} from '../../deepChat';
+import { DeepSeekRequestBody, DeepSeekMessage } from '../../types/deepSeekInternal';
+import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
+import { DirectConnection } from '../../types/directConnection';
+import { MessageLimitUtils } from '../utils/messageLimitUtils';
+import { MessageContentI } from '../../types/messagesInternal';
+import { Messages } from '../../views/chat/messages/messages';
+import { Response as ResponseI } from '../../types/response';
+import { DeepSeekResult } from '../../types/deepSeekResult';
+import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
+import { DirectServiceIO } from '../utils/directServiceIO';
+import { DeepSeekUtils } from './utils/deepSeekUtils';
+import { Stream } from '../../utils/HTTP/stream';
+import { DeepSeek } from '../../types/deepSeek';
+import { APIKey } from '../../types/APIKey';
+import { DeepChat } from '../../deepChat';
 
 // https://platform.deepseek.com/api-docs/
 export class DeepSeekIO extends DirectServiceIO {
@@ -55,7 +55,7 @@ export class DeepSeekIO extends DirectServiceIO {
       } as DeepSeekMessage;
     });
 
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    bodyCopy.messages = [{ role: 'system', content: this._systemMessage }, ...processedMessages];
     return bodyCopy;
   }
 
@@ -79,15 +79,15 @@ export class DeepSeekIO extends DirectServiceIO {
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return { text: choice.delta.content };
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return { text: choice.message.content };
       }
     }
 
-    return {text: ''};
+    return { text: '' };
   }
 }

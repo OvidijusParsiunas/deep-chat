@@ -1,11 +1,11 @@
-import {MessageFile, MessageFiles} from '../../../types/messageFile';
-import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
-import {FileMessageUtils} from './utils/fileMessageUtils';
-import {FILE_ICON_STRING} from '../../../icons/fileIcon';
-import {Browser} from '../../../utils/browser/browser';
-import {MessageStyles} from '../../../types/messages';
-import {MessageUtils} from './utils/messageUtils';
-import {MessagesBase} from './messagesBase';
+import { MessageFile, MessageFiles } from '../../../types/messageFile';
+import { SVGIconUtils } from '../../../utils/svg/svgIconUtils';
+import { FileMessageUtils } from './utils/fileMessageUtils';
+import { FILE_ICON_STRING } from '../../../icons/fileIcon';
+import { Browser } from '../../../utils/browser/browser';
+import { MessageStyles } from '../../../types/messages';
+import { MessageUtils } from './utils/messageUtils';
+import { MessagesBase } from './messagesBase';
 
 export class FileMessages {
   private static readonly IMAGE_BUBBLE_CLASS = 'image-message';
@@ -25,7 +25,7 @@ export class FileMessages {
     const elements = msg.createNewMessageElement('', role);
     elements.bubbleElement.appendChild(image);
     elements.bubbleElement.classList.add(FileMessages.IMAGE_BUBBLE_CLASS);
-    return {type: 'image', elements};
+    return { type: 'image', elements };
   }
 
   private static createAudioElement(audioData: MessageFile, role: string) {
@@ -55,7 +55,7 @@ export class FileMessages {
     const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     elements.bubbleElement.appendChild(audioElement);
     elements.bubbleElement.classList.add(FileMessages.AUDIO_BUBBLE_CLASS);
-    return {type: 'audio', elements, audioElement};
+    return { type: 'audio', elements, audioElement };
   }
 
   private static createAnyFile(imageData: MessageFile) {
@@ -79,7 +79,7 @@ export class FileMessages {
     const anyFile = FileMessages.createAnyFile(data);
     elements.bubbleElement.classList.add(FileMessages.ANY_FILE_BUBBLE_CLASS);
     elements.bubbleElement.appendChild(anyFile);
-    return {type: 'file', elements};
+    return { type: 'file', elements };
   }
 
   public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, isTop = false) {
@@ -108,7 +108,7 @@ export class FileMessages {
     const typeToElements = FileMessages.createMessages(messages, files, role, isTop);
     typeToElements
       .filter((element) => element !== undefined)
-      .forEach(({type, elements}) => {
+      .forEach(({ type, elements }) => {
         FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop);
       });
   }

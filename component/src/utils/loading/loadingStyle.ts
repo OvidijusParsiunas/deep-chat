@@ -1,5 +1,5 @@
-import {MessageStyles} from '../../types/messages';
-import {CustomStyle} from '../../types/styles';
+import { MessageStyles } from '../../types/messages';
+import { CustomStyle } from '../../types/styles';
 
 export class LoadingStyle {
   public static readonly BUBBLE_CLASS = 'deep-chat-loading-message-bubble';
@@ -28,7 +28,7 @@ export class LoadingStyle {
   }
 
   public static setRing(bubbleElement: HTMLElement, style?: CustomStyle) {
-    const {color, width, height, margin, border} = style || {};
+    const { color, width, height, margin, border } = style || {};
     if (color) {
       const hexColor = LoadingStyle.colorToHex(color);
       bubbleElement.style.setProperty('--loading-history-color', hexColor);

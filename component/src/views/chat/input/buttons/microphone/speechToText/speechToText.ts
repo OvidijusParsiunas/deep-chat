@@ -1,14 +1,14 @@
-import {ValidationHandler} from '../../../../../../types/validationHandler';
-import {SpeechToTextConfig} from '../../../../../../types/microphone';
-import {OnPreResult} from 'speech-to-element/dist/types/options';
-import {TextInputEl} from '../../../textInput/textInput';
-import {Messages} from '../../../../messages/messages';
-import {MicrophoneButton} from '../microphoneButton';
-import {DeepChat} from '../../../../../../deepChat';
+import { ValidationHandler } from '../../../../../../types/validationHandler';
+import { SpeechToTextConfig } from '../../../../../../types/microphone';
+import { OnPreResult } from 'speech-to-element/dist/types/options';
+import { TextInputEl } from '../../../textInput/textInput';
+import { Messages } from '../../../../messages/messages';
+import { MicrophoneButton } from '../microphoneButton';
+import { DeepChat } from '../../../../../../deepChat';
 import SpeechToElement from 'speech-to-element';
-import {SilenceSubmit} from './silenceSubmit';
+import { SilenceSubmit } from './silenceSubmit';
 
-export type ProcessedConfig = SpeechToTextConfig & {onPreResult?: OnPreResult};
+export type ProcessedConfig = SpeechToTextConfig & { onPreResult?: OnPreResult };
 
 export type AddErrorMessage = Messages['addNewErrorMessage'];
 
@@ -21,7 +21,7 @@ export class SpeechToText extends MicrophoneButton {
   constructor(deepChat: DeepChat, textInput: TextInputEl, addErrorMessage: AddErrorMessage) {
     const config = typeof deepChat.speechToText === 'object' ? deepChat.speechToText : {};
     super(config?.button);
-    const {serviceName, processedConfig} = this.processConfiguration(textInput, deepChat.speechToText);
+    const { serviceName, processedConfig } = this.processConfiguration(textInput, deepChat.speechToText);
     this._addErrorMessage = addErrorMessage;
     if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechSupported()) {
       this.changeToUnsupported();

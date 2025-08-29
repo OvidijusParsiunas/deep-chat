@@ -1,15 +1,15 @@
-import {ErrorMessages} from '../../../../utils/errorMessages/errorMessages';
-import {ElementUtils} from '../../../../utils/element/elementUtils';
-import {MessageContentI} from '../../../../types/messagesInternal';
-import {TextToSpeech} from '../textToSpeech/textToSpeech';
-import {MessageFile} from '../../../../types/messageFile';
-import {MessageElements, Messages} from '../messages';
-import {Response} from '../../../../types/response';
-import {MessageUtils} from '../utils/messageUtils';
-import {HTMLMessages} from '../html/htmlMessages';
-import {Stream} from '../../../../types/stream';
-import {MessagesBase} from '../messagesBase';
-import {HTMLUtils} from '../html/htmlUtils';
+import { ErrorMessages } from '../../../../utils/errorMessages/errorMessages';
+import { ElementUtils } from '../../../../utils/element/elementUtils';
+import { MessageContentI } from '../../../../types/messagesInternal';
+import { TextToSpeech } from '../textToSpeech/textToSpeech';
+import { MessageFile } from '../../../../types/messageFile';
+import { MessageElements, Messages } from '../messages';
+import { Response } from '../../../../types/response';
+import { MessageUtils } from '../utils/messageUtils';
+import { HTMLMessages } from '../html/htmlMessages';
+import { Stream } from '../../../../types/stream';
+import { MessagesBase } from '../messagesBase';
+import { HTMLUtils } from '../html/htmlUtils';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
@@ -67,8 +67,8 @@ export class MessageStream {
     if (this._elements) {
       this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
       this._activeMessageRole = role;
-      this._message = {role: this._activeMessageRole, [streamType]: initContent};
-      this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
+      this._message = { role: this._activeMessageRole, [streamType]: initContent };
+      this._messages.messageToElements.push([this._message, { [streamType]: this._elements }]);
       if (customWrapper) this.setTargetWrapperIfNeeded(this._elements, content, this._streamType, customWrapper);
     }
   }
