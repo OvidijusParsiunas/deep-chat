@@ -14,7 +14,12 @@ function getInterceptorMesages(result: object, messageType: string, isIntercepto
   return responseMessage + interceptorMessage;
 }
 
-function getInvalidResponseMessage(result: object, messageType: string, isInterceptor: boolean, postInterceptor?: object) {
+function getInvalidResponseMessage(
+  result: object,
+  messageType: string,
+  isInterceptor: boolean,
+  postInterceptor?: object
+) {
   return (
     `${getInterceptorMesages(result, messageType, isInterceptor, postInterceptor)}` +
     `Make sure the ${messageType} message is using the Response format: ` +

@@ -83,7 +83,10 @@ export class RequestUtils {
     return response.blob();
   }
 
-  public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResultP {
+  public static async processRequestInterceptor(
+    deepChat: DeepChat,
+    requestDetails: RequestDetails
+  ): InterceptorResultP {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};
@@ -98,7 +101,7 @@ export class RequestUtils {
       return false;
     }
     const invalidFound = dataArr.find(
-      (data) =>
+      data =>
         typeof data !== 'object' ||
         !(
           typeof data.error === 'string' ||

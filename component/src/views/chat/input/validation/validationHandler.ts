@@ -36,7 +36,7 @@ export class ValidationHandler {
     const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
-    const fileData = uploadedFilesData?.map((fileData) => fileData.file);
+    const fileData = uploadedFilesData?.map(fileData => fileData.file);
     return ValidationHandler.validate(validation, submitButton, text as string, fileData);
   }
 
@@ -45,7 +45,7 @@ export class ValidationHandler {
     programmatic: UserContentI,
     submitButton: SubmitButton
   ) {
-    const files = programmatic.files?.map((file) => file.file);
+    const files = programmatic.files?.map(file => file.file);
     return ValidationHandler.validate(validation, submitButton, programmatic.text, files, true);
   }
 
@@ -72,7 +72,8 @@ export class ValidationHandler {
       if (!ValidationHandler.validateWebsocket(serviceIO, submitButton)) return false;
       const validation = validateInput || serviceIO.canSendMessage;
       if (validation) {
-        if (programmatic) return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton);
+        if (programmatic)
+          return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton);
         return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton);
       }
       return null;

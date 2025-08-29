@@ -259,7 +259,7 @@ export class MessagesBase {
 
   public removeMessage(messageElements: MessageElements) {
     messageElements.outerContainer.remove();
-    const messageElementsIndex = this.messageElementRefs.findIndex((elRefs) => elRefs === messageElements);
+    const messageElementsIndex = this.messageElementRefs.findIndex(elRefs => elRefs === messageElements);
     this.messageElementRefs.splice(messageElementsIndex, 1);
   }
 
@@ -300,7 +300,7 @@ export class MessagesBase {
   // this is mostly used for enabling highlight.js to highlight code if it downloads later
   protected refreshTextMessages(customConfig?: RemarkableOptions) {
     this._remarkable = RemarkableConfig.createNew(customConfig);
-    this.messageToElements.forEach((msgToEls) => {
+    this.messageToElements.forEach(msgToEls => {
       if (msgToEls[1].text && msgToEls[0].text) {
         this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text, msgToEls[0].role);
       }

@@ -41,7 +41,7 @@ export class Websocket {
         if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, websocket, messages);
         io.deepChat._validationHandler?.();
       };
-      io.websocket.onerror = (event) => {
+      io.websocket.onerror = event => {
         console.error(event);
         Websocket.retryConnection(io, messages);
       };
@@ -63,7 +63,7 @@ export class Websocket {
 
   private static assignListeners(io: ServiceIO, ws: WebSocket, messages: Messages) {
     const roleToStream = {} as RoleToStream;
-    ws.onmessage = async (message) => {
+    ws.onmessage = async message => {
       if (!io.extractResultData) return; // this return should theoretically not execute
       try {
         const result: Response = JSON.parse(message.data);
@@ -77,9 +77,9 @@ export class Websocket {
           Stream.upsertWFiles(messages, upsertFunc, stream, finalResult);
         } else {
           const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
-          const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+          const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
           if (errorMessage) throw errorMessage.error;
-          messageDataArr.forEach((data) => messages.addNewMessage(data));
+          messageDataArr.forEach(data => messages.addNewMessage(data));
         }
       } catch (error) {
         RequestUtils.displayError(messages, error as object, 'Error in server message');

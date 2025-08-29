@@ -17,7 +17,7 @@ export class DropupItem {
     item.addEventListener('click', () => {
       inputButton.click();
     });
-    item.addEventListener('mouseenter', (event) => {
+    item.addEventListener('mouseenter', event => {
       menu.highlightedItem = event.target as HTMLElement;
     });
     item.addEventListener('mouseleave', () => {
@@ -44,7 +44,7 @@ export class DropupItem {
   private static populateItem(inputButton: InputButton, item: HTMLElement, styles?: DropupMenuStyles) {
     const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
-    const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
+    const emptySVG = customStyles && Object.values(customStyles).find(style => style.svg?.content === '');
     if (buttonInnerElement.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
       if (!emptySVG) item.appendChild(DropupItem.createItemIcon(svg, styles?.iconContainer));
       item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.text));

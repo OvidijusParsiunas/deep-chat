@@ -21,7 +21,13 @@ interface GenerateProgressCallbackParams {
   step: number;
   currentMessage: string;
 }
-type MessageContent = GenerateProgressCallbackParams | ReloadParams | GenerateParams | InitProgressReport | string | null;
+type MessageContent =
+  | GenerateProgressCallbackParams
+  | ReloadParams
+  | GenerateParams
+  | InitProgressReport
+  | string
+  | null;
 
 export declare class ChatWorkerHandler {
   private readonly chat;

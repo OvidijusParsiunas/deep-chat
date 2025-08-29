@@ -57,7 +57,7 @@ export class Dropup extends InputButton<Styles> {
   }
 
   private addContainerEvents(containerElement: HTMLElement) {
-    containerElement.addEventListener('click', (event) => {
+    containerElement.addEventListener('click', event => {
       const classes = (event.target as HTMLElement).classList;
       if (!classes.contains(Dropup.BUTTON_ICON_CLASS) && !classes.contains(CustomButton.DISABLED_CONTAINER_CLASS)) {
         this._menu.close();

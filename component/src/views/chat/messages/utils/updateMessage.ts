@@ -11,13 +11,13 @@ import {MessageUtils} from './messageUtils';
 export class UpdateMessage {
   private static removeElements(messageElementRefs: MessageElements[], elemsToRemove?: MessageElements) {
     if (!elemsToRemove) return;
-    const removalElsIndex = messageElementRefs.findIndex((messageElements) => messageElements === elemsToRemove);
+    const removalElsIndex = messageElementRefs.findIndex(messageElements => messageElements === elemsToRemove);
     messageElementRefs.splice(removalElsIndex, 1);
     elemsToRemove?.outerContainer.remove();
   }
 
   private static removeFilesMessages(msg: MessagesBase, messageToEls: MessageToElements[0]) {
-    messageToEls[1].files?.forEach((file) => {
+    messageToEls[1].files?.forEach(file => {
       UpdateMessage.removeElements(msg.messageElementRefs, file);
     });
     delete messageToEls[0].files;
@@ -41,7 +41,7 @@ export class UpdateMessage {
       const {nextSibling} = previousElements.outerContainer;
       nextSibling?.parentElement?.insertBefore(messageElements.outerContainer, nextSibling);
       msg.messageElementRefs.splice(msg.messageElementRefs.length - 1, 1); // removing as createMessageElements adds one
-      const prevMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === previousElements);
+      const prevMsgElsIndex = msg.messageElementRefs.findIndex(messageElements => messageElements === previousElements);
       msg.messageElementRefs.splice(prevMsgElsIndex + 1, 0, messageElements);
       messageToEls[1].html = messageElements;
     }
@@ -55,7 +55,7 @@ export class UpdateMessage {
     const nextElement = messageToEls[1].html;
     const prevElement = messageToEls[1].files?.[messageToEls[1].files?.length - 1] || messageToEls[1].text;
     const siblingElement = (nextElement || prevElement) as MessageElements;
-    let siblingElementIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === siblingElement);
+    let siblingElementIndex = msg.messageElementRefs.findIndex(messageElements => messageElements === siblingElement);
     if (prevElement) siblingElementIndex += 1;
     const beforeElement = (nextElement?.outerContainer || prevElement?.outerContainer.nextSibling) as Node;
     typeToElements.forEach(({type, elements}, index) => {
@@ -75,8 +75,11 @@ export class UpdateMessage {
     } else {
       const messageElements = msg.createElements(newText, messageToEls[0].role);
       const nextElements = (messageToEls[1].files?.[0] || messageToEls[1].html) as MessageElements;
-      nextElements.outerContainer.parentElement?.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
-      const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);
+      nextElements.outerContainer.parentElement?.insertBefore(
+        messageElements.outerContainer,
+        nextElements.outerContainer
+      );
+      const nextMsgElsIndex = msg.messageElementRefs.findIndex(messageElements => messageElements === nextElements);
       msg.messageElementRefs.splice(nextMsgElsIndex, 0, messageElements);
       messageToEls[1].text = messageElements;
     }

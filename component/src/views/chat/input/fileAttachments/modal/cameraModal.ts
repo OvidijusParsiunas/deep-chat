@@ -79,7 +79,7 @@ export class CameraModal extends Modal {
 
   private stop() {
     if (this._mediaStream) {
-      this._mediaStream.getTracks().forEach((track) => track.stop());
+      this._mediaStream.getTracks().forEach(track => track.stop());
     }
     this._stopped = true;
     setTimeout(() => {
@@ -96,7 +96,7 @@ export class CameraModal extends Modal {
     this._stopped = false;
     navigator.mediaDevices
       .getUserMedia({video: this._dimensions || true})
-      .then((stream) => {
+      .then(stream => {
         this._mediaStream = stream;
         if (!this.isOpen()) return this.stop();
         const video = document.createElement('video');
@@ -104,7 +104,7 @@ export class CameraModal extends Modal {
         video.play();
         requestAnimationFrame(this.updateCanvas.bind(this, video, this._canvas));
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         this.stop();
         this.close();

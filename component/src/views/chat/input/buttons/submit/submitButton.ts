@@ -92,7 +92,7 @@ export class SubmitButton extends InputButton<Styles> {
   private createCustomElements() {
     const submit = ButtonInnerElements.createCustomElements('submit', this.svg, this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
-    Object.keys(states).forEach((state) => {
+    Object.keys(states).forEach(state => {
       const styleState = state as keyof Styles;
       const elements = ButtonInnerElements.createCustomElements(styleState, this.svg, this.customStyles);
       if (elements) states[styleState] = elements;
@@ -187,7 +187,7 @@ export class SubmitButton extends InputButton<Styles> {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
     const newContent: UserContentI = {text: content.text};
     if (content.files) {
-      newContent.files = Array.from(content.files).map((file) => {
+      newContent.files = Array.from(content.files).map(file => {
         return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
       });
     }
@@ -206,7 +206,7 @@ export class SubmitButton extends InputButton<Styles> {
     }
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    const filesData = content.files?.map((fileData) => fileData.file);
+    const filesData = content.files?.map(fileData => fileData.file);
     const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.hideFiles();
@@ -229,7 +229,11 @@ export class SubmitButton extends InputButton<Styles> {
 
   private changeToStopIcon() {
     if (this._serviceIO.websocket) return; // stop not used for streaming messages in websocket
-    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
+    this.elementRef.classList.remove(
+      SubmitButton.LOADING_CLASS,
+      SubmitButton.DISABLED_CLASS,
+      SubmitButton.SUBMIT_CLASS
+    );
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
     this.changeElementsByState(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);

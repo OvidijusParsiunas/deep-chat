@@ -48,12 +48,12 @@ export class HTMLDeepChatElements {
   }
 
   public static doesElementContainDeepChatClass(element: HTMLElement) {
-    return DEEP_CHAT_ELEMENT_CLASSES.find((className) => element.classList.contains(className));
+    return DEEP_CHAT_ELEMENT_CLASSES.find(className => element.classList.contains(className));
   }
 
   private static applyEvents(element: Element, className: string) {
     const events = DEEP_CHAT_ELEMENTS[className].events;
-    Object.keys(events || []).forEach((eventType) => {
+    Object.keys(events || []).forEach(eventType => {
       element.addEventListener(eventType, events?.[eventType as keyof GlobalEventHandlersEventMap] as () => void);
     });
   }
@@ -77,15 +77,15 @@ export class HTMLDeepChatElements {
   }
 
   public static applyDeepChatUtilities(messages: MessagesBase, utilities: HTMLClassUtilities, element: HTMLElement) {
-    DEEP_CHAT_ELEMENT_CLASSES.forEach((className) => {
+    DEEP_CHAT_ELEMENT_CLASSES.forEach(className => {
       const elements = element.getElementsByClassName(className);
-      Array.from(elements || []).forEach((element) => {
+      Array.from(elements || []).forEach(element => {
         const styles = HTMLDeepChatElements.getProcessedStyles(utilities, element, className);
         HTMLUtils.applyStylesToElement(element as HTMLElement, styles);
         HTMLDeepChatElements.applyEvents(element, className);
       });
     });
     const suggestionElements = element.getElementsByClassName(DEEP_CHAT_SUGGESTION_BUTTON);
-    Array.from(suggestionElements).forEach((element) => HTMLDeepChatElements.applySuggestionEvent(messages, element));
+    Array.from(suggestionElements).forEach(element => HTMLDeepChatElements.applySuggestionEvent(messages, element));
   }
 }

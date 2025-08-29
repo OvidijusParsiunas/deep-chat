@@ -15,7 +15,7 @@ export class InternalHTML extends HTMLElement {
   // If this is not working, try using propertyName directly
   constructor() {
     super();
-    Object.keys(InternalHTML._attributeToProperty_).forEach((attributeName) => {
+    Object.keys(InternalHTML._attributeToProperty_).forEach(attributeName => {
       const propertyName = InternalHTML._attributeToProperty_[attributeName];
       this.constructPropertyAccessors(propertyName);
       if (!this.hasOwnProperty(attributeName)) {

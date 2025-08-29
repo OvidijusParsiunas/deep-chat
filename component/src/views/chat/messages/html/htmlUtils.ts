@@ -16,7 +16,7 @@ export class HTMLUtils {
   }
 
   private static applyEventsToElement(element: HTMLElement, events: EventToFunction) {
-    Object.keys(events).forEach((event) => {
+    Object.keys(events).forEach(event => {
       const eventFunction = events[event];
       if (eventFunction) element.addEventListener(event, eventFunction as () => void);
     });
@@ -32,9 +32,9 @@ export class HTMLUtils {
   }
 
   private static applyCustomClassUtilities(utilities: HTMLClassUtilities, element: HTMLElement) {
-    Object.keys(utilities).forEach((className) => {
+    Object.keys(utilities).forEach(className => {
       const elements = element.getElementsByClassName(className);
-      (Array.from(elements) as HTMLElement[]).forEach((element) => {
+      (Array.from(elements) as HTMLElement[]).forEach(element => {
         if (utilities[className as string]) {
           HTMLUtils.applyClassUtilitiesToElement(element, utilities[className as string]);
         }
@@ -51,7 +51,7 @@ export class HTMLUtils {
     if (node.nodeType === Node.ELEMENT_NODE) {
       topLevelElements.push((node as HTMLElement).outerHTML);
     }
-    node.childNodes.forEach((childNode) => {
+    node.childNodes.forEach(childNode => {
       HTMLUtils.traverseNodes(childNode, topLevelElements);
     });
   }
@@ -60,7 +60,7 @@ export class HTMLUtils {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
     const topLevelElements: string[] = [];
-    doc.body.childNodes.forEach((childNode) => {
+    doc.body.childNodes.forEach(childNode => {
       HTMLUtils.traverseNodes(childNode, topLevelElements);
     });
     return topLevelElements;

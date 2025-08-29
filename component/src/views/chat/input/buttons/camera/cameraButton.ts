@@ -12,7 +12,11 @@ import {InputButton} from '../inputButton';
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class CameraButton extends InputButton<Styles> {
-  constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
+  constructor(
+    containerElement: HTMLElement,
+    fileAttachmentsType: FileAttachmentsType,
+    fileService: ServiceIO['camera']
+  ) {
     const buttonPosition = fileService?.button?.position;
     const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
     const tooltip = TooltipUtils.tryCreateConfig('Camera', fileService?.button?.tooltip);

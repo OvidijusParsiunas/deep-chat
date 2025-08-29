@@ -76,8 +76,9 @@
     "trailingComma": "es5",
     "tabWidth": 2,
     "useTabs": false,
-    "printWidth": 123,
-    "bracketSpacing": false
+    "printWidth": 120,
+    "bracketSpacing": false,
+    "arrowParens": "avoid"
   },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",

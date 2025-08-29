@@ -17,7 +17,9 @@ export type AzureSummarizationResult = InterfacesUnion<
       errors: string[];
       status: 'succeeded' | 'running';
       tasks: {
-        items: [{status: string; results: {documents: [{sentences: [{text: string}]; warnings: []}]; errors: string[]}}];
+        items: [
+          {status: string; results: {documents: [{sentences: [{text: string}]; warnings: []}]; errors: string[]}},
+        ];
       };
     }
   | {error: {code: string}}

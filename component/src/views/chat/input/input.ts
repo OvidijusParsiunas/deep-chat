@@ -63,7 +63,14 @@ export class Input {
     buttons: Buttons
   ) {
     const fileAttachments = new FileAttachments(this.elementRef, deepChat.attachmentContainerStyle, serviceIO.demo);
-    Input.createUploadButtons(deepChat, serviceIO, serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
+    Input.createUploadButtons(
+      deepChat,
+      serviceIO,
+      serviceIO.fileTypes || {},
+      fileAttachments,
+      containerElement,
+      buttons
+    );
     if (serviceIO.camera?.files) {
       const cameraType =
         buttons.images?.fileType || fileAttachments.addType(deepChat, serviceIO, serviceIO.camera.files, 'images');
@@ -88,7 +95,7 @@ export class Input {
     containerEl: HTMLElement,
     buttons: Buttons
   ) {
-    Object.keys(fileTypes).forEach((key) => {
+    Object.keys(fileTypes).forEach(key => {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
       if (fileService.files) {
@@ -122,7 +129,7 @@ export class Input {
         const uploadedFilesData = fileAtts.getAllFileData();
         const inputText = textInput.inputElementRef.innerText.trim() as string;
         const content: {text?: string; files?: File[]} = {text: inputText};
-        if (uploadedFilesData) content.files = uploadedFilesData.map((file) => file.file);
+        if (uploadedFilesData) content.files = uploadedFilesData.map(file => file.file);
         FireEvents.onInput(deepChat, content, isUser);
       });
     };

@@ -24,8 +24,8 @@ export class InputButtonPositions {
     dropupStyles?: DropupStyles
   ) {
     const dropup = new Dropup(containerElement, dropupStyles);
-    BUTTON_ORDER.forEach((buttonType) => {
-      const index = pToBs['dropup-menu'].findIndex((props) => props.buttonType === buttonType);
+    BUTTON_ORDER.forEach(buttonType => {
+      const index = pToBs['dropup-menu'].findIndex(props => props.buttonType === buttonType);
       const buttonProps = pToBs['dropup-menu'][index];
       if (buttonProps) {
         dropup.addItem(buttonProps.button);
@@ -41,9 +41,9 @@ export class InputButtonPositions {
 
   private static addToSideContainer(buttonContainers: ButtonContainersT, pToBs: PositionToButtons) {
     const sideContainerPositions = ['inside-left', 'inside-right', 'outside-left', 'outside-right'];
-    sideContainerPositions.forEach((sideContainerPosition) => {
+    sideContainerPositions.forEach(sideContainerPosition => {
       const position = sideContainerPosition as keyof PositionToButtons;
-      pToBs[position].forEach((buttonProps) => {
+      pToBs[position].forEach(buttonProps => {
         ButtonContainers.addButton(buttonContainers, buttonProps.button.elementRef, position);
       });
     });
@@ -69,7 +69,7 @@ export class InputButtonPositions {
     const pToBs = InputButtonPositions.createPositionsToButtonsObj();
     // REMEMBER THAT setPosition removes from buttonsObj
     // populate positions
-    Object.keys(buttonsObj).forEach((key) => {
+    Object.keys(buttonsObj).forEach(key => {
       const position = buttonsObj[key as keyof Buttons]?.button.position;
       if (position) InputButtonPositions.setPosition(buttonsObj, key as keyof Buttons, pToBs[position]);
     });
@@ -108,11 +108,11 @@ export class InputButtonPositions {
     // if there are multiple buttons without a position -> dropdown
     const buttonsWithoutPositions = Object.keys(buttonsObj);
     if (buttonsWithoutPositions.length > 1 || pToBs['dropup-menu'].length > 0) {
-      BUTTON_ORDER.forEach((buttonType) => {
+      BUTTON_ORDER.forEach(buttonType => {
         if (buttonsObj[buttonType]) pToBs['dropup-menu'].push({...buttonsObj[buttonType], buttonType} as ButtonProps);
       });
       // custom buttons are added at the bottom
-      buttonsWithoutPositions.forEach((buttonType) => {
+      buttonsWithoutPositions.forEach(buttonType => {
         const customType = buttonType as `custom${number}`;
         if (customType.startsWith(CustomButton.INDICATOR_PREFIX) && buttonsObj[customType]) {
           pToBs['dropup-menu'].push({...buttonsObj[customType], customType} as ButtonProps);

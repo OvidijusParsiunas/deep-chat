@@ -6,14 +6,19 @@ import {MessageElements} from '../messages';
 import {MessageUtils} from './messageUtils';
 
 export class MessageStyleUtils {
-  public static applyCustomStylesToElements(elements: MessageElements, isMedia: boolean, styles?: MessageElementsStyles) {
+  public static applyCustomStylesToElements(
+    elements: MessageElements,
+    isMedia: boolean,
+    styles?: MessageElementsStyles
+  ) {
     if (!styles) return;
     Object.assign(elements.outerContainer.style, styles.outerContainer);
     Object.assign(elements.innerContainer.style, styles.innerContainer);
     Object.assign(elements.bubbleElement.style, styles.bubble);
     if (isMedia) {
       const bubbleContent = elements.bubbleElement.children[0] as HTMLElement;
-      const mediaElement = bubbleContent.tagName.toLocaleLowerCase() !== 'a' ? bubbleContent : bubbleContent.children[0];
+      const mediaElement =
+        bubbleContent.tagName.toLocaleLowerCase() !== 'a' ? bubbleContent : bubbleContent.children[0];
       Object.assign((mediaElement as HTMLElement).style, styles.media);
     }
   }
@@ -71,7 +76,7 @@ export class MessageStyleUtils {
       bubble: {},
       media: {},
     };
-    specificStyles.forEach((style) => {
+    specificStyles.forEach(style => {
       newElementStyles.outerContainer[style as keyof GenericObject] =
         (sharedStyles.outerContainer?.[style] as string) || '';
       newElementStyles.innerContainer[style as keyof GenericObject] =

@@ -155,7 +155,7 @@ export class FileAttachmentsType {
 
   removeAttachment(attachmentObject: AttachmentObject, event?: MouseEvent) {
     this._onInput?.(!!event?.isTrusted);
-    const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
+    const index = this._attachments.findIndex(attachment => attachment === attachmentObject);
     const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
     AudioFileAttachmentType.stopAttachmentPlayback(containerElement);
@@ -165,13 +165,13 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
+    return Array.from(this._attachments).map(attachment => ({file: attachment.file, type: attachment.fileType}));
   }
 
   hideAttachments() {
     this._hiddenAttachments.clear();
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
-    this._attachments.forEach((attachment) => {
+    this._attachments.forEach(attachment => {
       setTimeout(() => attachment.removeButton?.click());
       this._hiddenAttachments.add(attachment);
     });
@@ -179,14 +179,14 @@ export class FileAttachmentsType {
 
   removeAttachments() {
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
-    this._attachments.forEach((attachment) => {
+    this._attachments.forEach(attachment => {
       setTimeout(() => attachment.removeButton?.click());
     });
     this._hiddenAttachments.clear();
   }
 
   readdAttachments() {
-    Array.from(this._hiddenAttachments).forEach((attachment) => {
+    Array.from(this._hiddenAttachments).forEach(attachment => {
       this._fileAttachmentsContainerRef.appendChild(attachment.attachmentContainerElement);
       this._attachments.push(attachment);
     });

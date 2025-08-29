@@ -61,7 +61,7 @@ export class Modal {
   }
 
   public addButtons(...buttons: HTMLElement[]) {
-    buttons.forEach((button) => {
+    buttons.forEach(button => {
       ButtonAccessibility.addAttributes(button);
       this._buttonPanel.appendChild(button);
     });
@@ -122,7 +122,11 @@ export class Modal {
     return closeButton;
   }
 
-  public static createTextModalFunc(viewContainerElement: HTMLElement, fileIO: FileServiceIO, closeCallback: () => void) {
+  public static createTextModalFunc(
+    viewContainerElement: HTMLElement,
+    fileIO: FileServiceIO,
+    closeCallback: () => void
+  ) {
     if (typeof fileIO === 'object' && fileIO.files?.infoModal) {
       const modal = new Modal(viewContainerElement, ['modal-content'], fileIO.files.infoModal.containerStyle);
       modal.addCloseButton('OK', false, closeCallback);

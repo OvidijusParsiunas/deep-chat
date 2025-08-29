@@ -33,10 +33,10 @@ export class RecordAudio extends MicrophoneButton {
   }
 
   private stop(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.changeToDefault();
       this._mediaRecorder?.stop(); // may not be required
-      this._mediaStream?.getTracks().forEach((track) => track.stop()); // necessary to remove tab bubble
+      this._mediaStream?.getTracks().forEach(track => track.stop()); // necessary to remove tab bubble
       setTimeout(() => {
         resolve();
       }, 10);
@@ -46,18 +46,18 @@ export class RecordAudio extends MicrophoneButton {
   private record() {
     navigator.mediaDevices
       .getUserMedia({audio: true})
-      .then((stream) => {
+      .then(stream => {
         this.changeToActive();
         this._mediaRecorder = new MediaRecorder(stream);
         this._audioType.addPlaceholderAttachment(this.stop.bind(this), this._maxDurationSeconds);
         this._mediaStream = stream;
         // fired on recording stop
-        this._mediaRecorder.addEventListener('dataavailable', (event) => {
+        this._mediaRecorder.addEventListener('dataavailable', event => {
           this.createFile(event);
         });
         this._mediaRecorder.start();
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         this.stop();
       })
@@ -72,7 +72,7 @@ export class RecordAudio extends MicrophoneButton {
     const file = new File([blob], filename, {type: blob.type});
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = (event) => {
+    reader.onload = event => {
       this._audioType.completePlaceholderAttachment(file, (event.target as FileReader).result as string);
     };
   }

@@ -74,7 +74,12 @@ export class MessageStream {
   }
 
   // not using existing htmlUtils htmlWrappers logic to be able to stream html
-  private setTargetWrapperIfNeeded(elements: MessageElements, content: string, streamType: string, customWrapper: string) {
+  private setTargetWrapperIfNeeded(
+    elements: MessageElements,
+    content: string,
+    streamType: string,
+    customWrapper: string
+  ) {
     elements.bubbleElement.innerHTML = customWrapper;
     this._targetWrapper = HTMLUtils.getTargetWrapper(elements.bubbleElement);
     if (this._elements) HTMLUtils.apply(this._messages, this._elements.bubbleElement);

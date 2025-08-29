@@ -2,7 +2,7 @@ export class ElementUtils {
   private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
 
   public static addElements(parent: HTMLElement, ...elements: HTMLElement[]) {
-    elements.forEach((element) => parent.appendChild(element));
+    elements.forEach(element => parent.appendChild(element));
   }
 
   public static isScrollbarAtBottomOfElement(element: HTMLElement) {

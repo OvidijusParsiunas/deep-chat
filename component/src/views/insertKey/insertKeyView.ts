@@ -82,7 +82,7 @@ export class InsertKeyView {
     };
     const verifyKeyFunc = InsertKeyView.verifyKey.bind(this, inputEl, keyVerificationHandlers, serviceIO);
     startEl.onclick = verifyKeyFunc;
-    inputEl.onkeydown = (event) => {
+    inputEl.onkeydown = event => {
       if (!inputEl.classList.contains('loading') && event.key === KEYBOARD_KEY.ENTER) verifyKeyFunc();
     };
   }

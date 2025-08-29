@@ -28,7 +28,7 @@ export class CustomHandler {
         io.completionsHandlers.onFinish();
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
           messages.addNewErrorMessage('service', errorMessage.error);
@@ -36,7 +36,7 @@ export class CustomHandler {
         } else if (Stream.isSimulatable(io.stream, result as Response)) {
           Stream.simulate(messages, io.streamHandlers, result as Response);
         } else {
-          messageDataArr.forEach((message) => messages.addNewMessage(message));
+          messageDataArr.forEach(message => messages.addNewMessage(message));
           io.completionsHandlers.onFinish();
         }
       }
@@ -82,7 +82,12 @@ export class CustomHandler {
         displayError: false,
       })) as Response;
       if (!result) {
-        const errorMessage = ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
+        const errorMessage = ErrorMessages.INVALID_RESPONSE(
+          response,
+          'server',
+          !!io.deepChat.responseInterceptor,
+          result
+        );
         CustomHandler.streamError(errorMessage, stream, io, messages);
         isHandlerActive = false;
       } else if (result.error) {
@@ -132,7 +137,7 @@ export class CustomHandler {
         messages.addNewErrorMessage('service', 'Error in server message');
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
           if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', errorMessage.error);
@@ -142,7 +147,7 @@ export class CustomHandler {
           const stream = (internalConfig.roleToStream as RoleToStream)[message.role || MessageUtils.AI_ROLE];
           Stream.upsertWFiles(messages, upsertFunc, stream, message);
         } else {
-          messageDataArr.forEach((message) => messages.addNewMessage(message));
+          messageDataArr.forEach(message => messages.addNewMessage(message));
         }
       }
     };

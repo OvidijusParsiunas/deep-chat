@@ -26,7 +26,7 @@ export class TextInputEvents {
       inputElement.addEventListener('keydown', TextInputEvents.onKeyDown.bind(this, characterLimit));
     }
     inputElement.oninput = TextInputEvents.onInput.bind(this, characterLimit, validationHandler);
-    inputElement.addEventListener('paste', (event) => {
+    inputElement.addEventListener('paste', event => {
       event.preventDefault();
       if (event.clipboardData?.files.length) fileAts.addFilesToAnyType(Array.from(event.clipboardData.files));
     });

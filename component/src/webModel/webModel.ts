@@ -135,7 +135,9 @@ export class WebModel extends BaseServiceIO {
     }
     if (this._isModelLoaded || this._isModelLoading) return;
     const {worker} = this._webModel;
-    return config.use_web_worker && worker ? new window.webLLM.ChatWorkerClient(worker) : new window.webLLM.ChatModule();
+    return config.use_web_worker && worker
+      ? new window.webLLM.ChatWorkerClient(worker)
+      : new window.webLLM.ChatModule();
   }
 
   private getConfig() {
@@ -143,7 +145,7 @@ export class WebModel extends BaseServiceIO {
     if (this._webModel.model) model = this._webModel.model;
     const appConfig = JSON.parse(JSON.stringify(config)) as AppConfig;
     if (this._webModel.urls) {
-      const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
+      const modelConfig = appConfig.model_list.find(modelConfig => (modelConfig.local_id = model));
       if (modelConfig) {
         if (this._webModel.urls.model) modelConfig.model_url = this._webModel.urls.model;
         if (this._webModel.urls.wasm) modelConfig.model_lib_url = this._webModel.urls.wasm;
@@ -207,7 +209,7 @@ export class WebModel extends BaseServiceIO {
   private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
     const output = {text: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
     const response = await WebModel.processResponse(this.deepChat, messages, output);
-    if (response) response.forEach((data) => messages.addNewMessage(data));
+    if (response) response.forEach(data => messages.addNewMessage(data));
     this.completionsHandlers.onFinish();
   }
 
@@ -289,12 +291,12 @@ export class WebModel extends BaseServiceIO {
         return;
       }
     const messageDataArr = Array.isArray(result) ? result : [result];
-    const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+    const errorMessage = messageDataArr.find(message => typeof message.error === 'string');
     if (errorMessage) {
       RequestUtils.displayError(messages, new Error(errorMessage.error));
       return;
     } else {
-      const errorMessage = messageDataArr.find((message) => !message || !message.text);
+      const errorMessage = messageDataArr.find(message => !message || !message.text);
       if (errorMessage) {
         const error = ErrorMessages.INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
         RequestUtils.displayError(messages, new Error(error));
@@ -318,9 +320,9 @@ export class WebModel extends BaseServiceIO {
   }
 
   private static clearCache(scope: string) {
-    caches.open(scope).then((cache) => {
-      cache.keys().then((keys) => {
-        keys.forEach((key) => {
+    caches.open(scope).then(cache => {
+      cache.keys().then(keys => {
+        keys.forEach(key => {
           cache.delete(key);
         });
       });

@@ -30,7 +30,7 @@ export class StyleUtils {
 
   public static mergeStatefulStyles(stylesArr: StatefulStyles[]): StatefulStyles {
     const statefulStyles = {default: {}, hover: {}, click: {}};
-    stylesArr.forEach((styles) => {
+    stylesArr.forEach(styles => {
       statefulStyles.default = Object.assign(statefulStyles.default, styles.default);
       statefulStyles.hover = Object.assign(statefulStyles.hover, styles.hover);
       statefulStyles.click = Object.assign(statefulStyles.click, styles.click);
@@ -39,7 +39,7 @@ export class StyleUtils {
   }
 
   public static overwriteDefaultWithAlreadyApplied(styles: StatefulStyles, element: HTMLElement) {
-    Object.keys(styles.default || []).forEach((key) => {
+    Object.keys(styles.default || []).forEach(key => {
       const styleKey = key as keyof CSSStyleDeclaration;
       if (element.style[styleKey]) {
         if (styles.default?.[styleKey]) {

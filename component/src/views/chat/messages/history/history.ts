@@ -29,7 +29,7 @@ export class History {
     const history = await ioFetchHistory();
     this._messages.removeMessage(loadingElements);
     History.displayIntroMessages(this._messages.messageElementRefs);
-    history.forEach((message) => this._messages.addAnyMessage(message, true));
+    history.forEach(message => this._messages.addAnyMessage(message, true));
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
     setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
   }
@@ -37,12 +37,12 @@ export class History {
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
     const {messageElementRefs, messageToElements, elementRef} = this._messages;
     const preLoadFirstMessageEl = messageElementRefs.find(
-      (messageElRefs) => !messageElRefs.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)
+      messageElRefs => !messageElRefs.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)
     )?.outerContainer;
     const currentScrollTop = elementRef.scrollTop;
     historyMessages
       ?.reverse()
-      .map((message) => {
+      .map(message => {
         const messageContent = this._messages.addAnyMessage({...message, sendUpdate: true}, true, true);
         if (messageContent) {
           const messageBody = MessageUtils.generateMessageBody(messageContent, messageElementRefs, true);
@@ -50,16 +50,16 @@ export class History {
         }
         return messageContent;
       })
-      .filter((message) => !!message)
+      .filter(message => !!message)
       .reverse()
-      .forEach((message) => this._messages.sendClientUpdate(message as MessageContentI, true));
+      .forEach(message => this._messages.sendClientUpdate(message as MessageContentI, true));
     if (preLoadFirstMessageEl) elementRef.scrollTop = currentScrollTop + preLoadFirstMessageEl.offsetTop - 40;
   }
 
   private populateMessages(loadingElements: MessageElements, messages: HistoryMessage[]) {
     this._messages.removeMessage(loadingElements);
-    this._isPaginationComplete = messages.findIndex((message) => !message) < 0;
-    const messageContent = messages.filter((message) => !!message);
+    this._isPaginationComplete = messages.findIndex(message => !message) < 0;
+    const messageContent = messages.filter(message => !!message);
     this.processLoadedHistory(messageContent);
     const {messageElementRefs, avatar, name} = this._messages;
     MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
@@ -85,7 +85,7 @@ export class History {
   }
 
   private populateInitialHistory(history: MessageContent[]) {
-    history.forEach((message) => {
+    history.forEach(message => {
       Legacy.processHistoryFile(message);
       this._messages.addAnyMessage(message, true);
     });

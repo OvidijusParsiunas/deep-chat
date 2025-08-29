@@ -31,7 +31,12 @@ export class TextInputEl {
     deepChat.setPlaceholderText(this._config.placeholder?.text || 'Ask me anything!');
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
-      TextInputEvents.add(this.inputElementRef, fileAttachments, this._config.characterLimit, deepChat._validationHandler);
+      TextInputEvents.add(
+        this.inputElementRef,
+        fileAttachments,
+        this._config.characterLimit,
+        deepChat._validationHandler
+      );
       this._onInput = serviceIO.onInput;
     });
   }

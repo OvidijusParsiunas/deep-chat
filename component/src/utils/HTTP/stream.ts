@@ -15,7 +15,13 @@ type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: 
 type UpsertFunc = (response?: ResponseI) => MessageStream | void;
 
 export class Stream {
-  public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true, canBeEmpty = false) {
+  public static async request(
+    io: ServiceIO,
+    body: object,
+    messages: Messages,
+    stringifyBody = true,
+    canBeEmpty = false
+  ) {
     const requestDetails = {body, headers: io.connectSettings?.headers};
     const {
       body: interceptedBody,
@@ -53,7 +59,7 @@ export class Stream {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     let aborted = false;
     fetch(io.connectSettings?.url || io.url || '', reqBody)
-      .then(async (response) => {
+      .then(async response => {
         if (!response.body) throw new Error(ErrorMessages.READABLE_STREAM_CONNECTION_ERROR);
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -72,7 +78,7 @@ export class Stream {
           }
         }
       })
-      .catch((err) => {
+      .catch(err => {
         Stream.handleError(io, messages, err);
       });
     abortStream.abort = () => {
@@ -120,7 +126,7 @@ export class Stream {
         Stream.handleClose(io, stream, onClose, canBeEmpty);
       },
       signal: abortStream.signal,
-    }).catch((err) => {
+    }).catch(err => {
       Stream.handleError(io, messages, err);
     });
   }
@@ -144,7 +150,7 @@ export class Stream {
       .then(() => {
         RequestUtils.displayError(messages, err);
       })
-      .catch((parsedError) => {
+      .catch(parsedError => {
         RequestUtils.displayError(messages, parsedError);
       });
   }
@@ -227,7 +233,12 @@ export class Stream {
     onClose();
   }
 
-  public static upsertWFiles(msgs: Messages, upsert: UpsertFunc, stream?: MessageStream, resp?: ResponseI | ResponseI[]) {
+  public static upsertWFiles(
+    msgs: Messages,
+    upsert: UpsertFunc,
+    stream?: MessageStream,
+    resp?: ResponseI | ResponseI[]
+  ) {
     if (resp && Array.isArray(resp)) resp = resp[0]; // single array responses are supproted
     if (resp?.text || resp?.html) {
       const resultStream = upsert(resp);

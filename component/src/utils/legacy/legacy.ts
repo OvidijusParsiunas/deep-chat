@@ -48,13 +48,16 @@ export class Legacy {
     const file = (message as MessageContent & {file?: MessageFile}).file;
     if (file) {
       console.error('The file property in MessageContent is deprecated since version 1.3.17.');
-      console.error('Please change to using the files array property: https://deepchat.dev/docs/messages/#MessageContent');
+      console.error(
+        'Please change to using the files array property: https://deepchat.dev/docs/messages/#MessageContent'
+      );
       message.files = [file];
     }
   }
 
   public static processValidateInput(deepChat: DeepChat) {
-    const validate = (deepChat as DeepChat & {validateMessageBeforeSending?: ValidateInput}).validateMessageBeforeSending;
+    const validate = (deepChat as DeepChat & {validateMessageBeforeSending?: ValidateInput})
+      .validateMessageBeforeSending;
     if (validate) {
       console.error('The validateMessageBeforeSending property is deprecated since version 1.3.24.');
       console.error('Please change to using validateInput: https://deepchat.dev/docs/interceptors#validateInput');

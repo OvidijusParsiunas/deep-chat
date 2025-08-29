@@ -24,7 +24,11 @@ export class SubmitButtonStateStyle {
 
   private static setUpDisabledButton(styles: SubmitButtonStyles) {
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', 'default', 'backgroundColor'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', 'default', 'backgroundColor'], 'unset');
+    ObjectUtils.setPropertyValueIfDoesNotExist(
+      styles,
+      ['disabled', 'container', 'default', 'backgroundColor'],
+      'unset'
+    );
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', 'default', 'filter'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(
       styles.disabled,

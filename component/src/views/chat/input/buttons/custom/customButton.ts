@@ -110,11 +110,11 @@ export class CustomButton extends InputButton<Styles> {
   private applyDropupContentStyles(styles?: CustomDropupItemStateStyles) {
     const childrenEls = Array.from(this.elementRef.children);
     if (styles?.text) {
-      const textElement = childrenEls.find((element) => element.classList.contains(DropupItem.TEXT_CLASS)) as HTMLElement;
+      const textElement = childrenEls.find(element => element.classList.contains(DropupItem.TEXT_CLASS)) as HTMLElement;
       if (textElement) Object.assign(textElement.style, styles.text);
     }
     if (styles?.iconContainer) {
-      const iconElement = childrenEls.find((element) => element.classList.contains(DropupItem.ICON_CLASS)) as HTMLElement;
+      const iconElement = childrenEls.find(element => element.classList.contains(DropupItem.ICON_CLASS)) as HTMLElement;
       if (iconElement) Object.assign(iconElement.style, styles.iconContainer);
     }
   }
@@ -191,7 +191,12 @@ export class CustomButton extends InputButton<Styles> {
     this.changeState(this._state, true);
   }
 
-  private genStateInnerElements(iconId: string, state: keyof Styles, defaultElements: Element[], customStyles?: Styles) {
+  private genStateInnerElements(
+    iconId: string,
+    state: keyof Styles,
+    defaultElements: Element[],
+    customStyles?: Styles
+  ) {
     let stateElements = this.createInnerElements(iconId, state, customStyles);
     const SVGContent = customStyles?.[state]?.svg?.content;
     const textContent = customStyles?.[state]?.text?.content;
@@ -206,7 +211,12 @@ export class CustomButton extends InputButton<Styles> {
     return stateElements;
   }
 
-  private static addToInnerElements(newEls: ButtonInnerElement[], content?: string, defEl?: Element, stateEl?: Element) {
+  private static addToInnerElements(
+    newEls: ButtonInnerElement[],
+    content?: string,
+    defEl?: Element,
+    stateEl?: Element
+  ) {
     if (content === undefined && defEl) {
       newEls.push(defEl.cloneNode(true) as ButtonInnerElement);
     } else if (stateEl) {

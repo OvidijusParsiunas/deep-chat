@@ -29,11 +29,11 @@ export class HTTPRequest {
     let responseValid = true;
     const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
     fetchFunc(interceptedBody)
-      .then((response) => {
+      .then(response => {
         responseValid = !!response.ok;
         return response;
       })
-      .then((response) => RequestUtils.processResponseByType(response))
+      .then(response => RequestUtils.processResponseByType(response))
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
@@ -41,17 +41,19 @@ export class HTTPRequest {
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
         if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
-          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
+          throw Error(
+            ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult)
+          );
         if (resultData.makingAnotherRequest) return;
         if (Stream.isSimulatable(io.stream, resultData)) {
           Stream.simulate(messages, io.streamHandlers, resultData);
         } else {
           const messageDataArr = Array.isArray(resultData) ? resultData : [resultData];
-          messageDataArr.forEach((message) => messages.addNewMessage(message));
+          messageDataArr.forEach(message => messages.addNewMessage(message));
           onFinish();
         }
       })
-      .catch((err) => {
+      .catch(err => {
         RequestUtils.displayError(messages, err);
         onFinish();
       });
@@ -61,7 +63,7 @@ export class HTTPRequest {
     // console.log('polling');
     const {onFinish} = io.completionsHandlers;
     fetch(url, requestInit)
-      .then((response) => response.json())
+      .then(response => response.json())
       .then(async (result: object) => {
         if (!io.extractPollResultData) return;
         const resultData = await io.extractPollResultData((await io.deepChat.responseInterceptor?.(result)) || result);
@@ -79,7 +81,7 @@ export class HTTPRequest {
           }
         }
       })
-      .catch((err) => {
+      .catch(err => {
         RequestUtils.displayError(messages, err);
         onFinish();
       });
@@ -115,11 +117,11 @@ export class HTTPRequest {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
     fetch(url, {method, headers, body: body || null})
-      .then((response) => RequestUtils.processResponseByType(response))
+      .then(response => RequestUtils.processResponseByType(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);
       })
-      .catch((err) => {
+      .catch(err => {
         onFail(ErrorMessages.CONNECTION_FAILED);
         console.error(err);
       });

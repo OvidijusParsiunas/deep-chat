@@ -67,17 +67,19 @@ export class Messages extends MessagesBase {
     this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
     this._displayServiceErrorMessages = deepChat.errorMessages?.displayServiceErrorMessages;
-    deepChat.getMessages = () => MessageUtils.deepCloneMessagesWithReferences(this.messageToElements.map(([msg]) => msg));
+    deepChat.getMessages = () =>
+      MessageUtils.deepCloneMessagesWithReferences(this.messageToElements.map(([msg]) => msg));
     deepChat.clearMessages = this.clearMessages.bind(this, serviceIO);
     deepChat.refreshMessages = this.refreshTextMessages.bind(this, deepChat.remarkable);
     deepChat.scrollToBottom = ElementUtils.scrollToBottom.bind(this, this.elementRef);
     deepChat.addMessage = (message: ResponseI, isUpdate?: boolean) => {
       this.addAnyMessage({...message, sendUpdate: !!isUpdate}, !isUpdate);
     };
-    deepChat.updateMessage = (messageBody: MessageBody, index: number) => UpdateMessage.update(this, messageBody, index);
+    deepChat.updateMessage = (messageBody: MessageBody, index: number) =>
+      UpdateMessage.update(this, messageBody, index);
     if (serviceIO.isWebModel()) (serviceIO as WebModel).setUpMessages(this);
     if (deepChat.textToSpeech) {
-      TextToSpeech.processConfig(deepChat.textToSpeech, (processedConfig) => {
+      TextToSpeech.processConfig(deepChat.textToSpeech, processedConfig => {
         this.textToSpeech = processedConfig;
       });
     }
@@ -178,7 +180,13 @@ export class Messages extends MessagesBase {
     return this.addNewMessage(message, isHistory, isTop);
   }
 
-  private tryAddTextMessage(msg: MessageContentI, overwrite: Overwrite, data: ResponseI, history = false, isTop = false) {
+  private tryAddTextMessage(
+    msg: MessageContentI,
+    overwrite: Overwrite,
+    data: ResponseI,
+    history = false,
+    isTop = false
+  ) {
     if (!data.ignoreText && msg.text !== undefined && data.text !== null) {
       this.addNewTextMessage(msg.text, msg.role, overwrite, isTop);
       if (!history && this.textToSpeech && msg.role !== MessageUtils.USER_ROLE) {
@@ -227,7 +235,12 @@ export class Messages extends MessagesBase {
     return messageContent.text || messageContent.html || (messageContent.files && messageContent.files.length > 0);
   }
 
-  private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, isHistory = false) {
+  private updateStateOnMessage(
+    messageContent: MessageContentI,
+    overwritten?: boolean,
+    update = true,
+    isHistory = false
+  ) {
     if (!overwritten) {
       const messageBody = MessageUtils.generateMessageBody(messageContent, this.messageElementRefs);
       this.messageToElements.push([messageContent, messageBody]);
@@ -352,8 +365,8 @@ export class Messages extends MessagesBase {
   public async addMultipleFiles(filesData: {file: File; type: MessageFileType}[], hiddenAtts: HiddenFileAttachments) {
     this._hiddenAttachments = hiddenAtts;
     return Promise.all<MessageFile>(
-      (filesData || []).map((fileData) => {
-        return new Promise((resolve) => {
+      (filesData || []).map(fileData => {
+        return new Promise(resolve => {
           if (!fileData.type || fileData.type === 'any') {
             const fileName = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
             resolve({name: fileName, type: 'any', ref: fileData.file});
@@ -381,7 +394,7 @@ export class Messages extends MessagesBase {
   // WORK - update all message classes to use deep-chat prefix
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
-    this.messageElementRefs.forEach((message) => {
+    this.messageElementRefs.forEach(message => {
       if (Messages.isActiveElement(message.bubbleElement.classList)) {
         retainedElements.push(message);
       } else {
@@ -390,14 +403,14 @@ export class Messages extends MessagesBase {
     });
     // this is a form of cleanup as this.messageElementRefs does not contain error messages
     // and can only be deleted by direct search
-    Array.from(this.elementRef.children).forEach((messageElement) => {
+    Array.from(this.elementRef.children).forEach(messageElement => {
       const bubbleClasslist = messageElement.children[0]?.children[0];
       if (bubbleClasslist?.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {
         messageElement.remove();
       }
     });
     this.messageElementRefs = retainedElements;
-    const retainedMessageToElements = this.messageToElements.filter((msgToEls) => {
+    const retainedMessageToElements = this.messageToElements.filter(msgToEls => {
       // safe because streamed messages can't contain multiple props (text, html)
       return (
         (msgToEls[1].text && Messages.isActiveElement(msgToEls[1].text.bubbleElement.classList)) ||
