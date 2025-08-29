@@ -3,3 +3,4 @@ dist
 bundle
 local_assets
 .vscode
+.crush

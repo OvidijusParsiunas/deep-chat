@@ -1,52 +1,64 @@
 export type BigModelTextContent = {
-  type: 'text';
-  text: string;
-};
+  type: 'text'
+  text: string
+}
 
 export type BigModelImageContent = {
-  type: 'image_url';
+  type: 'image_url'
   image_url: {
-    url: string;
-  };
-};
+    url: string
+  }
+}
 
 export type BigModelVideoContent = {
-  type: 'video_url';
+  type: 'video_url'
   video_url: {
-    url: string;
-  };
-};
+    url: string
+  }
+}
 
 export type BigModelFileContent = {
-  type: 'file';
+  type: 'file'
   file_url: {
-    url: string;
-  };
-};
+    url: string
+  }
+}
 
-export type BigModelContentItem = BigModelTextContent | BigModelImageContent | BigModelVideoContent | BigModelFileContent;
+export type BigModelContentItem = BigModelTextContent | BigModelImageContent | BigModelVideoContent | BigModelFileContent
+
+export type BigModelToolCall = {
+  id: string
+  type: 'function'
+  function: {
+    name: string
+    arguments: string
+  }
+}
 
 export type BigModelMessage = {
-  role: 'system' | 'user' | 'assistant';
-  content: string | BigModelContentItem[];
-};
+  role: 'system' | 'user' | 'assistant'
+  content: string | BigModelContentItem[]
+  tool_calls?: BigModelToolCall[]
+  tool_call_id?: string
+  name?: string
+}
 
 export type BigModelRequestBody = {
-  model: string;
-  messages: BigModelMessage[];
-  max_tokens?: number;
-  temperature?: number;
-  top_p?: number;
-  stream?: boolean;
-};
+  model: string
+  messages: BigModelMessage[]
+  max_tokens?: number
+  temperature?: number
+  top_p?: number
+  stream?: boolean
+}
 
 export type BigModelImagesRequestBody = {
-  model: string;
-  prompt: string;
-};
+  model: string
+  prompt: string
+}
 
 export type BigModelTextToSpeechRequestBody = {
-  model: string;
-  input: string;
-  voice?: string;
-};
+  model: string
+  input: string
+  voice?: string
+}
