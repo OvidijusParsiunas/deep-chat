@@ -1,3 +1,5 @@
+import {ChatFunctionHandler} from './openAI';
+
 export type BigModelTextToSpeech = {
   model?: string;
   voice?: string;
@@ -13,6 +15,7 @@ export type BigModelChat = {
   max_tokens?: number;
   temperature?: number;
   top_p?: number;
+  function_handler?: ChatFunctionHandler;
 };
 
 export interface BigModel {

@@ -14,13 +14,7 @@ import {BigModelChat} from '../../types/bigModel';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-import {
-  BigModelRequestBody,
-  BigModelContentItem,
-  BigModelUserMessage,
-  BigModelToolCall,
-  BigModelMessage,
-} from '../../types/bigModelInternal';
+import {BigModelRequestBody, BigModelContentItem, BigModelToolCall, BigModelMessage} from '../../types/bigModelInternal';
 
 // https://docs.bigmodel.cn/api-reference/%E6%A8%A1%E5%9E%8B-api/%E5%AF%B9%E8%AF%9D%E8%A1%A5%E5%85%A8
 export class BigModelChatIO extends DirectServiceIO {
@@ -84,7 +78,7 @@ export class BigModelChatIO extends DirectServiceIO {
       return {
         content: BigModelChatIO.getContent(message),
         role: message.role === 'ai' ? 'assistant' : 'user',
-      } as BigModelUserMessage;
+      };
     });
     if (this._systemMessage) {
       processedMessages.unshift({role: 'system', content: this._systemMessage});

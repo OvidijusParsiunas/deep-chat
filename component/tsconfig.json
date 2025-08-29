@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "es2019",
     "module": "es2020",
-    "lib": ["es2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "es2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -21,8 +25,15 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
-    "types": ["vite/client", "dom-speech-recognition"]
+    "types": [
+      "vite/client",
+      "dom-speech-recognition"
+    ]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": []
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "vite.config.*ts"
+  ]
 }

@@ -3,6 +3,7 @@ import {HuggingFace} from './services/huggingFace';
 import {StabilityAI} from './services/stabilityAI';
 import {ErrorUtils} from './utils/errorUtils';
 import {Custom} from './services/custom';
+import {OpenRouter} from './services/openRouter';
 import {OpenAI} from './services/openAI';
 import {Cohere} from './services/cohere';
 import dotenv from 'dotenv';
@@ -20,22 +21,45 @@ const app: Express = express();
 const port = 8080;
 
 // this will need to be reconfigured before taking the app to production
-app.use(cors());
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+  : ['http://localhost:5173', 'http://localhost:5174'];
+
+const corsOptions = {
+  origin: (origin: string, callback: Function) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions as any));
 
 app.use(express.json());
 
+app.post('/openrouter-chat', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.chat(req, res, next);
+});
+
+app.post('/openrouter-chat-stream', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.chatStream(req.body, res, next);
+});
+
+app.post('/openrouter-list-models', async (req: Request, res: Response, next: NextFunction) => {
+  OpenRouter.listModels(req, res, next);
+});
+
 // ------------------ CUSTOM API ------------------
 
-app.post('/chat', async (req: Request, res: Response) => {
+app.post('/chat', upload.array('files'), async (req: Request, res: Response, next: NextFunction) => {
   Custom.chat(req.body, res);
 });
 
-app.post('/chat-stream', async (req: Request, res: Response) => {
+app.post('/chat-stream', async (req: Request, res: Response, next: NextFunction) => {
   Custom.chatStream(req.body, res);
-});
-
-app.post('/files', upload.array('files'), async (req: Request, res: Response) => {
-  Custom.files(req, res);
 });
 
 // ------------------ OPENAI API ------------------

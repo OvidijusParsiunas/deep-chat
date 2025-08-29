@@ -1,0 +1,10 @@
+# Ignore CSS files as they may have specific formatting requirements
+*.css
+
+# Ignore minified files
+*.min.js
+*.min.css
+
+# Ignore build artifacts
+dist/
+build/

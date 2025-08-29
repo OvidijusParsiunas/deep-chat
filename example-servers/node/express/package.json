@@ -4,7 +4,7 @@
   "description": "Example server for the deep-chat component",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon"
+    "start": "npx nodemon --inspect=9229"
   },
   "author": "OvidijusParsiunas",
   "license": "ISC",

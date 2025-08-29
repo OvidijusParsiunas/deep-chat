@@ -12,6 +12,7 @@
     "build:bundle": "npm run lint && tsc && vite build && npm run analyze && rollup -c && npm run build:babel",
     "analyze": "cem analyze --globs \"src/**/*.ts\"",
     "lint": "eslint --parser-options '{'project':'./tsconfig.json'}' 'src/**/*.ts'",
+    "format": "prettier --write 'src/**/*.{ts,js,json,md}' --ignore-unknown",
     "build:babel": "npm run build:temp && npm run transpile && rimraf dist/deepChatTemp.js",
     "build:temp": "cp dist/deepChat.js dist/deepChatTemp.js && rimraf dist/deepChat.js",
     "transpile": "babel dist/deepChatTemp.js --out-file dist/deepChat.js"
@@ -69,6 +70,15 @@
     "assets/**/*",
     "custom-elements.json"
   ],
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 123,
+    "bracketSpacing": false
+  },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "remarkable": "^2.0.1",

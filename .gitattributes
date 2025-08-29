@@ -1,0 +1,10 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Define merge strategies for specific file types
+*.ts merge=union
+*.js merge=union
+*.json merge=union
+
+# Handle whitespace
+* whitespace=nowarn

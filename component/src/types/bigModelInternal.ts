@@ -26,9 +26,21 @@ export type BigModelFileContent = {
 
 export type BigModelContentItem = BigModelTextContent | BigModelImageContent | BigModelVideoContent | BigModelFileContent;
 
+export type BigModelToolCall = {
+  id: string;
+  type: 'function';
+  function: {
+    name: string;
+    arguments: string;
+  };
+};
+
 export type BigModelMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string | BigModelContentItem[];
+  tool_calls?: BigModelToolCall[];
+  tool_call_id?: string;
+  name?: string;
 };
 
 export type BigModelRequestBody = {
