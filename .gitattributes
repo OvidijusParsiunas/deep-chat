@@ -5,3 +5,6 @@
 *.ts merge=union
 *.js merge=union
 *.json merge=union
+
+# Handle whitespace
+* whitespace=nowarn
