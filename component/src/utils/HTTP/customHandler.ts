@@ -60,7 +60,6 @@ export class CustomHandler {
     }
   }
 
-  // prettier-ignore
   public static stream(io: ServiceIO, body: RequestDetails['body'], messages: Messages) {
     let isHandlerActive = true;
     let isOpen = false;
@@ -78,7 +77,10 @@ export class CustomHandler {
     };
     const onResponse = async (response: Response | Response[]) => {
       if (!isHandlerActive) return;
-      const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false}) as Response;
+      const result = (await RequestUtils.basicResponseProcessing(messages, response, {
+        io,
+        displayError: false,
+      })) as Response;
       if (!result) {
         const errorMessage = ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
         CustomHandler.streamError(errorMessage, stream, io, messages);
@@ -96,8 +98,13 @@ export class CustomHandler {
       isHandlerActive = false;
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.connectSettings.handler?.(body,
-      {...signals, onOpen, onResponse, onClose, stopClicked: io.streamHandlers.stopClicked});
+    io.connectSettings.handler?.(body, {
+      ...signals,
+      onOpen,
+      onResponse,
+      onClose,
+      stopClicked: io.streamHandlers.stopClicked,
+    });
   }
 
   private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
@@ -107,7 +114,6 @@ export class CustomHandler {
     io.streamHandlers.onClose();
   }
 
-  // prettier-ignore
   public static websocket(io: ServiceIO, messages: Messages) {
     const internalConfig = {isOpen: false, newUserMessage: {listener: () => {}}, roleToStream: {}};
     io.websocket = internalConfig;
@@ -141,8 +147,13 @@ export class CustomHandler {
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.connectSettings.handler?.(undefined,
-      {...signals, onOpen, onResponse, onClose, newUserMessage: internalConfig.newUserMessage});
+    io.connectSettings.handler?.(undefined, {
+      ...signals,
+      onOpen,
+      onResponse,
+      onClose,
+      newUserMessage: internalConfig.newUserMessage,
+    });
   }
 
   private static generateOptionalSignals() {

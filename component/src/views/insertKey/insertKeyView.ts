@@ -59,16 +59,22 @@ export class InsertKeyView {
     startEl.innerHTML = '<div id="loading-key"></div>';
   }
 
-  // prettier-ignore
-  private static verifyKey(inputElement: HTMLInputElement, keyVerificationHandlers: KeyVerificationHandlers,
-      serviceIO: ServiceIO) {
+  private static verifyKey(
+    inputElement: HTMLInputElement,
+    keyVerificationHandlers: KeyVerificationHandlers,
+    serviceIO: ServiceIO
+  ) {
     const key = inputElement.value.trim();
     serviceIO.verifyKey(key, keyVerificationHandlers);
   }
 
-  // prettier-ignore
-  private static addVerificationEvents(inputEl: HTMLInputElement, startEl: HTMLElement, failTextEl: HTMLElement,
-      changeToChat: () => void, serviceIO: ServiceIO) {
+  private static addVerificationEvents(
+    inputEl: HTMLInputElement,
+    startEl: HTMLElement,
+    failTextEl: HTMLElement,
+    changeToChat: () => void,
+    serviceIO: ServiceIO
+  ) {
     const keyVerificationHandlers: KeyVerificationHandlers = {
       onSuccess: changeToChat,
       onFail: InsertKeyView.onFail.bind(this, inputEl, startEl, failTextEl),
@@ -105,7 +111,6 @@ export class InsertKeyView {
     return inputContainer;
   }
 
-  // prettier-ignore
   private static createContents(changeToChat: () => void, serviceIO: ServiceIO) {
     const contentsElement = document.createElement('div');
     contentsElement.id = 'insert-key-contents';
@@ -116,7 +121,9 @@ export class InsertKeyView {
     contentsElement.appendChild(inputContainerElement);
     const startButton = InsertKeyView.createStartButton();
     const {helpTextContainerElement, failTextElement} = InsertKeyView.createHelpTextContainer(
-      serviceIO.keyHelpUrl, serviceIO.deepChat._insertKeyViewStyles?.displayCautionText);
+      serviceIO.keyHelpUrl,
+      serviceIO.deepChat._insertKeyViewStyles?.displayCautionText
+    );
     contentsElement.appendChild(startButton);
     contentsElement.appendChild(helpTextContainerElement);
     InsertKeyView.addVerificationEvents(inputElement, startButton, failTextElement, changeToChat, serviceIO);

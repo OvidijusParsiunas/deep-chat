@@ -48,9 +48,14 @@ export class SubmitButton extends InputButton<Styles> {
   private _validationHandler?: ValidationHandler;
   readonly status = {requestInProgress: false, loadingActive: false};
 
-  // prettier-ignore
-  constructor(deepChat: DeepChat, textInput: TextInputEl, messages: Messages, serviceIO: ServiceIO,
-      fileAttachments: FileAttachments, buttons: Buttons) {
+  constructor(
+    deepChat: DeepChat,
+    textInput: TextInputEl,
+    messages: Messages,
+    serviceIO: ServiceIO,
+    fileAttachments: FileAttachments,
+    buttons: Buttons
+  ) {
     const submitButtonStyles = SubmitButtonStateStyle.process(deepChat.submitButtonStyles);
     const svg = SUBMIT_ICON_STRING;
     const tooltip = TooltipUtils.tryCreateConfig('Submit', submitButtonStyles?.tooltip);
@@ -66,7 +71,8 @@ export class SubmitButton extends InputButton<Styles> {
     deepChat.disableSubmitButton = this.disableSubmitButton.bind(this, serviceIO);
     this.attemptOverwriteLoadingStyle(deepChat);
     if (buttons.microphone) this.setUpSpeechToText(buttons.microphone.button, deepChat.speechToText);
-    setTimeout(() => { // in a timeout as deepChat._validationHandler initialised later
+    setTimeout(() => {
+      // in a timeout as deepChat._validationHandler initialised later
       this._validationHandler = deepChat._validationHandler;
       this.assignHandlers(this._validationHandler as ValidationHandler);
       this._validationHandler?.();
@@ -118,10 +124,13 @@ export class SubmitButton extends InputButton<Styles> {
     return elements || [submitElement[0].cloneNode(true) as ButtonInnerElement];
   }
 
-  // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
-    if (this.customStyles?.submit?.svg
-        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.text?.content) return;
+    if (
+      this.customStyles?.submit?.svg ||
+      this.customStyles?.loading?.svg?.content ||
+      this.customStyles?.loading?.text?.content
+    )
+      return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
       const styleElement = document.createElement('style');

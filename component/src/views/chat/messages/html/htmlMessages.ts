@@ -27,11 +27,16 @@ export class HTMLMessages {
     Legacy.flagHTMLUpdateClass(overwrittenElements.bubbleElement);
   }
 
-  // prettier-ignore
   private static overwrite(messages: MessagesBase, html: string, role: string, messageElementRefs: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(
-      msgToEls, messageElementRefs, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
+      msgToEls,
+      messageElementRefs,
+      html,
+      role,
+      'html',
+      HTMLMessages.HTML_BUBBLE_CLASS
+    );
     if (overwrittenElements) {
       HTMLMessages.overwriteElements(messages, html, overwrittenElements);
     }

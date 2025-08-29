@@ -38,9 +38,13 @@ export class MessageStyleUtils {
     );
   }
 
-  // prettier-ignore
-  public static applyCustomStyles(messageStyles: MessageStyles,
-      elements: MessageElements, role: string, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
+  public static applyCustomStyles(
+    messageStyles: MessageStyles,
+    elements: MessageElements,
+    role: string,
+    media: boolean,
+    otherStyles?: MessageRoleStyles | MessageElementsStyles
+  ) {
     if (otherStyles && messageStyles.default !== otherStyles) {
       if (MessageStyleUtils.isElementsStyles(otherStyles)) {
         MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles.default?.shared);
@@ -55,9 +59,10 @@ export class MessageStyleUtils {
     }
   }
 
-  // prettier-ignore
-  public static extractParticularSharedStyles(specificStyles: (keyof CustomStyle)[],
-      otherStyles?: MessageRoleStyles): MessageElementsStyles | undefined {
+  public static extractParticularSharedStyles(
+    specificStyles: (keyof CustomStyle)[],
+    otherStyles?: MessageRoleStyles
+  ): MessageElementsStyles | undefined {
     if (!otherStyles?.shared) return undefined;
     const sharedStyles = otherStyles.shared;
     const newElementStyles: Required<OverrideTypes<MessageElementsStyles, GenericObject>> = {
@@ -67,12 +72,14 @@ export class MessageStyleUtils {
       media: {},
     };
     specificStyles.forEach((style) => {
-      newElementStyles.outerContainer[style as keyof GenericObject] = sharedStyles.outerContainer?.[style] as string || '';
-      newElementStyles.innerContainer[style as keyof GenericObject] = sharedStyles.innerContainer?.[style] as string || '';
-      newElementStyles.bubble[style as keyof GenericObject] = sharedStyles.bubble?.[style] as string || '';
-      newElementStyles.media[style as keyof GenericObject] = sharedStyles.media?.[style] as string || '';
+      newElementStyles.outerContainer[style as keyof GenericObject] =
+        (sharedStyles.outerContainer?.[style] as string) || '';
+      newElementStyles.innerContainer[style as keyof GenericObject] =
+        (sharedStyles.innerContainer?.[style] as string) || '';
+      newElementStyles.bubble[style as keyof GenericObject] = (sharedStyles.bubble?.[style] as string) || '';
+      newElementStyles.media[style as keyof GenericObject] = (sharedStyles.media?.[style] as string) || '';
     });
-    
+
     return newElementStyles;
   }
 }

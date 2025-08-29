@@ -10,9 +10,12 @@ export class StabilityAIUtils {
     };
   }
 
-  // prettier-ignore
-  private static handleVerificationResult(result: object, key: string,
-      onSuccess: (key: string) => void, onFail: (message: string) => void) {
+  private static handleVerificationResult(
+    result: object,
+    key: string,
+    onSuccess: (key: string) => void,
+    onFail: (message: string) => void
+  ) {
     const stabilityAIResult = result as StabilityAITextToImageResult;
     if (stabilityAIResult.message) {
       onFail(ErrorMessages.INVALID_KEY);

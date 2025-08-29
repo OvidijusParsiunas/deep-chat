@@ -5,9 +5,12 @@ import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 export class VisibilityIcon {
   private static readonly VISIBLE_ICON_ID = 'visible-icon';
 
-  // prettier-ignore
-  private static changeVisibility(inputElement: HTMLInputElement,
-      visibleIcon: SVGGraphicsElement, notVisibleIcon: SVGGraphicsElement, event: MouseEvent) {
+  private static changeVisibility(
+    inputElement: HTMLInputElement,
+    visibleIcon: SVGGraphicsElement,
+    notVisibleIcon: SVGGraphicsElement,
+    event: MouseEvent
+  ) {
     const iconElement = event.target as SVGGraphicsElement;
     if (iconElement.id === VisibilityIcon.VISIBLE_ICON_ID) {
       visibleIcon.style.display = 'none';
@@ -27,7 +30,6 @@ export class VisibilityIcon {
     return iconElement;
   }
 
-  // prettier-ignore
   public static create(inputElement: HTMLInputElement) {
     const iconContainerElement = document.createElement('div');
     iconContainerElement.id = 'visibility-icon-container';
@@ -36,8 +38,12 @@ export class VisibilityIcon {
     iconContainerElement.appendChild(visibleIconElement);
     const notVisibleIconElement = VisibilityIcon.createIconElement(NOT_VISIBLE_ICON_STRING, 'not-visible-icon');
     iconContainerElement.appendChild(notVisibleIconElement);
-    iconContainerElement.onclick = VisibilityIcon.changeVisibility.bind(this,
-      inputElement, visibleIconElement, notVisibleIconElement);
+    iconContainerElement.onclick = VisibilityIcon.changeVisibility.bind(
+      this,
+      inputElement,
+      visibleIconElement,
+      notVisibleIconElement
+    );
     return iconContainerElement;
   }
 }

@@ -42,9 +42,12 @@ export class InputButtonStyleAdjustments {
     return undefined;
   }
 
-  // prettier-ignore
-  public static set(textInputEl: HTMLElement, containers: ButtonContainersT, fileAtt: HTMLElement,
-      pToBs: PositionToButtons) {
+  public static set(
+    textInputEl: HTMLElement,
+    containers: ButtonContainersT,
+    fileAtt: HTMLElement,
+    pToBs: PositionToButtons
+  ) {
     const adjustedForSubmit = !!InputButtonStyleAdjustments.adjustOutsideSubmit(containers, fileAtt, pToBs);
     if (!adjustedForSubmit) InputButtonStyleAdjustments.adjustForOutsideButton(containers, fileAtt, pToBs);
     InputButtonStyleAdjustments.adjustInputPadding(textInputEl, pToBs);

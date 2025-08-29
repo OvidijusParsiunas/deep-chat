@@ -5,14 +5,14 @@ import {PollResult} from '../serviceIO';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
-  // prettier-ignore
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.huggingFace?.audioClassification as NonNullable<
       HuggingFace['audioClassification']
     >;
     const apiKey = deepChat.directConnection?.huggingFace;
-    super(deepChat,
-      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, apiKey, {audio: {}});
+    super(deepChat, 'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, apiKey, {
+      audio: {},
+    });
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

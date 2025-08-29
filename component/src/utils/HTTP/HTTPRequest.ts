@@ -7,23 +7,29 @@ import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 import {Stream} from './stream';
 
-// prettier-ignore
 export type HandleVerificationResult = (
-  result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => void;
+  result: object,
+  key: string,
+  onSuccess: (key: string) => void,
+  onFail: (message: string) => void
+) => void;
 
 export class HTTPRequest {
-  // prettier-ignore
   public static async request(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails: RequestDetails = {body, headers: io.connectSettings?.headers};
-    const {body: interceptedBody, headers, error} =
-      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
+    const {
+      body: interceptedBody,
+      headers,
+      error,
+    } = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     const {onFinish} = io.completionsHandlers;
     if (error) return RequestUtils.onInterceptorError(messages, error, onFinish);
     if (io.connectSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.connectSettings?.url === Demo.URL) return Demo.request(io, messages);
     let responseValid = true;
     const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
-    fetchFunc(interceptedBody).then((response) => {
+    fetchFunc(interceptedBody)
+      .then((response) => {
         responseValid = !!response.ok;
         return response;
       })
@@ -79,27 +85,36 @@ export class HTTPRequest {
       });
   }
 
-  // prettier-ignore
   public static async poll(io: ServiceIO, body: object, messages: Messages, stringifyBody = true) {
     const requestDetails = {body, headers: io.connectSettings?.headers};
-    const {body: interceptedBody, headers, error} =
-      (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
+    const {
+      body: interceptedBody,
+      headers,
+      error,
+    } = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
     if (error) return RequestUtils.onInterceptorError(messages, error);
     const url = io.connectSettings?.url || io.url || '';
     const method = io.connectSettings?.method || 'POST';
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit: RequestInit = {method, body: requestBody, headers};
-    if (io.connectSettings.credentials) requestInit.credentials = io.connectSettings.credentials; 
+    if (io.connectSettings.credentials) requestInit.credentials = io.connectSettings.credentials;
     HTTPRequest.executePollRequest(io, url, requestInit, messages);
   }
 
-  // prettier-ignore
-  public static verifyKey(key: string, url: string, headers: HeadersInit, method: string,
-      onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void,
-      handleVerificationResult: HandleVerificationResult, body?: string) {
+  public static verifyKey(
+    key: string,
+    url: string,
+    headers: HeadersInit,
+    method: string,
+    onSuccess: (key: string) => void,
+    onFail: (message: string) => void,
+    onLoad: () => void,
+    handleVerificationResult: HandleVerificationResult,
+    body?: string
+  ) {
     if (key === '') return onFail(ErrorMessages.INVALID_KEY);
     onLoad();
-    fetch(url, { method, headers, body: body || null })
+    fetch(url, {method, headers, body: body || null})
       .then((response) => RequestUtils.processResponseByType(response))
       .then((result: object) => {
         handleVerificationResult(result, key, onSuccess, onFail);

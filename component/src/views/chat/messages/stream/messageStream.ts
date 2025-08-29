@@ -176,9 +176,10 @@ export class MessageStream {
     this._activeMessageRole = undefined;
   }
 
-  // prettier-ignore
   public async endStreamAfterFileDownloaded(
-      messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
+    messages: Messages,
+    downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>
+  ) {
     this._endStreamAfterOperation = true;
     const {text, files} = await downloadCb();
     if (text) this.updateBasedOnType(text, 'text', true);

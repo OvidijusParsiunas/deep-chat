@@ -11,9 +11,12 @@ export class CohereUtils {
     };
   }
 
-  // prettier-ignore
-  private static handleVerificationResult(result: object, key: string,
-      onSuccess: (key: string) => void, onFail: (message: string) => void) {
+  private static handleVerificationResult(
+    result: object,
+    key: string,
+    onSuccess: (key: string) => void,
+    onFail: (message: string) => void
+  ) {
     const cohereResult = result as CohereChatResult;
     // if the token is valid - it will simply error out that the prompt is wrong
     // using this approach to not cost anything to the user

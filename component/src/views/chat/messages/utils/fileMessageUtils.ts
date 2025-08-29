@@ -7,17 +7,24 @@ export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
   public static readonly FILE_BUBBLE_CLASS = 'file-message';
 
-  // prettier-ignore
   public static setElementProps(
-      messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string) {
+    messages: MessagesBase,
+    elements: MessageElements,
+    styles: keyof MessageStyles,
+    role: string
+  ) {
     if (styles === 'loading') return;
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
     elements.bubbleElement.classList.add(FileMessageUtils.FILE_BUBBLE_CLASS);
   }
 
-  // prettier-ignore
   public static addMessage(
-      messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
+    messages: MessagesBase,
+    elements: MessageElements,
+    styles: keyof MessageStyles,
+    role: string,
+    isTop: boolean
+  ) {
     FileMessageUtils.setElementProps(messages, elements, styles, role);
     if (!isTop) {
       messages.appendOuterContainerElemet(elements.outerContainer);

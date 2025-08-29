@@ -24,10 +24,15 @@ export class FileAttachments implements HiddenFileAttachments {
     if (attachmentContainerStyle) Object.assign(this.elementRef.style, attachmentContainerStyle);
   }
 
-  // prettier-ignore
   addType(deepChat: DeepChat, serviceIO: ServiceIO, files: FileAttachmentsT, type: keyof ServiceFileTypes) {
     const fileAttachmentsType = FileAttachmentTypeFactory.create(
-      deepChat, serviceIO, files, this.toggleContainerDisplay.bind(this), this.elementRef, type);
+      deepChat,
+      serviceIO,
+      files,
+      this.toggleContainerDisplay.bind(this),
+      this.elementRef,
+      type
+    );
     this._fileAttachmentsTypes.push(fileAttachmentsType);
     return fileAttachmentsType;
   }

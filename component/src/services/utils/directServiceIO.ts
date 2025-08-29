@@ -15,9 +15,13 @@ export class DirectServiceIO extends BaseServiceIO {
   private readonly _keyVerificationDetails: KeyVerificationDetails;
   private readonly _buildHeadersFunc: BuildHeadersFunc;
 
-  // prettier-ignore
-  constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails,
-      buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
+  constructor(
+    deepChat: DeepChat,
+    keyVerificationDetails: KeyVerificationDetails,
+    buildHeadersFunc: BuildHeadersFunc,
+    apiKey?: APIKey,
+    existingFileTypes?: ServiceFileTypes
+  ) {
     super(deepChat, existingFileTypes);
     Object.assign(this.rawBody, deepChat.connect?.additionalBodyProps);
     this._keyVerificationDetails = keyVerificationDetails;
@@ -44,14 +48,21 @@ export class DirectServiceIO extends BaseServiceIO {
     onSuccess();
   }
 
-  // prettier-ignore
   override verifyKey(key: string, keyVerificationHandlers: KeyVerificationHandlers) {
     const {url, method, handleVerificationResult, createHeaders, body, augmentUrl} = this._keyVerificationDetails;
     const headers = createHeaders?.(key) || this._buildHeadersFunc(key);
     const processedUrl = augmentUrl?.(key) || url;
-    HTTPRequest.verifyKey(key, processedUrl, headers, method,
-      this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess), keyVerificationHandlers.onFail,
-      keyVerificationHandlers.onLoad, handleVerificationResult, body);
+    HTTPRequest.verifyKey(
+      key,
+      processedUrl,
+      headers,
+      method,
+      this.keyAuthenticated.bind(this, keyVerificationHandlers.onSuccess),
+      keyVerificationHandlers.onFail,
+      keyVerificationHandlers.onLoad,
+      handleVerificationResult,
+      body
+    );
   }
 
   override isDirectConnection() {

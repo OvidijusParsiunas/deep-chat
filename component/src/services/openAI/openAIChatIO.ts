@@ -34,9 +34,14 @@ export class OpenAIChatIO extends DirectServiceIO {
   private _messages?: Messages;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
-  // prettier-ignore
-  constructor(deepChat: DeepChat, keyVerificationDetailsArg?: KeyVerificationDetails,
-      buildHeadersFuncArg?: BuildHeadersFunc, apiKeyArg?: APIKey, configArg?: true | OpenAIChat) {
+
+  constructor(
+    deepChat: DeepChat,
+    keyVerificationDetailsArg?: KeyVerificationDetails,
+    buildHeadersFuncArg?: BuildHeadersFunc,
+    apiKeyArg?: APIKey,
+    configArg?: true | OpenAIChat
+  ) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const keyVerificationDetails = keyVerificationDetailsArg || OpenAIUtils.buildKeyVerificationDetails();
     const buildHeadersFunc = buildHeadersFuncArg || OpenAIUtils.buildHeaders;
@@ -87,15 +92,18 @@ export class OpenAIChatIO extends DirectServiceIO {
     return message.text;
   }
 
-  // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const canSendAudio = bodyCopy.modalities?.includes('audio');
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
-      .map((message) => {
-        return {content: OpenAIChatIO.getContent(message, canSendAudio),
-          role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
+    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
+      pMessages,
+      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1
+    ).map((message) => {
+      return {
+        content: OpenAIChatIO.getContent(message, canSendAudio),
+        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+      };
+    });
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
       bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
     }
@@ -116,9 +124,11 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
   }
 
-  // prettier-ignore
-  override async extractResultData(result: OpenAIConverseResult,
-      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
+  override async extractResultData(
+    result: OpenAIConverseResult,
+    fetchFunc?: FetchFunc,
+    prevBody?: OpenAIChat
+  ): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices?.[0]?.delta) {
       return this.extractStreamResult(result.choices[0], fetchFunc, prevBody);
@@ -160,7 +170,6 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {text: delta?.content || ''};
   }
 
-  // prettier-ignore
   private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
     if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
@@ -177,7 +186,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (!Array.isArray(handlerResponse)) {
       if (handlerResponse.text) {
         const response = {text: handlerResponse.text};
-        const processedResponse = await this.deepChat.responseInterceptor?.(response) || response;
+        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
         if (Array.isArray(processedResponse)) throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ARR_ERROR);
         return processedResponse;
       }
@@ -201,7 +210,7 @@ export class OpenAIChatIO extends DirectServiceIO {
           return {text: ''};
         }
         let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = await this.deepChat.responseInterceptor?.(result) || result;
+        result = (await this.deepChat.responseInterceptor?.(result)) || result;
         if (result.error) throw result.error.message;
         return {text: result.choices[0].message.content || ''};
       } catch (e) {

@@ -11,9 +11,13 @@ import {DeepChat} from '../../../../deepChat';
 type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) => boolean;
 
 export class ValidationHandler {
-  // prettier-ignore
-  private static validate(validation: ValidateFunc,
-      submitButton: SubmitButton, text?: string, files?: File[], isProgrammatic?: boolean) {
+  private static validate(
+    validation: ValidateFunc,
+    submitButton: SubmitButton,
+    text?: string,
+    files?: File[],
+    isProgrammatic?: boolean
+  ) {
     const isValid = validation(text as string, files, isProgrammatic);
     if (isValid) {
       submitButton.changeToSubmitIcon();
@@ -23,9 +27,12 @@ export class ValidationHandler {
     return isValid;
   }
 
-  // prettier-ignore
-  private static async useValidationFunc(validation: ValidateFunc,
-      textInput: TextInputEl, fileAttachments: FileAttachments, submitButton: SubmitButton) {
+  private static async useValidationFunc(
+    validation: ValidateFunc,
+    textInput: TextInputEl,
+    fileAttachments: FileAttachments,
+    submitButton: SubmitButton
+  ) {
     const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
@@ -33,9 +40,11 @@ export class ValidationHandler {
     return ValidationHandler.validate(validation, submitButton, text as string, fileData);
   }
 
-  // prettier-ignore
-  private static async useValidationFuncProgrammatic(validation: ValidateFunc,
-      programmatic: UserContentI, submitButton: SubmitButton) {
+  private static async useValidationFuncProgrammatic(
+    validation: ValidateFunc,
+    programmatic: UserContentI,
+    submitButton: SubmitButton
+  ) {
     const files = programmatic.files?.map((file) => file.file);
     return ValidationHandler.validate(validation, submitButton, programmatic.text, files, true);
   }
@@ -49,9 +58,13 @@ export class ValidationHandler {
     return true;
   }
 
-  // prettier-ignore
-  public static attach(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
-      fileAttachments: FileAttachments, submitButton: SubmitButton) {
+  public static attach(
+    deepChat: DeepChat,
+    serviceIO: ServiceIO,
+    textInput: TextInputEl,
+    fileAttachments: FileAttachments,
+    submitButton: SubmitButton
+  ) {
     const validateInput = deepChat.validateInput || Legacy.processValidateInput(deepChat);
     deepChat._validationHandler = async (programmatic?: UserContentI) => {
       if (submitButton.status.loadingActive || submitButton.status.requestInProgress) return false;

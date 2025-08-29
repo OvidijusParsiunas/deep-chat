@@ -71,9 +71,14 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private readonly urlSegments: URLSegments;
   private _messageStream: MessageStream | undefined;
 
-  // prettier-ignore
-  constructor(deepChat: DeepChat, config: OpenAI['assistant'], urlSegments: URLSegments,
-      keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc, apiKey?: APIKey) {
+  constructor(
+    deepChat: DeepChat,
+    config: OpenAI['assistant'],
+    urlSegments: URLSegments,
+    keyVerificationDetails: KeyVerificationDetails,
+    buildHeadersFunc: BuildHeadersFunc,
+    apiKey?: APIKey
+  ) {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     this.urlSegments = urlSegments;
     if (typeof config === 'object') {
@@ -228,9 +233,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     this._searchedForThreadId = true;
   }
 
-  // prettier-ignore
-  override async extractResultData(result: OpenAIAssistantInitReqResult):
-      Promise<ResponseI | {makingAnotherRequest: true}> {
+  override async extractResultData(
+    result: OpenAIAssistantInitReqResult
+  ): Promise<ResponseI | {makingAnotherRequest: true}> {
     if (this._waitingForStreamResponse || (this._isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
@@ -293,7 +298,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     throw Error(`Thread run status: ${status}`);
   }
 
-  // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
     if (!this.functionHandler) {
       throw Error(
@@ -345,15 +349,19 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     return {makingAnotherRequest: true};
   }
 
-  // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
     if (result.content && result.content.length > 0 && this._messages) {
       // if file is included and there is an annotation/link in text, process at the end
       const textContent = result.content.find((content) => content.text);
       if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
-        const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: 'assistant', content: result.content}, this.urlSegments, textFileFirst);
+        const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(
+          this,
+          this,
+          {role: 'assistant', content: result.content},
+          this.urlSegments,
+          textFileFirst
+        );
         this._messageStream?.endStreamAfterFileDownloaded(this._messages, downloadCb);
         return {text: ''};
       }

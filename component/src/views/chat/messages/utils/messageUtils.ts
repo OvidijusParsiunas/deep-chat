@@ -60,12 +60,21 @@ export class MessageUtils {
 
   // IMPORTANT: If the overwrite message does not contain a role property it will look for the last 'ai' role message
   // and if messages have custom roles, it will still look to update the last 'ai' role message
-  // prettier-ignore
-  public static overwriteMessage(messageToElements: MessageToElements, messageElementRefs: MessageElements[],
-      content: string, role: string, contentType: 'text' | 'html', className: string) {
+
+  public static overwriteMessage(
+    messageToElements: MessageToElements,
+    messageElementRefs: MessageElements[],
+    content: string,
+    role: string,
+    contentType: 'text' | 'html',
+    className: string
+  ) {
     // not sure if LoadingStyle.LOADING_MESSAGE_TEXT_CLASS is needed
     const elements = MessageUtils.getLastElementsByClass(
-      messageElementRefs, [MessageUtils.getRoleClass(role), className], [LoadingStyle.BUBBLE_CLASS]);
+      messageElementRefs,
+      [MessageUtils.getRoleClass(role), className],
+      [LoadingStyle.BUBBLE_CLASS]
+    );
     const lastMessage = MessageUtils.getLastMessage(messageToElements, role, contentType);
     if (lastMessage) lastMessage[contentType] = content;
     return elements;

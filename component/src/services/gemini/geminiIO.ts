@@ -74,21 +74,21 @@ export class GeminiIO extends DirectServiceIO {
     };
   }
 
-  // prettier-ignore
   private preprocessBody(body: GeminiRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemInstruction?.length || 0) : -1)
-      .map((message) => GeminiIO.getContent(message));
-    
+    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
+      pMessages,
+      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemInstruction?.length || 0) : -1
+    ).map((message) => GeminiIO.getContent(message));
+
     bodyCopy.contents = processedMessages;
-    
+
     if (this._systemInstruction) {
       bodyCopy.systemInstruction = {
-        parts: [{text: this._systemInstruction}]
+        parts: [{text: this._systemInstruction}],
       };
     }
-    
+
     return bodyCopy;
   }
 

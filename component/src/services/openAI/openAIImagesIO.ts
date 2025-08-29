@@ -66,7 +66,6 @@ export class OpenAIImagesIO extends DirectServiceIO {
     return bodyCopy;
   }
 
-  // prettier-ignore
   private callApiWithImage(messages: Messages, pMessages: MessageContentI[], files: File[]) {
     let formData: FormData;
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
@@ -80,8 +79,11 @@ export class OpenAIImagesIO extends DirectServiceIO {
       formData = OpenAIImagesIO.createFormDataBody(this.rawBody, files[0]);
     }
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-    RequestUtils.tempRemoveContentHeader(this.connectSettings,
-      HTTPRequest.request.bind(this, this, formData, messages), false);
+    RequestUtils.tempRemoveContentHeader(
+      this.connectSettings,
+      HTTPRequest.request.bind(this, this, formData, messages),
+      false
+    );
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {

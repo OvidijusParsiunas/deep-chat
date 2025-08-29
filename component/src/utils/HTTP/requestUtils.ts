@@ -26,21 +26,24 @@ export class RequestUtils {
   public static readonly CONTENT_TYPE = 'Content-Type';
 
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
-  // prettier-ignore
-  public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
-    request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
-    if (!connectSettings?.headers) throw new Error('Request settings have not been set up')
-    const previousContetType = connectSettings.headers[RequestUtils.CONTENT_TYPE]
-    delete connectSettings.headers[RequestUtils.CONTENT_TYPE]
-    let result
+
+  public static async tempRemoveContentHeader(
+    connectSettings: Connect | undefined,
+    request: (stringifyBody?: boolean) => Promise<unknown>,
+    stringifyBody: boolean
+  ) {
+    if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
+    const previousContetType = connectSettings.headers[RequestUtils.CONTENT_TYPE];
+    delete connectSettings.headers[RequestUtils.CONTENT_TYPE];
+    let result;
     try {
-      result = await request(stringifyBody)
+      result = await request(stringifyBody);
     } catch (e) {
-      connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType
-      throw e
+      connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+      throw e;
     }
-    connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType
-    return result
+    connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+    return result;
   }
 
   public static displayError(messages: Messages, err: ErrorResp, defMessage = 'Service error, please try again.') {
@@ -112,21 +115,23 @@ export class RequestUtils {
     onFinish?.();
   }
 
-  // prettier-ignore
   public static async basicResponseProcessing(
-    messages: Messages, resp: ResponseI | ResponseI[], options: RespProcessingOptions = {}) {
-    const { io, displayError = true, useRI = true } = options
-    if (!io?.extractResultData) return resp
-    const responseInterceptor = useRI ? io.deepChat.responseInterceptor : undefined
-    const result = (await responseInterceptor?.(resp)) || resp
-    const finalResult = await io.extractResultData(result)
+    messages: Messages,
+    resp: ResponseI | ResponseI[],
+    options: RespProcessingOptions = {}
+  ) {
+    const {io, displayError = true, useRI = true} = options;
+    if (!io?.extractResultData) return resp;
+    const responseInterceptor = useRI ? io.deepChat.responseInterceptor : undefined;
+    const result = (await responseInterceptor?.(resp)) || resp;
+    const finalResult = await io.extractResultData(result);
     if (!finalResult || (typeof finalResult !== 'object' && !Array.isArray(finalResult))) {
       if (displayError) {
-        const err = ErrorMessages.INVALID_RESPONSE(resp, 'response', !!responseInterceptor, result)
-        RequestUtils.displayError(messages, err)
+        const err = ErrorMessages.INVALID_RESPONSE(resp, 'response', !!responseInterceptor, result);
+        RequestUtils.displayError(messages, err);
       }
-      return undefined
+      return undefined;
     }
-    return finalResult
+    return finalResult;
   }
 }

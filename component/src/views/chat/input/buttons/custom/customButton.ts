@@ -42,13 +42,18 @@ export class CustomButton extends InputButton<Styles> {
   private readonly _menuStyles?: DropupMenuStyles;
   override isCustom = true;
 
-  // prettier-ignore
   constructor(customButton: CustomButtonT, index: number, focusInput?: () => void, menuStyles?: DropupMenuStyles) {
     const dropupText = customButton?.styles?.button?.default?.text?.content || `Custom ${index}`;
     const svg = CUSTOM_ICON_STRING;
-    const tooltip = TooltipUtils.tryCreateConfig(`Custom ${index}`, customButton?.tooltip);  
-    super(CustomButton.createButtonElement(), svg, customButton?.position,
-      tooltip, customButton?.styles?.button || (tooltip && {}), dropupText);
+    const tooltip = TooltipUtils.tryCreateConfig(`Custom ${index}`, customButton?.tooltip);
+    super(
+      CustomButton.createButtonElement(),
+      svg,
+      customButton?.position,
+      tooltip,
+      customButton?.styles?.button || (tooltip && {}),
+      dropupText
+    );
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menuStyles = menuStyles;
     this._onClick = customButton.onClick;

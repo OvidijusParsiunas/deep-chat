@@ -85,9 +85,13 @@ export class OpenAIAssistantUtils {
     return parts[parts.length - 1];
   }
 
-  // prettier-ignore
-  private static async getFilesAndNewText(io: ServiceIO, fileDetails: FileDetails,
-      urls: URLSegments, role?: string, content?: OpenAIAssistantContent) {
+  private static async getFilesAndNewText(
+    io: ServiceIO,
+    fileDetails: FileDetails,
+    urls: URLSegments,
+    role?: string,
+    content?: OpenAIAssistantContent
+  ) {
     let files: MessageFile[] | undefined;
     const {getFilesPrefix, getFilesPostfix} = urls;
     if (fileDetails.length > 0) {
@@ -110,7 +114,7 @@ export class OpenAIAssistantUtils {
   // To reproduce use the following text:
   // give example data for a csv and create a suitable bar chart for it with a link
   // Don't think it can be fixed and it is something on OpenAI side of things
-  // prettier-ignore
+
   private static getFileDetails(lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
     const fileDetails: FileDetails = [];
     if (content?.text?.value) {
@@ -134,9 +138,12 @@ export class OpenAIAssistantUtils {
     return fileDetails;
   }
 
-  // prettier-ignore
-  public static async getFilesAndText(io: ServiceIO, message: OpenAIAssistantData,
-      urls: URLSegments, content?: OpenAIAssistantContent) {
+  public static async getFilesAndText(
+    io: ServiceIO,
+    message: OpenAIAssistantData,
+    urls: URLSegments,
+    content?: OpenAIAssistantContent
+  ) {
     const fileDetails = OpenAIAssistantUtils.getFileDetails(message, content);
     // gets files and replaces hyperlinks with base64 file encodings
     return await OpenAIAssistantUtils.getFilesAndNewText(io, fileDetails, urls, message.role, content);
@@ -182,9 +189,12 @@ export class OpenAIAssistantUtils {
     return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}], urls);
   }
 
-  // prettier-ignore
   public static async processAPIMessages(
-      io: DirectServiceIO, result: OpenAIAssistantMessagesResult, isHistory: boolean, urls: URLSegments) {
+    io: DirectServiceIO,
+    result: OpenAIAssistantMessagesResult,
+    isHistory: boolean,
+    urls: URLSegments
+  ) {
     const messages = OpenAIAssistantUtils.parseResult(result, isHistory);
     return OpenAIAssistantUtils.parseMessages(io, messages, urls);
   }

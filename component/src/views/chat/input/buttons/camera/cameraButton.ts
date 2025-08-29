@@ -38,11 +38,18 @@ export class CameraButton extends InputButton<Styles> {
     return buttonElement;
   }
 
-  // prettier-ignore
-  private addClickEvent(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
-      modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
+  private addClickEvent(
+    containerElement: HTMLElement,
+    fileAttachmentsType: FileAttachmentsType,
+    modalContainerStyle?: CustomStyle,
+    cameraFiles?: CameraFiles
+  ) {
     const openModalFunc = CameraModal.createCameraModalFunc(
-      containerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
+      containerElement,
+      fileAttachmentsType,
+      modalContainerStyle,
+      cameraFiles
+    );
     this.elementRef.onclick = openModalFunc;
   }
 }

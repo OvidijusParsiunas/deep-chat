@@ -14,23 +14,33 @@ export class UploadFileButton extends InputButton<Styles> {
   private readonly _fileAttachmentsType: FileAttachmentsType;
   private _openModalOnce?: boolean | undefined;
 
-  // prettier-ignore
-  constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
-      fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
+  constructor(
+    containerElement: HTMLElement,
+    fileAttachmentsType: FileAttachmentsType,
+    fileService: FileServiceIO,
+    iconId: string,
+    iconSVGString: string,
+    dropupText?: string
+  ) {
     const buttonPosition = fileService?.button?.position;
     const dropupItemText = fileService?.button?.styles?.text?.content || dropupText;
     const tooltip = TooltipUtils.tryCreateConfig('Upload File', fileService?.button?.tooltip);
     super(
-      UploadFileButton.createButtonElement(), iconSVGString, buttonPosition,
-      tooltip, fileService.button, dropupItemText);
+      UploadFileButton.createButtonElement(),
+      iconSVGString,
+      buttonPosition,
+      tooltip,
+      fileService.button,
+      dropupItemText
+    );
     const innerElements = this.createInnerElementsForStates(iconId, this.customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.files?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
     this.changeElementsByState(innerElements.styles);
     this.reapplyStateStyle('styles');
     this._fileAttachmentsType = fileAttachmentsType;
-    this._openModalOnce = fileService.files?.infoModal?.openModalOnce === false
-      ? undefined : fileService.files?.infoModal?.openModalOnce;
+    this._openModalOnce =
+      fileService.files?.infoModal?.openModalOnce === false ? undefined : fileService.files?.infoModal?.openModalOnce;
   }
 
   private createInnerElementsForStates(iconId: string, customStyles?: Styles) {
