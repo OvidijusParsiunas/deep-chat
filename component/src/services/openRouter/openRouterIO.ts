@@ -117,7 +117,7 @@ export class OpenRouterIO extends DirectServiceIO {
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
       pMessages,
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map(message => {
+    ).map((message) => {
       const role = message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant';
 
       // Handle multimodal messages with images
@@ -133,7 +133,7 @@ export class OpenRouterIO extends DirectServiceIO {
         }
 
         // Add image content
-        message.files.forEach(file => {
+        message.files.forEach((file) => {
           if (file.type === 'image' && file.src) {
             content.push({
               type: 'image_url',
