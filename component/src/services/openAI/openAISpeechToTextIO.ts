@@ -1,13 +1,13 @@
-import { OpenAI, OpenAISpeechToText } from '../../types/openAI';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { RequestUtils } from '../../utils/HTTP/requestUtils';
-import { OpenAIAudioResult } from '../../types/openAIResult';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { OpenAIUtils } from './utils/openAIUtils';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
+import {OpenAIAudioResult} from '../../types/openAIResult';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {OpenAIUtils} from './utils/openAIUtils';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class OpenAISpeechToTextIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -30,7 +30,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCopy?.openAI;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, { audio: {} });
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, {audio: {}});
     const config = directConnectionCopy?.openAI?.audio as NonNullable<OpenAI['speechToText']>;
     if (typeof config === 'object') {
       this.processConfig(config);
@@ -87,6 +87,6 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   override async extractResultData(result: OpenAIAudioResult): Promise<Response> {
     if (result.error) throw result.error.message;
-    return { text: result.text };
+    return {text: result.text};
   }
 }

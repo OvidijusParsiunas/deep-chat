@@ -1,11 +1,11 @@
-import { StatefulEvents } from '../../../../utils/element/statefulEvents';
-import { CustomStyle, StatefulStyles } from '../../../../types/styles';
-import { ButtonInnerElements } from '../buttons/buttonInnerElements';
-import { DropupMenuStyles } from '../../../../types/dropupStyles';
-import { StyleUtils } from '../../../../utils/element/styleUtils';
-import { CustomButton } from '../buttons/custom/customButton';
-import { InputButton } from '../buttons/inputButton';
-import { DropupMenu } from './dropupMenu';
+import {StatefulEvents} from '../../../../utils/element/statefulEvents';
+import {CustomStyle, StatefulStyles} from '../../../../types/styles';
+import {ButtonInnerElements} from '../buttons/buttonInnerElements';
+import {DropupMenuStyles} from '../../../../types/dropupStyles';
+import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {CustomButton} from '../buttons/custom/customButton';
+import {InputButton} from '../buttons/inputButton';
+import {DropupMenu} from './dropupMenu';
 
 export class DropupItem {
   public static MENU_ITEM_CLASS = 'dropup-menu-item';
@@ -42,7 +42,7 @@ export class DropupItem {
   }
 
   private static populateItem(inputButton: InputButton, item: HTMLElement, styles?: DropupMenuStyles) {
-    const { elementRef, dropupText, svg, customStyles } = inputButton;
+    const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
     const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
     if (buttonInnerElement.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
@@ -59,7 +59,7 @@ export class DropupItem {
     Object.assign(item.style, styles?.item?.default);
     DropupItem.populateItem(inputButton, item, styles);
     item.classList.add(DropupItem.MENU_ITEM_CLASS);
-    const { elementRef } = inputButton;
+    const {elementRef} = inputButton;
     if (inputButton.isCustom) {
       (inputButton as CustomButton).setDropupItem(item);
     } else {

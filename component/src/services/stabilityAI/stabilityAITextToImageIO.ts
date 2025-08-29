@@ -1,14 +1,14 @@
-import { StabilityAI, StabilityAITextToImage } from '../../types/stabilityAI';
-import { StabilityAITextToImageResult } from '../../types/stabilityAIResult';
-import { BASE_64_PREFIX } from '../../utils/element/imageUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { StabilityAIUtils } from './utils/stabilityAIUtils';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { MessageFiles } from '../../types/messageFile';
-import { StabilityAIIO } from './stabilityAIIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
+import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
+import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {StabilityAIUtils} from './utils/stabilityAIUtils';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageFiles} from '../../types/messageFile';
+import {StabilityAIIO} from './stabilityAIIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class StabilityAITextToImageIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image';
@@ -44,7 +44,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
 
   private preprocessBody(body: StabilityAITextToImage, lastMessage?: string) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const prompt = { text: lastMessage } as { weight?: number };
+    const prompt = {text: lastMessage} as {weight?: number};
     if (this._imageWeight) prompt.weight = this._imageWeight;
     bodyCopy.text_prompts = [prompt];
     return bodyCopy;
@@ -59,8 +59,8 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return { src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image' };
+      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
     }) as MessageFiles;
-    return { files };
+    return {files};
   }
 }

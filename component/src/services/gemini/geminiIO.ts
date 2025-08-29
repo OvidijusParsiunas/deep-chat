@@ -1,18 +1,18 @@
-import { GeminiContent, GeminiRequestBody } from '../../types/geminiInternal';
-import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
-import { GeminiGenerateContentResult } from '../../types/geminiResult';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageLimitUtils } from '../utils/messageLimitUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { GeminiUtils } from './utils/geminiUtils';
-import { Stream } from '../../utils/HTTP/stream';
-import { Response } from '../../types/response';
-import { Gemini } from '../../types/gemini';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {GeminiGenerateContentResult} from '../../types/geminiResult';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {GeminiUtils} from './utils/geminiUtils';
+import {Stream} from '../../utils/HTTP/stream';
+import {Response} from '../../types/response';
+import {Gemini} from '../../types/gemini';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // https://ai.google.dev/api/generate-content
 export class GeminiIO extends DirectServiceIO {
@@ -35,7 +35,7 @@ export class GeminiIO extends DirectServiceIO {
     if (config.model) {
       this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
     }
-    Object.defineProperty(this, '_systemInstruction', { value: systemInstruction, writable: false });
+    Object.defineProperty(this, '_systemInstruction', {value: systemInstruction, writable: false});
     this.cleanConfig(config);
     Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
@@ -51,7 +51,7 @@ export class GeminiIO extends DirectServiceIO {
     const parts: GeminiContent['parts'] = [];
 
     if (message.text && message.text.trim().length > 0) {
-      parts.push({ text: message.text });
+      parts.push({text: message.text});
     }
 
     if (message.files && message.files.length > 0) {
@@ -111,8 +111,8 @@ export class GeminiIO extends DirectServiceIO {
   override async extractResultData(result: GeminiGenerateContentResult): Promise<Response> {
     if (result.error) throw result.error.message || 'Gemini API Error';
     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-      return { text: result.candidates[0].content.parts[0].text };
+      return {text: result.candidates[0].content.parts[0].text};
     }
-    return { text: '' };
+    return {text: ''};
   }
 }

@@ -1,9 +1,9 @@
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { BuildHeadersFunc } from '../../types/headers';
-import { AzureUtils } from './utils/azureUtils';
-import { ServiceFileTypes } from '../serviceIO';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {BuildHeadersFunc} from '../../types/headers';
+import {AzureUtils} from './utils/azureUtils';
+import {ServiceFileTypes} from '../serviceIO';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 export class AzureLanguageIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Azure Language Subscription Key';

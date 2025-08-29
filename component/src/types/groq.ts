@@ -1,4 +1,4 @@
-import { ChatFunctionHandler } from './openAI';
+import {ChatFunctionHandler} from './openAI';
 
 // https://console.groq.com/docs/api-reference#audio-speechCalled
 export type GroqTextToSpeech = {
@@ -19,7 +19,7 @@ export type GroqChat = {
   seed?: number;
   tools?: object[];
   // https://console.groq.com/docs/tool-use
-  tool_choice?: 'none' | 'auto' | 'required' | { type: 'function'; function: { name: string } };
+  tool_choice?: 'none' | 'auto' | 'required' | {type: 'function'; function: {name: string}};
   function_handler?: ChatFunctionHandler;
   parallel_tool_calls?: boolean;
 };

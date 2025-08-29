@@ -1,6 +1,6 @@
-import { AttributeTypeConverter } from '../../types/typeConverters';
-import { RenderControl } from '../decorators/renderControl';
-import { GenericObject } from '../../types/object';
+import {AttributeTypeConverter} from '../../types/typeConverters';
+import {RenderControl} from '../decorators/renderControl';
+import {GenericObject} from '../../types/object';
 
 export class InternalHTML extends HTMLElement {
   _waitingToRender_ = false;

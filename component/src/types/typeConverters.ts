@@ -2,4 +2,4 @@ export type AvailableTypes = 'string' | 'number' | 'boolean' | 'object' | 'array
 
 export type AttributeTypeConverter = (value: string) => unknown;
 
-export type AttributeTypeConverters = { [key in AvailableTypes]: AttributeTypeConverter };
+export type AttributeTypeConverters = {[key in AvailableTypes]: AttributeTypeConverter};

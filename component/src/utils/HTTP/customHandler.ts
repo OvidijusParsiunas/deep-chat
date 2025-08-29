@@ -1,18 +1,18 @@
-import { MessageStream } from '../../views/chat/messages/stream/messageStream';
-import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
-import { MessagesBase } from '../../views/chat/messages/messagesBase';
-import { ErrorMessages } from '../errorMessages/errorMessages';
-import { Messages } from '../../views/chat/messages/messages';
-import { RequestDetails } from '../../types/interceptors';
-import { RoleToStream, Websocket } from './websocket';
-import { ServiceIO } from '../../services/serviceIO';
-import { Response } from '../../types/response';
-import { RequestUtils } from './requestUtils';
-import { Stream } from './stream';
+import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {MessagesBase} from '../../views/chat/messages/messagesBase';
+import {ErrorMessages} from '../errorMessages/errorMessages';
+import {Messages} from '../../views/chat/messages/messages';
+import {RequestDetails} from '../../types/interceptors';
+import {RoleToStream, Websocket} from './websocket';
+import {ServiceIO} from '../../services/serviceIO';
+import {Response} from '../../types/response';
+import {RequestUtils} from './requestUtils';
+import {Stream} from './stream';
 
 export interface IWebsocketHandler {
   isOpen: boolean;
-  newUserMessage: { listener: (text: string) => void };
+  newUserMessage: {listener: (text: string) => void};
 }
 
 export class CustomHandler {
@@ -21,7 +21,7 @@ export class CustomHandler {
     const onResponse = async (response: Response | Response[]) => {
       if (!isHandlerActive) return;
       isHandlerActive = false; // need to set it here due to asynchronous code below
-      const result = await RequestUtils.basicResponseProcessing(messages, response, { io, displayError: false });
+      const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage('service', 'Error in server message');
@@ -42,7 +42,7 @@ export class CustomHandler {
       }
     };
     const signals = CustomHandler.generateOptionalSignals();
-    io.connectSettings.handler?.(body, { ...signals, onResponse });
+    io.connectSettings.handler?.(body, {...signals, onResponse});
   }
 
   private static attemptToFinaliseStream(stream: MessageStream, messages: Messages) {
@@ -149,8 +149,8 @@ export class CustomHandler {
     return {
       onClose: () => {},
       onOpen: () => {},
-      stopClicked: { listener: () => {} },
-      newUserMessage: { listener: () => {} },
+      stopClicked: {listener: () => {}},
+      newUserMessage: {listener: () => {}},
     };
   }
 }

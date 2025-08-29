@@ -1,4 +1,4 @@
-import { GenericObject } from './object';
+import {GenericObject} from './object';
 
 export interface KeyVerificationDetails {
   url: string;

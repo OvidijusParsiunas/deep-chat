@@ -1,4 +1,4 @@
-import { ChatFunctionHandler } from './openAI';
+import {ChatFunctionHandler} from './openAI';
 
 // https://docs.anthropic.com/en/api/messages#body-tools
 export interface ClaudeTool {
@@ -29,7 +29,7 @@ export interface Claude {
   stop_sequences?: string[];
   system_prompt?: string;
   tools?: ClaudeTool[];
-  tool_choice?: 'auto' | 'any' | { type: 'tool'; name: string } | { type: 'function'; name: string };
+  tool_choice?: 'auto' | 'any' | {type: 'tool'; name: string} | {type: 'function'; name: string};
   function_handler?: ChatFunctionHandler;
   mcp_servers?: ClaudeMCPServer[];
 }

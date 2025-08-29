@@ -1,6 +1,6 @@
-import { NOT_VISIBLE_ICON_STRING } from '../../icons/notVisibilityIcon';
-import { VISIBLE_ICON_STRING } from '../../icons/visibleIcon';
-import { SVGIconUtils } from '../../utils/svg/svgIconUtils';
+import {NOT_VISIBLE_ICON_STRING} from '../../icons/notVisibilityIcon';
+import {VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
+import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
 
 export class VisibilityIcon {
   private static readonly VISIBLE_ICON_ID = 'visible-icon';

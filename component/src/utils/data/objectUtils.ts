@@ -33,7 +33,7 @@ export class ObjectUtils {
   public static overwritePropertyObjectFromAnother<T>(target: T, source: T, nestedKeys: string[]) {
     const sourceObject = ObjectUtils.getObjectValue(source, nestedKeys);
     if (sourceObject) {
-      const newObject = { ...sourceObject, ...(ObjectUtils.getObjectValue(target, nestedKeys) || {}) };
+      const newObject = {...sourceObject, ...(ObjectUtils.getObjectValue(target, nestedKeys) || {})};
       ObjectUtils.setPropertyValue(target, nestedKeys, newObject);
     }
   }

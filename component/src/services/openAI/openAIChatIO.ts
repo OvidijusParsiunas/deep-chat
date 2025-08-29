@@ -1,24 +1,24 @@
-import { OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls } from '../../types/openAIResult';
-import { OpenAIConverseBodyInternal, SystemMessageInternal } from '../../types/openAIInternal';
-import { KeyVerificationDetails } from '../../types/keyVerificationDetails';
-import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
-import { FetchFunc, RequestUtils } from '../../utils/HTTP/requestUtils';
-import { ChatFunctionHandler, OpenAIChat } from '../../types/openAI';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageLimitUtils } from '../utils/messageLimitUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { BuildHeadersFunc } from '../../types/headers';
-import { MessageFile } from '../../types/messageFile';
-import { OpenAIUtils } from './utils/openAIUtils';
-import { Stream } from '../../utils/HTTP/stream';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
+import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
+import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {BuildHeadersFunc} from '../../types/headers';
+import {MessageFile} from '../../types/messageFile';
+import {OpenAIUtils} from './utils/openAIUtils';
+import {Stream} from '../../utils/HTTP/stream';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
-type ImageContent = { type: string; image_url?: { url?: string }; text?: string }[];
+type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -55,7 +55,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   private static generateSystemMessage(system_prompt: string): SystemMessageInternal {
-    return { role: 'system', content: system_prompt };
+    return {role: 'system', content: system_prompt};
   }
 
   private cleanConfig(config: OpenAIChat) {
@@ -71,9 +71,9 @@ export class OpenAIChatIO extends DirectServiceIO {
         const base64Data = file.src?.split(',')[1];
         // Extract format from data URL (e.g., "data:audio/wav;base64," -> "wav")
         const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] || 'wav';
-        return { type: 'input_audio', input_audio: { data: base64Data, format } };
+        return {type: 'input_audio', input_audio: {data: base64Data, format}};
       }
-      return { type: 'image_url', image_url: { url: file.src } };
+      return {type: 'image_url', image_url: {url: file.src}};
     });
     return content;
   }
@@ -81,7 +81,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   private static getContent(message: MessageContentI, canSendAudio: boolean) {
     if (message.files && message.files.length > 0) {
       const content: ImageContent = OpenAIChatIO.getFileContent(message.files, canSendAudio);
-      if (message.text && message.text.trim().length > 0) content.unshift({ type: 'text', text: message.text });
+      if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', text: message.text});
       return content;
     }
     return message.text;
@@ -141,10 +141,10 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: ResultChoice, fetchFunc?: FetchFunc, prevBody?: OpenAIChat) {
-    const { delta, finish_reason } = choice;
+    const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls') {
       this.asyncCallInProgress = true;
-      const tools = { tool_calls: this._streamToolCalls };
+      const tools = {tool_calls: this._streamToolCalls};
       this._streamToolCalls = undefined;
       return this.handleTools(tools, fetchFunc, prevBody);
     } else if (delta?.tool_calls) {
@@ -157,7 +157,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       }
     }
     this.asyncCallInProgress = false;
-    return { text: delta?.content || '' };
+    return {text: delta?.content || ''};
   }
 
   // prettier-ignore

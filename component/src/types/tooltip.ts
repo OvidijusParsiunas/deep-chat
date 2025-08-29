@@ -1,4 +1,4 @@
-import { CustomStyle } from './styles';
+import {CustomStyle} from './styles';
 
 export interface Tooltip {
   text?: string;

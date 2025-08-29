@@ -1,15 +1,15 @@
-import { StabilityAI, StabilityAIImageToImage } from '../../types/stabilityAI';
-import { StabilityAITextToImageResult } from '../../types/stabilityAIResult';
-import { BASE_64_PREFIX } from '../../utils/element/imageUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { RequestUtils } from '../../utils/HTTP/requestUtils';
-import { StabilityAIUtils } from './utils/stabilityAIUtils';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { MessageFiles } from '../../types/messageFile';
-import { StabilityAIIO } from './stabilityAIIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {StabilityAI, StabilityAIImageToImage} from '../../types/stabilityAI';
+import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
+import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
+import {StabilityAIUtils} from './utils/stabilityAIUtils';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageFiles} from '../../types/messageFile';
+import {StabilityAIIO} from './stabilityAIIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 // WORK - allow appropriate responses for invalid height etc
 export class StabilityAIImageToImageIO extends StabilityAIIO {
@@ -24,7 +24,7 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCopy.stabilityAI;
-    const defaultFile = { images: { files: { acceptedFormats: '.png', maxNumberOfFiles: 1 } } };
+    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 1}}};
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
     const config = directConnectionCopy.stabilityAI?.imageToImage as NonNullable<StabilityAI['imageToImage']>;
     if (typeof config === 'object') {
@@ -77,8 +77,8 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return { src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image' };
+      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
     }) as MessageFiles;
-    return { files };
+    return {files};
   }
 }

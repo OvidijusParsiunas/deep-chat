@@ -1,12 +1,12 @@
-import { PositionToButtons } from '../buttons/styleAdjustments/inputButtonPositions';
-import { GenericInputButtonStyles } from '../../../../types/genericInputButton';
-import { DefinedButtonStateStyles } from '../../../../types/buttonInternal';
-import { TooltipUtils } from '../buttons/tooltip/tooltipUtils';
-import { DropupStyles } from '../../../../types/dropupStyles';
-import { PLUS_ICON_STRING } from '../../../../icons/plusIcon';
-import { CustomButton } from '../buttons/custom/customButton';
-import { InputButton } from '../buttons/inputButton';
-import { DropupMenu } from './dropupMenu';
+import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
+import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
+import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
+import {TooltipUtils} from '../buttons/tooltip/tooltipUtils';
+import {DropupStyles} from '../../../../types/dropupStyles';
+import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
+import {CustomButton} from '../buttons/custom/customButton';
+import {InputButton} from '../buttons/inputButton';
+import {DropupMenu} from './dropupMenu';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
@@ -17,7 +17,7 @@ export class Dropup extends InputButton<Styles> {
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
     const tooltip = TooltipUtils.tryCreateConfig('Options', styles?.button?.tooltip);
-    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, tooltip, { styles: styles?.button?.styles });
+    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, tooltip, {styles: styles?.button?.styles});
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();

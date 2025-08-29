@@ -1,5 +1,5 @@
-import { ActiveTooltip, Tooltip } from '../../../../../types/tooltip';
-import { StyleUtils } from '../../../../../utils/element/styleUtils';
+import {ActiveTooltip, Tooltip} from '../../../../../types/tooltip';
+import {StyleUtils} from '../../../../../utils/element/styleUtils';
 
 export class TooltipUtils {
   private static readonly OVERFLOW_NEW_POSITION_PX = 4;
@@ -15,7 +15,7 @@ export class TooltipUtils {
 
   public static tryCreateConfig(defaultText: string, tooltip?: true | Tooltip): Tooltip | undefined {
     if (!tooltip) return undefined;
-    if (typeof tooltip === 'boolean') return { text: defaultText };
+    if (typeof tooltip === 'boolean') return {text: defaultText};
     return {
       text: tooltip.text || defaultText,
       timeout: tooltip.timeout || 0,
@@ -59,7 +59,7 @@ export class TooltipUtils {
       TooltipUtils.setPosition(buttonElement, tooltipElement);
       if (config.style) Object.assign(tooltipElement.style, config.style);
     }, config.timeout || 0);
-    return { timeout, element: tooltipElement };
+    return {timeout, element: tooltipElement};
   }
 
   public static hide(activeTooltip: ActiveTooltip, config: Tooltip) {

@@ -1,8 +1,8 @@
-import { HuggingFaceTextGenerationResult } from '../../types/huggingFaceResult';
-import { HuggingFace } from '../../types/huggingFace';
-import { HuggingFaceIO } from './huggingFaceIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {HuggingFaceTextGenerationResult} from '../../types/huggingFaceResult';
+import {HuggingFace} from '../../types/huggingFace';
+import {HuggingFaceIO} from './huggingFaceIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceTextGenerationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
@@ -13,6 +13,6 @@ export class HuggingFaceTextGenerationIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceTextGenerationResult): Promise<Response> {
     if (result.error) throw result.error;
-    return { text: result[0]?.generated_text || '' };
+    return {text: result[0]?.generated_text || ''};
   }
 }

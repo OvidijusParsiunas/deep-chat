@@ -1,16 +1,16 @@
-import { EventSourceMessage, fetchEventSource, FetchEventSourceInit } from '@microsoft/fetch-event-source';
-import { MessageStream } from '../../views/chat/messages/stream/messageStream';
-import { ServiceIO, StreamHandlers } from '../../services/serviceIO';
-import { HTMLUtils } from '../../views/chat/messages/html/htmlUtils';
-import { ErrorMessages } from '../errorMessages/errorMessages';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { FetchFunc, RequestUtils } from './requestUtils';
-import { Stream as StreamI } from '../../types/stream';
-import { CustomHandler } from './customHandler';
-import { Demo } from '../demo/demo';
+import {EventSourceMessage, fetchEventSource, FetchEventSourceInit} from '@microsoft/fetch-event-source';
+import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
+import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
+import {ErrorMessages} from '../errorMessages/errorMessages';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {FetchFunc, RequestUtils} from './requestUtils';
+import {Stream as StreamI} from '../../types/stream';
+import {CustomHandler} from './customHandler';
+import {Demo} from '../demo/demo';
 
-type SimulationSH = Omit<StreamHandlers, 'abortStream'> & { abortStream: { abort: () => void } };
+type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
 
 type UpsertFunc = (response?: ResponseI) => MessageStream | void;
 
@@ -146,11 +146,11 @@ export class Stream {
   // io is only passed for demo to simulate a real stream
   public static async simulate(messages: Messages, sh: StreamHandlers, result: ResponseI, io?: ServiceIO) {
     const simulationSH = sh as unknown as SimulationSH;
-    if (!(await RequestUtils.basicResponseProcessing(messages, result, { io, useRI: false }))) return sh.onClose();
+    if (!(await RequestUtils.basicResponseProcessing(messages, result, {io, useRI: false}))) return sh.onClose();
     if (Array.isArray(result)) result = result[0]; // single array responses are supproted
     if (result.files) {
-      const finalEventData = await RequestUtils.basicResponseProcessing(messages, { files: result.files }, { io });
-      messages.addNewMessage({ sendUpdate: false, ignoreText: true, ...finalEventData }, false);
+      const finalEventData = await RequestUtils.basicResponseProcessing(messages, {files: result.files}, {io});
+      messages.addNewMessage({sendUpdate: false, ignoreText: true, ...finalEventData}, false);
     }
     if (result.text) {
       sh.onOpen();
@@ -212,7 +212,7 @@ export class Stream {
       stream ??= resultStream || undefined; // when streaming with websockets - created per message due to roles
     }
     if (resp?.files) {
-      msgs.addNewMessage({ files: resp.files });
+      msgs.addNewMessage({files: resp.files});
       stream?.markFileAdded();
     }
   }

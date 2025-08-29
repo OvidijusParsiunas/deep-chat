@@ -12,7 +12,7 @@ export type GeminiContent = {
 export type GeminiRequestBody = {
   contents: GeminiContent[];
   systemInstruction?: {
-    parts: { text: string }[];
+    parts: {text: string}[];
   };
   generationConfig?: {
     maxOutputTokens?: number;

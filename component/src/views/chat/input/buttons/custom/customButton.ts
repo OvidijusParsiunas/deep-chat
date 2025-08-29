@@ -1,17 +1,17 @@
-import { StatefulEvents } from '../../../../../utils/element/statefulEvents';
-import { DropupMenuStyles } from '../../../../../types/dropupStyles';
-import { CUSTOM_ICON_STRING } from '../../../../../icons/customIcon';
-import { StyleUtils } from '../../../../../utils/element/styleUtils';
-import { HTMLUtils } from '../../../messages/html/htmlUtils';
-import { ButtonAccessibility } from '../buttonAccessility';
-import { ButtonStyles } from '../../../../../types/button';
-import { TooltipUtils } from '../tooltip/tooltipUtils';
-import { DropupItem } from '../../dropup/dropupItem';
-import { DeepChat } from '../../../../../deepChat';
-import { InputButton } from '../inputButton';
-import { ButtonUtils } from '../buttonUtils';
-import { ButtonCSS } from '../buttonCSS';
-import { Buttons } from '../../input';
+import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
+import {DropupMenuStyles} from '../../../../../types/dropupStyles';
+import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
+import {StyleUtils} from '../../../../../utils/element/styleUtils';
+import {HTMLUtils} from '../../../messages/html/htmlUtils';
+import {ButtonAccessibility} from '../buttonAccessility';
+import {ButtonStyles} from '../../../../../types/button';
+import {TooltipUtils} from '../tooltip/tooltipUtils';
+import {DropupItem} from '../../dropup/dropupItem';
+import {DeepChat} from '../../../../../deepChat';
+import {InputButton} from '../inputButton';
+import {ButtonUtils} from '../buttonUtils';
+import {ButtonCSS} from '../buttonCSS';
+import {Buttons} from '../../input';
 import {
   DefinedButtonInnerElements,
   DefinedButtonStateStyles,
@@ -191,8 +191,8 @@ export class CustomButton extends InputButton<Styles> {
     const SVGContent = customStyles?.[state]?.svg?.content;
     const textContent = customStyles?.[state]?.text?.content;
     if (SVGContent === undefined || textContent === undefined) {
-      const { svg: defaultSVG, text: defaultText } = ButtonUtils.parseSVGTextElements(defaultElements);
-      const { svg: stateSVG, text: stateText } = ButtonUtils.parseSVGTextElements(stateElements);
+      const {svg: defaultSVG, text: defaultText} = ButtonUtils.parseSVGTextElements(defaultElements);
+      const {svg: stateSVG, text: stateText} = ButtonUtils.parseSVGTextElements(stateElements);
       const newElements: ButtonInnerElement[] = [];
       CustomButton.addToInnerElements(newElements, SVGContent, defaultSVG, stateSVG);
       CustomButton.addToInnerElements(newElements, textContent, defaultText, stateText);
@@ -210,9 +210,9 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   public static add(deepChat: DeepChat, buttons: Buttons) {
-    const { customButtons, focusInput, dropupStyles } = deepChat;
+    const {customButtons, focusInput, dropupStyles} = deepChat;
     customButtons?.forEach((customButton, index) => {
-      const button = { button: new CustomButton(customButton, index + 1, focusInput, dropupStyles?.menu) };
+      const button = {button: new CustomButton(customButton, index + 1, focusInput, dropupStyles?.menu)};
       buttons[`${CustomButton.INDICATOR_PREFIX}${index + 1}`] = button;
     });
   }

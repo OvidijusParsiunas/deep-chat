@@ -1,6 +1,6 @@
-import { AttributeTypeConverter, AvailableTypes } from '../../types/typeConverters';
-import { GenericObject } from '../../types/object';
-import { TypeConverters } from './typeConverters';
+import {AttributeTypeConverter, AvailableTypes} from '../../types/typeConverters';
+import {GenericObject} from '../../types/object';
+import {TypeConverters} from './typeConverters';
 
 // _attributes_ and _attributeToProperty_ exist as static props as Property is called only once for each field (below)
 type InternalHTML = {

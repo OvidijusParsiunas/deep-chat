@@ -1,22 +1,22 @@
-import { CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig } from '../types/fileServiceConfigs';
-import { IWebsocketHandler } from '../utils/HTTP/customHandler';
-import { Messages } from '../views/chat/messages/messages';
-import { InterfacesUnion } from '../types/utilityTypes';
-import { FetchFunc } from '../utils/HTTP/requestUtils';
-import { FILE_TYPE } from '../types/fileTypes';
-import { Response } from '../types/response';
-import { Connect } from '../types/connect';
-import { Signals } from '../types/handler';
-import { Stream } from '../types/stream';
-import { DeepChat } from '../deepChat';
-import { Demo } from '../types/demo';
+import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from '../types/fileServiceConfigs';
+import {IWebsocketHandler} from '../utils/HTTP/customHandler';
+import {Messages} from '../views/chat/messages/messages';
+import {InterfacesUnion} from '../types/utilityTypes';
+import {FetchFunc} from '../utils/HTTP/requestUtils';
+import {FILE_TYPE} from '../types/fileTypes';
+import {Response} from '../types/response';
+import {Connect} from '../types/connect';
+import {Signals} from '../types/handler';
+import {Stream} from '../types/stream';
+import {DeepChat} from '../deepChat';
+import {Demo} from '../types/demo';
 
 export interface RequestContents {
   text?: string;
   files?: File[];
 }
 
-export type PollResult = Promise<InterfacesUnion<Response | { timeoutMS: number }>>;
+export type PollResult = Promise<InterfacesUnion<Response | {timeoutMS: number}>>;
 
 export interface CompletionsHandlers {
   onFinish: () => void;
@@ -36,7 +36,7 @@ export interface KeyVerificationHandlers {
   onLoad: () => void;
 }
 
-export type FileServiceIO = FilesServiceConfig & { infoModalTextMarkUp?: string };
+export type FileServiceIO = FilesServiceConfig & {infoModalTextMarkUp?: string};
 
 export type CustomErrors = string[];
 
@@ -94,7 +94,7 @@ export interface ServiceIO {
     result: object,
     fetch?: FetchFunc,
     previousBody?: object
-  ): Promise<InterfacesUnion<Response | { makingAnotherRequest: true }>>;
+  ): Promise<InterfacesUnion<Response | {makingAnotherRequest: true}>>;
 
   extractPollResultData?(result: object): PollResult;
 

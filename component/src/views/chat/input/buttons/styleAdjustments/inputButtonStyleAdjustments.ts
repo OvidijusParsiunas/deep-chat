@@ -1,5 +1,5 @@
-import { ButtonContainersT } from '../../buttonContainers/buttonContainers';
-import { PositionToButtons } from './inputButtonPositions';
+import {ButtonContainersT} from '../../buttonContainers/buttonContainers';
+import {PositionToButtons} from './inputButtonPositions';
 
 export class InputButtonStyleAdjustments {
   private static readonly INPUT_OUTSIDE_LEFT_ADJUSTMENT_CLASS = 'text-input-container-left-adjustment';

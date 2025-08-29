@@ -1,6 +1,6 @@
-import { KeyVerificationDetails } from '../../../types/keyVerificationDetails';
-import { ErrorMessages } from '../../../utils/errorMessages/errorMessages';
-import { GeminiGenerateContentResult } from '../../../types/geminiResult';
+import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {GeminiGenerateContentResult} from '../../../types/geminiResult';
 
 export class GeminiUtils {
   public static buildHeaders() {

@@ -1,8 +1,8 @@
-import { ServiceFileTypes, ServiceIO } from '../../../../../services/serviceIO';
-import { FileAttachments } from '../../../../../types/fileAttachments';
-import { AudioFileAttachmentType } from './audioFileAttachmentType';
-import { FileAttachmentsType } from './fileAttachmentsType';
-import { DeepChat } from '../../../../../deepChat';
+import {ServiceFileTypes, ServiceIO} from '../../../../../services/serviceIO';
+import {FileAttachments} from '../../../../../types/fileAttachments';
+import {AudioFileAttachmentType} from './audioFileAttachmentType';
+import {FileAttachmentsType} from './fileAttachmentsType';
+import {DeepChat} from '../../../../../deepChat';
 
 export class FileAttachmentTypeFactory {
   // prettier-ignore

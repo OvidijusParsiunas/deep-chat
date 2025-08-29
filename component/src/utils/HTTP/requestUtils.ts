@@ -1,18 +1,18 @@
-import { ErrorMessages } from '../errorMessages/errorMessages';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { RequestDetails } from '../../types/interceptors';
-import { ErrorResp } from '../../types/errorInternal';
-import { ServiceIO } from '../../services/serviceIO';
-import { GenericObject } from '../../types/object';
-import { Connect } from '../../types/connect';
-import { DeepChat } from '../../deepChat';
+import {ErrorMessages} from '../errorMessages/errorMessages';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {RequestDetails} from '../../types/interceptors';
+import {ErrorResp} from '../../types/errorInternal';
+import {ServiceIO} from '../../services/serviceIO';
+import {GenericObject} from '../../types/object';
+import {Connect} from '../../types/connect';
+import {DeepChat} from '../../deepChat';
 
 // this is mostly used for calling the request again for OpenAI API function calls
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FetchFunc = (body: any) => Promise<Response>;
 
-export type InterceptorResult = RequestDetails & { error?: string };
+export type InterceptorResult = RequestDetails & {error?: string};
 
 type InterceptorResultP = Promise<InterceptorResult>;
 
@@ -62,7 +62,7 @@ export class RequestUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
-    const requestContent: RequestInit = { method: io.connectSettings?.method || 'POST', headers };
+    const requestContent: RequestInit = {method: io.connectSettings?.method || 'POST', headers};
     if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
     if (io.connectSettings.credentials) requestContent.credentials = io.connectSettings.credentials;
     return fetch(io.connectSettings?.url || io.url || '', requestContent);
@@ -83,8 +83,8 @@ export class RequestUtils {
   public static async processRequestInterceptor(deepChat: DeepChat, requestDetails: RequestDetails): InterceptorResultP {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
-    const resErrDetails = result as { error?: string };
-    return { body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error };
+    const resErrDetails = result as {error?: string};
+    return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
   }
 
   public static validateResponseFormat(response: ResponseI | ResponseI[], isStreaming: boolean) {

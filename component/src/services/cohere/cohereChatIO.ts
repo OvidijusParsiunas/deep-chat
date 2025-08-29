@@ -1,14 +1,14 @@
-import { CohereChatResult, CohereStreamEventBody } from '../../types/cohereResult';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { Legacy } from '../../utils/legacy/legacy';
-import { Stream } from '../../utils/HTTP/stream';
-import { Response } from '../../types/response';
-import { Cohere } from '../../types/cohere';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
-import { CohereIO } from './cohereIO';
+import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {Legacy} from '../../utils/legacy/legacy';
+import {Stream} from '../../utils/HTTP/stream';
+import {Response} from '../../types/response';
+import {Cohere} from '../../types/cohere';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
+import {CohereIO} from './cohereIO';
 
 export class CohereChatIO extends CohereIO {
   constructor(deepChat: DeepChat) {
@@ -46,7 +46,7 @@ export class CohereChatIO extends CohereIO {
     const stream = this.stream;
     if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
       body.stream = true;
-      this.stream = { readable: true };
+      this.stream = {readable: true};
       Stream.request(this, body, messages);
     } else {
       HTTPRequest.request(this, body, messages);
@@ -60,12 +60,12 @@ export class CohereChatIO extends CohereIO {
     if (this.stream && result.text) {
       const bundledEvents = CohereChatIO.parseBundledEvents(result.text);
       const text = CohereChatIO.aggregateBundledEventsText(bundledEvents);
-      return { text };
+      return {text};
     }
 
     // Handle non-streaming response (final response)
     if ('message' in result && result.message?.content?.[0]?.text) {
-      return { text: result.message.content[0].text };
+      return {text: result.message.content[0].text};
     }
 
     throw new Error('Invalid response format from Cohere API');

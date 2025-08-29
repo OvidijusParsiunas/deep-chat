@@ -1,4 +1,4 @@
-import { ChatFunctionHandler } from './openAI';
+import {ChatFunctionHandler} from './openAI';
 
 export interface OllamaTool {
   type: 'function';

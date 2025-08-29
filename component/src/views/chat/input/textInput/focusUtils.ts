@@ -1,5 +1,5 @@
-import { Browser } from '../../../../utils/browser/browser';
-import { TextInputEl } from './textInput';
+import {Browser} from '../../../../utils/browser/browser';
+import {TextInputEl} from './textInput';
 
 export class FocusUtils {
   public static focusEndOfInput(inputElement: HTMLElement) {

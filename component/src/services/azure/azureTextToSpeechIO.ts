@@ -1,12 +1,12 @@
-import { Azure, AzureTextToSpeechConfig } from '../../types/azure';
-import { AzureTextToSpeechResult } from '../../types/azureResult';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { AzureUtils } from './utils/azureUtils';
-import { AzureSpeechIO } from './azureSpeechIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
+import {AzureTextToSpeechResult} from '../../types/azureResult';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {AzureUtils} from './utils/azureUtils';
+import {AzureSpeechIO} from './azureSpeechIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class AzureTextToSpeechIO extends AzureSpeechIO {
   private static readonly HELP_LINK =
@@ -68,7 +68,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
       const reader = new FileReader();
       reader.readAsDataURL(result);
       reader.onload = (event) => {
-        resolve({ files: [{ src: (event.target as FileReader).result as string, type: 'audio' }] });
+        resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
       };
     });
   }

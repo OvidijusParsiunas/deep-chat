@@ -1,4 +1,4 @@
-import { OpenAIRealtime } from './openAIRealtime';
+import {OpenAIRealtime} from './openAIRealtime';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
@@ -36,7 +36,7 @@ export interface OpenAIImagesDalle3 {
   user?: string;
 }
 
-export type FunctionsDetails = { name: string; arguments: string }[];
+export type FunctionsDetails = {name: string; arguments: string}[];
 
 export type AssistantFunctionHandlerResponse =
   | string[]
@@ -54,7 +54,7 @@ export interface OpenAINewAssistant {
   instructions?: string;
   tools?: {
     type: 'code_interpreter' | 'file_search' | 'function';
-    function?: { name: string; description?: string; parameters?: object };
+    function?: {name: string; description?: string; parameters?: object};
   }[];
   tool_resources?: {
     code_interpreter?: {
@@ -62,7 +62,7 @@ export interface OpenAINewAssistant {
     };
     file_search?: {
       vector_store_ids?: string[];
-      vector_stores: { file_ids: string[] };
+      vector_stores: {file_ids: string[]};
     };
   };
 }
@@ -82,16 +82,16 @@ export interface OpenAIAssistant {
   custom_base_url?: string;
 }
 
-export type ChatFunctionHandlerResponse = { response: string }[] | { text: string };
+export type ChatFunctionHandlerResponse = {response: string}[] | {text: string};
 
 export type ChatFunctionHandler = (
   functionsDetails: FunctionsDetails
-) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse> | Promise<{ response: string }>[];
+) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse> | Promise<{response: string}>[];
 
 export interface OpenAIChatFunctions {
   // parameters use the JSON Schema type
-  tools?: { type: 'function' | 'object'; function: { name: string; description?: string; parameters: object } }[];
-  tool_choice?: 'auto' | { type: 'function'; function: { name: string } };
+  tools?: {type: 'function' | 'object'; function: {name: string; description?: string; parameters: object}}[];
+  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
   function_handler?: ChatFunctionHandler;
 }
 
@@ -104,7 +104,7 @@ export type OpenAIChat = {
   temperature?: number;
   top_p?: number;
   modalities?: ['text', 'audio'];
-  audio?: { format: string; voice: string };
+  audio?: {format: string; voice: string};
 } & OpenAIChatFunctions;
 
 export interface OpenAI {

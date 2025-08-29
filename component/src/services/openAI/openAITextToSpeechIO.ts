@@ -1,13 +1,13 @@
-import { OpenAITextToSpeechResult } from '../../types/openAIResult';
-import { DirectConnection } from '../../types/directConnection';
-import { OpenAI, OpenAITextToSpeech } from '../../types/openAI';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { OpenAIUtils } from './utils/openAIUtils';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {OpenAITextToSpeechResult} from '../../types/openAIResult';
+import {DirectConnection} from '../../types/directConnection';
+import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {OpenAIUtils} from './utils/openAIUtils';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class OpenAITextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
@@ -58,11 +58,11 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
         const reader = new FileReader();
         reader.readAsDataURL(result);
         reader.onload = (event) => {
-          resolve({ files: [{ src: (event.target as FileReader).result as string, type: 'audio' }] });
+          resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
         };
       });
     }
     if (result.error) throw result.error.message;
-    return { error: 'error' }; // this should theoritaclly not get called but here for typescript
+    return {error: 'error'}; // this should theoritaclly not get called but here for typescript
   }
 }

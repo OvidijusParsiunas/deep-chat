@@ -1,16 +1,16 @@
-import { TogetherImagesRequestBody } from '../../types/togetherInternal';
-import { TogetherImagesResult } from '../../types/togetherResult';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { MessageFiles } from '../../types/messageFile';
-import { TogetherUtils } from './utils/togetherUtils';
-import { TogetherImages } from '../../types/together';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {TogetherImagesRequestBody} from '../../types/togetherInternal';
+import {TogetherImagesResult} from '../../types/togetherResult';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {MessageFiles} from '../../types/messageFile';
+import {TogetherUtils} from './utils/togetherUtils';
+import {TogetherImages} from '../../types/together';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // https://docs.together.ai/reference/post-images-generations
 export class TogetherImagesIO extends DirectServiceIO {
@@ -51,13 +51,13 @@ export class TogetherImagesIO extends DirectServiceIO {
   override async extractResultData(result: TogetherImagesResult): Promise<ResponseI> {
     const files = result.data.map((imageData) => {
       if (imageData?.url) {
-        return { src: imageData.url, type: 'image' };
+        return {src: imageData.url, type: 'image'};
       }
       if (imageData?.b64_json) {
-        return { src: `data:image/png;base64,${imageData.b64_json}`, type: 'image' };
+        return {src: `data:image/png;base64,${imageData.b64_json}`, type: 'image'};
       }
-      return { src: '', type: 'image' };
+      return {src: '', type: 'image'};
     }) as MessageFiles;
-    return { files };
+    return {files};
   }
 }

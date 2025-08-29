@@ -1,17 +1,17 @@
-import { TogetherResult, TogetherNormalResult, TogetherStreamEvent } from '../../types/togetherResult';
-import { TogetherMessage, TogetherRequestBody } from '../../types/togetherInternal';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageLimitUtils } from '../utils/messageLimitUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { TogetherUtils } from './utils/togetherUtils';
-import { TogetherChat } from '../../types/together';
-import { Stream } from '../../utils/HTTP/stream';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
+import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {TogetherUtils} from './utils/togetherUtils';
+import {TogetherChat} from '../../types/together';
+import {Stream} from '../../utils/HTTP/stream';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // https://docs.together.ai/reference/chat-completions-1
 export class TogetherChatIO extends DirectServiceIO {
@@ -52,7 +52,7 @@ export class TogetherChatIO extends DirectServiceIO {
       };
     });
     if (this._systemMessage) {
-      processedMessages.unshift({ role: 'system', content: this._systemMessage });
+      processedMessages.unshift({role: 'system', content: this._systemMessage});
     }
     bodyCopy.messages = processedMessages;
     return bodyCopy;
@@ -74,12 +74,12 @@ export class TogetherChatIO extends DirectServiceIO {
     if (result.error) throw result.error.message;
     if (result.choices.length > 0) {
       if ((result.choices[0] as TogetherNormalResult).message !== undefined) {
-        return { text: (result.choices[0] as TogetherNormalResult).message.content };
+        return {text: (result.choices[0] as TogetherNormalResult).message.content};
       }
       if ((result.choices[0] as TogetherStreamEvent).delta !== undefined) {
-        return { text: (result.choices[0] as TogetherStreamEvent).delta.content };
+        return {text: (result.choices[0] as TogetherStreamEvent).delta.content};
       }
     }
-    return { text: '' };
+    return {text: ''};
   }
 }

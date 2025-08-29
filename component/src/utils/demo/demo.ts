@@ -1,10 +1,10 @@
-import { MessageContentI, MessageToElements } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { ServiceIO } from '../../services/serviceIO';
-import { RequestUtils } from '../HTTP/requestUtils';
-import { DemoResponse } from '../../types/demo';
-import { Response } from '../../types/response';
-import { Stream } from '../HTTP/stream';
+import {MessageContentI, MessageToElements} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {ServiceIO} from '../../services/serviceIO';
+import {RequestUtils} from '../HTTP/requestUtils';
+import {DemoResponse} from '../../types/demo';
+import {Response} from '../../types/response';
+import {Stream} from '../HTTP/stream';
 
 export class Demo {
   public static readonly URL = 'deep-chat-demo';
@@ -43,17 +43,17 @@ export class Demo {
     return customResponse;
   }
 
-  private static getResponse({ customDemoResponse, messageToElements }: Messages): Response {
+  private static getResponse({customDemoResponse, messageToElements}: Messages): Response {
     return customDemoResponse
       ? Demo.getCustomResponse(customDemoResponse, messageToElements[messageToElements.length - 1][0])
-      : { text: Demo.generateResponse(messageToElements) };
+      : {text: Demo.generateResponse(messageToElements)};
   }
 
   // timeout is used to simulate a timeout for a response to come back
   public static request(io: ServiceIO, messages: Messages) {
     const response = Demo.getResponse(messages);
     setTimeout(async () => {
-      const result = await RequestUtils.basicResponseProcessing(messages, response, { io });
+      const result = await RequestUtils.basicResponseProcessing(messages, response, {io});
       if (!result) return io.completionsHandlers.onFinish();
       const messageDataArr = Array.isArray(result) ? result : [result];
       const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');

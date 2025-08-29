@@ -1,14 +1,14 @@
-import { GroqTextToSpeechRequestBody } from '../../types/groqInternal';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { GroqTextToSpeech } from '../../types/groq';
-import { GroqUtils } from './utils/groqUtils';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {GroqTextToSpeech} from '../../types/groq';
+import {GroqUtils} from './utils/groqUtils';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // https://console.groq.com/docs/api-reference#audio-speechCalled
 export class GroqTextToSpeechIO extends DirectServiceIO {
@@ -50,8 +50,8 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
     const format = this.rawBody.response_format || 'mp3';
-    const blob = new Blob([result], { type: `audio/${format}` });
+    const blob = new Blob([result], {type: `audio/${format}`});
     const audioUrl = URL.createObjectURL(blob);
-    return { files: [{ src: audioUrl, type: 'audio' }] };
+    return {files: [{src: audioUrl, type: 'audio'}]};
   }
 }

@@ -1,9 +1,9 @@
-import { StyleUtils } from '../../../../utils/element/styleUtils';
-import { HTMLClassUtilities } from '../../../../types/html';
-import { StatefulStyles } from '../../../../types/styles';
-import { MessagesBase } from '../messagesBase';
-import { MessageElements } from '../messages';
-import { HTMLUtils } from './htmlUtils';
+import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {HTMLClassUtilities} from '../../../../types/html';
+import {StatefulStyles} from '../../../../types/styles';
+import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
+import {HTMLUtils} from './htmlUtils';
 
 const DEEP_CHAT_TEMPORARY_MESSAGE = 'deep-chat-temporary-message';
 const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
@@ -37,7 +37,7 @@ export class HTMLDeepChatElements {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
       element.addEventListener('click', () => {
-        messages.submitUserMessage?.({ text: element.textContent?.trim() || '' });
+        messages.submitUserMessage?.({text: element.textContent?.trim() || ''});
       });
     });
   }

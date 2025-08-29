@@ -1,6 +1,6 @@
-import { WebSpeechOptions, AzureOptions, Translations, TextColor, Commands } from 'speech-to-element/dist/types/options';
-import { ButtonStyles, ButtonPosition } from './button';
-import { Tooltip } from './tooltip';
+import {WebSpeechOptions, AzureOptions, Translations, TextColor, Commands} from 'speech-to-element/dist/types/options';
+import {ButtonStyles, ButtonPosition} from './button';
+import {Tooltip} from './tooltip';
 
 export interface MicrophoneStyles {
   default?: ButtonStyles;
@@ -36,9 +36,9 @@ export type SpeechToTextConfig = {
   displayInterimResults?: boolean;
   textColor?: TextColor;
   translations?: Translations;
-  commands?: Commands & { submit?: string };
+  commands?: Commands & {submit?: string};
   stopAfterSubmit?: false;
   submitAfterSilence?: SubmitAfterSilence;
-  button?: { commandMode?: ButtonStyles } & MicrophoneStyles; // TO-DO - potentially include a pause style
+  button?: {commandMode?: ButtonStyles} & MicrophoneStyles; // TO-DO - potentially include a pause style
   events?: SpeechEvents;
 };

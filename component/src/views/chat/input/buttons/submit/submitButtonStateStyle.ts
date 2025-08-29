@@ -1,7 +1,7 @@
-import { SubmitButtonStyles } from '../../../../../types/submitButton';
-import { ObjectUtils } from '../../../../../utils/data/objectUtils';
-import { ButtonStyles } from '../../../../../types/button';
-import { SubmitButton } from './submitButton';
+import {SubmitButtonStyles} from '../../../../../types/submitButton';
+import {ObjectUtils} from '../../../../../utils/data/objectUtils';
+import {ButtonStyles} from '../../../../../types/button';
+import {SubmitButton} from './submitButton';
 
 export class SubmitButtonStateStyle {
   public static resetSubmit(submitButton: SubmitButton, wasLoading: boolean) {

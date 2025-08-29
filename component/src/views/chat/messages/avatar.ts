@@ -1,8 +1,8 @@
-import { Avatars, AvatarStyles, CustomAvatars } from '../../../types/avatars';
+import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
 import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
-import { MessageUtils } from './utils/messageUtils';
-import { Role } from './role';
+import {MessageUtils} from './utils/messageUtils';
+import {Role} from './role';
 
 export class Avatar extends Role {
   private readonly _avatars: Avatars;

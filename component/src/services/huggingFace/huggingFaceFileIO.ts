@@ -1,11 +1,11 @@
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { HuggingFaceModel } from '../../types/huggingFace';
-import { ServiceFileTypes } from '../serviceIO';
-import { HuggingFaceIO } from './huggingFaceIO';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {HuggingFaceModel} from '../../types/huggingFace';
+import {ServiceFileTypes} from '../serviceIO';
+import {HuggingFaceIO} from './huggingFaceIO';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // can sometimes get a (Service Unavailable) error which can be ignored when polling as another request will be made
 export class HuggingFaceFileIO extends HuggingFaceIO {
@@ -23,7 +23,7 @@ export class HuggingFaceFileIO extends HuggingFaceIO {
   }
 
   override preprocessBody(_: object, __: MessageContentI[], files: File[]) {
-    return files[0] as unknown as { inputs: string };
+    return files[0] as unknown as {inputs: string};
   }
 
   // prettier-ignore

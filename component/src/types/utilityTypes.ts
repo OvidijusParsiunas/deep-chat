@@ -1,5 +1,5 @@
 // sets properties that are in K but not in T to optional never
-type AssignNever<T, K> = K & { [B in Exclude<keyof T, keyof K>]?: never };
+type AssignNever<T, K> = K & {[B in Exclude<keyof T, keyof K>]?: never};
 
 // This type accepts a union of interfaces that contain varying combinations of the CompleteInterface and returns
 // a union of interfaces that contain their originally missing properties set to optional never. The reason why
@@ -13,6 +13,6 @@ type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) exten
 
 export type InterfacesUnion<Interfaces> = BuildUniqueInterfaces<UnionToIntersection<Interfaces>, Interfaces>;
 
-export type OverrideTypes<T, U> = { [P in keyof T]: U };
+export type OverrideTypes<T, U> = {[P in keyof T]: U};
 
-export type PropsRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+export type PropsRequired<T, K extends keyof T> = T & {[P in K]-?: T[P]};

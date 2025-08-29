@@ -1,5 +1,5 @@
-import { StatefulStyles } from './styles';
-import { Tooltip } from './tooltip';
+import {StatefulStyles} from './styles';
+import {Tooltip} from './tooltip';
 
 interface ButtonInnerStyles {
   styles?: StatefulStyles;

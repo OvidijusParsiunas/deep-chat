@@ -1,21 +1,21 @@
-import { CameraFilesServiceConfig, MicrophoneFilesServiceConfig } from '../../types/fileServiceConfigs';
-import { History } from '../../views/chat/messages/history/history';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { RequestUtils } from '../../utils/HTTP/requestUtils';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { ValidateInput } from '../../types/validateInput';
-import { MessageLimitUtils } from './messageLimitUtils';
-import { Stream as StreamI } from '../../types/stream';
-import { Websocket } from '../../utils/HTTP/websocket';
-import { Legacy } from '../../utils/legacy/legacy';
-import { Stream } from '../../utils/HTTP/stream';
-import { Demo as DemoT } from '../../types/demo';
-import { Response } from '../../types/response';
-import { Connect } from '../../types/connect';
-import { SetFileTypes } from './setFileTypes';
-import { Demo } from '../../utils/demo/demo';
-import { DeepChat } from '../../deepChat';
+import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {History} from '../../views/chat/messages/history/history';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ValidateInput} from '../../types/validateInput';
+import {MessageLimitUtils} from './messageLimitUtils';
+import {Stream as StreamI} from '../../types/stream';
+import {Websocket} from '../../utils/HTTP/websocket';
+import {Legacy} from '../../utils/legacy/legacy';
+import {Stream} from '../../utils/HTTP/stream';
+import {Demo as DemoT} from '../../types/demo';
+import {Response} from '../../types/response';
+import {Connect} from '../../types/connect';
+import {SetFileTypes} from './setFileTypes';
+import {Demo} from '../../utils/demo/demo';
+import {DeepChat} from '../../deepChat';
 import {
   KeyVerificationHandlers,
   CompletionsHandlers,
@@ -100,7 +100,7 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   private async callAPIWithText(messages: Messages, pMessages: MessageContentI[]) {
-    const body = { messages: pMessages, ...this.rawBody };
+    const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
     if (!this.connectSettings.headers?.['Content-Type']) {
       this.connectSettings.headers ??= {};
@@ -146,7 +146,7 @@ export class BaseServiceIO implements ServiceIO {
     }
   }
 
-  async extractResultData(result: any | Response): Promise<Response | { makingAnotherRequest: true }> {
+  async extractResultData(result: any | Response): Promise<Response | {makingAnotherRequest: true}> {
     if (result.result) return Legacy.handleResponseProperty(result);
     // if invalid - process later in HTTPRequest.request
     if (!RequestUtils.validateResponseFormat(result, !!this.stream)) return undefined as unknown as Response;

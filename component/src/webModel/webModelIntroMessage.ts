@@ -1,5 +1,5 @@
-import { WebModelIntro } from '../types/webModel/webModel';
-import { WebModel } from './webModel';
+import {WebModelIntro} from '../types/webModel/webModel';
+import {WebModel} from './webModel';
 
 export class WebModelIntroMessage {
   private static readonly DOWNLOAD_BUTTON_CLASS = 'deep-chat-download-button';

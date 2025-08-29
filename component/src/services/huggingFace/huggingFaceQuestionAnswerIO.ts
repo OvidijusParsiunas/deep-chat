@@ -1,9 +1,9 @@
-import { HuggingFace, HuggingFaceQuestionAnswerConfig } from '../../types/huggingFace';
-import { HuggingFaceQuestionAnswerResult } from '../../types/huggingFaceResult';
-import { MessageContentI } from '../../types/messagesInternal';
-import { HuggingFaceIO } from './huggingFaceIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
+import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
+import {MessageContentI} from '../../types/messagesInternal';
+import {HuggingFaceIO} from './huggingFaceIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
   override permittedErrorPrefixes = ['Authorization header', 'Error in'];
@@ -21,12 +21,12 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
     const mostRecentMessageText = messages[messages.length - 1].text;
     if (!mostRecentMessageText) return;
     return {
-      inputs: { question: mostRecentMessageText, context: this._context, options: { wait_for_model: true } },
-    } as unknown as { inputs: string };
+      inputs: {question: mostRecentMessageText, context: this._context, options: {wait_for_model: true}},
+    } as unknown as {inputs: string};
   }
 
   override async extractResultData(result: HuggingFaceQuestionAnswerResult): Promise<Response> {
     if (result.error) throw result.error;
-    return { text: result.answer || '' };
+    return {text: result.answer || ''};
   }
 }

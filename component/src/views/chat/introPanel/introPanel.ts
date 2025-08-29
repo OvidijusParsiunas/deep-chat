@@ -1,4 +1,4 @@
-import { CustomStyle } from '../../../types/styles';
+import {CustomStyle} from '../../../types/styles';
 
 export class IntroPanel {
   readonly _elementRef?: HTMLElement;

@@ -1,5 +1,5 @@
-import { CustomStyle, StatefulStyles } from '../../types/styles';
-import { GenericObject } from '../../types/object';
+import {CustomStyle, StatefulStyles} from '../../types/styles';
+import {GenericObject} from '../../types/object';
 
 export class StyleUtils {
   public static unsetStyle(element: HTMLElement, style: CustomStyle) {
@@ -25,11 +25,11 @@ export class StyleUtils {
     const defaultStyle = styles.default || {};
     const hoverStyle = Object.assign(JSON.parse(JSON.stringify(defaultStyle)), styles?.hover);
     const clickStyle = Object.assign(JSON.parse(JSON.stringify(hoverStyle)), styles?.click);
-    return { default: defaultStyle, hover: hoverStyle, click: clickStyle };
+    return {default: defaultStyle, hover: hoverStyle, click: clickStyle};
   }
 
   public static mergeStatefulStyles(stylesArr: StatefulStyles[]): StatefulStyles {
-    const statefulStyles = { default: {}, hover: {}, click: {} };
+    const statefulStyles = {default: {}, hover: {}, click: {}};
     stylesArr.forEach((styles) => {
       statefulStyles.default = Object.assign(statefulStyles.default, styles.default);
       statefulStyles.hover = Object.assign(statefulStyles.hover, styles.hover);

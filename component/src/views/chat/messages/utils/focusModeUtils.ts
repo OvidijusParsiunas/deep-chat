@@ -1,4 +1,4 @@
-import { FocusModeFade } from '../../../../types/focusMode';
+import {FocusModeFade} from '../../../../types/focusMode';
 
 export class FocusModeUtils {
   private static readonly DEFAULT_FADE_MS = 500;

@@ -1,14 +1,14 @@
-import { BASE_64_PREFIX } from '../../utils/element/imageUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { GrokImageResult } from '../../types/grokResult';
-import { MessageFiles } from '../../types/messageFile';
-import { Response } from '../../types/response';
-import { GrokImages } from '../../types/grok';
-import { GrokUtils } from './utils/grokUtils';
-import { DeepChat } from '../../deepChat';
+import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {GrokImageResult} from '../../types/grokResult';
+import {MessageFiles} from '../../types/messageFile';
+import {Response} from '../../types/response';
+import {GrokImages} from '../../types/grok';
+import {GrokUtils} from './utils/grokUtils';
+import {DeepChat} from '../../deepChat';
 
 export class GrokImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Grok API Key';
@@ -25,7 +25,7 @@ export class GrokImagesIO extends DirectServiceIO {
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
 
   constructor(deepChat: DeepChat) {
-    const { directConnection } = deepChat;
+    const {directConnection} = deepChat;
     const apiKey = directConnection?.grok;
     super(deepChat, GrokUtils.buildKeyVerificationDetails(), GrokUtils.buildHeaders, apiKey);
     const config = directConnection?.grok?.images as NonNullable<GrokImages>;
@@ -48,9 +48,9 @@ export class GrokImagesIO extends DirectServiceIO {
   override async extractResultData(result: GrokImageResult): Promise<Response> {
     if (result.error) throw result.error.message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return { src: imageData.url, type: 'image' };
-      return { src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image' };
+      if (imageData.url) return {src: imageData.url, type: 'image'};
+      return {src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
     }) as MessageFiles;
-    return { files };
+    return {files};
   }
 }

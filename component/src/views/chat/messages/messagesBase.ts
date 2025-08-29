@@ -1,29 +1,29 @@
-import { MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent } from '../../../types/messages';
-import { MessageContentI, MessageToElements, Overwrite } from '../../../types/messagesInternal';
-import { ProcessedTextToSpeechConfig } from './textToSpeech/textToSpeech';
-import { ElementUtils } from '../../../utils/element/elementUtils';
-import { HTMLDeepChatElements } from './html/htmlDeepChatElements';
-import { LoadingStyle } from '../../../utils/loading/loadingStyle';
-import { RemarkableConfig } from './remarkable/remarkableConfig';
-import { BrowserStorage } from './browserStorage/browserStorage';
-import { MessageStyleUtils } from './utils/messageStyleUtils';
-import { FireEvents } from '../../../utils/events/fireEvents';
-import { RemarkableOptions } from '../../../types/remarkable';
-import { LoadingHistory } from './history/loadingHistory';
-import { HTMLClassUtilities } from '../../../types/html';
-import { FocusModeUtils } from './utils/focusModeUtils';
-import { IntroPanel } from '../introPanel/introPanel';
-import { Legacy } from '../../../utils/legacy/legacy';
-import { FocusMode } from '../../../types/focusMode';
-import { HTMLWrappers } from '../../../types/stream';
-import { MessageUtils } from './utils/messageUtils';
-import { Response } from '../../../types/response';
-import { DeepChat } from '../../../deepChat';
-import { MessageElements } from './messages';
-import { HTMLUtils } from './html/htmlUtils';
-import { Remarkable } from 'remarkable';
-import { Avatar } from './avatar';
-import { Name } from './name';
+import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
+import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
+import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
+import {ElementUtils} from '../../../utils/element/elementUtils';
+import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
+import {LoadingStyle} from '../../../utils/loading/loadingStyle';
+import {RemarkableConfig} from './remarkable/remarkableConfig';
+import {BrowserStorage} from './browserStorage/browserStorage';
+import {MessageStyleUtils} from './utils/messageStyleUtils';
+import {FireEvents} from '../../../utils/events/fireEvents';
+import {RemarkableOptions} from '../../../types/remarkable';
+import {LoadingHistory} from './history/loadingHistory';
+import {HTMLClassUtilities} from '../../../types/html';
+import {FocusModeUtils} from './utils/focusModeUtils';
+import {IntroPanel} from '../introPanel/introPanel';
+import {Legacy} from '../../../utils/legacy/legacy';
+import {FocusMode} from '../../../types/focusMode';
+import {HTMLWrappers} from '../../../types/stream';
+import {MessageUtils} from './utils/messageUtils';
+import {Response} from '../../../types/response';
+import {DeepChat} from '../../../deepChat';
+import {MessageElements} from './messages';
+import {HTMLUtils} from './html/htmlUtils';
+import {Remarkable} from 'remarkable';
+import {Avatar} from './avatar';
+import {Name} from './name';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -184,7 +184,7 @@ export class MessagesBase {
 
   public createElements(text: string, role: string) {
     const messageElements = MessagesBase.createBaseElements(role);
-    const { outerContainer, innerContainer, bubbleElement } = messageElements;
+    const {outerContainer, innerContainer, bubbleElement} = messageElements;
     outerContainer.appendChild(innerContainer);
     this.addInnerContainerElements(bubbleElement, text, role);
     return messageElements;
@@ -207,7 +207,7 @@ export class MessagesBase {
     const bubbleElement = document.createElement('div');
     bubbleElement.classList.add('message-bubble');
     innerContainer.appendChild(bubbleElement);
-    return { outerContainer, innerContainer, bubbleElement };
+    return {outerContainer, innerContainer, bubbleElement};
   }
 
   // prettier-ignore
@@ -233,8 +233,8 @@ export class MessagesBase {
 
   public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
-    const { text, files, html, custom, _sessionId, role } = content;
-    const messageContent: MessageContentI = { role: role || MessageUtils.AI_ROLE };
+    const {text, files, html, custom, _sessionId, role} = content;
+    const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
     if (text) messageContent.text = text;
     if (files) messageContent.files = files;
     if (html) messageContent.html = html;
@@ -272,7 +272,7 @@ export class MessagesBase {
 
   // role is optional to not add wrapper to error
   public renderText(bubbleElement: HTMLElement, text: string, role?: string) {
-    const { contentEl: textEl, wrapper } = HTMLUtils.tryAddWrapper(bubbleElement, text, this._customWrappers, role);
+    const {contentEl: textEl, wrapper} = HTMLUtils.tryAddWrapper(bubbleElement, text, this._customWrappers, role);
     if (wrapper) HTMLUtils.apply(this, bubbleElement);
     textEl.innerHTML = this._remarkable.render(text);
     // There is a bug in remarkable where text with only numbers and full stop after them causes the creation

@@ -1,17 +1,14 @@
-import { RemarkableOptions } from '../../../../types/remarkable';
-import { KatexPlugin } from './katexPlugin';
-import { Remarkable } from 'remarkable';
+import {RemarkableOptions} from '../../../../types/remarkable';
+import {KatexPlugin} from './katexPlugin';
+import {Remarkable} from 'remarkable';
 import hljs from 'highlight.js';
 
 declare global {
   interface Window {
     hljs: typeof hljs;
-    remarkable_plugins: { plugin: unknown; options?: unknown }[];
+    remarkable_plugins: {plugin: unknown; options?: unknown}[];
     katex: {
-      renderToString: (
-        source: string,
-        options?: { displayMode: boolean; throwOnError: boolean; output: string }
-      ) => string;
+      renderToString: (source: string, options?: {displayMode: boolean; throwOnError: boolean; output: string}) => string;
     };
   }
 }
@@ -36,20 +33,20 @@ export class RemarkableConfig {
       }
       const delimiter = typeof customConfig.math === 'object' ? customConfig.math.delimiter : '';
       const options = typeof customConfig.math === 'object' && customConfig.math.options ? customConfig.math.options : {};
-      remarkable.use(KatexPlugin.katex.bind(this, options), { delimiter });
+      remarkable.use(KatexPlugin.katex.bind(this, options), {delimiter});
     }
   }
 
   private static instantiate(customConfig?: RemarkableOptions) {
     if (customConfig) {
-      return new Remarkable({ ...RemarkableConfig.DEFAULT_PROPERTIES, ...customConfig });
+      return new Remarkable({...RemarkableConfig.DEFAULT_PROPERTIES, ...customConfig});
     } else if (window.hljs) {
       const hljsModule = window.hljs;
       return new Remarkable({
         highlight: function (str, language) {
           if (language && hljsModule.getLanguage(language)) {
             try {
-              return hljsModule.highlight(str, { language }).value;
+              return hljsModule.highlight(str, {language}).value;
             } catch (_) {
               console.error('failed to setup the highlight dependency');
             }

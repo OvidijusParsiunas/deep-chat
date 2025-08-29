@@ -1,17 +1,17 @@
-import { ButtonAccessibility } from '../../../views/chat/input/buttons/buttonAccessility';
-import { SpeechToSpeechEvents } from '../../../types/speechToSpeechEvents';
-import { DirectConnection } from '../../../types/directConnection';
-import { MICROPHONE_ICON_STRING } from '../../../icons/microphone';
+import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
+import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
+import {DirectConnection} from '../../../types/directConnection';
+import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
-import { OpenAIRealtimeButton } from './openAIRealtimeButton';
-import { DirectServiceIO } from '../../utils/directServiceIO';
-import { ObjectUtils } from '../../../utils/data/objectUtils';
-import { SpeechToSpeech } from '../../utils/speechToSpeech';
-import { PLAY_ICON_STRING } from '../../../icons/playIcon';
-import { STOP_ICON_STRING } from '../../../icons/stopIcon';
-import { OpenAIUtils } from '../utils/openAIUtils';
-import { APIKey } from '../../../types/APIKey';
-import { DeepChat } from '../../../deepChat';
+import {OpenAIRealtimeButton} from './openAIRealtimeButton';
+import {DirectServiceIO} from '../../utils/directServiceIO';
+import {ObjectUtils} from '../../../utils/data/objectUtils';
+import {SpeechToSpeech} from '../../utils/speechToSpeech';
+import {PLAY_ICON_STRING} from '../../../icons/playIcon';
+import {STOP_ICON_STRING} from '../../../icons/stopIcon';
+import {OpenAIUtils} from '../utils/openAIUtils';
+import {APIKey} from '../../../types/APIKey';
+import {DeepChat} from '../../../deepChat';
 import {
   OpenAIRealtimeButton as OpenAIRealtimeButtonT,
   OpenAIRealtimeFunctionHandler,
@@ -50,7 +50,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const key = OpenAIRealtimeIO.getKey(deepChat);
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, { key });
+    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, {key});
     const config = directConnectionCopy.openAI?.realtime as OpenAIRealtime;
     if (typeof config === 'object') {
       this._avatarConfig = config.avatar;
@@ -59,7 +59,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
       const realtime = deepChat.directConnection?.openAI?.realtime as OpenAIRealtime;
-      const { function_handler } = realtime.config || {};
+      const {function_handler} = realtime.config || {};
       if (function_handler) this._functionHandler = function_handler;
       this._events = config.events;
       realtime.methods = this.generateMethods();
@@ -160,13 +160,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return {
       updateConfig: (config: OpenAIRealtimeConfig) => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/session
-        this._dc?.send(JSON.stringify({ type: 'session.update', session: config }));
+        this._dc?.send(JSON.stringify({type: 'session.update', session: config}));
       },
       sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
         const messageRole = role || 'system';
-        const content = [{ type: messageRole === 'system' || messageRole === 'user' ? 'input_text' : 'text', text }];
-        const item = { role: messageRole, type: 'message', content };
+        const content = [{type: messageRole === 'system' || messageRole === 'user' ? 'input_text' : 'text', text}];
+        const item = {role: messageRole, type: 'message', content};
         this.sendMessage(item);
       },
     };
@@ -367,7 +367,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         const message = JSON.parse(e.data);
         const output = message.response.output?.[0];
         if (output?.type === 'function_call') {
-          const { name, call_id } = output;
+          const {name, call_id} = output;
           try {
             await this.handleTool(name, output.arguments, call_id);
           } catch (e) {
@@ -551,20 +551,20 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           ' the [openAI](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeFunction) object.'
       );
     }
-    const result = await this._functionHandler({ name, arguments: functionArguments });
+    const result = await this._functionHandler({name, arguments: functionArguments});
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }
-    const item = { type: 'function_call_output', call_id, output: JSON.stringify(result) };
+    const item = {type: 'function_call_output', call_id, output: JSON.stringify(result)};
     this.sendMessage(item);
   }
 
   // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
   sendMessage(item: object) {
     if (!this._dc) return;
-    const message = JSON.stringify({ type: 'conversation.item.create', item });
+    const message = JSON.stringify({type: 'conversation.item.create', item});
     this._dc.send(message);
-    const responseCreatePayload = { type: 'response.create' };
+    const responseCreatePayload = {type: 'response.create'};
     this._dc.send(JSON.stringify(responseCreatePayload));
   }
 

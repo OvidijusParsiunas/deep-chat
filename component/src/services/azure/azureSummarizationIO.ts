@@ -1,13 +1,13 @@
-import { AzureSummarizationResult, AzureAuthenticationError } from '../../types/azureResult';
-import { Azure, AzureSummarizationConfig } from '../../types/azure';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { AzureLanguageIO } from './azureLanguageIO';
-import { GenericObject } from '../../types/object';
-import { AzureUtils } from './utils/azureUtils';
-import { PollResult } from '../serviceIO';
-import { DeepChat } from '../../deepChat';
+import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
+import {Azure, AzureSummarizationConfig} from '../../types/azure';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {AzureLanguageIO} from './azureLanguageIO';
+import {GenericObject} from '../../types/object';
+import {AzureUtils} from './utils/azureUtils';
+import {PollResult} from '../serviceIO';
+import {DeepChat} from '../../deepChat';
 
 type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
@@ -29,7 +29,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({ error: AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE });
+        deepChat.addMessage({error: AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE});
       });
     } else {
       this.rawBody.language ??= 'en';
@@ -66,25 +66,25 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     this.messages = messages;
   }
 
-  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{ makingAnotherRequest: true }> {
+  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{makingAnotherRequest: true}> {
     if (result.error) throw result.error.message;
     if (this.messages && this.completionsHandlers) {
       const jobURL = result.headers.get('operation-location') as string;
-      const requestInit = { method: 'GET', headers: this.connectSettings?.headers as GenericObject<string> };
+      const requestInit = {method: 'GET', headers: this.connectSettings?.headers as GenericObject<string>};
       HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
-    return { makingAnotherRequest: true };
+    return {makingAnotherRequest: true};
   }
 
   async extractPollResultData(result: AzureSummarizationResult): PollResult {
     if (result.error) throw result.error;
-    if (result.status === 'running') return { timeoutMS: 2000 };
+    if (result.status === 'running') return {timeoutMS: 2000};
     if (result.errors.length > 0) throw result.errors[0];
     if (result.tasks.items[0].results.errors.length > 0) throw result.tasks.items[0].results.errors[0];
     let textResult = '';
     for (const a of result.tasks.items[0].results.documents[0].sentences) {
       textResult += a.text;
     }
-    return { text: textResult || '' };
+    return {text: textResult || ''};
   }
 }

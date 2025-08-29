@@ -1,4 +1,4 @@
-import { MessageContentI } from '../../types/messagesInternal';
+import {MessageContentI} from '../../types/messagesInternal';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContentI[], limit: number) {

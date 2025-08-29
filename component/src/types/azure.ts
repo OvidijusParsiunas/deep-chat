@@ -1,4 +1,4 @@
-import { OpenAIAssistant, OpenAIChat } from './openAI';
+import {OpenAIAssistant, OpenAIChat} from './openAI';
 
 // https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
 export interface AzureTranslationConfig {
@@ -39,7 +39,7 @@ type AzureOpenAIDataSources = {
 }[];
 
 // https://learn.microsoft.com/en-gb/azure/ai-services/openai/references/on-your-data?tabs=python#request-body
-export type AzureOpenAIChat = OpenAIChat & { data_sources?: AzureOpenAIDataSources };
+export type AzureOpenAIChat = OpenAIChat & {data_sources?: AzureOpenAIDataSources};
 
 type URLDetails = {
   endpoint: string;

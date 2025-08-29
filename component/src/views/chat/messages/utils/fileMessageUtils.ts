@@ -1,7 +1,7 @@
-import { MessageFile, MessageFileType } from '../../../../types/messageFile';
-import { MessageContent, MessageStyles } from '../../../../types/messages';
-import { MessagesBase } from '../messagesBase';
-import { MessageElements } from '../messages';
+import {MessageFile, MessageFileType} from '../../../../types/messageFile';
+import {MessageContent, MessageStyles} from '../../../../types/messages';
+import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
 
 export class FileMessageUtils {
   public static readonly DEFAULT_FILE_NAME = 'file';
@@ -65,7 +65,7 @@ export class FileMessageUtils {
       try {
         // no-cors is an attempt to prevent a typical 'No 'Access-Control-Allow-Origin' header' error
         // being logged in the console
-        fetch(url, { mode: 'no-cors' })
+        fetch(url, {mode: 'no-cors'})
           .catch(() => {})
           .finally(() => {
             FileMessageUtils.waitToLoadThenScroll(messagesContainerEl);
@@ -80,7 +80,7 @@ export class FileMessageUtils {
   // But it is not actually used by anything in the chat, hence it is removed when adding a message
 
   // after the body has been stringified and parsed - the file reference will disappear, hence this readds it
-  public static reAddFileRefToObject(message: { files?: MessageFile[] }, targetMessage: MessageContent) {
+  public static reAddFileRefToObject(message: {files?: MessageFile[]}, targetMessage: MessageContent) {
     message.files?.forEach((file, index) => {
       if (file.ref && targetMessage.files?.[index]) targetMessage.files[index].ref = file.ref;
     });
@@ -88,19 +88,19 @@ export class FileMessageUtils {
 
   // the chat does not use the actual file
   public static removeFileRef(messageFile: MessageFile): Omit<MessageFile, 'file'> {
-    const newMessageFileObj = { ...messageFile };
+    const newMessageFileObj = {...messageFile};
     delete newMessageFileObj.ref;
     return newMessageFileObj;
   }
 
   public static isAudioFile(fileData: MessageFile) {
     const audioRegex = /\.(mp3|ogg|wav|aac|webm|4a)$/i;
-    const { type, src } = fileData;
+    const {type, src} = fileData;
     return type === 'audio' || src?.startsWith('data:audio') || (src && audioRegex.test(src));
   }
 
   public static isImageFile(fileData: MessageFile) {
-    const { type, src } = fileData;
+    const {type, src} = fileData;
     return type === 'image' || src?.startsWith('data:image') || (src && FileMessageUtils.isImageFileExtension(src));
   }
 

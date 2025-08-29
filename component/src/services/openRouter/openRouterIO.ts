@@ -1,16 +1,16 @@
-import { MessageUtils } from '../../views/chat/messages/utils/messageUtils';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageLimitUtils } from '../utils/messageLimitUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { OpenRouterUtils } from './utils/openRouterUtils';
-import { OpenRouter } from '../../types/openRouter';
-import { Stream } from '../../utils/HTTP/stream';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {OpenRouterUtils} from './utils/openRouterUtils';
+import {OpenRouter} from '../../types/openRouter';
+import {Stream} from '../../utils/HTTP/stream';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 type OpenRouterContent = {
   type: 'text' | 'image_url';
@@ -160,7 +160,7 @@ export class OpenRouterIO extends DirectServiceIO {
 
     const messages: OpenRouterMessage[] = [];
     if (this._systemMessage) {
-      messages.push({ role: 'system', content: this._systemMessage });
+      messages.push({role: 'system', content: this._systemMessage});
     }
     messages.push(...processedMessages);
 
@@ -187,19 +187,19 @@ export class OpenRouterIO extends DirectServiceIO {
     if (result.object === 'chat.completion.chunk') {
       const choice = result.choices?.[0];
       if (choice?.delta?.content) {
-        return { text: choice.delta.content };
+        return {text: choice.delta.content};
       }
-      return { text: '' };
+      return {text: ''};
     }
 
     // Handle non-streaming response
     if (result.object === 'chat.completion') {
       const choice = result.choices?.[0];
       if (choice?.message?.content) {
-        return { text: choice.message.content };
+        return {text: choice.message.content};
       }
     }
 
-    return { text: (result as any).text ?? '' };
+    return {text: (result as any).text ?? ''};
   }
 }

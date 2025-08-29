@@ -1,12 +1,12 @@
-import { MessageBodyElements, MessageContentI, MessageToElements } from '../../../../types/messagesInternal';
-import { LoadingStyle } from '../../../../utils/loading/loadingStyle';
-import { MessageContent } from '../../../../types/messages';
-import { FileMessageUtils } from './fileMessageUtils';
-import { HTMLMessages } from '../html/htmlMessages';
-import { MessagesBase } from '../messagesBase';
-import { MessageElements } from '../messages';
-import { Avatar } from '../avatar';
-import { Name } from '../name';
+import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../../types/messagesInternal';
+import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
+import {MessageContent} from '../../../../types/messages';
+import {FileMessageUtils} from './fileMessageUtils';
+import {HTMLMessages} from '../html/htmlMessages';
+import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
+import {Avatar} from '../avatar';
+import {Name} from '../name';
 
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';

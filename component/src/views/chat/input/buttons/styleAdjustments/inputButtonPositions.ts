@@ -1,16 +1,16 @@
-import { FileAttachmentsType } from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import { ButtonContainers, ButtonContainersT } from '../../buttonContainers/buttonContainers';
-import { BUTTON_ORDER } from '../../../../../utils/buttons/inputButtons';
-import { DropupStyles } from '../../../../../types/dropupStyles';
-import { BUTTON_TYPE } from '../../../../../types/buttonTypes';
-import { ButtonPosition } from '../../../../../types/button';
-import { CustomButton } from '../custom/customButton';
-import { InputButton } from '../inputButton';
-import { Dropup } from '../../dropup/dropup';
+import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import {ButtonContainers, ButtonContainersT} from '../../buttonContainers/buttonContainers';
+import {BUTTON_ORDER} from '../../../../../utils/buttons/inputButtons';
+import {DropupStyles} from '../../../../../types/dropupStyles';
+import {BUTTON_TYPE} from '../../../../../types/buttonTypes';
+import {ButtonPosition} from '../../../../../types/button';
+import {CustomButton} from '../custom/customButton';
+import {InputButton} from '../inputButton';
+import {Dropup} from '../../dropup/dropup';
 
-export type PositionToButtons = { [key in ButtonPosition]: ButtonProps[] };
+export type PositionToButtons = {[key in ButtonPosition]: ButtonProps[]};
 
-type ButtonProps = { button: InputButton; buttonType?: BUTTON_TYPE; fileType?: FileAttachmentsType };
+type ButtonProps = {button: InputButton; buttonType?: BUTTON_TYPE; fileType?: FileAttachmentsType};
 
 type Buttons = {
   [key in BUTTON_TYPE]?: ButtonProps;
@@ -47,7 +47,7 @@ export class InputButtonPositions {
   }
 
   private static setPosition(buttonsObj: Buttons, buttonType: keyof Buttons, positionButtons: ButtonProps[]) {
-    const buttonProps = { ...buttonsObj[buttonType], buttonType } as ButtonProps;
+    const buttonProps = {...buttonsObj[buttonType], buttonType} as ButtonProps;
     positionButtons.push(buttonProps);
     delete buttonsObj[buttonType];
   }

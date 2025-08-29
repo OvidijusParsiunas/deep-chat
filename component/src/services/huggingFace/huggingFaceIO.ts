@@ -1,14 +1,14 @@
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { HuggingFaceUtils } from './utils/huggingFaceUtils';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { HuggingFaceModel } from '../../types/huggingFace';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { ServiceFileTypes } from '../serviceIO';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {HuggingFaceUtils} from './utils/huggingFaceUtils';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {HuggingFaceModel} from '../../types/huggingFace';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ServiceFileTypes} from '../serviceIO';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
-type HuggingFaceServiceConfigObj = { parameters?: object; options?: object; context?: string };
+type HuggingFaceServiceConfigObj = {parameters?: object; options?: object; context?: string};
 
 type HuggingFaceServiceConfig = true | (HuggingFaceModel & HuggingFaceServiceConfigObj);
 

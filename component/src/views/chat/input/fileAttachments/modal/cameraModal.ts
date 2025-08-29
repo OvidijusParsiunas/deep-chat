@@ -1,14 +1,14 @@
-import { FileAttachmentsType } from '../fileAttachmentTypes/fileAttachmentsType';
-import { CameraDimensions, CameraFiles } from '../../../../../types/camera';
-import { REFRESH_ICON_STRING } from '../../../../../icons/refreshIcon';
-import { CAPTURE_ICON_STRING } from '../../../../../icons/captureIcon';
-import { SVGIconUtils } from '../../../../../utils/svg/svgIconUtils';
-import { CLOSE_ICON_STRING } from '../../../../../icons/closeIcon';
-import { TICK_ICON_STRING } from '../../../../../icons/tickIcon';
-import { CustomStyle } from '../../../../../types/styles';
-import { FileAttachments } from '../fileAttachments';
-import { NewFileName } from '../newFileName';
-import { Modal } from './modal';
+import {FileAttachmentsType} from '../fileAttachmentTypes/fileAttachmentsType';
+import {CameraDimensions, CameraFiles} from '../../../../../types/camera';
+import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
+import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
+import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
+import {CLOSE_ICON_STRING} from '../../../../../icons/closeIcon';
+import {TICK_ICON_STRING} from '../../../../../icons/tickIcon';
+import {CustomStyle} from '../../../../../types/styles';
+import {FileAttachments} from '../fileAttachments';
+import {NewFileName} from '../newFileName';
+import {Modal} from './modal';
 
 export class CameraModal extends Modal {
   private _dataURL?: string;
@@ -53,7 +53,7 @@ export class CameraModal extends Modal {
     submitButton.classList.add('modal-svg-submit-button');
     this.addButtons(captureButton, submitButton);
     this.addButtonEvents(captureButton, closeButton, submitButton, fileAttachmentsType);
-    return { captureButton, submitButton };
+    return {captureButton, submitButton};
   }
 
   // prettier-ignore
@@ -89,7 +89,7 @@ export class CameraModal extends Modal {
     this._submitButton.classList.add('modal-svg-submit-disabled');
     this._stopped = false;
     navigator.mediaDevices
-      .getUserMedia({ video: this._dimensions || true })
+      .getUserMedia({video: this._dimensions || true})
       .then((stream) => {
         this._mediaStream = stream;
         if (!this.isOpen()) return this.stop();
@@ -127,10 +127,10 @@ export class CameraModal extends Modal {
         byteNumbers[i] = binaryData.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: this._format });
+      const blob = new Blob([byteArray], {type: this._format});
       const extension = this._format === 'image/jpeg' ? 'jpeg' : 'png';
       const filename = NewFileName.getFileName(this._newFilePrefix || 'photo', extension);
-      return new File([blob], filename, { type: blob.type });
+      return new File([blob], filename, {type: blob.type});
     }
     return undefined;
   }

@@ -1,14 +1,14 @@
-import { KEYBOARD_KEY } from '../../../../utils/buttons/keyboardKeys';
-import { FileAttachments } from '../fileAttachments/fileAttachments';
-import { StyleUtils } from '../../../../utils/element/styleUtils';
-import { Browser } from '../../../../utils/browser/browser';
-import { ServiceIO } from '../../../../services/serviceIO';
-import { TextInput } from '../../../../types/textInput';
-import { CustomStyle } from '../../../../types/styles';
-import { TextInputEvents } from './textInputEvents';
-import { DeepChat } from '../../../../deepChat';
-import { PasteUtils } from './pasteUtils';
-import { FocusUtils } from './focusUtils';
+import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
+import {FileAttachments} from '../fileAttachments/fileAttachments';
+import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {Browser} from '../../../../utils/browser/browser';
+import {ServiceIO} from '../../../../services/serviceIO';
+import {TextInput} from '../../../../types/textInput';
+import {CustomStyle} from '../../../../types/styles';
+import {TextInputEvents} from './textInputEvents';
+import {DeepChat} from '../../../../deepChat';
+import {PasteUtils} from './pasteUtils';
+import {FocusUtils} from './focusUtils';
 
 // TO-DO state for focused (like input)
 export class TextInputEl {
@@ -71,7 +71,7 @@ export class TextInputEl {
       FocusUtils.focusEndOfInput(this.inputElementRef);
       this._onInput?.(false);
     }
-    if (Browser.IS_CHROMIUM) window.scrollTo({ top: scrollY });
+    if (Browser.IS_CHROMIUM) window.scrollTo({top: scrollY});
   }
 
   private createInputElement() {

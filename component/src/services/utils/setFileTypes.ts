@@ -1,11 +1,11 @@
-import { RemarkableConfig } from '../../views/chat/messages/remarkable/remarkableConfig';
-import { FileServiceIO, ServiceFileTypes, ServiceIO } from '../serviceIO';
-import { FilesServiceConfig } from '../../types/fileServiceConfigs';
-import { FileAttachments } from '../../types/fileAttachments';
-import { Legacy } from '../../utils/legacy/legacy';
-import { Connect } from '../../types/connect';
-import { DeepChat } from '../../deepChat';
-import { Remarkable } from 'remarkable';
+import {RemarkableConfig} from '../../views/chat/messages/remarkable/remarkableConfig';
+import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../serviceIO';
+import {FilesServiceConfig} from '../../types/fileServiceConfigs';
+import {FileAttachments} from '../../types/fileAttachments';
+import {Legacy} from '../../utils/legacy/legacy';
+import {Connect} from '../../types/connect';
+import {DeepChat} from '../../deepChat';
+import {Remarkable} from 'remarkable';
 
 export class SetFileTypes {
   // prettier-ignore
@@ -41,7 +41,7 @@ export class SetFileTypes {
 
   private static processMixedFiles(serviceIO: ServiceIO, remark: Remarkable, mixedFiles: DeepChat['mixedFiles']) {
     if (mixedFiles) {
-      const defFormats = { acceptedFormats: '' };
+      const defFormats = {acceptedFormats: ''};
       serviceIO.fileTypes.mixedFiles = SetFileTypes.parseConfig(serviceIO.connectSettings, defFormats, remark, mixedFiles);
     }
   }

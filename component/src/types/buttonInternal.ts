@@ -1,5 +1,5 @@
-import { OverrideTypes } from './utilityTypes';
-import { ButtonStyles } from './button';
+import {OverrideTypes} from './utilityTypes';
+import {ButtonStyles} from './button';
 
 export type ButtonInnerElement = HTMLElement | SVGGraphicsElement;
 

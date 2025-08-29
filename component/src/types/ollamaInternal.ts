@@ -1,4 +1,4 @@
-import { OllamaTool } from './ollama';
+import {OllamaTool} from './ollama';
 
 export interface SystemMessageInternal {
   role: 'system';

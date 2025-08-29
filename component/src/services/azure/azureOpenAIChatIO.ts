@@ -1,8 +1,8 @@
-import { AzureOpenAI, AzureOpenAIChat } from '../../types/azure';
-import { DirectConnection } from '../../types/directConnection';
-import { AzureOpenAIUtils } from './utils/azureOpenAIUtils';
-import { OpenAIChatIO } from '../openAI/openAIChatIO';
-import { DeepChat } from '../../deepChat';
+import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
+import {DirectConnection} from '../../types/directConnection';
+import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
+import {OpenAIChatIO} from '../openAI/openAIChatIO';
+import {DeepChat} from '../../deepChat';
 
 export class AzureOpenAIChatIO extends OpenAIChatIO {
   override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
@@ -17,14 +17,14 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
 
     if (typeof config === 'object') {
-      const { function_handler } = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
+      const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
     }
     if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({ error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE });
+        deepChat.addMessage({error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
       });
     } else {
       this.url = AzureOpenAIChatIO.buildURL(urlDetails);
@@ -32,7 +32,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
   }
 
   private static buildURL(urlDetails: AzureOpenAI['urlDetails']) {
-    const { endpoint, deploymentId, version } = urlDetails;
+    const {endpoint, deploymentId, version} = urlDetails;
     return `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=${version}`;
   }
 }

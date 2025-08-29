@@ -1,13 +1,13 @@
-import { MessageContent, MessageElementsStyles, MessageStyles, OnMessage } from '../../types/messages';
-import { FilesServiceConfig } from '../../types/fileServiceConfigs';
-import { ValidateInput } from '../../types/validateInput';
-import { HTMLWrappers, Stream } from '../../types/stream';
-import { MessageFile } from '../../types/messageFile';
-import { CustomStyle } from '../../types/styles';
-import { Connect } from '../../types/connect';
-import { Cohere } from '../../types/cohere';
-import { DeepChat } from '../../deepChat';
-import { Demo } from '../../types/demo';
+import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
+import {FilesServiceConfig} from '../../types/fileServiceConfigs';
+import {ValidateInput} from '../../types/validateInput';
+import {HTMLWrappers, Stream} from '../../types/stream';
+import {MessageFile} from '../../types/messageFile';
+import {CustomStyle} from '../../types/styles';
+import {Connect} from '../../types/connect';
+import {Cohere} from '../../types/cohere';
+import {DeepChat} from '../../deepChat';
+import {Demo} from '../../types/demo';
 
 interface LegacyDeepChat {
   request?: Connect;
@@ -45,7 +45,7 @@ export class Legacy {
   }
 
   public static processHistoryFile(message: MessageContent) {
-    const file = (message as MessageContent & { file?: MessageFile }).file;
+    const file = (message as MessageContent & {file?: MessageFile}).file;
     if (file) {
       console.error('The file property in MessageContent is deprecated since version 1.3.17.');
       console.error('Please change to using the files array property: https://deepchat.dev/docs/messages/#MessageContent');
@@ -54,8 +54,7 @@ export class Legacy {
   }
 
   public static processValidateInput(deepChat: DeepChat) {
-    const validate = (deepChat as DeepChat & { validateMessageBeforeSending?: ValidateInput })
-      .validateMessageBeforeSending;
+    const validate = (deepChat as DeepChat & {validateMessageBeforeSending?: ValidateInput}).validateMessageBeforeSending;
     if (validate) {
       console.error('The validateMessageBeforeSending property is deprecated since version 1.3.24.');
       console.error('Please change to using validateInput: https://deepchat.dev/docs/interceptors#validateInput');
@@ -67,7 +66,7 @@ export class Legacy {
   public static processSubmitUserMessage(content: string) {
     console.error('The submitUserMessage(text: string) argument string type is deprecated since version 1.4.4.');
     console.error('Please change to using the new argument type: https://deepchat.dev/docs/methods#submitUserMessage');
-    return { text: content };
+    return {text: content};
   }
 
   public static flagHTMLUpdateClass(bubbleElement: HTMLElement) {
@@ -101,18 +100,18 @@ export class Legacy {
     return undefined;
   }
 
-  public static fireOnNewMessage(deepChat: DeepChat, updateBody: { message: MessageContent; isHistory: boolean }) {
+  public static fireOnNewMessage(deepChat: DeepChat, updateBody: {message: MessageContent; isHistory: boolean}) {
     const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
     if (legacyDeepchat.onNewMessage) {
       console.error('The onNewMessage event has been deprecated since version 2.0.0.');
       console.error('Please see the onMessage event: https://deepchat.dev/docs/events#onMessage');
       legacyDeepchat.onNewMessage?.(updateBody);
     }
-    deepChat.dispatchEvent(new CustomEvent('new-message', { detail: updateBody }));
+    deepChat.dispatchEvent(new CustomEvent('new-message', {detail: updateBody}));
   }
 
   public static processFileConfigConnect(config: FilesServiceConfig) {
-    const legacyConfig = config as unknown as FilesServiceConfig & { request?: Connect };
+    const legacyConfig = config as unknown as FilesServiceConfig & {request?: Connect};
     if (legacyConfig.request) {
       console.error('The request property in file configuration is deprecated since version 2.0.0.');
       console.error('Please use the connect property instead: https://deepchat.dev/docs/files');
@@ -127,23 +126,23 @@ export class Legacy {
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
       console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.1.0.');
       console.error('Check it out here: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
-      messageStylesCp.loading = { message: { styles: loading } };
+      messageStylesCp.loading = {message: {styles: loading}};
     }
     return messageStylesCp;
   }
 
   public static processDemo(demo: Demo) {
     if (typeof demo === 'boolean') return demo;
-    if ((demo as unknown as { displayLoadingBubble?: boolean }).displayLoadingBubble) {
+    if ((demo as unknown as {displayLoadingBubble?: boolean}).displayLoadingBubble) {
       console.error('The demo displayLoadingBubble property is deprecated since version 2.1.0.');
       console.error('Please use displayLoading instead: https://deepchat.dev/docs/modes#demo');
-      demo.displayLoading = { message: true };
+      demo.displayLoading = {message: true};
     }
     return demo;
   }
 
   public static processCohere(cohere: Cohere) {
-    const cohereObj = cohere as unknown as { chat?: object; textGeneration?: object; summarization?: object };
+    const cohereObj = cohere as unknown as {chat?: object; textGeneration?: object; summarization?: object};
     const documentationMsg = 'Please see the official documentation: https://deepchat.dev/docs/directConnection/Cohere';
     if (cohereObj.chat) {
       console.error('Cohere chat property is deprecated since version 2.2.3.');
@@ -167,7 +166,7 @@ export class Legacy {
 
   public static processStreamHTMLWrappers(stream?: Stream) {
     if (!stream || typeof stream !== 'object') return;
-    const htmlWrappers = (stream as { htmlWrappers?: HTMLWrappers }).htmlWrappers;
+    const htmlWrappers = (stream as {htmlWrappers?: HTMLWrappers}).htmlWrappers;
     if (htmlWrappers) {
       console.error(`The htmlWrappers property has been moved to Deep Chat's base since version 2.3.0.`);
       console.error('Check it out here: https://deepchat.dev/docs/messages/HTML#htmlWrappers');

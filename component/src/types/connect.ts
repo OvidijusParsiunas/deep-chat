@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GenericObject } from './object';
-import { Handler } from './handler';
-import { Stream } from './stream';
+import {GenericObject} from './object';
+import {Handler} from './handler';
+import {Stream} from './stream';
 export interface Connect {
   url?: string;
   method?: string;

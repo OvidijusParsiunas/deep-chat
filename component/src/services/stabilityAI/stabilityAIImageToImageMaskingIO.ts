@@ -1,15 +1,15 @@
-import { StabilityAI, StabilityAIImageToImageMasking } from '../../types/stabilityAI';
-import { StabilityAITextToImageResult } from '../../types/stabilityAIResult';
-import { BASE_64_PREFIX } from '../../utils/element/imageUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { RequestUtils } from '../../utils/HTTP/requestUtils';
-import { StabilityAIUtils } from './utils/stabilityAIUtils';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { MessageFiles } from '../../types/messageFile';
-import { StabilityAIIO } from './stabilityAIIO';
-import { Response } from '../../types/response';
-import { DeepChat } from '../../deepChat';
+import {StabilityAI, StabilityAIImageToImageMasking} from '../../types/stabilityAI';
+import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
+import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {RequestUtils} from '../../utils/HTTP/requestUtils';
+import {StabilityAIUtils} from './utils/stabilityAIUtils';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageFiles} from '../../types/messageFile';
+import {StabilityAIIO} from './stabilityAIIO';
+import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 
 export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image/masking';
@@ -25,7 +25,7 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCp?.stabilityAI;
-    const defaultFile = { images: { files: { acceptedFormats: '.png', maxNumberOfFiles: 2 } } };
+    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, StabilityAIUtils.buildKeyVerificationDetails(), StabilityAIUtils.buildHeaders, apiKey, defaultFile);
     const config = directConnectionCp?.stabilityAI?.imageToImageMasking as NonNullable<StabilityAI['imageToImageMasking']>;
     if (typeof config === 'object') {
@@ -81,8 +81,8 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return { src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image' };
+      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
     }) as MessageFiles;
-    return { files };
+    return {files};
   }
 }

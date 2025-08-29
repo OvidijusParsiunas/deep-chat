@@ -1,9 +1,9 @@
-import { Overwrite } from '../../../../types/messagesInternal';
-import { Legacy } from '../../../../utils/legacy/legacy';
-import { MessageUtils } from '../utils/messageUtils';
-import { MessagesBase } from '../messagesBase';
-import { MessageElements } from '../messages';
-import { HTMLUtils } from './htmlUtils';
+import {Overwrite} from '../../../../types/messagesInternal';
+import {Legacy} from '../../../../utils/legacy/legacy';
+import {MessageUtils} from '../utils/messageUtils';
+import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
+import {HTMLUtils} from './htmlUtils';
 
 export class HTMLMessages {
   public static readonly HTML_BUBBLE_CLASS = 'html-message';
@@ -16,7 +16,7 @@ export class HTMLMessages {
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop, loading);
     messageElements.bubbleElement.classList.add(HTMLMessages.HTML_BUBBLE_CLASS);
-    const { contentEl } = HTMLUtils.tryAddWrapper(messageElements.bubbleElement, html, messages._customWrappers, role);
+    const {contentEl} = HTMLUtils.tryAddWrapper(messageElements.bubbleElement, html, messages._customWrappers, role);
     contentEl.innerHTML = html;
     return messageElements;
   }

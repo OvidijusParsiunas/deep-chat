@@ -1,19 +1,19 @@
-import { GroqResult, GroqToolCall, ToolAPI, GroqChoice } from '../../types/groqResult';
-import { GroqMessage, GroqRequestBody } from '../../types/groqInternal';
-import { FetchFunc, RequestUtils } from '../../utils/HTTP/requestUtils';
-import { DirectConnection } from '../../types/directConnection';
-import { MessageLimitUtils } from '../utils/messageLimitUtils';
-import { MessageContentI } from '../../types/messagesInternal';
-import { Messages } from '../../views/chat/messages/messages';
-import { Response as ResponseI } from '../../types/response';
-import { HTTPRequest } from '../../utils/HTTP/HTTPRequest';
-import { DirectServiceIO } from '../utils/directServiceIO';
-import { ChatFunctionHandler } from '../../types/openAI';
-import { Stream } from '../../utils/HTTP/stream';
-import { GroqUtils } from './utils/groqUtils';
-import { GroqChat } from '../../types/groq';
-import { APIKey } from '../../types/APIKey';
-import { DeepChat } from '../../deepChat';
+import {GroqResult, GroqToolCall, ToolAPI, GroqChoice} from '../../types/groqResult';
+import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
+import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {DirectConnection} from '../../types/directConnection';
+import {MessageLimitUtils} from '../utils/messageLimitUtils';
+import {MessageContentI} from '../../types/messagesInternal';
+import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
+import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {DirectServiceIO} from '../utils/directServiceIO';
+import {ChatFunctionHandler} from '../../types/openAI';
+import {Stream} from '../../utils/HTTP/stream';
+import {GroqUtils} from './utils/groqUtils';
+import {GroqChat} from '../../types/groq';
+import {APIKey} from '../../types/APIKey';
+import {DeepChat} from '../../deepChat';
 
 // https://console.groq.com/docs/api-reference#chat-create
 export class GroqChatIO extends DirectServiceIO {
@@ -61,7 +61,7 @@ export class GroqChatIO extends DirectServiceIO {
       };
     });
     if (this._systemMessage) {
-      processedMessages.unshift({ role: 'system', content: this._systemMessage });
+      processedMessages.unshift({role: 'system', content: this._systemMessage});
     }
     bodyCopy.messages = processedMessages;
     return bodyCopy;
@@ -93,16 +93,16 @@ export class GroqChatIO extends DirectServiceIO {
       if (result.choices[0].message.tool_calls) {
         return this.handleTools(result.choices[0].message, fetchFunc, prevBody);
       }
-      return { text: result.choices[0].message.content || '' };
+      return {text: result.choices[0].message.content || ''};
     }
-    return { text: '' };
+    return {text: ''};
   }
 
   private async extractStreamResult(choice: GroqChoice, fetchFunc?: FetchFunc, prevBody?: GroqRequestBody) {
-    const { delta, finish_reason } = choice;
+    const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls') {
       this.asyncCallInProgress = true;
-      const tools = { tool_calls: this._streamToolCalls };
+      const tools = {tool_calls: this._streamToolCalls};
       this._streamToolCalls = undefined;
       return this.handleTools(tools, fetchFunc, prevBody);
     } else if (delta?.tool_calls) {
@@ -115,7 +115,7 @@ export class GroqChatIO extends DirectServiceIO {
       }
     }
     this.asyncCallInProgress = false;
-    return { text: delta?.content || '' };
+    return {text: delta?.content || ''};
   }
 
   // https://console.groq.com/docs/tool-use
@@ -128,12 +128,12 @@ export class GroqChatIO extends DirectServiceIO {
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
-      return { name: call.function.name, arguments: call.function.arguments };
+      return {name: call.function.name, arguments: call.function.arguments};
     });
     const handlerResponse = await this._functionHandler?.(functions);
     if (!Array.isArray(handlerResponse)) {
       if (handlerResponse.text) {
-        const response = { text: handlerResponse.text };
+        const response = {text: handlerResponse.text};
         const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
         if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
         return processedResponse;
@@ -143,9 +143,9 @@ export class GroqChatIO extends DirectServiceIO {
     const responses = await Promise.all(handlerResponse);
     // When making a tool call, only using latest user prompt as for some reason on multiple requests it responds to first
     bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
-    if (this._systemMessage) bodyCp.messages.unshift({ role: 'system', content: this._systemMessage });
-    bodyCp.messages.push({ tool_calls: tools.tool_calls, role: 'assistant', content: null });
-    if (!responses.find(({ response }) => typeof response !== 'string') && functions.length === responses.length) {
+    if (this._systemMessage) bodyCp.messages.unshift({role: 'system', content: this._systemMessage});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
+    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
@@ -158,12 +158,12 @@ export class GroqChatIO extends DirectServiceIO {
       try {
         if (this.stream && this._messages) {
           Stream.request(this, bodyCp, this._messages);
-          return { text: '' };
+          return {text: ''};
         }
         let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
         result = (await this.deepChat.responseInterceptor?.(result)) || result;
         if (result.error) throw result.error.message;
-        return { text: result.choices[0].message.content || '' };
+        return {text: result.choices[0].message.content || ''};
       } catch (e) {
         this.asyncCallInProgress = false;
         throw e;
