@@ -1,5 +1,6 @@
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
+import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
@@ -546,10 +547,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
   private async handleTool(name: string, functionArguments: string, call_id: string) {
     if (!this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [openAI](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeFunction) object.'
-      );
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const result = await this._functionHandler({name, arguments: functionArguments});
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {

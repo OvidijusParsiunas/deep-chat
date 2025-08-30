@@ -2,7 +2,7 @@ import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../type
 import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -28,7 +28,6 @@ export class OpenAIChatIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Incorrect'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
-  asyncCallInProgress = false; // used when streaming tools
   private readonly _systemMessage: SystemMessageInternal =
     OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
   private _messages?: Messages;
@@ -116,16 +115,14 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
   }
 
-  // prettier-ignore
-  override async extractResultData(result: OpenAIConverseResult,
-      fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
+  override async extractResultData(result: OpenAIConverseResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices?.[0]?.delta) {
-      return this.extractStreamResult(result.choices[0], fetchFunc, prevBody);
+      return this.extractStreamResult(result.choices[0], prevBody);
     }
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleTools(result.choices[0].message, fetchFunc, prevBody);
+        return this.handleTools(result.choices[0].message, prevBody);
       }
       if (result.choices[0].message?.audio) {
         const tts = this.deepChat.textToSpeech;
@@ -140,13 +137,12 @@ export class OpenAIChatIO extends DirectServiceIO {
     return {text: ''};
   }
 
-  private async extractStreamResult(choice: ResultChoice, fetchFunc?: FetchFunc, prevBody?: OpenAIChat) {
+  private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
     const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls') {
-      this.asyncCallInProgress = true;
       const tools = {tool_calls: this._streamToolCalls};
       this._streamToolCalls = undefined;
-      return this.handleTools(tools, fetchFunc, prevBody);
+      return this.handleTools(tools, prevBody);
     } else if (delta?.tool_calls) {
       if (!this._streamToolCalls) {
         this._streamToolCalls = delta.tool_calls;
@@ -156,34 +152,21 @@ export class OpenAIChatIO extends DirectServiceIO {
         });
       }
     }
-    this.asyncCallInProgress = false;
     return {text: delta?.content || ''};
   }
 
-  // prettier-ignore
-  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: OpenAIChat): Promise<ResponseI> {
+  private async handleTools(tools: ToolAPI, prevBody?: OpenAIChat): Promise<ResponseI> {
     // tool_calls, requestFunc and prevBody should theoretically be defined
-    if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
-      );
+    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this._functionHandler?.(functions);
-    if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
-        const processedResponse = await this.deepChat.responseInterceptor?.(response) || response;
-        if (Array.isArray(processedResponse)) throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ARR_ERROR);
-        return processedResponse;
-      }
-      throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
-    }
-    const responses = await Promise.all(handlerResponse);
+    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
     bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
@@ -195,19 +178,8 @@ export class OpenAIChatIO extends DirectServiceIO {
           content: resp.response,
         });
       });
-      try {
-        if (this.stream && this._messages) {
-          Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
-        }
-        let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = await this.deepChat.responseInterceptor?.(result) || result;
-        if (result.error) throw result.error.message;
-        return {text: result.choices[0].message.content || ''};
-      } catch (e) {
-        this.asyncCallInProgress = false;
-        throw e;
-      }
+
+      return this.makeAnotherRequest(bodyCp, this._messages);
     }
     throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
   }

@@ -2,7 +2,6 @@ import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConf
 import {IWebsocketHandler} from '../utils/HTTP/customHandler';
 import {Messages} from '../views/chat/messages/messages';
 import {InterfacesUnion} from '../types/utilityTypes';
-import {FetchFunc} from '../utils/HTTP/requestUtils';
 import {FILE_TYPE} from '../types/fileTypes';
 import {Response} from '../types/response';
 import {Connect} from '../types/connect';
@@ -92,7 +91,6 @@ export interface ServiceIO {
 
   extractResultData?(
     result: object,
-    fetch?: FetchFunc,
     previousBody?: object
   ): Promise<InterfacesUnion<Response | {makingAnotherRequest: true}>>;
 
@@ -116,7 +114,7 @@ export interface ServiceIO {
 
   fetchHistory?: () => Promise<Response[]> | Response[];
 
-  // mostly used for streaming to not close the stream when it makes another request
+  // used to not add another message or close a stream when another request is in progress
   asyncCallInProgress?: boolean;
 
   onInput?: (isUser: boolean) => void;

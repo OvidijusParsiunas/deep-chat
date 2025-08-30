@@ -8,10 +8,6 @@ import {GenericObject} from '../../types/object';
 import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
 
-// this is mostly used for calling the request again for OpenAI API function calls
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FetchFunc = (body: any) => Promise<Response>;
-
 export type InterceptorResult = RequestDetails & {error?: string};
 
 type InterceptorResultP = Promise<InterceptorResult>;

@@ -1,7 +1,7 @@
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -24,7 +24,6 @@ export class ClaudeIO extends DirectServiceIO {
   url = 'https://api.anthropic.com/v1/messages';
   permittedErrorPrefixes = ['authentication_error', 'invalid_request_error'];
   _functionHandler?: ChatFunctionHandler;
-  asyncCallInProgress = false; // used when streaming tools
   private _messages?: Messages;
   private _streamToolCalls: ClaudeToolUse = {type: 'tool_use', id: '', name: '', input: ''};
   private readonly _systemMessage: string = 'You are a helpful assistant.';
@@ -107,11 +106,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(
-    result: ClaudeResult,
-    fetchFunc?: FetchFunc,
-    prevBody?: ClaudeRequestBody
-  ): Promise<ResponseI> {
+  override async extractResultData(result: ClaudeResult, prevBody?: ClaudeRequestBody): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     // Handle non-streaming response (final response)
@@ -119,7 +114,7 @@ export class ClaudeIO extends DirectServiceIO {
       // Check for tool use in the response
       const toolUseContent = result.content.find((item): item is ClaudeToolUse => item.type === 'tool_use');
       if (toolUseContent) {
-        return this.handleTools([toolUseContent], fetchFunc, prevBody);
+        return this.handleTools([toolUseContent], prevBody);
       }
 
       const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
@@ -129,9 +124,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
 
     // Handle streaming events
-    if (result.type === 'message_start') {
-      this.asyncCallInProgress = false;
-    } else if (result.type === 'content_block_delta') {
+    if (result.type === 'content_block_delta') {
       if (result.delta && result.delta.type === 'text_delta') {
         return {text: result.delta.text || ''};
       }
@@ -144,41 +137,24 @@ export class ClaudeIO extends DirectServiceIO {
     } else if (result.type === 'content_block_delta' && result.delta?.type === 'input_json_delta') {
       this._streamToolCalls.input += result.delta.partial_json || '';
     } else if (result.type === 'message_delta' && result.delta?.stop_reason === 'tool_use') {
-      this.asyncCallInProgress = true;
       this._streamToolCalls.input = JSON.parse(this._streamToolCalls.input);
-      return this.handleTools([this._streamToolCalls], fetchFunc, prevBody);
+      return this.handleTools([this._streamToolCalls], prevBody);
     }
 
     // Return empty for other event types (message_start, content_block_start, etc.)
     return {text: ''};
   }
 
-  private async handleTools(
-    toolUseBlocks: ClaudeToolUse[],
-    fetchFunc?: FetchFunc,
-    prevBody?: ClaudeRequestBody
-  ): Promise<ResponseI> {
-    if (!toolUseBlocks || !fetchFunc || !prevBody || !this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [claude](https://deepchat.dev/docs/directConnection/claude) object.'
-      );
+  private async handleTools(toolUseBlocks: ClaudeToolUse[], prevBody?: ClaudeRequestBody): Promise<ResponseI> {
+    if (!toolUseBlocks || !prevBody || !this._functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = toolUseBlocks.map((block) => {
       return {name: block.name, arguments: JSON.stringify(block.input)};
     });
-    const handlerResponse = await this._functionHandler?.(functions);
-    if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
-        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
-        if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
-        return processedResponse;
-      }
-      throw Error('Function tool response must be an array or contain a text property');
-    }
-    const responses = await Promise.all(handlerResponse);
+    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    if (processedResponse) return processedResponse;
 
     // Add assistant message with tool use
     const assistantContent = toolUseBlocks.map((block) => ({
@@ -202,27 +178,7 @@ export class ClaudeIO extends DirectServiceIO {
 
       bodyCp.messages.push({role: 'user' as const, content: toolResultContent});
 
-      try {
-        if (this.stream && this._messages) {
-          Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
-        }
-        let result: ClaudeResult = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = ((await this.deepChat.responseInterceptor?.(result)) || result) as ClaudeResult;
-        if (result.error) throw result.error.message;
-
-        // Extract text from the final response
-        if (result.content && result.content.length > 0) {
-          const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
-          if (textContent) {
-            return {text: textContent.text};
-          }
-        }
-        return {text: ''};
-      } catch (e) {
-        this.asyncCallInProgress = false;
-        throw e;
-      }
+      return this.makeAnotherRequest(bodyCp, this._messages);
     }
     throw Error('Function tool response must be an array or contain a text property');
   }

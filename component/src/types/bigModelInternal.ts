@@ -26,9 +26,47 @@ export type BigModelFileContent = {
 
 export type BigModelContentItem = BigModelTextContent | BigModelImageContent | BigModelVideoContent | BigModelFileContent;
 
-export type BigModelMessage = {
-  role: 'system' | 'user' | 'assistant';
+export type BigModelToolCall = {
+  function: {
+    name: string;
+    arguments: string;
+  };
+  id: string;
+  type: string;
+};
+
+export type BigModelToolMessage = {
+  role: 'tool';
+  tool_call_id: string;
+  name: string;
+  content: string;
+};
+
+export type BigModelAssistantMessage = {
+  role: 'assistant';
+  content: string | null;
+  tool_calls?: BigModelToolCall[];
+};
+
+export type BigModelUserMessage = {
+  role: 'user';
   content: string | BigModelContentItem[];
+};
+
+export type BigModelSystemMessage = {
+  role: 'system';
+  content: string;
+};
+
+export type BigModelMessage = BigModelSystemMessage | BigModelUserMessage | BigModelAssistantMessage | BigModelToolMessage;
+
+export type BigModelTool = {
+  type: 'function';
+  function: {
+    name: string;
+    description?: string;
+    parameters: object;
+  };
 };
 
 export type BigModelRequestBody = {
@@ -38,6 +76,8 @@ export type BigModelRequestBody = {
   temperature?: number;
   top_p?: number;
   stream?: boolean;
+  tools?: BigModelTool[];
+  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
 };
 
 export type BigModelImagesRequestBody = {

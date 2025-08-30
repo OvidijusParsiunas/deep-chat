@@ -1,6 +1,6 @@
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -29,7 +29,6 @@ export class OllamaIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Error'];
   private readonly _systemMessage?: SystemMessageInternal;
   _functionHandler?: ChatFunctionHandler;
-  asyncCallInProgress = false;
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
@@ -109,26 +108,20 @@ export class OllamaIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(
-    result: OllamaConverseResult,
-    fetchFunc?: FetchFunc,
-    prevBody?: OllamaChat
-  ): Promise<ResponseI> {
+  override async extractResultData(result: OllamaConverseResult, prevBody?: OllamaChat): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     if (result.text) {
       const parsedStreamBody = JSON.parse(result.text) as OllamaStreamResult;
       if (parsedStreamBody.message?.tool_calls) {
-        this.asyncCallInProgress = true;
-        return this.handleTools({tool_calls: parsedStreamBody.message.tool_calls}, fetchFunc, prevBody);
+        return this.handleTools({tool_calls: parsedStreamBody.message.tool_calls}, prevBody);
       }
-      this.asyncCallInProgress = false;
       return {text: parsedStreamBody.message?.content || ''};
     }
 
     if (result.message) {
       if (result.message.tool_calls) {
-        return this.handleTools({tool_calls: result.message.tool_calls}, fetchFunc, prevBody);
+        return this.handleTools({tool_calls: result.message.tool_calls}, prevBody);
       }
       return {text: result.message.content || ''};
     }
@@ -136,32 +129,17 @@ export class OllamaIO extends DirectServiceIO {
     return {text: ''};
   }
 
-  private async handleTools(
-    tools: {tool_calls: OllamaToolCall[]},
-    fetchFunc?: FetchFunc,
-    prevBody?: OllamaChat
-  ): Promise<ResponseI> {
-    if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [ollama](https://deepchat.dev/docs/directConnection/ollama) object.'
-      );
+  private async handleTools(tools: {tool_calls: OllamaToolCall[]}, prevBody?: OllamaChat): Promise<ResponseI> {
+    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: JSON.stringify(call.function.arguments)};
     });
-    const handlerResponse = await this._functionHandler?.(functions);
-    if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
-        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
-        if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
-        return processedResponse;
-      }
-      throw Error('Function tool response must be an array or contain a text property');
-    }
-    const responses = await Promise.all(handlerResponse);
+    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
     bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: ''});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
@@ -172,19 +150,8 @@ export class OllamaIO extends DirectServiceIO {
           content: resp.response,
         });
       });
-      try {
-        if (this.stream && this._messages) {
-          Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
-        }
-        let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = (await this.deepChat.responseInterceptor?.(result)) || result;
-        if (result.error) throw result.error.message;
-        return {text: result.message?.content || ''};
-      } catch (e) {
-        this.asyncCallInProgress = false;
-        throw e;
-      }
+
+      return this.makeAnotherRequest(bodyCp, this._messages);
     }
     throw Error('Function tool response must be an array or contain a text property');
   }

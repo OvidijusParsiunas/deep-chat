@@ -5,9 +5,9 @@ import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {FetchFunc, RequestUtils} from './requestUtils';
 import {Stream as StreamI} from '../../types/stream';
 import {CustomHandler} from './customHandler';
+import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
 
 type SimulationSH = Omit<StreamHandlers, 'abortStream'> & {abortStream: {abort: () => void}};
@@ -24,7 +24,6 @@ export class Stream {
     if (io.connectSettings?.handler) return CustomHandler.stream(io, interceptedBody, messages);
     if (io.connectSettings?.url === Demo.URL) return Demo.requestStream(messages, io);
     const stream = new MessageStream(messages, io.stream);
-    const fetchFunc = RequestUtils.fetch.bind(this, io, interceptedHeaders, stringifyBody);
     const reqBody = {
       method: io.connectSettings?.method || 'POST',
       headers: interceptedHeaders,
@@ -32,16 +31,16 @@ export class Stream {
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
     };
     if (typeof io.stream === 'object' && io.stream.readable) {
-      Stream.handleReadableStream(io, messages, stream, reqBody, canBeEmpty, fetchFunc, interceptedBody);
+      Stream.handleReadableStream(io, messages, stream, reqBody, canBeEmpty, interceptedBody);
     } else {
-      Stream.handleEventStream(io, messages, stream, reqBody, canBeEmpty, fetchFunc, interceptedBody);
+      Stream.handleEventStream(io, messages, stream, reqBody, canBeEmpty, interceptedBody);
     }
     return stream;
   }
 
   // prettier-ignore
   private static handleReadableStream(io: ServiceIO, messages: Messages, stream: MessageStream,
-      reqBody: RequestInit, canBeEmpty: boolean, fetchFunc?: FetchFunc, interceptedBody?: object) {
+      reqBody: RequestInit, canBeEmpty: boolean, interceptedBody?: object) {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     let aborted = false;
     fetch(io.connectSettings?.url || io.url || '', reqBody).then(async (response) => {
@@ -57,7 +56,7 @@ export class Stream {
           const chunk = decoder.decode(value, { stream: true });
           const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
           const objEventData = typeof finalEventData === 'object' ? finalEventData : {text: chunk};
-          Stream.handleMessage(io, messages, stream, objEventData, fetchFunc, interceptedBody);
+          Stream.handleMessage(io, messages, stream, objEventData, interceptedBody);
         } else {
           Stream.handleClose(io, stream, onClose, canBeEmpty);
         }
@@ -72,7 +71,7 @@ export class Stream {
 
   // prettier-ignore
   private static handleEventStream(io: ServiceIO, messages: Messages, stream: MessageStream,
-      reqBody: FetchEventSourceInit, canBeEmpty: boolean, fetchFunc?: FetchFunc, interceptedBody?: object) {
+      reqBody: FetchEventSourceInit, canBeEmpty: boolean, interceptedBody?: object) {
     const {onOpen, onClose, abortStream} = io.streamHandlers;
     fetchEventSource(io.connectSettings?.url || io.url || '', {
       ...reqBody,
@@ -93,7 +92,7 @@ export class Stream {
             eventData = {};
           }
           const finalEventData = (await io.deepChat.responseInterceptor?.(eventData)) || eventData;
-          Stream.handleMessage(io, messages, stream, finalEventData, fetchFunc, interceptedBody);
+          Stream.handleMessage(io, messages, stream, finalEventData, interceptedBody);
         }
       },
       onerror(err) {
@@ -111,8 +110,8 @@ export class Stream {
 
   //prettier-ignore
   private static handleMessage(io: ServiceIO, messages: Messages, stream: MessageStream,
-      eventData: object, fetchFunc?: FetchFunc, interceptedBody?: object) {
-    io.extractResultData?.(eventData, fetchFunc, interceptedBody)
+      eventData: object, interceptedBody?: object) {
+    io.extractResultData?.(eventData, interceptedBody)
       .then((result?: ResponseI) => {
         // do not to stop the stream on one message failure to give other messages a change to display
         Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
@@ -124,8 +123,7 @@ export class Stream {
   private static handleError(io: ServiceIO, messages: Messages, err: any) {
     if (messages.isLastMessageError()) return;
     // allowing extractResultData to attempt extract error message and throw it
-    io
-      .extractResultData?.(err)
+    io.extractResultData?.(err)
       .then(() => {
         RequestUtils.displayError(messages, err);
       })
@@ -135,7 +133,10 @@ export class Stream {
   }
 
   private static handleClose(io: ServiceIO, stream: MessageStream, onClose: () => void, canBeEmpty: boolean) {
-    if (io.asyncCallInProgress) return;
+    if (io.asyncCallInProgress) {
+      io.asyncCallInProgress = false;
+      return;
+    }
     try {
       stream.finaliseStreamedMessage();
       onClose();

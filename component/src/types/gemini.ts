@@ -1,3 +1,4 @@
+import {ChatFunctionHandler} from './openAI';
 import {GenericObject} from './object';
 
 export interface GeminiGeneration {
@@ -14,4 +15,16 @@ export interface GeminiGeneration {
 export interface Gemini extends GeminiGeneration {
   model?: string;
   systemInstruction?: string;
+  function_handler?: ChatFunctionHandler;
+  tools?: {
+    functionDeclarations: {
+      name: string;
+      description: string;
+      parameters: {
+        type: string;
+        properties: object;
+        required?: string[];
+      };
+    }[];
+  }[];
 }

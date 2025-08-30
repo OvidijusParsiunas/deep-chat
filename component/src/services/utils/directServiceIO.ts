@@ -1,7 +1,10 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
+import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BuildHeadersFunc} from '../../types/headers';
+import {Stream} from '../../utils/HTTP/stream';
 import {BaseServiceIO} from './baseServiceIO';
 import {Connect} from '../../types/connect';
 import {APIKey} from '../../types/APIKey';
@@ -12,6 +15,7 @@ export class DirectServiceIO extends BaseServiceIO {
   insertKeyPlaceholderText = 'API Key';
   keyHelpUrl = '';
   sessionId?: string;
+  asyncCallInProgress = false;
   private readonly _keyVerificationDetails: KeyVerificationDetails;
   private readonly _buildHeadersFunc: BuildHeadersFunc;
 
@@ -56,5 +60,37 @@ export class DirectServiceIO extends BaseServiceIO {
 
   override isDirectConnection() {
     return true;
+  }
+
+  protected async callToolFunction(functionHandler: ChatFunctionHandler, functions: FunctionsDetails) {
+    this.asyncCallInProgress = true;
+    const handlerResponse = await functionHandler(functions);
+    if (!Array.isArray(handlerResponse)) {
+      if (handlerResponse.text) {
+        const response = {text: handlerResponse.text};
+        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
+        if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
+        return {processedResponse};
+      }
+      throw Error('Function tool response must be an array or contain a text property');
+    }
+    const responses = await Promise.all(handlerResponse);
+    return {responses};
+  }
+
+  protected makeAnotherRequest(body: object, messages?: Messages) {
+    try {
+      if (messages) {
+        if (this.stream) {
+          Stream.request(this, body, messages);
+        } else {
+          HTTPRequest.request(this, body, messages);
+        }
+      }
+      return {text: ''};
+    } catch (e) {
+      this.asyncCallInProgress = false;
+      throw e;
+    }
   }
 }

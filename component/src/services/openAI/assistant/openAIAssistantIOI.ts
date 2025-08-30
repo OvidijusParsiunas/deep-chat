@@ -5,6 +5,7 @@ import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
+import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {History} from '../../../views/chat/messages/history/history';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
 import {Messages} from '../../../views/chat/messages/messages';
@@ -296,10 +297,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
     if (!this.functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [openAI](https://deepchat.dev/docs/directConnection/openAI#Assistant) object.'
-      );
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};

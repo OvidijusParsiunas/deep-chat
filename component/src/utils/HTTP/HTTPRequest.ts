@@ -22,8 +22,7 @@ export class HTTPRequest {
     if (io.connectSettings?.handler) return CustomHandler.request(io, interceptedBody, messages);
     if (io.connectSettings?.url === Demo.URL) return Demo.request(io, messages);
     let responseValid = true;
-    const fetchFunc = RequestUtils.fetch.bind(this, io, headers, stringifyBody);
-    fetchFunc(interceptedBody).then((response) => {
+    RequestUtils.fetch(io, headers, stringifyBody, interceptedBody).then((response) => {
         responseValid = !!response.ok;
         return response;
       })
@@ -31,12 +30,15 @@ export class HTTPRequest {
       .then(async (result: Response) => {
         if (!io.extractResultData) return; // this return should theoretically not execute
         const finalResult = (await io.deepChat.responseInterceptor?.(result)) || result;
-        const resultData = await io.extractResultData(finalResult, fetchFunc, interceptedBody);
+        const resultData = await io.extractResultData(finalResult, interceptedBody);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
         if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
-        if (resultData.makingAnotherRequest) return;
+        if (resultData.makingAnotherRequest || io.asyncCallInProgress) {
+          io.asyncCallInProgress = false;
+          return;
+        }
         if (Stream.isSimulatable(io.stream, resultData)) {
           Stream.simulate(messages, io.streamHandlers, resultData);
         } else {

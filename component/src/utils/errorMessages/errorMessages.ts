@@ -57,4 +57,5 @@ export const ErrorMessages = {
   INVALID_STREAM_EVENT_MIX: 'Cannot mix {text: string} and {html: string} responses.',
   NO_VALID_STREAM_EVENTS_SENT: `No valid stream events were sent.\n${INVALID_STREAM_EVENT}`,
   READABLE_STREAM_CONNECTION_ERROR: 'Readable Stream connection error.',
+  DEFINE_FUNCTION_HANDLER: 'Please define a `function_handler` property inside the service config.',
 };

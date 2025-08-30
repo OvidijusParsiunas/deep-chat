@@ -1,6 +1,16 @@
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
 interface GeminiContent {
-  parts: {text?: string}[];
+  parts: {
+    text?: string;
+    inlineData?: {
+      mimeType: string;
+      data: string;
+    };
+    functionCall?: {
+      name: string;
+      args: object;
+    };
+  }[];
   role?: string;
 }
 

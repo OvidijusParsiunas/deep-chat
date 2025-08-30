@@ -1,6 +1,6 @@
 import {GroqResult, GroqToolCall, ToolAPI, GroqChoice} from '../../types/groqResult';
 import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -23,7 +23,6 @@ export class GroqChatIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Invalid', 'property'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: GroqToolCall[];
-  asyncCallInProgress = false;
   private readonly _systemMessage: string = 'You are a helpful assistant.';
   private _messages?: Messages;
 
@@ -80,31 +79,26 @@ export class GroqChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(
-    result: GroqResult,
-    fetchFunc?: FetchFunc,
-    prevBody?: GroqRequestBody
-  ): Promise<ResponseI> {
+  override async extractResultData(result: GroqResult, prevBody?: GroqRequestBody): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices?.[0]?.delta) {
-      return this.extractStreamResult(result.choices[0], fetchFunc, prevBody);
+      return this.extractStreamResult(result.choices[0], prevBody);
     }
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleTools(result.choices[0].message, fetchFunc, prevBody);
+        return this.handleTools(result.choices[0].message, prevBody);
       }
       return {text: result.choices[0].message.content || ''};
     }
     return {text: ''};
   }
 
-  private async extractStreamResult(choice: GroqChoice, fetchFunc?: FetchFunc, prevBody?: GroqRequestBody) {
+  private async extractStreamResult(choice: GroqChoice, prevBody?: GroqRequestBody) {
     const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls') {
-      this.asyncCallInProgress = true;
       const tools = {tool_calls: this._streamToolCalls};
       this._streamToolCalls = undefined;
-      return this.handleTools(tools, fetchFunc, prevBody);
+      return this.handleTools(tools, prevBody);
     } else if (delta?.tool_calls) {
       if (!this._streamToolCalls) {
         this._streamToolCalls = delta.tool_calls;
@@ -114,33 +108,21 @@ export class GroqChatIO extends DirectServiceIO {
         });
       }
     }
-    this.asyncCallInProgress = false;
     return {text: delta?.content || ''};
   }
 
   // https://console.groq.com/docs/tool-use
-  private async handleTools(tools: ToolAPI, fetchFunc?: FetchFunc, prevBody?: GroqRequestBody): Promise<ResponseI> {
-    if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [groq](https://deepchat.dev/docs/directConnection/groq) object.'
-      );
+  private async handleTools(tools: ToolAPI, prevBody?: GroqRequestBody): Promise<ResponseI> {
+    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this._functionHandler?.(functions);
-    if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
-        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
-        if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
-        return processedResponse;
-      }
-      throw Error('Function tool response must be an array or contain a text property');
-    }
-    const responses = await Promise.all(handlerResponse);
+    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
     // When making a tool call, only using latest user prompt as for some reason on multiple requests it responds to first
     bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
     if (this._systemMessage) bodyCp.messages.unshift({role: 'system', content: this._systemMessage});
@@ -155,19 +137,8 @@ export class GroqChatIO extends DirectServiceIO {
           content: resp.response,
         });
       });
-      try {
-        if (this.stream && this._messages) {
-          Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
-        }
-        let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = (await this.deepChat.responseInterceptor?.(result)) || result;
-        if (result.error) throw result.error.message;
-        return {text: result.choices[0].message.content || ''};
-      } catch (e) {
-        this.asyncCallInProgress = false;
-        throw e;
-      }
+
+      return this.makeAnotherRequest(bodyCp, this._messages);
     }
     throw Error('Function tool response must be an array or contain a text property');
   }

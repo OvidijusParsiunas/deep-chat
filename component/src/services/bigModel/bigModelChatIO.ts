@@ -1,6 +1,6 @@
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
-import {FetchFunc, RequestUtils} from '../../utils/HTTP/requestUtils';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -29,7 +29,6 @@ export class BigModelChatIO extends DirectServiceIO {
   url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
   permittedErrorPrefixes = ['Authorization', 'authentication_error'];
   _functionHandler?: ChatFunctionHandler;
-  asyncCallInProgress = false;
   private _messages?: Messages;
   private readonly _systemMessage: string = 'You are a helpful assistant.';
 
@@ -106,20 +105,16 @@ export class BigModelChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(
-    result: BigModelResult,
-    fetchFunc?: FetchFunc,
-    prevBody?: BigModelChat
-  ): Promise<ResponseI> {
+  override async extractResultData(result: BigModelResult, prevBody?: BigModelChat): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (result.choices.length > 0) {
       if ((result.choices[0] as BigModelStreamEvent).delta !== undefined) {
-        return this.extractStreamResult(result.choices[0] as BigModelStreamEvent, fetchFunc, prevBody);
+        return this.extractStreamResult(result.choices[0] as BigModelStreamEvent, prevBody);
       }
       if ((result.choices[0] as BigModelNormalResult).message !== undefined) {
         const message = (result.choices[0] as BigModelNormalResult).message;
         if (message.tool_calls) {
-          return this.handleTools({tool_calls: message.tool_calls}, fetchFunc, prevBody);
+          return this.handleTools({tool_calls: message.tool_calls}, prevBody);
         }
         return {text: message.content};
       }
@@ -127,7 +122,7 @@ export class BigModelChatIO extends DirectServiceIO {
     return {text: ''};
   }
 
-  private async extractStreamResult(choice: BigModelStreamEvent, fetchFunc?: FetchFunc, prevBody?: BigModelChat) {
+  private async extractStreamResult(choice: BigModelStreamEvent, prevBody?: BigModelChat) {
     const {delta, finish_reason} = choice;
     const lastMessage = this._messages?.messageToElements[this._messages.messageToElements.length - 2];
     // This is used when AI responds first responds with something like "Let me think about this"
@@ -141,42 +136,25 @@ export class BigModelChatIO extends DirectServiceIO {
 
     if (finish_reason === 'tool_calls') {
       if (delta.tool_calls) {
-        this.asyncCallInProgress = true;
         const tools = {tool_calls: delta.tool_calls};
-        return this.handleTools(tools, fetchFunc, prevBody);
+        return this.handleTools(tools, prevBody);
       }
       return {text: delta?.content || ''};
     }
-    this.asyncCallInProgress = false;
     return {text: delta?.content || ''};
   }
 
-  private async handleTools(
-    tools: {tool_calls?: BigModelToolCall[]},
-    fetchFunc?: FetchFunc,
-    prevBody?: BigModelChat
-  ): Promise<ResponseI> {
-    if (!tools.tool_calls || !fetchFunc || !prevBody || !this._functionHandler) {
-      throw Error(
-        'Please define the `function_handler` property inside' +
-          ' the [bigModel](https://deepchat.dev/docs/directConnection/bigModel#Chat) object.'
-      );
+  private async handleTools(tools: {tool_calls?: BigModelToolCall[]}, prevBody?: BigModelChat): Promise<ResponseI> {
+    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this._functionHandler?.(functions);
-    if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
-        const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
-        if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
-        return processedResponse;
-      }
-      throw Error('Function tool response must be an array or contain a text property');
-    }
-    const responses = await Promise.all(handlerResponse);
+    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
     bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
@@ -188,19 +166,8 @@ export class BigModelChatIO extends DirectServiceIO {
           content: resp.response,
         });
       });
-      try {
-        if (this.stream && this._messages) {
-          Stream.request(this, bodyCp, this._messages);
-          return {text: ''};
-        }
-        let result = await fetchFunc?.(bodyCp).then((resp) => RequestUtils.processResponseByType(resp));
-        result = (await this.deepChat.responseInterceptor?.(result)) || result;
-        if (result.error) throw result.error.message;
-        return {text: result.choices[0].message.content || ''};
-      } catch (e) {
-        this.asyncCallInProgress = false;
-        throw e;
-      }
+
+      return this.makeAnotherRequest(bodyCp, this._messages);
     }
     throw Error('Function tool response must be an array or contain a text property');
   }
