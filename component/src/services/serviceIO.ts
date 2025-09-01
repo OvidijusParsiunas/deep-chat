@@ -89,10 +89,7 @@ export interface ServiceIO {
 
   callAPI(requestContents: RequestContents, messages: Messages): Promise<void>;
 
-  extractResultData?(
-    result: object,
-    previousBody?: object
-  ): Promise<InterfacesUnion<Response | {makingAnotherRequest: true}>>;
+  extractResultData?(result: object, previousBody?: object): Promise<Response>;
 
   extractPollResultData?(result: object): PollResult;
 

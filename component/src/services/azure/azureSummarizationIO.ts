@@ -2,6 +2,7 @@ import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/az
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
@@ -66,19 +67,20 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     this.messages = messages;
   }
 
-  override async extractResultData(result: Response & AzureAuthenticationError): Promise<{makingAnotherRequest: true}> {
+  override async extractResultData(result: Response & AzureAuthenticationError): Promise<ResponseI> {
     if (result.error) throw result.error.message;
     if (this.messages && this.completionsHandlers) {
+      this.asyncCallInProgress = true;
       const jobURL = result.headers.get('operation-location') as string;
       const requestInit = {method: 'GET', headers: this.connectSettings?.headers as GenericObject<string>};
       HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
-    return {makingAnotherRequest: true};
+    return {text: ''};
   }
 
   async extractPollResultData(result: AzureSummarizationResult): PollResult {
     if (result.error) throw result.error;
-    if (result.status === 'running') return {timeoutMS: 2000};
+    if (result.status === 'running' || result.status === 'notStarted') return {timeoutMS: 2000};
     if (result.errors.length > 0) throw result.errors[0];
     if (result.tasks.items[0].results.errors.length > 0) throw result.tasks.items[0].results.errors[0];
     let textResult = '';

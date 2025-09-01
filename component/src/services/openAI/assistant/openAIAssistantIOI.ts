@@ -229,9 +229,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     this._searchedForThreadId = true;
   }
 
-  // prettier-ignore
-  override async extractResultData(result: OpenAIAssistantInitReqResult):
-      Promise<ResponseI | {makingAnotherRequest: true}> {
+  override async extractResultData(result: OpenAIAssistantInitReqResult): Promise<ResponseI> {
     if (this._waitingForStreamResponse || (this._isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
@@ -241,12 +239,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       }
       throw result.error.message;
     }
+    this.asyncCallInProgress = true;
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
     const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this._messages as Messages); // poll for run status
-    return {makingAnotherRequest: true};
+    return {text: ''};
   }
 
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
@@ -335,12 +334,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       return this.parseStreamResult(result);
     }
     if (this._isSSEStream && this.sessionId) {
+      this.asyncCallInProgress = true;
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
-    return {makingAnotherRequest: true};
+    return {text: ''};
   }
 
   // prettier-ignore
@@ -370,7 +370,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (!this.sessionId && result.thread_id) {
       this.sessionId = result.thread_id;
     }
-    return {makingAnotherRequest: true};
+    return {text: ''};
   }
 
   // https://platform.openai.com/docs/api-reference/assistants-streaming

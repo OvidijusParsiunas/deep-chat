@@ -15,7 +15,7 @@ export interface AzureAuthenticationError {
 export type AzureSummarizationResult = InterfacesUnion<
   | {
       errors: string[];
-      status: 'succeeded' | 'running';
+      status: 'succeeded' | 'running' | 'notStarted';
       tasks: {
         items: [{status: string; results: {documents: [{sentences: [{text: string}]; warnings: []}]; errors: string[]}}];
       };
