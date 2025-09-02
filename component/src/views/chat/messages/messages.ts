@@ -2,19 +2,20 @@ import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesIn
 import {HiddenFileAttachments} from '../input/fileAttachments/fileAttachments';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
+import {IntroMessage, LoadingStyles} from '../../../types/messages';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {ErrorMessageOverrides} from '../../../types/error';
+import {LoadingToggleConfig} from '../../../types/loading';
 import {ResponseI} from '../../../types/responseInternal';
 import {FileMessageUtils} from './utils/fileMessageUtils';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {LoadingHistory} from './history/loadingHistory';
 import {ErrorResp} from '../../../types/errorInternal';
 import {Demo, DemoResponse} from '../../../types/demo';
-import {IntroMessage} from '../../../types/messages';
 import {MessageStream} from './stream/messageStream';
 import {IntroPanel} from '../introPanel/introPanel';
 import {WebModel} from '../../../webModel/webModel';
@@ -47,6 +48,7 @@ export class Messages extends MessagesBase {
   private readonly _displayServiceErrorMessages?: boolean;
   private _introMessage?: IntroMessage | IntroMessage[];
   private _hiddenAttachments?: HiddenFileAttachments;
+  private _activeLoadingConfig?: LoadingToggleConfig;
   customDemoResponse?: DemoResponse;
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
@@ -84,18 +86,24 @@ export class Messages extends MessagesBase {
   }
 
   private static getDefaultDisplayLoadingMessage(deepChat: DeepChat, serviceIO: ServiceIO) {
-    // if displayLoadingBubble is {} then treat it as true.
-    if (serviceIO.websocket) {
-      return !!deepChat.displayLoadingBubble;
+    if (typeof deepChat.displayLoadingBubble === 'object' && !!deepChat.displayLoadingBubble.toggle) {
+      return false;
     }
+    if (serviceIO.websocket) {
+      return typeof deepChat.displayLoadingBubble === 'object' ? false : !!deepChat.displayLoadingBubble;
+    }
+    // if displayLoadingBubble is {} then treat it as true.
     return (typeof deepChat.displayLoadingBubble === 'object' || deepChat.displayLoadingBubble) ?? true;
   }
 
-  private setLoadingToggle() {
+  private setLoadingToggle(config?: LoadingToggleConfig) {
     const lastMessageEls = this.messageElementRefs[this.messageElementRefs.length - 1];
-    if (MessagesBase.isLoadingMessage(lastMessageEls)) {
+    if (!config && MessagesBase.isLoadingMessage(lastMessageEls)) {
       this.removeLastMessage();
+      delete this._activeLoadingConfig;
     } else {
+      if (this._activeLoadingConfig) this.removeLastMessage();
+      this._activeLoadingConfig = config || {};
       this.addLoadingMessage(true);
     }
   }
@@ -220,6 +228,7 @@ export class Messages extends MessagesBase {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
       if (!isHistory) this.browserStorage?.addMessages(this.messageToElements.map(([msg]) => msg));
     }
+    if (this._activeLoadingConfig) this.addLoadingMessage(false);
     return message;
   }
 
@@ -310,27 +319,31 @@ export class Messages extends MessagesBase {
     if (this.isLastMessageError()) MessageUtils.getLastMessageElement(this.elementRef).remove();
   }
 
-  private addDefaultLoadingMessage() {
-    const messageElements = this.createMessageElements('', MessageUtils.AI_ROLE);
+  private addDefaultLoadingMessage(styles?: LoadingStyles, role = MessageUtils.AI_ROLE) {
+    const messageElements = this.createMessageElements('', role);
     const {bubbleElement} = messageElements;
     messageElements.bubbleElement.classList.add(LoadingStyle.DOTS_CONTAINER_CLASS);
     const dotsElement = document.createElement('div');
     dotsElement.classList.add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
-    LoadingStyle.setDots(bubbleElement, this.messageStyles);
+    LoadingStyle.setDots(bubbleElement, styles);
     return messageElements;
   }
 
+  // prettier-ignore
   public addLoadingMessage(override = false) {
-    const lastMessageEls = this.messageElementRefs[this.messageElementRefs.length - 1];
-    if (MessagesBase.isLoadingMessage(lastMessageEls) || (!override && !this._isLoadingMessageAllowed)) return;
-    const html = this.messageStyles?.loading?.message?.html;
+    if (MessagesBase.isLoadingMessage(this.messageElementRefs[this.messageElementRefs.length - 1]) ||
+      (!this._activeLoadingConfig && !override && !this._isLoadingMessageAllowed)) return;
+    const role = this._activeLoadingConfig?.role || MessageUtils.AI_ROLE;
+    const style = this._activeLoadingConfig?.style || this.messageStyles?.loading?.message;
+    const html = style?.html;
     const messageElements = html
-      ? HTMLMessages.createElements(this, html, MessageUtils.AI_ROLE, false)
-      : this.addDefaultLoadingMessage();
+      ? HTMLMessages.createElements(this, html, role, false)
+      : this.addDefaultLoadingMessage(style, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
     messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
-    this.applyCustomStyles(messageElements, MessageUtils.AI_ROLE, false, this.messageStyles?.loading?.message?.styles);
+    this.applyCustomStyles(messageElements, role, false, style?.styles);
+    this.avatar?.getAvatarContainer(messageElements.innerContainer)?.classList.add('loading-avatar-container');
     if (!this.focusMode) ElementUtils.scrollToBottom(this.elementRef);
   }
 

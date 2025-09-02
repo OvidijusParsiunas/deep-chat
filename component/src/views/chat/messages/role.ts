@@ -5,15 +5,19 @@ export class Role {
     this.className = className;
   }
 
+  public getAvatarContainer(innerContainer: HTMLElement) {
+    return innerContainer.getElementsByClassName(this.className)[0] as HTMLElement;
+  }
+
   public tryHide(innerContainer: HTMLElement) {
-    (innerContainer.getElementsByClassName(this.className)[0] as HTMLElement).style.visibility ||= 'hidden';
+    this.getAvatarContainer(innerContainer).style.visibility ||= 'hidden';
   }
 
   public tryReveal(innerContainer: HTMLElement) {
-    (innerContainer.getElementsByClassName(this.className)[0] as HTMLElement).style.visibility = '';
+    this.getAvatarContainer(innerContainer).style.visibility = '';
   }
 
   public trySoftRem(innerContainer: HTMLElement) {
-    (innerContainer.getElementsByClassName(this.className)[0] as HTMLElement).classList.add('role-hidden');
+    this.getAvatarContainer(innerContainer).classList.add('role-hidden');
   }
 }

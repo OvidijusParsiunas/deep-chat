@@ -90,18 +90,19 @@ export class MessageUtils {
   }
 
   public static getLastMessageBubbleElement(messagesEl: HTMLElement) {
-    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).map((element) => {
-      return Array.from(element?.children || []).find((element) => element.classList.contains('message-bubble'));
-    })?.[0];
+    return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).find((element) => {
+      return element.classList.contains('message-bubble');
+    });
   }
 
   public static getLastMessageElement(messagesEl: HTMLElement) {
-    return messagesEl.children[messagesEl.children.length - 1];
+    const messageBubbles = messagesEl.children[messagesEl.children.length - 1]?.children;
+    return messageBubbles?.[messageBubbles.length - 1];
   }
 
   public static addRoleElements(bubbleElement: HTMLElement, role: string, avatar?: Avatar, name?: Name) {
-    avatar?.addBesideMsg(bubbleElement, role);
-    name?.addBesideMsg(bubbleElement, role);
+    avatar?.addBesideBubble(bubbleElement, role);
+    name?.addBesideBubble(bubbleElement, role);
   }
 
   public static hideRoleElements(innerContainer: HTMLElement, avatar?: Avatar, name?: Name) {

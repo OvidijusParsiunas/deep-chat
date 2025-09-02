@@ -10,7 +10,7 @@ export class Name extends Role {
     this._names = names;
   }
 
-  public addBesideMsg(messageText: HTMLElement, role: string) {
+  public addBesideBubble(messageText: HTMLElement, role: string) {
     const customConfig = typeof this._names === 'boolean' ? {} : this._names;
     const nameElement = this.createName(role, customConfig);
     const position = Name.getPosition(role, customConfig);

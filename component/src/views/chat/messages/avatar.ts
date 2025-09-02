@@ -12,7 +12,7 @@ export class Avatar extends Role {
     this._avatars = avatars;
   }
 
-  public addBesideMsg(messageText: HTMLElement, role: string) {
+  public addBesideBubble(messageText: HTMLElement, role: string) {
     const styles = typeof this._avatars === 'boolean' ? undefined : this._avatars;
     const avatarContainerElement = this.createAvatar(role, styles);
     const position = this.getPosition(role, styles);

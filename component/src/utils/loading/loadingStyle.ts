@@ -1,4 +1,4 @@
-import {MessageStyles} from '../../types/messages';
+import {LoadingStyles} from '../../types/messages';
 import {CustomStyle} from '../../types/styles';
 
 export class LoadingStyle {
@@ -16,9 +16,9 @@ export class LoadingStyle {
     return `#${hex}`;
   }
 
-  public static setDots(bubbleElement: HTMLElement, messageStyles?: MessageStyles) {
-    if (messageStyles?.loading?.message?.styles?.bubble?.color) {
-      const color = LoadingStyle.colorToHex(messageStyles.loading.message.styles.bubble.color);
+  public static setDots(bubbleElement: HTMLElement, styles?: LoadingStyles) {
+    if (styles?.styles?.bubble?.color) {
+      const color = LoadingStyle.colorToHex(styles.styles.bubble.color);
       bubbleElement.style.setProperty('--loading-message-color', color);
       bubbleElement.style.setProperty('--loading-message-color-fade', `${color}33`);
     } else {
