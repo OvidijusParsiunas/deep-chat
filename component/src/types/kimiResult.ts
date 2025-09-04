@@ -1,3 +1,5 @@
+import {KimiToolCall} from './kimiInternal';
+
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
 export type KimiResult = {
   id: string;
@@ -8,13 +10,15 @@ export type KimiResult = {
     index: number;
     message?: {
       role: 'assistant';
-      content: string;
+      content: string | null;
+      tool_calls?: KimiToolCall[];
     };
     delta?: {
       role?: 'assistant';
       content?: string;
+      tool_calls?: KimiToolCall[];
     };
-    finish_reason?: string;
+    finish_reason?: string | 'tool_calls';
   }>;
   usage?: {
     prompt_tokens: number;
@@ -26,4 +30,8 @@ export type KimiResult = {
     type: string;
     code?: string;
   };
+};
+
+export type ToolAPI = {
+  tool_calls?: KimiToolCall[];
 };
