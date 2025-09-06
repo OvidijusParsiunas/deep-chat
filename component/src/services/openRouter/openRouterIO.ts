@@ -5,12 +5,12 @@ import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {MessageFile} from '../../types/messageFile';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {OpenRouterUtils} from './utils/openRouterUtils';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {MessageFile} from '../../types/messageFile';
 import {OpenRouter} from '../../types/openRouter';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
@@ -23,6 +23,8 @@ import {
 } from '../../types/openRouterInternal';
 
 // https://openrouter.ai/docs/api-reference/overview
+// WORK - add a panel stating that you can upload images and ask the model to generate
+// images (gemini-2.5-flash-image-preview)
 export class OpenRouterIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenRouter API Key';
   override keyHelpUrl = 'https://openrouter.ai/keys';
@@ -68,9 +70,30 @@ export class OpenRouterIO extends DirectServiceIO {
       .filter((content) => content.image_url.url.length > 0);
   }
 
+  private static getAudioContent(files: MessageFile[]): OpenRouterContent[] {
+    return files
+      .filter((file) => file.type === 'audio')
+      .map((file) => {
+        const base64Data = file.src?.split(',')[1];
+        const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] as 'wav' | 'mp3';
+
+        return {
+          type: 'input_audio' as const,
+          input_audio: {
+            data: base64Data || '',
+            format: format === 'wav' || format === 'mp3' ? format : 'mp3',
+          },
+        };
+      })
+      .filter((content) => content.input_audio.data.length > 0);
+  }
+
   private static getContent(message: MessageContentI): string | OpenRouterContent[] {
     if (message.files && message.files.length > 0) {
-      const content: OpenRouterContent[] = OpenRouterIO.getImageContent(message.files);
+      const content: OpenRouterContent[] = [
+        ...OpenRouterIO.getImageContent(message.files),
+        ...OpenRouterIO.getAudioContent(message.files),
+      ];
       if (message.text && message.text.trim().length > 0) {
         content.unshift({type: 'text', text: message.text});
       }
@@ -123,6 +146,19 @@ export class OpenRouterIO extends DirectServiceIO {
       if (choice?.delta) {
         return this.extractStreamResult(choice, prevBody);
       }
+
+      // Handle streaming response with images
+      if (result.message?.images) {
+        const files = result.message.images.map((image) => ({
+          src: image.image_url.url,
+        }));
+
+        return {
+          text: result.message.content || '',
+          files,
+        };
+      }
+
       return {text: ''};
     }
 
@@ -133,7 +169,16 @@ export class OpenRouterIO extends DirectServiceIO {
         if (choice.message.tool_calls) {
           return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
         }
-        return {text: choice.message.content || ''};
+
+        const files =
+          choice.message.images?.map((image) => ({
+            src: image.image_url.url,
+          })) || [];
+
+        return {
+          text: choice.message.content || '',
+          files,
+        };
       }
     }
 
@@ -142,6 +187,17 @@ export class OpenRouterIO extends DirectServiceIO {
 
   private async extractStreamResult(choice: OpenRouterStreamEvent['choices'][0], prevBody?: OpenRouter) {
     const {delta, finish_reason} = choice;
+    // Handle streaming response with images
+    if (delta?.images) {
+      const files = delta.images.map((image) => ({
+        src: image.image_url.url,
+      }));
+
+      return {
+        text: delta.content || '',
+        files,
+      };
+    }
     if (finish_reason === 'tool_calls') {
       const tools = {tool_calls: this._streamToolCalls};
       this._streamToolCalls = undefined;
