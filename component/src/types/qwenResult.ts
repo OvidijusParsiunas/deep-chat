@@ -1,3 +1,5 @@
+import {QwenToolCall} from './qwenInternal';
+
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
 export type QwenResult = {
   id: string;
@@ -8,13 +10,15 @@ export type QwenResult = {
     index: number;
     message?: {
       role: 'assistant';
-      content: string;
+      content: string | null;
+      tool_calls?: QwenToolCall[];
     };
     delta?: {
       role?: 'assistant';
       content?: string;
+      tool_calls?: QwenToolCall[];
     };
-    finish_reason?: string;
+    finish_reason?: 'stop' | 'length' | 'tool_calls' | string;
   }>;
   usage?: {
     prompt_tokens: number;
@@ -27,4 +31,8 @@ export type QwenResult = {
     code?: string;
   };
 };
+
+export interface ToolAPI {
+  tool_calls?: QwenToolCall[];
+}
 
