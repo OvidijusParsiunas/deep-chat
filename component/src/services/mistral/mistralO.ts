@@ -1,4 +1,4 @@
-import {MistralMessage, MistralRequestBody, MistralToolCall} from '../../types/mistralInternal';
+import {MistralMessage, MistralRequestBody, MistralToolCall, MistralContentItem} from '../../types/mistralInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -8,6 +8,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {MistralResult} from '../../types/mistralRsult';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {MessageFile} from '../../types/messageFile';
 import {MistralUtils} from './utils/mistralUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
@@ -46,6 +47,26 @@ export class MistralIO extends DirectServiceIO {
     delete config.key;
   }
 
+  private static getFileContent(files: MessageFile[]): MistralContentItem[] {
+    return files.map((file) => {
+      if (file.type === 'image') {
+        return {type: 'image_url', image_url: file.src || ''};
+      }
+      return {type: 'text', text: `[Unsupported file type: ${file.type}]`};
+    });
+  }
+
+  private static getContent(message: MessageContentI): string | MistralContentItem[] {
+    if (message.files && message.files.length > 0) {
+      const content: MistralContentItem[] = MistralIO.getFileContent(message.files);
+      if (message.text && message.text.trim().length > 0) {
+        content.unshift({type: 'text', text: message.text});
+      }
+      return content;
+    }
+    return message.text || '';
+  }
+
   private preprocessBody(body: MistralRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as MistralRequestBody;
     const processedMessages: MistralMessage[] = MessageLimitUtils.getCharacterLimitMessages(
@@ -53,7 +74,7 @@ export class MistralIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => ({
       role: message.role === 'ai' ? 'assistant' : 'user',
-      content: message.text || '',
+      content: MistralIO.getContent(message),
     }));
     if (this._systemMessage) {
       processedMessages.unshift({role: 'system', content: this._systemMessage});
