@@ -13,9 +13,8 @@ import {CohereIO} from './cohereIO';
 export class CohereChatIO extends CohereIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
-    const apiKey = directConnectionCopy.cohere;
-    super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', {}, apiKey);
     const config = directConnectionCopy.cohere;
+    super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', {}, config);
     if (typeof config === 'object') {
       const canSendMessage = Legacy.processCohere(config);
       this.canSendMessage = () => canSendMessage;

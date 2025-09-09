@@ -30,19 +30,17 @@ export class GeminiIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.gemini;
     const config = directConnectionCopy.gemini;
-    let systemInstruction: string | undefined;
-    super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, apiKey);
-    if (!config) return;
-    if (config.systemInstruction) systemInstruction = config.systemInstruction;
-    const {function_handler} = deepChat.directConnection?.gemini as Gemini;
-    if (function_handler) this._functionHandler = function_handler;
-    if (config.model) {
-      this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
+    super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, config);
+    if (typeof config === 'object') {
+      if (config.systemInstruction) this._systemInstruction = config.systemInstruction;
+      const {function_handler} = deepChat.directConnection?.gemini as Gemini;
+      if (function_handler) this._functionHandler = function_handler;
+      if (config.model) {
+        this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
+      }
+      this.cleanConfig(config);
     }
-    Object.defineProperty(this, '_systemInstruction', {value: systemInstruction, writable: false});
-    this.cleanConfig(config);
     Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
   }

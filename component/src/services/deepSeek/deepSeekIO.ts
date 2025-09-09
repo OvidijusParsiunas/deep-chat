@@ -24,9 +24,8 @@ export class DeepSeekIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.deepSeek;
-    super(deepChat, DeepSeekUtils.buildKeyVerificationDetails(), DeepSeekUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.deepSeek;
+    super(deepChat, DeepSeekUtils.buildKeyVerificationDetails(), DeepSeekUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);

@@ -30,9 +30,8 @@ export class KimiChatIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.kimi;
-    super(deepChat, KimiUtils.buildKeyVerificationDetails(), KimiUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.kimi;
+    super(deepChat, KimiUtils.buildKeyVerificationDetails(), KimiUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.kimi as Kimi)?.function_handler;
