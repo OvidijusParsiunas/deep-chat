@@ -35,18 +35,18 @@ import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
-import {GrokImagesIO} from './grok/grokImagesIO';
 import {WebModel} from '../webModel/webModel';
 import {KimiChatIO} from './kimi/kimiChatIO';
 import {MistralIO} from './mistral/mistralO';
-import {GrokChatIO} from './grok/grokChatIO';
 import {GroqChatIO} from './groq/groqChatIO';
 import {QwenChatIO} from './qwen/qwenChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
 import {OllamaIO} from './ollama/ollamaIO';
+import {XImagesIO} from './x/xImagesIO';
 import {ServiceIO} from './serviceIO';
 import {DeepChat} from '../deepChat';
+import {XChatIO} from './x/xChatIO';
 
 // exercise caution when defining default returns for directConnection as their configs can be undefined
 export class ServiceIOFactory {
@@ -160,11 +160,11 @@ export class ServiceIOFactory {
       if (directConnection.kimi) {
         return new KimiChatIO(deepChat);
       }
-      if (directConnection.grok) {
-        if (directConnection.grok.images) {
-          return new GrokImagesIO(deepChat);
+      if (directConnection.x) {
+        if (directConnection.x.images) {
+          return new XImagesIO(deepChat);
         }
-        return new GrokChatIO(deepChat);
+        return new XChatIO(deepChat);
       }
       if (directConnection.qwen) {
         return new QwenChatIO(deepChat);
