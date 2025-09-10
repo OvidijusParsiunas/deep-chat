@@ -1,11 +1,11 @@
-export type GrokMessage = {
+export type XMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string;
 };
 
-export type GrokRequestBody = {
+export type XRequestBody = {
   model: string;
-  messages: GrokMessage[];
+  messages: XMessage[];
   max_tokens?: number;
   temperature?: number;
   stream?: boolean;

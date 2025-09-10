@@ -1,5 +1,5 @@
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {GrokMessage, GrokRequestBody} from '../../types/grokInternal';
+import {XMessage, XRequestBody} from '../../types/xInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -7,15 +7,15 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {GrokResult} from '../../types/grokResult';
+import {XResult} from '../../types/xResult';
 import {Stream} from '../../utils/HTTP/stream';
-import {GrokUtils} from './utils/grokUtils';
-import {GrokChat} from '../../types/grok';
+import {XUtils} from './utils/xUtils';
+import {XChat} from '../../types/x';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
-export class GrokChatIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Grok API Key';
+export class XChatIO extends DirectServiceIO {
+  override insertKeyPlaceholderText = 'X API Key';
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   url = 'https://api.x.ai/v1/chat/completions';
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
@@ -23,9 +23,9 @@ export class GrokChatIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.grok;
-    super(deepChat, GrokUtils.buildKeyVerificationDetails(), GrokUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.grok?.chat;
+    const apiKey = directConnectionCopy.x;
+    super(deepChat, XUtils.buildKeyVerificationDetails(), XUtils.buildHeaders, apiKey);
+    const config = directConnectionCopy.x?.chat;
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);
@@ -35,13 +35,13 @@ export class GrokChatIO extends DirectServiceIO {
     this.rawBody.model ??= 'grok-3-latest';
   }
 
-  private cleanConfig(config: GrokChat & APIKey) {
+  private cleanConfig(config: XChat & APIKey) {
     delete config.system_prompt;
     delete config.key;
   }
 
-  private preprocessBody(body: GrokRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as GrokRequestBody;
+  private preprocessBody(body: XRequestBody, pMessages: MessageContentI[]) {
+    const bodyCopy = JSON.parse(JSON.stringify(body)) as XRequestBody;
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
       pMessages,
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
@@ -49,10 +49,10 @@ export class GrokChatIO extends DirectServiceIO {
       return {
         content: message.text || '',
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
-      } as GrokMessage;
+      } as XMessage;
     });
 
-    const systemMessage: GrokMessage = {
+    const systemMessage: XMessage = {
       role: 'system',
       content: this._systemMessage,
     };
@@ -73,7 +73,7 @@ export class GrokChatIO extends DirectServiceIO {
     }
   }
 
-  override async extractResultData(result: GrokResult): Promise<ResponseI> {
+  override async extractResultData(result: XResult): Promise<ResponseI> {
     if (result.error) throw result.error.message;
 
     // Handle streaming response

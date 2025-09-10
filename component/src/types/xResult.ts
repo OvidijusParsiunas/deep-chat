@@ -1,4 +1,4 @@
-export type GrokImageResult = {
+export type XImageResult = {
   data: Array<{
     url?: string;
     b64_json?: string;
@@ -9,7 +9,7 @@ export type GrokImageResult = {
   };
 };
 
-export type GrokNormalResult = {
+export type XNormalResult = {
   id: string;
   object: 'chat.completion';
   created: number;
@@ -33,7 +33,7 @@ export type GrokNormalResult = {
   };
 };
 
-export type GrokStreamEvent = {
+export type XStreamEvent = {
   id: string;
   object: 'chat.completion.chunk';
   created: number;
@@ -52,4 +52,4 @@ export type GrokStreamEvent = {
   };
 };
 
-export type GrokResult = GrokNormalResult | GrokStreamEvent;
+export type XResult = XNormalResult | XStreamEvent;

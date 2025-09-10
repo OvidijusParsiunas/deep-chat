@@ -1,14 +1,14 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
-type GrokErrorResponse = {
+type XErrorResponse = {
   error?: {
     type: string;
     message: string;
   };
 };
 
-export class GrokUtils {
+export class XUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
@@ -22,9 +22,9 @@ export class GrokUtils {
     onSuccess: (key: string) => void,
     onFail: (message: string) => void
   ) {
-    const grokResult = result as GrokErrorResponse;
-    if (grokResult.error) {
-      if (grokResult.error.type === 'authentication_error' || grokResult.error.type === 'invalid_request_error') {
+    const xResult = result as XErrorResponse;
+    if (xResult.error) {
+      if (xResult.error.type === 'authentication_error' || xResult.error.type === 'invalid_request_error') {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -38,7 +38,7 @@ export class GrokUtils {
     return {
       url: 'https://api.x.ai/v1/models',
       method: 'GET',
-      handleVerificationResult: GrokUtils.handleVerificationResult,
+      handleVerificationResult: XUtils.handleVerificationResult,
     };
   }
 }
