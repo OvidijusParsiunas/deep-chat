@@ -31,6 +31,7 @@ import {BigModelChatIO} from './bigModel/bigModelChatIO';
 import {TogetherChatIO} from './together/togetherChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
+import {MiniMaxChatIO} from './miniMax/miniMaxChatIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
@@ -153,6 +154,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.deepSeek) {
         return new DeepSeekIO(deepChat);
+      }
+      if (directConnection.miniMax) {
+        return new MiniMaxChatIO(deepChat);
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);

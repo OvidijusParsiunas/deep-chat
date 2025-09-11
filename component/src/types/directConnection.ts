@@ -6,6 +6,7 @@ import {DeepSeek} from './deepSeek';
 import {Together} from './together';
 import {BigModel} from './bigModel';
 import {Mistral} from './mistral';
+import {MiniMax} from './miniMax';
 import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
 import {Gemini} from './gemini';
@@ -15,8 +16,8 @@ import {Ollama} from './ollama';
 import {Azure} from './azure';
 import {Groq} from './groq';
 import {Kimi} from './kimi';
-import {Grok} from './grok';
 import {Qwen} from './qwen';
+import {X} from './x';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -30,8 +31,9 @@ export interface DirectConnection {
   claude?: Claude & APIKey;
   deepSeek?: DeepSeek & APIKey;
   kimi?: Kimi & APIKey;
+  miniMax?: MiniMax & APIKey;
   openRouter?: OpenRouter & APIKey;
-  grok?: Grok & APIKey;
+  x?: X & APIKey;
   qwen?: Qwen & APIKey;
   together?: Together & APIKey;
   bigModel?: BigModel & APIKey;
