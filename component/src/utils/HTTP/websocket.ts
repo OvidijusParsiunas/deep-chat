@@ -74,7 +74,7 @@ export class Websocket {
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
           const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
-          Stream.upsertWFiles(messages, upsertFunc, stream, finalResult);
+          Stream.upsertContent(messages, upsertFunc, stream, finalResult);
         } else {
           const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
           const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');

@@ -35,6 +35,7 @@ export class HTTPRequest {
         if (!responseValid) throw result;
         if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
+        if (resultData.error) throw resultData.error;
         if (io.asyncCallInProgress) {
           io.asyncCallInProgress = false;
           return;
