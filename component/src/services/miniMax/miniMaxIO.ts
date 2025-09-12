@@ -15,7 +15,7 @@ import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 // https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek
-export class MiniMaxChatIO extends DirectServiceIO {
+export class MiniMaxIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'MiniMax API Key';
   override keyHelpUrl = 'https://www.minimaxi.com';
   url = 'https://api.minimax.io/v1/text/chatcompletion_v2';

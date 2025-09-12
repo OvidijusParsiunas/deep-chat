@@ -18,7 +18,7 @@ import {DeepChat} from '../../deepChat';
 import {Kimi} from '../../types/kimi';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
-export class KimiChatIO extends DirectServiceIO {
+export class KimiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Kimi AI API Key';
   override keyHelpUrl = 'https://platform.moonshot.ai/console/api-keys';
   url = 'https://api.moonshot.ai/v1/chat/completions';
@@ -63,7 +63,7 @@ export class KimiChatIO extends DirectServiceIO {
 
   private static getContent(message: MessageContentI): string | KimiContent[] {
     if (message.files && message.files.length > 0) {
-      const content: KimiContent[] = KimiChatIO.getImageContent(message.files);
+      const content: KimiContent[] = KimiIO.getImageContent(message.files);
       if (message.text && message.text.trim().length > 0) {
         content.unshift({type: 'text', text: message.text});
       }
@@ -79,7 +79,7 @@ export class KimiChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: KimiChatIO.getContent(message),
+        content: KimiIO.getContent(message),
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       } as KimiMessage;
     });

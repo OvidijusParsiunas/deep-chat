@@ -31,21 +31,21 @@ import {BigModelChatIO} from './bigModel/bigModelChatIO';
 import {TogetherChatIO} from './together/togetherChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
-import {MiniMaxChatIO} from './miniMax/miniMaxChatIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
+import {MiniMaxIO} from './miniMax/miniMaxIO';
 import {WebModel} from '../webModel/webModel';
-import {KimiChatIO} from './kimi/kimiChatIO';
 import {MistralIO} from './mistral/mistralO';
 import {GroqChatIO} from './groq/groqChatIO';
-import {QwenChatIO} from './qwen/qwenChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
 import {OllamaIO} from './ollama/ollamaIO';
 import {XImagesIO} from './x/xImagesIO';
 import {ServiceIO} from './serviceIO';
+import {QwenIO} from './qwen/qwenIO';
+import {KimiIO} from './kimi/kimiIO';
 import {DeepChat} from '../deepChat';
 import {XChatIO} from './x/xChatIO';
 
@@ -156,13 +156,13 @@ export class ServiceIOFactory {
         return new DeepSeekIO(deepChat);
       }
       if (directConnection.miniMax) {
-        return new MiniMaxChatIO(deepChat);
+        return new MiniMaxIO(deepChat);
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
       }
       if (directConnection.kimi) {
-        return new KimiChatIO(deepChat);
+        return new KimiIO(deepChat);
       }
       if (directConnection.x) {
         if (directConnection.x.images) {
@@ -171,7 +171,7 @@ export class ServiceIOFactory {
         return new XChatIO(deepChat);
       }
       if (directConnection.qwen) {
-        return new QwenChatIO(deepChat);
+        return new QwenIO(deepChat);
       }
       if (directConnection.together) {
         if (directConnection.together.images) {

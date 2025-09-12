@@ -18,7 +18,7 @@ import {DeepChat} from '../../deepChat';
 import {Qwen} from '../../types/qwen';
 
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
-export class QwenChatIO extends DirectServiceIO {
+export class QwenIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Qwen API Key';
   override keyHelpUrl = 'https://www.alibabacloud.com/help/en/model-studio/get-api-key';
   url = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
@@ -63,7 +63,7 @@ export class QwenChatIO extends DirectServiceIO {
 
   private static getContent(message: MessageContentI): string | QwenContent[] {
     if (message.files && message.files.length > 0) {
-      const content: QwenContent[] = QwenChatIO.getImageContent(message.files);
+      const content: QwenContent[] = QwenIO.getImageContent(message.files);
       if (message.text && message.text.trim().length > 0) {
         content.unshift({type: 'text', text: message.text});
       }
@@ -79,7 +79,7 @@ export class QwenChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: QwenChatIO.getContent(message),
+        content: QwenIO.getContent(message),
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       } as QwenMessage;
     });
