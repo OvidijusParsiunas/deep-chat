@@ -31,6 +31,7 @@ import {BigModelChatIO} from './bigModel/bigModelChatIO';
 import {TogetherChatIO} from './together/togetherChatIO';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
+import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {CohereChatIO} from './cohere/cohereChatIO';
@@ -196,6 +197,9 @@ export class ServiceIOFactory {
           return new GroqTextToSpeechIO(deepChat);
         }
         return new GroqChatIO(deepChat);
+      }
+      if (directConnection.perplexity) {
+        return new PerplexityIO(deepChat);
       }
       if (directConnection.ollama) {
         return new OllamaIO(deepChat);

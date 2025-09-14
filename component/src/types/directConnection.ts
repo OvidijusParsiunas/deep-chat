@@ -2,6 +2,7 @@ import {HuggingFace} from './huggingFace';
 import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
 import {OpenRouter} from './openRouter';
+import {Perplexity} from './perplexity';
 import {DeepSeek} from './deepSeek';
 import {Together} from './together';
 import {BigModel} from './bigModel';
@@ -38,5 +39,6 @@ export interface DirectConnection {
   together?: Together & APIKey;
   bigModel?: BigModel & APIKey;
   groq?: Groq & APIKey;
+  perplexity?: Perplexity & APIKey;
   ollama?: Ollama;
 }
