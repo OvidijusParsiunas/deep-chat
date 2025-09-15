@@ -87,7 +87,7 @@ export class CustomHandler {
         CustomHandler.streamError(result.error, stream, io, messages);
         isHandlerActive = false;
       } else {
-        Stream.upsertWFiles(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
+        Stream.upsertContent(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
       }
     };
     io.streamHandlers.abortStream.abort = () => {
@@ -119,7 +119,6 @@ export class CustomHandler {
       internalConfig.isOpen = false;
     };
     const onResponse = async (response: Response | Response[]) => {
-      if (!internalConfig.isOpen) return;
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
@@ -134,7 +133,7 @@ export class CustomHandler {
           const message = result as Response; // array not supported for streaming
           const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
           const stream = (internalConfig.roleToStream as RoleToStream)[message.role || MessageUtils.AI_ROLE];
-          Stream.upsertWFiles(messages, upsertFunc, stream, message);
+          Stream.upsertContent(messages, upsertFunc, stream, message);
         } else {
           messageDataArr.forEach((message) => messages.addNewMessage(message));
         }
