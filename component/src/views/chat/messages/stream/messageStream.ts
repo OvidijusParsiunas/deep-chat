@@ -167,15 +167,6 @@ export class MessageStream {
     this._fileAdded = true;
   }
 
-  public newMessage() {
-    this.finaliseStreamedMessage();
-    this._elements = undefined;
-    delete this._message;
-    this._fileAdded = false;
-    this._hasStreamEnded = false;
-    this._activeMessageRole = undefined;
-  }
-
   // prettier-ignore
   public async endStreamAfterFileDownloaded(
       messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
