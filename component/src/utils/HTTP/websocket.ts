@@ -89,7 +89,7 @@ export class Websocket {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
       if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
-      if (io.stream) io.streamHandlers.abortStream.abort();
+      if (io.stream) io.streamHandlers.onAbort?.();
       Websocket.createConnection(io, messages);
     };
   }

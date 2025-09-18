@@ -24,7 +24,7 @@ export interface CompletionsHandlers {
 export interface StreamHandlers {
   onOpen: () => void;
   onClose: () => void;
-  abortStream: AbortController;
+  onAbort?: () => void;
   stopClicked: Signals['stopClicked']; // custom stream handler as can't listen to abort when user overwrites it
   simulationInterim?: number;
 }

@@ -90,7 +90,7 @@ export class CustomHandler {
         Stream.upsertContent(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
       }
     };
-    io.streamHandlers.abortStream.abort = () => {
+    io.streamHandlers.onAbort = () => {
       CustomHandler.attemptToFinaliseStream(stream, messages);
       io.streamHandlers.onClose();
       isHandlerActive = false;

@@ -37,7 +37,6 @@ export class SubmitButton extends InputButton<Styles> {
   private readonly _serviceIO: ServiceIO;
   private readonly _messages: Messages;
   private readonly _textInput: TextInputEl;
-  private readonly _abortStream: AbortController;
   private readonly _stopClicked: Signals['stopClicked'];
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
   private readonly _fileAttachments: FileAttachments;
@@ -59,7 +58,6 @@ export class SubmitButton extends InputButton<Styles> {
     this._textInput = textInput;
     this._fileAttachments = fileAttachments;
     this._innerElements = this.createInnerElementsForStates();
-    this._abortStream = new AbortController();
     this._stopClicked = {listener: () => {}};
     this._serviceIO = serviceIO;
     this._alwaysEnabled = !!submitButtonStyles?.alwaysEnabled;
@@ -142,7 +140,6 @@ export class SubmitButton extends InputButton<Styles> {
     this._serviceIO.streamHandlers = {
       onOpen: this.changeToStopIcon.bind(this),
       onClose: this.resetSubmit.bind(this, validationHandler),
-      abortStream: this._abortStream,
       stopClicked: this._stopClicked,
     };
     const {stream} = this._serviceIO;
@@ -213,7 +210,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private stopStream() {
     // This will not stop the stream on the server side
-    this._abortStream.abort();
+    this._serviceIO.streamHandlers.onAbort?.();
     this._stopClicked?.listener();
     if (this._validationHandler) this.resetSubmit(this._validationHandler);
   }

@@ -42,7 +42,7 @@ export class Stream {
   // prettier-ignore
   private static handleReadableStream(io: ServiceIO, messages: Messages, stream: MessageStream,
       reqBody: RequestInit, canBeEmpty: boolean, interceptedBody?: object) {
-    const {onOpen, onClose, abortStream} = io.streamHandlers;
+    const {onOpen, onClose} = io.streamHandlers;
     let aborted = false;
     fetch(io.connectSettings?.url || io.url || '', reqBody).then(async (response) => {
       if (!response.body) throw new Error(ErrorMessages.READABLE_STREAM_CONNECTION_ERROR);
@@ -65,7 +65,9 @@ export class Stream {
     }).catch((err) => {
       Stream.handleError(io, messages, err);
     });
-    abortStream.abort = () => {
+    io.streamHandlers.onAbort = () => {
+      stream.finaliseStreamedMessage();
+      io.streamHandlers.onClose();
       aborted = true;
     };
   }
@@ -73,7 +75,13 @@ export class Stream {
   // prettier-ignore
   private static handleEventStream(io: ServiceIO, messages: Messages, stream: MessageStream,
       reqBody: FetchEventSourceInit, canBeEmpty: boolean, interceptedBody?: object) {
-    const {onOpen, onClose, abortStream} = io.streamHandlers;
+    const {onOpen, onClose} = io.streamHandlers;
+    const abortStream = new AbortController();
+    io.streamHandlers.onAbort = () => {
+      stream.finaliseStreamedMessage();
+      io.streamHandlers.onClose();
+      abortStream.abort();
+    };
     fetchEventSource(io.connectSettings?.url || io.url || '', {
       ...reqBody,
       openWhenHidden: true, // keep stream open when browser tab not open

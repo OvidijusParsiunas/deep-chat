@@ -212,7 +212,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async streamResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
-    this.streamHandlers.abortStream.abort = () => {
+    this.streamHandlers.onAbort = () => {
       chat.interruptGenerate();
     };
     this.streamHandlers.onOpen();
