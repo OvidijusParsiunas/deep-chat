@@ -30,9 +30,8 @@ export class ClaudeIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.claude;
-    super(deepChat, ClaudeUtils.buildKeyVerificationDetails(), ClaudeUtils.buildHeaders, apiKey);
     const config = directConnectionCopy.claude;
+    super(deepChat, ClaudeUtils.buildKeyVerificationDetails(), ClaudeUtils.buildHeaders, config);
     if (typeof config === 'object') {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = deepChat.directConnection?.claude?.function_handler;
