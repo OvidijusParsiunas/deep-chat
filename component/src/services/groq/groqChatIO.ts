@@ -1,5 +1,5 @@
 import {GroqResult, GroqToolCall, ToolAPI, GroqChoice} from '../../types/groqResult';
-import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
+import {GroqMessage, GroqRequestBody, GroqContent} from '../../types/groqInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -9,6 +9,7 @@ import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {MessageFile} from '../../types/messageFile';
 import {Stream} from '../../utils/HTTP/stream';
 import {GroqUtils} from './utils/groqUtils';
 import {GroqChat} from '../../types/groq';
@@ -48,6 +49,29 @@ export class GroqChatIO extends DirectServiceIO {
     delete config.key;
   }
 
+  private static getImageContent(files: MessageFile[]): GroqContent[] {
+    return files
+      .filter((file) => file.type === 'image')
+      .map((file) => ({
+        type: 'image_url' as const,
+        image_url: {
+          url: file.src || '',
+        },
+      }))
+      .filter((content) => content.image_url.url.length > 0);
+  }
+
+  private static getContent(message: MessageContentI): string | GroqContent[] {
+    if (message.files && message.files.length > 0) {
+      const content: GroqContent[] = GroqChatIO.getImageContent(message.files);
+      if (message.text && message.text.trim().length > 0) {
+        content.unshift({type: 'text', text: message.text});
+      }
+      return content.length > 0 ? content : message.text || '';
+    }
+    return message.text || '';
+  }
+
   private preprocessBody(body: GroqRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as GroqRequestBody;
     const processedMessages: GroqMessage[] = MessageLimitUtils.getCharacterLimitMessages(
@@ -55,7 +79,7 @@ export class GroqChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
+        content: GroqChatIO.getContent(message),
         role: message.role === 'ai' ? ('assistant' as const) : (message.role as 'user'),
       };
     });

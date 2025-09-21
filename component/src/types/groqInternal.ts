@@ -7,9 +7,17 @@ export type GroqToolCall = {
   };
 };
 
+export type GroqContent = {
+  type: 'text' | 'image_url';
+  text?: string;
+  image_url?: {
+    url: string;
+  };
+};
+
 export type GroqMessage = {
   role: 'system' | 'user' | 'assistant' | 'tool';
-  content: string | null;
+  content: string | GroqContent[] | null;
   tool_calls?: GroqToolCall[];
   tool_call_id?: string;
   name?: string;
