@@ -20,7 +20,7 @@ export class PerplexityIO extends DirectServiceIO {
   override keyHelpUrl = 'https://www.perplexity.ai/settings/api';
   url = 'https://api.perplexity.ai/chat/completions';
   permittedErrorPrefixes = ['Invalid', 'Authentication', 'Permission denied'];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

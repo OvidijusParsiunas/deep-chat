@@ -26,7 +26,7 @@ export class ClaudeIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
   private _streamToolCalls: ClaudeToolUse = {type: 'tool_use', id: '', name: '', input: ''};
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

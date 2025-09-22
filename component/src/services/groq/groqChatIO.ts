@@ -24,7 +24,7 @@ export class GroqChatIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Invalid', 'property'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: GroqToolCall[];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {

@@ -19,7 +19,7 @@ export class XChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   url = 'https://api.x.ai/v1/chat/completions';
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

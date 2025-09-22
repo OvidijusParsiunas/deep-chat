@@ -23,7 +23,7 @@ export class MistralIO extends DirectServiceIO {
   url = 'https://api.mistral.ai/v1/chat/completions';
   permittedErrorPrefixes = ['Invalid'];
   _functionHandler?: ChatFunctionHandler;
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {

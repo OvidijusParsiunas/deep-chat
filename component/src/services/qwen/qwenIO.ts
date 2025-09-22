@@ -25,7 +25,7 @@ export class QwenIO extends DirectServiceIO {
   permittedErrorPrefixes = ['No static', 'The model', 'Incorrect'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: QwenToolCall[];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {

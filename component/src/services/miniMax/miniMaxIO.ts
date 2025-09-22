@@ -20,7 +20,7 @@ export class MiniMaxIO extends DirectServiceIO {
   override keyHelpUrl = 'https://www.minimaxi.com';
   url = 'https://api.minimax.io/v1/text/chatcompletion_v2';
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error', 'insufficient balance'];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

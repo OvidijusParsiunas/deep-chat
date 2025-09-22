@@ -30,7 +30,7 @@ export class BigModelChatIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Authorization', 'authentication_error'];
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

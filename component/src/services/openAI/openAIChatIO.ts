@@ -28,8 +28,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Incorrect'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
-  private readonly _systemMessage: SystemMessageInternal =
-    OpenAIChatIO.generateSystemMessage('You are a helpful assistant.');
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
@@ -43,7 +42,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     const config = configArg || directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
     if (typeof config === 'object') {
-      if (config.system_prompt) this._systemMessage = OpenAIChatIO.generateSystemMessage(config.system_prompt);
+      if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.openAI?.chat as OpenAIChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
       this.cleanConfig(config);
@@ -51,10 +50,6 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'gpt-4o';
-  }
-
-  private static generateSystemMessage(system_prompt: string): SystemMessageInternal {
-    return {role: 'system', content: system_prompt};
   }
 
   private cleanConfig(config: OpenAIChat) {
@@ -91,14 +86,17 @@ export class OpenAIChatIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const canSendAudio = bodyCopy.modalities?.includes('audio');
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.content.length : -1)
+        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1)
       .map((message) => {
         return {content: OpenAIChatIO.getContent(message, canSendAudio),
           role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
     if (pMessages.find((message) => message.files && message.files.length > 0)) {
       bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
     }
-    bodyCopy.messages = [this._systemMessage, ...processedMessages];
+    if (this._systemMessage) {
+      processedMessages.unshift({role: 'system', content: this._systemMessage});
+    }
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 

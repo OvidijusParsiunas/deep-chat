@@ -32,7 +32,7 @@ export class OpenRouterIO extends DirectServiceIO {
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: OpenRouterToolCall[];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {

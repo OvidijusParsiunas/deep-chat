@@ -20,7 +20,7 @@ export class DeepSeekIO extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.deepseek.com/api_keys';
   url = 'https://api.deepseek.com/v1/chat/completions';
   permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
-  private readonly _systemMessage: string = 'You are a helpful assistant.';
+  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
