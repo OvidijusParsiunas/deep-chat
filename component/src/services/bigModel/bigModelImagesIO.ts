@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
 import {BigModelImagesRequestBody} from '../../types/bigModelInternal';
 import {BigModelImagesResult} from '../../types/bigModelResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -17,7 +18,7 @@ export class BigModelImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'BigModel API Key';
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/images/generations';
-  permittedErrorPrefixes = ['Authorization', 'authentication_error'];
+  permittedErrorPrefixes = [AUTHORIZATION, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

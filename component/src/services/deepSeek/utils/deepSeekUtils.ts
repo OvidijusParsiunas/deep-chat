@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -25,7 +26,7 @@ export class DeepSeekUtils {
   ) {
     const deepSeekResult = result as DeepSeekErrorResponse;
     if (deepSeekResult.error) {
-      if (deepSeekResult.error.type === 'authentication_error') {
+      if (deepSeekResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);

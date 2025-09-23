@@ -1,24 +1,25 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {XMessage, XRequestBody} from '../../types/xInternal';
 import {DirectConnection} from '../../types/directConnection';
+import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {XResult} from '../../types/xResult';
 import {Stream} from '../../utils/HTTP/stream';
-import {XUtils} from './utils/xUtils';
-import {XChat} from '../../types/x';
+import {XResult} from '../../types/xResult';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
+import {XUtils} from './utils/xUtils';
+import {XChat} from '../../types/x';
 
 export class XChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'X API Key';
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   url = 'https://api.x.ai/v1/chat/completions';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {

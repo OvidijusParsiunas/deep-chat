@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -24,7 +25,7 @@ export class XUtils {
   ) {
     const xResult = result as XErrorResponse;
     if (xResult.error) {
-      if (xResult.error.type === 'authentication_error' || xResult.error.type === 'invalid_request_error') {
+      if (xResult.error.type === AUTHENTICATION_ERROR_PREFIX || xResult.error.type === INVALID_REQUEST_ERROR_PREFIX) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);

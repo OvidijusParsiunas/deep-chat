@@ -1,4 +1,5 @@
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
+import {INVALID_REQUEST_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../../types/directConnection';
@@ -379,7 +380,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       } else if (response.type === 'error') {
         this.stopOnError(response.error.message);
         // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
-      } else if (response.type === 'invalid_request_error') {
+      } else if (response.type === INVALID_REQUEST_ERROR_PREFIX) {
         this.stopOnError(response.message);
       } else if (response.type === 'response.audio_transcript.delta') {
         // console.log(response.delta);

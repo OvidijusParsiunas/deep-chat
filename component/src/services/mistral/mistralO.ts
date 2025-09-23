@@ -1,5 +1,6 @@
 import {MistralMessage, MistralRequestBody, MistralToolCall, MistralContentItem} from '../../types/mistralInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -21,7 +22,7 @@ export class MistralIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Mistral API Key';
   override keyHelpUrl = 'https://console.mistral.ai/api-keys/';
   url = 'https://api.mistral.ai/v1/chat/completions';
-  permittedErrorPrefixes = ['Invalid'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private readonly _systemMessage: string = '';
   private _messages?: Messages;

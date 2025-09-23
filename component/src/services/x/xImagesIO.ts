@@ -1,14 +1,15 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {XImageResult} from '../../types/xResult';
 import {MessageFiles} from '../../types/messageFile';
+import {XImageResult} from '../../types/xResult';
 import {Response} from '../../types/response';
+import {DeepChat} from '../../deepChat';
 import {XImages} from '../../types/x';
 import {XUtils} from './utils/xUtils';
-import {DeepChat} from '../../deepChat';
 
 export class XImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'X API Key';
@@ -22,7 +23,7 @@ export class XImagesIO extends DirectServiceIO {
       here</a> for more info.</p>`;
 
   url = XImagesIO.IMAGE_GENERATION_URL;
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const {directConnection} = deepChat;

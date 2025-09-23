@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
@@ -19,7 +20,7 @@ export class DeepSeekIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'DeepSeek API Key';
   override keyHelpUrl = 'https://platform.deepseek.com/api_keys';
   url = 'https://api.deepseek.com/v1/chat/completions';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {

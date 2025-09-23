@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {MiniMaxRequestBody, MiniMaxMessage} from '../../types/miniMaxInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
@@ -19,7 +20,7 @@ export class MiniMaxIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'MiniMax API Key';
   override keyHelpUrl = 'https://www.minimaxi.com';
   url = 'https://api.minimax.io/v1/text/chatcompletion_v2';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error', 'insufficient balance'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX, 'insufficient balance'];
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {

@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -18,7 +19,7 @@ export class TogetherChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Together AI API Key';
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/chat/completions';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {

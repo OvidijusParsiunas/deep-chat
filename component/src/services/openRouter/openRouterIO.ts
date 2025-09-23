@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
@@ -29,7 +30,7 @@ export class OpenRouterIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenRouter API Key';
   override keyHelpUrl = 'https://openrouter.ai/keys';
   url = 'https://openrouter.ai/api/v1/chat/completions';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: OpenRouterToolCall[];
   private readonly _systemMessage: string = '';

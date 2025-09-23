@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
@@ -22,7 +23,7 @@ export class ClaudeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Claude API Key';
   override keyHelpUrl = 'https://console.anthropic.com/settings/keys';
   url = 'https://api.anthropic.com/v1/messages';
-  permittedErrorPrefixes = ['authentication_error', 'invalid_request_error'];
+  permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
   private _streamToolCalls: ClaudeToolUse = {type: 'tool_use', id: '', name: '', input: ''};

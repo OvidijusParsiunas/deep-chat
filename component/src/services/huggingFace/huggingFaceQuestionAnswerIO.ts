@@ -1,12 +1,13 @@
 import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
+import {AUTHORIZATION_HEADER} from '../utils/directServiceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
-  override permittedErrorPrefixes = ['Authorization header', 'Error in'];
+  override permittedErrorPrefixes = [AUTHORIZATION_HEADER, 'Error in'];
 
   private readonly _context: string;
 

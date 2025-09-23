@@ -1,3 +1,4 @@
+import {AUTHORIZATION_HEADER} from '../utils/directServiceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';
@@ -19,7 +20,7 @@ export class HuggingFaceIO extends DirectServiceIO {
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
     <p>First message may take an extented amount of time to complete as the model needs to be initialized.</p>`;
-  permittedErrorPrefixes = ['Authorization header'];
+  permittedErrorPrefixes = [AUTHORIZATION_HEADER];
   url: string;
   textInputPlaceholderText: string;
 

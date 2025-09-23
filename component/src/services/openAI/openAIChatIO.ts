@@ -1,7 +1,8 @@
 import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
-import {OpenAIConverseBodyInternal, SystemMessageInternal} from '../../types/openAIInternal';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
@@ -25,7 +26,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   // https://platform.openai.com/docs/api-reference/chat/create
   url = 'https://api.openai.com/v1/chat/completions';
-  permittedErrorPrefixes = ['Incorrect'];
+  permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: ToolCalls;
   private readonly _systemMessage: string = '';
@@ -57,6 +58,9 @@ export class OpenAIChatIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
+  // mention that microphone is not supported because the outputted base64 is not accepted
+  // use speech to speech instead
+  // give allowed regex example for audio format rules
   private static getFileContent(files: MessageFile[], canSendAudio: boolean): ImageContent {
     const content: ImageContent = files.map((file) => {
       // Last time I checked only wav and mp3 are supported

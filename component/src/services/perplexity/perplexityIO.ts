@@ -1,4 +1,5 @@
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
+import {AUTHENTICATION, INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
@@ -19,7 +20,7 @@ export class PerplexityIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Perplexity API Key';
   override keyHelpUrl = 'https://www.perplexity.ai/settings/api';
   url = 'https://api.perplexity.ai/chat/completions';
-  permittedErrorPrefixes = ['Invalid', 'Authentication', 'Permission denied'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX, AUTHENTICATION, 'Permission denied'];
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {

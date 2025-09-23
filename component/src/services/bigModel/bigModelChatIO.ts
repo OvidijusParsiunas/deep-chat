@@ -1,4 +1,5 @@
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
@@ -27,7 +28,7 @@ export class BigModelChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'BigModel API Key';
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-  permittedErrorPrefixes = ['Authorization', 'authentication_error'];
+  permittedErrorPrefixes = [AUTHORIZATION, AUTHENTICATION_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
   private readonly _systemMessage: string = '';

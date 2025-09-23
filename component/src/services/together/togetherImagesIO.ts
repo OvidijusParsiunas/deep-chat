@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {TogetherImagesRequestBody} from '../../types/togetherInternal';
 import {TogetherImagesResult} from '../../types/togetherResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -17,7 +18,7 @@ export class TogetherImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Together AI API Key';
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/images/generations';
-  permittedErrorPrefixes = ['invalid_request_error', 'authentication_error'];
+  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

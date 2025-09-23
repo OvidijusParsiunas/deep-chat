@@ -1,4 +1,5 @@
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
+import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -30,7 +31,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     for more info.</p>`;
 
   url = ''; // set dynamically
-  permittedErrorPrefixes = ['Incorrect', 'Invalid input image'];
+  permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid input image'];
 
   constructor(deepChat: DeepChat) {
     const {directConnection} = deepChat;

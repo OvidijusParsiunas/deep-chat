@@ -1,5 +1,6 @@
 import {QwenRequestBody, QwenMessage, QwenToolCall, QwenContent} from '../../types/qwenInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -22,7 +23,7 @@ export class QwenIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Qwen API Key';
   override keyHelpUrl = 'https://www.alibabacloud.com/help/en/model-studio/get-api-key';
   url = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
-  permittedErrorPrefixes = ['No static', 'The model', 'Incorrect'];
+  permittedErrorPrefixes = ['No static', 'The model', INCORRECT_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: QwenToolCall[];
   private readonly _systemMessage: string = '';

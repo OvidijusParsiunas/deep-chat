@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -25,7 +26,7 @@ export class KimiUtils {
   ) {
     const kimiResult = result as KimiErrorResponse;
     if (kimiResult.error) {
-      if (kimiResult.error.type === 'authentication_error') {
+      if (kimiResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);

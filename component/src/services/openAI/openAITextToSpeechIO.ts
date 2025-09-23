@@ -1,3 +1,4 @@
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
@@ -13,7 +14,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'OpenAI API Key';
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/audio/speech';
-  permittedErrorPrefixes = ['Invalid'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   private static readonly DEFAULT_MODEL = 'tts-1';
   private static readonly DEFAULT_VOIDE = 'alloy';
   textInputPlaceholderText: string;

@@ -1,6 +1,7 @@
 import {KimiRequestBody, KimiMessage, KimiToolCall, KimiContent} from '../../types/kimiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -22,7 +23,7 @@ export class KimiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Kimi AI API Key';
   override keyHelpUrl = 'https://platform.moonshot.ai/console/api-keys';
   url = 'https://api.moonshot.ai/v1/chat/completions';
-  permittedErrorPrefixes = ['Invalid', 'Not found'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'Not found'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: KimiToolCall[];
   private readonly _systemMessage: string = 'You are Kimi, a helpful assistant created by Moonshot AI.';

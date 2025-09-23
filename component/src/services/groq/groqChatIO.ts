@@ -1,6 +1,7 @@
 import {GroqResult, GroqToolCall, ToolAPI, GroqChoice} from '../../types/groqResult';
 import {GroqMessage, GroqRequestBody, GroqContent} from '../../types/groqInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -21,7 +22,7 @@ export class GroqChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Groq API Key';
   override keyHelpUrl = 'https://console.groq.com/keys';
   url = 'https://api.groq.com/openai/v1/chat/completions';
-  permittedErrorPrefixes = ['Invalid', 'property'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'property'];
   _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls?: GroqToolCall[];
   private readonly _systemMessage: string = '';

@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
 import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -15,7 +16,7 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'BigModel API Key';
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/audio/speech';
-  permittedErrorPrefixes = ['Authorization', 'authentication_error'];
+  permittedErrorPrefixes = [AUTHORIZATION, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;

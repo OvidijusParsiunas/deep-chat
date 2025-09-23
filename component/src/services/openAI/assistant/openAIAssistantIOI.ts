@@ -4,6 +4,7 @@ import {MessageContentI, MessageToElements} from '../../../types/messagesInterna
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {INCORRECT_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {History} from '../../../views/chat/messages/history/history';
@@ -58,7 +59,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 500;
-  permittedErrorPrefixes = ['Incorrect', 'Please send text', History.FAILED_ERROR_MESSAGE];
+  permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Please send text', History.FAILED_ERROR_MESSAGE];
   functionHandler?: AssistantFunctionHandler;
   filesToolType: OpenAIAssistant['files_tool_type'];
   readonly shouldFetchHistory: boolean = false;

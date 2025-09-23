@@ -1,3 +1,4 @@
+import {AUTHENTICATION_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -26,7 +27,7 @@ export class ClaudeUtils {
   ) {
     const claudeResult = result as ClaudeErrorResponse;
     if (claudeResult.error) {
-      if (claudeResult.error.type === 'authentication_error') {
+      if (claudeResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);

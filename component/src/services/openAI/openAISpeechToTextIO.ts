@@ -1,3 +1,4 @@
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -23,7 +24,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
     <p>Click <a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank">here</a> for more info.</p>`;
 
   url = ''; // set dynamically
-  permittedErrorPrefixes = ['Invalid'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   textInputPlaceholderText = 'Upload an audio file';
   private _service_url: string = OpenAISpeechToTextIO.AUDIO_TRANSCRIPTIONS_URL;
 

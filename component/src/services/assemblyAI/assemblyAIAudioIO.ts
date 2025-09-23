@@ -1,3 +1,4 @@
+import {AUTHENTICATION, AUTHORIZATION, INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -21,7 +22,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
   url = 'https://api.assemblyai.com/v2/upload';
   isTextInputDisabled = true;
   textInputPlaceholderText = 'Upload an audio file';
-  permittedErrorPrefixes = ['Authentication', 'Invalid'];
+  permittedErrorPrefixes = [AUTHENTICATION, INVALID_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const apiKey = deepChat.directConnection?.assemblyAI;
@@ -41,7 +42,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
 
   override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
-    const key = this.connectSettings?.headers?.['Authorization'] as string;
+    const key = this.connectSettings?.headers?.[AUTHORIZATION] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
     return {text: pollingResult.text};
   }

@@ -1,4 +1,5 @@
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
+import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -15,7 +16,7 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Groq API Key';
   override keyHelpUrl = 'https://console.groq.com/keys';
   url = 'https://api.groq.com/openai/v1/audio/speech';
-  permittedErrorPrefixes = ['Invalid', 'property'];
+  permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'property'];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
