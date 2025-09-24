@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/serviceConstants';
 import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';

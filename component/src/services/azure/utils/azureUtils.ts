@@ -1,13 +1,14 @@
 import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/azureResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {GenericObject} from '../../../types/object';
 
 export class AzureUtils {
   public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
     return {
       'Ocp-Apim-Subscription-Key': key,
-      'Content-Type': 'application/ssml+xml',
+      [CONTENT_TYPE_KEY]: 'application/ssml+xml',
       'X-Microsoft-OutputFormat': outputFormat,
     };
   }
@@ -44,7 +45,7 @@ export class AzureUtils {
   public static buildSummarizationHeader(key: string) {
     return {
       'Ocp-Apim-Subscription-Key': key,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
   }
 
@@ -99,7 +100,7 @@ export class AzureUtils {
   public static buildTranslationHeaders(region: string | undefined, key: string) {
     const headers: GenericObject<string> = {
       'Ocp-Apim-Subscription-Key': key,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
     if (region) headers['Ocp-Apim-Subscription-Region'] = region;
     return headers;

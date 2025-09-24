@@ -1,12 +1,13 @@
 import {HuggingFaceTextGenerationResult} from '../../../types/huggingFaceResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class HuggingFaceUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json', // bigcode/santacoder expects this so adding just-in-case
+      [CONTENT_TYPE_KEY]: 'application/json', // bigcode/santacoder expects this so adding just-in-case
     };
   }
 

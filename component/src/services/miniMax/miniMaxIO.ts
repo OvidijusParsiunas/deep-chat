@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
 import {MiniMaxRequestBody, MiniMaxMessage} from '../../types/miniMaxInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';

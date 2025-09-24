@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';

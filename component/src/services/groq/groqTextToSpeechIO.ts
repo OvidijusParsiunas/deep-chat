@@ -1,5 +1,5 @@
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
-import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';

@@ -1,13 +1,13 @@
 import {MistralMessage, MistralRequestBody, MistralToolCall, MistralContentItem} from '../../types/mistralInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {MistralResult} from '../../types/mistralRsult';
+import {MistralResult} from '../../types/mistralResult';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {MistralUtils} from './utils/mistralUtils';

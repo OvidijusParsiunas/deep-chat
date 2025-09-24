@@ -1,5 +1,5 @@
+import {CONTENT_TYPE_KEY, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
-import {INVALID_REQUEST_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../../types/directConnection';
@@ -150,7 +150,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       method: 'POST',
       body: JSON.stringify(this.rawBody),
       headers: {
-        'Content-Type': 'application/json',
+        [CONTENT_TYPE_KEY]: 'application/json',
         Authorization: `Bearer ${key}`,
       },
     });
@@ -398,7 +398,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         body: offer.sdp,
         headers: {
           Authorization: `Bearer ${ephemeralKey}`,
-          'Content-Type': 'application/sdp',
+          [CONTENT_TYPE_KEY]: 'application/sdp',
         },
       });
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button

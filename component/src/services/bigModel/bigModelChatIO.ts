@@ -1,5 +1,5 @@
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/serviceConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';

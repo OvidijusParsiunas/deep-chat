@@ -1,5 +1,5 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
 import {ServiceFileTypes} from '../serviceIO';

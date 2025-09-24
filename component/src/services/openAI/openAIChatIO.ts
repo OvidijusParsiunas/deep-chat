@@ -1,10 +1,10 @@
 import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
+import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';

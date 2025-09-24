@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';

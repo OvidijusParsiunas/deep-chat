@@ -1,11 +1,12 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {GeminiGenerateContentResult} from '../../../types/geminiResult';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class GeminiUtils {
   public static buildHeaders() {
     return {
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
   }
 

@@ -1,3 +1,4 @@
+import {CONTENT_TYPE_KEY} from '../../services/utils/serviceConstants';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -19,23 +20,21 @@ interface RespProcessingOptions {
 }
 
 export class RequestUtils {
-  public static readonly CONTENT_TYPE = 'Content-Type';
-
   // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
   // prettier-ignore
   public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
       request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
     if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
-    const previousContetType = connectSettings.headers[RequestUtils.CONTENT_TYPE];
-    delete connectSettings.headers[RequestUtils.CONTENT_TYPE];
+    const previousContetType = connectSettings.headers[CONTENT_TYPE_KEY];
+    delete connectSettings.headers[CONTENT_TYPE_KEY];
     let result;
     try {
       result = await request(stringifyBody);
     } catch (e) {
-      connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+      connectSettings.headers[CONTENT_TYPE_KEY] = previousContetType;
       throw e;
     }
-    connectSettings.headers[RequestUtils.CONTENT_TYPE] = previousContetType;
+    connectSettings.headers[CONTENT_TYPE_KEY] = previousContetType;
     return result;
   }
 

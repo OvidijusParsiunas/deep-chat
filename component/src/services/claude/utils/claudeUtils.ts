@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX} from '../../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -13,7 +13,7 @@ export class ClaudeUtils {
   public static buildHeaders(key: string) {
     return {
       'x-api-key': key,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     };

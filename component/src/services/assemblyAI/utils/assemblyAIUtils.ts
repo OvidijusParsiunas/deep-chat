@@ -1,6 +1,7 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class AssemblyAIUtils {
   public static async poll(api_token: string, audio_url: string) {
@@ -49,7 +50,7 @@ export class AssemblyAIUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: key,
-      'Content-Type': 'application/octet-stream',
+      [CONTENT_TYPE_KEY]: 'application/octet-stream',
     };
   }
 

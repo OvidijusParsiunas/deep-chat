@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
 import {TogetherImagesRequestBody} from '../../types/togetherInternal';
 import {TogetherImagesResult} from '../../types/togetherResult';
 import {DirectConnection} from '../../types/directConnection';

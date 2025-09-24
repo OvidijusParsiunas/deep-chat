@@ -11,3 +11,5 @@ export const INCORRECT_ERROR_PREFIX = 'Incorrect';
 export const AUTHENTICATION_ERROR_PREFIX = 'authentication_error';
 
 export const INVALID_REQUEST_ERROR_PREFIX = 'invalid_request_error';
+
+export const CONTENT_TYPE_KEY = 'Content-Type';

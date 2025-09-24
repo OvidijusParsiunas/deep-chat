@@ -1,4 +1,4 @@
-import {AUTHENTICATION, AUTHORIZATION, INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION, AUTHORIZATION, INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';

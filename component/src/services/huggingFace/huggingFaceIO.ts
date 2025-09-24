@@ -1,4 +1,4 @@
-import {AUTHORIZATION_HEADER} from '../utils/directServiceConstants';
+import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HuggingFaceUtils} from './utils/huggingFaceUtils';

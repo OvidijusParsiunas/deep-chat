@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/serviceConstants';
 import {BigModelImagesRequestBody} from '../../types/bigModelInternal';
 import {BigModelImagesResult} from '../../types/bigModelResult';
 import {DirectConnection} from '../../types/directConnection';

@@ -1,5 +1,5 @@
-import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
+import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';

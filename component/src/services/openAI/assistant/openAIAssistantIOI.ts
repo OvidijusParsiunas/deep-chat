@@ -4,10 +4,10 @@ import {MessageContentI, MessageToElements} from '../../../types/messagesInterna
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {INCORRECT_ERROR_PREFIX} from '../../utils/directServiceConstants';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {History} from '../../../views/chat/messages/history/history';
+import {INCORRECT_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
 import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';

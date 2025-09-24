@@ -1,7 +1,7 @@
 import {KimiRequestBody, KimiMessage, KimiToolCall, KimiContent} from '../../types/kimiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';

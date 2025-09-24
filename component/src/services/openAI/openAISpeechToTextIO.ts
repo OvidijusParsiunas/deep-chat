@@ -1,4 +1,4 @@
-import {INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';

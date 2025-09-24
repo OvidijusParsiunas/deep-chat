@@ -1,12 +1,13 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {MistralResult} from '../../../types/mistralRsult';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {MistralResult} from '../../../types/mistralResult';
 
 export class MistralUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
       accept: 'application/json',
     };
   }

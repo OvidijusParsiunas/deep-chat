@@ -1,5 +1,5 @@
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
-import {AUTHENTICATION, INVALID_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {AUTHENTICATION, INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';

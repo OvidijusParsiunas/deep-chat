@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/directServiceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_KEY, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -13,7 +13,7 @@ export class XUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
   }
 

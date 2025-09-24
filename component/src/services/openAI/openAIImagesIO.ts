@@ -1,5 +1,5 @@
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
-import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
+import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';

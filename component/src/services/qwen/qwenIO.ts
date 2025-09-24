@@ -1,7 +1,7 @@
 import {QwenRequestBody, QwenMessage, QwenToolCall, QwenContent} from '../../types/qwenInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {INCORRECT_ERROR_PREFIX} from '../utils/directServiceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
+import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';

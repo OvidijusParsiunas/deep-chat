@@ -2,6 +2,7 @@ import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {ServiceIO} from '../../serviceIO';
 
 export class OpenAIUtils {
@@ -13,7 +14,7 @@ export class OpenAIUtils {
   public static buildHeaders(key: string) {
     return {
       Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
   }
 

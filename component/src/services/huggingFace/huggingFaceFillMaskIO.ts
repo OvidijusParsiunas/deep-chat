@@ -1,5 +1,5 @@
 import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
-import {AUTHORIZATION_HEADER} from '../utils/directServiceConstants';
+import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';

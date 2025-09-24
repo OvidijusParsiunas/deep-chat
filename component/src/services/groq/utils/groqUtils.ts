@@ -1,5 +1,6 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 type GroqErrorResponse = {
   error?: {
@@ -10,7 +11,7 @@ type GroqErrorResponse = {
 export class GroqUtils {
   public static buildHeaders(key?: string) {
     return {
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
       Authorization: `Bearer ${key}`,
     };
   }

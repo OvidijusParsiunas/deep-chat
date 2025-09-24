@@ -1,6 +1,6 @@
 import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
-import {AUTHORIZATION_HEADER} from '../utils/directServiceConstants';
+import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';

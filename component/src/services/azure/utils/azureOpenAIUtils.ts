@@ -1,4 +1,5 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {OpenAIUtils} from '../../openAI/utils/openAIUtils';
 import {AzureOpenAI} from '../../../types/azure';
 
@@ -9,7 +10,7 @@ export class AzureOpenAIUtils {
   public static buildHeaders(apiKey: string) {
     return {
       'api-key': apiKey,
-      'Content-Type': 'application/json',
+      [CONTENT_TYPE_KEY]: 'application/json',
     };
   }
 
