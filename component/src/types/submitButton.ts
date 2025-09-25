@@ -6,9 +6,9 @@ export interface SubmitButtonStyles {
   loading?: ButtonStyles;
   stop?: ButtonStyles;
   disabled?: ButtonStyles;
+  alwaysEnabled?: boolean;
   position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
   tooltip?: true | Tooltip;
-  alwaysEnabled?: boolean;
 }
 
 export type DisableSubmitButton = (isDisabled?: boolean) => void;
