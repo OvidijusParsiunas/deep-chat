@@ -1,8 +1,8 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {ServiceIO} from '../../serviceIO';
 
 export class OpenAIUtils {
@@ -13,8 +13,8 @@ export class OpenAIUtils {
 
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -36,7 +36,7 @@ export class OpenAIUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.openai.com/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: OpenAIUtils.handleVerificationResult,
     };
   }

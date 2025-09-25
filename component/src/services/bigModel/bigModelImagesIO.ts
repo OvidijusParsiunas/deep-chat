@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {BigModelImagesRequestBody} from '../../types/bigModelInternal';
 import {BigModelImagesResult} from '../../types/bigModelResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -15,17 +15,17 @@ import {DeepChat} from '../../deepChat';
 
 // https://docs.bigmodel.cn/api-reference/%E6%A8%A1%E5%9E%8B-api/%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90
 export class BigModelImagesIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'BigModel API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('BigModel');
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/images/generations';
-  permittedErrorPrefixes = [AUTHORIZATION, AUTHENTICATION_ERROR_PREFIX];
+  permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
     super(deepChat, BigModelUtils.buildKeyVerificationDetails(), BigModelUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.bigModel?.images;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.bigModel?.images as BigModelImages;
+    if (typeof config === OBJECT) {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }

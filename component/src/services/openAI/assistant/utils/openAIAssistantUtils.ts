@@ -1,5 +1,7 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
 import {MessageFileType, MessageFile} from '../../../../types/messageFile';
+import {CONTENT_TYPE_H_KEY, POST} from '../../../utils/serviceConstants';
+import {TEXT_KEY} from '../../../../utils/consts/messageConstants';
 import {Messages} from '../../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../../utils/HTTP/requestUtils';
 import {DirectServiceIO} from '../../../utils/directServiceIO';
@@ -23,24 +25,24 @@ export class OpenAIAssistantUtils {
     const headers = serviceIO.connectSettings.headers;
     if (!headers) return;
     serviceIO.url = storeFilesUrl; // stores files
-    const previousContentType = headers[RequestUtils.CONTENT_TYPE];
-    delete headers[RequestUtils.CONTENT_TYPE];
+    const previousContentType = headers[CONTENT_TYPE_H_KEY];
+    delete headers[CONTENT_TYPE_H_KEY];
     const requests = files.map(async (file) => {
       const formData = new FormData();
       formData.append('purpose', 'assistants');
       formData.append('file', file);
       return new Promise<{id: string; filename: string}>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, formData, 'POST', false)); // should perhaps use await but works without
+        resolve(OpenAIUtils.directFetch(serviceIO, formData, POST, false)); // should perhaps use await but works without
       });
     });
     try {
       const uploadedFiles = (await Promise.all(requests)).map((result) => {
         return {id: result.id, name: result.filename};
       });
-      headers[RequestUtils.CONTENT_TYPE] = previousContentType;
+      headers[CONTENT_TYPE_H_KEY] = previousContentType;
       return uploadedFiles as UploadedFile[];
     } catch (err) {
-      headers[RequestUtils.CONTENT_TYPE] = previousContentType;
+      headers[CONTENT_TYPE_H_KEY] = previousContentType;
       // error handled here as files not sent using HTTPRequest.request to not trigger the interceptors
       RequestUtils.displayError(messages, err as object);
       serviceIO.completionsHandlers.onFinish();
@@ -103,7 +105,7 @@ export class OpenAIAssistantUtils {
       }
     }
     // not displaying a separate file if annotated
-    return content?.text?.value ? {text: content.text.value, role} : {files, role};
+    return content?.text?.value ? {[TEXT_KEY]: content.text.value, role} : {files, role};
   }
 
   // Noticed an issue where text contains a sandbox hyperlink to a csv, but no annotation provided

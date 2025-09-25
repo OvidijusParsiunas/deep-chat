@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
@@ -6,6 +6,7 @@ import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -13,6 +14,7 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {ClaudeUtils} from './utils/claudeUtils';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Claude} from '../../types/claude';
 import {APIKey} from '../../types/APIKey';
@@ -20,7 +22,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://docs.anthropic.com/en/api/messages
 export class ClaudeIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Claude API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Claude');
   override keyHelpUrl = 'https://console.anthropic.com/settings/keys';
   url = 'https://api.anthropic.com/v1/messages';
   permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
@@ -31,9 +33,9 @@ export class ClaudeIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.claude;
+    const config = directConnectionCopy.claude as Claude & APIKey;
     super(deepChat, ClaudeUtils.buildKeyVerificationDetails(), ClaudeUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = deepChat.directConnection?.claude?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -59,7 +61,7 @@ export class ClaudeIO extends DirectServiceIO {
         const mediaType = file.src?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
         return {type: 'image', source: {type: 'base64', media_type: mediaType, data: base64Data || ''}};
       }
-      return {type: 'text', text: `[Unsupported file type: ${file.type}]`};
+      return {type: 'text', [TEXT_KEY]: `[Unsupported file type: ${file.type}]`};
     });
   }
 
@@ -67,7 +69,7 @@ export class ClaudeIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: ClaudeContent[] = ClaudeIO.getFileContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content;
     }
@@ -98,7 +100,7 @@ export class ClaudeIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -119,14 +121,14 @@ export class ClaudeIO extends DirectServiceIO {
 
       const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
       if (textContent) {
-        return {text: textContent.text};
+        return {[TEXT_KEY]: textContent.text};
       }
     }
 
     // Handle streaming events
     if (result.type === 'content_block_delta') {
       if (result.delta && result.delta.type === 'text_delta') {
-        return {text: result.delta.text || ''};
+        return {[TEXT_KEY]: result.delta.text || ''};
       }
     }
 
@@ -142,7 +144,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
 
     // Return empty for other event types (message_start, content_block_start, etc.)
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async handleTools(toolUseBlocks: ClaudeToolUse[], prevBody?: ClaudeRequestBody): Promise<ResponseI> {

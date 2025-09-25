@@ -1,10 +1,11 @@
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -12,6 +13,7 @@ import {ChatFunctionHandler} from '../../types/openAI';
 import {BigModelUtils} from './utils/bigModelUtils';
 import {MessageFile} from '../../types/messageFile';
 import {BigModelChat} from '../../types/bigModel';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -25,10 +27,10 @@ import {
 
 // https://docs.bigmodel.cn/api-reference/%E6%A8%A1%E5%9E%8B-api/%E5%AF%B9%E8%AF%9D%E8%A1%A5%E5%85%A8
 export class BigModelChatIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'BigModel API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('BigModel');
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-  permittedErrorPrefixes = [AUTHORIZATION, AUTHENTICATION_ERROR_PREFIX];
+  permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
   private readonly _systemMessage: string = '';
@@ -37,8 +39,8 @@ export class BigModelChatIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
     super(deepChat, BigModelUtils.buildKeyVerificationDetails(), BigModelUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.bigModel?.chat;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.bigModel?.chat as BigModelChat;
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.bigModel?.chat as BigModelChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -68,7 +70,7 @@ export class BigModelChatIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: BigModelContentItem[] = BigModelChatIO.getFileContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content;
     }
@@ -98,7 +100,7 @@ export class BigModelChatIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -117,10 +119,10 @@ export class BigModelChatIO extends DirectServiceIO {
         if (message.tool_calls) {
           return this.handleTools({tool_calls: message.tool_calls}, prevBody);
         }
-        return {text: message.content};
+        return {[TEXT_KEY]: message.content};
       }
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: BigModelStreamEvent, prevBody?: BigModelChat) {
@@ -140,9 +142,9 @@ export class BigModelChatIO extends DirectServiceIO {
         const tools = {tool_calls: delta.tool_calls};
         return this.handleTools(tools, prevBody);
       }
-      return {text: delta?.content || ''};
+      return {[TEXT_KEY]: delta?.content || ''};
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   private async handleTools(tools: {tool_calls?: BigModelToolCall[]}, prevBody?: BigModelChat): Promise<ResponseI> {

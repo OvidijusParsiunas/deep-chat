@@ -1,4 +1,5 @@
 import {HuggingFaceTranslationResult} from '../../types/huggingFaceResult';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
@@ -13,6 +14,6 @@ export class HuggingFaceTranslationIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceTranslationResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result[0]?.translation_text || ''};
+    return {[TEXT_KEY]: result[0]?.translation_text || ''};
   }
 }

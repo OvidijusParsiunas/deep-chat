@@ -1,19 +1,28 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {
+  CONTENT_TYPE_H_KEY,
+  CONTENT_TYPE_L_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  AUTHORIZATION_L,
+  COMPLETED,
+  ERROR,
+  POST,
+} from '../../utils/serviceConstants';
 
 export class AssemblyAIUtils {
   public static async poll(api_token: string, audio_url: string) {
     // Set the headers for the request, including the API token and content type
     const headers = {
-      authorization: api_token,
-      'content-type': 'application/json',
+      [AUTHORIZATION_L]: api_token,
+      [CONTENT_TYPE_L_KEY]: APPLICATION_JSON,
     };
 
     // Send a POST request to the transcription API with the audio URL in the request body
     const response = await fetch('https://api.assemblyai.com/v2/transcript', {
-      method: 'POST',
+      method: POST,
       body: JSON.stringify({audio_url}),
       headers,
     });
@@ -32,11 +41,11 @@ export class AssemblyAIUtils {
       const pollingResponse = await fetch(pollingEndpoint, {headers});
       const transcriptionResult = await pollingResponse.json();
       // If the transcription is complete, return the transcript object
-      if (transcriptionResult.status === 'completed') {
+      if (transcriptionResult.status === COMPLETED) {
         result = transcriptionResult;
       }
       // If the transcription has failed, throw an error with the error message
-      else if (transcriptionResult.status === 'error') {
+      else if (transcriptionResult.status === ERROR) {
         throw new Error(`Transcription failed: ${transcriptionResult.error}`);
       }
       // If the transcription is still in progress, wait for a few seconds before polling again
@@ -49,8 +58,8 @@ export class AssemblyAIUtils {
 
   public static buildHeaders(key: string) {
     return {
-      Authorization: key,
-      [CONTENT_TYPE_KEY]: 'application/octet-stream',
+      [AUTHORIZATION_H]: key,
+      [CONTENT_TYPE_H_KEY]: 'application/octet-stream',
     };
   }
 
@@ -72,7 +81,7 @@ export class AssemblyAIUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.assemblyai.com/v2/upload',
-      method: 'POST',
+      method: POST,
       handleVerificationResult: AssemblyAIUtils.handleVerificationResult,
     };
   }

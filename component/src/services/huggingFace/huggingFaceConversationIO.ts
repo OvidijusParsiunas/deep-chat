@@ -1,6 +1,7 @@
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -40,7 +41,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
       inputs: {
         past_user_inputs: processedMessagesDetails.past_user_inputs,
         generated_responses: processedMessagesDetails.generated_responses,
-        text: processedMessagesDetails.mostRecentMessageText,
+        [TEXT_KEY]: processedMessagesDetails.mostRecentMessageText,
       },
       ...bodyCopy,
     } as unknown as {inputs: string};
@@ -48,6 +49,6 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
 
   override async extractResultData(result: HuggingFaceConversationResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result.generated_text || ''};
+    return {[TEXT_KEY]: result.generated_text || ''};
   }
 }

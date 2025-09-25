@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -12,7 +12,7 @@ import {XImages} from '../../types/x';
 import {XUtils} from './utils/xUtils';
 
 export class XImagesIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'X API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('X');
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.x.ai/v1/images/generations';
 
@@ -30,7 +30,7 @@ export class XImagesIO extends DirectServiceIO {
     const apiKey = directConnection?.x;
     super(deepChat, XUtils.buildKeyVerificationDetails(), XUtils.buildHeaders, apiKey);
     const config = directConnection?.x?.images as NonNullable<XImages>;
-    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.rawBody.model ??= 'grok-2-image';
   }
 

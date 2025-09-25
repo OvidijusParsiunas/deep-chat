@@ -1,4 +1,5 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {APPLICATION_JSON, CONTENT_TYPE_H_KEY} from './serviceConstants';
 import {History} from '../../views/chat/messages/history/history';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -8,7 +9,6 @@ import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Stream as StreamI} from '../../types/stream';
 import {Websocket} from '../../utils/HTTP/websocket';
-import {CONTENT_TYPE_KEY} from './serviceConstants';
 import {Legacy} from '../../utils/legacy/legacy';
 import {Stream} from '../../utils/HTTP/stream';
 import {Demo as DemoT} from '../../types/demo';
@@ -103,13 +103,13 @@ export class BaseServiceIO implements ServiceIO {
   private async callAPIWithText(messages: Messages, pMessages: MessageContentI[]) {
     const body = {messages: pMessages, ...this.rawBody};
     let tempHeaderSet = false; // if the user has not set a header - we need to temporarily set it
-    if (!this.connectSettings.headers?.[CONTENT_TYPE_KEY]) {
+    if (!this.connectSettings.headers?.[CONTENT_TYPE_H_KEY]) {
       this.connectSettings.headers ??= {};
-      this.connectSettings.headers[CONTENT_TYPE_KEY] ??= 'application/json';
+      this.connectSettings.headers[CONTENT_TYPE_H_KEY] ??= APPLICATION_JSON;
       tempHeaderSet = true;
     }
     await this.request(body, messages);
-    if (tempHeaderSet) delete this.connectSettings.headers?.[CONTENT_TYPE_KEY];
+    if (tempHeaderSet) delete this.connectSettings.headers?.[CONTENT_TYPE_H_KEY];
   }
 
   private async callApiWithFiles(messages: Messages, pMessages: MessageContentI[], files: File[]) {

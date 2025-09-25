@@ -1,6 +1,6 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 type MiniMaxErrorResponse = {
   error?: {
@@ -16,8 +16,8 @@ type MiniMaxErrorResponse = {
 export class MiniMaxUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -38,7 +38,7 @@ export class MiniMaxUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.minimax.io/v1/files/delete',
-      method: 'POST',
+      method: POST,
       handleVerificationResult: MiniMaxUtils.handleVerificationResult,
     };
   }

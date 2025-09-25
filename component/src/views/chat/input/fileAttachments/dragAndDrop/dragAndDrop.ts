@@ -1,3 +1,4 @@
+import {OBJECT} from '../../../../../services/utils/serviceConstants';
 import {CustomStyle} from '../../../../../types/styles';
 import {FileAttachments} from '../fileAttachments';
 
@@ -11,7 +12,7 @@ export class DragAndDrop {
   private static createElement(dnd?: boolean | CustomStyle) {
     const fileDropElement = document.createElement('div');
     fileDropElement.id = 'drag-and-drop';
-    if (typeof dnd === 'object') Object.assign(fileDropElement.style, dnd);
+    if (typeof dnd === OBJECT) Object.assign(fileDropElement.style, dnd);
     return fileDropElement;
   }
 

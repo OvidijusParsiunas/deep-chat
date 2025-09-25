@@ -6,6 +6,8 @@ import {IntroMessage, LoadingStyles} from '../../../types/messages';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {OBJECT} from '../../../services/utils/serviceConstants';
+import {SERVICE} from '../../../utils/consts/messageConstants';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {ErrorMessageOverrides} from '../../../types/error';
@@ -57,7 +59,7 @@ export class Messages extends MessagesBase {
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._onError = FireEvents.onError.bind(this, deepChat);
-    this._isLoadingMessageAllowed = Messages.getDefaultDisplayLoadingMessage(deepChat, serviceIO);
+    this._isLoadingMessageAllowed = Messages.getDefaultDisplayLoadingMessage(deepChat, serviceIO) as boolean;
     if (typeof deepChat.displayLoadingBubble === 'object' && !!deepChat.displayLoadingBubble.toggle) {
       deepChat.displayLoadingBubble.toggle = this.setLoadingToggle.bind(this);
     }
@@ -90,10 +92,10 @@ export class Messages extends MessagesBase {
       return false;
     }
     if (serviceIO.websocket) {
-      return typeof deepChat.displayLoadingBubble === 'object' ? false : !!deepChat.displayLoadingBubble;
+      return typeof deepChat.displayLoadingBubble === OBJECT ? false : !!deepChat.displayLoadingBubble;
     }
     // if displayLoadingBubble is {} then treat it as true.
-    return (typeof deepChat.displayLoadingBubble === 'object' || deepChat.displayLoadingBubble) ?? true;
+    return (typeof deepChat.displayLoadingBubble === OBJECT || deepChat.displayLoadingBubble) ?? true;
   }
 
   private setLoadingToggle(config?: LoadingToggleConfig) {
@@ -117,7 +119,7 @@ export class Messages extends MessagesBase {
       }
       if (demo.displayErrors) {
         if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
-        if (demo.displayErrors.service) this.addNewErrorMessage('service', '');
+        if (demo.displayErrors.service) this.addNewErrorMessage(SERVICE, '');
         if (demo.displayErrors.speechToText) this.addNewErrorMessage('speechToText', '');
       }
       // needs to be here for message loading bubble to not disappear after error
@@ -181,7 +183,7 @@ export class Messages extends MessagesBase {
 
   public addAnyMessage(message: ResponseI, isHistory = false, isTop = false) {
     if (message.error) {
-      return this.addNewErrorMessage('service', message.error, isTop);
+      return this.addNewErrorMessage(SERVICE, message.error, isTop);
     }
     return this.addNewMessage(message, isHistory, isTop);
   }

@@ -1,5 +1,5 @@
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
-import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
+import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -15,7 +15,7 @@ import {DeepChat} from '../../deepChat';
 type OpenAIImagesDalle = OpenAIImagesDalle2 | OpenAIImagesDalle3;
 
 export class OpenAIImagesIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
@@ -43,7 +43,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
       this.camera.files = {dimensions: {width: dimension, height: dimension}};
     }
-    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.canSendMessage = OpenAIImagesIO.canFileSendMessage;
   }
 

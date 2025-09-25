@@ -1,6 +1,7 @@
-import {AUTHENTICATION, AUTHORIZATION, INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION, AUTHORIZATION_H, INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -9,7 +10,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AssemblyAIAudioIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'AssemblyAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('AssemblyAI');
   override keyHelpUrl = 'https://www.assemblyai.com/app/account';
   introPanelMarkUp = `
     <div style="width: 100%; text-align: center; margin-left: -10px"><b>AssemblyAI Audio</b></div>
@@ -21,7 +22,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
 
   url = 'https://api.assemblyai.com/v2/upload';
   isTextInputDisabled = true;
-  textInputPlaceholderText = 'Upload an audio file';
+  textInputPlaceholderText = UPLOAD_AN_AUDIO_FILE;
   permittedErrorPrefixes = [AUTHENTICATION, INVALID_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
@@ -42,8 +43,8 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
 
   override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
-    const key = this.connectSettings?.headers?.[AUTHORIZATION] as string;
+    const key = this.connectSettings?.headers?.[AUTHORIZATION_H] as string;
     const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
-    return {text: pollingResult.text};
+    return {[TEXT_KEY]: pollingResult.text};
   }
 }

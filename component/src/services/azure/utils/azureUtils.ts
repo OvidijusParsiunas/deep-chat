@@ -1,22 +1,24 @@
 import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/azureResult';
+import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {GenericObject} from '../../../types/object';
 
 export class AzureUtils {
+  private static readonly SUBSCRIPTION_KEY_NAME = 'Ocp-Apim-Subscription-Key';
+
   public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
     return {
-      'Ocp-Apim-Subscription-Key': key,
-      [CONTENT_TYPE_KEY]: 'application/ssml+xml',
+      [AzureUtils.SUBSCRIPTION_KEY_NAME]: key,
+      [CONTENT_TYPE_H_KEY]: 'application/ssml+xml',
       'X-Microsoft-OutputFormat': outputFormat,
     };
   }
 
   public static buildSpeechToTextHeaders(key: string) {
     return {
-      'Ocp-Apim-Subscription-Key': key,
-      Accept: 'application/json',
+      [AzureUtils.SUBSCRIPTION_KEY_NAME]: key,
+      Accept: APPLICATION_JSON,
     };
   }
 
@@ -34,9 +36,9 @@ export class AzureUtils {
   public static buildSpeechKeyVerificationDetails(region: string): KeyVerificationDetails {
     return {
       url: `https://${region}.api.cognitive.microsoft.com/sts/v1.0/issuetoken`,
-      method: 'POST',
+      method: POST,
       createHeaders: (key: string) => {
-        return {'Ocp-Apim-Subscription-Key': `${key}`};
+        return {[AzureUtils.SUBSCRIPTION_KEY_NAME]: `${key}`};
       },
       handleVerificationResult: AzureUtils.handleSpeechVerificationResult,
     };
@@ -44,8 +46,8 @@ export class AzureUtils {
 
   public static buildSummarizationHeader(key: string) {
     return {
-      'Ocp-Apim-Subscription-Key': key,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AzureUtils.SUBSCRIPTION_KEY_NAME]: key,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -64,9 +66,9 @@ export class AzureUtils {
   public static buildLanguageKeyVerificationDetails(endpoint: string): KeyVerificationDetails {
     return {
       url: `${endpoint}/language/analyze-text/jobs?api-version=2022-10-01-preview`,
-      method: 'POST',
+      method: POST,
       createHeaders: (key: string) => {
-        return {'Ocp-Apim-Subscription-Key': `${key}`};
+        return {[AzureUtils.SUBSCRIPTION_KEY_NAME]: `${key}`};
       },
       handleVerificationResult: AzureUtils.handleLanguageVerificationResult,
     };
@@ -89,7 +91,7 @@ export class AzureUtils {
   public static buildTranslationKeyVerificationDetails(region?: string): KeyVerificationDetails {
     return {
       url: `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=es`,
-      method: 'POST',
+      method: POST,
       createHeaders: (key: string) => {
         return AzureUtils.buildTranslationHeaders(region, key);
       },
@@ -99,8 +101,8 @@ export class AzureUtils {
 
   public static buildTranslationHeaders(region: string | undefined, key: string) {
     const headers: GenericObject<string> = {
-      'Ocp-Apim-Subscription-Key': key,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AzureUtils.SUBSCRIPTION_KEY_NAME]: key,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
     if (region) headers['Ocp-Apim-Subscription-Region'] = region;
     return headers;

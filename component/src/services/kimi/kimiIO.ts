@@ -1,10 +1,11 @@
 import {KimiRequestBody, KimiMessage, KimiToolCall, KimiContent} from '../../types/kimiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {KimiResult, ToolAPI} from '../../types/kimiResult';
@@ -12,6 +13,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {KimiUtils} from './utils/kimiUtils';
 import {APIKey} from '../../types/APIKey';
@@ -20,7 +22,7 @@ import {Kimi} from '../../types/kimi';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
 export class KimiIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Kimi AI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Kimi');
   override keyHelpUrl = 'https://platform.moonshot.ai/console/api-keys';
   url = 'https://api.moonshot.ai/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'Not found'];
@@ -31,9 +33,9 @@ export class KimiIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.kimi;
+    const config = directConnectionCopy.kimi as Kimi & APIKey;
     super(deepChat, KimiUtils.buildKeyVerificationDetails(), KimiUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.kimi as Kimi)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -66,7 +68,7 @@ export class KimiIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: KimiContent[] = KimiIO.getImageContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content.length > 0 ? content : message.text || '';
     }
@@ -94,7 +96,7 @@ export class KimiIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -116,11 +118,11 @@ export class KimiIO extends DirectServiceIO {
         if (choice.message.tool_calls) {
           return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
         }
-        return {text: choice.message.content || ''};
+        return {[TEXT_KEY]: choice.message.content || ''};
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: KimiResult['choices'][0], prevBody?: Kimi) {
@@ -138,7 +140,7 @@ export class KimiIO extends DirectServiceIO {
         });
       }
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   private async handleTools(tools: ToolAPI, prevBody?: Kimi): Promise<ResponseI> {

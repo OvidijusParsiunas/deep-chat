@@ -7,7 +7,7 @@ import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 export class StabilityAIIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Stability AI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Stability AI');
   override keyHelpUrl = 'https://platform.stability.ai/docs/getting-started/authentication';
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'invalid_'];
 

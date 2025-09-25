@@ -1,6 +1,13 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  UNAUTHORIZED,
+  GET,
+} from '../../utils/serviceConstants';
 
 type TogetherErrorResponse = {
   error?: {
@@ -11,8 +18,8 @@ type TogetherErrorResponse = {
 export class TogetherUtils {
   public static buildHeaders(key?: string) {
     return {
-      [CONTENT_TYPE_KEY]: 'application/json',
-      Authorization: `Bearer ${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
     };
   }
 
@@ -24,7 +31,7 @@ export class TogetherUtils {
   ) {
     const togetherResult = result as TogetherErrorResponse;
     if (togetherResult.error) {
-      if (togetherResult.error.message === 'Unauthorized') {
+      if (togetherResult.error.message === UNAUTHORIZED) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -37,7 +44,7 @@ export class TogetherUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.together.xyz/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: TogetherUtils.handleVerificationResult,
     };
   }

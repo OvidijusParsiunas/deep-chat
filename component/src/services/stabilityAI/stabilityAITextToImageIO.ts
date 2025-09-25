@@ -2,6 +2,7 @@ import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {StabilityAIUtils} from './utils/stabilityAIUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -44,7 +45,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
 
   private preprocessBody(body: StabilityAITextToImage, lastMessage?: string) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const prompt = {text: lastMessage} as {weight?: number};
+    const prompt = {[TEXT_KEY]: lastMessage} as {weight?: number};
     if (this._imageWeight) prompt.weight = this._imageWeight;
     bodyCopy.text_prompts = [prompt];
     return bodyCopy;

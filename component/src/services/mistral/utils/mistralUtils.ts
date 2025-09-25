@@ -1,14 +1,14 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {MistralResult} from '../../../types/mistralResult';
 
 export class MistralUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
-      accept: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+      accept: APPLICATION_JSON,
     };
   }
 
@@ -28,7 +28,7 @@ export class MistralUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.mistral.ai/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: MistralUtils.handleVerificationResult,
     };
   }

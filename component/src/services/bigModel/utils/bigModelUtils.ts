@@ -1,6 +1,13 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  UNAUTHORIZED,
+  GET,
+} from '../../utils/serviceConstants';
 
 type BigModelErrorResponse = {
   error?: {
@@ -11,8 +18,8 @@ type BigModelErrorResponse = {
 export class BigModelUtils {
   public static buildHeaders(key?: string) {
     return {
-      [CONTENT_TYPE_KEY]: 'application/json',
-      Authorization: `Bearer ${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
     };
   }
 
@@ -24,7 +31,7 @@ export class BigModelUtils {
   ) {
     const bigModelResult = result as BigModelErrorResponse;
     if (bigModelResult.error) {
-      if (bigModelResult.error.message === 'Unauthorized') {
+      if (bigModelResult.error.message === UNAUTHORIZED) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -37,7 +44,7 @@ export class BigModelUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://open.bigmodel.cn/api/paas/v4/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: BigModelUtils.handleVerificationResult,
     };
   }

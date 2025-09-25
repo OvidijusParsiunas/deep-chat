@@ -2,6 +2,7 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
+import {TEXT_KEY} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
@@ -163,17 +164,17 @@ export class SubmitButton extends InputButton<Styles> {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     if (this._textInput.isTextInputEmpty()) {
-      this.attemptSubmit({text: '', files: uploadedFilesData});
+      this.attemptSubmit({[TEXT_KEY]: '', files: uploadedFilesData});
     } else {
       // not using textContent as it ignores new line spaces
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
-      this.attemptSubmit({text: inputText, files: uploadedFilesData});
+      this.attemptSubmit({[TEXT_KEY]: inputText, files: uploadedFilesData});
     }
   }
 
   public async programmaticSubmit(content: UserContent) {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
-    const newContent: UserContentI = {text: content.text};
+    const newContent: UserContentI = {[TEXT_KEY]: content.text};
     if (content.files) {
       newContent.files = Array.from(content.files).map((file) => {
         return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
@@ -195,7 +196,7 @@ export class SubmitButton extends InputButton<Styles> {
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
     const filesData = content.files?.map((fileData) => fileData.file);
-    const requestContents = {text: content.text === '' ? undefined : content.text, files: filesData};
+    const requestContents = {[TEXT_KEY]: content.text === '' ? undefined : content.text, files: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.hideFiles();
   }

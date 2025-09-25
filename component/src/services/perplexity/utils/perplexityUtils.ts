@@ -1,6 +1,6 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 type PerplexityErrorResponse = {
   error?: {
@@ -13,8 +13,8 @@ type PerplexityErrorResponse = {
 export class PerplexityUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -35,7 +35,7 @@ export class PerplexityUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.perplexity.ai/chat/completions',
-      method: 'POST',
+      method: POST,
       handleVerificationResult: PerplexityUtils.handleVerificationResult,
     };
   }

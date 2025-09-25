@@ -1,6 +1,7 @@
 import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
 import {DirectConnection} from '../../types/directConnection';
 import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
+import {ERROR, OBJECT} from '../utils/serviceConstants';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
 import {DeepChat} from '../../deepChat';
 
@@ -16,7 +17,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
 
     super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
 
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
     }
@@ -24,7 +25,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
       });
     } else {
       this.url = AzureOpenAIChatIO.buildURL(urlDetails);

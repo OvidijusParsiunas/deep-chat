@@ -1,13 +1,14 @@
 import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
-import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -15,6 +16,7 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
 import {OpenAIUtils} from './utils/openAIUtils';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -22,7 +24,7 @@ import {DeepChat} from '../../deepChat';
 type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
 
 export class OpenAIChatIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   // https://platform.openai.com/docs/api-reference/chat/create
   url = 'https://api.openai.com/v1/chat/completions';
@@ -41,8 +43,9 @@ export class OpenAIChatIO extends DirectServiceIO {
     const buildHeadersFunc = buildHeadersFuncArg || OpenAIUtils.buildHeaders;
     const apiKey = apiKeyArg || directConnectionCopy.openAI;
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
-    const config = configArg || directConnectionCopy.openAI?.chat; // can be undefined as this is the default service
-    if (typeof config === 'object') {
+    // can be undefined as this is the default service
+    const config = (configArg || directConnectionCopy.openAI?.chat) as OpenAIChat;
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.openAI?.chat as OpenAIChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -79,7 +82,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   private static getContent(message: MessageContentI, canSendAudio: boolean) {
     if (message.files && message.files.length > 0) {
       const content: ImageContent = OpenAIChatIO.getFileContent(message.files, canSendAudio);
-      if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', text: message.text});
+      if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', [TEXT_KEY]: message.text});
       return content;
     }
     return message.text;
@@ -109,7 +112,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -131,12 +134,12 @@ export class OpenAIChatIO extends DirectServiceIO {
         const displayText = typeof tts === 'object' && typeof tts?.service?.displayText === 'boolean';
         return {
           files: [{src: `data:audio/wav;base64,${result.choices[0].message.audio.data}`, type: 'audio'}],
-          text: displayText ? result.choices[0].message.audio.transcript : undefined,
+          [TEXT_KEY]: displayText ? result.choices[0].message.audio.transcript : undefined,
         };
       }
-      return {text: result.choices[0].message.content};
+      return {[TEXT_KEY]: result.choices[0].message.content};
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
@@ -154,7 +157,7 @@ export class OpenAIChatIO extends DirectServiceIO {
         });
       }
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   private async handleTools(tools: ToolAPI, prevBody?: OpenAIChat): Promise<ResponseI> {

@@ -1,5 +1,7 @@
+import {ERROR, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AzureUtils} from './utils/azureUtils';
@@ -24,7 +26,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     </p>`;
   url = '';
   isTextInputDisabled = true;
-  textInputPlaceholderText = 'Upload an audio file';
+  textInputPlaceholderText = UPLOAD_AN_AUDIO_FILE;
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.speechToText as NonNullable<Azure['speechToText']>;
@@ -35,7 +37,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureSpeechToTextIO.REGION_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AzureSpeechToTextIO.REGION_ERROR_MESSAGE});
       });
     } else {
       this.canSendMessage = AzureSpeechToTextIO.canFileSendMessage;
@@ -63,6 +65,6 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
 
   override async extractResultData(result: AzureSpeechToTextResult): Promise<Response> {
     if (result.error) throw result.error;
-    return {text: result.DisplayText || ''};
+    return {[TEXT_KEY]: result.DisplayText || ''};
   }
 }

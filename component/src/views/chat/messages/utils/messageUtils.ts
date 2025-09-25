@@ -1,5 +1,6 @@
 import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../../types/messagesInternal';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
+import {OBJECT} from '../../../../services/utils/serviceConstants';
 import {MessageContent} from '../../../../types/messages';
 import {FileMessageUtils} from './fileMessageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
@@ -248,7 +249,7 @@ export class MessageUtils {
   }
 
   private static processMessageContent<T>(obj: T): T {
-    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
+    if (obj === null || obj === undefined || typeof obj !== OBJECT) return obj;
 
     if (Array.isArray(obj)) {
       return obj.map((item) => MessageUtils.processMessageContent(item)) as unknown as T;
@@ -260,7 +261,7 @@ export class MessageUtils {
         newObj[key] = value;
       } else if (key === 'custom') {
         newObj[key] = value;
-      } else if (value !== null && typeof value === 'object') {
+      } else if (value !== null && typeof value === OBJECT) {
         newObj[key] = MessageUtils.processMessageContent(value);
       } else {
         newObj[key] = value;

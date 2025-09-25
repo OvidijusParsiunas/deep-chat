@@ -3,6 +3,7 @@ import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ERROR} from '../utils/serviceConstants';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
@@ -36,7 +37,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureTextToSpeechIO.REGION_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AzureTextToSpeechIO.REGION_ERROR_MESSAGE});
       });
     } else {
       Object.assign(this.rawBody, config);

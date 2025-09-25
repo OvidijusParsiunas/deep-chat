@@ -1,3 +1,4 @@
+import {TEXT_KEY} from '../../../../../utils/consts/messageConstants';
 import {ActiveTooltip, Tooltip} from '../../../../../types/tooltip';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
 
@@ -15,9 +16,9 @@ export class TooltipUtils {
 
   public static tryCreateConfig(defaultText: string, tooltip?: true | Tooltip): Tooltip | undefined {
     if (!tooltip) return undefined;
-    if (typeof tooltip === 'boolean') return {text: defaultText};
+    if (typeof tooltip === 'boolean') return {[TEXT_KEY]: defaultText};
     return {
-      text: tooltip.text || defaultText,
+      [TEXT_KEY]: tooltip.text || defaultText,
       timeout: tooltip.timeout || 0,
       style: tooltip.style,
     };

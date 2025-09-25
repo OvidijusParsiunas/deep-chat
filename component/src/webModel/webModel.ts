@@ -2,6 +2,7 @@ import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {MessageUtils} from '../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../utils/errorMessages/errorMessages';
+import {SERVICE, TEXT_KEY} from '../utils/consts/messageConstants';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {WebModelIntroMessage} from './webModelIntroMessage';
@@ -76,7 +77,7 @@ export class WebModel extends BaseServiceIO {
     if (window.webLLM) {
       this.configureInit(this.shouldAddIntroMessage(deepChat.introMessage));
     } else if (seconds > WebModel.MODULE_SEARCH_LIMIT_S) {
-      this._messages?.addNewErrorMessage('service', WebModel.WEB_LLM_NOT_FOUND_ERROR);
+      this._messages?.addNewErrorMessage(SERVICE, WebModel.WEB_LLM_NOT_FOUND_ERROR);
       console.error(
         'The deep-chat-web-llm module has not been attached to the window object. ' + 'Please see the following guide:'
       );
@@ -129,7 +130,7 @@ export class WebModel extends BaseServiceIO {
 
   private attemptToCreateChat() {
     if (WebModel.chat) {
-      this._messages?.addNewErrorMessage('service', WebModel.MULTIPLE_MODELS_ERROR);
+      this._messages?.addNewErrorMessage(SERVICE, WebModel.MULTIPLE_MODELS_ERROR);
       console.error(WebModel.MULTIPLE_MODELS_ERROR);
       return;
     }
@@ -195,7 +196,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async unloadChat(err: string) {
-    this._messages?.addNewErrorMessage('service', WebModel.GENERIC_ERROR);
+    this._messages?.addNewErrorMessage(SERVICE, WebModel.GENERIC_ERROR);
     console.error(err);
     this._isModelLoaded = false;
     this._isModelLoading = false;
@@ -205,7 +206,7 @@ export class WebModel extends BaseServiceIO {
   }
 
   private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
-    const output = {text: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
+    const output = {[TEXT_KEY]: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
     const response = await WebModel.processResponse(this.deepChat, messages, output);
     if (response) response.forEach((data) => messages.addNewMessage(data));
     this.completionsHandlers.onFinish();
@@ -218,8 +219,8 @@ export class WebModel extends BaseServiceIO {
     this.streamHandlers.onOpen();
     const stream = new MessageStream(messages);
     await chat.generate(text, async (_: number, message: string) => {
-      const response = await WebModel.processResponse(this.deepChat, messages, {text: message});
-      if (response) stream.upsertStreamedMessage({text: response[0].text, overwrite: true});
+      const response = await WebModel.processResponse(this.deepChat, messages, {[TEXT_KEY]: message});
+      if (response) stream.upsertStreamedMessage({[TEXT_KEY]: response[0].text, overwrite: true});
     });
     stream.finaliseStreamedMessage();
     this.streamHandlers.onClose();
@@ -234,14 +235,14 @@ export class WebModel extends BaseServiceIO {
         await this.immediateResp(ms, text, chat);
       }
     } catch (e) {
-      this._messages?.addNewErrorMessage('service');
+      this._messages?.addNewErrorMessage(SERVICE);
       console.log(e);
     }
   }
 
   private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
     const lastText = pMessages[pMessages.length - 1].text as string;
-    const {body, error} = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {text: lastText}});
+    const {body, error} = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {[TEXT_KEY]: lastText}});
     const stream = !!this.stream;
     try {
       if (error) {

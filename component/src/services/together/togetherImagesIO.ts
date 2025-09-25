@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TogetherImagesRequestBody} from '../../types/togetherInternal';
 import {TogetherImagesResult} from '../../types/togetherResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -15,7 +15,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://docs.together.ai/reference/post-images-generations
 export class TogetherImagesIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Together AI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Together AI');
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/images/generations';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
@@ -24,8 +24,8 @@ export class TogetherImagesIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TogetherUtils.buildKeyVerificationDetails(), TogetherUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.together?.images;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.together?.images as TogetherImages & APIKey;
+    if (typeof config === OBJECT) {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }

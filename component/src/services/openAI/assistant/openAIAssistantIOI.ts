@@ -1,4 +1,5 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
+import {COMPLETED, ERROR, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
@@ -7,8 +8,8 @@ import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {History} from '../../../views/chat/messages/history/history';
-import {INCORRECT_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
+import {TEXT_KEY} from '../../../utils/consts/messageConstants';
 import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
@@ -55,7 +56,7 @@ export type URLSegments = {
 // WORK - need to refactor to be in Responses API
 // https://platform.openai.com/docs/guides/responses-vs-chat-completions
 export class OpenAIAssistantIOI extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 500;
@@ -96,7 +97,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.deepChat.disableSubmitButton(false);
       return threadMessages;
     } catch (_) {
-      return [{error: 'Failed to fetch history'}];
+      return [{[ERROR]: 'Failed to fetch history'}];
     }
   }
 
@@ -108,7 +109,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       });
     if (contentArr && contentArr.length > 0) {
       if (processedMessage.text && processedMessage.text.length > 0) {
-        contentArr.push({type: 'text', text: processedMessage.text});
+        contentArr.push({type: 'text', [TEXT_KEY]: processedMessage.text});
       }
       return {content: contentArr, role: 'user'};
     }
@@ -123,7 +124,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
       return {tools: [{type: toolType}], file_id: file.id};
     });
-    return {attachments, content: [{type: 'text', text: processedMessage.text}], role: 'user'};
+    return {attachments, content: [{type: 'text', [TEXT_KEY]: processedMessage.text}], role: 'user'};
   }
 
   private processMessage(pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
@@ -207,14 +208,14 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const uploadedFiles = files
       ? await OpenAIAssistantUtils.storeFiles(this, messages, files, this.urlSegments.storeFiles)
       : undefined;
-    this.connectSettings.method = 'POST';
+    this.connectSettings.method = POST;
     this.callService(messages, pMessages, uploadedFiles);
   }
 
   private async createNewAssistant() {
     try {
       this.url = this.urlSegments.newAssistantUrl;
-      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), 'POST');
+      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), POST);
       this._config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this._config.assistant_id;
     } catch (e) {
@@ -244,16 +245,16 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     await this.assignThreadAndRun(result);
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
-    const requestInit = {method: 'GET', headers: this.connectSettings?.headers};
+    const requestInit = {method: GET, headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this._messages as Messages); // poll for run status
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
-      const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), 'POST');
+      const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), POST);
       this.run_id = runObj.id;
     } else {
       this.sessionId = result.thread_id;
@@ -269,7 +270,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
     this.url = `${this.urlSegments.threadsPrefix}/${thread_id}/messages?${this.urlSegments.listMessagesPostfix}`;
-    let threadMessages = (await OpenAIUtils.directFetch(this, {}, 'GET')) as OpenAIAssistantMessagesResult;
+    let threadMessages = (await OpenAIUtils.directFetch(this, {}, GET)) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
@@ -279,7 +280,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   async extractPollResultData(result: OpenAIRunResult): PollResult {
     const {status, required_action} = result;
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
-    if (status === 'completed' && this._messages) {
+    if (status === COMPLETED && this._messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
       const {text, files} = threadMessages.shift() as ResponseI;
       setTimeout(() => {
@@ -320,7 +321,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (this._isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
-      await OpenAIUtils.directFetch(this, {tool_outputs}, 'POST');
+      await OpenAIUtils.directFetch(this, {tool_outputs}, POST);
     }
     return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
   }
@@ -341,7 +342,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   // prettier-ignore
@@ -354,7 +355,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
           this, {role: 'assistant', content: result.content}, this.urlSegments, textFileFirst);
         this._messageStream?.endStreamAfterFileDownloaded(this._messages, downloadCb);
-        return {text: ''};
+        return {[TEXT_KEY]: ''};
       }
     }
     if (result.delta?.content) {
@@ -363,15 +364,15 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         const textContent = result.delta.content.find((content) => content.text);
         if (textContent?.text?.annotations && textContent.text.annotations.length === 0) {
           const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content, this.urlSegments);
-          return {text: messages[0].text, files: messages[1].files};
+          return {[TEXT_KEY]: messages[0].text, files: messages[1].files};
         }
       }
-      return {text: result.delta.content[0].text?.value};
+      return {[TEXT_KEY]: result.delta.content[0].text?.value};
     }
     if (!this.sessionId && result.thread_id) {
       this.sessionId = result.thread_id;
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   // https://platform.openai.com/docs/api-reference/assistants-streaming

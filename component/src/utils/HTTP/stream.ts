@@ -5,8 +5,10 @@ import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
+import {POST} from '../../services/utils/serviceConstants';
 import {Stream as StreamI} from '../../types/stream';
 import {ErrorResp} from '../../types/errorInternal';
+import {TEXT_KEY} from '../consts/messageConstants';
 import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -26,7 +28,7 @@ export class Stream {
     if (io.connectSettings?.url === Demo.URL) return Demo.requestStream(messages, io);
     const stream = new MessageStream(messages, io.stream);
     const reqBody = {
-      method: io.connectSettings?.method || 'POST',
+      method: io.connectSettings?.method || POST,
       headers: interceptedHeaders,
       credentials: io.connectSettings?.credentials,
       body: stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody,
@@ -56,7 +58,7 @@ export class Stream {
         if (!done) {
           const chunk = decoder.decode(value, { stream: true });
           const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
-          const objEventData = typeof finalEventData === 'object' ? finalEventData : {text: chunk};
+          const objEventData = typeof finalEventData === 'object' ? finalEventData : {[TEXT_KEY]: chunk};
           Stream.handleMessage(io, messages, stream, objEventData, interceptedBody);
         } else {
           Stream.handleClose(io, stream, onClose, canBeEmpty);

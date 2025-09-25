@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {APPLICATION_JSON, AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
@@ -13,7 +13,7 @@ export class ClaudeUtils {
   public static buildHeaders(key: string) {
     return {
       'x-api-key': key,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     };
@@ -40,7 +40,7 @@ export class ClaudeUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.anthropic.com/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: ClaudeUtils.handleVerificationResult,
     };
   }

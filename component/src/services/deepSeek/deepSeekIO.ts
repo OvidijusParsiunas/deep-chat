@@ -1,15 +1,17 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DeepSeekResult} from '../../types/deepSeekResult';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {DeepSeekUtils} from './utils/deepSeekUtils';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {DeepSeek} from '../../types/deepSeek';
 import {APIKey} from '../../types/APIKey';
@@ -17,7 +19,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://platform.deepseek.com/api-docs/
 export class DeepSeekIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'DeepSeek API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('DeepSeek');
   override keyHelpUrl = 'https://platform.deepseek.com/api_keys';
   url = 'https://api.deepseek.com/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
@@ -25,9 +27,9 @@ export class DeepSeekIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.deepSeek;
+    const config = directConnectionCopy.deepSeek as DeepSeek & APIKey;
     super(deepChat, DeepSeekUtils.buildKeyVerificationDetails(), DeepSeekUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -63,7 +65,7 @@ export class DeepSeekIO extends DirectServiceIO {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -79,15 +81,15 @@ export class DeepSeekIO extends DirectServiceIO {
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return {[TEXT_KEY]: choice.delta.content};
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return {[TEXT_KEY]: choice.message.content};
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 }

@@ -1,13 +1,13 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {HuggingFaceTextGenerationResult} from '../../../types/huggingFaceResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class HuggingFaceUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json', // bigcode/santacoder expects this so adding just-in-case
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON, // bigcode/santacoder expects this so adding just-in-case
     };
   }
 
@@ -26,7 +26,7 @@ export class HuggingFaceUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api-inference.huggingface.co/models/gpt2',
-      method: 'POST',
+      method: POST,
       handleVerificationResult: HuggingFaceUtils.handleVerificationResult,
     };
   }

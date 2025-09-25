@@ -4,12 +4,15 @@ import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
+import {OBJECT} from '../utils/serviceConstants';
+import {StreamConfig} from '../../types/stream';
 import {OllamaUtils} from './utils/ollamaUtils';
 import {Stream} from '../../utils/HTTP/stream';
 import {OllamaChat} from '../../types/ollama';
@@ -36,8 +39,8 @@ export class OllamaIO extends DirectServiceIO {
     const keyVerificationDetails = OllamaUtils.buildKeyVerificationDetails();
     const buildHeadersFunc = OllamaUtils.buildHeaders;
     super(deepChat, keyVerificationDetails, buildHeadersFunc, {key: 'placeholder'});
-    const config = directConnectionCopy.ollama;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.ollama as OllamaChat;
+    if (typeof config === OBJECT) {
       if (config.system) this._systemMessage = OllamaIO.generateSystemMessage(config.system);
       const function_handler = (deepChat.directConnection?.ollama as OllamaChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -99,7 +102,7 @@ export class OllamaIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       this.stream = {readable: true};
       Stream.request(this, body, messages);
@@ -116,17 +119,17 @@ export class OllamaIO extends DirectServiceIO {
       if (parsedStreamBody.message?.tool_calls) {
         return this.handleTools({tool_calls: parsedStreamBody.message.tool_calls}, prevBody);
       }
-      return {text: parsedStreamBody.message?.content || ''};
+      return {[TEXT_KEY]: parsedStreamBody.message?.content || ''};
     }
 
     if (result.message) {
       if (result.message.tool_calls) {
         return this.handleTools({tool_calls: result.message.tool_calls}, prevBody);
       }
-      return {text: result.message.content || ''};
+      return {[TEXT_KEY]: result.message.content || ''};
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async handleTools(tools: {tool_calls: OllamaToolCall[]}, prevBody?: OllamaChat): Promise<ResponseI> {

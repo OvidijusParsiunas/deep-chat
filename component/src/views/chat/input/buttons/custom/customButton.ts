@@ -1,4 +1,5 @@
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
+import {TEXT_KEY} from '../../../../../utils/consts/messageConstants';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
@@ -191,8 +192,8 @@ export class CustomButton extends InputButton<Styles> {
     const SVGContent = customStyles?.[state]?.svg?.content;
     const textContent = customStyles?.[state]?.text?.content;
     if (SVGContent === undefined || textContent === undefined) {
-      const {svg: defaultSVG, text: defaultText} = ButtonUtils.parseSVGTextElements(defaultElements);
-      const {svg: stateSVG, text: stateText} = ButtonUtils.parseSVGTextElements(stateElements);
+      const {svg: defaultSVG, [TEXT_KEY]: defaultText} = ButtonUtils.parseSVGTextElements(defaultElements);
+      const {svg: stateSVG, [TEXT_KEY]: stateText} = ButtonUtils.parseSVGTextElements(stateElements);
       const newElements: ButtonInnerElement[] = [];
       CustomButton.addToInnerElements(newElements, SVGContent, defaultSVG, stateSVG);
       CustomButton.addToInnerElements(newElements, textContent, defaultText, stateText);

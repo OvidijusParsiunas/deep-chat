@@ -1,23 +1,25 @@
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
-import {AUTHENTICATION, INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {PerplexityUtils} from './utils/perplexityUtils';
 import {Perplexity} from '../../types/perplexity';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 // https://docs.perplexity.ai/api-reference/chat-completions-post
 export class PerplexityIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Perplexity API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Perplexity');
   override keyHelpUrl = 'https://www.perplexity.ai/settings/api';
   url = 'https://api.perplexity.ai/chat/completions';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, AUTHENTICATION, 'Permission denied'];
@@ -25,9 +27,9 @@ export class PerplexityIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.perplexity;
+    const config = directConnectionCopy.perplexity as Perplexity & APIKey;
     super(deepChat, PerplexityUtils.buildKeyVerificationDetails(), PerplexityUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -61,7 +63,7 @@ export class PerplexityIO extends DirectServiceIO {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -77,15 +79,15 @@ export class PerplexityIO extends DirectServiceIO {
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {text: choice.delta.content};
+        return {[TEXT_KEY]: choice.delta.content};
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {text: choice.message.content};
+        return {[TEXT_KEY]: choice.message.content};
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 }

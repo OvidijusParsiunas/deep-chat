@@ -1,13 +1,13 @@
+import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {StabilityAITextToImageResult} from '../../../types/stabilityAIResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class StabilityAIUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -25,7 +25,7 @@ export class StabilityAIUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.stability.ai/v1/engines/list',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: StabilityAIUtils.handleVerificationResult,
     };
   }

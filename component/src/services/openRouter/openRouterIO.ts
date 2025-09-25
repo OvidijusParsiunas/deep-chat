@@ -1,10 +1,11 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -13,6 +14,7 @@ import {OpenRouterUtils} from './utils/openRouterUtils';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {OpenRouter} from '../../types/openRouter';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -27,7 +29,7 @@ import {
 // WORK - add a panel stating that you can upload images and ask the model to generate
 // images (gemini-2.5-flash-image-preview)
 export class OpenRouterIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenRouter API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenRouter');
   override keyHelpUrl = 'https://openrouter.ai/keys';
   url = 'https://openrouter.ai/api/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
@@ -38,9 +40,9 @@ export class OpenRouterIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.openRouter;
+    const config = directConnectionCopy.openRouter as OpenRouter & APIKey;
     super(deepChat, OpenRouterUtils.buildKeyVerificationDetails(), OpenRouterUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.openRouter as OpenRouter)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -95,7 +97,7 @@ export class OpenRouterIO extends DirectServiceIO {
         ...OpenRouterIO.getAudioContent(message.files),
       ];
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content.length > 0 ? content : message.text || '';
     }
@@ -129,7 +131,7 @@ export class OpenRouterIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -154,12 +156,12 @@ export class OpenRouterIO extends DirectServiceIO {
         }));
 
         return {
-          text: result.message.content || '',
+          [TEXT_KEY]: result.message.content || '',
           files,
         };
       }
 
-      return {text: ''};
+      return {[TEXT_KEY]: ''};
     }
 
     // Handle non-streaming response
@@ -176,13 +178,13 @@ export class OpenRouterIO extends DirectServiceIO {
           })) || [];
 
         return {
-          text: choice.message.content || '',
+          [TEXT_KEY]: choice.message.content || '',
           files,
         };
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: OpenRouterStreamEvent['choices'][0], prevBody?: OpenRouter) {
@@ -194,7 +196,7 @@ export class OpenRouterIO extends DirectServiceIO {
       }));
 
       return {
-        text: delta.content || '',
+        [TEXT_KEY]: delta.content || '',
         files,
       };
     }
@@ -211,7 +213,7 @@ export class OpenRouterIO extends DirectServiceIO {
         });
       }
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   // https://openrouter.ai/docs/features/tool-calling

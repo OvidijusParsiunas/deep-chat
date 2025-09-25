@@ -1,3 +1,4 @@
+import {OBJECT, POST} from '../../services/utils/serviceConstants';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
@@ -33,7 +34,7 @@ export class HTTPRequest {
         const resultData = await io.extractResultData(finalResult, interceptedBody);
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
-        if (!resultData || (typeof resultData !== 'object' && !Array.isArray(resultData)))
+        if (!resultData || (typeof resultData !== OBJECT && !Array.isArray(resultData)))
           throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.error) throw resultData.error;
         if (io.asyncCallInProgress) {
@@ -89,7 +90,7 @@ export class HTTPRequest {
       (await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails));
     if (error) return RequestUtils.onInterceptorError(messages, error);
     const url = io.connectSettings?.url || io.url || '';
-    const method = io.connectSettings?.method || 'POST';
+    const method = io.connectSettings?.method || POST;
     const requestBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     const requestInit: RequestInit = {method, body: requestBody, headers};
     if (io.connectSettings.credentials) requestInit.credentials = io.connectSettings.credentials; 

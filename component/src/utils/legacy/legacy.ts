@@ -1,8 +1,10 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
+import {OBJECT} from '../../services/utils/serviceConstants';
 import {ValidateInput} from '../../types/validateInput';
 import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
+import {TEXT_KEY} from '../consts/messageConstants';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
 import {Cohere} from '../../types/cohere';
@@ -66,7 +68,7 @@ export class Legacy {
   public static processSubmitUserMessage(content: string) {
     console.error('The submitUserMessage(text: string) argument string type is deprecated since version 1.4.4.');
     console.error('Please change to using the new argument type: https://deepchat.dev/docs/methods#submitUserMessage');
-    return {text: content};
+    return {[TEXT_KEY]: content};
   }
 
   public static flagHTMLUpdateClass(bubbleElement: HTMLElement) {
@@ -165,7 +167,7 @@ export class Legacy {
   }
 
   public static processStreamHTMLWrappers(stream?: Stream) {
-    if (!stream || typeof stream !== 'object') return;
+    if (!stream || typeof stream !== OBJECT) return;
     const htmlWrappers = (stream as {htmlWrappers?: HTMLWrappers}).htmlWrappers;
     if (htmlWrappers) {
       console.error(`The htmlWrappers property has been moved to Deep Chat's base since version 2.3.0.`);

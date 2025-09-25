@@ -11,6 +11,7 @@ import {ButtonContainers} from './buttonContainers/buttonContainers';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {ValidationHandler} from './validation/validationHandler';
+import {TEXT_KEY} from '../../../utils/consts/messageConstants';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {CustomButton} from './buttons/custom/customButton';
@@ -108,7 +109,7 @@ export class Input {
       setTimeout(() => {
         const uploadedFilesData = fileAtts.getAllFileData();
         const inputText = textInput.inputElementRef.innerText.trim() as string;
-        const content: {text?: string; files?: File[]} = {text: inputText};
+        const content: {text?: string; files?: File[]} = {[TEXT_KEY]: inputText};
         if (uploadedFilesData) content.files = uploadedFilesData.map((file) => file.file);
         FireEvents.onInput(deepChat, content, isUser);
       });

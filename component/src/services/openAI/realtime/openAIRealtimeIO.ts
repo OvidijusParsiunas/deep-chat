@@ -1,4 +1,3 @@
-import {CONTENT_TYPE_KEY, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
@@ -21,9 +20,19 @@ import {
   OpenAIRealtimeConfig,
   OpenAIRealtime,
 } from '../../../types/openAIRealtime';
+import {
+  INVALID_REQUEST_ERROR_PREFIX,
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  OBJECT,
+  ERROR,
+  POST,
+} from '../../utils/serviceConstants';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   private readonly _avatarConfig: OpenAIRealtime['avatar'];
   private readonly _buttonsConfig: OpenAIRealtime['buttons'];
@@ -54,7 +63,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const key = OpenAIRealtimeIO.getKey(deepChat);
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, {key});
     const config = directConnectionCopy.openAI?.realtime as OpenAIRealtime;
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
       this._errorConfig = config.error;
@@ -147,11 +156,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private async getEphemeralKey(key: string) {
     // https://platform.openai.com/docs/api-reference/realtime-sessions/create
     const result = await fetch('https://api.openai.com/v1/realtime/sessions', {
-      method: 'POST',
+      method: POST,
       body: JSON.stringify(this.rawBody),
       headers: {
-        [CONTENT_TYPE_KEY]: 'application/json',
-        Authorization: `Bearer ${key}`,
+        [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+        [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
       },
     });
     const data = await result.json();
@@ -377,7 +386,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           }
         }
         // https://platform.openai.com/docs/api-reference/realtime-server-events/error
-      } else if (response.type === 'error') {
+      } else if (response.type === ERROR) {
         this.stopOnError(response.error.message);
         // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
       } else if (response.type === INVALID_REQUEST_ERROR_PREFIX) {
@@ -394,11 +403,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       await this._pc.setLocalDescription(offer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
-        method: 'POST',
+        method: POST,
         body: offer.sdp,
         headers: {
-          Authorization: `Bearer ${ephemeralKey}`,
-          [CONTENT_TYPE_KEY]: 'application/sdp',
+          [AUTHORIZATION_H]: `${BEARER_PREFIX}${ephemeralKey}`,
+          [CONTENT_TYPE_H_KEY]: 'application/sdp',
         },
       });
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button

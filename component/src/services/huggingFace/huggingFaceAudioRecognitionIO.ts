@@ -1,4 +1,5 @@
 import {HuggingFaceAudioRecognitionResult} from '../../types/huggingFaceResult';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
 import {PollResult} from '../serviceIO';
@@ -16,6 +17,6 @@ export class HuggingFaceAudioRecognitionIO extends HuggingFaceFileIO {
   async extractPollResultData(result: HuggingFaceAudioRecognitionResult): PollResult {
     if (result.estimated_time) return {timeoutMS: (result.estimated_time + 1) * 1000};
     if (result.error) throw result.error;
-    return {text: result.text || ''};
+    return {[TEXT_KEY]: result.text || ''};
   }
 }

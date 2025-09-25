@@ -1,10 +1,11 @@
-import {CONTENT_TYPE_KEY} from '../../services/utils/serviceConstants';
+import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET, OBJECT, POST} from '../../services/utils/serviceConstants';
 import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
 import {ErrorResp} from '../../types/errorInternal';
 import {ServiceIO} from '../../services/serviceIO';
+import {SERVICE} from '../consts/messageConstants';
 import {GenericObject} from '../../types/object';
 import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
@@ -25,47 +26,47 @@ export class RequestUtils {
   public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
       request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
     if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
-    const previousContetType = connectSettings.headers[CONTENT_TYPE_KEY];
-    delete connectSettings.headers[CONTENT_TYPE_KEY];
+    const previousContetType = connectSettings.headers[CONTENT_TYPE_H_KEY];
+    delete connectSettings.headers[CONTENT_TYPE_H_KEY];
     let result;
     try {
       result = await request(stringifyBody);
     } catch (e) {
-      connectSettings.headers[CONTENT_TYPE_KEY] = previousContetType;
+      connectSettings.headers[CONTENT_TYPE_H_KEY] = previousContetType;
       throw e;
     }
-    connectSettings.headers[CONTENT_TYPE_KEY] = previousContetType;
+    connectSettings.headers[CONTENT_TYPE_H_KEY] = previousContetType;
     return result;
   }
 
   public static displayError(messages: Messages, err: ErrorResp, defMessage = 'Service error, please try again.') {
     console.error(err);
-    if (typeof err === 'object') {
+    if (typeof err === OBJECT) {
       if (err instanceof Error) {
-        return messages.addNewErrorMessage('service', err.message);
+        return messages.addNewErrorMessage(SERVICE, err.message);
       }
-      if (Array.isArray(err) || typeof err.error === 'string') {
-        return messages.addNewErrorMessage('service', err);
+      if (Array.isArray(err) || typeof (err as {error?: string}).error === 'string') {
+        return messages.addNewErrorMessage(SERVICE, err);
       }
       if (Object.keys(err).length === 0) {
-        return messages.addNewErrorMessage('service', defMessage);
+        return messages.addNewErrorMessage(SERVICE, defMessage);
       }
-      return messages.addNewErrorMessage('service', JSON.stringify(err));
+      return messages.addNewErrorMessage(SERVICE, JSON.stringify(err));
     }
-    messages.addNewErrorMessage('service', err);
+    messages.addNewErrorMessage(SERVICE, err);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fetch(io: ServiceIO, headers: GenericObject<string> | undefined, stringifyBody: boolean, body: any) {
-    const requestContent: RequestInit = {method: io.connectSettings?.method || 'POST', headers};
-    if (requestContent.method !== 'GET') requestContent.body = stringifyBody ? JSON.stringify(body) : body;
+    const requestContent: RequestInit = {method: io.connectSettings?.method || POST, headers};
+    if (requestContent.method !== GET) requestContent.body = stringifyBody ? JSON.stringify(body) : body;
     if (io.connectSettings.credentials) requestContent.credentials = io.connectSettings.credentials;
     return fetch(io.connectSettings?.url || io.url || '', requestContent);
   }
 
   public static processResponseByType(response: Response) {
     const contentType = response.headers.get('content-type');
-    if (contentType?.includes('application/json')) {
+    if (contentType?.includes(APPLICATION_JSON)) {
       return response.json();
     }
     // when no contentType - the response is returned primarily for azure summarization to allow examination of headers
@@ -103,7 +104,7 @@ export class RequestUtils {
   }
 
   public static onInterceptorError(messages: Messages, error: string, onFinish?: () => void) {
-    messages.addNewErrorMessage('service', error);
+    messages.addNewErrorMessage(SERVICE, error);
     onFinish?.();
   }
 

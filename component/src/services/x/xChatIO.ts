@@ -1,13 +1,15 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {XResult} from '../../types/xResult';
 import {APIKey} from '../../types/APIKey';
@@ -16,7 +18,7 @@ import {XUtils} from './utils/xUtils';
 import {XChat} from '../../types/x';
 
 export class XChatIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'X API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('X');
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   url = 'https://api.x.ai/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
@@ -26,8 +28,8 @@ export class XChatIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.x;
     super(deepChat, XUtils.buildKeyVerificationDetails(), XUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.x?.chat;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.x?.chat as XChat & APIKey;
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -66,7 +68,7 @@ export class XChatIO extends DirectServiceIO {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -81,16 +83,16 @@ export class XChatIO extends DirectServiceIO {
     if (result.object === 'chat.completion.chunk') {
       const choice = result.choices?.[0];
       if (choice?.delta?.content) {
-        return {text: choice.delta.content};
+        return {[TEXT_KEY]: choice.delta.content};
       }
-      return {text: ''};
+      return {[TEXT_KEY]: ''};
     }
 
     // Handle non-streaming response
     if (result.object === 'chat.completion' && result.choices?.[0]?.message) {
-      return {text: result.choices[0].message.content || ''};
+      return {[TEXT_KEY]: result.choices[0].message.content || ''};
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 }

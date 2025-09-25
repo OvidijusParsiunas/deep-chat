@@ -1,6 +1,13 @@
-import {AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_KEY, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {
+  INVALID_REQUEST_ERROR_PREFIX,
+  AUTHENTICATION_ERROR_PREFIX,
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  BEARER_PREFIX,
+  GET,
+} from '../../utils/serviceConstants';
 
 type XErrorResponse = {
   error?: {
@@ -12,8 +19,8 @@ type XErrorResponse = {
 export class XUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      Authorization: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -38,7 +45,7 @@ export class XUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.x.ai/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: XUtils.handleVerificationResult,
     };
   }

@@ -1,6 +1,13 @@
-import {CONTENT_TYPE_KEY, INVALID_REQUEST_ERROR_PREFIX} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {
+  INVALID_REQUEST_ERROR_PREFIX,
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  GET,
+} from '../../utils/serviceConstants';
 
 type QwenErrorResponse = {
   error?: {
@@ -13,8 +20,8 @@ type QwenErrorResponse = {
 export class QwenUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -39,7 +46,7 @@ export class QwenUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: QwenUtils.handleVerificationResult,
     };
   }

@@ -5,11 +5,14 @@ import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
+import {OBJECT} from '../utils/serviceConstants';
 import {GeminiUtils} from './utils/geminiUtils';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {Gemini} from '../../types/gemini';
@@ -19,7 +22,7 @@ import {DeepChat} from '../../deepChat';
 // https://ai.google.dev/api/generate-content#method:-models.generatecontent
 // https://ai.google.dev/gemini-api/docs/text-generation
 export class GeminiIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Gemini API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Gemini');
   override keyHelpUrl = 'https://aistudio.google.com/app/apikey';
   urlPrefix = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   url = '';
@@ -30,9 +33,9 @@ export class GeminiIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.gemini;
+    const config = directConnectionCopy.gemini as Gemini & APIKey;
     super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.systemInstruction) this._systemInstruction = config.systemInstruction;
       const {function_handler} = deepChat.directConnection?.gemini as Gemini;
       if (function_handler) this._functionHandler = function_handler;
@@ -56,7 +59,7 @@ export class GeminiIO extends DirectServiceIO {
     const parts: GeminiContent['parts'] = [];
 
     if (message.text && message.text.trim().length > 0) {
-      parts.push({text: message.text});
+      parts.push({[TEXT_KEY]: message.text});
     }
 
     if (message.files && message.files.length > 0) {
@@ -90,7 +93,7 @@ export class GeminiIO extends DirectServiceIO {
     
     if (this._systemInstruction) {
       bodyCopy.systemInstruction = {
-        parts: [{text: this._systemInstruction}]
+        parts: [{[TEXT_KEY]: this._systemInstruction}]
       };
     }
     
@@ -102,7 +105,7 @@ export class GeminiIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       // https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
       // https://www.googlecloudcommunity.com/gc/AI-ML/streamGenerateContent-Method-of-Gemini-Rest-APIs-giving-multiple/
       // m-p/713681?lightbox-message-images-771198=116842i602BA042C49F4979
@@ -129,11 +132,11 @@ export class GeminiIO extends DirectServiceIO {
       const imagePart = parts.find((part) => part.inlineData?.mimeType === 'image/png');
 
       return {
-        text: textPart?.text || '',
+        [TEXT_KEY]: textPart?.text || '',
         files: imagePart?.inlineData?.data ? [{src: `data:image/png;base64,${imagePart.inlineData.data}`}] : [],
       };
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async handleTools(functionCalls: {name: string; args: object}[], prevBody?: Gemini): Promise<Response> {

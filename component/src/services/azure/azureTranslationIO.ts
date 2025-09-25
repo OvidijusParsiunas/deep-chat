@@ -1,5 +1,6 @@
 import {AzureTranslationResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -40,7 +41,7 @@ export class AzureTranslationIO extends DirectServiceIO {
 
   override async extractResultData(result: AzureTranslationResult): Promise<Response> {
     if (Array.isArray(result)) {
-      return {text: result[0].translations?.[0].text || ''};
+      return {[TEXT_KEY]: result[0].translations?.[0].text || ''};
     }
     throw result.error;
   }

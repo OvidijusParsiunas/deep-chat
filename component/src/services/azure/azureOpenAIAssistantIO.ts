@@ -1,6 +1,7 @@
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
 import {DirectConnection} from '../../types/directConnection';
 import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
+import {ERROR, OBJECT} from '../utils/serviceConstants';
 import {OpenAIAssistant} from '../../types/openAI';
 import {AzureOpenAI} from '../../types/azure';
 import {DeepChat} from '../../deepChat';
@@ -9,7 +10,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
   override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
-  override insertKeyPlaceholderText = 'Azure OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Azure OpenAI');
   override keyHelpUrl =
     'https://learn.microsoft.com/en-us/answers/questions/1193991/how-to-get-the-value-of-openai-api-key';
   isTextInputDisabled = false;
@@ -36,7 +37,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
     super(deepChat, config?.assistant, urlSegments,
       AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
 
-    if (typeof config?.assistant === 'object') {
+    if (typeof config?.assistant === OBJECT) {
       const {function_handler, files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this.functionHandler = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
@@ -45,7 +46,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
       });
     } else {
       this.connectSettings.headers ??= {};

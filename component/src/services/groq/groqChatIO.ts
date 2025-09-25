@@ -1,16 +1,18 @@
 import {GroqResult, GroqToolCall, ToolAPI, GroqChoice} from '../../types/groqResult';
 import {GroqMessage, GroqRequestBody, GroqContent} from '../../types/groqInternal';
+import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {GroqUtils} from './utils/groqUtils';
 import {GroqChat} from '../../types/groq';
@@ -19,7 +21,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://console.groq.com/docs/api-reference#chat-create
 export class GroqChatIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Groq API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Groq');
   override keyHelpUrl = 'https://console.groq.com/keys';
   url = 'https://api.groq.com/openai/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'property'];
@@ -32,8 +34,8 @@ export class GroqChatIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.groq;
     super(deepChat, GroqUtils.buildKeyVerificationDetails(), GroqUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.groq?.chat;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.groq?.chat as GroqChat;
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.groq?.chat as GroqChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -66,7 +68,7 @@ export class GroqChatIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: GroqContent[] = GroqChatIO.getImageContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content.length > 0 ? content : message.text || '';
     }
@@ -96,7 +98,7 @@ export class GroqChatIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -113,9 +115,9 @@ export class GroqChatIO extends DirectServiceIO {
       if (result.choices[0].message.tool_calls) {
         return this.handleTools(result.choices[0].message, prevBody);
       }
-      return {text: result.choices[0].message.content || ''};
+      return {[TEXT_KEY]: result.choices[0].message.content || ''};
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: GroqChoice, prevBody?: GroqRequestBody) {
@@ -133,7 +135,7 @@ export class GroqChatIO extends DirectServiceIO {
         });
       }
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   // https://console.groq.com/docs/tool-use

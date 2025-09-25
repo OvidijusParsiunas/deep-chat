@@ -1,6 +1,7 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BuildHeadersFunc} from '../../types/headers';
@@ -67,7 +68,7 @@ export class DirectServiceIO extends BaseServiceIO {
     const handlerResponse = await functionHandler(functions);
     if (!Array.isArray(handlerResponse)) {
       if (handlerResponse.text) {
-        const response = {text: handlerResponse.text};
+        const response = {[TEXT_KEY]: handlerResponse.text};
         const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
         if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
         return {processedResponse};
@@ -87,10 +88,14 @@ export class DirectServiceIO extends BaseServiceIO {
           HTTPRequest.request(this, body, messages);
         }
       }
-      return {text: ''};
+      return {[TEXT_KEY]: ''};
     } catch (e) {
       this.asyncCallInProgress = false;
       throw e;
     }
+  }
+
+  protected genereteAPIKeyName(serviceName: string) {
+    return `${serviceName} API Key`;
   }
 }

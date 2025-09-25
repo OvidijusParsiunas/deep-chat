@@ -1,9 +1,10 @@
 import {MistralMessage, MistralRequestBody, MistralToolCall, MistralContentItem} from '../../types/mistralInternal';
+import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -11,6 +12,7 @@ import {MistralResult} from '../../types/mistralResult';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {MistralUtils} from './utils/mistralUtils';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {Mistral} from '../../types/mistral';
@@ -19,7 +21,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://docs.mistral.ai/api/
 export class MistralIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Mistral API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Mistral');
   override keyHelpUrl = 'https://console.mistral.ai/api-keys/';
   url = 'https://api.mistral.ai/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
@@ -29,9 +31,9 @@ export class MistralIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.mistral;
+    const config = directConnectionCopy.mistral as Mistral & APIKey;
     super(deepChat, MistralUtils.buildKeyVerificationDetails(), MistralUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = deepChat.directConnection?.mistral?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -53,7 +55,7 @@ export class MistralIO extends DirectServiceIO {
       if (file.type === 'image') {
         return {type: 'image_url', image_url: file.src || ''};
       }
-      return {type: 'text', text: `[Unsupported file type: ${file.type}]`};
+      return {type: 'text', [TEXT_KEY]: `[Unsupported file type: ${file.type}]`};
     });
   }
 
@@ -61,7 +63,7 @@ export class MistralIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: MistralContentItem[] = MistralIO.getFileContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content;
     }
@@ -89,7 +91,7 @@ export class MistralIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -114,11 +116,11 @@ export class MistralIO extends DirectServiceIO {
         if (choice.message.tool_calls) {
           return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
         }
-        return {text: choice.message.content || ''};
+        return {[TEXT_KEY]: choice.message.content || ''};
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: MistralResult['choices'][0], prevBody?: Mistral) {
@@ -127,7 +129,7 @@ export class MistralIO extends DirectServiceIO {
       const tools = {tool_calls: delta.tool_calls};
       return this.handleTools(tools, prevBody);
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post

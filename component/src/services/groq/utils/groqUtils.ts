@@ -1,6 +1,13 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
+import {
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  UNAUTHORIZED,
+  GET,
+} from '../../utils/serviceConstants';
 
 type GroqErrorResponse = {
   error?: {
@@ -11,8 +18,8 @@ type GroqErrorResponse = {
 export class GroqUtils {
   public static buildHeaders(key?: string) {
     return {
-      [CONTENT_TYPE_KEY]: 'application/json',
-      Authorization: `Bearer ${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
     };
   }
 
@@ -24,7 +31,7 @@ export class GroqUtils {
   ) {
     const groqResult = result as GroqErrorResponse;
     if (groqResult.error) {
-      if (groqResult.error.message === 'Unauthorized') {
+      if (groqResult.error.message === UNAUTHORIZED) {
         onFail(ErrorMessages.INVALID_KEY);
       } else {
         onFail(ErrorMessages.CONNECTION_FAILED);
@@ -37,7 +44,7 @@ export class GroqUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.groq.com/openai/v1/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: GroqUtils.handleVerificationResult,
     };
   }

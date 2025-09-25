@@ -1,4 +1,4 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TogetherTextToSpeechRequestBody} from '../../types/togetherInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -13,7 +13,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://docs.together.ai/reference/audio-speech
 export class TogetherTextToSpeechIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Together AI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Together AI');
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/audio/speech';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
@@ -22,8 +22,8 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TogetherUtils.buildKeyVerificationDetails(), TogetherUtils.buildHeaders, apiKey);
-    const config = directConnectionCopy.together?.textToSpeech;
-    if (typeof config === 'object') {
+    const config = directConnectionCopy.together?.textToSpeech as TogetherTextToSpeech & APIKey;
+    if (typeof config === OBJECT) {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
     }

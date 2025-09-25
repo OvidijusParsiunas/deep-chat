@@ -1,9 +1,11 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {ERROR, GET} from '../utils/serviceConstants';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
 import {AzureUtils} from './utils/azureUtils';
@@ -30,7 +32,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({error: AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE});
       });
     } else {
       this.rawBody.language ??= 'en';
@@ -48,7 +50,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
           {
             id: '1',
             language: body.language,
-            text: mostRecentMessageText,
+            [TEXT_KEY]: mostRecentMessageText,
           },
         ],
       },
@@ -72,10 +74,10 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     if (this.messages && this.completionsHandlers) {
       this.asyncCallInProgress = true;
       const jobURL = result.headers.get('operation-location') as string;
-      const requestInit = {method: 'GET', headers: this.connectSettings?.headers as GenericObject<string>};
+      const requestInit = {method: GET, headers: this.connectSettings?.headers as GenericObject<string>};
       HTTPRequest.executePollRequest(this, jobURL, requestInit, this.messages);
     }
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   async extractPollResultData(result: AzureSummarizationResult): PollResult {
@@ -87,6 +89,6 @@ export class AzureSummarizationIO extends AzureLanguageIO {
     for (const a of result.tasks.items[0].results.documents[0].sentences) {
       textResult += a.text;
     }
-    return {text: textResult || ''};
+    return {[TEXT_KEY]: textResult || ''};
   }
 }

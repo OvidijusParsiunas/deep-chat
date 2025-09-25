@@ -1,5 +1,5 @@
+import {ERROR, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
-import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -11,7 +11,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAITextToSpeechIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   url = 'https://api.openai.com/v1/audio/speech';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
@@ -30,7 +30,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
     const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
     const config = directConnectionCopy?.openAI?.textToSpeech as NonNullable<OpenAI['textToSpeech']>;
-    if (typeof config === 'object') Object.assign(this.rawBody, config);
+    if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.rawBody.model ??= OpenAITextToSpeechIO.DEFAULT_MODEL;
     this.rawBody.voice ??= OpenAITextToSpeechIO.DEFAULT_VOIDE;
     this.textInputPlaceholderText = 'Insert text to generate audio';
@@ -64,6 +64,6 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
       });
     }
     if (result.error) throw result.error.message;
-    return {error: 'error'}; // this should theoritaclly not get called but here for typescript
+    return {[ERROR]: ERROR}; // this should theoritaclly not get called but here for typescript
   }
 }

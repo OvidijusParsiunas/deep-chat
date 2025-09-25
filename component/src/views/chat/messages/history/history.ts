@@ -1,6 +1,7 @@
 import {HistoryMessage, LoadHistory} from '../../../../types/history';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
+import {SERVICE} from '../../../../utils/consts/messageConstants';
 import {MessageContent} from '../../../../types/messages';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {Legacy} from '../../../../utils/legacy/legacy';
@@ -77,7 +78,7 @@ export class History {
         } catch (e) {
           this._messages.removeMessage(loadingElements);
           this._isPaginationComplete = true;
-          this._messages.addNewErrorMessage('service', History.FAILED_ERROR_MESSAGE, true);
+          this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
           console.error(e);
         }
       }
@@ -106,7 +107,7 @@ export class History {
     } catch (e) {
       this._messages.removeMessage(loadingElements);
       this._isPaginationComplete = true;
-      this._messages.addNewErrorMessage('service', History.FAILED_ERROR_MESSAGE, true);
+      this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
       console.error(e);
     }
     History.displayIntroMessages(this._messages.messageElementRefs);

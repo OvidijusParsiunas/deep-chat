@@ -6,6 +6,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {RoleToStream, Websocket} from './websocket';
 import {ServiceIO} from '../../services/serviceIO';
+import {SERVICE} from '../consts/messageConstants';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
 import {Stream} from './stream';
@@ -24,14 +25,14 @@ export class CustomHandler {
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
-        messages.addNewErrorMessage('service', 'Error in server message');
+        messages.addNewErrorMessage(SERVICE, 'Error in server message');
         io.completionsHandlers.onFinish();
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
         const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
-          messages.addNewErrorMessage('service', errorMessage.error);
+          messages.addNewErrorMessage(SERVICE, errorMessage.error);
           io.completionsHandlers.onFinish();
         } else if (Stream.isSimulatable(io.stream, result as Response)) {
           Stream.simulate(messages, io.streamHandlers, result as Response);
@@ -56,7 +57,7 @@ export class CustomHandler {
       }
     } catch (error) {
       console.error(error);
-      messages.addNewErrorMessage('service', error as Error);
+      messages.addNewErrorMessage(SERVICE, error as Error);
     }
   }
 
@@ -103,7 +104,7 @@ export class CustomHandler {
   private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
     console.error(errorMessage);
     stream.finaliseStreamedMessage();
-    messages.addNewErrorMessage('service', errorMessage);
+    messages.addNewErrorMessage(SERVICE, errorMessage);
     io.streamHandlers.onClose();
   }
 
@@ -122,13 +123,13 @@ export class CustomHandler {
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
         console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
-        messages.addNewErrorMessage('service', 'Error in server message');
+        messages.addNewErrorMessage(SERVICE, 'Error in server message');
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
         const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
         if (errorMessage) {
           console.error(errorMessage.error);
-          if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', errorMessage.error);
+          if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, errorMessage.error);
         } else if (Stream.isSimulation(io.stream)) {
           const message = result as Response; // array not supported for streaming
           const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);

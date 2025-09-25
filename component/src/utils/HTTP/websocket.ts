@@ -2,8 +2,10 @@ import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {ErrorMessages} from '../errorMessages/errorMessages';
+import {OBJECT} from '../../services/utils/serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
+import {SERVICE} from '../consts/messageConstants';
 import {StreamConfig} from '../../types/stream';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
@@ -38,7 +40,7 @@ export class Websocket {
       io.websocket = websocket;
       io.websocket.onopen = () => {
         messages.removeError();
-        if (io.websocket && typeof io.websocket === 'object') Websocket.assignListeners(io, websocket, messages);
+        if (io.websocket && typeof io.websocket === OBJECT) Websocket.assignListeners(io, websocket, messages);
         io.deepChat._validationHandler?.();
       };
       io.websocket.onerror = (event) => {
@@ -55,7 +57,7 @@ export class Websocket {
     io.deepChat._validationHandler?.();
     if (!Websocket.isElementPresentInDOM(io.deepChat)) return;
     io.websocket = 'pending';
-    if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+    if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, 'Connection error');
     setTimeout(() => {
       Websocket.createConnection(io, messages);
     }, 5000);
@@ -88,7 +90,7 @@ export class Websocket {
     ws.onclose = () => {
       console.error('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
-      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+      if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, 'Connection error');
       if (io.stream) io.streamHandlers.onAbort?.();
       Websocket.createConnection(io, messages);
     };
@@ -100,12 +102,12 @@ export class Websocket {
     if (!ws || ws === 'pending') return;
     const requestDetails = {body, headers: io.connectSettings?.headers};
     const {body: interceptedBody, error} = await RequestUtils.processRequestInterceptor(io.deepChat, requestDetails);
-    if (error) return messages.addNewErrorMessage('service', error);
+    if (error) return messages.addNewErrorMessage(SERVICE, error);
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {
       console.error('Connection is not open');
-      if (!messages.isLastMessageError()) messages.addNewErrorMessage('service', 'Connection error');
+      if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, 'Connection error');
     } else {
       ws.send(JSON.stringify(processedBody));
       io.completionsHandlers.onFinish();

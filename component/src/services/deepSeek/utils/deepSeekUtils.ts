@@ -1,6 +1,13 @@
-import {AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {
+  AUTHENTICATION_ERROR_PREFIX,
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  GET,
+} from '../../utils/serviceConstants';
 
 type DeepSeekErrorResponse = {
   error?: {
@@ -13,8 +20,8 @@ type DeepSeekErrorResponse = {
 export class DeepSeekUtils {
   public static buildHeaders(key: string) {
     return {
-      Authorization: `Bearer ${key}`,
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -39,7 +46,7 @@ export class DeepSeekUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: 'https://api.deepseek.com/models',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: DeepSeekUtils.handleVerificationResult,
     };
   }

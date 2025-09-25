@@ -1,6 +1,7 @@
-import {INVALID_ERROR_PREFIX} from '../utils/serviceConstants';
+import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIAudioResult} from '../../types/openAIResult';
@@ -11,7 +12,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class OpenAISpeechToTextIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'OpenAI API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
   private static readonly AUDIO_TRANSLATIONS_URL = 'https://api.openai.com/v1/audio/translations';
@@ -25,7 +26,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   url = ''; // set dynamically
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
-  textInputPlaceholderText = 'Upload an audio file';
+  textInputPlaceholderText = UPLOAD_AN_AUDIO_FILE;
   private _service_url: string = OpenAISpeechToTextIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
@@ -88,6 +89,6 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   override async extractResultData(result: OpenAIAudioResult): Promise<Response> {
     if (result.error) throw result.error.message;
-    return {text: result.text};
+    return {[TEXT_KEY]: result.text};
   }
 }

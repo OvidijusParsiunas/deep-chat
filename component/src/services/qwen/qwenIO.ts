@@ -1,10 +1,11 @@
 import {QwenRequestBody, QwenMessage, QwenToolCall, QwenContent} from '../../types/qwenInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
-import {INCORRECT_ERROR_PREFIX} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {QwenResult, ToolAPI} from '../../types/qwenResult';
@@ -12,6 +13,7 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {QwenUtils} from './utils/qwenUtils';
 import {APIKey} from '../../types/APIKey';
@@ -20,7 +22,7 @@ import {Qwen} from '../../types/qwen';
 
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
 export class QwenIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = 'Qwen API Key';
+  override insertKeyPlaceholderText = this.genereteAPIKeyName('Qwen');
   override keyHelpUrl = 'https://www.alibabacloud.com/help/en/model-studio/get-api-key';
   url = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
   permittedErrorPrefixes = ['No static', 'The model', INCORRECT_ERROR_PREFIX];
@@ -31,9 +33,9 @@ export class QwenIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const config = directConnectionCopy.qwen;
+    const config = directConnectionCopy.qwen as Qwen & APIKey;
     super(deepChat, QwenUtils.buildKeyVerificationDetails(), QwenUtils.buildHeaders, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.qwen as Qwen)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
@@ -66,7 +68,7 @@ export class QwenIO extends DirectServiceIO {
     if (message.files && message.files.length > 0) {
       const content: QwenContent[] = QwenIO.getImageContent(message.files);
       if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', text: message.text});
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
       }
       return content.length > 0 ? content : message.text || '';
     }
@@ -94,7 +96,7 @@ export class QwenIO extends DirectServiceIO {
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       Stream.request(this, body, messages);
     } else {
@@ -118,11 +120,11 @@ export class QwenIO extends DirectServiceIO {
         if (choice.message.tool_calls) {
           return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
         }
-        return {text: choice.message.content || ''};
+        return {[TEXT_KEY]: choice.message.content || ''};
       }
     }
 
-    return {text: ''};
+    return {[TEXT_KEY]: ''};
   }
 
   private async extractStreamResult(choice: QwenResult['choices'][0], prevBody?: Qwen) {
@@ -140,7 +142,7 @@ export class QwenIO extends DirectServiceIO {
         });
       }
     }
-    return {text: delta?.content || ''};
+    return {[TEXT_KEY]: delta?.content || ''};
   }
 
   private async handleTools(tools: ToolAPI, prevBody?: Qwen): Promise<ResponseI> {

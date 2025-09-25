@@ -1,3 +1,4 @@
+import {TEXT_KEY} from '../../../../utils/consts/messageConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
@@ -37,7 +38,7 @@ export class HTMLDeepChatElements {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
       element.addEventListener('click', () => {
-        messages.submitUserMessage?.({text: element.textContent?.trim() || ''});
+        messages.submitUserMessage?.({[TEXT_KEY]: element.textContent?.trim() || ''});
       });
     });
   }

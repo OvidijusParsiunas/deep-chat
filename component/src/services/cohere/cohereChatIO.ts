@@ -1,8 +1,11 @@
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {Legacy} from '../../utils/legacy/legacy';
+import {OBJECT} from '../utils/serviceConstants';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {Cohere} from '../../types/cohere';
@@ -15,7 +18,7 @@ export class CohereChatIO extends CohereIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const config = directConnectionCopy.cohere;
     super(deepChat, 'https://api.cohere.com/v2/chat', 'Ask me anything!', {}, config);
-    if (typeof config === 'object') {
+    if (typeof config === OBJECT) {
       const canSendMessage = Legacy.processCohere(config);
       this.canSendMessage = () => canSendMessage;
       this.cleanConfig(config);
@@ -43,7 +46,7 @@ export class CohereChatIO extends CohereIO {
     if (!this.connectSettings) throw new Error('Request settings have not been set up');
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
-    if ((stream && (typeof stream !== 'object' || !stream.simulation)) || body.stream) {
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
       body.stream = true;
       this.stream = {readable: true};
       Stream.request(this, body, messages);
@@ -64,7 +67,7 @@ export class CohereChatIO extends CohereIO {
 
     // Handle non-streaming response (final response)
     if ('message' in result && result.message?.content?.[0]?.text) {
-      return {text: result.message.content[0].text};
+      return {[TEXT_KEY]: result.message.content[0].text};
     }
 
     throw new Error('Invalid response format from Cohere API');

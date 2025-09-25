@@ -1,4 +1,5 @@
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {GET} from '../../utils/serviceConstants';
 
 export class OllamaUtils {
   public static buildHeaders() {
@@ -8,7 +9,7 @@ export class OllamaUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     return {
       url: '',
-      method: 'GET',
+      method: GET,
       handleVerificationResult: () => {},
     };
   }

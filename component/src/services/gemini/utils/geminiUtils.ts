@@ -1,12 +1,12 @@
+import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {GeminiGenerateContentResult} from '../../../types/geminiResult';
-import {CONTENT_TYPE_KEY} from '../../utils/serviceConstants';
 
 export class GeminiUtils {
   public static buildHeaders() {
     return {
-      [CONTENT_TYPE_KEY]: 'application/json',
+      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
     };
   }
 
@@ -31,7 +31,7 @@ export class GeminiUtils {
     return {
       url,
       augmentUrl: (key: string) => `${url}${key}`,
-      method: 'GET',
+      method: GET,
       handleVerificationResult: GeminiUtils.handleVerificationResult,
     };
   }

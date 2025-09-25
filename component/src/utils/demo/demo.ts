@@ -1,4 +1,5 @@
 import {MessageContentI, MessageToElements} from '../../types/messagesInternal';
+import {SERVICE, TEXT_KEY} from '../consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
 import {RequestUtils} from '../HTTP/requestUtils';
@@ -46,7 +47,7 @@ export class Demo {
   private static getResponse({customDemoResponse, messageToElements}: Messages): Response {
     return customDemoResponse
       ? Demo.getCustomResponse(customDemoResponse, messageToElements[messageToElements.length - 1][0])
-      : {text: Demo.generateResponse(messageToElements)};
+      : {[TEXT_KEY]: Demo.generateResponse(messageToElements)};
   }
 
   // timeout is used to simulate a timeout for a response to come back
@@ -58,7 +59,7 @@ export class Demo {
       const messageDataArr = Array.isArray(result) ? result : [result];
       const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
       if (errorMessage) {
-        messages.addNewErrorMessage('service', errorMessage.error);
+        messages.addNewErrorMessage(SERVICE, errorMessage.error);
         io.completionsHandlers.onFinish();
       } else if (Stream.isSimulatable(io.stream, result as Response)) {
         Stream.simulate(messages, io.streamHandlers, result as Response);
