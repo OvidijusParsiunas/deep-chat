@@ -1,4 +1,5 @@
-import {ERROR, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
+import {CONTENT_TYPE_H_KEY, ERROR, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -53,10 +54,10 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   }
 
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
-    if (!files?.[0]) throw new Error('No file was added');
+    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!files?.[0]) throw new Error(ErrorMessages.NO_FILE_ADDED_ERROR);
     if (this.connectSettings?.headers) {
-      this.connectSettings.headers['Content-Type'] = files[0].name.toLocaleLowerCase().endsWith('.wav')
+      this.connectSettings.headers[CONTENT_TYPE_H_KEY] = files[0].name.toLocaleLowerCase().endsWith('.wav')
         ? 'audio/wav; codecs=audio/pcm; samplerate=16000'
         : 'audio/ogg; codecs=opus';
     }

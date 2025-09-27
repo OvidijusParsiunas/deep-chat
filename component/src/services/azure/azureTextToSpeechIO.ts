@@ -1,3 +1,4 @@
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
 import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -59,7 +60,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as unknown as object, messages, false);
   }

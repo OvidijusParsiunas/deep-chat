@@ -1,4 +1,5 @@
 import {ERROR, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
@@ -47,7 +48,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this.url = this.connectSettings.url || this.url;
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body, messages);

@@ -1,5 +1,6 @@
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -52,7 +53,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
     HTTPRequest.request(this, body, messages);
   }

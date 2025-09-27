@@ -1,5 +1,6 @@
 import {StabilityAI, StabilityAIImageToImageMasking} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -69,8 +70,8 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
-    if (!files || !files[0] || !files[1]) throw new Error('Image was not found');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!files || !files[0] || !files[1]) throw new Error(ErrorMessages.IMAGE_NOT_FOUND_ERROR);
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], files[1], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason

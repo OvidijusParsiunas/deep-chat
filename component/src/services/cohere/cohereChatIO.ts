@@ -1,4 +1,5 @@
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
@@ -43,7 +44,7 @@ export class CohereChatIO extends CohereIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
     if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {

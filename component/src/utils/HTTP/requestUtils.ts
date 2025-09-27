@@ -25,7 +25,7 @@ export class RequestUtils {
   // prettier-ignore
   public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
       request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
-    if (!connectSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const previousContetType = connectSettings.headers[CONTENT_TYPE_H_KEY];
     delete connectSettings.headers[CONTENT_TYPE_H_KEY];
     let result;

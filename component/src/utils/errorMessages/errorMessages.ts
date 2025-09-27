@@ -49,6 +49,9 @@ const INVALID_STREAM_EVENT =
 export const ErrorMessages = {
   INVALID_KEY: 'Invalid API Key',
   CONNECTION_FAILED: 'Failed to connect',
+  REQUEST_SETTINGS_ERROR: 'Request settings have not been set up',
+  NO_FILE_ADDED_ERROR: 'No file was added',
+  IMAGE_NOT_FOUND_ERROR: 'Image was not found',
   INVALID_RESPONSE: getInvalidResponseMessage,
   INVALID_MODEL_REQUEST: getModelRequestMessage,
   INVALID_MODEL_RESPONSE: getModelResponseMessage,

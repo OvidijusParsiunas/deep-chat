@@ -1,4 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -41,7 +42,7 @@ export class XImagesIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings?.headers) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
     HTTPRequest.request(this, body, messages);
   }

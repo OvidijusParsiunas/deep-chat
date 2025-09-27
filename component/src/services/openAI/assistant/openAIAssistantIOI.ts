@@ -201,7 +201,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     this._waitingForStreamResponse = false;
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this.rawBody.assistant_id ??= this._config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this._searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messageToElements);

@@ -92,7 +92,7 @@ export class QwenIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;

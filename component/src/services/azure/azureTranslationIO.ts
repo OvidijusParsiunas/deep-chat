@@ -1,3 +1,4 @@
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {AzureTranslationResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -34,7 +35,7 @@ export class AzureTranslationIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(pMessages);
     HTTPRequest.request(this, body as unknown as object, messages);
   }

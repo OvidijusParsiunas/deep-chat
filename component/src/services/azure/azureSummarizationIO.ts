@@ -1,4 +1,5 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -63,7 +64,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages);
     HTTPRequest.request(this, body as object, messages);
     this.messages = messages;

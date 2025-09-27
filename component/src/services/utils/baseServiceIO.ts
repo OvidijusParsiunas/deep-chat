@@ -1,5 +1,6 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY} from './serviceConstants';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {History} from '../../views/chat/messages/history/history';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -131,7 +132,7 @@ export class BaseServiceIO implements ServiceIO {
 
   // prettier-ignore
   async callAPI(requestContents: RequestContents, messages: Messages) {
-    if (!this.connectSettings) throw new Error('Request settings have not been set up');
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     const processedMessages = MessageLimitUtils.processMessages(
       messages.messageToElements.map(([msg]) => msg), this.maxMessages, this.totalMessagesMaxCharLength);
     // if handler is being used and demo is on, websocket calls should be directed to callServiceAPI
