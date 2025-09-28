@@ -60,9 +60,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body as unknown as object, messages, false);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, undefined, false);
   }
 
   override async extractResultData(result: AzureTextToSpeechResult): Promise<Response> {

@@ -96,16 +96,8 @@ export class BigModelChatIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this._messages ??= messages;
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    const stream = this.stream;
-    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
-      body.stream = true;
-      Stream.request(this, body, messages);
-    } else {
-      HTTPRequest.request(this, body, messages);
-    }
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
   }
 
   override async extractResultData(result: BigModelResult, prevBody?: BigModelChat): Promise<ResponseI> {

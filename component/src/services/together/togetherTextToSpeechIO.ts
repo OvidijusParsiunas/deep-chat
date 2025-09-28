@@ -1,12 +1,10 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TogetherTextToSpeechRequestBody} from '../../types/togetherInternal';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {TogetherTextToSpeech} from '../../types/together';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {TogetherUtils} from './utils/togetherUtils';
 import {APIKey} from '../../types/APIKey';
@@ -44,9 +42,7 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    return await HTTPRequest.request(this, body, messages);
+    return this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {

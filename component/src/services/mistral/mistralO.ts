@@ -6,14 +6,11 @@ import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {MistralResult} from '../../types/mistralResult';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {MistralUtils} from './utils/mistralUtils';
-import {StreamConfig} from '../../types/stream';
-import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
@@ -87,16 +84,8 @@ export class MistralIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this._messages ??= messages;
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    const stream = this.stream;
-    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
-      body.stream = true;
-      Stream.request(this, body, messages);
-    } else {
-      HTTPRequest.request(this, body, messages);
-    }
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
   }
 
   override async extractResultData(result: MistralResult, prevBody?: Mistral): Promise<Response> {

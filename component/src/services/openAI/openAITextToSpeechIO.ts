@@ -1,12 +1,10 @@
 import {ERROR, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -48,10 +46,8 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this.url = this.connectSettings.url || this.url;
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body, messages);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
   }
 
   override async extractResultData(result: OpenAITextToSpeechResult): Promise<Response> {

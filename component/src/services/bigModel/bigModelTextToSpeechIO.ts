@@ -44,9 +44,7 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    return await HTTPRequest.request(this, body, messages);
+    return this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {

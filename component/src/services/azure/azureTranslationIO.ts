@@ -35,9 +35,7 @@ export class AzureTranslationIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(pMessages);
-    HTTPRequest.request(this, body as unknown as object, messages);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
   }
 
   override async extractResultData(result: AzureTranslationResult): Promise<Response> {

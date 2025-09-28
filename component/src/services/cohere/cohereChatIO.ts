@@ -1,13 +1,9 @@
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {Legacy} from '../../utils/legacy/legacy';
 import {OBJECT} from '../utils/serviceConstants';
-import {StreamConfig} from '../../types/stream';
-import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
 import {Cohere} from '../../types/cohere';
 import {APIKey} from '../../types/APIKey';
@@ -44,16 +40,7 @@ export class CohereChatIO extends CohereIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    const stream = this.stream;
-    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
-      body.stream = true;
-      this.stream = {readable: true};
-      Stream.request(this, body, messages);
-    } else {
-      HTTPRequest.request(this, body, messages);
-    }
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {readable: true});
   }
 
   override async extractResultData(result: CohereChatResult): Promise<Response> {

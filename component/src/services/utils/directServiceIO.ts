@@ -1,14 +1,18 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
+import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BuildHeadersFunc} from '../../types/headers';
+import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {BaseServiceIO} from './baseServiceIO';
 import {Connect} from '../../types/connect';
 import {APIKey} from '../../types/APIKey';
+import {OBJECT} from './serviceConstants';
 import {DeepChat} from '../../deepChat';
 
 export class DirectServiceIO extends BaseServiceIO {
@@ -61,6 +65,26 @@ export class DirectServiceIO extends BaseServiceIO {
 
   override isDirectConnection() {
     return true;
+  }
+
+  async callDirectServiceServiceAPI(
+    messages: Messages,
+    pMessages: MessageContentI[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    preprocessBody: (body: any, messages: MessageContentI[]) => any,
+    streamConfig?: StreamConfig,
+    stringifyBody?: boolean
+  ) {
+    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    const body = preprocessBody(this.rawBody, pMessages);
+    const stream = streamConfig ? this.stream : false;
+    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
+      body.stream = true;
+      if (streamConfig?.readable) this.stream = {readable: true};
+      Stream.request(this, body, messages);
+    } else {
+      return await HTTPRequest.request(this, body, messages, stringifyBody);
+    }
   }
 
   protected async callToolFunction(functionHandler: ChatFunctionHandler, functions: FunctionsDetails) {

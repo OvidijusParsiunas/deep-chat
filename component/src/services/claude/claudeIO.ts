@@ -9,13 +9,10 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {ClaudeUtils} from './utils/claudeUtils';
-import {StreamConfig} from '../../types/stream';
-import {Stream} from '../../utils/HTTP/stream';
 import {Claude} from '../../types/claude';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -96,16 +93,8 @@ export class ClaudeIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
     this._messages ??= messages;
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    const stream = this.stream;
-    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
-      body.stream = true;
-      Stream.request(this, body, messages);
-    } else {
-      HTTPRequest.request(this, body, messages);
-    }
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
   }
 
   override async extractResultData(result: ClaudeResult, prevBody?: ClaudeRequestBody): Promise<ResponseI> {

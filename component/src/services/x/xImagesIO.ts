@@ -1,10 +1,8 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
 import {XImageResult} from '../../types/xResult';
 import {Response} from '../../types/response';
@@ -35,16 +33,15 @@ export class XImagesIO extends DirectServiceIO {
     this.rawBody.model ??= 'grok-2-image';
   }
 
-  private preprocessBody(body: XImages, lastMessage?: string) {
+  private preprocessBody(body: XImages, messages: MessageContentI[]) {
+    const lastMessage = messages[messages.length - 1].text;
     const bodyCopy = JSON.parse(JSON.stringify(body));
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
-    HTTPRequest.request(this, body, messages);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
   }
 
   override async extractResultData(result: XImageResult): Promise<Response> {

@@ -21,6 +21,7 @@ import {DeepChat} from '../../deepChat';
 
 // https://ai.google.dev/api/generate-content#method:-models.generatecontent
 // https://ai.google.dev/gemini-api/docs/text-generation
+
 export class GeminiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Gemini');
   override keyHelpUrl = 'https://aistudio.google.com/app/apikey';
@@ -88,15 +89,15 @@ export class GeminiIO extends DirectServiceIO {
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemInstruction?.length || 0) : -1)
       .map((message) => GeminiIO.getContent(message));
-    
+
     bodyCopy.contents = processedMessages;
-    
+
     if (this._systemInstruction) {
       bodyCopy.systemInstruction = {
         parts: [{[TEXT_KEY]: this._systemInstruction}]
       };
     }
-    
+
     return bodyCopy;
   }
 

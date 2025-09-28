@@ -1,19 +1,15 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {TogetherUtils} from './utils/togetherUtils';
 import {TogetherChat} from '../../types/together';
-import {StreamConfig} from '../../types/stream';
-import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -63,15 +59,7 @@ export class TogetherChatIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    const stream = this.stream;
-    if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
-      body.stream = true;
-      Stream.request(this, body, messages);
-    } else {
-      HTTPRequest.request(this, body, messages);
-    }
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
   }
 
   override async extractResultData(result: TogetherResult): Promise<ResponseI> {

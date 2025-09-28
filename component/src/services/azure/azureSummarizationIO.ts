@@ -64,9 +64,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    const body = this.preprocessBody(this.rawBody, pMessages);
-    HTTPRequest.request(this, body as object, messages);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
     this.messages = messages;
   }
 
