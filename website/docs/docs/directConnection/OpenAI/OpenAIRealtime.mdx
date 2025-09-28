@@ -672,11 +672,12 @@ chatElementRef.openAI.realtime.methods.sendMessage('Are you a real human?', 'use
 
 ### `SpeechToSpeechEvents` {#SpeechToSpeechEvents}
 
-- Functions: \{ `started?:` () => `void`, `stopped?:` () => `void` \}
+- Functions: \{ `started?:` () => `void`, `stopped?:` () => `void`, [`onMessage?: OnMessage`](/docs/events#onMessage) \}
 - Events: `sts-session-started` | `sts-session-stopped`
 
 `started`/`sts-session-started` is triggered when the conversion has started. <br />
 `stopped`/`sts-session-stopped` is triggered when the conversion has stopped. <br />
+`onMessage` is triggered when voice messages are transcribed to text (both user and AI messages). This uses the same [`OnMessage`](/docs/events#onMessage) interface as regular chat messages. For user messages, you must enable `input_audio_transcription` in the [`config`](#OpenAIRealtimeConfig). AI message transcription is enabled by default. <br />
 
 {' '}
 <ContainersKeyToggle>
@@ -712,6 +713,10 @@ chatElementRef.openAI.realtime.methods.sendMessage('Are you a real human?', 'use
 chatElementRef.directConnection.openAI.realtime.events = {
   started: () => console.log('Session started'),
   stopped: () => console.log('Session stopped'),
+  onMessage: (body) => {
+    const {message, isHistory} = body;
+    console.log(`${message.role} said: ${message.text}`);
+  },
 };
 ```
 
@@ -728,6 +733,126 @@ chatElementRef.addEventListener('sts-session-started', () => {
 chatElementRef.addEventListener('sts-session-stopped', () => {
   console.log('Session stopped');
 });
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Message Transcription Example
+
+The following example shows how to capture transcribed messages from voice conversations:
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          realtime: {
+            config: {
+              input_audio_transcription: { model: "whisper-1" }
+            },
+            events: {
+              onMessage: (body) => {
+                console.log(`${body.message.role} said: ${body.message.text}`);
+              }
+            }
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          realtime: {
+            config: {
+              input_audio_transcription: { model: "whisper-1" }
+            },
+            events: {
+              onMessage: (body) => {
+                console.log(`${body.message.role} said: ${body.message.text}`);
+              }
+            }
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "realtime": {
+        "config": {
+          "input_audio_transcription": {"model": "whisper-1"}
+        },
+        "events": {
+          "onMessage": "chatElementRef.handleMessage"
+        }
+      }
+    }
+  }'
+></deep-chat>
+
+<script>
+  // Define handler function
+  const chatElementRef = document.querySelector('deep-chat');
+  chatElementRef.handleMessage = (body) => {
+    const {message, isHistory} = body;
+    console.log(`${message.role} said: ${message.text}`);
+    // message.role will be 'user' or 'ai'
+    // message.text contains the transcribed speech
+  };
+</script>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "realtime": {
+        "config": {
+          "input_audio_transcription": {"model": "whisper-1"}
+        }
+      }
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+
+<script>
+  // Retrieve element reference
+  const chatElementRef = document.querySelector('deep-chat');
+
+  // Set up message handler
+  chatElementRef.directConnection.openAI.realtime.events = {
+    onMessage: (body) => {
+      const {message, isHistory} = body;
+      console.log(`${message.role} said: ${message.text}`);
+
+      // You can also access other MessageContent properties:
+      // message.files, message.html, message.custom, etc.
+    }
+  };
+</script>
 ```
 
 </TabItem>

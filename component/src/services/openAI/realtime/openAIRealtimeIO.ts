@@ -393,6 +393,22 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         this.stopOnError(response.message);
       } else if (response.type === 'response.audio_transcript.delta') {
         // console.log(response.delta);
+      } else if (response.type === 'response.audio_transcript.done') {
+        // AI message transcription is complete
+        if (response.transcript) {
+          this._events?.onMessage?.({
+            message: {role: 'ai', text: response.transcript},
+            isHistory: false
+          });
+        }
+      } else if (response.type === 'conversation.item.input_audio_transcription.completed') {
+        // User message transcription is complete
+        if (response.transcript) {
+          this._events?.onMessage?.({
+            message: {role: 'user', text: response.transcript},
+            isHistory: false
+          });
+        }
       }
     });
 
