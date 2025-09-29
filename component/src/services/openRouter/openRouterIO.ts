@@ -1,7 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -31,7 +30,7 @@ export class OpenRouterIO extends DirectServiceIO {
   url = 'https://openrouter.ai/api/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
-  private _streamToolCalls?: OpenRouterToolCall[];
+  readonly _streamToolCalls?: OpenRouterToolCall[];
   private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
@@ -55,18 +54,6 @@ export class OpenRouterIO extends DirectServiceIO {
     delete config.system_prompt;
     delete config.function_handler;
     delete config.key;
-  }
-
-  private static getImageContent(files: MessageFile[]): OpenRouterContent[] {
-    return files
-      .filter((file) => file.type === 'image')
-      .map((file) => ({
-        type: 'image_url' as const,
-        image_url: {
-          url: file.src || '',
-        },
-      }))
-      .filter((content) => content.image_url.url.length > 0);
   }
 
   private static getAudioContent(files: MessageFile[]): OpenRouterContent[] {
@@ -158,7 +145,13 @@ export class OpenRouterIO extends DirectServiceIO {
       const choice = result.choices?.[0];
       if (choice?.message) {
         if (choice.message.tool_calls) {
-          return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
+          // https://openrouter.ai/docs/features/tool-calling
+          return this.handleToolsGeneric(
+            {tool_calls: choice.message.tool_calls},
+            this._functionHandler,
+            this._messages,
+            prevBody
+          );
         }
 
         const files =
@@ -177,7 +170,7 @@ export class OpenRouterIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: OpenRouterStreamEvent['choices'][0], prevBody?: OpenRouter) {
-    const {delta, finish_reason} = choice;
+    const {delta} = choice;
     // Handle streaming response with images
     if (delta?.images) {
       const files = delta.images.map((image) => ({
@@ -189,48 +182,6 @@ export class OpenRouterIO extends DirectServiceIO {
         files,
       };
     }
-    if (finish_reason === 'tool_calls') {
-      const tools = {tool_calls: this._streamToolCalls};
-      this._streamToolCalls = undefined;
-      return this.handleTools(tools, prevBody);
-    } else if (delta?.tool_calls) {
-      if (!this._streamToolCalls) {
-        this._streamToolCalls = delta.tool_calls;
-      } else {
-        delta.tool_calls.forEach((tool, index) => {
-          if (this._streamToolCalls) this._streamToolCalls[index].function.arguments += tool.function.arguments;
-        });
-      }
-    }
-    return {[TEXT_KEY]: delta?.content || ''};
-  }
-
-  // https://openrouter.ai/docs/features/tool-calling
-  private async handleTools(tools: {tool_calls?: OpenRouterToolCall[]}, prevBody?: OpenRouter): Promise<ResponseI> {
-    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
-    }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
-    const functions = tools.tool_calls.map((call) => {
-      return {name: call.function.name, arguments: call.function.arguments};
-    });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
-    if (processedResponse) return processedResponse;
-
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
-      responses.forEach((resp, index) => {
-        const toolCall = tools.tool_calls?.[index];
-        bodyCp?.messages.push({
-          role: 'tool',
-          tool_call_id: toolCall?.id,
-          name: toolCall?.function.name,
-          content: resp.response,
-        });
-      });
-
-      return this.makeAnotherRequest(bodyCp, this._messages);
-    }
-    throw Error('Function tool response must be an array or contain a text property');
+    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);
   }
 }

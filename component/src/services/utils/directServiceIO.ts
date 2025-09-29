@@ -5,8 +5,10 @@ import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
+import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {BuildHeadersFunc} from '../../types/headers';
+import {MessageFile} from '../../types/messageFile';
 import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {BaseServiceIO} from './baseServiceIO';
@@ -121,5 +123,136 @@ export class DirectServiceIO extends BaseServiceIO {
 
   protected genereteAPIKeyName(serviceName: string) {
     return `${serviceName} API Key`;
+  }
+
+  protected static getImageContent(files: MessageFile[]): {
+    type: 'text' | 'image_url';
+    text?: string;
+    image_url?: {
+      url: string;
+    };
+  }[] {
+    return files
+      .filter((file) => file.type === 'image')
+      .map((file) => ({
+        type: 'image_url' as const,
+        image_url: {
+          url: file.src || '',
+        },
+      }))
+      .filter((content) => content.image_url.url.length > 0);
+  }
+
+  protected static getTextWImagesContent(message: MessageContentI) {
+    if (message.files && message.files.length > 0) {
+      const content = this.getImageContent(message.files);
+      if (message.text && message.text.trim().length > 0) {
+        content.unshift({type: 'text', [TEXT_KEY]: message.text});
+      }
+      return content.length > 0 ? content : message.text || '';
+    }
+    return message.text || '';
+  }
+
+  protected static getTextWFilesContent<T>(message: MessageContentI, getFileContent: (files: MessageFile[]) => T[]) {
+    if (message.files && message.files.length > 0) {
+      const content = getFileContent(message.files);
+      if (message.text && message.text.trim().length > 0) {
+        content.unshift({type: 'text', [TEXT_KEY]: message.text} as T);
+      }
+      return content;
+    }
+    return message.text || '';
+  }
+
+  protected async extractStreamResultWToolsGeneric(
+    service: {
+      _streamToolCalls?: {
+        id: string;
+        function: {
+          name: string;
+          arguments: string;
+        };
+      }[];
+    },
+    choice: {
+      delta?: {
+        content?: string | null;
+        tool_calls?: {
+          id: string;
+          function: {
+            name: string;
+            arguments: string;
+          };
+        }[];
+      };
+      finish_reason?: 'stop' | 'length' | 'tool_calls' | string | null;
+    },
+    functionHandler?: ChatFunctionHandler,
+    messages?: Messages,
+    prevBody?: unknown,
+    system?: {message?: string}
+  ) {
+    const {delta, finish_reason} = choice;
+    if (finish_reason === 'tool_calls') {
+      const tools = {tool_calls: service._streamToolCalls};
+      service._streamToolCalls = undefined;
+      return this.handleToolsGeneric(tools, functionHandler, messages, prevBody, system);
+    } else if (delta?.tool_calls) {
+      if (!service._streamToolCalls) {
+        service._streamToolCalls = delta.tool_calls;
+      } else {
+        delta.tool_calls.forEach((tool, index) => {
+          if (service._streamToolCalls) service._streamToolCalls[index].function.arguments += tool.function.arguments;
+        });
+      }
+    }
+    return {[TEXT_KEY]: delta?.content || ''};
+  }
+
+  protected async handleToolsGeneric(
+    tools: {
+      tool_calls?: {
+        id: string;
+        function: {
+          name: string;
+          arguments: string;
+        };
+      }[];
+    },
+    functionHandler?: ChatFunctionHandler,
+    messages?: Messages,
+    prevBody?: unknown,
+    system?: {message?: string}
+  ): Promise<ResponseI> {
+    if (!tools.tool_calls || !prevBody || !functionHandler) {
+      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+    }
+    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const functions = tools.tool_calls.map((call) => {
+      return {name: call.function.name, arguments: call.function.arguments};
+    });
+    const {responses, processedResponse} = await this.callToolFunction(functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
+    if (system) {
+      bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
+      if (system.message) bodyCp.messages.unshift({role: 'system', content: system.message});
+    }
+    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
+    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
+      responses.forEach((resp, index) => {
+        const toolCall = tools.tool_calls?.[index];
+        bodyCp?.messages.push({
+          role: 'tool',
+          tool_call_id: toolCall?.id,
+          name: toolCall?.function.name,
+          content: resp.response,
+        });
+      });
+
+      return this.makeAnotherRequest(bodyCp, messages);
+    }
+    throw Error('Function tool response must be an array or contain a text property');
   }
 }

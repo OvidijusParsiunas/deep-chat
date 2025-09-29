@@ -1,12 +1,10 @@
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {BigModelTextToSpeech} from '../../types/bigModel';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BigModelUtils} from './utils/bigModelUtils';
 import {APIKey} from '../../types/APIKey';

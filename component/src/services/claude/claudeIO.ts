@@ -62,17 +62,6 @@ export class ClaudeIO extends DirectServiceIO {
     });
   }
 
-  private static getContent(message: MessageContentI): string | ClaudeContent[] {
-    if (message.files && message.files.length > 0) {
-      const content: ClaudeContent[] = ClaudeIO.getFileContent(message.files);
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text});
-      }
-      return content;
-    }
-    return message.text || '';
-  }
-
   private preprocessBody(body: ClaudeRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as ClaudeRequestBody;
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
@@ -80,7 +69,7 @@ export class ClaudeIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: ClaudeIO.getContent(message),
+        content: ClaudeIO.getTextWFilesContent(message, ClaudeIO.getFileContent),
         role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
       } as ClaudeMessage;
     });

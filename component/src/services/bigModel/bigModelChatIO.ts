@@ -1,27 +1,22 @@
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Response as ResponseI} from '../../types/response';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {BigModelUtils} from './utils/bigModelUtils';
 import {MessageFile} from '../../types/messageFile';
 import {BigModelChat} from '../../types/bigModel';
-import {StreamConfig} from '../../types/stream';
-import {Stream} from '../../utils/HTTP/stream';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {
   BigModelRequestBody,
   BigModelContentItem,
   BigModelUserMessage,
-  BigModelToolCall,
   BigModelMessage,
 } from '../../types/bigModelInternal';
 
@@ -66,17 +61,6 @@ export class BigModelChatIO extends DirectServiceIO {
     });
   }
 
-  private static getContent(message: MessageContentI): string | BigModelContentItem[] {
-    if (message.files && message.files.length > 0) {
-      const content: BigModelContentItem[] = BigModelChatIO.getFileContent(message.files);
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text});
-      }
-      return content;
-    }
-    return message.text || '';
-  }
-
   private preprocessBody(body: BigModelRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelRequestBody;
     const processedMessages: BigModelMessage[] = MessageLimitUtils.getCharacterLimitMessages(
@@ -84,7 +68,7 @@ export class BigModelChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: BigModelChatIO.getContent(message),
+        content: BigModelChatIO.getTextWFilesContent(message, BigModelChatIO.getFileContent),
         role: message.role === 'ai' ? 'assistant' : 'user',
       } as BigModelUserMessage;
     });
@@ -109,7 +93,12 @@ export class BigModelChatIO extends DirectServiceIO {
       if ((result.choices[0] as BigModelNormalResult).message !== undefined) {
         const message = (result.choices[0] as BigModelNormalResult).message;
         if (message.tool_calls) {
-          return this.handleTools({tool_calls: message.tool_calls}, prevBody);
+          return this.handleToolsGeneric(
+            {tool_calls: message.tool_calls},
+            this._functionHandler,
+            this._messages,
+            prevBody
+          );
         }
         return {[TEXT_KEY]: message.content};
       }
@@ -132,38 +121,10 @@ export class BigModelChatIO extends DirectServiceIO {
     if (finish_reason === 'tool_calls') {
       if (delta.tool_calls) {
         const tools = {tool_calls: delta.tool_calls};
-        return this.handleTools(tools, prevBody);
+        return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
       }
       return {[TEXT_KEY]: delta?.content || ''};
     }
     return {[TEXT_KEY]: delta?.content || ''};
-  }
-
-  private async handleTools(tools: {tool_calls?: BigModelToolCall[]}, prevBody?: BigModelChat): Promise<ResponseI> {
-    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
-    }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
-    const functions = tools.tool_calls.map((call) => {
-      return {name: call.function.name, arguments: call.function.arguments};
-    });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
-    if (processedResponse) return processedResponse;
-
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
-      responses.forEach((resp, index) => {
-        const toolCall = tools.tool_calls?.[index];
-        bodyCp?.messages.push({
-          role: 'tool',
-          tool_call_id: toolCall?.id,
-          name: toolCall?.function.name,
-          content: resp.response,
-        });
-      });
-
-      return this.makeAnotherRequest(bodyCp, this._messages);
-    }
-    throw Error('Function tool response must be an array or contain a text property');
   }
 }

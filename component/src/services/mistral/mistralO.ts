@@ -1,6 +1,5 @@
-import {MistralMessage, MistralRequestBody, MistralToolCall, MistralContentItem} from '../../types/mistralInternal';
+import {MistralMessage, MistralRequestBody, MistralContentItem} from '../../types/mistralInternal';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -15,6 +14,9 @@ import {Response} from '../../types/response';
 import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
+
+// WORK - see if there are similar handleTools
+// WORK - move Function tool response must be an array or contain a text property to same variable
 
 // https://docs.mistral.ai/api/
 export class MistralIO extends DirectServiceIO {
@@ -56,17 +58,6 @@ export class MistralIO extends DirectServiceIO {
     });
   }
 
-  private static getContent(message: MessageContentI): string | MistralContentItem[] {
-    if (message.files && message.files.length > 0) {
-      const content: MistralContentItem[] = MistralIO.getFileContent(message.files);
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text});
-      }
-      return content;
-    }
-    return message.text || '';
-  }
-
   private preprocessBody(body: MistralRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as MistralRequestBody;
     const processedMessages: MistralMessage[] = MessageLimitUtils.getCharacterLimitMessages(
@@ -74,7 +65,7 @@ export class MistralIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => ({
       role: message.role === 'ai' ? 'assistant' : 'user',
-      content: MistralIO.getContent(message),
+      content: DirectServiceIO.getTextWFilesContent(message, MistralIO.getFileContent),
     }));
     if (this._systemMessage) {
       processedMessages.unshift({role: 'system', content: this._systemMessage});
@@ -103,7 +94,12 @@ export class MistralIO extends DirectServiceIO {
       // Handle non-streaming response
       if (choice.message) {
         if (choice.message.tool_calls) {
-          return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
+          return this.handleToolsGeneric(
+            {tool_calls: choice.message.tool_calls},
+            this._functionHandler,
+            this._messages,
+            prevBody
+          );
         }
         return {[TEXT_KEY]: choice.message.content || ''};
       }
@@ -116,37 +112,9 @@ export class MistralIO extends DirectServiceIO {
     const {delta, finish_reason} = choice;
     if (finish_reason === 'tool_calls' && delta?.tool_calls) {
       const tools = {tool_calls: delta.tool_calls};
-      return this.handleTools(tools, prevBody);
+      // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post
+      return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
     }
     return {[TEXT_KEY]: delta?.content || ''};
-  }
-
-  // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post
-  private async handleTools(tools: {tool_calls?: MistralToolCall[]}, prevBody?: Mistral): Promise<Response> {
-    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
-    }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
-    const functions = tools.tool_calls.map((call) => {
-      return {name: call.function.name, arguments: call.function.arguments};
-    });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
-    if (processedResponse) return processedResponse;
-
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
-      responses.forEach((resp, index) => {
-        const toolCall = tools.tool_calls?.[index];
-        bodyCp?.messages.push({
-          role: 'tool',
-          tool_call_id: toolCall?.id,
-          name: toolCall?.function.name,
-          content: resp.response,
-        });
-      });
-
-      return this.makeAnotherRequest(bodyCp, this._messages);
-    }
-    throw Error('Function tool response must be an array or contain a text property');
   }
 }

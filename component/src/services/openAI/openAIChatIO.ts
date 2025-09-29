@@ -1,9 +1,8 @@
-import {OpenAIConverseResult, ResultChoice, ToolAPI, ToolCalls} from '../../types/openAIResult';
+import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -27,7 +26,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
-  private _streamToolCalls?: ToolCalls;
+  _streamToolCalls?: ToolCalls;
   private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
@@ -116,7 +115,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleTools(result.choices[0].message, prevBody);
+        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this._messages, prevBody);
       }
       if (result.choices[0].message?.audio) {
         const tts = this.deepChat.textToSpeech;
@@ -132,49 +131,6 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
-    const {delta, finish_reason} = choice;
-    if (finish_reason === 'tool_calls') {
-      const tools = {tool_calls: this._streamToolCalls};
-      this._streamToolCalls = undefined;
-      return this.handleTools(tools, prevBody);
-    } else if (delta?.tool_calls) {
-      if (!this._streamToolCalls) {
-        this._streamToolCalls = delta.tool_calls;
-      } else {
-        delta.tool_calls.forEach((tool, index) => {
-          if (this._streamToolCalls) this._streamToolCalls[index].function.arguments += tool.function.arguments;
-        });
-      }
-    }
-    return {[TEXT_KEY]: delta?.content || ''};
-  }
-
-  private async handleTools(tools: ToolAPI, prevBody?: OpenAIChat): Promise<ResponseI> {
-    // tool_calls, requestFunc and prevBody should theoretically be defined
-    if (!tools.tool_calls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
-    }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
-    const functions = tools.tool_calls.map((call) => {
-      return {name: call.function.name, arguments: call.function.arguments};
-    });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
-    if (processedResponse) return processedResponse;
-
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
-    if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
-      responses.forEach((resp, index) => {
-        const toolCall = tools.tool_calls?.[index];
-        bodyCp?.messages.push({
-          role: 'tool',
-          tool_call_id: toolCall?.id,
-          name: toolCall?.function.name,
-          content: resp.response,
-        });
-      });
-
-      return this.makeAnotherRequest(bodyCp, this._messages);
-    }
-    throw Error(OpenAIUtils.FUNCTION_TOOL_RESP_ERROR);
+    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);
   }
 }

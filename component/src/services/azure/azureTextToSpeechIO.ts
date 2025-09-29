@@ -1,9 +1,7 @@
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
 import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ERROR} from '../utils/serviceConstants';
 import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';

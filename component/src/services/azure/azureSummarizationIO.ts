@@ -1,5 +1,4 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
