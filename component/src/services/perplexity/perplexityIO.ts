@@ -57,7 +57,7 @@ export class PerplexityIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: PerplexityResult): Promise<ResponseI> {

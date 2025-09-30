@@ -40,7 +40,7 @@ export class CohereChatIO extends CohereIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {readable: true});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {readable: true});
   }
 
   override async extractResultData(result: CohereChatResult): Promise<Response> {

@@ -47,7 +47,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     this.url = this.connectSettings.url || this.url;
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this));
   }
 
   override async extractResultData(result: OpenAITextToSpeechResult): Promise<Response> {

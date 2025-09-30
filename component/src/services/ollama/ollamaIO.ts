@@ -96,7 +96,7 @@ export class OllamaIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     this._messages ??= messages;
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {readable: true});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {readable: true});
   }
 
   override async extractResultData(result: OllamaConverseResult, prevBody?: OllamaChat): Promise<ResponseI> {

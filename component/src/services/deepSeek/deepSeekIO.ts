@@ -59,7 +59,7 @@ export class DeepSeekIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: DeepSeekResult): Promise<ResponseI> {

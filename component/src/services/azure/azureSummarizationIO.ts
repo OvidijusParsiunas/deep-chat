@@ -63,7 +63,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this));
     this.messages = messages;
   }
 

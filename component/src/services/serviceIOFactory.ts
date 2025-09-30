@@ -38,7 +38,7 @@ import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
 import {WebModel} from '../webModel/webModel';
-import {MistralIO} from './mistral/mistralO';
+import {MistralIO} from './mistral/mistralIO';
 import {GroqChatIO} from './groq/groqChatIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';

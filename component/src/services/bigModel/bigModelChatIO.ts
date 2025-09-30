@@ -81,7 +81,7 @@ export class BigModelChatIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     this._messages ??= messages;
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: BigModelResult, prevBody?: BigModelChat): Promise<ResponseI> {

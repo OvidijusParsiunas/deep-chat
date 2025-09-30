@@ -15,9 +15,6 @@ import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
-// WORK - see if there are similar handleTools
-// WORK - move Function tool response must be an array or contain a text property to same variable
-
 // https://docs.mistral.ai/api/
 export class MistralIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Mistral');
@@ -76,7 +73,7 @@ export class MistralIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     this._messages ??= messages;
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody, {});
+    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: MistralResult, prevBody?: Mistral): Promise<Response> {

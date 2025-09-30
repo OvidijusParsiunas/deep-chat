@@ -42,7 +42,7 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    return this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody);
+    return this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this));
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
