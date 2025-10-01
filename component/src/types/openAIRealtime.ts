@@ -5,6 +5,12 @@ import {CustomStyle} from './styles';
 // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
 export type OpenAIRealtimeFunctionHandler = (details: {name: string; arguments: string}) => object | Promise<object>;
 
+export type OpenAIRealtimeInputAudioTranscription = {
+  model?: string;
+  language?: string;
+  prompt?: string;
+};
+
 // https://platform.openai.com/docs/api-reference/realtime-sessions/create
 export type OpenAIRealtimeConfig = {
   model?: string;
@@ -18,6 +24,7 @@ export type OpenAIRealtimeConfig = {
     prefix_padding_ms?: number;
     silence_duration_ms?: number;
   };
+  input_audio_transcription?: true | OpenAIRealtimeInputAudioTranscription;
   tools?: {
     type: 'function' | 'code_interpreter' | 'file_search';
     name?: string;

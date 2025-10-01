@@ -7,6 +7,7 @@ import avatarUrl from '../../../../assets/person-avatar.png';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {ObjectUtils} from '../../../utils/data/objectUtils';
+import {FireEvents} from '../../../utils/events/fireEvents';
 import {SpeechToSpeech} from '../../utils/speechToSpeech';
 import {PLAY_ICON_STRING} from '../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../icons/stopIcon';
@@ -15,6 +16,7 @@ import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 import {
   OpenAIRealtimeButton as OpenAIRealtimeButtonT,
+  OpenAIRealtimeInputAudioTranscription,
   OpenAIRealtimeFunctionHandler,
   OpenAIRealtimeMethods,
   OpenAIRealtimeConfig,
@@ -74,6 +76,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (function_handler) this._functionHandler = function_handler;
       this._events = config.events;
       realtime.methods = this.generateMethods();
+      this.setInputAudioTranscribe(deepChat, realtime.config?.input_audio_transcription);
     }
     this.rawBody.model ??= 'gpt-4o-realtime-preview-2025-06-03';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
@@ -91,6 +94,27 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       return 'placeholder';
     }
     return undefined;
+  }
+
+  // https://community.openai.com/t/unable-to-access-user-audio-transcript-in-realtime-api/1001570/3
+  private setInputAudioTranscribe(deepChat: DeepChat, transcription?: true | OpenAIRealtimeInputAudioTranscription) {
+    if (transcription) {
+      const defaultModel = 'whisper-1';
+      if (typeof transcription === 'object') {
+        this.rawBody.input_audio_transcription = {
+          model: transcription.model || defaultModel,
+          language: transcription.language,
+          prompt: transcription.prompt,
+        };
+      } else {
+        this.rawBody.input_audio_transcription = {
+          model: defaultModel,
+        };
+      }
+    } else if (deepChat.onMessage) {
+      console.warn('To get user audio transcription, set `input_audio_transcription` in the `realtime` config.');
+      console.warn('See: https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeConfig');
+    }
   }
 
   // called after API key was inserted
@@ -393,6 +417,14 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         this.stopOnError(response.message);
       } else if (response.type === 'response.audio_transcript.delta') {
         // console.log(response.delta);
+      } else if (response.type === 'response.audio_transcript.done') {
+        if (response.transcript) {
+          FireEvents.onMessage(this._deepChat, {role: 'ai', text: response.transcript}, false);
+        }
+      } else if (response.type === 'conversation.item.input_audio_transcription.completed') {
+        if (response.transcript) {
+          FireEvents.onMessage(this._deepChat, {role: 'user', text: response.transcript}, false);
+        }
       }
     });
 
