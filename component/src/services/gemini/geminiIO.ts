@@ -28,7 +28,7 @@ export class GeminiIO extends DirectServiceIO {
   urlPrefix = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   url = '';
   permittedErrorPrefixes = ['API_KEY_INVALID'];
-  private readonly _systemInstruction?: string;
+  private readonly _systemPrompt?: string;
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
 
@@ -37,7 +37,7 @@ export class GeminiIO extends DirectServiceIO {
     const config = directConnectionCopy.gemini as Gemini & APIKey;
     super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, config);
     if (typeof config === OBJECT) {
-      if (config.systemInstruction) this._systemInstruction = config.systemInstruction;
+      if (config.system_prompt) this._systemPrompt = config.system_prompt;
       const {function_handler} = deepChat.directConnection?.gemini as Gemini;
       if (function_handler) this._functionHandler = function_handler;
       if (config.model) {
@@ -50,7 +50,7 @@ export class GeminiIO extends DirectServiceIO {
   }
 
   private cleanConfig(config: Gemini & APIKey) {
-    delete config.systemInstruction;
+    delete config.system_prompt;
     delete config.function_handler;
     delete config.model;
     delete config.key;
@@ -87,14 +87,14 @@ export class GeminiIO extends DirectServiceIO {
   private preprocessBody(body: GeminiRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemInstruction?.length || 0) : -1)
+        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemPrompt?.length || 0) : -1)
       .map((message) => GeminiIO.getContent(message));
 
     bodyCopy.contents = processedMessages;
 
-    if (this._systemInstruction) {
+    if (this._systemPrompt) {
       bodyCopy.systemInstruction = {
-        parts: [{[TEXT_KEY]: this._systemInstruction}]
+        parts: [{[TEXT_KEY]: this._systemPrompt}]
       };
     }
 

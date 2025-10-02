@@ -14,7 +14,7 @@ export interface GeminiGeneration {
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
 export interface Gemini extends GeminiGeneration {
   model?: string;
-  systemInstruction?: string;
+  system_prompt?: string;
   function_handler?: ChatFunctionHandler;
   tools?: {
     functionDeclarations: {
