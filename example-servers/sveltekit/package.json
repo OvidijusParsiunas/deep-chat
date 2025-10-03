@@ -22,6 +22,7 @@
   "type": "module",
   "dependencies": {
     "deep-chat": "^2.2.2",
-    "eventsource-parser": "^1.1.2"
+    "eventsource-parser": "^1.1.2",
+    "salesforce-agent-api-client": "^1.0.1"
   }
 }

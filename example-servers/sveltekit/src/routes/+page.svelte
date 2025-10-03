@@ -232,5 +232,32 @@
         errorMessages={{displayServiceErrorMessages: true}}
       />
     </div>
+    <h1 class="server-title">Server for Salesforce Agentforce</h1>
+    <a href="https://developer.salesforce.com/docs/einstein/genai/guide/agent-api.html" target="_blank" rel="noreferrer">
+      <img
+        class="server-title-icon"
+        src="https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/website/static/img/salesforceLogo.png"
+        style="width: 40px; margin-bottom: -8px; margin-left: 8px"
+        alt={'Title icon'}
+      />
+    </a>
+    <h3>Make sure to set the SALESFORCE_INSTANCE_URL, SALESFORCE_CLIENT_ID, SALESFORCE_CLIENT_SECRET and SALESFORCE_AGENT_ID environment variable in your server</h3>
+    <div class="components">
+      <div class="diagonal-line" style="background: #e3f2fd"></div>
+      <deep-chat
+        style="border-radius: 10px"
+        introMessage={{text: "Send a chat message through an example server to Salesforce Agent. You may configure an Agentforce agent in your Salesforce account."}}
+        connect={{url: '/api/salesforce/agentforce'}}
+        requestBodyLimits={{maxMessages: -1}}
+        errorMessages={{displayServiceErrorMessages: true}}
+      />
+      <deep-chat
+        style="border-radius: 10px"
+        introMessage={{text: "Send a streamed chat message through an example server to Salesforce Agentforce. You may configure an Agentforce agent in your Salesforce account."}}
+        connect={{url: '/api/salesforce/agentforce-stream', stream: true}}
+        requestBodyLimits={{maxMessages: -1}}
+        errorMessages={{displayServiceErrorMessages: true}}
+      />
+    </div>
   {/if}
 </main>
