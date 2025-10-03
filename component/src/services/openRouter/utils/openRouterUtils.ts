@@ -46,7 +46,7 @@ export class OpenRouterUtils {
   public static buildKeyVerificationDetails(): KeyVerificationDetails {
     // Will return a 400 error, but it is fine as long as it is not 401
     return {
-      url: 'https://openrouter.ai/api/v1/generation',
+      url: 'https://openrouter.ai/api/v1/key',
       method: GET,
       handleVerificationResult: OpenRouterUtils.handleVerificationResult,
     };
