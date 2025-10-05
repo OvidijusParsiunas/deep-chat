@@ -63,7 +63,7 @@ export class MessageStream {
     this._elements =
       streamType === 'text'
         ? this._messages.addNewTextMessage(initContent, role)
-        : HTMLMessages.add(this._messages, initContent, role);
+        : HTMLMessages.add(this._messages, initContent, role, true);
     if (this._elements) {
       this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
       this._activeMessageRole = role;

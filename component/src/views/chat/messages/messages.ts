@@ -163,7 +163,7 @@ export class Messages extends MessagesBase {
     if (introMessage?.text) {
       elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
     } else if (introMessage?.html) {
-      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE);
+      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, false);
     }
     if (elements) {
       this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
@@ -199,13 +199,14 @@ export class Messages extends MessagesBase {
 
   private tryAddFileMessages(message: MessageContentI, isTop = false) {
     if (message.files && Array.isArray(message.files)) {
-      FileMessages.addMessages(this, message.files, message.role, isTop);
+      FileMessages.addMessages(this, message.files, message.role, !!message.text, isTop);
     }
   }
 
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
     if (message.html !== undefined && message.html !== null) {
-      const elements = HTMLMessages.add(this, message.html, message.role, overwrite, isTop);
+      const scroll = !message.text && (!message.files || message.files.length === 0);
+      const elements = HTMLMessages.add(this, message.html, message.role, scroll, overwrite, isTop);
       if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
     }
   }

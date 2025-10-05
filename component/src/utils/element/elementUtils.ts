@@ -24,11 +24,13 @@ export class ElementUtils {
     return newElement;
   }
 
-  public static scrollToBottom(element: HTMLElement, isAnimation = false) {
+  public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
     if (isAnimation) {
-      element.scrollTo({left: 0, top: element.scrollHeight, behavior: 'smooth'});
+      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
+    } else if (targetElement) {
+      messagesElementRef.scrollTo({left: 0, top: targetElement.offsetTop});
     } else {
-      element.scrollTop = element.scrollHeight;
+      messagesElementRef.scrollTop = messagesElementRef.scrollHeight;
     }
   }
 

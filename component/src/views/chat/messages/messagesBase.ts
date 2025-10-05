@@ -123,7 +123,14 @@ export class MessagesBase {
   private createAndAppendNewMessageElementDefault(text: string, role: string) {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
-    setTimeout(() => ElementUtils.scrollToBottom(this.elementRef)); // timeout neeed when bubble font is large
+    // timeout neeed when bubble font is large
+    setTimeout(() => {
+      if (role === 'user') {
+        ElementUtils.scrollToBottom(this.elementRef);
+      } else {
+        ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
+      }
+    });
     return messageElements;
   }
 
