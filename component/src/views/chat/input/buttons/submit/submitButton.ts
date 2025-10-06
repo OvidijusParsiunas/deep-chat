@@ -28,6 +28,8 @@ import {
   DefinedButtonStateStyles,
   ButtonInnerElement,
 } from '../../../../../types/buttonInternal';
+  import { FocusUtils } from '../../textInput/focusUtils';
+import { Browser } from '../../../../../utils/browser/browser';
 
 type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled' | 'tooltip'>;
 
@@ -170,6 +172,10 @@ export class SubmitButton extends InputButton<Styles> {
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
       this.attemptSubmit({[TEXT_KEY]: inputText, files: uploadedFilesData});
     }
+    // After triggering submit, immediately restore caret/focus for seamless typing
+    setTimeout(() => {
+      FocusUtils.focusEndOfInput(this._textInput.inputElementRef);
+    }, 0);
   }
 
   public async programmaticSubmit(content: UserContent) {
@@ -190,6 +196,13 @@ export class SubmitButton extends InputButton<Styles> {
     if ((await this._validationHandler?.(isProgrammatic ? content : undefined)) === false) return;
     this.changeToLoadingIcon();
     this._textInput.clear();
+
+    // Keep focus on mobile after clearing to maintain keyboard active
+    if(Browser.IS_MOBILE) {
+      setTimeout(() => {
+        this._textInput.inputElementRef.focus();
+      }, 0);
+    }
     if (typeof this._messages.focusMode !== 'boolean' && this._messages.focusMode?.fade) {
       await FocusModeUtils.fadeAnimation(this._messages.elementRef, this._messages.focusMode.fade);
     }
@@ -252,6 +265,10 @@ export class SubmitButton extends InputButton<Styles> {
       if (this._microphoneButton?.isActive) {
         SpeechToText.toggleSpeechAfterSubmit(this._microphoneButton.elementRef, !!this._stopSTTAfterSubmit);
       }
+      // Ensure focus is restored even when triggered via button click
+      setTimeout(() => {
+        FocusUtils.focusEndOfInput(this._textInput.inputElementRef);
+      }, 0);
     };
   }
 
