@@ -73,7 +73,7 @@ export class FileMessageUtils {
             FileMessageUtils.waitToLoadThenScroll(targetElement, messagesContainerEl);
           });
       } catch (_) {
-        ElementUtils.scrollToBottom(messagesContainerEl);
+        ElementUtils.scrollToBottom(messagesContainerEl, false, targetElement);
       }
     }
   }

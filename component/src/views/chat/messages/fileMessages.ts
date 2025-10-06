@@ -1,4 +1,5 @@
 import {MessageFile, MessageFiles} from '../../../types/messageFile';
+import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
 import {FileMessageUtils} from './utils/fileMessageUtils';
 import {FILE_ICON_STRING} from '../../../icons/fileIcon';
@@ -83,7 +84,7 @@ export class FileMessages {
     return {type: 'file', elements};
   }
 
-  public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, hasText: boolean, isTop = false) {
+  public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, scroll: boolean, isTop = false) {
     return files
       .map((fileData, index) => {
         if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
@@ -97,7 +98,7 @@ export class FileMessages {
           return audioMessage;
         }
         if (FileMessageUtils.isImageFile(fileData)) {
-          return FileMessages.createImageMessage(msg, fileData, role, isTop, !hasText && index === 0);
+          return FileMessages.createImageMessage(msg, fileData, role, isTop, scroll && index === 0);
         }
         return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
       })
@@ -106,12 +107,13 @@ export class FileMessages {
 
   // no overwrite previous message logic as it is complex to track which files are to be overwritten
   public static addMessages(messages: MessagesBase, files: MessageFiles, role: string, hasText: boolean, isTop: boolean) {
-    const typeToElements = FileMessages.createMessages(messages, files, role, hasText, isTop);
+    const scroll = !hasText && ElementUtils.isScrollbarAtBottomOfElement(messages.elementRef);
+    const typeToElements = FileMessages.createMessages(messages, files, role, scroll, isTop);
     typeToElements
       .filter((element) => element !== undefined)
       .forEach(({type, elements}, index) => {
-        const scroll = !hasText && index === 0;
-        FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop, scroll);
+        const allowScroll = index === 0 && scroll;
+        FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop, allowScroll);
       });
   }
 }

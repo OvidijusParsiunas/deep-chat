@@ -10,8 +10,11 @@ export class HTMLMessages {
   public static readonly HTML_BUBBLE_CLASS = 'html-message';
 
   private static addElement(messages: MessagesBase, outerElement: HTMLElement, allowScroll: boolean) {
+    const isCurrentlyAtBottom = ElementUtils.isScrollbarAtBottomOfElement(messages.elementRef);
     messages.appendOuterContainerElemet(outerElement);
-    if (!messages.focusMode && allowScroll) ElementUtils.scrollToBottom(messages.elementRef, false, outerElement);
+    if (!messages.focusMode && allowScroll && isCurrentlyAtBottom) {
+      ElementUtils.scrollToBottom(messages.elementRef, false, outerElement);
+    }
   }
 
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {

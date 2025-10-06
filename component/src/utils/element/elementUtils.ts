@@ -25,10 +25,10 @@ export class ElementUtils {
   }
 
   public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
-    if (isAnimation) {
-      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
-    } else if (targetElement) {
+    if (targetElement) {
       messagesElementRef.scrollTo({left: 0, top: targetElement.offsetTop});
+    } else if (isAnimation) {
+      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
     } else {
       messagesElementRef.scrollTop = messagesElementRef.scrollHeight;
     }

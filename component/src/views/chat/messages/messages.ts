@@ -347,7 +347,8 @@ export class Messages extends MessagesBase {
     messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, role, false, style?.styles);
     this.avatar?.getAvatarContainer(messageElements.innerContainer)?.classList.add('loading-avatar-container');
-    if (!this.focusMode) ElementUtils.scrollToBottom(this.elementRef);
+    const allowScroll = !this.focusMode && ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
+    if (allowScroll) ElementUtils.scrollToBottom(this.elementRef);
   }
 
   private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
