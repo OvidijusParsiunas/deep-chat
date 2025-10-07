@@ -122,12 +122,13 @@ export class MessagesBase {
 
   private createAndAppendNewMessageElementDefault(text: string, role: string) {
     const messageElements = this.createNewMessageElement(text, role);
+    const isCurrentlyAtBottom = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     this.appendOuterContainerElemet(messageElements.outerContainer);
     // timeout neeed when bubble font is large
     setTimeout(() => {
       if (role === 'user') {
         ElementUtils.scrollToBottom(this.elementRef);
-      } else {
+      } else if (isCurrentlyAtBottom) {
         ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
       }
     });
