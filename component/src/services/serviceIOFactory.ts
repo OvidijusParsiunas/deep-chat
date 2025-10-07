@@ -34,12 +34,12 @@ import {OpenRouterIO} from './openRouter/openRouterIO';
 import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
-import {CohereChatIO} from './cohere/cohereChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralIO';
 import {GroqChatIO} from './groq/groqChatIO';
+import {CohereIO} from './cohere/cohereIO';
 import {GeminiIO} from './gemini/geminiIO';
 import {ClaudeIO} from './claude/claudeIO';
 import {OllamaIO} from './ollama/ollamaIO';
@@ -81,7 +81,7 @@ export class ServiceIOFactory {
         return new AssemblyAIAudioIO(deepChat);
       }
       if (directConnection.cohere) {
-        return new CohereChatIO(deepChat);
+        return new CohereIO(deepChat);
       }
       if (directConnection.huggingFace) {
         if (directConnection.huggingFace.textGeneration) {
