@@ -55,7 +55,7 @@ export class MessagesBase {
     if (deepChat.browserStorage) this.browserStorage = new BrowserStorage(deepChat.browserStorage);
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
-    this.focusMode = deepChat.focusMode;
+    this.focusMode = Legacy.processFocusMode(deepChat.focusMode);
     if (!this.focusMode) this._lastGroupMessagesElement = document.createElement('div');
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.fade) {
       FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
@@ -106,7 +106,7 @@ export class MessagesBase {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === 'user') {
-      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.scroll;
+      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
       ElementUtils.scrollToBottom(this.elementRef, isAnimation);
     }
     return messageElements;

@@ -5,6 +5,7 @@ import {ValidateInput} from '../../types/validateInput';
 import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
 import {TEXT_KEY} from '../consts/messageConstants';
+import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
 import {Cohere} from '../../types/cohere';
@@ -175,5 +176,16 @@ export class Legacy {
       return htmlWrappers;
     }
     return undefined;
+  }
+
+  public static processFocusMode(focusMode?: FocusMode) {
+    if (!focusMode || typeof focusMode === 'boolean') return focusMode;
+    const scroll = (focusMode as unknown as {scroll?: boolean}).scroll;
+    if (scroll) {
+      console.error('The scroll property in focusMode has been changed to smoothScroll since version 2.3.0.');
+      console.error('Check it out here: https://deepchat.dev/docs/modes#focusMode');
+      focusMode.smoothScroll = true;
+    }
+    return focusMode;
   }
 }
