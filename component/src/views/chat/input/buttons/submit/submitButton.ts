@@ -172,10 +172,12 @@ export class SubmitButton extends InputButton<Styles> {
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
       this.attemptSubmit({[TEXT_KEY]: inputText, files: uploadedFilesData});
     }
-    // After triggering submit, immediately restore caret/focus for seamless typing
+    // on Safari and mobile devices, after triggering submit, immediately restore caret/focus for seamless typing
+    if (Browser.IS_SAFARI || Browser.IS_MOBILE) {
     setTimeout(() => {
-      FocusUtils.focusEndOfInput(this._textInput.inputElementRef);
-    }, 0);
+        FocusUtils.focusEndOfInput(this._textInput.inputElementRef);
+      }, 0);
+    }
   }
 
   public async programmaticSubmit(content: UserContent) {
