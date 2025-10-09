@@ -17,14 +17,19 @@ import {OpenAIUtils} from './utils/openAIUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
-type ImageContent = {type: string; image_url?: {url?: string}; text?: string}[];
+type FileContent = {
+  type: string;
+  image_url?: {url?: string};
+  input_audio?: {data?: string; format: string};
+  text?: string;
+}[];
 
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   // https://platform.openai.com/docs/api-reference/chat/create
   url = 'https://api.openai.com/v1/chat/completions';
-  permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX];
+  permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid value'];
   _functionHandler?: ChatFunctionHandler;
   _streamToolCalls?: ToolCalls;
   private readonly _systemMessage: string = '';
@@ -57,17 +62,11 @@ export class OpenAIChatIO extends DirectServiceIO {
     delete config.function_handler;
   }
 
-  // mention that microphone is not supported because the outputted base64 is not accepted
-  // use speech to speech instead
-  // give allowed regex example for audio format rules
-  private static getFileContent(files: MessageFile[], canSendAudio: boolean): ImageContent {
-    const content: ImageContent = files.map((file) => {
-      // Last time I checked only wav and mp3 are supported
-      if (file.type === 'audio' && canSendAudio) {
-        // Extract base64 data from data URL (remove "data:audio/format;base64," prefix)
+  private static getFileContent(files: MessageFile[]): FileContent {
+    const content: FileContent = files.map((file) => {
+      if (file.type === 'audio') {
         const base64Data = file.src?.split(',')[1];
-        // Extract format from data URL (e.g., "data:audio/wav;base64," -> "wav")
-        const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] || 'wav';
+        const format = file.name?.split('.').pop()?.toLowerCase() || 'wav';
         return {type: 'input_audio', input_audio: {data: base64Data, format}};
       }
       return {type: 'image_url', image_url: {url: file.src}};
@@ -75,9 +74,9 @@ export class OpenAIChatIO extends DirectServiceIO {
     return content;
   }
 
-  private static getContent(message: MessageContentI, canSendAudio: boolean) {
+  private static getContent(message: MessageContentI) {
     if (message.files && message.files.length > 0) {
-      const content: ImageContent = OpenAIChatIO.getFileContent(message.files, canSendAudio);
+      const content: FileContent = OpenAIChatIO.getFileContent(message.files);
       if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', [TEXT_KEY]: message.text});
       return content;
     }
@@ -87,15 +86,11 @@ export class OpenAIChatIO extends DirectServiceIO {
   // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const canSendAudio = bodyCopy.modalities?.includes('audio');
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1)
       .map((message) => {
-        return {content: OpenAIChatIO.getContent(message, canSendAudio),
+        return {content: OpenAIChatIO.getContent(message),
           role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
-    if (pMessages.find((message) => message.files && message.files.length > 0)) {
-      bodyCopy.max_tokens ??= 300; // otherwise AI does not return full responses - remove when this behaviour changes
-    }
     if (this._systemMessage) {
       processedMessages.unshift({role: 'system', content: this._systemMessage});
     }

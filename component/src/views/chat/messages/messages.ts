@@ -367,13 +367,14 @@ export class Messages extends MessagesBase {
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
           if (!fileData.type || fileData.type === 'any') {
-            const fileName = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
-            resolve({name: fileName, type: 'any', ref: fileData.file});
+            const name = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
+            resolve({name, type: 'any', ref: fileData.file});
           } else {
             const reader = new FileReader();
             reader.readAsDataURL(fileData.file);
             reader.onload = () => {
-              resolve({src: reader.result as string, type: fileData.type, ref: fileData.file});
+              const name = fileData.file.name;
+              resolve({src: reader.result as string, name, type: fileData.type, ref: fileData.file});
             };
           }
         });
