@@ -79,6 +79,7 @@ export class TextInputEl {
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-styling');
     inputElement.role = 'textbox';
+    inputElement.setAttribute('tabindex', '0');
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof this._config.disabled === 'boolean' && this._config.disabled === true) {
       inputElement.contentEditable = 'false';
