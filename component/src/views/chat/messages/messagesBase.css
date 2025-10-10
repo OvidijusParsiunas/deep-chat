@@ -1,5 +1,8 @@
 #messages {
   overflow: auto;
+  /* prevents the browser from automatically scrolling to keep expanding heights in view
+  which prevents streamAutoScroll: false from working correctly */
+  overflow-anchor: none;
 }
 
 .outer-message-container:last-child {

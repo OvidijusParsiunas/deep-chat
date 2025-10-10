@@ -107,7 +107,13 @@ export class MessagesBase {
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === 'user') {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
-      ElementUtils.scrollToBottom(this.elementRef, isAnimation);
+      if (isAnimation) {
+        setTimeout(() => {
+          ElementUtils.scrollToBottom(this.elementRef, isAnimation); // in timeout for it to move to the loading bubble
+        });
+      } else {
+        ElementUtils.scrollToBottom(this.elementRef);
+      }
     }
     return messageElements;
   }
