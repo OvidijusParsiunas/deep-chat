@@ -90,7 +90,7 @@ export class FileMessages {
         if (fileData.ref) fileData = FileMessageUtils.removeFileRef(fileData);
         if (FileMessageUtils.isAudioFile(fileData)) {
           const audioMessage = FileMessages.createNewAudioMessage(msg, fileData, role, isTop);
-          const ttsConfig = msg.textToSpeech?.service;
+          const ttsConfig = msg.textToSpeech?.audio;
           if (ttsConfig) {
             if (ttsConfig.autoPlay) FileMessages.autoPlayAudio(audioMessage.audioElement);
             if (typeof ttsConfig.displayAudio === 'boolean' && !ttsConfig.displayAudio) return undefined;

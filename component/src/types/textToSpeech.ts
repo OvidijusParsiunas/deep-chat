@@ -1,11 +1,10 @@
-export interface TextToSpeechAudioConfig {
+export interface ServiceAudioResponse {
   autoPlay?: boolean;
   displayAudio?: boolean;
   displayText?: boolean; // applies to services that offer transcript
 }
 
 export interface TextToSpeechConfig {
-  service?: TextToSpeechAudioConfig;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/lang
   lang?: string;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/pitch
@@ -17,4 +16,5 @@ export interface TextToSpeechConfig {
   voiceName?: string;
   // https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance/volume
   volume?: number;
+  audio?: ServiceAudioResponse;
 }

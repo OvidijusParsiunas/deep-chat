@@ -114,7 +114,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       }
       if (result.choices[0].message?.audio) {
         const tts = this.deepChat.textToSpeech;
-        const displayText = typeof tts === 'object' && typeof tts?.service?.displayText === 'boolean';
+        const displayText = typeof tts === 'object' && typeof tts?.audio?.displayText === 'boolean';
         return {
           files: [{src: `data:audio/wav;base64,${result.choices[0].message.audio.data}`, type: 'audio'}],
           [TEXT_KEY]: displayText ? result.choices[0].message.audio.transcript : undefined,
