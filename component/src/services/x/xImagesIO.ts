@@ -15,12 +15,6 @@ export class XImagesIO extends DirectServiceIO {
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   private static readonly IMAGE_GENERATION_URL = 'https://api.x.ai/v1/images/generations';
 
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>X Image Generation</b></div>
-    <p><b>Insert text</b> to generate an image.</p>
-    <p>Click <a target="_blank" href="https://docs.x.ai/docs/api-reference#image-generations" target="_blank">
-      here</a> for more info.</p>`;
-
   url = XImagesIO.IMAGE_GENERATION_URL;
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 

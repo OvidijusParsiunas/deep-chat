@@ -15,11 +15,6 @@ import {DeepChat} from '../../deepChat';
 export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/esrgan-v1-x2plus/image-to-image/upscale';
   textInputPlaceholderText = 'Describe image changes';
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI</b></div>
-    <div style="width: 100%; text-align: center; margin-left: -10px; margin-top: 5px"><b>Image to Image Upscale</b></div>
-    <p>Upload an image to generate a new one with higher resolution.</p>
-    <p>Click <a href="https://platform.stability.ai/" target="_blank">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));

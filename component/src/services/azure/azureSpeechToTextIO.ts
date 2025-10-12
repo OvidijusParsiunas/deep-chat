@@ -12,19 +12,10 @@ import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
 export class AzureSpeechToTextIO extends AzureSpeechIO {
-  private static readonly HELP_LINK =
-    // eslint-disable-next-line max-len
-    'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';
   private static readonly REGION_ERROR_MESSAGE =
     // eslint-disable-next-line max-len
     'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#SpeechToText)';
   permittedErrorPrefixes: string[] = [AzureSpeechToTextIO.REGION_ERROR_MESSAGE];
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Speech To Text</b></div>
-    <p><b>Upload a .wav or .ogg audio file</b> to transcribe it into text.
-    <p>
-      Click <a href="${AzureSpeechToTextIO.HELP_LINK}" target="_blank">here</a> for more info.
-    </p>`;
   url = '';
   isTextInputDisabled = true;
   textInputPlaceholderText = UPLOAD_AN_AUDIO_FILE;

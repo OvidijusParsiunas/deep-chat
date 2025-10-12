@@ -24,7 +24,6 @@ import {WebModel} from '../../../webModel/webModel';
 import {UpdateMessage} from './utils/updateMessage';
 import {Legacy} from '../../../utils/legacy/legacy';
 import {LoadHistory} from '../../../types/history';
-import {CustomStyle} from '../../../types/styles';
 import {MessageUtils} from './utils/messageUtils';
 import {HTMLMessages} from './html/htmlMessages';
 import {SetupMessages} from './setupMessages';
@@ -55,7 +54,7 @@ export class Messages extends MessagesBase {
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     super(deepChat);
-    const {permittedErrorPrefixes, introPanelMarkUp, demo} = serviceIO;
+    const {permittedErrorPrefixes, demo} = serviceIO;
     this._errorMessageOverrides = deepChat.errorMessages?.overrides;
     this._onClearMessages = FireEvents.onClearMessages.bind(this, deepChat);
     this._onError = FireEvents.onError.bind(this, deepChat);
@@ -64,9 +63,7 @@ export class Messages extends MessagesBase {
       deepChat.displayLoadingBubble.toggle = this.setLoadingToggle.bind(this);
     }
     this._permittedErrorPrefixes = permittedErrorPrefixes;
-    if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) {
-      this.populateIntroPanel(panel, introPanelMarkUp, deepChat.introPanelStyle);
-    }
+    if (!this.addSetupMessageIfNeeded(deepChat, serviceIO)) this.populateIntroPanel(panel);
     if (demo) this.prepareDemo(Legacy.processDemo(demo), deepChat.loadHistory); // before intro/history for loading spinner
     this.addIntroductoryMessages(deepChat, serviceIO);
     new History(deepChat, this, serviceIO);
@@ -351,13 +348,11 @@ export class Messages extends MessagesBase {
     if (allowScroll) ElementUtils.scrollToBottom(this.elementRef);
   }
 
-  private populateIntroPanel(childElement?: HTMLElement, introPanelMarkUp?: string, introPanelStyle?: CustomStyle) {
-    if (childElement || introPanelMarkUp) {
-      this._introPanel = new IntroPanel(childElement, introPanelMarkUp, introPanelStyle);
-      if (this._introPanel._elementRef) {
-        HTMLUtils.apply(this, this._introPanel._elementRef);
-        this.elementRef.appendChild(this._introPanel._elementRef);
-      }
+  private populateIntroPanel(childElement?: HTMLElement) {
+    if (childElement) {
+      this._introPanel = new IntroPanel(childElement);
+      HTMLUtils.apply(this, this._introPanel._elementRef);
+      this.elementRef.appendChild(this._introPanel._elementRef);
     }
   }
 

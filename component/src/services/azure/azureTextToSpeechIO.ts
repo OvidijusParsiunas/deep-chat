@@ -9,19 +9,10 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AzureTextToSpeechIO extends AzureSpeechIO {
-  private static readonly HELP_LINK =
-    // eslint-disable-next-line max-len
-    'https://learn.microsoft.com/en-GB/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=windows%2Cterminal&pivots=programming-language-rest';
   private static readonly REGION_ERROR_MESSAGE =
     // eslint-disable-next-line max-len
     'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#TextToSpeech)';
   permittedErrorPrefixes: string[] = [AzureTextToSpeechIO.REGION_ERROR_MESSAGE];
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Azure Text To Speech</b></div>
-    <p>Insert text to synthesize it to audio.
-    <p>
-      Click <a href="${AzureTextToSpeechIO.HELP_LINK}" target="_blank">here</a> for more info.
-    </p>`;
   isTextInputDisabled = false;
   url = '';
 

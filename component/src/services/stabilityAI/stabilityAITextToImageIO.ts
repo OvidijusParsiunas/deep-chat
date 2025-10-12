@@ -14,10 +14,6 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   url = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image';
   private readonly _imageWeight: number | undefined;
   textInputPlaceholderText = 'Describe an image';
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Stability AI: Text to Image</b></div>
-    <p>Insert text to generate an image.</p>
-    <p>Click <a href="https://platform.stability.ai/" target="_blank">here</a> for more info.</p>`;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));

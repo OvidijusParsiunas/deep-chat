@@ -148,9 +148,6 @@ export class DeepChat extends InternalHTML {
   dragAndDrop?: boolean | CustomStyle; // by default it is enabled if file attachments are allowed
 
   @Property('object')
-  introPanelStyle?: CustomStyle;
-
-  @Property('object')
   htmlWrappers?: HTMLWrappers;
 
   @Property('object')

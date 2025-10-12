@@ -21,16 +21,6 @@ export class OpenAIImagesIO extends DirectServiceIO {
   private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
   private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
   private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
-
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI DALL·E</b></div>
-    <p><b>Insert text</b> to generate an image.</p>
-    <p><b>Upload 1</b> PNG image to generate its variation and optionally insert text to specify the change.</p>
-    <p><b>Upload 2</b> PNG images where the second is a copy of the first with a transparent area where the edit should
-      take place and text to specify the edit.</p>
-    <p>Click <a href="https://platform.openai.com/docs/guides/images/introduction" target="_blank">here</a>
-    for more info.</p>`;
-
   url = ''; // set dynamically
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid input image'];
 

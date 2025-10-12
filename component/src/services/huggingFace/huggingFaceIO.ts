@@ -18,9 +18,6 @@ export class HuggingFaceIO extends DirectServiceIO {
   override insertKeyPlaceholderText = 'Hugging Face Token';
   override keyHelpUrl = 'https://huggingface.co/settings/tokens';
   private static readonly URL_PREFIX = 'https://api-inference.huggingface.co/models/';
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>Hugging Face</b></div>
-    <p>First message may take an extented amount of time to complete as the model needs to be initialized.</p>`;
   permittedErrorPrefixes = [AUTHORIZATION_HEADER];
   url: string;
   textInputPlaceholderText: string;

@@ -76,8 +76,6 @@ export interface ServiceIO {
 
   connectSettings: Connect;
 
-  introPanelMarkUp?: string;
-
   // the reason why we use a set of prefixes to allow certain errors is because some errors can change
   // depending on the input e.g. incorrect image dimensions or formatting, hence we identify the permitted
   // service errors via prefixes

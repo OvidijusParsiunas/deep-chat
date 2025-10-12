@@ -18,13 +18,6 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
   private static readonly AUDIO_TRANSLATIONS_URL = 'https://api.openai.com/v1/audio/translations';
   private static readonly DEFAULT_MODEL = 'whisper-1';
-
-  introPanelMarkUp = `
-    <div style="width: 100%; text-align: center; margin-left: -10px"><b>OpenAI : Speech To Text</b></div>
-    <p><b>Upload an audio file</b> to transcribe it into text. You can optionally provide text to guide the audio
-      processing.
-    <p>Click <a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank">here</a> for more info.</p>`;
-
   url = ''; // set dynamically
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   textInputPlaceholderText = UPLOAD_AN_AUDIO_FILE;
