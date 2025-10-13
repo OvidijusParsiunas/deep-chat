@@ -79,7 +79,9 @@ export class TextInputEl {
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement.classList.add('text-input-styling');
     inputElement.role = 'textbox';
-    inputElement.setAttribute('tabindex', '0');
+    // makes the element focusable on mobile
+    // https://github.com/OvidijusParsiunas/deep-chat/pull/452/files/b8cf45dc559be2667e51f8cf2bb026527000076d
+    if (Browser.IS_MOBILE) inputElement.setAttribute('tabindex', '0');
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof this._config.disabled === 'boolean' && this._config.disabled === true) {
       inputElement.contentEditable = 'false';
