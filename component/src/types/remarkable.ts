@@ -11,6 +11,7 @@ export interface RemarkableOptions {
   quotes?: string;
   highlight?: (str: string, lang: string) => void;
   math?: true | {delimiter?: string; options?: KatexOptions};
+  applyHTML?: boolean;
 }
 
 // https://katex.org/docs/options

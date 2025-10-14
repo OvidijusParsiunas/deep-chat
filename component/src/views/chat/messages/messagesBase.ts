@@ -40,6 +40,7 @@ export class MessagesBase {
   private _remarkable: Remarkable;
   readonly _customWrappers?: HTMLWrappers;
   private _lastGroupMessagesElement?: HTMLElement;
+  private readonly _applyHTMLToRemarkable?: boolean;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
   public readonly browserStorage?: BrowserStorage;
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
@@ -50,6 +51,7 @@ export class MessagesBase {
     this.elementRef = MessagesBase.createContainerElement();
     this.messageStyles = Legacy.processMessageStyles(deepChat.messageStyles);
     this._remarkable = RemarkableConfig.createNew(deepChat.remarkable);
+    this._applyHTMLToRemarkable = deepChat.remarkable?.applyHTML;
     if (deepChat.avatars) this.avatar = new Avatar(deepChat.avatars);
     if (deepChat.names) this.name = new Name(deepChat.names);
     if (deepChat.browserStorage) this.browserStorage = new BrowserStorage(deepChat.browserStorage);
@@ -289,6 +291,7 @@ export class MessagesBase {
     const {contentEl: textEl, wrapper} = HTMLUtils.tryAddWrapper(bubbleElement, text, this._customWrappers, role);
     if (wrapper) HTMLUtils.apply(this, bubbleElement);
     textEl.innerHTML = this._remarkable.render(text);
+    if (this._applyHTMLToRemarkable) HTMLUtils.apply(this, textEl);
     // There is a bug in remarkable where text with only numbers and full stop after them causes the creation
     // of a list which has no inner text and is instead prepended as a prefix in the start attribute (12.)
     // We also check if the only child is not <p> because it could be an image
