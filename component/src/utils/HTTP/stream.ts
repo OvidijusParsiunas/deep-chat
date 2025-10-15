@@ -163,7 +163,7 @@ export class Stream {
     if (Array.isArray(result)) result = result[0]; // single array responses are supproted
     if (result.files) {
       const finalEventData = await RequestUtils.basicResponseProcessing(messages, {files: result.files}, {io});
-      messages.addNewMessage({sendUpdate: false, ignoreText: true, ...finalEventData}, false);
+      messages.addNewMessage({sendUpdate: false, ...finalEventData}, false);
     }
     if (result.text) {
       sh.onOpen();

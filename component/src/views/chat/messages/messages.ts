@@ -186,7 +186,7 @@ export class Messages extends MessagesBase {
   }
 
   private tryAddTextMessage(msg: MessageContentI, overwrite: Overwrite, data: ResponseI, history = false, isTop = false) {
-    if (!data.ignoreText && msg.text !== undefined && data.text !== null) {
+    if (msg.text !== undefined && data.text !== null) {
       this.addNewTextMessage(msg.text, msg.role, overwrite, isTop);
       if (!history && this.textToSpeech && msg.role !== MessageUtils.USER_ROLE) {
         TextToSpeech.speak(msg.text, this.textToSpeech);
