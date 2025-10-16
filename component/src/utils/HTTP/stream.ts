@@ -161,22 +161,27 @@ export class Stream {
   public static async simulate(messages: Messages, sh: StreamHandlers, result: ResponseI, io?: ServiceIO) {
     if (!(await RequestUtils.basicResponseProcessing(messages, result, {io, useRI: false}))) return sh.onClose();
     if (Array.isArray(result)) result = result[0]; // single array responses are supproted
-    if (result.files) {
-      const finalEventData = await RequestUtils.basicResponseProcessing(messages, {files: result.files}, {io});
-      messages.addNewMessage({sendUpdate: false, ...finalEventData}, false);
-    }
-    if (result.text) {
-      sh.onOpen();
-      const responseTextStrings = result.text.split(''); // important to split by char for Chinese characters
-      const stream = new MessageStream(messages, io?.stream);
-      Stream.populateMessages(messages, responseTextStrings, stream, sh, 'text', 0, io);
-    }
     if (result.html) {
       sh.onOpen();
       let responseHTMLStrings = HTMLUtils.splitHTML(result.html);
       if (responseHTMLStrings.length === 0) responseHTMLStrings = result.html.split('');
       const stream = new MessageStream(messages, io?.stream);
       Stream.populateMessages(messages, responseHTMLStrings, stream, sh, 'html', 0, io);
+    }
+    if (result.files) {
+      const finalEventData = await RequestUtils.basicResponseProcessing(messages, {files: result.files}, {io});
+      messages.addNewMessage({sendUpdate: false, ...finalEventData}, false);
+      if (!result.html && !result.text) {
+        const stream = new MessageStream(messages, io?.stream);
+        stream.finaliseStreamedMessage();
+        sh.onClose();
+      }
+    }
+    if (result.text) {
+      sh.onOpen();
+      const responseTextStrings = result.text.split(''); // important to split by char for Chinese characters
+      const stream = new MessageStream(messages, io?.stream);
+      Stream.populateMessages(messages, responseTextStrings, stream, sh, 'text', 0, io);
     }
     if (result.error) {
       RequestUtils.displayError(messages, result.error);
