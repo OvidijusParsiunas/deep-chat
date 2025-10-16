@@ -9,9 +9,7 @@ import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
 export class AzureTextToSpeechIO extends AzureSpeechIO {
-  private static readonly REGION_ERROR_MESSAGE =
-    // eslint-disable-next-line max-len
-    'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#TextToSpeech)';
+  private static readonly REGION_ERROR_MESSAGE = `${AzureSpeechIO.REGION_ERROR_PREFIX}TextToSpeech)`;
   permittedErrorPrefixes: string[] = [AzureTextToSpeechIO.REGION_ERROR_MESSAGE];
   isTextInputDisabled = false;
   url = '';

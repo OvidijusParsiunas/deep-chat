@@ -1,6 +1,6 @@
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
+import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -77,11 +77,11 @@ export class OpenAIImagesIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!this.connectSettings?.headers) throw new Error(REQUEST_SETTINGS_ERROR);
     if (files?.[0]) {
       this.callApiWithImage(messages, pMessages, files);
     } else {
-      if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+      if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
       const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
       HTTPRequest.request(this, body, messages);

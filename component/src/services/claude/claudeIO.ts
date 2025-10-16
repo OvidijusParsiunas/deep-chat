@@ -1,8 +1,7 @@
+import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -70,7 +69,7 @@ export class ClaudeIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: ClaudeIO.getTextWFilesContent(message, ClaudeIO.getFileContent),
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as ClaudeMessage;
     });
 
@@ -127,7 +126,7 @@ export class ClaudeIO extends DirectServiceIO {
 
   private async handleTools(toolUseBlocks: ClaudeToolUse[], prevBody?: ClaudeRequestBody): Promise<ResponseI> {
     if (!toolUseBlocks || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = toolUseBlocks.map((block) => {
@@ -138,13 +137,13 @@ export class ClaudeIO extends DirectServiceIO {
 
     // Add assistant message with tool use
     const assistantContent = toolUseBlocks.map((block) => ({
-      type: 'tool_use' as const,
+      type: 'tool_use',
       id: block.id,
       name: block.name,
       input: block.input,
     }));
     bodyCp.messages.push({
-      role: 'assistant' as const,
+      role: 'assistant',
       content: assistantContent,
     });
 
@@ -156,10 +155,10 @@ export class ClaudeIO extends DirectServiceIO {
         content: resp.response,
       }));
 
-      bodyCp.messages.push({role: 'user' as const, content: toolResultContent});
+      bodyCp.messages.push({role: 'user', content: toolResultContent});
 
       return this.makeAnotherRequest(bodyCp, this._messages);
     }
-    throw Error('Function tool response must be an array or contain a text property');
+    throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
 }

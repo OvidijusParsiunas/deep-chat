@@ -1,7 +1,7 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
+import {DOCS_BASE_URL, TEXT_KEY} from '../../../../utils/consts/messageConstants';
 import {MessageFileType, MessageFile} from '../../../../types/messageFile';
 import {CONTENT_TYPE_H_KEY, POST} from '../../../utils/serviceConstants';
-import {TEXT_KEY} from '../../../../utils/consts/messageConstants';
 import {Messages} from '../../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../../utils/HTTP/requestUtils';
 import {DirectServiceIO} from '../../../utils/directServiceIO';
@@ -19,7 +19,7 @@ export class OpenAIAssistantUtils {
 
   public static readonly FUNCTION_TOOL_RESP_ERROR =
     'Response must contain an array of strings for each individual function/tool_call, ' +
-    'see https://deepchat.dev/docs/directConnection/OpenAI/#assistant-functions.';
+    `see ${DOCS_BASE_URL}directConnection/OpenAI/#assistant-functions.`;
 
   public static async storeFiles(serviceIO: ServiceIO, messages: Messages, files: File[], storeFilesUrl: string) {
     const headers = serviceIO.connectSettings.headers;

@@ -12,6 +12,7 @@ import {Name} from '../name';
 export class MessageUtils {
   public static readonly AI_ROLE = 'ai';
   public static readonly USER_ROLE = 'user';
+  public static readonly ASSISTANT_ROLE = 'assistant';
   public static readonly ERROR_MESSAGE_TEXT_CLASS = 'error-message-text';
   public static readonly OUTER_CONTAINER_CLASS_ROLE_PREFIX = 'deep-chat-outer-container-role-';
   private static readonly EMPTY_MESSAGE_CLASS = 'empty-message';

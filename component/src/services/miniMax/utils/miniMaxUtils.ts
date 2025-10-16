@@ -1,6 +1,6 @@
 import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
 
 type MiniMaxErrorResponse = {
   error?: {
@@ -29,7 +29,7 @@ export class MiniMaxUtils {
   ) {
     const miniMaxResult = result as MiniMaxErrorResponse;
     if (miniMaxResult.base_resp?.status_code === 1004) {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     } else {
       onSuccess(key);
     }

@@ -1,6 +1,5 @@
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -18,6 +17,11 @@ import {Response} from '../../types/response';
 import {Gemini} from '../../types/gemini';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
+import {
+  FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR,
+  DEFINE_FUNCTION_HANDLER,
+  REQUEST_SETTINGS_ERROR,
+} from '../../utils/errorMessages/errorMessages';
 
 // https://ai.google.dev/api/generate-content#method:-models.generatecontent
 // https://ai.google.dev/gemini-api/docs/text-generation
@@ -102,7 +106,7 @@ export class GeminiIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
     this._messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
@@ -142,7 +146,7 @@ export class GeminiIO extends DirectServiceIO {
 
   private async handleTools(functionCalls: {name: string; args: object}[], prevBody?: Gemini): Promise<Response> {
     if (!functionCalls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = functionCalls.map((call) => {
@@ -180,6 +184,6 @@ export class GeminiIO extends DirectServiceIO {
 
       return this.makeAnotherRequest(bodyCp, this._messages);
     }
-    throw Error('Function tool response must be an array or contain a text property');
+    throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
 }

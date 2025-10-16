@@ -69,12 +69,10 @@ export class BigModelChatIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: BigModelChatIO.getTextWFilesContent(message, BigModelChatIO.getFileContent),
-        role: message.role === 'ai' ? 'assistant' : 'user',
+        role: DirectServiceIO.getRoleViaAI(message.role),
       } as BigModelUserMessage;
     });
-    if (this._systemMessage) {
-      processedMessages.unshift({role: 'system', content: this._systemMessage});
-    }
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

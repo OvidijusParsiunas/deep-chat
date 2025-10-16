@@ -1,7 +1,7 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
-import {ErrorMessages} from '../errorMessages/errorMessages';
+import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {OBJECT} from '../../services/utils/serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
@@ -71,7 +71,7 @@ export class Websocket {
         const result: Response = JSON.parse(message.data);
         const finalResult = await RequestUtils.basicResponseProcessing(messages, result, {io, displayError: false});
         if (!finalResult) {
-          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
+          throw Error(INVALID_RESPONSE(result, 'server', !!io.deepChat.responseInterceptor, finalResult));
         }
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);

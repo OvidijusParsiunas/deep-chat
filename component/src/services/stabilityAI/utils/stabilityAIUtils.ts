@@ -1,7 +1,7 @@
 import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {StabilityAITextToImageResult} from '../../../types/stabilityAIResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
 
 export class StabilityAIUtils {
   public static buildHeaders(key: string) {
@@ -16,7 +16,7 @@ export class StabilityAIUtils {
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const stabilityAIResult = result as StabilityAITextToImageResult;
     if (stabilityAIResult.message) {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     } else {
       onSuccess(key);
     }

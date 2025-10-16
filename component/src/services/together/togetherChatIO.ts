@@ -1,6 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -48,12 +49,10 @@ export class TogetherChatIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: message.text || '',
-        role: message.role === 'ai' ? ('assistant' as const) : (message.role as 'user'),
+        role: message.role === MessageUtils.AI_ROLE ? MessageUtils.ASSISTANT_ROLE : (message.role as 'user'),
       };
     });
-    if (this._systemMessage) {
-      processedMessages.unshift({role: 'system', content: this._systemMessage});
-    }
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

@@ -1,6 +1,5 @@
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
 import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -48,7 +47,7 @@ export class PerplexityIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: message.text || '',
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as PerplexityMessage;
     });
 

@@ -1,5 +1,5 @@
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {
   AUTHENTICATION_ERROR_PREFIX,
   CONTENT_TYPE_H_KEY,
@@ -34,9 +34,9 @@ export class KimiUtils {
     const kimiResult = result as KimiErrorResponse;
     if (kimiResult.error) {
       if (kimiResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

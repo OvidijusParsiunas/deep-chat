@@ -1,8 +1,8 @@
+import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {CONTENT_TYPE_H_KEY, ERROR, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
-import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
+import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {AzureUtils} from './utils/azureUtils';
@@ -12,9 +12,7 @@ import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
 
 export class AzureSpeechToTextIO extends AzureSpeechIO {
-  private static readonly REGION_ERROR_MESSAGE =
-    // eslint-disable-next-line max-len
-    'Please define a region config property. [More Information](https://deepchat.dev/docs/directConnection/Azure#SpeechToText)';
+  private static readonly REGION_ERROR_MESSAGE = `${AzureSpeechIO.REGION_ERROR_PREFIX}SpeechToText)`;
   permittedErrorPrefixes: string[] = [AzureSpeechToTextIO.REGION_ERROR_MESSAGE];
   url = '';
   isTextInputDisabled = true;
@@ -45,8 +43,8 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
   }
 
   override async callServiceAPI(messages: Messages, _: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    if (!files?.[0]) throw new Error(ErrorMessages.NO_FILE_ADDED_ERROR);
+    if (!this.connectSettings?.headers) throw new Error(REQUEST_SETTINGS_ERROR);
+    if (!files?.[0]) throw new Error(NO_FILE_ADDED_ERROR);
     if (this.connectSettings?.headers) {
       this.connectSettings.headers[CONTENT_TYPE_H_KEY] = files[0].name.toLocaleLowerCase().endsWith('.wav')
         ? 'audio/wav; codecs=audio/pcm; samplerate=16000'

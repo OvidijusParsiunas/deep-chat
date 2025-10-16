@@ -1,3 +1,4 @@
+import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
 import {ServiceIO} from '../../../services/serviceIO';
 import {DeepChat} from '../../../deepChat';
 
@@ -5,24 +6,24 @@ export class SetupMessages {
   public static getText(deepChat: DeepChat, serviceIO: ServiceIO) {
     if (!deepChat.directConnection && !deepChat.connect && !deepChat.webModel && !deepChat.demo) {
       return (
-        'Connect to any API using the [connect](https://deepchat.dev/docs/connect#connect-1) ' +
+        `Connect to any API using the [connect](${DOCS_BASE_URL}connect#connect-1) ` +
         'property or a popular service via ' +
-        '[directConnection](https://deepchat.dev/docs/directConnection/#directConnection).' +
-        '\n Host AI entirely on your browser via a [webModel](https://deepchat.dev/docs/webModel).' +
+        `[directConnection](${DOCS_BASE_URL}directConnection/#directConnection).` +
+        `\n Host AI entirely on your browser via a [webModel](${DOCS_BASE_URL}webModel).` +
         '\n To get started checkout the [Start](https://deepchat.dev/start) page and ' +
         'live code [examples](https://deepchat.dev/examples/frameworks).' +
-        '\n To remove this message set the [demo](https://deepchat.dev/docs/modes#demo) property to true.'
+        `\n To remove this message set the [demo](${DOCS_BASE_URL}modes#demo) property to true.`
       );
     } else if (deepChat.directConnection) {
       if (!serviceIO.isDirectConnection()) {
         return `Please define a valid service inside
-          the [directConnection](https://deepchat.dev/docs/directConnection/#directConnection) object.`;
+          the [directConnection](${DOCS_BASE_URL}directConnection/#directConnection) object.`;
       }
       const openAIChat = deepChat.directConnection.openAI?.chat;
       if (typeof openAIChat === 'object' && openAIChat.tools && !openAIChat.function_handler) {
         return (
           'Please define the `function_handler` property inside' +
-          ' the openAI [chat](https://deepchat.dev/docs/directConnection/openAI#Chat) object.'
+          ` the openAI [chat](${DOCS_BASE_URL}directConnection/openAI#Chat) object.`
         );
       }
     } else if (deepChat.connect) {
@@ -30,7 +31,7 @@ export class SetupMessages {
       if (!deepChat.connect.url && !deepChat.connect.handler) {
         return (
           'Please define a `url` or a `handler` property inside ' +
-          'the [connect](https://deepchat.dev/docs/connect#connect-1) object.'
+          `the [connect](${DOCS_BASE_URL}connect#connect-1) object.`
         );
       }
     }

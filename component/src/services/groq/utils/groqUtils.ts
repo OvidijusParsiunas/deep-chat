@@ -1,5 +1,5 @@
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {
   CONTENT_TYPE_H_KEY,
   APPLICATION_JSON,
@@ -32,9 +32,9 @@ export class GroqUtils {
     const groqResult = result as GroqErrorResponse;
     if (groqResult.error) {
       if (groqResult.error.message === UNAUTHORIZED) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

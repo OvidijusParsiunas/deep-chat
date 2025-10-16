@@ -1,4 +1,4 @@
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
+import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -49,7 +49,7 @@ export class HuggingFaceIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
     const body = this.preprocessBody(this.rawBody, pMessages, files) as object;
     HTTPRequest.request(this, body, messages);
   }

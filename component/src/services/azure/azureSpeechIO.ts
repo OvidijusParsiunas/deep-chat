@@ -1,3 +1,4 @@
+import {DOCS_BASE_URL} from '../../utils/consts/messageConstants';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
 import {ServiceFileTypes} from '../serviceIO';
@@ -6,10 +7,11 @@ import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
 export class AzureSpeechIO extends DirectServiceIO {
+  // prettier-ignore
+  protected static readonly REGION_ERROR_PREFIX =
+    `Please define a region config property. [More Information](${DOCS_BASE_URL}directConnection/Azure#`;
   override insertKeyPlaceholderText = 'Azure Speech Subscription Key';
-  override keyHelpUrl =
-    // eslint-disable-next-line max-len
-    'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
+  override keyHelpUrl = AzureUtils.SUBSCRIPTION_KEY_HELP_URL;
 
   // prettier-ignore
   constructor(deepChat: DeepChat, buildHeadersFunc: BuildHeadersFunc, region: string, apiKey?: APIKey,

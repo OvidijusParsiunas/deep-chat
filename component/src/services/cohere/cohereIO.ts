@@ -39,7 +39,7 @@ export class CohereIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message.text);
     bodyCopy.messages = textMessages.map((message) => ({
-      role: message.role === 'ai' ? 'assistant' : 'user',
+      role: DirectServiceIO.getRoleViaAI(message.role),
       content: message.text,
     }));
     return bodyCopy;

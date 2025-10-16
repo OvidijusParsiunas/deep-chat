@@ -1,6 +1,6 @@
 import {APPLICATION_JSON, AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 
 type ClaudeErrorResponse = {
   error?: {
@@ -28,9 +28,9 @@ export class ClaudeUtils {
     const claudeResult = result as ClaudeErrorResponse;
     if (claudeResult.error) {
       if (claudeResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

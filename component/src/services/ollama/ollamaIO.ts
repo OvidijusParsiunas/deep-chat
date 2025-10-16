@@ -1,6 +1,6 @@
+import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
+import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -14,12 +14,6 @@ import {OBJECT} from '../utils/serviceConstants';
 import {OllamaUtils} from './utils/ollamaUtils';
 import {OllamaChat} from '../../types/ollama';
 import {DeepChat} from '../../deepChat';
-import {
-  OllamaConverseBodyInternal,
-  SystemMessageInternal,
-  OllamaToolCall,
-  OllamaMessage,
-} from '../../types/ollamaInternal';
 
 export class OllamaIO extends DirectServiceIO {
   override insertKeyPlaceholderText = '';
@@ -27,7 +21,7 @@ export class OllamaIO extends DirectServiceIO {
   override validateKeyProperty = false;
   url = 'http://localhost:11434/api/chat';
   permittedErrorPrefixes = ['Error'];
-  private readonly _systemMessage?: SystemMessageInternal;
+  private readonly _systemMessage: string = '';
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
 
@@ -38,7 +32,7 @@ export class OllamaIO extends DirectServiceIO {
     super(deepChat, keyVerificationDetails, buildHeadersFunc, {key: 'placeholder'});
     const config = directConnectionCopy.ollama as OllamaChat;
     if (typeof config === OBJECT) {
-      if (config.system) this._systemMessage = OllamaIO.generateSystemMessage(config.system);
+      if (config.system) this._systemMessage = config.system;
       const function_handler = (deepChat.directConnection?.ollama as OllamaChat)?.function_handler;
       if (function_handler) this._functionHandler = function_handler;
       this.cleanConfig(config);
@@ -47,10 +41,6 @@ export class OllamaIO extends DirectServiceIO {
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'llama3.2';
     this.rawBody.stream ??= false;
-  }
-
-  private static generateSystemMessage(system: string): SystemMessageInternal {
-    return {role: 'system', content: system};
   }
 
   private cleanConfig(config: OllamaChat) {
@@ -72,11 +62,11 @@ export class OllamaIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
       pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemMessage?.content.length || 0) : -1
+      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       const ollamaMessage: OllamaMessage = {
         content: message.text || '',
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       };
 
       if (message.files && message.files.length > 0) {
@@ -88,9 +78,8 @@ export class OllamaIO extends DirectServiceIO {
 
       return ollamaMessage;
     });
-
-    bodyCopy.messages = [...processedMessages];
-    if (this._systemMessage) bodyCopy.messages.unshift(this._systemMessage);
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 
@@ -122,7 +111,7 @@ export class OllamaIO extends DirectServiceIO {
 
   private async handleTools(tools: {tool_calls: OllamaToolCall[]}, prevBody?: OllamaChat): Promise<ResponseI> {
     if (!tools.tool_calls || !prevBody || !this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
@@ -144,6 +133,6 @@ export class OllamaIO extends DirectServiceIO {
 
       return this.makeAnotherRequest(bodyCp, this._messages);
     }
-    throw Error('Function tool response must be an array or contain a text property');
+    throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
 }

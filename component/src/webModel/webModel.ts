@@ -1,8 +1,7 @@
+import {DOCS_BASE_URL, SERVICE, TEXT_KEY} from '../utils/consts/messageConstants';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {MessageUtils} from '../views/chat/messages/utils/messageUtils';
-import {ErrorMessages} from '../utils/errorMessages/errorMessages';
-import {SERVICE, TEXT_KEY} from '../utils/consts/messageConstants';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {WebModelIntroMessage} from './webModelIntroMessage';
@@ -16,6 +15,11 @@ import {ResponseI} from '../types/responseInternal';
 // import * as WebLLM2 from 'deep-chat-web-llm';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
+import {
+  INVALID_STREAM_ARRAY_RESPONSE,
+  INVALID_MODEL_RESPONSE,
+  INVALID_MODEL_REQUEST,
+} from '../utils/errorMessages/errorMessages';
 
 declare global {
   interface Window {
@@ -27,7 +31,7 @@ export class WebModel extends BaseServiceIO {
   public static chat?: WebLLM.ChatInterface;
   private static readonly GENERIC_ERROR =
     'Error, please check the ' +
-    '[troubleshooting](https://deepchat.dev/docs/webModel#troubleshooting) section of documentation for help.';
+    `[troubleshooting](${DOCS_BASE_URL}webModel#troubleshooting) section of documentation for help.`;
   private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
   private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
   private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
@@ -250,7 +254,7 @@ export class WebModel extends BaseServiceIO {
         const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
         onFinish();
       } else if (!body || !body.text) {
-        const error = ErrorMessages.INVALID_MODEL_REQUEST({body}, false);
+        const error = INVALID_MODEL_REQUEST({body}, false);
         console.error(error);
         const onFinish = stream ? this.streamHandlers.onClose : this.completionsHandlers.onFinish;
         RequestUtils.onInterceptorError(messages, error, onFinish);
@@ -286,7 +290,7 @@ export class WebModel extends BaseServiceIO {
     const result = (await deepChat.responseInterceptor?.(output)) || output;
     if (deepChat.connect?.stream)
       if (Array.isArray(result) && result.length > 1) {
-        console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);
+        console.error(INVALID_STREAM_ARRAY_RESPONSE);
         return;
       }
     const messageDataArr = Array.isArray(result) ? result : [result];
@@ -297,7 +301,7 @@ export class WebModel extends BaseServiceIO {
     } else {
       const errorMessage = messageDataArr.find((message) => !message || !message.text);
       if (errorMessage) {
-        const error = ErrorMessages.INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
+        const error = INVALID_MODEL_RESPONSE(output, !!deepChat.responseInterceptor, result);
         RequestUtils.displayError(messages, new Error(error));
         return;
       }

@@ -55,12 +55,10 @@ export class GroqChatIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: GroqChatIO.getTextWImagesContent(message),
-        role: message.role === 'ai' ? ('assistant' as const) : (message.role as 'user'),
+        role: message.role === 'ai' ? 'assistant' : (message.role as 'user'),
       };
     });
-    if (this._systemMessage) {
-      processedMessages.unshift({role: 'system', content: this._systemMessage});
-    }
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

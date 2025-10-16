@@ -1,5 +1,5 @@
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {
   INVALID_REQUEST_ERROR_PREFIX,
   AUTHENTICATION_ERROR_PREFIX,
@@ -33,9 +33,9 @@ export class XUtils {
     const xResult = result as XErrorResponse;
     if (xResult.error) {
       if (xResult.error.type === AUTHENTICATION_ERROR_PREFIX || xResult.error.type === INVALID_REQUEST_ERROR_PREFIX) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

@@ -1,5 +1,4 @@
 import {KimiRequestBody, KimiMessage, KimiToolCall} from '../../types/kimiInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -16,7 +15,6 @@ import {DeepChat} from '../../deepChat';
 import {Kimi} from '../../types/kimi';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
-
 export class KimiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Kimi');
   override keyHelpUrl = 'https://platform.moonshot.ai/console/api-keys';
@@ -24,7 +22,7 @@ export class KimiIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'Not found'];
   _functionHandler?: ChatFunctionHandler;
   readonly _streamToolCalls?: KimiToolCall[];
-  private readonly _systemMessage: string = 'You are Kimi, a helpful assistant created by Moonshot AI.';
+  private readonly _systemMessage: string = '';
   private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
@@ -56,11 +54,11 @@ export class KimiIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: KimiIO.getTextWImagesContent(message),
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as KimiMessage;
     });
-
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 

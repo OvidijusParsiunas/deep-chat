@@ -1,5 +1,5 @@
+import {REQUEST_SETTINGS_ERROR, INVALID_STREAM_ARRAY_RESPONSE, INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET, OBJECT, POST} from '../../services/utils/serviceConstants';
-import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
@@ -25,7 +25,7 @@ export class RequestUtils {
   // prettier-ignore
   public static async tempRemoveContentHeader(connectSettings: Connect | undefined,
       request: (stringifyBody?: boolean) => Promise<unknown>, stringifyBody: boolean) {
-    if (!connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!connectSettings?.headers) throw new Error(REQUEST_SETTINGS_ERROR);
     const previousContetType = connectSettings.headers[CONTENT_TYPE_H_KEY];
     delete connectSettings.headers[CONTENT_TYPE_H_KEY];
     let result;
@@ -87,7 +87,7 @@ export class RequestUtils {
     if (!response) return false;
     const dataArr = Array.isArray(response) ? response : [response];
     if (isStreaming && dataArr.length > 1) {
-      console.error(ErrorMessages.INVALID_STREAM_ARRAY_RESPONSE);
+      console.error(INVALID_STREAM_ARRAY_RESPONSE);
       return false;
     }
     const invalidFound = dataArr.find(
@@ -118,7 +118,7 @@ export class RequestUtils {
     const finalResult = await io.extractResultData(result);
     if (!finalResult || (typeof finalResult !== 'object' && !Array.isArray(finalResult))) {
       if (displayError) {
-        const err = ErrorMessages.INVALID_RESPONSE(resp, 'response', !!responseInterceptor, result);
+        const err = INVALID_RESPONSE(resp, 'response', !!responseInterceptor, result);
         RequestUtils.displayError(messages, err);
       }
       return undefined;

@@ -1,7 +1,7 @@
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -16,6 +16,11 @@ import {Connect} from '../../types/connect';
 import {APIKey} from '../../types/APIKey';
 import {OBJECT} from './serviceConstants';
 import {DeepChat} from '../../deepChat';
+import {
+  FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR,
+  DEFINE_FUNCTION_HANDLER,
+  REQUEST_SETTINGS_ERROR,
+} from '../../utils/errorMessages/errorMessages';
 
 export class DirectServiceIO extends BaseServiceIO {
   key?: string;
@@ -69,6 +74,14 @@ export class DirectServiceIO extends BaseServiceIO {
     return true;
   }
 
+  protected static getRoleViaUser(role: string) {
+    return role === MessageUtils.USER_ROLE ? MessageUtils.USER_ROLE : MessageUtils.ASSISTANT_ROLE;
+  }
+
+  protected static getRoleViaAI(role: string) {
+    return role === MessageUtils.AI_ROLE ? MessageUtils.ASSISTANT_ROLE : MessageUtils.USER_ROLE;
+  }
+
   async callDirectServiceServiceAPI(
     messages: Messages,
     pMessages: MessageContentI[],
@@ -77,7 +90,7 @@ export class DirectServiceIO extends BaseServiceIO {
     streamConfig?: StreamConfig,
     stringifyBody?: boolean
   ) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
     const body = preprocessBody(this.rawBody, pMessages);
     const stream = streamConfig ? this.stream : false;
     if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
@@ -99,7 +112,7 @@ export class DirectServiceIO extends BaseServiceIO {
         if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
         return {processedResponse};
       }
-      throw Error('Function tool response must be an array or contain a text property');
+      throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
     }
     const responses = await Promise.all(handlerResponse);
     return {responses};
@@ -226,7 +239,7 @@ export class DirectServiceIO extends BaseServiceIO {
     system?: {message?: string}
   ): Promise<ResponseI> {
     if (!tools.tool_calls || !prevBody || !functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = tools.tool_calls.map((call) => {
@@ -253,6 +266,6 @@ export class DirectServiceIO extends BaseServiceIO {
 
       return this.makeAnotherRequest(bodyCp, messages);
     }
-    throw Error('Function tool response must be an array or contain a text property');
+    throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
 }

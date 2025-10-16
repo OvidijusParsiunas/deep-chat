@@ -1,7 +1,7 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
+import {DOCS_BASE_URL, TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -17,7 +17,7 @@ type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 export class AzureSummarizationIO extends AzureLanguageIO {
   private static readonly ENDPOINT_ERROR_MESSAGE =
     // eslint-disable-next-line max-len
-    'Please define the azure endpoint. [More Information](https://deepchat.dev/docs/directConnection/Azure#Summarization)';
+    `Please define the azure endpoint. [More Information](${DOCS_BASE_URL}directConnection/Azure#Summarization)`;
   override permittedErrorPrefixes: string[] = [AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE];
   url = '';
   textInputPlaceholderText = 'Insert text to summarize';

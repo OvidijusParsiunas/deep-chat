@@ -61,12 +61,10 @@ export class MistralIO extends DirectServiceIO {
       pMessages,
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => ({
-      role: message.role === 'ai' ? 'assistant' : 'user',
+      role: DirectServiceIO.getRoleViaAI(message.role),
       content: DirectServiceIO.getTextWFilesContent(message, MistralIO.getFileContent),
     }));
-    if (this._systemMessage) {
-      processedMessages.unshift({role: 'system', content: this._systemMessage});
-    }
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

@@ -1,6 +1,6 @@
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {GeminiGenerateContentResult} from '../../../types/geminiResult';
 
 export class GeminiUtils {
@@ -16,9 +16,9 @@ export class GeminiUtils {
     const geminiResult = result as GeminiGenerateContentResult;
     if (geminiResult.error) {
       if (geminiResult.error.code === 403 || geminiResult.error.message?.includes('API key')) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

@@ -1,5 +1,5 @@
+import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -71,8 +71,8 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings?.headers) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    if (!files?.[0]) throw new Error(ErrorMessages.NO_FILE_ADDED_ERROR);
+    if (!this.connectSettings?.headers) throw new Error(REQUEST_SETTINGS_ERROR);
+    if (!files?.[0]) throw new Error(NO_FILE_ADDED_ERROR);
     this.url = this.connectSettings.url || this._service_url;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const formData = OpenAISpeechToTextIO.createFormDataBody(body, files[0]);

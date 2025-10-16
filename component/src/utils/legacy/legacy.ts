@@ -1,10 +1,10 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
+import {DOCS_BASE_URL, TEXT_KEY} from '../consts/messageConstants';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {OBJECT} from '../../services/utils/serviceConstants';
 import {ValidateInput} from '../../types/validateInput';
 import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
-import {TEXT_KEY} from '../consts/messageConstants';
 import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
@@ -25,23 +25,23 @@ export class Legacy {
     const containerStyle = (deepChat as unknown as LegacyDeepChat).containerStyle;
     if (containerStyle) {
       Object.assign(containerRef.style, containerStyle);
-      console.error('The containerStyle property is deprecated since version 1.3.14.');
-      console.error('Please change to using the style property instead: https://deepchat.dev/docs/styles#style');
+      console.error(`The containerStyle property${IS_DEPRECATED}1.3.14.`);
+      console.error(`${PLEASE_CHANGE}the style property instead: ${DOCS_BASE_URL}styles#style`);
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static handleResponseProperty(result: any | Response) {
-    console.error('The {result: ....} response object type is deprecated since version 1.3.0.');
-    console.error('Please change to using the new response object: https://deepchat.dev/docs/connect#Response');
+    console.error(`The {result: ....} response object type${IS_DEPRECATED}1.3.0.`);
+    console.error(`${PLEASE_CHANGE}the new response object: ${DOCS_BASE_URL}connect#Response`);
     return result.result;
   }
 
   public static processHistory(deepChat: DeepChat) {
     const initialMessages = (deepChat as unknown as LegacyDeepChat).initialMessages;
     if (initialMessages) {
-      console.error('The initialMessages property is deprecated since version 2.0.0.');
-      console.error('Please change to using the history property instead: https://deepchat.dev/docs/messages/#history');
+      console.error(`The initialMessages property${IS_DEPRECATED}2.0.0.`);
+      console.error(`${PLEASE_CHANGE}the history property instead: ${DOCS_BASE_URL}messages/#history`);
       return initialMessages;
     }
     return undefined;
@@ -50,8 +50,8 @@ export class Legacy {
   public static processHistoryFile(message: MessageContent) {
     const file = (message as MessageContent & {file?: MessageFile}).file;
     if (file) {
-      console.error('The file property in MessageContent is deprecated since version 1.3.17.');
-      console.error('Please change to using the files array property: https://deepchat.dev/docs/messages/#MessageContent');
+      console.error(`The file property in MessageContent${IS_DEPRECATED}1.3.17.`);
+      console.error(`${PLEASE_CHANGE}the files array property: ${DOCS_BASE_URL}messages/#MessageContent`);
       message.files = [file];
     }
   }
@@ -59,23 +59,23 @@ export class Legacy {
   public static processValidateInput(deepChat: DeepChat) {
     const validate = (deepChat as DeepChat & {validateMessageBeforeSending?: ValidateInput}).validateMessageBeforeSending;
     if (validate) {
-      console.error('The validateMessageBeforeSending property is deprecated since version 1.3.24.');
-      console.error('Please change to using validateInput: https://deepchat.dev/docs/interceptors#validateInput');
+      console.error(`The validateMessageBeforeSending property${IS_DEPRECATED}1.3.24.`);
+      console.error(`${PLEASE_CHANGE}validateInput: ${DOCS_BASE_URL}interceptors#validateInput`);
       return validate;
     }
     return undefined;
   }
 
   public static processSubmitUserMessage(content: string) {
-    console.error('The submitUserMessage(text: string) argument string type is deprecated since version 1.4.4.');
-    console.error('Please change to using the new argument type: https://deepchat.dev/docs/methods#submitUserMessage');
+    console.error(`The submitUserMessage(text: string) argument string type${IS_DEPRECATED}1.4.4.`);
+    console.error(`${PLEASE_CHANGE}the new argument type: ${DOCS_BASE_URL}methods#submitUserMessage`);
     return {[TEXT_KEY]: content};
   }
 
   public static flagHTMLUpdateClass(bubbleElement: HTMLElement) {
     if (bubbleElement.children[0]?.classList.contains('deep-chat-update-message')) {
-      console.error('The "deep-chat-update-message" html class is deprecated since version 1.4.4.');
-      console.error('Please change to using {..., overwrite: true} object: https://deepchat.dev/docs/connect#Response');
+      console.error(`The "deep-chat-update-message" html class${IS_DEPRECATED}1.4.4.`);
+      console.error(`${PLEASE_CHANGE}using {..., overwrite: true} object: ${DOCS_BASE_URL}connect#Response`);
     }
   }
 
@@ -88,16 +88,16 @@ export class Legacy {
         // this will cause the component to render twice but it is needed
         legacyDeepchat.connect = legacyDeepchat.request;
       }
-      console.error('The request property is deprecated since version 2.0.0.');
-      console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
+      console.error(`The request property${IS_DEPRECATED}2.0.0.`);
+      console.error(`${SEE}connect object: ${DOCS_BASE_URL}connect#connect-1`);
     }
   }
 
   public static checkForStream(deepChat: DeepChat) {
     const stream = (deepChat as unknown as LegacyDeepChat).stream;
     if (stream) {
-      console.error('The stream property has been moved to the connect object in version 2.0.0.');
-      console.error('Please see the connect object: https://deepchat.dev/docs/connect#connect-1');
+      console.error(`The stream property${MOVED_TO}the connect object in version 2.0.0.`);
+      console.error(`${SEE}connect object: ${DOCS_BASE_URL}connect#connect-1`);
       return stream;
     }
     return undefined;
@@ -107,7 +107,7 @@ export class Legacy {
     const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
     if (legacyDeepchat.onNewMessage) {
       console.error('The onNewMessage event has been deprecated since version 2.0.0.');
-      console.error('Please see the onMessage event: https://deepchat.dev/docs/events#onMessage');
+      console.error(`${SEE}onMessage event: ${DOCS_BASE_URL}events#onMessage`);
       legacyDeepchat.onNewMessage?.(updateBody);
     }
     deepChat.dispatchEvent(new CustomEvent('new-message', {detail: updateBody}));
@@ -116,8 +116,8 @@ export class Legacy {
   public static processFileConfigConnect(config: FilesServiceConfig) {
     const legacyConfig = config as unknown as FilesServiceConfig & {request?: Connect};
     if (legacyConfig.request) {
-      console.error('The request property in file configuration is deprecated since version 2.0.0.');
-      console.error('Please use the connect property instead: https://deepchat.dev/docs/files');
+      console.error(`The request property in file configuration${IS_DEPRECATED}2.0.0.`);
+      console.error(`Please use the connect property instead: ${DOCS_BASE_URL}files`);
       if (!legacyConfig.connect) legacyConfig.connect = legacyConfig.request;
     }
   }
@@ -128,7 +128,7 @@ export class Legacy {
     const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
       console.error('The loading message styles are defined using LoadingMessageStyles interface since version 2.1.0.');
-      console.error('Check it out here: https://deepchat.dev/docs/messages/styles#LoadingMessageStyles');
+      console.error(`Check it out here: ${DOCS_BASE_URL}messages/styles#LoadingMessageStyles`);
       messageStylesCp.loading = {message: {styles: loading}};
     }
     return messageStylesCp;
@@ -137,8 +137,8 @@ export class Legacy {
   public static processDemo(demo: Demo) {
     if (typeof demo === 'boolean') return demo;
     if ((demo as unknown as {displayLoadingBubble?: boolean}).displayLoadingBubble) {
-      console.error('The demo displayLoadingBubble property is deprecated since version 2.1.0.');
-      console.error('Please use displayLoading instead: https://deepchat.dev/docs/modes#demo');
+      console.error(`The demo displayLoadingBubble property${IS_DEPRECATED}2.1.0.`);
+      console.error(`Please use displayLoading instead: ${DOCS_BASE_URL}modes#demo`);
       demo.displayLoading = {message: true};
     }
     return demo;
@@ -146,20 +146,20 @@ export class Legacy {
 
   public static processCohere(cohere: Cohere) {
     const cohereObj = cohere as unknown as {chat?: object; textGeneration?: object; summarization?: object};
-    const documentationMsg = 'Please see the official documentation: https://deepchat.dev/docs/directConnection/Cohere';
+    const documentationMsg = `${SEE}official documentation: ${DOCS_BASE_URL}directConnection/Cohere`;
     if (cohereObj.chat) {
-      console.error('Cohere chat property is deprecated since version 2.2.3.');
+      console.error(`Cohere chat property${IS_DEPRECATED}2.2.3.`);
       console.error(documentationMsg);
       delete cohereObj.chat;
     }
     if (cohereObj.textGeneration) {
-      console.error('Cohere textGeneration is not supported since version 2.2.3.');
+      console.error(`Cohere textGeneration${NOT_SUPPORTED_SINCE}2.2.3.`);
       console.error(documentationMsg);
       delete cohereObj.textGeneration;
       return false;
     }
     if (cohereObj.summarization) {
-      console.error('Cohere summarization is not supported since version 2.2.3.');
+      console.error(`Cohere summarization${NOT_SUPPORTED_SINCE}2.2.3.`);
       console.error(documentationMsg);
       delete cohereObj.summarization;
       return false;
@@ -167,12 +167,13 @@ export class Legacy {
     return true;
   }
 
+  // WORK - update link
   public static processStreamHTMLWrappers(stream?: Stream) {
     if (!stream || typeof stream !== OBJECT) return;
     const htmlWrappers = (stream as {htmlWrappers?: HTMLWrappers}).htmlWrappers;
     if (htmlWrappers) {
-      console.error(`The htmlWrappers property has been moved to Deep Chat's base since version 2.3.0.`);
-      console.error('Check it out here: https://deepchat.dev/docs/messages/HTML#htmlWrappers');
+      console.error(`The htmlWrappers property${MOVED_TO}Deep Chat's base since version 2.3.0.`);
+      console.error(`Check it out here: ${DOCS_BASE_URL}messages/HTML#htmlWrappers`);
       return htmlWrappers;
     }
     return undefined;
@@ -183,9 +184,16 @@ export class Legacy {
     const scroll = (focusMode as unknown as {scroll?: boolean}).scroll;
     if (scroll) {
       console.error('The scroll property in focusMode has been changed to smoothScroll since version 2.3.0.');
-      console.error('Check it out here: https://deepchat.dev/docs/modes#focusMode');
+      console.error(`Check it out here: ${DOCS_BASE_URL}modes#focusMode`);
       focusMode.smoothScroll = true;
     }
     return focusMode;
   }
 }
+
+// these are used to allow bundled to mangle names to reduce the bundle size
+const IS_DEPRECATED = ' is deprecated since version ';
+const PLEASE_CHANGE = 'Please change to using ';
+const SEE = 'Please see the ';
+const NOT_SUPPORTED_SINCE = ' is not supported since version ';
+const MOVED_TO = ' has been moved to ';

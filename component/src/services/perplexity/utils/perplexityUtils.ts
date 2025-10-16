@@ -1,6 +1,6 @@
 import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
 
 type PerplexityErrorResponse = {
   error?: {
@@ -26,7 +26,7 @@ export class PerplexityUtils {
   ) {
     const perplexityResult = result as PerplexityErrorResponse;
     if (perplexityResult.error) {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     } else {
       onSuccess(key);
     }

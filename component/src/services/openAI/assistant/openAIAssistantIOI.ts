@@ -1,4 +1,5 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
+import {REQUEST_SETTINGS_ERROR, DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {COMPLETED, ERROR, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
@@ -6,7 +7,6 @@ import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
 import {MessageStream} from '../../../views/chat/messages/stream/messageStream';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {History} from '../../../views/chat/messages/history/history';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
 import {TEXT_KEY} from '../../../utils/consts/messageConstants';
@@ -201,7 +201,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     this._waitingForStreamResponse = false;
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
+    if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
     this.rawBody.assistant_id ??= this._config.assistant_id || (await this.createNewAssistant());
     // here instead of constructor as messages may be loaded later
     if (!this._searchedForThreadId) this.searchPreviousMessagesForThreadId(messages.messageToElements);
@@ -298,7 +298,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
     if (!this.functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};

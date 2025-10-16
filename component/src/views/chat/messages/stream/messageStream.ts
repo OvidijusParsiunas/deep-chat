@@ -1,4 +1,3 @@
-import {ErrorMessages} from '../../../../utils/errorMessages/errorMessages';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
@@ -11,6 +10,11 @@ import {HTMLMessages} from '../html/htmlMessages';
 import {Stream} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
 import {HTMLUtils} from '../html/htmlUtils';
+import {
+  NO_VALID_STREAM_EVENTS_SENT,
+  INVALID_STREAM_EVENT_MIX,
+  INVALID_STREAM_EVENT,
+} from '../../../../utils/errorMessages/errorMessages';
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
@@ -46,7 +50,7 @@ export class MessageStream {
   public upsertStreamedMessage(response?: Response) {
     if (this._hasStreamEnded) return;
     if (response?.text === undefined && response?.html === undefined) {
-      return console.error(ErrorMessages.INVALID_STREAM_EVENT);
+      return console.error(INVALID_STREAM_EVENT);
     }
     if (response?.custom && this._message) this._message.custom = response.custom;
     const content = response?.text || response?.html || '';
@@ -55,7 +59,7 @@ export class MessageStream {
     if (!this._elements && !this._message) {
       this.setInitialState(streamType, content, response?.role);
     } else if (this._streamType !== streamType) {
-      return console.error(ErrorMessages.INVALID_STREAM_EVENT_MIX);
+      return console.error(INVALID_STREAM_EVENT_MIX);
     } else {
       this.updateBasedOnType(content, streamType, response?.overwrite);
     }
@@ -157,7 +161,7 @@ export class MessageStream {
   public finaliseStreamedMessage() {
     if (this._endStreamAfterOperation || !this._message) return;
     if (this._fileAdded && !this._elements) return;
-    if (!this._elements) throw Error(ErrorMessages.NO_VALID_STREAM_EVENTS_SENT);
+    if (!this._elements) throw Error(NO_VALID_STREAM_EVENTS_SENT);
     if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
     if (this._streamType === 'text') {
       if (this._messages.textToSpeech) TextToSpeech.speak(this._message.text || '', this._messages.textToSpeech);

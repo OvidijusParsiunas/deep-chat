@@ -1,6 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {MiniMaxRequestBody, MiniMaxMessage} from '../../types/miniMaxInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -48,7 +47,7 @@ export class MiniMaxIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: message.text || '',
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as MiniMaxMessage;
     });
 

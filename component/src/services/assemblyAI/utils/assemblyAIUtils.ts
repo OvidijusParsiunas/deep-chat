@@ -1,5 +1,5 @@
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {
   CONTENT_TYPE_H_KEY,
@@ -69,9 +69,9 @@ export class AssemblyAIUtils {
     const openAIResult = result as OpenAIConverseResult;
     if (openAIResult.error) {
       if (openAIResult.error.code === 'invalid_api_key') {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

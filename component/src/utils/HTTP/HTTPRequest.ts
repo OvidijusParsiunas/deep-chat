@@ -1,5 +1,5 @@
+import {INVALID_RESPONSE, INVALID_KEY, CONNECTION_FAILED} from '../errorMessages/errorMessages';
 import {OBJECT, POST} from '../../services/utils/serviceConstants';
-import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
@@ -35,7 +35,7 @@ export class HTTPRequest {
         // the reason why throwing here is to allow extractResultData to attempt extract error message and throw it
         if (!responseValid) throw result;
         if (!resultData || (typeof resultData !== OBJECT && !Array.isArray(resultData)))
-          throw Error(ErrorMessages.INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
+          throw Error(INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
         if (resultData.error) throw resultData.error;
         if (io.asyncCallInProgress) {
           io.asyncCallInProgress = false;
@@ -101,7 +101,7 @@ export class HTTPRequest {
   public static verifyKey(key: string, url: string, headers: HeadersInit, method: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void, onLoad: () => void,
       handleVerificationResult: HandleVerificationResult, body?: string) {
-    if (key === '') return onFail(ErrorMessages.INVALID_KEY);
+    if (key === '') return onFail(INVALID_KEY);
     onLoad();
     fetch(url, { method, headers, body: body || null })
       .then((response) => RequestUtils.processResponseByType(response))
@@ -109,7 +109,7 @@ export class HTTPRequest {
         handleVerificationResult(result, key, onSuccess, onFail);
       })
       .catch((err) => {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
         console.error(err);
       });
   }

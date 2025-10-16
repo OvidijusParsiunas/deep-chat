@@ -1,6 +1,7 @@
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
+import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
@@ -113,7 +114,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       }
     } else if (deepChat.onMessage) {
       console.warn('To get user audio transcription, set `input_audio_transcription` in the `realtime` config.');
-      console.warn('See: https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeConfig');
+      console.warn(`See: ${DOCS_BASE_URL}directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeConfig`);
     }
   }
 
@@ -589,7 +590,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
   private async handleTool(name: string, functionArguments: string, call_id: string) {
     if (!this._functionHandler) {
-      throw Error(ErrorMessages.DEFINE_FUNCTION_HANDLER);
+      throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const result = await this._functionHandler({name, arguments: functionArguments});
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {

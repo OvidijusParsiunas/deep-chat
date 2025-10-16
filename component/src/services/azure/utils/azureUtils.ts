@@ -1,11 +1,14 @@
 import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/azureResult';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
 import {GenericObject} from '../../../types/object';
 
 export class AzureUtils {
   private static readonly SUBSCRIPTION_KEY_NAME = 'Ocp-Apim-Subscription-Key';
+  public static readonly SUBSCRIPTION_KEY_HELP_URL =
+    // eslint-disable-next-line max-len
+    'https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions#create-and-manage-subscriptions-in-azure-portal';
 
   public static buildTextToSpeechHeaders(outputFormat: string, key: string) {
     return {
@@ -27,7 +30,7 @@ export class AzureUtils {
       onSuccess: (key: string) => void, onFail: (message: string) => void) {
     const azureResult = result as AzureKeyRetrievalResult;
     if (azureResult.error) {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     } else {
       onSuccess(key);
     }
@@ -57,7 +60,7 @@ export class AzureUtils {
     const azureResult = result as AzureSummarizationResult;
     // if the token is valid - it will throw a different error than a 401
     if (azureResult.error?.code === "401") {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     } else {
       onSuccess(key);
     }
@@ -81,7 +84,7 @@ export class AzureUtils {
     azureResult.json().then((result) => {
       // if the token is valid - it will throw a different error than a 401000
       if (!Array.isArray(result) && result.error.code === 401000) {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
         onSuccess(key);
       }

@@ -1,7 +1,7 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {MessagesBase} from '../../views/chat/messages/messagesBase';
-import {ErrorMessages} from '../errorMessages/errorMessages';
+import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {RoleToStream, Websocket} from './websocket';
@@ -24,7 +24,7 @@ export class CustomHandler {
       isHandlerActive = false; // need to set it here due to asynchronous code below
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
-        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        console.error(INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage(SERVICE, 'Error in server message');
         io.completionsHandlers.onFinish();
       } else {
@@ -81,7 +81,7 @@ export class CustomHandler {
       if (!isHandlerActive) return;
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false}) as Response;
       if (!result) {
-        const errorMessage = ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
+        const errorMessage = INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
         CustomHandler.streamError(errorMessage, stream, io, messages);
         isHandlerActive = false;
       } else if (result.error) {
@@ -122,7 +122,7 @@ export class CustomHandler {
     const onResponse = async (response: Response | Response[]) => {
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
-        console.error(ErrorMessages.INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        console.error(INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage(SERVICE, 'Error in server message');
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];

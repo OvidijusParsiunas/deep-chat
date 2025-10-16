@@ -1,8 +1,8 @@
 import {EventSourceMessage, fetchEventSource, FetchEventSourceInit} from '@microsoft/fetch-event-source';
+import {READABLE_STREAM_CONNECTION_ERROR} from '../errorMessages/errorMessages';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
-import {ErrorMessages} from '../errorMessages/errorMessages';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {POST} from '../../services/utils/serviceConstants';
@@ -45,7 +45,7 @@ export class Stream {
     const {onOpen, onClose} = io.streamHandlers;
     let aborted = false;
     fetch(io.connectSettings?.url || io.url || '', reqBody).then(async (response) => {
-      if (!response.body) throw new Error(ErrorMessages.READABLE_STREAM_CONNECTION_ERROR);
+      if (!response.body) throw new Error(READABLE_STREAM_CONNECTION_ERROR);
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       onOpen();

@@ -1,6 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -96,14 +95,12 @@ export class OpenRouterIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: OpenRouterIO.getContent(message),
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as OpenRouterMessage;
     });
 
     const messages: OpenRouterMessage[] = [];
-    if (this._systemMessage) {
-      messages.push({role: 'system', content: this._systemMessage});
-    }
+    if (this._systemMessage) messages.push({role: 'system', content: this._systemMessage});
     messages.push(...processedMessages);
 
     bodyCopy.messages = messages;

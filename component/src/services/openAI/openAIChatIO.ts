@@ -1,6 +1,5 @@
 import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
@@ -88,12 +87,11 @@ export class OpenAIChatIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
         this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1)
-      .map((message) => {
-        return {content: OpenAIChatIO.getContent(message),
-          role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant'};});
-    if (this._systemMessage) {
-      processedMessages.unshift({role: 'system', content: this._systemMessage});
-    }
+      .map((message) => ({
+        content: OpenAIChatIO.getContent(message),
+        role: DirectServiceIO.getRoleViaUser(message.role)
+      }));
+    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

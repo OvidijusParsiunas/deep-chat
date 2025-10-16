@@ -1,6 +1,7 @@
 import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
@@ -8,7 +9,7 @@ import {ServiceIO} from '../../serviceIO';
 export class OpenAIUtils {
   public static readonly FUNCTION_TOOL_RESP_ERROR =
     'Response object must either be {response: string}[] for each individual function ' +
-    'or {text: string} for a direct response, see https://deepchat.dev/docs/directConnection/OpenAI#FunctionHandler.';
+    `or {text: string} for a direct response, see ${DOCS_BASE_URL}directConnection/OpenAI#FunctionHandler.`;
   public static readonly FUNCTION_TOOL_RESP_ARR_ERROR = 'Arrays are not accepted in handler responses';
 
   public static buildHeaders(key: string) {
@@ -24,9 +25,9 @@ export class OpenAIUtils {
     const openAIResult = result as OpenAIConverseResult;
     if (openAIResult.error) {
       if (openAIResult.error.code === 'invalid_api_key') {
-        onFail(ErrorMessages.INVALID_KEY);
+        onFail(INVALID_KEY);
       } else {
-        onFail(ErrorMessages.CONNECTION_FAILED);
+        onFail(CONNECTION_FAILED);
       }
     } else {
       onSuccess(key);

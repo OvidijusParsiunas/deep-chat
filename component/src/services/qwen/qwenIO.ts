@@ -1,5 +1,4 @@
 import {QwenRequestBody, QwenMessage, QwenToolCall} from '../../types/qwenInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -55,7 +54,7 @@ export class QwenIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: QwenIO.getTextWImagesContent(message),
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as QwenMessage;
     });
 

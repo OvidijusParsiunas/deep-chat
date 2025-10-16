@@ -1,6 +1,6 @@
+import {REQUEST_SETTINGS_ERROR, IMAGE_NOT_FOUND_ERROR} from '../../utils/errorMessages/errorMessages';
 import {StabilityAI, StabilityAIImageToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
-import {ErrorMessages} from '../../utils/errorMessages/errorMessages';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -62,8 +62,8 @@ export class StabilityAIImageToImageIO extends StabilityAIIO {
 
   // prettier-ignore
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
-    if (!this.connectSettings) throw new Error(ErrorMessages.REQUEST_SETTINGS_ERROR);
-    if (!files) throw new Error(ErrorMessages.IMAGE_NOT_FOUND_ERROR);
+    if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
+    if (!files) throw new Error(IMAGE_NOT_FOUND_ERROR);
     const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason

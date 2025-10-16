@@ -1,7 +1,7 @@
 import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {HuggingFaceTextGenerationResult} from '../../../types/huggingFaceResult';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ErrorMessages} from '../../../utils/errorMessages/errorMessages';
+import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
 
 export class HuggingFaceUtils {
   public static buildHeaders(key: string) {
@@ -19,7 +19,7 @@ export class HuggingFaceUtils {
     if (Array.isArray(huggingFaceResult.error) && huggingFaceResult.error[0] === 'Error in `parameters`: field required') {
       onSuccess(key);
     } else {
-      onFail(ErrorMessages.INVALID_KEY);
+      onFail(INVALID_KEY);
     }
   }
 

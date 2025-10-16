@@ -1,5 +1,4 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -48,16 +47,10 @@ export class XChatIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: message.text || '',
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as XMessage;
     });
-
-    const systemMessage: XMessage = {
-      role: 'system',
-      content: this._systemMessage,
-    };
-
-    bodyCopy.messages = [systemMessage, ...processedMessages];
+    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
     return bodyCopy;
   }
 

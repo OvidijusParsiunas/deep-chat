@@ -1,6 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -50,7 +49,7 @@ export class DeepSeekIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: message.text || '',
-        role: message.role === MessageUtils.USER_ROLE ? 'user' : 'assistant',
+        role: DirectServiceIO.getRoleViaUser(message.role),
       } as DeepSeekMessage;
     });
 
