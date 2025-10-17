@@ -1,4 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {X_BUILD_HEADERS, X_BUILD_KEY_VERIFICATION_DETAILS} from './utils/xUtils';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -8,7 +9,6 @@ import {XImageResult} from '../../types/xResult';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {XImages} from '../../types/x';
-import {XUtils} from './utils/xUtils';
 
 export class XImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('X');
@@ -21,7 +21,7 @@ export class XImagesIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const {directConnection} = deepChat;
     const apiKey = directConnection?.x;
-    super(deepChat, XUtils.buildKeyVerificationDetails(), XUtils.buildHeaders, apiKey);
+    super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
     const config = directConnection?.x?.images as NonNullable<XImages>;
     if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.rawBody.model ??= 'grok-2-image';

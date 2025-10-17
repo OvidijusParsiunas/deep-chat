@@ -1,3 +1,4 @@
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {ERROR, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -5,7 +6,6 @@ import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
@@ -21,7 +21,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy?.openAI;
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
+    super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy?.openAI?.textToSpeech as NonNullable<OpenAI['textToSpeech']>;
     if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.rawBody.model ??= OpenAITextToSpeechIO.DEFAULT_MODEL;

@@ -1,4 +1,5 @@
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
+import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY} from './serviceConstants';
 import {History} from '../../views/chat/messages/history/history';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -25,7 +26,6 @@ import {
   StreamHandlers,
   ServiceIO,
 } from '../serviceIO';
-import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class BaseServiceIO implements ServiceIO {

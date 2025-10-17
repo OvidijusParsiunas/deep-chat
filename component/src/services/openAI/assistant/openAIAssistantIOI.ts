@@ -14,9 +14,9 @@ import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../../utils/directServiceIO';
+import {OPEN_AI_DIRECT_FETCH} from '../utils/openAIUtils';
 import {BuildHeadersFunc} from '../../../types/headers';
 import {Stream} from '../../../utils/HTTP/stream';
-import {OpenAIUtils} from '../utils/openAIUtils';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 import {PollResult} from '../../serviceIO';
@@ -215,7 +215,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async createNewAssistant() {
     try {
       this.url = this.urlSegments.newAssistantUrl;
-      const result = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), POST);
+      const result = await OPEN_AI_DIRECT_FETCH(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), POST);
       this._config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this._config.assistant_id;
     } catch (e) {
@@ -254,7 +254,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
-      const runObj = await OpenAIUtils.directFetch(this, JSON.parse(JSON.stringify(this.rawBody)), POST);
+      const runObj = await OPEN_AI_DIRECT_FETCH(this, JSON.parse(JSON.stringify(this.rawBody)), POST);
       this.run_id = runObj.id;
     } else {
       this.sessionId = result.thread_id;
@@ -270,7 +270,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async getThreadMessages(thread_id: string, isHistory = false) {
     // https://platform.openai.com/docs/api-reference/messages/listMessages
     this.url = `${this.urlSegments.threadsPrefix}/${thread_id}/messages?${this.urlSegments.listMessagesPostfix}`;
-    let threadMessages = (await OpenAIUtils.directFetch(this, {}, GET)) as OpenAIAssistantMessagesResult;
+    let threadMessages = (await OPEN_AI_DIRECT_FETCH(this, {}, GET)) as OpenAIAssistantMessagesResult;
     if (!isHistory && this.deepChat.responseInterceptor) {
       threadMessages = (await this.deepChat.responseInterceptor?.(threadMessages)) as OpenAIAssistantMessagesResult;
     }
@@ -321,7 +321,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (this._isSSEStream) {
       await this.createStreamRun({tool_outputs});
     } else {
-      await OpenAIUtils.directFetch(this, {tool_outputs}, POST);
+      await OPEN_AI_DIRECT_FETCH(this, {tool_outputs}, POST);
     }
     return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
   }

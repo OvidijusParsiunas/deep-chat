@@ -1,9 +1,9 @@
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
 import {DirectConnection} from '../../../types/directConnection';
 import {Response as ResponseI} from '../../../types/response';
 import {OpenAIAssistantIOI} from './openAIAssistantIOI';
 import {OpenAIAssistant} from '../../../types/openAI';
 import {OBJECT} from '../../utils/serviceConstants';
-import {OpenAIUtils} from '../utils/openAIUtils';
 import {DeepChat} from '../../../deepChat';
 
 export class OpenAIAssistantIO extends OpenAIAssistantIOI {
@@ -14,7 +14,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     const apiKey = directConnectionCopy.openAI;
     const config = directConnectionCopy.openAI?.assistant;
     const urlSegments = OpenAIAssistantIO.buildUrlSegments(config);
-    super(deepChat, config, urlSegments, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey);
+    super(deepChat, config, urlSegments, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey);
     this.connectSettings.headers ??= {};
     this.connectSettings.headers['OpenAI-Beta'] ??= 'assistants=v2'; // runs keep failing but keep trying
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);

@@ -1,4 +1,5 @@
 import {MistralMessage, MistralRequestBody, MistralContentItem} from '../../types/mistralInternal';
+import {MISTRAL_BUILD_HEADERS, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS} from './utils/mistralUtils';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -9,7 +10,6 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {MistralResult} from '../../types/mistralResult';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
-import {MistralUtils} from './utils/mistralUtils';
 import {Response} from '../../types/response';
 import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
@@ -28,7 +28,7 @@ export class MistralIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.mistral as Mistral & APIKey;
-    super(deepChat, MistralUtils.buildKeyVerificationDetails(), MistralUtils.buildHeaders, config);
+    super(deepChat, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS(), MISTRAL_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = deepChat.directConnection?.mistral?.function_handler;

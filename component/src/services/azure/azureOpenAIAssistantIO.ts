@@ -1,15 +1,20 @@
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
 import {DirectConnection} from '../../types/directConnection';
-import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {ERROR, OBJECT} from '../utils/serviceConstants';
 import {OpenAIAssistant} from '../../types/openAI';
 import {AzureOpenAI} from '../../types/azure';
 import {DeepChat} from '../../deepChat';
+import {
+  AZURE_OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS,
+  AZURE_OPEN_AI_VALIDATE_URL_DETAILS,
+  AZURE_OPEN_AI_BUILD_HEADERS,
+  AZURE_OPEN_AI_URL_DETAILS_ERROR,
+} from './utils/azureOpenAIUtils';
 
 export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
   private static readonly THREAD_RESOURCE = `threads`;
   private static readonly NEW_ASSISTANT_RESOURCE = 'assistants';
-  override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
+  override permittedErrorPrefixes: string[] = [AZURE_OPEN_AI_URL_DETAILS_ERROR];
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Azure OpenAI');
   override keyHelpUrl =
     'https://learn.microsoft.com/en-us/answers/questions/1193991/how-to-get-the-value-of-openai-api-key';
@@ -35,18 +40,18 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
 
     // prettier-ignore
     super(deepChat, config?.assistant, urlSegments,
-      AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, apiKey);
+      AZURE_OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(urlDetails), AZURE_OPEN_AI_BUILD_HEADERS, apiKey);
 
     if (typeof config?.assistant === OBJECT) {
       const {function_handler, files_tool_type} = deepChat.directConnection?.azure?.openAI?.assistant as OpenAIAssistant;
       if (function_handler) this.functionHandler = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
     }
-    if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
+    if (!AZURE_OPEN_AI_VALIDATE_URL_DETAILS(urlDetails)) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({[ERROR]: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AZURE_OPEN_AI_URL_DETAILS_ERROR});
       });
     } else {
       this.connectSettings.headers ??= {};

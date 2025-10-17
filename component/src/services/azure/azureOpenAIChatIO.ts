@@ -1,12 +1,17 @@
 import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
 import {DirectConnection} from '../../types/directConnection';
-import {AzureOpenAIUtils} from './utils/azureOpenAIUtils';
 import {ERROR, OBJECT} from '../utils/serviceConstants';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
 import {DeepChat} from '../../deepChat';
+import {
+  AZURE_OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS,
+  AZURE_OPEN_AI_VALIDATE_URL_DETAILS,
+  AZURE_OPEN_AI_BUILD_HEADERS,
+  AZURE_OPEN_AI_URL_DETAILS_ERROR,
+} from './utils/azureOpenAIUtils';
 
 export class AzureOpenAIChatIO extends OpenAIChatIO {
-  override permittedErrorPrefixes: string[] = [AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE];
+  override permittedErrorPrefixes: string[] = [AZURE_OPEN_AI_URL_DETAILS_ERROR];
   isTextInputDisabled = false;
 
   constructor(deepChat: DeepChat) {
@@ -15,17 +20,17 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
     const urlDetails = directConnectionCopy.azure?.openAI?.urlDetails || ({} as AzureOpenAI['urlDetails']);
     const config = directConnectionCopy.azure?.openAI?.chat as AzureOpenAI['chat'];
 
-    super(deepChat, AzureOpenAIUtils.buildKeyVerificationDetails(urlDetails), AzureOpenAIUtils.buildHeaders, key, config);
+    super(deepChat, AZURE_OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(urlDetails), AZURE_OPEN_AI_BUILD_HEADERS, key, config);
 
     if (typeof config === OBJECT) {
       const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
       if (function_handler) this._functionHandler = function_handler;
     }
-    if (!AzureOpenAIUtils.validateURLDetails(urlDetails)) {
+    if (!AZURE_OPEN_AI_VALIDATE_URL_DETAILS(urlDetails)) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;
       setTimeout(() => {
-        deepChat.addMessage({[ERROR]: AzureOpenAIUtils.URL_DETAILS_ERROR_MESSAGE});
+        deepChat.addMessage({[ERROR]: AZURE_OPEN_AI_URL_DETAILS_ERROR});
       });
     } else {
       this.url = AzureOpenAIChatIO.buildURL(urlDetails);

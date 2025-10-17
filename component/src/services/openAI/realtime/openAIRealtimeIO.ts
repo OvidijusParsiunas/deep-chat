@@ -1,3 +1,5 @@
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
+import {SPEECH_SESSION_STARTED, SPEECH_SESSION_STOPPED} from '../../utils/speechConstants';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
@@ -9,10 +11,8 @@ import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {ObjectUtils} from '../../../utils/data/objectUtils';
 import {FireEvents} from '../../../utils/events/fireEvents';
-import {SpeechToSpeech} from '../../utils/speechToSpeech';
 import {PLAY_ICON_STRING} from '../../../icons/playIcon';
 import {STOP_ICON_STRING} from '../../../icons/stopIcon';
-import {OpenAIUtils} from '../utils/openAIUtils';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
 import {
@@ -64,7 +64,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const key = OpenAIRealtimeIO.getKey(deepChat);
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, {key});
+    super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, {key});
     const config = directConnectionCopy.openAI?.realtime as OpenAIRealtime;
     if (typeof config === OBJECT) {
       this._avatarConfig = config.avatar;
@@ -397,7 +397,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           this._toggleButton.changeToActive();
         }
         this._events?.started?.();
-        this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STARTED));
+        this._deepChat.dispatchEvent(new CustomEvent(SPEECH_SESSION_STARTED));
         this.hideLoading();
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
@@ -494,7 +494,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._pc.close();
       this._pc = null;
       this._events?.stopped?.();
-      this._deepChat.dispatchEvent(new CustomEvent(SpeechToSpeech.SESSION_STOPPED));
+      this._deepChat.dispatchEvent(new CustomEvent(SPEECH_SESSION_STOPPED));
       this._dc = undefined;
     }
   }

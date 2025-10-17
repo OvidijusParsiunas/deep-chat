@@ -1,3 +1,4 @@
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
@@ -12,7 +13,6 @@ import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
-import {OpenAIUtils} from './utils/openAIUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -39,8 +39,8 @@ export class OpenAIChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat, keyVerificationDetailsArg?: KeyVerificationDetails,
       buildHeadersFuncArg?: BuildHeadersFunc, apiKeyArg?: APIKey, configArg?: true | OpenAIChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const keyVerificationDetails = keyVerificationDetailsArg || OpenAIUtils.buildKeyVerificationDetails();
-    const buildHeadersFunc = buildHeadersFuncArg || OpenAIUtils.buildHeaders;
+    const keyVerificationDetails = keyVerificationDetailsArg || OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS();
+    const buildHeadersFunc = buildHeadersFuncArg || OPEN_AI_BUILD_HEADERS;
     const apiKey = apiKeyArg || directConnectionCopy.openAI;
     super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
     // can be undefined as this is the default service

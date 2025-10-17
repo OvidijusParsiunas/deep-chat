@@ -1,3 +1,4 @@
+import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
 import {GroqResult, GroqToolCall, GroqChoice} from '../../types/groqResult';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
@@ -9,7 +10,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
-import {GroqUtils} from './utils/groqUtils';
 import {GroqChat} from '../../types/groq';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -28,7 +28,7 @@ export class GroqChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.groq;
-    super(deepChat, GroqUtils.buildKeyVerificationDetails(), GroqUtils.buildHeaders, apiKey);
+    super(deepChat, GROQ_BUILD_KEY_VERIFICATION_DETAILS(), GROQ_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.groq?.chat as GroqChat;
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;

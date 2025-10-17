@@ -1,3 +1,4 @@
+import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
@@ -8,7 +9,6 @@ import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
-import {BigModelUtils} from './utils/bigModelUtils';
 import {MessageFile} from '../../types/messageFile';
 import {BigModelChat} from '../../types/bigModel';
 import {APIKey} from '../../types/APIKey';
@@ -33,7 +33,7 @@ export class BigModelChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
-    super(deepChat, BigModelUtils.buildKeyVerificationDetails(), BigModelUtils.buildHeaders, apiKey);
+    super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.bigModel?.chat as BigModelChat;
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;

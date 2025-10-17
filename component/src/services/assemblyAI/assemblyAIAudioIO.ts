@@ -6,9 +6,13 @@ import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {AssemblyAIUtils} from './utils/assemblyAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
+import {
+  ASSEMBLY_AI_BUILD_KEY_VERIFICATION_DETAILS,
+  ASSEMBLY_AI_BUILD_HEADERS,
+  ASSEMBLY_AI_POLL,
+} from './utils/assemblyAIUtils';
 
 export class AssemblyAIAudioIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('AssemblyAI');
@@ -20,7 +24,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const apiKey = deepChat.directConnection?.assemblyAI;
-    super(deepChat, AssemblyAIUtils.buildKeyVerificationDetails(), AssemblyAIUtils.buildHeaders, apiKey, {audio: {}});
+    super(deepChat, ASSEMBLY_AI_BUILD_KEY_VERIFICATION_DETAILS(), ASSEMBLY_AI_BUILD_HEADERS, apiKey, {audio: {}});
     this.canSendMessage = AssemblyAIAudioIO.canFileSendMessage;
   }
 
@@ -37,7 +41,7 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
   override async extractResultData(result: AssemblyAIResult): Promise<Response> {
     if (result.error) throw result.error;
     const key = this.connectSettings?.headers?.[AUTHORIZATION_H] as string;
-    const pollingResult = await AssemblyAIUtils.poll(key, result.upload_url);
+    const pollingResult = await ASSEMBLY_AI_POLL(key, result.upload_url);
     return {[TEXT_KEY]: pollingResult.text};
   }
 }

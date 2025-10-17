@@ -1,9 +1,9 @@
+import {AZURE_BUILD_TRANSLATION_KEY_VERIFICATION_DETAILS, AZURE_BUILD_TRANSLATION_HEADERS} from './utils/azureUtils';
 import {AzureTranslationResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {AzureUtils} from './utils/azureUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 import {Azure} from '../../types/azure';
@@ -21,8 +21,8 @@ export class AzureTranslationIO extends DirectServiceIO {
     const apiKey = deepChat.directConnection?.azure;
     super(
       deepChat,
-      AzureUtils.buildTranslationKeyVerificationDetails(config.region),
-      AzureUtils.buildTranslationHeaders.bind({}, config?.region), apiKey);
+      AZURE_BUILD_TRANSLATION_KEY_VERIFICATION_DETAILS(config.region),
+      AZURE_BUILD_TRANSLATION_HEADERS.bind({}, config?.region), apiKey);
     this.url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${config.language || 'es'}`;
   }
 

@@ -1,3 +1,4 @@
+import {KIMI_BUILD_HEADERS, KIMI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/kimiUtils';
 import {KimiRequestBody, KimiMessage, KimiToolCall} from '../../types/kimiInternal';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
@@ -9,7 +10,6 @@ import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {KimiResult} from '../../types/kimiResult';
-import {KimiUtils} from './utils/kimiUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {Kimi} from '../../types/kimi';
@@ -28,7 +28,7 @@ export class KimiIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.kimi as Kimi & APIKey;
-    super(deepChat, KimiUtils.buildKeyVerificationDetails(), KimiUtils.buildHeaders, config);
+    super(deepChat, KIMI_BUILD_KEY_VERIFICATION_DETAILS(), KIMI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.kimi as Kimi)?.function_handler;

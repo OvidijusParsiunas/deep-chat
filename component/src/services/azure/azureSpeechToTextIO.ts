@@ -1,11 +1,11 @@
 import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {CONTENT_TYPE_H_KEY, ERROR, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
+import {AZURE_BUILD_SPEECH_TO_TEXT_HEADERS} from './utils/azureUtils';
 import {AzureSpeechToTextResult} from '../../types/azureResult';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -22,7 +22,7 @@ export class AzureSpeechToTextIO extends AzureSpeechIO {
     const config = deepChat.directConnection?.azure?.speechToText as NonNullable<Azure['speechToText']>;
     const apiKey = deepChat.directConnection?.azure;
     const defaultFile = {audio: {files: {acceptedFormats: '.wav,.ogg'}}};
-    super(deepChat, AzureUtils.buildSpeechToTextHeaders, config.region, apiKey, defaultFile);
+    super(deepChat, AZURE_BUILD_SPEECH_TO_TEXT_HEADERS, config.region, apiKey, defaultFile);
     if (!config.region) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;

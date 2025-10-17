@@ -1,4 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {X_BUILD_KEY_VERIFICATION_DETAILS, X_BUILD_HEADERS} from './utils/xUtils';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -10,7 +11,6 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {XResult} from '../../types/xResult';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-import {XUtils} from './utils/xUtils';
 import {XChat} from '../../types/x';
 
 export class XChatIO extends DirectServiceIO {
@@ -23,7 +23,7 @@ export class XChatIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.x;
-    super(deepChat, XUtils.buildKeyVerificationDetails(), XUtils.buildHeaders, apiKey);
+    super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.x?.chat as XChat & APIKey;
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;

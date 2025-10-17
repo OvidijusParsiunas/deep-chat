@@ -1,5 +1,6 @@
 import {AzureSummarizationResult, AzureAuthenticationError} from '../../types/azureResult';
 import {DOCS_BASE_URL, TEXT_KEY} from '../../utils/consts/messageConstants';
+import {AZURE_BUILD_SUMMARIZATION_HEADER} from './utils/azureUtils';
 import {Azure, AzureSummarizationConfig} from '../../types/azure';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -8,7 +9,6 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {ERROR, GET} from '../utils/serviceConstants';
 import {AzureLanguageIO} from './azureLanguageIO';
 import {GenericObject} from '../../types/object';
-import {AzureUtils} from './utils/azureUtils';
 import {PollResult} from '../serviceIO';
 import {DeepChat} from '../../deepChat';
 
@@ -27,7 +27,7 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.summarization as NonNullable<Azure['summarization']>;
     const apiKey = deepChat.directConnection?.azure;
-    super(deepChat, AzureUtils.buildSummarizationHeader, config.endpoint, apiKey);
+    super(deepChat, AZURE_BUILD_SUMMARIZATION_HEADER, config.endpoint, apiKey);
     if (!config.endpoint) {
       this.isTextInputDisabled = true;
       this.canSendMessage = () => false;

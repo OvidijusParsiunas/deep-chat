@@ -1,9 +1,9 @@
+import {AZURE_BUILD_TEXT_TO_SPEECH_HEADERS} from './utils/azureUtils';
 import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
 import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {ERROR} from '../utils/serviceConstants';
-import {AzureUtils} from './utils/azureUtils';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -19,7 +19,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
     const config = deepChat.directConnection?.azure?.textToSpeech as NonNullable<Azure['textToSpeech']>;
     const apiKey = deepChat.directConnection?.azure;
     super(deepChat,
-      AzureUtils.buildTextToSpeechHeaders.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
+      AZURE_BUILD_TEXT_TO_SPEECH_HEADERS.bind({}, config?.outputFormat || 'audio-16khz-128kbitrate-mono-mp3'),
       config.region, apiKey);
     if (!config.region) {
       this.isTextInputDisabled = true;

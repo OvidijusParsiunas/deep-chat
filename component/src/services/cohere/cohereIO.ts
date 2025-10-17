@@ -1,3 +1,4 @@
+import {COHERE_BUILD_HEADERS, COHERE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/cohereUtils';
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {TEXT_KEY} from '../../utils/consts/messageConstants';
@@ -5,7 +6,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {Legacy} from '../../utils/legacy/legacy';
 import {OBJECT} from '../utils/serviceConstants';
-import {CohereUtils} from './utils/cohereUtils';
 import {Response} from '../../types/response';
 import {Cohere} from '../../types/cohere';
 import {APIKey} from '../../types/APIKey';
@@ -20,7 +20,7 @@ export class CohereIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const config = directConnectionCopy.cohere;
-    super(deepChat, CohereUtils.buildKeyVerificationDetails(), CohereUtils.buildHeaders, config);
+    super(deepChat, COHERE_BUILD_KEY_VERIFICATION_DETAILS(), COHERE_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       const canSendMessage = Legacy.processCohere(config);
       this.canSendMessage = () => canSendMessage;

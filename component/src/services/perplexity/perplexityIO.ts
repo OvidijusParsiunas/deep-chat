@@ -1,3 +1,4 @@
+import {PERPLEXITY_BUILD_HEADERS, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS} from './utils/perplexityUtils';
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
 import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
@@ -8,7 +9,6 @@ import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {PerplexityUtils} from './utils/perplexityUtils';
 import {Perplexity} from '../../types/perplexity';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -24,7 +24,7 @@ export class PerplexityIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.perplexity as Perplexity & APIKey;
-    super(deepChat, PerplexityUtils.buildKeyVerificationDetails(), PerplexityUtils.buildHeaders, config);
+    super(deepChat, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS(), PERPLEXITY_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);

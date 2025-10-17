@@ -1,3 +1,4 @@
+import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -6,7 +7,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {GroqTextToSpeech} from '../../types/groq';
-import {GroqUtils} from './utils/groqUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -20,7 +20,7 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.groq;
-    super(deepChat, GroqUtils.buildKeyVerificationDetails(), GroqUtils.buildHeaders, apiKey);
+    super(deepChat, GROQ_BUILD_KEY_VERIFICATION_DETAILS(), GROQ_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.groq?.textToSpeech as GroqTextToSpeech & APIKey;
     if (typeof config === OBJECT) {
       this.cleanConfig(config);

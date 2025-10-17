@@ -5,7 +5,7 @@ import {CONTENT_TYPE_H_KEY, POST} from '../../../utils/serviceConstants';
 import {Messages} from '../../../../views/chat/messages/messages';
 import {RequestUtils} from '../../../../utils/HTTP/requestUtils';
 import {DirectServiceIO} from '../../../utils/directServiceIO';
-import {OpenAIUtils} from '../../utils/openAIUtils';
+import {OPEN_AI_DIRECT_FETCH} from '../../utils/openAIUtils';
 import {URLSegments} from '../openAIAssistantIOI';
 import {ServiceIO} from '../../../serviceIO';
 
@@ -32,7 +32,7 @@ export class OpenAIAssistantUtils {
       formData.append('purpose', 'assistants');
       formData.append('file', file);
       return new Promise<{id: string; filename: string}>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, formData, POST, false)); // should perhaps use await but works without
+        resolve(OPEN_AI_DIRECT_FETCH(serviceIO, formData, POST, false)); // should perhaps use await but works without
       });
     });
     try {
@@ -62,7 +62,7 @@ export class OpenAIAssistantUtils {
       // https://platform.openai.com/docs/api-reference/files/retrieve-contents
       serviceIO.url = `${urlPrefix}${fileId}${urlPosfix}`;
       return new Promise<Blob>((resolve) => {
-        resolve(OpenAIUtils.directFetch(serviceIO, undefined, 'GET', false));
+        resolve(OPEN_AI_DIRECT_FETCH(serviceIO, undefined, 'GET', false));
       });
     });
     const blobs = await Promise.all(fileRequests);

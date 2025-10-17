@@ -1,3 +1,4 @@
+import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
 import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -6,7 +7,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {BigModelTextToSpeech} from '../../types/bigModel';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {BigModelUtils} from './utils/bigModelUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -20,7 +20,7 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
-    super(deepChat, BigModelUtils.buildKeyVerificationDetails(), BigModelUtils.buildHeaders, apiKey);
+    super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.bigModel?.textToSpeech as BigModelTextToSpeech;
     if (typeof config === OBJECT) {
       this.cleanConfig(config);

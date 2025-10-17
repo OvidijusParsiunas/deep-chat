@@ -1,4 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {DEEPSEEK_BUILD_HEADERS, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS} from './utils/deepSeekUtils';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -8,7 +9,6 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DeepSeekResult} from '../../types/deepSeekResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {DeepSeekUtils} from './utils/deepSeekUtils';
 import {DeepSeek} from '../../types/deepSeek';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -24,7 +24,7 @@ export class DeepSeekIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.deepSeek as DeepSeek & APIKey;
-    super(deepChat, DeepSeekUtils.buildKeyVerificationDetails(), DeepSeekUtils.buildHeaders, config);
+    super(deepChat, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS(), DEEPSEEK_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       this.cleanConfig(config);

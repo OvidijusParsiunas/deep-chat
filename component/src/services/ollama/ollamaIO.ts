@@ -1,5 +1,6 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
+import {OLLAMA_BUILD_HEADERS, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS} from './utils/ollamaUtils';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
@@ -11,7 +12,6 @@ import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {OBJECT} from '../utils/serviceConstants';
-import {OllamaUtils} from './utils/ollamaUtils';
 import {OllamaChat} from '../../types/ollama';
 import {DeepChat} from '../../deepChat';
 
@@ -27,9 +27,7 @@ export class OllamaIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const keyVerificationDetails = OllamaUtils.buildKeyVerificationDetails();
-    const buildHeadersFunc = OllamaUtils.buildHeaders;
-    super(deepChat, keyVerificationDetails, buildHeadersFunc, {key: 'placeholder'});
+    super(deepChat, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS(), OLLAMA_BUILD_HEADERS, {key: 'placeholder'});
     const config = directConnectionCopy.ollama as OllamaChat;
     if (typeof config === OBJECT) {
       if (config.system) this._systemMessage = config.system;

@@ -1,3 +1,4 @@
+import {QWEN_BUILD_HEADERS, QWEN_BUILD_KEY_VERIFICATION_DETAILS} from './utils/qwenUtils';
 import {QwenRequestBody, QwenMessage, QwenToolCall} from '../../types/qwenInternal';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
@@ -9,7 +10,6 @@ import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {QwenResult} from '../../types/qwenResult';
-import {QwenUtils} from './utils/qwenUtils';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {Qwen} from '../../types/qwen';
@@ -28,7 +28,7 @@ export class QwenIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.qwen as Qwen & APIKey;
-    super(deepChat, QwenUtils.buildKeyVerificationDetails(), QwenUtils.buildHeaders, config);
+    super(deepChat, QWEN_BUILD_KEY_VERIFICATION_DETAILS(), QWEN_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemMessage = config.system_prompt;
       const function_handler = (deepChat.directConnection?.qwen as Qwen)?.function_handler;

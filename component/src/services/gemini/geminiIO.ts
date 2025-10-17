@@ -1,3 +1,4 @@
+import {GEMINI_BUILD_HEADERS, GEMINI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/geminiUtils';
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
@@ -10,7 +11,6 @@ import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
 import {OBJECT} from '../utils/serviceConstants';
-import {GeminiUtils} from './utils/geminiUtils';
 import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
@@ -25,7 +25,9 @@ import {
 
 // https://ai.google.dev/api/generate-content#method:-models.generatecontent
 // https://ai.google.dev/gemini-api/docs/text-generation
-
+// WORK - add a panel stating that you can upload images and ask the model to generate
+// images (gemini-2.5-flash-image-preview)
+// https://ai.google.dev/gemini-api/docs/models
 export class GeminiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Gemini');
   override keyHelpUrl = 'https://aistudio.google.com/app/apikey';
@@ -39,7 +41,7 @@ export class GeminiIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.gemini as Gemini & APIKey;
-    super(deepChat, GeminiUtils.buildKeyVerificationDetails(), GeminiUtils.buildHeaders, config);
+    super(deepChat, GEMINI_BUILD_KEY_VERIFICATION_DETAILS(), GEMINI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
       if (config.system_prompt) this._systemPrompt = config.system_prompt;
       const {function_handler} = deepChat.directConnection?.gemini as Gemini;

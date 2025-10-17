@@ -1,8 +1,8 @@
+import {HUGGING_FACE_BUILD_HEADERS, HUGGING_FACE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/huggingFaceUtils';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {HuggingFaceUtils} from './utils/huggingFaceUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -26,7 +26,7 @@ export class HuggingFaceIO extends DirectServiceIO {
   constructor(deepChat: DeepChat, textInputPlaceholderText: string, defaultModel: string,
       config?: HuggingFaceServiceConfig, apiKey?: APIKey, existingFileTypes?: ServiceFileTypes) {
     super(deepChat,
-      HuggingFaceUtils.buildKeyVerificationDetails(), HuggingFaceUtils.buildHeaders, apiKey, existingFileTypes);
+      HUGGING_FACE_BUILD_KEY_VERIFICATION_DETAILS(), HUGGING_FACE_BUILD_HEADERS, apiKey, existingFileTypes);
     this.url = `${HuggingFaceIO.URL_PREFIX}${defaultModel}`;
     this.textInputPlaceholderText = textInputPlaceholderText;
     // don't bother cleaning the config as we construct rawBody with individual props

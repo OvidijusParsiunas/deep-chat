@@ -1,5 +1,6 @@
 import {APPLICATION_JSON, AUTHENTICATION_ERROR_PREFIX, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceConstants';
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
+import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 
 type ClaudeErrorResponse = {
@@ -9,39 +10,33 @@ type ClaudeErrorResponse = {
   };
 };
 
-export class ClaudeUtils {
-  public static buildHeaders(key: string) {
-    return {
-      'x-api-key': key,
-      [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    };
-  }
+export const CLAUDE_BUILD_HEADERS = (key: string) => {
+  return {
+    'x-api-key': key,
+    [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+    'anthropic-version': '2023-06-01',
+    'anthropic-dangerous-direct-browser-access': 'true',
+  };
+};
 
-  public static handleVerificationResult(
-    result: object,
-    key: string,
-    onSuccess: (key: string) => void,
-    onFail: (message: string) => void
-  ) {
-    const claudeResult = result as ClaudeErrorResponse;
-    if (claudeResult.error) {
-      if (claudeResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
-        onFail(INVALID_KEY);
-      } else {
-        onFail(CONNECTION_FAILED);
-      }
+const handleVerificationResult = (
+  result: object,
+  key: string,
+  onSuccess: (key: string) => void,
+  onFail: (message: string) => void
+) => {
+  const claudeResult = result as ClaudeErrorResponse;
+  if (claudeResult.error) {
+    if (claudeResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
+      onFail(INVALID_KEY);
     } else {
-      onSuccess(key);
+      onFail(CONNECTION_FAILED);
     }
+  } else {
+    onSuccess(key);
   }
+};
 
-  public static buildKeyVerificationDetails(): KeyVerificationDetails {
-    return {
-      url: 'https://api.anthropic.com/v1/models',
-      method: GET,
-      handleVerificationResult: ClaudeUtils.handleVerificationResult,
-    };
-  }
-}
+export const CLAUDE_BUILD_KEY_VERIFICATION_DETAILS = (): KeyVerificationDetails => {
+  return BUILD_KEY_VERIFICATION_DETAILS('https://api.anthropic.com/v1/models', GET, handleVerificationResult);
+};

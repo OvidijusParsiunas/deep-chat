@@ -1,3 +1,4 @@
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
@@ -9,7 +10,6 @@ import {OpenAIImageResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageFiles} from '../../types/messageFile';
-import {OpenAIUtils} from './utils/openAIUtils';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
@@ -28,7 +28,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     const {directConnection} = deepChat;
     const apiKey = directConnection?.openAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
-    super(deepChat, OpenAIUtils.buildKeyVerificationDetails(), OpenAIUtils.buildHeaders, apiKey, defaultFile);
+    super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey, defaultFile);
     const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
     if (this.camera) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
