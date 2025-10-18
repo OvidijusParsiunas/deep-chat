@@ -1,11 +1,11 @@
 import {REQUEST_SETTINGS_ERROR, INVALID_STREAM_ARRAY_RESPONSE, INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET, OBJECT, POST} from '../../services/utils/serviceConstants';
+import {ERROR, FILES, HTML, SERVICE, TEXT} from '../consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {RequestDetails} from '../../types/interceptors';
 import {ErrorResp} from '../../types/errorInternal';
 import {ServiceIO} from '../../services/serviceIO';
-import {SERVICE} from '../consts/messageConstants';
 import {GenericObject} from '../../types/object';
 import {Connect} from '../../types/connect';
 import {DeepChat} from '../../deepChat';
@@ -40,12 +40,12 @@ export class RequestUtils {
   }
 
   public static displayError(messages: Messages, err: ErrorResp, defMessage = 'Service error, please try again.') {
-    console.error(err);
+    console[ERROR](err);
     if (typeof err === OBJECT) {
       if (err instanceof Error) {
         return messages.addNewErrorMessage(SERVICE, err.message);
       }
-      if (Array.isArray(err) || typeof (err as {error?: string}).error === 'string') {
+      if (Array.isArray(err) || typeof (err as {error?: string})[ERROR] === 'string') {
         return messages.addNewErrorMessage(SERVICE, err);
       }
       if (Object.keys(err).length === 0) {
@@ -80,24 +80,24 @@ export class RequestUtils {
     const result = (await deepChat.requestInterceptor?.(requestDetails)) || requestDetails;
     const resReqDetails = result as RequestDetails;
     const resErrDetails = result as {error?: string};
-    return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails.error};
+    return {body: resReqDetails.body, headers: resReqDetails.headers, error: resErrDetails[ERROR]};
   }
 
   public static validateResponseFormat(response: ResponseI | ResponseI[], isStreaming: boolean) {
     if (!response) return false;
     const dataArr = Array.isArray(response) ? response : [response];
     if (isStreaming && dataArr.length > 1) {
-      console.error(INVALID_STREAM_ARRAY_RESPONSE);
+      console[ERROR](INVALID_STREAM_ARRAY_RESPONSE);
       return false;
     }
     const invalidFound = dataArr.find(
       (data) =>
         typeof data !== 'object' ||
         !(
-          typeof data.error === 'string' ||
-          typeof data.text === 'string' ||
-          typeof data.html === 'string' ||
-          Array.isArray(data.files)
+          typeof data[ERROR] === 'string' ||
+          typeof data[TEXT] === 'string' ||
+          typeof data[HTML] === 'string' ||
+          Array.isArray(data[FILES])
         )
     );
     return !invalidFound;

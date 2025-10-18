@@ -1,4 +1,6 @@
+import {CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
 import {OBJECT} from '../../../../../services/utils/serviceConstants';
+import {FILES} from '../../../../../utils/consts/messageConstants';
 import {CustomStyle} from '../../../../../types/styles';
 import {FileAttachments} from '../fileAttachments';
 
@@ -10,9 +12,9 @@ export class DragAndDrop {
   }
 
   private static createElement(dnd?: boolean | CustomStyle) {
-    const fileDropElement = document.createElement('div');
+    const fileDropElement = CREATE_ELEMENT();
     fileDropElement.id = 'drag-and-drop';
-    if (typeof dnd === OBJECT) Object.assign(fileDropElement.style, dnd);
+    if (typeof dnd === OBJECT) Object.assign(fileDropElement[STYLE], dnd);
     return fileDropElement;
   }
 
@@ -36,16 +38,16 @@ export class DragAndDrop {
   }
 
   private static uploadFile(fileAttachments: FileAttachments, event: DragEvent) {
-    const files = event.dataTransfer?.files;
+    const files = event.dataTransfer?.[FILES];
     if (files) fileAttachments.addFilesToAnyType(Array.from(files));
   }
 
   private static display(fileDropElement: HTMLElement) {
-    fileDropElement.style.display = 'block';
+    fileDropElement[STYLE].display = 'block';
   }
 
   private static hide(fileDropElement: HTMLElement) {
-    fileDropElement.style.display = 'none';
+    fileDropElement[STYLE].display = 'none';
   }
 
   public static isEnabled(fileAttachments: FileAttachments, dragAndDrop?: boolean | CustomStyle) {

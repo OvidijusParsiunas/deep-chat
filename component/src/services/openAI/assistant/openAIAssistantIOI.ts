@@ -1,6 +1,7 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
 import {REQUEST_SETTINGS_ERROR, DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
-import {COMPLETED, ERROR, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
+import {ASSISTANT, ERROR, FILES, IMAGES, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
+import {COMPLETED, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
 import {OpenAIAssistantUtils, UploadedFile} from './utils/openAIAssistantUtils';
@@ -9,7 +10,6 @@ import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseBodyInternal} from '../../../types/openAIInternal';
 import {History} from '../../../views/chat/messages/history/history';
 import {MessageLimitUtils} from '../../utils/messageLimitUtils';
-import {TEXT_KEY} from '../../../utils/consts/messageConstants';
 import {Messages} from '../../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../../types/response';
 import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
@@ -105,13 +105,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const contentArr: MessageContentArr | undefined = uploadedFiles
       ?.filter((file) => FileMessageUtils.isImageFileExtension(file.name))
       .map((file) => {
-        return {type: 'image_file', image_file: {file_id: file.id}};
+        return {[TYPE]: 'image_file', image_file: {file_id: file.id}};
       });
     if (contentArr && contentArr.length > 0) {
-      if (processedMessage.text && processedMessage.text.length > 0) {
-        contentArr.push({type: 'text', [TEXT_KEY]: processedMessage.text});
+      if (processedMessage[TEXT] && processedMessage[TEXT].length > 0) {
+        contentArr.push({[TYPE]: TEXT, [TEXT]: processedMessage[TEXT]});
       }
-      return {content: contentArr, role: 'user'};
+      return {content: contentArr, role: USER};
     }
     return undefined;
   }
@@ -122,9 +122,9 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     toolType: OpenAIAssistant['files_tool_type']
   ) {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
-      return {tools: [{type: toolType}], file_id: file.id};
+      return {tools: [{[TYPE]: toolType}], file_id: file.id};
     });
-    return {attachments, content: [{type: 'text', [TEXT_KEY]: processedMessage.text}], role: 'user'};
+    return {attachments, content: [{[TYPE]: TEXT, [TEXT]: processedMessage[TEXT]}], role: USER};
   }
 
   private processMessage(pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
@@ -142,11 +142,11 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       // ]
       if (typeof this.filesToolType === 'function') {
         const rToolType = this.filesToolType(uploadedFiles.map(({name}) => name));
-        if (rToolType === 'code_interpreter' || rToolType === 'file_search' || rToolType === 'images') {
+        if (rToolType === 'code_interpreter' || rToolType === 'file_search' || rToolType === IMAGES) {
           toolType = rToolType;
         } else {
-          console.error(`Tool type "${rToolType}" is not valid`);
-          console.error('Expected "code_interpreter" or "file_search" or "images". Going to default to "images"');
+          console[ERROR](`Tool type "${rToolType}" is not valid`);
+          console[ERROR]('Expected "code_interpreter" or "file_search" or "images". Going to default to "images"');
         }
       }
       if (toolType === 'file_search') {
@@ -157,8 +157,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       }
       const notImage = uploadedFiles.find(({name}) => !FileMessageUtils.isImageFileExtension(name));
       if (notImage) {
-        console.error('The uploaded files contained a non-image file');
-        console.error(
+        console[ERROR]('The uploaded files contained a non-image file');
+        console[ERROR](
           'Make sure only images can be uploaded or define a "code_interpreter" or "file_search"' +
             ' value in the "files_tool_type" property'
         );
@@ -170,7 +170,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         if (imageMessage) return imageMessage;
       }
     }
-    return {content: processedMessage.text || '', role: 'user'};
+    return {content: processedMessage[TEXT] || '', role: USER};
   }
 
   private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], files?: UploadedFile[]) {
@@ -219,8 +219,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this._config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this._config.assistant_id;
     } catch (e) {
-      console.error(e);
-      console.error('Failed to create a new assistant'); // letting later calls throw and handle error
+      console[ERROR](e);
+      console[ERROR]('Failed to create a new assistant'); // letting later calls throw and handle error
     }
     return undefined;
   }
@@ -235,11 +235,11 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (this._waitingForStreamResponse || (this._isSSEStream && this.sessionId)) {
       return await this.handleStream(result);
     }
-    if (result.error) {
-      if (result.error.message.startsWith(OpenAIAssistantUtils.FILES_WITH_TEXT_ERROR)) {
+    if (result[ERROR]) {
+      if (result[ERROR].message.startsWith(OpenAIAssistantUtils.FILES_WITH_TEXT_ERROR)) {
         throw Error('Please send text with your file(s)');
       }
-      throw result.error.message;
+      throw result[ERROR].message;
     }
     this.asyncCallInProgress = true;
     await this.assignThreadAndRun(result);
@@ -247,7 +247,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
     const requestInit = {method: GET, headers: this.connectSettings?.headers};
     HTTPRequest.executePollRequest(this, url, requestInit, this._messages as Messages); // poll for run status
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async assignThreadAndRun(result: OpenAIAssistantInitReqResult) {
@@ -286,7 +286,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       setTimeout(() => {
         threadMessages.forEach((message) => this.deepChat.addMessage(message));
       });
-      return {text, _sessionId: this.sessionId, files};
+      return {text, _sessionId: this.sessionId, [FILES]: files};
     }
     const toolCalls = required_action?.submit_tool_outputs?.tool_calls;
     if (status === 'requires_action' && toolCalls) {
@@ -342,37 +342,37 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       const newBody = JSON.parse(JSON.stringify(this.rawBody));
       this.createStreamRun(newBody);
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
     if (result.content && result.content.length > 0 && this._messages) {
       // if file is included and there is an annotation/link in text, process at the end
-      const textContent = result.content.find((content) => content.text);
-      if (textContent?.text?.annotations && textContent.text.annotations.length > 0) {
-        const textFileFirst = result.content.find((content) => !!content.text) || result.content[0];
+      const textContent = result.content.find((content) => content[TEXT]);
+      if (textContent?.[TEXT]?.annotations && textContent[TEXT].annotations.length > 0) {
+        const textFileFirst = result.content.find((content) => !!content[TEXT]) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: 'assistant', content: result.content}, this.urlSegments, textFileFirst);
+          this, {role: ASSISTANT, content: result.content}, this.urlSegments, textFileFirst);
         this._messageStream?.endStreamAfterFileDownloaded(this._messages, downloadCb);
-        return {[TEXT_KEY]: ''};
+        return {[TEXT]: ''};
       }
     }
     if (result.delta?.content) {
       if (result.delta.content.length > 1) {
         // if file is included and there is no annotation/link in text, process during the stream
-        const textContent = result.delta.content.find((content) => content.text);
-        if (textContent?.text?.annotations && textContent.text.annotations.length === 0) {
+        const textContent = result.delta.content.find((content) => content[TEXT]);
+        if (textContent?.[TEXT]?.annotations && textContent[TEXT].annotations.length === 0) {
           const messages = await OpenAIAssistantUtils.processStreamMessages(this, result.delta.content, this.urlSegments);
-          return {[TEXT_KEY]: messages[0].text, files: messages[1].files};
+          return {[TEXT]: messages[0][TEXT], [FILES]: messages[1][FILES]};
         }
       }
-      return {[TEXT_KEY]: result.delta.content[0].text?.value};
+      return {[TEXT]: result.delta.content[0][TEXT]?.value};
     }
     if (!this.sessionId && result.thread_id) {
       this.sessionId = result.thread_id;
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   // https://platform.openai.com/docs/api-reference/assistants-streaming

@@ -1,3 +1,4 @@
+import {ERROR} from '../../../../utils/consts/messageConstants';
 import {RemarkableOptions} from '../../../../types/remarkable';
 import {KatexPlugin} from './katexPlugin';
 import {Remarkable} from 'remarkable';
@@ -48,13 +49,13 @@ export class RemarkableConfig {
             try {
               return hljsModule.highlight(str, {language}).value;
             } catch (_) {
-              console.error('failed to setup the highlight dependency');
+              console[ERROR]('failed to setup the highlight dependency');
             }
           }
           try {
             return hljsModule.highlightAuto(str).value;
           } catch (_) {
-            console.error('failed to automatically highlight messages');
+            console[ERROR]('failed to automatically highlight messages');
           }
           return ''; // use external default escaping
         },

@@ -6,6 +6,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {TEXT} from '../../utils/consts/messageConstants';
 import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -41,7 +42,7 @@ export class HuggingFaceIO extends DirectServiceIO {
   preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContentI[], _?: File[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
       & {options?: {wait_for_model?: boolean}});
-    const mostRecentMessageText = messages[messages.length - 1].text;
+    const mostRecentMessageText = messages[messages.length - 1][TEXT];
     if (!mostRecentMessageText) return;
     bodyCopy.options ??= {};
     bodyCopy.options.wait_for_model = true;

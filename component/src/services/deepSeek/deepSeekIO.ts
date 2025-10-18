@@ -1,10 +1,10 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DEEPSEEK_BUILD_HEADERS, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS} from './utils/deepSeekUtils';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DeepSeekResult} from '../../types/deepSeekResult';
@@ -48,7 +48,7 @@ export class DeepSeekIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
+        content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as DeepSeekMessage;
     });
@@ -62,22 +62,22 @@ export class DeepSeekIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: DeepSeekResult): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     if (result.choices && result.choices.length > 0) {
       const choice = result.choices[0];
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {[TEXT_KEY]: choice.delta.content};
+        return {[TEXT]: choice.delta.content};
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {[TEXT_KEY]: choice.message.content};
+        return {[TEXT]: choice.message.content};
       }
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 }

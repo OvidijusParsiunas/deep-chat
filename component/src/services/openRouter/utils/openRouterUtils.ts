@@ -1,6 +1,7 @@
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {
   AUTHENTICATION_ERROR_PREFIX,
   CONTENT_TYPE_H_KEY,
@@ -32,8 +33,8 @@ const handleVerificationResult = (
   onFail: (message: string) => void
 ) => {
   const openRouterResult = result as OpenRouterErrorResponse;
-  if (openRouterResult.error) {
-    if (openRouterResult.error.type === AUTHENTICATION_ERROR_PREFIX) {
+  if (openRouterResult[ERROR]) {
+    if (openRouterResult[ERROR].type === AUTHENTICATION_ERROR_PREFIX) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

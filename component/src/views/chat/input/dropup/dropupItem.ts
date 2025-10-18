@@ -1,8 +1,11 @@
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
+import {CLICK, DEFAULT} from '../../../../utils/consts/inputConstants';
 import {CustomStyle, StatefulStyles} from '../../../../types/styles';
 import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {TEXT} from '../../../../utils/consts/messageConstants';
 import {CustomButton} from '../buttons/custom/customButton';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
@@ -14,8 +17,8 @@ export class DropupItem {
 
   private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
     StatefulEvents.add(item, styles);
-    item.addEventListener('click', () => {
-      inputButton.click();
+    item.addEventListener(CLICK, () => {
+      inputButton[CLICK]();
     });
     item.addEventListener('mouseenter', (event) => {
       menu.highlightedItem = event.target as HTMLElement;
@@ -26,17 +29,17 @@ export class DropupItem {
   }
 
   public static createItemText(dropupText?: string, textStyle?: CustomStyle) {
-    const textElement = document.createElement('div');
-    Object.assign(textElement.style, textStyle);
-    textElement.classList.add(DropupItem.TEXT_CLASS);
+    const textElement = CREATE_ELEMENT();
+    Object.assign(textElement[STYLE], textStyle);
+    textElement[CLASS_LIST].add(DropupItem.TEXT_CLASS);
     textElement.textContent = dropupText || 'File';
     return textElement;
   }
 
   public static createItemIcon(inputButtonElement: Element, iconContainerStyle?: CustomStyle) {
-    const iconContainer = document.createElement('div');
-    Object.assign(iconContainer.style, iconContainerStyle);
-    iconContainer.classList.add(DropupItem.ICON_CLASS);
+    const iconContainer = CREATE_ELEMENT();
+    Object.assign(iconContainer[STYLE], iconContainerStyle);
+    iconContainer[CLASS_LIST].add(DropupItem.ICON_CLASS);
     iconContainer.appendChild(inputButtonElement);
     return iconContainer;
   }
@@ -45,20 +48,20 @@ export class DropupItem {
     const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
     const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
-    if (buttonInnerElement.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
+    if (buttonInnerElement[CLASS_LIST].contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
       if (!emptySVG) item.appendChild(DropupItem.createItemIcon(svg, styles?.iconContainer));
-      item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.text));
+      item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.[TEXT]));
     } else {
       if (!emptySVG) item.appendChild(DropupItem.createItemIcon(elementRef.children[0], styles?.iconContainer));
-      item.appendChild(DropupItem.createItemText(dropupText, styles?.text));
+      item.appendChild(DropupItem.createItemText(dropupText, styles?.[TEXT]));
     }
   }
 
   public static createItem(menu: DropupMenu, inputButton: InputButton, styles?: DropupMenuStyles) {
-    const item = document.createElement('div');
-    Object.assign(item.style, styles?.item?.default);
+    const item = CREATE_ELEMENT();
+    Object.assign(item[STYLE], styles?.item?.[DEFAULT]);
     DropupItem.populateItem(inputButton, item, styles);
-    item.classList.add(DropupItem.MENU_ITEM_CLASS);
+    item[CLASS_LIST].add(DropupItem.MENU_ITEM_CLASS);
     const {elementRef} = inputButton;
     if (inputButton.isCustom) {
       (inputButton as CustomButton).setDropupItem(item);

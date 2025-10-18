@@ -1,26 +1,27 @@
-import {TEXT_KEY} from '../../../../../utils/consts/messageConstants';
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
 import {ActiveTooltip, Tooltip} from '../../../../../types/tooltip';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
+import {TEXT} from '../../../../../utils/consts/messageConstants';
 
 export class TooltipUtils {
   private static readonly OVERFLOW_NEW_POSITION_PX = 4;
 
   public static buildElement() {
-    const container = document.createElement('div');
-    container.classList.add('tooltip');
-    const text = document.createElement('span');
-    text.classList.add('tooltip-text');
+    const container = CREATE_ELEMENT();
+    container[CLASS_LIST].add('tooltip');
+    const text = CREATE_ELEMENT('span');
+    text[CLASS_LIST].add('tooltip-text');
     container.appendChild(text);
     return container;
   }
 
   public static tryCreateConfig(defaultText: string, tooltip?: true | Tooltip): Tooltip | undefined {
     if (!tooltip) return undefined;
-    if (typeof tooltip === 'boolean') return {[TEXT_KEY]: defaultText};
+    if (typeof tooltip === 'boolean') return {[TEXT]: defaultText};
     return {
-      [TEXT_KEY]: tooltip.text || defaultText,
+      [TEXT]: tooltip[TEXT] || defaultText,
       timeout: tooltip.timeout || 0,
-      style: tooltip.style,
+      style: tooltip[STYLE],
     };
   }
 
@@ -39,13 +40,13 @@ export class TooltipUtils {
     const tooltipRectOriginal = tooltipElement.getBoundingClientRect();
     const tooltipHalf = tooltipRectOriginal.width / 2;
     const buttonMiddle = buttonRect.left + buttonRect.width / 2;
-    tooltipElement.style.left = `${buttonMiddle - tooltipHalf - shadowRect.left}px`;
-    tooltipElement.style.top = `${buttonRect.top - 36 - shadowRect.top}px`;
+    tooltipElement[STYLE].left = `${buttonMiddle - tooltipHalf - shadowRect.left}px`;
+    tooltipElement[STYLE].top = `${buttonRect.top - 36 - shadowRect.top}px`;
     const tooltipRect = tooltipElement.getBoundingClientRect();
     if (tooltipRect.left < shadowRect.left) {
-      tooltipElement.style.left = `${TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
+      tooltipElement[STYLE].left = `${TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
     } else if (tooltipRect.right > shadowRect.right) {
-      tooltipElement.style.left = `${shadowRect.width - tooltipRect.width - TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
+      tooltipElement[STYLE].left = `${shadowRect.width - tooltipRect.width - TooltipUtils.OVERFLOW_NEW_POSITION_PX}px`;
     }
   }
 
@@ -54,20 +55,20 @@ export class TooltipUtils {
       const containerElement = TooltipUtils.traverseParentUntilContainer(buttonElement);
       tooltipElement = containerElement.nextSibling as HTMLElement;
     }
-    if (config.text) tooltipElement.children[0].textContent = config.text;
+    if (config[TEXT]) tooltipElement.children[0].textContent = config[TEXT];
     const timeout = setTimeout(() => {
-      tooltipElement.style.visibility = 'visible';
+      tooltipElement[STYLE].visibility = 'visible';
       TooltipUtils.setPosition(buttonElement, tooltipElement);
-      if (config.style) Object.assign(tooltipElement.style, config.style);
+      if (config[STYLE]) Object.assign(tooltipElement[STYLE], config[STYLE]);
     }, config.timeout || 0);
     return {timeout, element: tooltipElement};
   }
 
   public static hide(activeTooltip: ActiveTooltip, config: Tooltip) {
     clearTimeout(activeTooltip.timeout);
-    activeTooltip.element.style.visibility = 'hidden';
-    if (config.style) StyleUtils.unsetStyle(activeTooltip.element, config.style);
-    activeTooltip.element.style.left = '';
-    activeTooltip.element.style.top = '';
+    activeTooltip.element[STYLE].visibility = 'hidden';
+    if (config[STYLE]) StyleUtils.unsetStyle(activeTooltip.element, config[STYLE]);
+    activeTooltip.element[STYLE].left = '';
+    activeTooltip.element[STYLE].top = '';
   }
 }

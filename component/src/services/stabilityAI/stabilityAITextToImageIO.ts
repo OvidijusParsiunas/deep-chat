@@ -1,9 +1,9 @@
 import {STABILITY_AI_BUILD_HEADERS, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/stabilityAIUtils';
+import {FILES, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {MessageFiles} from '../../types/messageFile';
 import {StabilityAIIO} from './stabilityAIIO';
@@ -39,9 +39,9 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   }
 
   private preprocessBody(body: StabilityAITextToImage, messages: MessageContentI[]) {
-    const lastMessage = messages[messages.length - 1].text;
+    const lastMessage = messages[messages.length - 1][TEXT];
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const prompt = {[TEXT_KEY]: lastMessage} as {weight?: number};
+    const prompt = {[TEXT]: lastMessage} as {weight?: number};
     if (this._imageWeight) prompt.weight = this._imageWeight;
     bodyCopy.text_prompts = [prompt];
     return bodyCopy;
@@ -54,8 +54,8 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
+      return {[SRC]: `${BASE_64_PREFIX}${imageData.base64}`, [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

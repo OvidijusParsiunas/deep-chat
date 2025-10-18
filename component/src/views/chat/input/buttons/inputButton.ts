@@ -1,7 +1,9 @@
+import {CLICK, DEFAULT, DROPUP_MENU, HOVER} from '../../../../utils/consts/inputConstants';
 import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {ActiveTooltip, Tooltip} from '../../../../types/tooltip';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {STYLE} from '../../../../utils/consts/htmlConstants';
 import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonAccessibility} from './buttonAccessility';
@@ -39,22 +41,22 @@ export class InputButton<T extends Styles = Styles> {
   }
 
   private buttonMouseLeave(customStyles?: ButtonStyles) {
-    this._mouseState.state = 'default';
-    if (this._activeTooltip?.element.style.visibility === 'visible' && this._tooltipSettings) {
+    this._mouseState.state = DEFAULT;
+    if (this._activeTooltip?.element[STYLE].visibility === 'visible' && this._tooltipSettings) {
       TooltipUtils.hide(this._activeTooltip, this._tooltipSettings);
     }
     if (customStyles) {
       ButtonCSS.unsetAllCSS(this.elementRef, customStyles);
-      ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'default');
+      ButtonCSS.setElementsCSS(this.elementRef, customStyles, DEFAULT);
     }
   }
 
   private buttonMouseEnter(customStyles?: ButtonStyles) {
-    this._mouseState.state = 'hover';
+    this._mouseState.state = HOVER;
     if (this._tooltipSettings) {
       this._activeTooltip = TooltipUtils.display(this.elementRef, this._tooltipSettings, this._activeTooltip?.element);
     }
-    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'hover');
+    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, HOVER);
   }
 
   private buttonMouseUp(customStyles?: ButtonStyles) {
@@ -63,8 +65,8 @@ export class InputButton<T extends Styles = Styles> {
   }
 
   private buttonMouseDown(customStyles?: ButtonStyles) {
-    this._mouseState.state = 'click';
-    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, 'click');
+    this._mouseState.state = CLICK;
+    if (customStyles) ButtonCSS.setElementsCSS(this.elementRef, customStyles, CLICK);
   }
 
   // be careful not to use onclick as that is used for button functionality
@@ -106,7 +108,7 @@ export class InputButton<T extends Styles = Styles> {
   protected createInnerElements(iconId: string, state: keyof T, customStyles?: ButtonStateStyles<T>) {
     const elements = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
     if (elements && elements.length > 0) {
-      if (this.position === 'dropup-menu') {
+      if (this.position === DROPUP_MENU) {
         const iconClone = this.svg.cloneNode(true) as SVGGraphicsElement;
         // if original svg - add original id, if custom use the custom id
         iconClone.id = elements[0] === this.svg ? iconId : 'dropup-menu-item-icon-element-custom';

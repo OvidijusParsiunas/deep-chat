@@ -1,13 +1,14 @@
+import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/inputConstants';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import {FILE, FILES, TEXT, USER} from '../../../../../utils/consts/messageConstants';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
-import {TEXT_KEY} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {UserContentI} from '../../../../../types/messagesInternal';
-import {MessageUtils} from '../../../messages/utils/messageUtils';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
 import {MicrophoneButton} from '../microphone/microphoneButton';
 import {Browser} from '../../../../../utils/browser/browser';
@@ -34,9 +35,6 @@ import {
 type Styles = Omit<DefinedButtonStateStyles<SubmitButtonStyles>, 'alwaysEnabled' | 'tooltip'>;
 
 export class SubmitButton extends InputButton<Styles> {
-  private static readonly SUBMIT_CLASS = 'submit-button';
-  private static readonly LOADING_CLASS = 'loading-button';
-  private static readonly DISABLED_CLASS = 'disabled-button';
   private readonly _serviceIO: ServiceIO;
   private readonly _messages: Messages;
   private readonly _textInput: TextInputEl;
@@ -97,19 +95,19 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private static createButtonContainerElement() {
-    const buttonElement = document.createElement('div');
-    buttonElement.classList.add('input-button');
+    const buttonElement = CREATE_ELEMENT();
+    buttonElement[CLASS_LIST].add('input-button');
     return buttonElement;
   }
 
   private static createLoadingIconElement() {
-    const loadingIconElement = document.createElement('div');
-    loadingIconElement.classList.add('loading-submit-button');
+    const loadingIconElement = CREATE_ELEMENT();
+    loadingIconElement[CLASS_LIST].add('loading-submit-button');
     return loadingIconElement;
   }
 
   private static createStopIconElement() {
-    const stopIconElement = document.createElement('div');
+    const stopIconElement = CREATE_ELEMENT();
     stopIconElement.id = 'stop-icon';
     return stopIconElement;
   }
@@ -122,10 +120,10 @@ export class SubmitButton extends InputButton<Styles> {
   // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
     if (this.customStyles?.submit?.svg
-        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.text?.content) return;
+        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.[TEXT]?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
-      const styleElement = document.createElement('style');
+      const styleElement = CREATE_ELEMENT('style');
       styleElement.textContent = `
         .loading-button > * {
           filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%)
@@ -166,11 +164,11 @@ export class SubmitButton extends InputButton<Styles> {
     await this._fileAttachments.completePlaceholders();
     const uploadedFilesData = this._fileAttachments.getAllFileData();
     if (this._textInput.isTextInputEmpty()) {
-      this.attemptSubmit({[TEXT_KEY]: '', files: uploadedFilesData});
+      this.attemptSubmit({[TEXT]: '', [FILES]: uploadedFilesData});
     } else {
       // not using textContent as it ignores new line spaces
       const inputText = this._textInput.inputElementRef.innerText.trim() as string;
-      this.attemptSubmit({[TEXT_KEY]: inputText, files: uploadedFilesData});
+      this.attemptSubmit({[TEXT]: inputText, [FILES]: uploadedFilesData});
     }
     // on Safari and mobile devices, after triggering submit, immediately restore caret/focus for seamless typing
     if (Browser.IS_SAFARI || Browser.IS_MOBILE) {
@@ -180,9 +178,9 @@ export class SubmitButton extends InputButton<Styles> {
 
   public async programmaticSubmit(content: UserContent) {
     if (typeof content === 'string') content = Legacy.processSubmitUserMessage(content);
-    const newContent: UserContentI = {[TEXT_KEY]: content.text};
-    if (content.files) {
-      newContent.files = Array.from(content.files).map((file) => {
+    const newContent: UserContentI = {[TEXT]: content[TEXT]};
+    if (content[FILES]) {
+      newContent[FILES] = Array.from(content[FILES]).map((file) => {
         return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
       });
     }
@@ -206,16 +204,16 @@ export class SubmitButton extends InputButton<Styles> {
     }
     await this.addNewMessage(content);
     if (!this._serviceIO.isWebModel()) this._messages.addLoadingMessage();
-    const filesData = content.files?.map((fileData) => fileData.file);
-    const requestContents = {[TEXT_KEY]: content.text === '' ? undefined : content.text, files: filesData};
+    const filesData = content[FILES]?.map((fileData) => fileData[FILE]);
+    const requestContents = {[TEXT]: content[TEXT] === '' ? undefined : content[TEXT], [FILES]: filesData};
     await this._serviceIO.callAPI(requestContents, this._messages);
     this._fileAttachments?.hideFiles();
   }
 
   private async addNewMessage({text, files, custom}: UserContentI) {
-    const data: Response = {role: MessageUtils.USER_ROLE, custom};
-    if (text) data.text = text;
-    if (files) data.files = await this._messages.addMultipleFiles(files, this._fileAttachments);
+    const data: Response = {role: USER, custom};
+    if (text) data[TEXT] = text;
+    if (files) data[FILES] = await this._messages.addMultipleFiles(files, this._fileAttachments);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;
     if (Object.keys(data).length > 0) this._messages.addNewMessage(data);
   }
@@ -229,7 +227,7 @@ export class SubmitButton extends InputButton<Styles> {
 
   private changeToStopIcon() {
     if (this._serviceIO.websocket) return; // stop not used for streaming messages in websocket
-    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS, SubmitButton.SUBMIT_CLASS);
+    this.elementRef[CLASS_LIST].remove(SUBMIT_CLASS, DISABLED_CLASS, SUBMIT_CLASS);
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
     this.changeElementsByState(this._innerElements.stop);
     this.reapplyStateStyle('stop', ['loading', 'submit']);
@@ -240,9 +238,9 @@ export class SubmitButton extends InputButton<Styles> {
   private changeToLoadingIcon() {
     if (this._serviceIO.websocket) return;
     if (!this._isSVGLoadingIconOverriden) this.changeElementsByState(this._innerElements.loading);
-    this.elementRef.classList.remove(SubmitButton.SUBMIT_CLASS, SubmitButton.DISABLED_CLASS);
+    this.elementRef[CLASS_LIST].remove(SUBMIT_CLASS, DISABLED_CLASS);
     ButtonAccessibility.removeAriaDisabled(this.elementRef);
-    this.elementRef.classList.add(SubmitButton.LOADING_CLASS);
+    this.elementRef[CLASS_LIST].add(LOADING_CLASS);
     ButtonAccessibility.addAriaBusy(this.elementRef);
     this.reapplyStateStyle('loading', ['submit']);
     this.elementRef.onclick = () => {};
@@ -252,10 +250,10 @@ export class SubmitButton extends InputButton<Styles> {
 
   // called every time when user triggers an input via ValidationHandler - hence use class to check if not already present
   public changeToSubmitIcon() {
-    if (this.elementRef.classList.contains(SubmitButton.SUBMIT_CLASS)) return;
-    this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.DISABLED_CLASS);
+    if (this.elementRef[CLASS_LIST].contains(SUBMIT_CLASS)) return;
+    this.elementRef[CLASS_LIST].remove(LOADING_CLASS, DISABLED_CLASS);
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
-    this.elementRef.classList.add(SubmitButton.SUBMIT_CLASS);
+    this.elementRef[CLASS_LIST].add(SUBMIT_CLASS);
     this.changeElementsByState(this._innerElements.submit);
     SubmitButtonStateStyle.resetSubmit(this, this.status.loadingActive);
     this.elementRef.onclick = () => {
@@ -272,10 +270,10 @@ export class SubmitButton extends InputButton<Styles> {
   public changeToDisabledIcon(isProgrammatic = false) {
     if (this._alwaysEnabled && !isProgrammatic) {
       this.changeToSubmitIcon();
-    } else if (!this.elementRef.classList.contains(SubmitButton.DISABLED_CLASS)) {
-      this.elementRef.classList.remove(SubmitButton.LOADING_CLASS, SubmitButton.SUBMIT_CLASS);
+    } else if (!this.elementRef[CLASS_LIST].contains(DISABLED_CLASS)) {
+      this.elementRef[CLASS_LIST].remove(LOADING_CLASS, SUBMIT_CLASS);
       ButtonAccessibility.removeAriaBusy(this.elementRef);
-      this.elementRef.classList.add(SubmitButton.DISABLED_CLASS);
+      this.elementRef[CLASS_LIST].add(DISABLED_CLASS);
       ButtonAccessibility.addAriaDisabled(this.elementRef);
       this.changeElementsByState(this._innerElements.disabled);
       this.reapplyStateStyle('disabled', ['submit']);

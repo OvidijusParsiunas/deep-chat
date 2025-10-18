@@ -1,5 +1,5 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
-import {DOCS_BASE_URL, TEXT_KEY} from '../../../../utils/consts/messageConstants';
+import {ANY, ASSISTANT, DOCS_BASE_URL, FILES, IMAGE, SRC, TEXT, TYPE} from '../../../../utils/consts/messageConstants';
 import {MessageFileType, MessageFile} from '../../../../types/messageFile';
 import {CONTENT_TYPE_H_KEY, POST} from '../../../utils/serviceConstants';
 import {Messages} from '../../../../views/chat/messages/messages';
@@ -53,8 +53,8 @@ export class OpenAIAssistantUtils {
   private static getType(fileDetails: FileDetails, index: number): MessageFileType {
     const {path} = fileDetails[index];
     // images don't have a path
-    if (!path || path.endsWith('png')) return 'image';
-    return 'any';
+    if (!path || path.endsWith('png')) return IMAGE;
+    return ANY;
   }
 
   private static async getFiles(serviceIO: ServiceIO, fileDetails: FileDetails, urlPrefix: string, urlPosfix: string) {
@@ -72,9 +72,9 @@ export class OpenAIAssistantUtils {
         reader.readAsDataURL(blob);
         reader.onload = (event) => {
           resolve({
-            src: (event.target as FileReader).result as string,
+            [SRC]: (event.target as FileReader).result as string,
             name: fileDetails[index].name,
-            type: OpenAIAssistantUtils.getType(fileDetails, index),
+            [TYPE]: OpenAIAssistantUtils.getType(fileDetails, index),
           });
         };
       });
@@ -94,18 +94,18 @@ export class OpenAIAssistantUtils {
     const {getFilesPrefix, getFilesPostfix} = urls;
     if (fileDetails.length > 0) {
       files = await OpenAIAssistantUtils.getFiles(io, fileDetails, getFilesPrefix, getFilesPostfix);
-      if (content?.text?.value) {
+      if (content?.[TEXT]?.value) {
         files.forEach((file, index) => {
           if (!file.src) return;
           const path = fileDetails[index].path;
-          if (content?.text?.value && path) {
-            content.text.value = content.text.value.replace(path, file.src);
+          if (content?.[TEXT]?.value && path) {
+            content[TEXT].value = content[TEXT].value.replace(path, file.src);
           }
         });
       }
     }
     // not displaying a separate file if annotated
-    return content?.text?.value ? {[TEXT_KEY]: content.text.value, role} : {files, role};
+    return content?.[TEXT]?.value ? {[TEXT]: content[TEXT].value, role} : {[FILES]: files, role};
   }
 
   // Noticed an issue where text contains a sandbox hyperlink to a csv, but no annotation provided
@@ -115,14 +115,14 @@ export class OpenAIAssistantUtils {
   // prettier-ignore
   private static getFileDetails(lastMessage: OpenAIAssistantData, content?: OpenAIAssistantContent) {
     const fileDetails: FileDetails = [];
-    if (content?.text?.value) {
+    if (content?.[TEXT]?.value) {
       lastMessage.content.forEach((content) => {
-        content.text?.annotations?.forEach((annotation) => {
-          if (annotation.text && annotation.text.startsWith('sandbox:') && annotation.file_path?.file_id) {
+        content[TEXT]?.annotations?.forEach((annotation) => {
+          if (annotation[TEXT] && annotation[TEXT].startsWith('sandbox:') && annotation.file_path?.file_id) {
             fileDetails.push({
-              path: annotation.text,
+              path: annotation[TEXT],
               fileId: annotation.file_path.file_id,
-              name: OpenAIAssistantUtils.getFileName(annotation.text),
+              name: OpenAIAssistantUtils.getFileName(annotation[TEXT]),
             });
           }
         });
@@ -151,7 +151,7 @@ export class OpenAIAssistantUtils {
     } else {
       for (let i = 0; i < result.data.length; i += 1) {
         const message = result.data[i];
-        if (message.role === 'assistant') {
+        if (message.role === ASSISTANT) {
           messages.push(message);
         } else {
           break;
@@ -167,9 +167,9 @@ export class OpenAIAssistantUtils {
     const parsedContent: Promise<{text?: string; files?: MessageFile[]}>[] = [];
     messages.forEach(async (data) => {
       data.content
-        .filter((content) => !!content.text || !!content.image_file)
+        .filter((content) => !!content[TEXT] || !!content.image_file)
         .sort((content) => {
-          if (content.text) return -1;
+          if (content[TEXT]) return -1;
           if (content.image_file) return 1;
           return 0;
         })
@@ -181,7 +181,7 @@ export class OpenAIAssistantUtils {
   }
 
   public static async processStreamMessages(io: DirectServiceIO, content: OpenAIAssistantContent[], urls: URLSegments) {
-    return OpenAIAssistantUtils.parseMessages(io, [{content, role: 'assistant'}], urls);
+    return OpenAIAssistantUtils.parseMessages(io, [{content, role: ASSISTANT}], urls);
   }
 
   // prettier-ignore

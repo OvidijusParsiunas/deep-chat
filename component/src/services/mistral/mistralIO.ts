@@ -1,10 +1,10 @@
 import {MistralMessage, MistralRequestBody, MistralContentItem} from '../../types/mistralInternal';
 import {MISTRAL_BUILD_HEADERS, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS} from './utils/mistralUtils';
+import {ERROR, IMAGE, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {MistralResult} from '../../types/mistralResult';
@@ -48,10 +48,10 @@ export class MistralIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): MistralContentItem[] {
     return files.map((file) => {
-      if (file.type === 'image') {
-        return {type: 'image_url', image_url: file.src || ''};
+      if (file.type === IMAGE) {
+        return {[TYPE]: 'image_url', image_url: file.src || ''};
       }
-      return {type: 'text', [TEXT_KEY]: `[Unsupported file type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported file type: ${file.type}]`};
     });
   }
 
@@ -76,7 +76,7 @@ export class MistralIO extends DirectServiceIO {
 
   override async extractResultData(result: MistralResult, prevBody?: Mistral): Promise<Response> {
     if (result.message) throw result.message;
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     if (result.choices && result.choices.length > 0) {
       const choice = result.choices[0];
@@ -96,11 +96,11 @@ export class MistralIO extends DirectServiceIO {
             prevBody
           );
         }
-        return {[TEXT_KEY]: choice.message.content || ''};
+        return {[TEXT]: choice.message.content || ''};
       }
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async extractStreamResult(choice: MistralResult['choices'][0], prevBody?: Mistral) {
@@ -110,6 +110,6 @@ export class MistralIO extends DirectServiceIO {
       // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post
       return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
     }
-    return {[TEXT_KEY]: delta?.content || ''};
+    return {[TEXT]: delta?.content || ''};
   }
 }

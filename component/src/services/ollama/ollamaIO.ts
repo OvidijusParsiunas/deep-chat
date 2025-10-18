@@ -1,11 +1,11 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
+import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, TEXT} from '../../utils/consts/messageConstants';
 import {OLLAMA_BUILD_HEADERS, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS} from './utils/ollamaUtils';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -48,7 +48,7 @@ export class OllamaIO extends DirectServiceIO {
 
   private static getImageData(files: MessageFile[]): string[] {
     return files
-      .filter((file) => file.type === 'image')
+      .filter((file) => file.type === IMAGE)
       .map((file) => {
         const base64Data = file.src?.split(',')[1];
         return base64Data || '';
@@ -63,14 +63,14 @@ export class OllamaIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       const ollamaMessage: OllamaMessage = {
-        content: message.text || '',
+        content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       };
 
-      if (message.files && message.files.length > 0) {
-        const images = OllamaIO.getImageData(message.files);
+      if (message[FILES] && message[FILES].length > 0) {
+        const images = OllamaIO.getImageData(message[FILES]);
         if (images.length > 0) {
-          ollamaMessage.images = images;
+          ollamaMessage[IMAGES] = images;
         }
       }
 
@@ -87,24 +87,24 @@ export class OllamaIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: OllamaConverseResult, prevBody?: OllamaChat): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
-    if (result.text) {
-      const parsedStreamBody = JSON.parse(result.text) as OllamaStreamResult;
+    if (result[TEXT]) {
+      const parsedStreamBody = JSON.parse(result[TEXT]) as OllamaStreamResult;
       if (parsedStreamBody.message?.tool_calls) {
         return this.handleTools({tool_calls: parsedStreamBody.message.tool_calls}, prevBody);
       }
-      return {[TEXT_KEY]: parsedStreamBody.message?.content || ''};
+      return {[TEXT]: parsedStreamBody.message?.content || ''};
     }
 
     if (result.message) {
       if (result.message.tool_calls) {
         return this.handleTools({tool_calls: result.message.tool_calls}, prevBody);
       }
-      return {[TEXT_KEY]: result.message.content || ''};
+      return {[TEXT]: result.message.content || ''};
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async handleTools(tools: {tool_calls: OllamaToolCall[]}, prevBody?: OllamaChat): Promise<ResponseI> {
@@ -118,7 +118,7 @@ export class OllamaIO extends DirectServiceIO {
     const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
     if (processedResponse) return processedResponse;
 
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: ''});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, role: ASSISTANT, content: ''});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];

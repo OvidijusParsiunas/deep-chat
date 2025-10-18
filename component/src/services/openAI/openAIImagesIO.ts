@@ -1,3 +1,4 @@
+import {CAMERA, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
@@ -27,12 +28,12 @@ export class OpenAIImagesIO extends DirectServiceIO {
   constructor(deepChat: DeepChat) {
     const {directConnection} = deepChat;
     const apiKey = directConnection?.openAI;
-    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
+    const defaultFile = {images: {[FILES]: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey, defaultFile);
-    const config = directConnection?.openAI?.images as NonNullable<OpenAI['images']>;
-    if (this.camera) {
+    const config = directConnection?.openAI?.[IMAGES] as NonNullable<OpenAI['images']>;
+    if (this[CAMERA]) {
       const dimension = typeof config === 'object' && config.size ? Number.parseInt(config.size) : 1024;
-      this.camera.files = {dimensions: {width: dimension, height: dimension}};
+      this[CAMERA][FILES] = {dimensions: {width: dimension, height: dimension}};
     }
     if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.canSendMessage = OpenAIImagesIO.canFileSendMessage;
@@ -44,7 +45,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
 
   private static createFormDataBody(body: OpenAIImagesDalle, image: File, mask?: File) {
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append(IMAGE, image);
     if (mask) formData.append('mask', mask);
     Object.keys(body).forEach((key) => {
       formData.append(key, String(body[key as keyof OpenAIImagesDalle]));
@@ -61,7 +62,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   // prettier-ignore
   private callApiWithImage(messages: Messages, pMessages: MessageContentI[], files: File[]) {
     let formData: FormData;
-    const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
+    const lastMessage = pMessages[pMessages.length - 1]?.[TEXT]?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = OpenAIImagesIO.IMAGE_EDIT_URL;
@@ -83,18 +84,18 @@ export class OpenAIImagesIO extends DirectServiceIO {
     } else {
       if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1].text);
+      const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1][TEXT]);
       HTTPRequest.request(this, body, messages);
     }
   }
 
   override async extractResultData(result: OpenAIImageResult): Promise<Response> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return {src: imageData.url, type: 'image'};
-      return {src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
+      if (imageData.url) return {[SRC]: imageData.url, [TYPE]: IMAGE};
+      return {[SRC]: `${BASE_64_PREFIX}${imageData.b64_json}`, [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 
   // private static readonly MODAL_MARKDOWN = `

@@ -1,7 +1,7 @@
 import {COHERE_BUILD_HEADERS, COHERE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/cohereUtils';
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {Legacy} from '../../utils/legacy/legacy';
@@ -37,10 +37,10 @@ export class CohereIO extends DirectServiceIO {
 
   private preprocessBody(body: Cohere, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const textMessages = pMessages.filter((message) => message.text);
+    const textMessages = pMessages.filter((message) => message[TEXT]);
     bodyCopy.messages = textMessages.map((message) => ({
       role: DirectServiceIO.getRoleViaAI(message.role),
-      content: message.text,
+      content: message[TEXT],
     }));
     return bodyCopy;
   }
@@ -53,15 +53,15 @@ export class CohereIO extends DirectServiceIO {
     if (typeof result.message === 'string') throw result.message;
 
     // Handle streaming events
-    if (this.stream && result.text) {
-      const bundledEvents = CohereIO.parseBundledEvents(result.text);
+    if (this.stream && result[TEXT]) {
+      const bundledEvents = CohereIO.parseBundledEvents(result[TEXT]);
       const text = CohereIO.aggregateBundledEventsText(bundledEvents);
       return {text};
     }
 
     // Handle non-streaming response (final response)
-    if ('message' in result && result.message?.content?.[0]?.text) {
-      return {[TEXT_KEY]: result.message.content[0].text};
+    if ('message' in result && result.message?.content?.[0]?.[TEXT]) {
+      return {[TEXT]: result.message.content[0][TEXT]};
     }
 
     throw new Error('Invalid response format from Cohere API');
@@ -78,7 +78,7 @@ export class CohereIO extends DirectServiceIO {
           const parsed = JSON.parse(line);
           parsedStreamEvents.push(parsed);
         } catch (error) {
-          console.error('Failed to parse line:', line, error);
+          console[ERROR]('Failed to parse line:', line, error);
         }
       }
     }
@@ -88,8 +88,8 @@ export class CohereIO extends DirectServiceIO {
 
   private static aggregateBundledEventsText(bundledEvents: CohereStreamEventBody[]) {
     return bundledEvents
-      .filter((obj) => obj.type === 'content-delta' && obj.delta?.message?.content?.text)
-      .map((obj) => obj.delta?.message?.content?.text)
+      .filter((obj) => obj.type === 'content-delta' && obj.delta?.message?.content?.[TEXT])
+      .map((obj) => obj.delta?.message?.content?.[TEXT])
       .join('');
   }
 }

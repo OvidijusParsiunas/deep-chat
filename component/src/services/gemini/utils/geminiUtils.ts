@@ -3,6 +3,7 @@ import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, GET} from '../../utils/serviceCons
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {GeminiGenerateContentResult} from '../../../types/geminiResult';
+import {ERROR} from '../../../utils/consts/messageConstants';
 
 export const GEMINI_BUILD_HEADERS = () => {
   return {
@@ -14,8 +15,8 @@ export const GEMINI_BUILD_HEADERS = () => {
 const handleVerificationResult = (result: object, key: string,
     onSuccess: (key: string) => void, onFail: (message: string) => void) => {
   const geminiResult = result as GeminiGenerateContentResult;
-  if (geminiResult.error) {
-    if (geminiResult.error.code === 403 || geminiResult.error.message?.includes('API key')) {
+  if (geminiResult[ERROR]) {
+    if (geminiResult[ERROR].code === 403 || geminiResult[ERROR].message?.includes('API key')) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

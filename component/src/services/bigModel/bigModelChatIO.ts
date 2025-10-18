@@ -1,11 +1,11 @@
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
+import {AI, ERROR, FILE, IMAGE, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {ChatFunctionHandler} from '../../types/openAI';
@@ -54,10 +54,10 @@ export class BigModelChatIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): BigModelContentItem[] {
     return files.map((file) => {
-      if (file.type === 'image') {
-        return {type: 'image_url', image_url: {url: file.src || ''}};
+      if (file.type === IMAGE) {
+        return {[TYPE]: 'image_url', image_url: {url: file.src || ''}};
       }
-      return {type: 'file', file_url: {url: file.src || ''}};
+      return {[TYPE]: FILE, file_url: {url: file.src || ''}};
     });
   }
 
@@ -83,7 +83,7 @@ export class BigModelChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: BigModelResult, prevBody?: BigModelChat): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     if (result.choices.length > 0) {
       if ((result.choices[0] as BigModelStreamEvent).delta !== undefined) {
         return this.extractStreamResult(result.choices[0] as BigModelStreamEvent, prevBody);
@@ -98,10 +98,10 @@ export class BigModelChatIO extends DirectServiceIO {
             prevBody
           );
         }
-        return {[TEXT_KEY]: message.content};
+        return {[TEXT]: message.content};
       }
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async extractStreamResult(choice: BigModelStreamEvent, prevBody?: BigModelChat) {
@@ -111,8 +111,8 @@ export class BigModelChatIO extends DirectServiceIO {
     // and then creates a new stream with the actual result. The problem is that the first
     // message can sometimes be completely empty which does not look good in the UI.
     // To repeat this behaviour, ask for something twice in same chat
-    if (lastMessage?.[0].role === 'ai' && lastMessage?.[0].text?.replace(/\n/g, '').trim().length === 0) {
-      this._messages?.removeMessage(lastMessage[1].text as MessageElements);
+    if (lastMessage?.[0].role === AI && lastMessage?.[0][TEXT]?.replace(/\n/g, '').trim().length === 0) {
+      this._messages?.removeMessage(lastMessage[1][TEXT] as MessageElements);
       this._messages?.messageToElements.splice(this._messages.messageToElements.length - 2, 1);
     }
 
@@ -121,8 +121,8 @@ export class BigModelChatIO extends DirectServiceIO {
         const tools = {tool_calls: delta.tool_calls};
         return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
       }
-      return {[TEXT_KEY]: delta?.content || ''};
+      return {[TEXT]: delta?.content || ''};
     }
-    return {[TEXT_KEY]: delta?.content || ''};
+    return {[TEXT]: delta?.content || ''};
   }
 }

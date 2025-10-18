@@ -1,5 +1,6 @@
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
+import {FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {BigModelImagesRequestBody} from '../../types/bigModelInternal';
 import {BigModelImagesResult} from '../../types/bigModelResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -23,7 +24,7 @@ export class BigModelImagesIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
     super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
-    const config = directConnectionCopy.bigModel?.images as BigModelImages;
+    const config = directConnectionCopy.bigModel?.[IMAGES] as BigModelImages;
     if (typeof config === OBJECT) {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -38,7 +39,7 @@ export class BigModelImagesIO extends DirectServiceIO {
   private preprocessBody(body: BigModelImagesRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelImagesRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
-    bodyCopy.prompt = lastMessage?.text || '';
+    bodyCopy.prompt = lastMessage?.[TEXT] || '';
     return bodyCopy;
   }
 
@@ -49,10 +50,10 @@ export class BigModelImagesIO extends DirectServiceIO {
   override async extractResultData(result: BigModelImagesResult): Promise<ResponseI> {
     const files = result.data.map((imageData) => {
       if (imageData?.url) {
-        return {src: imageData.url, type: 'image'};
+        return {[SRC]: imageData.url, [TYPE]: IMAGE};
       }
-      return {src: '', type: 'image'};
+      return {[SRC]: '', [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

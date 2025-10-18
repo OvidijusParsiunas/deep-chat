@@ -13,6 +13,7 @@ import {InsertKeyView} from './views/insertKey/insertKeyView';
 import {WebModel as WebModelClass} from './webModel/webModel';
 import {ServiceIOFactory} from './services/serviceIOFactory';
 import {ValidationHandler} from './types/validationHandler';
+import {CREATE_ELEMENT} from './utils/consts/htmlConstants';
 import {GoogleFont} from './utils/webComponent/googleFont';
 import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
@@ -215,7 +216,7 @@ export class DeepChat extends InternalHTML {
 
   constructor() {
     super();
-    this._elementRef = document.createElement('div');
+    this._elementRef = CREATE_ELEMENT();
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     this.shadowRoot?.appendChild(TooltipUtils.buildElement());

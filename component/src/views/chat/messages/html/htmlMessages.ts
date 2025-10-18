@@ -1,4 +1,6 @@
 import {ElementUtils} from '../../../../utils/element/elementUtils';
+import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
+import {HTML} from '../../../../utils/consts/messageConstants';
 import {Overwrite} from '../../../../types/messagesInternal';
 import {Legacy} from '../../../../utils/legacy/legacy';
 import {MessageUtils} from '../utils/messageUtils';
@@ -19,7 +21,7 @@ export class HTMLMessages {
 
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop, loading);
-    messageElements.bubbleElement.classList.add(HTMLMessages.HTML_BUBBLE_CLASS);
+    messageElements.bubbleElement[CLASS_LIST].add(HTMLMessages.HTML_BUBBLE_CLASS);
     const {contentEl} = HTMLUtils.tryAddWrapper(messageElements.bubbleElement, html, messages._customWrappers, role);
     contentEl.innerHTML = html;
     return messageElements;
@@ -35,7 +37,7 @@ export class HTMLMessages {
   private static overwrite(messages: MessagesBase, html: string, role: string, messageElementRefs: MessageElements[]) {
     const {messageToElements: msgToEls} = messages;
     const overwrittenElements = MessageUtils.overwriteMessage(
-      msgToEls, messageElementRefs, html, role, 'html', HTMLMessages.HTML_BUBBLE_CLASS);
+      msgToEls, messageElementRefs, html, role, HTML, HTMLMessages.HTML_BUBBLE_CLASS);
     if (overwrittenElements) {
       HTMLMessages.overwriteElements(messages, html, overwrittenElements);
     }
@@ -47,7 +49,7 @@ export class HTMLMessages {
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, html);
     HTMLUtils.apply(messages, messageElements.outerContainer);
     Legacy.flagHTMLUpdateClass(messageElements.bubbleElement);
-    messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.html);
+    messages.applyCustomStyles(messageElements, role, false, messages.messageStyles?.[HTML]);
     return messageElements;
   }
 

@@ -1,33 +1,35 @@
 import {MessageBodyElements, MessageContentI, MessageToElements} from '../../../../types/messagesInternal';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {OBJECT} from '../../../../services/utils/serviceConstants';
+import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {MessageContent} from '../../../../types/messages';
-import {FileMessageUtils} from './fileMessageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
 import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 import {Avatar} from '../avatar';
 import {Name} from '../name';
+import {
+  OUTER_CONTAINER_CLASS_ROLE_PREFIX,
+  POSITION_BOTTOM_MESSAGE_CLASS,
+  POSITION_MIDDLE_MESSAGE_CLASS,
+  POSITION_TOP_MESSAGE_CLASS,
+  ERROR_MESSAGE_TEXT_CLASS,
+  EMPTY_MESSAGE_CLASS,
+  FILE_BUBBLE_CLASS,
+  FILES,
+  TEXT,
+  HTML,
+} from '../../../../utils/consts/messageConstants';
 
 export class MessageUtils {
-  public static readonly AI_ROLE = 'ai';
-  public static readonly USER_ROLE = 'user';
-  public static readonly ASSISTANT_ROLE = 'assistant';
-  public static readonly ERROR_MESSAGE_TEXT_CLASS = 'error-message-text';
-  public static readonly OUTER_CONTAINER_CLASS_ROLE_PREFIX = 'deep-chat-outer-container-role-';
-  private static readonly EMPTY_MESSAGE_CLASS = 'empty-message';
-  private static readonly POSITION_TOP_MESSAGE_CLASS = 'deep-chat-top-message';
-  private static readonly POSITION_MIDDLE_MESSAGE_CLASS = 'deep-chat-middle-message';
-  private static readonly POSITION_BOTTOM_MESSAGE_CLASS = 'deep-chat-bottom-message';
-
   public static getLastElementsByClass(messageElementRefs: MessageElements[], classes: string[], avoidClasses?: string[]) {
     for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
       const elements = messageElementRefs[i];
-      if (elements.bubbleElement.classList.contains(classes[0])) {
-        const notFound = classes.slice(1).find((className) => !elements.bubbleElement.classList.contains(className));
+      if (elements.bubbleElement[CLASS_LIST].contains(classes[0])) {
+        const notFound = classes.slice(1).find((className) => !elements.bubbleElement[CLASS_LIST].contains(className));
         if (!notFound) {
           if (avoidClasses) {
-            const avoided = avoidClasses.find((className) => elements.bubbleElement.classList.contains(className));
+            const avoided = avoidClasses.find((className) => elements.bubbleElement[CLASS_LIST].contains(className));
             if (!avoided) return elements;
           } else {
             return elements;
@@ -80,20 +82,20 @@ export class MessageUtils {
   // makes sure the bubble has dimensions when there is no text
   public static fillEmptyMessageElement(bubbleElement: HTMLElement, content: string) {
     if (content.trim().length === 0) {
-      bubbleElement.classList.add(MessageUtils.EMPTY_MESSAGE_CLASS);
+      bubbleElement[CLASS_LIST].add(EMPTY_MESSAGE_CLASS);
       bubbleElement.innerHTML = '<div style="color:#00000000">.</div>';
     }
   }
 
   public static unfillEmptyMessageElement(bubbleElement: HTMLElement, newContent: string) {
-    if (bubbleElement.classList.contains(MessageUtils.EMPTY_MESSAGE_CLASS) && newContent.trim().length > 0) {
+    if (bubbleElement[CLASS_LIST].contains(EMPTY_MESSAGE_CLASS) && newContent.trim().length > 0) {
       bubbleElement.replaceChildren();
     }
   }
 
   public static getLastMessageBubbleElement(messagesEl: HTMLElement) {
     return Array.from(MessageUtils.getLastMessageElement(messagesEl)?.children?.[0]?.children || []).find((element) => {
-      return element.classList.contains('message-bubble');
+      return element[CLASS_LIST].contains('message-bubble');
     });
   }
 
@@ -131,40 +133,44 @@ export class MessageUtils {
   }
 
   public static buildRoleOuterContainerClass(role: string) {
-    return `${MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX}${role}`;
+    return `${OUTER_CONTAINER_CLASS_ROLE_PREFIX}${role}`;
   }
 
   private static addNewPositionClasses(messageEls: MessageElements, classes: string[]) {
-    messageEls.outerContainer.classList.remove(
-      MessageUtils.POSITION_TOP_MESSAGE_CLASS,
-      MessageUtils.POSITION_MIDDLE_MESSAGE_CLASS,
-      MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS
+    messageEls.outerContainer[CLASS_LIST].remove(
+      POSITION_TOP_MESSAGE_CLASS,
+      POSITION_MIDDLE_MESSAGE_CLASS,
+      POSITION_BOTTOM_MESSAGE_CLASS
     );
-    messageEls.outerContainer.classList.add(...classes);
+    messageEls.outerContainer[CLASS_LIST].add(...classes);
   }
 
   private static getNumberOfElements(messageContent: MessageContentI) {
     let length = 0;
-    if (messageContent.text !== undefined) length += 1;
-    if (messageContent.html !== undefined) length += 1;
-    if (messageContent.files) length += messageContent.files.length;
+    if (messageContent[TEXT] !== undefined) length += 1;
+    if (messageContent[HTML] !== undefined) length += 1;
+    if (messageContent[FILES]) length += messageContent[FILES].length;
     return length;
   }
 
   private static filterdMessageElements(elements: MessageElements[], className: string) {
-    return elements.filter((msgElements) => msgElements.bubbleElement.classList.contains(className));
+    return elements.filter((msgElements) => msgElements.bubbleElement[CLASS_LIST].contains(className));
   }
 
   private static findMessageElements(elements: MessageElements[], className: string) {
-    return elements.find((msgElements) => msgElements.bubbleElement.classList.contains(className));
+    return elements.find((msgElements) => msgElements.bubbleElement[CLASS_LIST].contains(className));
   }
 
   private static generateMessageBodyElements(messageContent: MessageContentI, elements: MessageElements[]) {
     const msgBodyEls: MessageBodyElements = {};
-    if (messageContent.text) msgBodyEls.text = MessageUtils.findMessageElements(elements, MessagesBase.TEXT_BUBBLE_CLASS);
-    if (messageContent.html) msgBodyEls.html = MessageUtils.findMessageElements(elements, HTMLMessages.HTML_BUBBLE_CLASS);
-    if (messageContent.files) {
-      msgBodyEls.files = MessageUtils.filterdMessageElements(elements, FileMessageUtils.FILE_BUBBLE_CLASS);
+    if (messageContent[TEXT]) {
+      msgBodyEls[TEXT] = MessageUtils.findMessageElements(elements, MessagesBase.TEXT_BUBBLE_CLASS);
+    }
+    if (messageContent[HTML]) {
+      msgBodyEls[HTML] = MessageUtils.findMessageElements(elements, HTMLMessages.HTML_BUBBLE_CLASS);
+    }
+    if (messageContent[FILES]) {
+      msgBodyEls[FILES] = MessageUtils.filterdMessageElements(elements, FILE_BUBBLE_CLASS);
     }
     return msgBodyEls;
   }
@@ -182,32 +188,29 @@ export class MessageUtils {
     let currentRole = role ? MessageUtils.buildRoleOuterContainerClass(role) : undefined;
     for (let i = messageElementRefs.length - 1; i >= 0; i -= 1) {
       if (!role) {
-        currentRole = Array.from(messageElementRefs[i].outerContainer.classList).find((className) =>
-          className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
+        currentRole = Array.from(messageElementRefs[i].outerContainer[CLASS_LIST]).find((className) =>
+          className.startsWith(OUTER_CONTAINER_CLASS_ROLE_PREFIX)
         );
       }
       if (!currentRole) continue; // will always be true if role is available
       const messageEls = messageElementRefs[i];
-      const hasCurrentRole = messageEls.outerContainer.classList.contains(currentRole);
+      const hasCurrentRole = messageEls.outerContainer[CLASS_LIST].contains(currentRole);
 
       const prevMessageEls = messageElementRefs[i - 1];
       const nextMessageEls = messageElementRefs[i + 1];
 
-      const hasPrevRole = prevMessageEls?.outerContainer.classList.contains(currentRole);
-      const hasNextRole = nextMessageEls?.outerContainer.classList.contains(currentRole);
+      const hasPrevRole = prevMessageEls?.outerContainer[CLASS_LIST].contains(currentRole);
+      const hasNextRole = nextMessageEls?.outerContainer[CLASS_LIST].contains(currentRole);
 
       if (hasCurrentRole) {
         if (!hasPrevRole && hasNextRole) {
-          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_TOP_MESSAGE_CLASS]);
+          MessageUtils.addNewPositionClasses(messageEls, [POSITION_TOP_MESSAGE_CLASS]);
         } else if (hasPrevRole && hasNextRole) {
-          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_MIDDLE_MESSAGE_CLASS]);
+          MessageUtils.addNewPositionClasses(messageEls, [POSITION_MIDDLE_MESSAGE_CLASS]);
         } else if (hasPrevRole && !hasNextRole) {
-          MessageUtils.addNewPositionClasses(messageEls, [MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS]);
+          MessageUtils.addNewPositionClasses(messageEls, [POSITION_BOTTOM_MESSAGE_CLASS]);
         } else if (!hasPrevRole && !hasNextRole) {
-          MessageUtils.addNewPositionClasses(messageEls, [
-            MessageUtils.POSITION_TOP_MESSAGE_CLASS,
-            MessageUtils.POSITION_BOTTOM_MESSAGE_CLASS,
-          ]);
+          MessageUtils.addNewPositionClasses(messageEls, [POSITION_TOP_MESSAGE_CLASS, POSITION_BOTTOM_MESSAGE_CLASS]);
         }
       } else if (role) {
         break;
@@ -217,8 +220,8 @@ export class MessageUtils {
 
   public static areOuterContainerClassRolesSame(comparedRole: string, message?: MessageElements) {
     if (!message) return false;
-    const currentRoleClass = Array.from(message.outerContainer.classList).find((className) =>
-      className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
+    const currentRoleClass = Array.from(message.outerContainer[CLASS_LIST]).find((className) =>
+      className.startsWith(OUTER_CONTAINER_CLASS_ROLE_PREFIX)
     );
     return currentRoleClass === MessageUtils.buildRoleOuterContainerClass(comparedRole);
   }
@@ -227,11 +230,11 @@ export class MessageUtils {
     if (!avatar && !name) return;
     let lastRoleClass: string | undefined = '';
     messageElementRefs.forEach((message, index) => {
-      if (!message.bubbleElement.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {
+      if (!message.bubbleElement[CLASS_LIST].contains(ERROR_MESSAGE_TEXT_CLASS)) {
         MessageUtils.revealRoleElements(message.innerContainer, avatar, name);
       }
-      const currentRoleClass = Array.from(message.outerContainer.classList).find((className) =>
-        className.startsWith(MessageUtils.OUTER_CONTAINER_CLASS_ROLE_PREFIX)
+      const currentRoleClass = Array.from(message.outerContainer[CLASS_LIST]).find((className) =>
+        className.startsWith(OUTER_CONTAINER_CLASS_ROLE_PREFIX)
       );
       if (lastRoleClass === currentRoleClass) {
         MessageUtils.hideRoleElements(messageElementRefs[index - 1].innerContainer, avatar, name);

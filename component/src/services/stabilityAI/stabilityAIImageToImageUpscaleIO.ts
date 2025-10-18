@@ -1,6 +1,7 @@
 import {STABILITY_AI_BUILD_HEADERS, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/stabilityAIUtils';
 import {REQUEST_SETTINGS_ERROR, IMAGE_NOT_FOUND_ERROR} from '../../utils/errorMessages/errorMessages';
 import {StabilityAI, StabilityAIImageToImageUpscale} from '../../types/stabilityAI';
+import {FILES, IMAGE, SRC, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -40,7 +41,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
 
   private createFormDataBody(body: StabilityAIImageToImageUpscale, image: File) {
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append(IMAGE, image);
     Object.keys(body).forEach((key) => {
       formData.append(key, String(body[key as keyof StabilityAIImageToImageUpscale]));
     });
@@ -60,8 +61,8 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
+      return {[SRC]: `${BASE_64_PREFIX}${imageData.base64}`, [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

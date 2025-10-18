@@ -1,4 +1,5 @@
 import {OpenAIRealtimeIO} from '../../services/openAI/realtime/openAIRealtimeIO';
+import {CREATE_ELEMENT} from '../../utils/consts/htmlConstants';
 import {ElementUtils} from '../../utils/element/elementUtils';
 import {Websocket} from '../../utils/HTTP/websocket';
 import {ServiceIO} from '../../services/serviceIO';
@@ -8,7 +9,7 @@ import {Input} from './input/input';
 
 export class ChatView {
   private static createElements(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
-    const containerElement = document.createElement('div');
+    const containerElement = CREATE_ELEMENT();
     containerElement.id = 'chat-view';
     const messages = new Messages(deepChat, serviceIO, panel);
     if (serviceIO.websocket) Websocket.createConnection(serviceIO, messages);

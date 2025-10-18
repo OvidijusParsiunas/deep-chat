@@ -1,4 +1,5 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
+import {AUDIO, ERROR, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIResult';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
@@ -7,7 +8,6 @@ import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -63,23 +63,23 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): FileContent {
     const content: FileContent = files.map((file) => {
-      if (file.type === 'audio') {
+      if (file.type === AUDIO) {
         const base64Data = file.src?.split(',')[1];
         const format = file.name?.split('.').pop()?.toLowerCase() || 'wav';
-        return {type: 'input_audio', input_audio: {data: base64Data, format}};
+        return {[TYPE]: 'input_audio', input_audio: {data: base64Data, format}};
       }
-      return {type: 'image_url', image_url: {url: file.src}};
+      return {[TYPE]: 'image_url', image_url: {url: file.src}};
     });
     return content;
   }
 
   private static getContent(message: MessageContentI) {
-    if (message.files && message.files.length > 0) {
-      const content: FileContent = OpenAIChatIO.getFileContent(message.files);
-      if (message.text && message.text.trim().length > 0) content.unshift({type: 'text', [TEXT_KEY]: message.text});
+    if (message[FILES] && message[FILES].length > 0) {
+      const content: FileContent = OpenAIChatIO.getFileContent(message[FILES]);
+      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       return content;
     }
-    return message.text;
+    return message[TEXT];
   }
 
   // prettier-ignore
@@ -102,7 +102,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: OpenAIConverseResult, prevBody?: OpenAIChat): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     if (result.choices?.[0]?.delta) {
       return this.extractStreamResult(result.choices[0], prevBody);
     }
@@ -110,17 +110,17 @@ export class OpenAIChatIO extends DirectServiceIO {
       if (result.choices[0].message.tool_calls) {
         return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this._messages, prevBody);
       }
-      if (result.choices[0].message?.audio) {
+      if (result.choices[0].message?.[AUDIO]) {
         const tts = this.deepChat.textToSpeech;
-        const displayText = typeof tts === 'object' && typeof tts?.audio?.displayText === 'boolean';
+        const displayText = typeof tts === 'object' && typeof tts?.[AUDIO]?.displayText === 'boolean';
         return {
-          files: [{src: `data:audio/wav;base64,${result.choices[0].message.audio.data}`, type: 'audio'}],
-          [TEXT_KEY]: displayText ? result.choices[0].message.audio.transcript : undefined,
+          [FILES]: [{[SRC]: `data:audio/wav;base64,${result.choices[0].message[AUDIO].data}`, [TYPE]: AUDIO}],
+          [TEXT]: displayText ? result.choices[0].message[AUDIO].transcript : undefined,
         };
       }
-      return {[TEXT_KEY]: result.choices[0].message.content};
+      return {[TEXT]: result.choices[0].message.content};
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {

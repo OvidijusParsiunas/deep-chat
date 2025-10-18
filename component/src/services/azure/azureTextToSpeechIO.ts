@@ -1,9 +1,9 @@
+import {AUDIO, ERROR, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {AZURE_BUILD_TEXT_TO_SPEECH_HEADERS} from './utils/azureUtils';
 import {Azure, AzureTextToSpeechConfig} from '../../types/azure';
 import {AzureTextToSpeechResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
-import {ERROR} from '../utils/serviceConstants';
 import {AzureSpeechIO} from './azureSpeechIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -37,7 +37,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
   }
 
   preprocessBody(body: AzureTextToSpeechConfig, messages: MessageContentI[]) {
-    const mostRecentMessageText = messages[messages.length - 1].text;
+    const mostRecentMessageText = messages[messages.length - 1][TEXT];
     if (!mostRecentMessageText) return;
     return `<speak version='1.0' xml:lang='${body.lang}'>
       <voice xml:lang='${body.lang}' xml:gender='${body.gender}' name='${body.name}'>
@@ -55,7 +55,7 @@ export class AzureTextToSpeechIO extends AzureSpeechIO {
       const reader = new FileReader();
       reader.readAsDataURL(result);
       reader.onload = (event) => {
-        resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
+        resolve({[FILES]: [{[SRC]: (event.target as FileReader).result as string, [TYPE]: AUDIO}]});
       };
     });
   }

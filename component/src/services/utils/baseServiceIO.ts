@@ -1,3 +1,4 @@
+import {AUDIO, CAMERA, FILES, GIFS, IMAGE, IMAGES, MIXED_FILES, TEXT} from '../../utils/consts/messageConstants';
 import {CameraFilesServiceConfig, MicrophoneFilesServiceConfig} from '../../types/fileServiceConfigs';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY} from './serviceConstants';
@@ -75,23 +76,23 @@ export class BaseServiceIO implements ServiceIO {
       formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(message));
     });
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.text) {
-      delete lastMessage.files; // no need to have files prop as we are sending the message
+    if (lastMessage[TEXT]) {
+      delete lastMessage[FILES]; // no need to have files prop as we are sending the message
       formData.append(`message${(textMessageIndex += 1)}`, JSON.stringify(lastMessage));
     }
     return formData;
   }
 
   private getServiceIOByType(file: File) {
-    if (file.type.startsWith('audio') && this.fileTypes.audio) {
-      return this.fileTypes.audio;
+    if (file.type.startsWith(AUDIO) && this.fileTypes[AUDIO]) {
+      return this.fileTypes[AUDIO];
     }
-    if (file.type.startsWith('image')) {
-      if (this.fileTypes.gifs && file.type.endsWith('/gif')) return this.fileTypes.gifs;
-      if (this.fileTypes.images) return this.fileTypes.images;
-      if (this.camera) return this.camera;
+    if (file.type.startsWith(IMAGE)) {
+      if (this.fileTypes[GIFS] && file.type.endsWith('/gif')) return this.fileTypes[GIFS];
+      if (this.fileTypes[IMAGES]) return this.fileTypes[IMAGES];
+      if (this[CAMERA]) return this[CAMERA];
     }
-    return this.fileTypes.mixedFiles;
+    return this.fileTypes[MIXED_FILES];
   }
 
   private async request(body: any, messages: Messages, stringifyBody = true) {
@@ -138,13 +139,13 @@ export class BaseServiceIO implements ServiceIO {
     // if handler is being used and demo is on, websocket calls should be directed to callServiceAPI
     if (this.connectSettings.websocket && (!this.connectSettings.handler || this.connectSettings.url !== Demo.URL)) {
       const body = {messages: processedMessages, ...this.rawBody};
-      if (requestContents.files && this.getServiceIOByType(requestContents.files[0])?.connect) {
-        this.callApiWithFiles(messages, processedMessages, requestContents.files);
+      if (requestContents[FILES] && this.getServiceIOByType(requestContents[FILES][0])?.connect) {
+        this.callApiWithFiles(messages, processedMessages, requestContents[FILES]);
       } else {
         Websocket.sendWebsocket(this, body, messages, false);
       }
     } else {
-      this.callServiceAPI(messages, processedMessages, requestContents.files);
+      this.callServiceAPI(messages, processedMessages, requestContents[FILES]);
     }
   }
 

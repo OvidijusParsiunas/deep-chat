@@ -1,6 +1,7 @@
 import {EventSourceMessage, fetchEventSource, FetchEventSourceInit} from '@microsoft/fetch-event-source';
 import {READABLE_STREAM_CONNECTION_ERROR} from '../errorMessages/errorMessages';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
+import {ERROR, FILES, HTML, TEXT} from '../consts/messageConstants';
 import {ServiceIO, StreamHandlers} from '../../services/serviceIO';
 import {HTMLUtils} from '../../views/chat/messages/html/htmlUtils';
 import {Messages} from '../../views/chat/messages/messages';
@@ -8,7 +9,6 @@ import {Response as ResponseI} from '../../types/response';
 import {POST} from '../../services/utils/serviceConstants';
 import {Stream as StreamI} from '../../types/stream';
 import {ErrorResp} from '../../types/errorInternal';
-import {TEXT_KEY} from '../consts/messageConstants';
 import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -56,7 +56,7 @@ export class Stream {
         if (!done) {
           const chunk = decoder.decode(value, { stream: true });
           const finalEventData = (await io.deepChat.responseInterceptor?.(chunk)) || chunk;
-          const objEventData = typeof finalEventData === 'object' ? finalEventData : {[TEXT_KEY]: chunk};
+          const objEventData = typeof finalEventData === 'object' ? finalEventData : {[TEXT]: chunk};
           Stream.handleMessage(io, messages, stream, objEventData, interceptedBody);
         } else {
           Stream.handleClose(io, stream, onClose, canBeEmpty);
@@ -161,30 +161,30 @@ export class Stream {
   public static async simulate(messages: Messages, sh: StreamHandlers, result: ResponseI, io?: ServiceIO) {
     if (!(await RequestUtils.basicResponseProcessing(messages, result, {io, useRI: false}))) return sh.onClose();
     if (Array.isArray(result)) result = result[0]; // single array responses are supproted
-    if (result.html) {
+    if (result[HTML]) {
       sh.onOpen();
-      let responseHTMLStrings = HTMLUtils.splitHTML(result.html);
-      if (responseHTMLStrings.length === 0) responseHTMLStrings = result.html.split('');
+      let responseHTMLStrings = HTMLUtils.splitHTML(result[HTML]);
+      if (responseHTMLStrings.length === 0) responseHTMLStrings = result[HTML].split('');
       const stream = new MessageStream(messages, io?.stream);
-      Stream.populateMessages(messages, responseHTMLStrings, stream, sh, 'html', 0, io);
+      Stream.populateMessages(messages, responseHTMLStrings, stream, sh, HTML, 0, io);
     }
-    if (result.files) {
-      const finalEventData = await RequestUtils.basicResponseProcessing(messages, {files: result.files}, {io});
+    if (result[FILES]) {
+      const finalEventData = await RequestUtils.basicResponseProcessing(messages, {[FILES]: result[FILES]}, {io});
       messages.addNewMessage({sendUpdate: false, ...finalEventData}, false);
-      if (!result.html && !result.text) {
+      if (!result[HTML] && !result[TEXT]) {
         const stream = new MessageStream(messages, io?.stream);
         stream.finaliseStreamedMessage();
         sh.onClose();
       }
     }
-    if (result.text) {
+    if (result[TEXT]) {
       sh.onOpen();
-      const responseTextStrings = result.text.split(''); // important to split by char for Chinese characters
+      const responseTextStrings = result[TEXT].split(''); // important to split by char for Chinese characters
       const stream = new MessageStream(messages, io?.stream);
-      Stream.populateMessages(messages, responseTextStrings, stream, sh, 'text', 0, io);
+      Stream.populateMessages(messages, responseTextStrings, stream, sh, TEXT, 0, io);
     }
-    if (result.error) {
-      RequestUtils.displayError(messages, result.error);
+    if (result[ERROR]) {
+      RequestUtils.displayError(messages, result[ERROR]);
       sh.onClose();
     }
     sh.onAbort = () => {
@@ -222,7 +222,7 @@ export class Stream {
   }
 
   public static isSimulatable(stream?: StreamI, respone?: ResponseI) {
-    return Stream.isSimulation(stream) && respone && (respone.text || respone.html);
+    return Stream.isSimulation(stream) && respone && (respone[TEXT] || respone[HTML]);
   }
 
   private static abort(timeout: number, stream: MessageStream, onClose: () => void) {
@@ -233,16 +233,16 @@ export class Stream {
 
   public static upsertContent(msgs: Messages, upsert: UpsertFunc, stream?: MessageStream, resp?: ResponseI | ResponseI[]) {
     if (resp && Array.isArray(resp)) resp = resp[0]; // single array responses are supproted
-    if (resp?.text || resp?.html) {
+    if (resp?.[TEXT] || resp?.[HTML]) {
       const resultStream = upsert(resp);
       stream ??= resultStream || undefined; // when streaming with websockets - created per message due to roles
     }
-    if (resp?.files) {
-      msgs.addNewMessage({files: resp.files});
+    if (resp?.[FILES]) {
+      msgs.addNewMessage({[FILES]: resp[FILES]});
       stream?.markFileAdded();
     }
-    if (resp?.error) {
-      throw resp.error;
+    if (resp?.[ERROR]) {
+      throw resp[ERROR];
     }
   }
 }

@@ -1,4 +1,6 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
+import {DEFAULT, DROPUP_MENU, OUTSIDE_RIGHT} from '../../../../../utils/consts/inputConstants';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonStyles} from '../../../../../types/button';
@@ -16,7 +18,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: AllMicrophoneStyles) {
-    if (styles?.position === 'dropup-menu') styles.position = 'outside-right'; // not allowed to be in dropup for UX
+    if (styles?.position === DROPUP_MENU) styles.position = OUTSIDE_RIGHT; // not allowed to be in dropup for UX
     const tooltip = TooltipUtils.tryCreateConfig('Microphone', styles?.tooltip);
     super(MicrophoneButton.createMicrophoneElement(), MICROPHONE_ICON_STRING, styles?.position, tooltip, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
@@ -26,7 +28,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   private createInnerElementsForStates(customStyles?: Styles) {
     const iconId = 'microphone-icon';
     return {
-      default: this.createInnerElements(iconId, 'default', customStyles),
+      [DEFAULT]: this.createInnerElements(iconId, DEFAULT, customStyles),
       active: this.createInnerElements(iconId, 'active', customStyles),
       unsupported: this.createInnerElements(iconId, 'unsupported', customStyles),
       commandMode: this.createInnerElements(iconId, 'commandMode', customStyles),
@@ -34,23 +36,23 @@ export class MicrophoneButton extends InputButton<Styles> {
   }
 
   private static createMicrophoneElement() {
-    const buttonElement = document.createElement('div');
+    const buttonElement = CREATE_ELEMENT();
     buttonElement.id = 'microphone-button';
-    buttonElement.classList.add('input-button');
+    buttonElement[CLASS_LIST].add('input-button');
     return buttonElement;
   }
 
   public changeToActive() {
     this.changeElementsByState(this._innerElements.active);
     this.toggleIconFilter('active');
-    this.reapplyStateStyle('active', ['default', 'commandMode']);
+    this.reapplyStateStyle('active', [DEFAULT, 'commandMode']);
     this.isActive = true;
   }
 
   public changeToDefault() {
-    this.changeElementsByState(this._innerElements.default);
-    this.toggleIconFilter('default');
-    this.reapplyStateStyle('default', ['active', 'commandMode']);
+    this.changeElementsByState(this._innerElements[DEFAULT]);
+    this.toggleIconFilter(DEFAULT);
+    this.reapplyStateStyle(DEFAULT, ['active', 'commandMode']);
     this.isActive = false;
   }
 
@@ -62,7 +64,7 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   public changeToUnsupported() {
     this.changeElementsByState(this._innerElements.unsupported);
-    this.elementRef.classList.add('unsupported-microphone');
+    this.elementRef[CLASS_LIST].add('unsupported-microphone');
     this.reapplyStateStyle('unsupported', ['active']);
   }
 
@@ -70,17 +72,17 @@ export class MicrophoneButton extends InputButton<Styles> {
     const iconElement = this.elementRef.children[0];
     if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
       switch (mode) {
-        case 'default':
-          iconElement.classList.remove('active-microphone-icon', 'command-microphone-icon');
-          iconElement.classList.add('default-microphone-icon');
+        case DEFAULT:
+          iconElement[CLASS_LIST].remove('active-microphone-icon', 'command-microphone-icon');
+          iconElement[CLASS_LIST].add('default-microphone-icon');
           break;
         case 'active':
-          iconElement.classList.remove('default-microphone-icon', 'command-microphone-icon');
-          iconElement.classList.add('active-microphone-icon');
+          iconElement[CLASS_LIST].remove('default-microphone-icon', 'command-microphone-icon');
+          iconElement[CLASS_LIST].add('active-microphone-icon');
           break;
         case 'command':
-          iconElement.classList.remove('active-microphone-icon', 'default-microphone-icon');
-          iconElement.classList.add('command-microphone-icon');
+          iconElement[CLASS_LIST].remove('active-microphone-icon', 'default-microphone-icon');
+          iconElement[CLASS_LIST].add('command-microphone-icon');
           break;
       }
     }

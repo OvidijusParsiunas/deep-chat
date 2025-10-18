@@ -1,5 +1,6 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
-import {ERROR, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {AUDIO, ERROR, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
@@ -32,7 +33,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenAITextToSpeech, messages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const lastMessage = messages[messages.length - 1]?.text?.trim();
+    const lastMessage = messages[messages.length - 1]?.[TEXT]?.trim();
     if (lastMessage && lastMessage !== '') {
       bodyCopy.input = lastMessage;
     }
@@ -50,11 +51,11 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
         const reader = new FileReader();
         reader.readAsDataURL(result);
         reader.onload = (event) => {
-          resolve({files: [{src: (event.target as FileReader).result as string, type: 'audio'}]});
+          resolve({[FILES]: [{[SRC]: (event.target as FileReader).result as string, [TYPE]: AUDIO}]});
         };
       });
     }
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     return {[ERROR]: ERROR}; // this should theoritaclly not get called but here for typescript
   }
 }

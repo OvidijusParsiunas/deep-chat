@@ -1,3 +1,4 @@
+import {FILE, FILES, TEXT} from '../../../../utils/consts/messageConstants';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {UserContentI} from '../../../../types/messagesInternal';
 import {SubmitButton} from '../buttons/submit/submitButton';
@@ -29,15 +30,15 @@ export class ValidationHandler {
     const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
-    const fileData = uploadedFilesData?.map((fileData) => fileData.file);
+    const fileData = uploadedFilesData?.map((fileData) => fileData[FILE]);
     return ValidationHandler.validate(validation, submitButton, text as string, fileData);
   }
 
   // prettier-ignore
   private static async useValidationFuncProgrammatic(validation: ValidateFunc,
       programmatic: UserContentI, submitButton: SubmitButton) {
-    const files = programmatic.files?.map((file) => file.file);
-    return ValidationHandler.validate(validation, submitButton, programmatic.text, files, true);
+    const files = programmatic[FILES]?.map((file) => file[FILE]);
+    return ValidationHandler.validate(validation, submitButton, programmatic[TEXT], files, true);
   }
 
   private static validateWebsocket(serviceIO: ServiceIO, submitButton: SubmitButton) {

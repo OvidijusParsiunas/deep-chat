@@ -1,12 +1,13 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
 import {SPEECH_SESSION_STARTED, SPEECH_SESSION_STOPPED} from '../../utils/speechConstants';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
-import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import avatarUrl from '../../../../assets/person-avatar.png';
+import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {ObjectUtils} from '../../../utils/data/objectUtils';
@@ -30,9 +31,20 @@ import {
   AUTHORIZATION_H,
   BEARER_PREFIX,
   OBJECT,
-  ERROR,
   POST,
 } from '../../utils/serviceConstants';
+import {
+  DOCS_BASE_URL,
+  MICROPHONE,
+  AUDIO,
+  ERROR,
+  IMAGE,
+  HTML,
+  TEXT,
+  TYPE,
+  USER,
+  AI,
+} from '../../../utils/consts/messageConstants';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
@@ -69,7 +81,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof config === OBJECT) {
       this._avatarConfig = config.avatar;
       this._ephemeralKey = config.ephemeralKey;
-      this._errorConfig = config.error;
+      this._errorConfig = config[ERROR];
       this._loadingConfig = config.loading;
       Object.assign(this.rawBody, config.config);
       const realtime = deepChat.directConnection?.openAI?.realtime as OpenAIRealtime;
@@ -83,7 +95,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
     this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
-    this._containerEl = this.createContainer();
+    this._containerEl = this.createContainer() as HTMLDivElement;
     this._deepChat = deepChat;
   }
 
@@ -120,7 +132,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   // called after API key was inserted
   public setUpView(oldContainerElement: HTMLElement, parentElement: HTMLElement) {
-    oldContainerElement.style.display = 'none';
+    oldContainerElement[STYLE].display = 'none';
     parentElement.appendChild(this._containerEl);
     this.setup();
   }
@@ -196,13 +208,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     return {
       updateConfig: (config: OpenAIRealtimeConfig) => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/session
-        this._dc?.send(JSON.stringify({type: 'session.update', session: config}));
+        this._dc?.send(JSON.stringify({[TYPE]: 'session.update', session: config}));
       },
       sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
         const messageRole = role || 'system';
-        const content = [{type: messageRole === 'system' || messageRole === 'user' ? 'input_text' : 'text', text}];
-        const item = {role: messageRole, type: 'message', content};
+        const content = [{[TYPE]: messageRole === 'system' || messageRole === USER ? 'input_text' : TEXT, text}];
+        const item = {role: messageRole, [TYPE]: 'message', content};
         this.sendMessage(item);
       },
     };
@@ -216,17 +228,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private static buildButtonsConfig(config?: OpenAIRealtime) {
     const newConfig = typeof config === 'object' && config.buttons ? JSON.parse(JSON.stringify(config.buttons)) : {};
-    if (!newConfig.microphone?.default?.text?.content) {
-      newConfig.microphone ??= {};
-      newConfig.microphone.default ??= {};
-      newConfig.microphone.default.svg ??= {};
-      newConfig.microphone.default.svg.content ??= MICROPHONE_ICON_STRING;
+    if (!newConfig[MICROPHONE]?.[DEFAULT]?.[TEXT]?.content) {
+      newConfig[MICROPHONE] ??= {};
+      newConfig[MICROPHONE][DEFAULT] ??= {};
+      newConfig[MICROPHONE][DEFAULT].svg ??= {};
+      newConfig[MICROPHONE][DEFAULT].svg.content ??= MICROPHONE_ICON_STRING;
     }
-    if (!newConfig.toggle?.default?.text?.content) {
+    if (!newConfig.toggle?.[DEFAULT]?.[TEXT]?.content) {
       newConfig.toggle ??= {};
-      newConfig.toggle.default ??= {};
-      newConfig.toggle.default.svg ??= {};
-      newConfig.toggle.default.svg.content ??= PLAY_ICON_STRING;
+      newConfig.toggle[DEFAULT] ??= {};
+      newConfig.toggle[DEFAULT].svg ??= {};
+      newConfig.toggle[DEFAULT].svg.content ??= PLAY_ICON_STRING;
       newConfig.toggle.active ??= {};
       newConfig.toggle.active.svg ??= {};
       newConfig.toggle.active.svg.content ??= STOP_ICON_STRING;
@@ -235,7 +247,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private createContainer() {
-    const container = document.createElement('div');
+    const container = CREATE_ELEMENT();
     container.id = 'deep-chat-openai-realtime-container';
     container.appendChild(this.createAvatarContainer());
     container.appendChild(this.createButtonsContainer());
@@ -244,25 +256,25 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private createAvatarContainer() {
-    const avatarContainer = document.createElement('div');
+    const avatarContainer = CREATE_ELEMENT();
     avatarContainer.id = 'deep-chat-openai-realtime-avatar-container';
-    Object.assign(avatarContainer.style, this._avatarConfig?.styles?.container);
+    Object.assign(avatarContainer[STYLE], this._avatarConfig?.styles?.container);
     avatarContainer.appendChild(this._avatarEl);
     return avatarContainer;
   }
 
   private static createAvatar(config?: OpenAIRealtime['avatar']) {
-    const avatar = document.createElement('img');
+    const avatar = CREATE_ELEMENT('img') as HTMLImageElement;
     avatar.id = 'deep-chat-openai-realtime-avatar';
-    Object.assign(avatar.style, config?.styles?.image);
+    Object.assign(avatar[STYLE], config?.styles?.[IMAGE]);
     avatar.src = config?.src || avatarUrl;
     return avatar;
   }
 
   private createButtonsContainer() {
-    const buttonsContainer = document.createElement('div');
+    const buttonsContainer = CREATE_ELEMENT();
     buttonsContainer.id = 'deep-chat-openai-realtime-buttons-container';
-    Object.assign(buttonsContainer.style, this._buttonsConfig?.container);
+    Object.assign(buttonsContainer[STYLE], this._buttonsConfig?.container);
     this._microphoneButton = this.createMicophoneButton();
     const microphoneButtonEl = OpenAIRealtimeIO.createButtonContainer(this._microphoneButton.elementRef);
     this._toggleButton = this.createToggleButton();
@@ -274,24 +286,30 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static createButtonContainer(optionChildElement: HTMLElement) {
-    const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('deep-chat-openai-realtime-button-container');
+    const buttonContainer = CREATE_ELEMENT();
+    buttonContainer[CLASS_LIST].add('deep-chat-openai-realtime-button-container');
     buttonContainer.appendChild(optionChildElement);
     return buttonContainer;
   }
 
   private createMicophoneButton() {
-    const micorphoneButton = new OpenAIRealtimeButton(this._buttonsConfig?.microphone as OpenAIRealtimeButtonT);
-    micorphoneButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-microphone');
+    const micorphoneButton = new OpenAIRealtimeButton(this._buttonsConfig?.[MICROPHONE] as OpenAIRealtimeButtonT);
+    micorphoneButton.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-microphone');
     micorphoneButton.elementRef.onclick = () => {
       if (micorphoneButton.isActive) {
         this.toggleMicorphone(true);
-        micorphoneButton.elementRef.classList.replace(OpenAIRealtimeIO.MICROPHONE_ACTIVE, OpenAIRealtimeIO.BUTTON_DEFAULT);
+        micorphoneButton.elementRef[CLASS_LIST].replace(
+          OpenAIRealtimeIO.MICROPHONE_ACTIVE,
+          OpenAIRealtimeIO.BUTTON_DEFAULT
+        );
         micorphoneButton.changeToDefault();
         this._isMuted = false;
       } else {
         this.toggleMicorphone(false);
-        micorphoneButton.elementRef.classList.replace(OpenAIRealtimeIO.BUTTON_DEFAULT, OpenAIRealtimeIO.MICROPHONE_ACTIVE);
+        micorphoneButton.elementRef[CLASS_LIST].replace(
+          OpenAIRealtimeIO.BUTTON_DEFAULT,
+          OpenAIRealtimeIO.MICROPHONE_ACTIVE
+        );
         ButtonAccessibility.removeAriaAttributes(micorphoneButton.elementRef);
         micorphoneButton.changeToActive();
         this._isMuted = true;
@@ -306,7 +324,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private createToggleButton() {
     const toggleButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
-    toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
+    toggleButton.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
     toggleButton.elementRef.onclick = async () => {
       if (toggleButton.isActive) {
         toggleButton.changeToDefault();
@@ -327,7 +345,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
             await this.fetchEphemeralKey(true);
           }
         } catch (error) {
-          console.error('Failed to start conversation:', error);
+          console[ERROR]('Failed to start conversation:', error);
           this.displayError();
           this.hideLoading();
         }
@@ -341,7 +359,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._pc = peerConnection;
 
     // Set up to play remote audio from the model
-    const audioEl = document.createElement('audio');
+    const audioEl = CREATE_ELEMENT(AUDIO) as HTMLAudioElement;
     audioEl.autoplay = true;
     const audioContext = new AudioContext();
 
@@ -362,7 +380,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         source.connect(analyser);
         this.monitorFrequencies(analyser, frequencyData);
       } else {
-        console.error('No streams found in the ontrack event.');
+        console[ERROR]('No streams found in the ontrack event.');
         this.displayError();
       }
     };
@@ -381,7 +399,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         }
       })
       .catch((error) => {
-        console.error('Error accessing microphone:', error);
+        console[ERROR]('Error accessing microphone:', error);
         this.displayError();
       });
 
@@ -412,7 +430,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         }
         // https://platform.openai.com/docs/api-reference/realtime-server-events/error
       } else if (response.type === ERROR) {
-        this.stopOnError(response.error.message);
+        this.stopOnError(response[ERROR].message);
         // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
       } else if (response.type === INVALID_REQUEST_ERROR_PREFIX) {
         this.stopOnError(response.message);
@@ -420,11 +438,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         // console.log(response.delta);
       } else if (response.type === 'response.audio_transcript.done') {
         if (response.transcript) {
-          FireEvents.onMessage(this._deepChat, {role: 'ai', text: response.transcript}, false);
+          FireEvents.onMessage(this._deepChat, {role: AI, [TEXT]: response.transcript}, false);
         }
       } else if (response.type === 'conversation.item.input_audio_transcription.completed') {
         if (response.transcript) {
-          FireEvents.onMessage(this._deepChat, {role: 'user', text: response.transcript}, false);
+          FireEvents.onMessage(this._deepChat, {role: USER, [TEXT]: response.transcript}, false);
         }
       }
     });
@@ -445,14 +463,14 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       });
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       const answer: RTCSessionDescriptionInit = {
-        type: 'answer',
-        sdp: await sdpResponse.text(),
+        [TYPE]: 'answer',
+        sdp: await sdpResponse[TEXT](),
       };
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setRemoteDescription(answer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
     } catch (e) {
-      console.error(e);
+      console[ERROR](e);
       this.displayError();
     }
   }
@@ -473,7 +491,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       // Update the avatar scale
       const minScale = 1;
       const scale = minScale + (normalizedLoudness / 100) * ((this._avatarConfig?.maxScale as number) - minScale);
-      this._avatarEl.style.transform = `scale(${scale})`;
+      this._avatarEl[STYLE].transform = `scale(${scale})`;
 
       requestAnimationFrame(updateFrequencyData);
     };
@@ -483,7 +501,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private stopOnError(error: string) {
     this.stop();
-    console.error(error);
+    console[ERROR](error);
     this.displayError();
   }
 
@@ -505,7 +523,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static changeButtonToUnavailable(button: OpenAIRealtimeButton) {
-    button.elementRef.classList.add(OpenAIRealtimeIO.UNAVAILABLE);
+    button.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.UNAVAILABLE);
     ButtonAccessibility.removeAriaBusy(button.elementRef);
     ButtonAccessibility.addAriaDisabled(button.elementRef);
     button.changeToUnavailable();
@@ -528,62 +546,62 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private static removeButtonUnavailable(button: OpenAIRealtimeButton) {
     ButtonAccessibility.removeAriaDisabled(button.elementRef);
-    button.elementRef.classList.remove(OpenAIRealtimeIO.UNAVAILABLE);
+    button.elementRef[CLASS_LIST].remove(OpenAIRealtimeIO.UNAVAILABLE);
   }
 
   private createError() {
-    const error = document.createElement('div');
+    const error = CREATE_ELEMENT() as HTMLDivElement;
     error.id = 'deep-chat-openai-realtime-error';
-    Object.assign(error.style, this._errorConfig?.style);
+    Object.assign(error[STYLE], this._errorConfig?.[STYLE]);
     this._errorElement = error;
     return error;
   }
 
   private displayFailedToRetrieveEphemeralKey(e: unknown) {
-    console.error('Failed to retrieve ephemeral key');
-    console.error(e);
+    console[ERROR]('Failed to retrieve ephemeral key');
+    console[ERROR](e);
     this.displayError();
   }
 
   private displayError() {
     if (this._errorElement) {
-      this._errorElement.style.display = 'block';
-      this._errorElement.textContent = this._errorConfig?.text || 'Error';
+      this._errorElement[STYLE].display = 'block';
+      this._errorElement.textContent = this._errorConfig?.[TEXT] || 'Error';
       this.changeToUnavailable();
     }
     this.hideLoading();
   }
 
   private createLoading() {
-    const loading = document.createElement('div');
+    const loading = CREATE_ELEMENT() as HTMLDivElement;
     loading.id = 'deep-chat-openai-realtime-loading';
     this._loadingElement = loading;
-    if (this._loadingConfig?.html) this._loadingElement.innerHTML = this._loadingConfig.html;
-    Object.assign(loading.style, this._loadingConfig?.style);
-    loading.style.display = 'none';
+    if (this._loadingConfig?.[HTML]) this._loadingElement.innerHTML = this._loadingConfig[HTML];
+    Object.assign(loading[STYLE], this._loadingConfig?.[STYLE]);
+    loading[STYLE].display = 'none';
     return loading;
   }
 
   private displayLoading() {
     if (this._toggleButton) {
       this._toggleButton.changeToActive();
-      this._toggleButton.elementRef.classList.add(OpenAIRealtimeIO.BUTTON_LOADING);
+      this._toggleButton.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.BUTTON_LOADING);
       ButtonAccessibility.removeAriaDisabled(this._toggleButton.elementRef);
       ButtonAccessibility.addAriaBusy(this._toggleButton.elementRef);
     }
     if ((typeof this._loadingConfig?.display !== 'boolean' || this._loadingConfig.display) && this._loadingElement) {
-      this._loadingElement.style.display = 'block';
-      if (!this._loadingConfig?.html) this._loadingElement.textContent = this._loadingConfig?.text || 'Loading';
+      this._loadingElement[STYLE].display = 'block';
+      if (!this._loadingConfig?.[HTML]) this._loadingElement.textContent = this._loadingConfig?.[TEXT] || 'Loading';
     }
   }
 
   private hideLoading() {
     if (this._toggleButton) {
-      this._toggleButton.elementRef.classList.remove(OpenAIRealtimeIO.BUTTON_LOADING);
+      this._toggleButton.elementRef[CLASS_LIST].remove(OpenAIRealtimeIO.BUTTON_LOADING);
       ButtonAccessibility.removeAriaBusy(this._toggleButton.elementRef);
     }
     if (this._loadingElement) {
-      this._loadingElement.style.display = 'none';
+      this._loadingElement[STYLE].display = 'none';
     }
   }
 
@@ -596,16 +614,16 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }
-    const item = {type: 'function_call_output', call_id, output: JSON.stringify(result)};
+    const item = {[TYPE]: 'function_call_output', call_id, output: JSON.stringify(result)};
     this.sendMessage(item);
   }
 
   // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
   sendMessage(item: object) {
     if (!this._dc) return;
-    const message = JSON.stringify({type: 'conversation.item.create', item});
+    const message = JSON.stringify({[TYPE]: 'conversation.item.create', item});
     this._dc.send(message);
-    const responseCreatePayload = {type: 'response.create'};
+    const responseCreatePayload = {[TYPE]: 'response.create'};
     this._dc.send(JSON.stringify(responseCreatePayload));
   }
 

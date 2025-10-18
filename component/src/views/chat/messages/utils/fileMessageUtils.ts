@@ -1,3 +1,5 @@
+import {ANY, AUDIO, FILE, FILE_BUBBLE_CLASS, FILES, IMAGE} from '../../../../utils/consts/messageConstants';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {MessageFile, MessageFileType} from '../../../../types/messageFile';
 import {MessageContent, MessageStyles} from '../../../../types/messages';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
@@ -5,15 +7,12 @@ import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 
 export class FileMessageUtils {
-  public static readonly DEFAULT_FILE_NAME = 'file';
-  public static readonly FILE_BUBBLE_CLASS = 'file-message';
-
   // prettier-ignore
   public static setElementProps(
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string) {
     if (styles === 'loading') return;
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
-    elements.bubbleElement.classList.add(FileMessageUtils.FILE_BUBBLE_CLASS);
+    elements.bubbleElement[CLASS_LIST].add(FILE_BUBBLE_CLASS);
   }
 
   // prettier-ignore
@@ -27,9 +26,9 @@ export class FileMessageUtils {
   }
 
   private static wrapInLink(element: HTMLElement, url: string, name?: string) {
-    const linkWrapperElement = document.createElement('a');
+    const linkWrapperElement = CREATE_ELEMENT('a') as HTMLAnchorElement;
     linkWrapperElement.href = url;
-    linkWrapperElement.download = name || FileMessageUtils.DEFAULT_FILE_NAME;
+    linkWrapperElement.download = name || FILE;
     linkWrapperElement.target = '_blank';
     linkWrapperElement.appendChild(element);
     return linkWrapperElement;
@@ -37,10 +36,10 @@ export class FileMessageUtils {
 
   private static isNonLinkableDataUrl(type: MessageFileType, url: string) {
     // if not a data url (http url) or image
-    if (!url.startsWith('data') || type === 'image') return false;
+    if (!url.startsWith('data') || type === IMAGE) return false;
     // not linking javascript as it can be a potential security vulnerability
     return (
-      (type === 'any' && url.startsWith('data:text/javascript')) ||
+      (type === ANY && url.startsWith('data:text/javascript')) ||
       (!url.startsWith('data:image') && !url.startsWith('data:application'))
     );
   }
@@ -83,8 +82,8 @@ export class FileMessageUtils {
 
   // after the body has been stringified and parsed - the file reference will disappear, hence this readds it
   public static reAddFileRefToObject(message: {files?: MessageFile[]}, targetMessage: MessageContent) {
-    message.files?.forEach((file, index) => {
-      if (file.ref && targetMessage.files?.[index]) targetMessage.files[index].ref = file.ref;
+    message[FILES]?.forEach((file, index) => {
+      if (file.ref && targetMessage[FILES]?.[index]) targetMessage[FILES][index].ref = file.ref;
     });
   }
 
@@ -98,12 +97,12 @@ export class FileMessageUtils {
   public static isAudioFile(fileData: MessageFile) {
     const audioRegex = /\.(mp3|ogg|wav|aac|webm|4a)$/i;
     const {type, src} = fileData;
-    return type === 'audio' || src?.startsWith('data:audio') || (src && audioRegex.test(src));
+    return type === AUDIO || src?.startsWith('data:audio') || (src && audioRegex.test(src));
   }
 
   public static isImageFile(fileData: MessageFile) {
     const {type, src} = fileData;
-    return type === 'image' || src?.startsWith('data:image') || (src && FileMessageUtils.isImageFileExtension(src));
+    return type === IMAGE || src?.startsWith('data:image') || (src && FileMessageUtils.isImageFileExtension(src));
   }
 
   public static isImageFileExtension(fileName: string) {

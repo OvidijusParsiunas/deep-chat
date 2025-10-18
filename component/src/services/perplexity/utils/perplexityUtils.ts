@@ -2,6 +2,7 @@ import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, PO
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
+import {ERROR} from '../../../utils/consts/messageConstants';
 
 type PerplexityErrorResponse = {
   error?: {
@@ -25,7 +26,7 @@ const handleVerificationResult = (
   onFail: (message: string) => void
 ) => {
   const perplexityResult = result as PerplexityErrorResponse;
-  if (perplexityResult.error) {
+  if (perplexityResult[ERROR]) {
     onFail(INVALID_KEY);
   } else {
     onSuccess(key);

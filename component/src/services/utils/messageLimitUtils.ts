@@ -1,4 +1,5 @@
 import {MessageContentI} from '../../types/messagesInternal';
+import {TEXT} from '../../utils/consts/messageConstants';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContentI[], limit: number) {
@@ -6,11 +7,11 @@ export class MessageLimitUtils {
     let totalCharacters = 0;
     let i = messages.length - 1;
     for (i; i >= 0; i -= 1) {
-      const text = messages[i]?.text;
+      const text = messages[i]?.[TEXT];
       if (text !== undefined) {
         totalCharacters += text.length;
         if (totalCharacters > limit) {
-          messages[i].text = text.substring(0, text.length - (totalCharacters - limit));
+          messages[i][TEXT] = text.substring(0, text.length - (totalCharacters - limit));
           break;
         }
       }

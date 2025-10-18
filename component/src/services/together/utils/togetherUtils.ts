@@ -1,6 +1,7 @@
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {
   CONTENT_TYPE_H_KEY,
   APPLICATION_JSON,
@@ -30,8 +31,8 @@ const handleVerificationResult = (
   onFail: (message: string) => void
 ) => {
   const togetherResult = result as TogetherErrorResponse;
-  if (togetherResult.error) {
-    if (togetherResult.error.message === UNAUTHORIZED) {
+  if (togetherResult[ERROR]) {
+    if (togetherResult[ERROR].message === UNAUTHORIZED) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

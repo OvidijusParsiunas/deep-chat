@@ -1,6 +1,7 @@
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {
   INVALID_REQUEST_ERROR_PREFIX,
   AUTHENTICATION_ERROR_PREFIX,
@@ -31,8 +32,8 @@ const handleVerificationResult = (
   onFail: (message: string) => void
 ) => {
   const xResult = result as XErrorResponse;
-  if (xResult.error) {
-    if (xResult.error.type === AUTHENTICATION_ERROR_PREFIX || xResult.error.type === INVALID_REQUEST_ERROR_PREFIX) {
+  if (xResult[ERROR]) {
+    if (xResult[ERROR].type === AUTHENTICATION_ERROR_PREFIX || xResult[ERROR].type === INVALID_REQUEST_ERROR_PREFIX) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

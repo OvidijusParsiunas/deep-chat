@@ -1,3 +1,5 @@
+import {CREATE_ELEMENT} from '../consts/htmlConstants';
+
 export class GoogleFont {
   private static readonly FONT_URL = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap';
   public static readonly DEFAULT_FONT_FAMILY = `'Inter', sans-serif, Avenir, Helvetica, Arial`;
@@ -9,7 +11,7 @@ export class GoogleFont {
       (link) => link.getAttribute('href') === GoogleFont.FONT_URL
     );
     if (!linkExists) {
-      const link = document.createElement('link');
+      const link = CREATE_ELEMENT('link') as HTMLLinkElement;
       link.rel = 'stylesheet';
       link.href = GoogleFont.FONT_URL;
       head.appendChild(link);

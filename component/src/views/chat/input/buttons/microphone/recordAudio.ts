@@ -1,5 +1,6 @@
 import {AudioFileAttachmentType} from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
 import {MicrophoneFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
+import {AUDIO, ERROR, FILES} from '../../../../../utils/consts/messageConstants';
 import {NewFileName} from '../../fileAttachments/newFileName';
 import {AudioFormat} from '../../../../../types/microphone';
 import {MicrophoneButton} from './microphoneButton';
@@ -16,10 +17,10 @@ export class RecordAudio extends MicrophoneButton {
   constructor(audioType: AudioFileAttachmentType, recordAudioConfig: MicrophoneFilesServiceConfig) {
     super(recordAudioConfig.button);
     this._audioType = audioType;
-    this._extension = recordAudioConfig.files?.format || 'mp3';
-    this._maxDurationSeconds = recordAudioConfig.files?.maxDurationSeconds;
+    this._extension = recordAudioConfig[FILES]?.format || 'mp3';
+    this._maxDurationSeconds = recordAudioConfig[FILES]?.maxDurationSeconds;
     this.elementRef.onclick = this.buttonClick.bind(this);
-    // this._newFilePrefix = recordAudioConfig.files?.newFilePrefix; // can implement in the future
+    // this._newFilePrefix = recordAudioConfig[FILES]?.newFilePrefix; // can implement in the future
   }
 
   private buttonClick() {
@@ -58,7 +59,7 @@ export class RecordAudio extends MicrophoneButton {
         this._mediaRecorder.start();
       })
       .catch((err) => {
-        console.error(err);
+        console[ERROR](err);
         this.stop();
       })
       .finally(() => {
@@ -68,7 +69,7 @@ export class RecordAudio extends MicrophoneButton {
 
   private createFile(event: BlobEvent) {
     const blob = new Blob([event.data], {type: `audio/${this._extension}`});
-    const filename = NewFileName.getFileName(this._newFilePrefix || 'audio', this._extension);
+    const filename = NewFileName.getFileName(this._newFilePrefix || AUDIO, this._extension);
     const file = new File([blob], filename, {type: blob.type});
     const reader = new FileReader();
     reader.readAsDataURL(file);

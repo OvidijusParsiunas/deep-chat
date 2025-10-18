@@ -1,7 +1,8 @@
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
 import {DirectConnection} from '../../types/directConnection';
-import {ERROR, OBJECT} from '../utils/serviceConstants';
+import {ERROR} from '../../utils/consts/messageConstants';
 import {OpenAIAssistant} from '../../types/openAI';
+import {OBJECT} from '../utils/serviceConstants';
 import {AzureOpenAI} from '../../types/azure';
 import {DeepChat} from '../../deepChat';
 import {

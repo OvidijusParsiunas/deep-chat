@@ -1,11 +1,11 @@
 import {PERPLEXITY_BUILD_HEADERS, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS} from './utils/perplexityUtils';
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
 import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -46,7 +46,7 @@ export class PerplexityIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
+        content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as PerplexityMessage;
     });
@@ -60,22 +60,22 @@ export class PerplexityIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: PerplexityResult): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     if (result.choices && result.choices.length > 0) {
       const choice = result.choices[0];
 
       // Handle streaming response
       if (choice.delta && choice.delta.content) {
-        return {[TEXT_KEY]: choice.delta.content};
+        return {[TEXT]: choice.delta.content};
       }
 
       // Handle non-streaming response
       if (choice.message && choice.message.content) {
-        return {[TEXT_KEY]: choice.message.content};
+        return {[TEXT]: choice.message.content};
       }
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 }

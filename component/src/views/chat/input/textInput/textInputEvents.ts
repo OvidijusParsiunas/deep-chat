@@ -1,6 +1,7 @@
 import {ValidationHandler} from '../../../../types/validationHandler';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
+import {FILES} from '../../../../utils/consts/messageConstants';
 import {FocusUtils} from './focusUtils';
 
 export class TextInputEvents {
@@ -19,7 +20,7 @@ export class TextInputEvents {
     inputElement.oninput = TextInputEvents.onInput.bind(this, characterLimit, validationHandler);
     inputElement.addEventListener('paste', (event) => {
       event.preventDefault();
-      if (event.clipboardData?.files.length) fileAts.addFilesToAnyType(Array.from(event.clipboardData.files));
+      if (event.clipboardData?.[FILES].length) fileAts.addFilesToAnyType(Array.from(event.clipboardData[FILES]));
     });
   }
 

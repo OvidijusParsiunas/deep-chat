@@ -1,5 +1,6 @@
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
+import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {BigModelTextToSpeechRequestBody} from '../../types/bigModelInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -37,7 +38,7 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   private preprocessBody(body: BigModelTextToSpeechRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelTextToSpeechRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
-    bodyCopy.input = lastMessage?.text || '';
+    bodyCopy.input = lastMessage?.[TEXT] || '';
     return bodyCopy;
   }
 
@@ -46,8 +47,8 @@ export class BigModelTextToSpeechIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
-    const blob = new Blob([result], {type: 'audio/mpeg'});
+    const blob = new Blob([result], {[TYPE]: 'audio/mpeg'});
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{src: audioUrl, type: 'audio'}]};
+    return {[FILES]: [{[SRC]: audioUrl, [TYPE]: AUDIO}]};
   }
 }

@@ -1,5 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
+import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {TogetherTextToSpeechRequestBody} from '../../types/togetherInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -37,7 +38,7 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   private preprocessBody(body: TogetherTextToSpeechRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherTextToSpeechRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
-    bodyCopy.input = lastMessage?.text || '';
+    bodyCopy.input = lastMessage?.[TEXT] || '';
     return bodyCopy;
   }
 
@@ -46,8 +47,8 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
-    const blob = new Blob([result], {type: 'audio/mpeg'});
+    const blob = new Blob([result], {[TYPE]: 'audio/mpeg'});
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{src: audioUrl, type: 'audio'}]};
+    return {[FILES]: [{[SRC]: audioUrl, [TYPE]: AUDIO}]};
   }
 }

@@ -1,5 +1,8 @@
+import {AI, ERROR, FILES, HTML, TEXT} from '../../../../utils/consts/messageConstants';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
+import {DEFAULT} from '../../../../utils/consts/inputConstants';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
 import {MessageFile} from '../../../../types/messageFile';
 import {MessageElements, Messages} from '../messages';
@@ -49,17 +52,17 @@ export class MessageStream {
 
   public upsertStreamedMessage(response?: Response) {
     if (this._hasStreamEnded) return;
-    if (response?.text === undefined && response?.html === undefined) {
-      return console.error(INVALID_STREAM_EVENT);
+    if (response?.[TEXT] === undefined && response?.[HTML] === undefined) {
+      return console[ERROR](INVALID_STREAM_EVENT);
     }
     if (response?.custom && this._message) this._message.custom = response.custom;
-    const content = response?.text || response?.html || '';
+    const content = response?.[TEXT] || response?.[HTML] || '';
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef);
-    const streamType = response?.text !== undefined ? 'text' : 'html';
+    const streamType = response?.[TEXT] !== undefined ? TEXT : HTML;
     if (!this._elements && !this._message) {
       this.setInitialState(streamType, content, response?.role);
     } else if (this._streamType !== streamType) {
-      return console.error(INVALID_STREAM_EVENT_MIX);
+      return console[ERROR](INVALID_STREAM_EVENT_MIX);
     } else {
       this.updateBasedOnType(content, streamType, response?.overwrite);
     }
@@ -68,17 +71,17 @@ export class MessageStream {
 
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {
     this._streamType = streamType;
-    role ??= MessageUtils.AI_ROLE;
-    const customWrapper = this._messages._customWrappers?.[role] || this._messages._customWrappers?.['default'];
+    role ??= AI;
+    const customWrapper = this._messages._customWrappers?.[role] || this._messages._customWrappers?.[DEFAULT];
     const initContent = customWrapper ? '' : content;
     // does not overwrite previous message for simplicity as otherwise users would need to return first response with
     // {..., overwrite: false} and others as {..., ovewrite: true} which would be too complex on their end
     this._elements =
-      streamType === 'text'
+      streamType === TEXT
         ? this._messages.addNewTextMessage(initContent, role)
         : HTMLMessages.add(this._messages, initContent, role, true);
     if (this._elements) {
-      this._elements.bubbleElement.classList.add(MessageStream.MESSAGE_CLASS);
+      this._elements.bubbleElement[CLASS_LIST].add(MessageStream.MESSAGE_CLASS);
       this._activeMessageRole = role;
       this._message = {role: this._activeMessageRole, [streamType]: initContent};
       this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
@@ -97,20 +100,20 @@ export class MessageStream {
   private updateBasedOnType(content: string, expectedType: string, isOverwrite = false) {
     const bubbleElement = (this._targetWrapper || this._elements?.bubbleElement) as HTMLElement;
     if (!this._partialRender) MessageUtils.unfillEmptyMessageElement(bubbleElement, content);
-    const func = expectedType === 'text' ? this.updateText : this.updateHTML;
+    const func = expectedType === TEXT ? this.updateText : this.updateHTML;
     func.bind(this)(content, bubbleElement, isOverwrite);
   }
 
   private updateText(text: string, bubbleElement: HTMLElement, overwrite: boolean) {
     if (!this._message) return;
-    this._message.text = overwrite ? text : this._message.text + text;
+    this._message[TEXT] = overwrite ? text : this._message[TEXT] + text;
     if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, overwrite)) {
       this.partialRenderNewParagraph(bubbleElement);
     }
     if (this._partialBubble) {
       this.partialRenderBubbleUpdate(text);
     } else {
-      this._messages.renderText(bubbleElement, this._message.text);
+      this._messages.renderText(bubbleElement, this._message[TEXT]);
     }
   }
 
@@ -120,7 +123,7 @@ export class MessageStream {
       return true;
     }
     if (!this._partialBubble) {
-      return this._message?.text && this.shouldCreateNewParagraph(this._message.text);
+      return this._message?.[TEXT] && this.shouldCreateNewParagraph(this._message[TEXT]);
     }
     return this._partialText && this.shouldCreateNewParagraph(this._partialText);
   }
@@ -135,8 +138,8 @@ export class MessageStream {
 
   private partialRenderNewParagraph(bubbleElement: HTMLElement) {
     this._partialText = '';
-    this._partialBubble = document.createElement('div');
-    this._partialBubble.classList.add('partial-render-message');
+    this._partialBubble = CREATE_ELEMENT() as HTMLDivElement;
+    this._partialBubble[CLASS_LIST].add('partial-render-message');
     bubbleElement.appendChild(this._partialBubble);
   }
 
@@ -148,13 +151,13 @@ export class MessageStream {
   private updateHTML(html: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
     if (!this._message) return;
     if (isOverwrite) {
-      this._message.html = html;
+      this._message[HTML] = html;
       bubbleElement.innerHTML = html;
     } else {
-      const wrapper = document.createElement('span');
+      const wrapper = CREATE_ELEMENT('span');
       wrapper.innerHTML = html;
       bubbleElement.appendChild(wrapper);
-      this._message.html = bubbleElement?.innerHTML || '';
+      this._message[HTML] = bubbleElement?.innerHTML || '';
     }
   }
 
@@ -162,13 +165,13 @@ export class MessageStream {
     if (this._endStreamAfterOperation || !this._message) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(NO_VALID_STREAM_EVENTS_SENT);
-    if (!this._elements.bubbleElement?.classList.contains(MessageStream.MESSAGE_CLASS)) return;
-    if (this._streamType === 'text') {
-      if (this._messages.textToSpeech) TextToSpeech.speak(this._message.text || '', this._messages.textToSpeech);
-    } else if (this._streamType === 'html') {
+    if (!this._elements.bubbleElement?.[CLASS_LIST].contains(MessageStream.MESSAGE_CLASS)) return;
+    if (this._streamType === TEXT) {
+      if (this._messages.textToSpeech) TextToSpeech.speak(this._message[TEXT] || '', this._messages.textToSpeech);
+    } else if (this._streamType === HTML) {
       if (this._elements) HTMLUtils.apply(this._messages, this._elements.outerContainer);
     }
-    this._elements.bubbleElement.classList.remove(MessageStream.MESSAGE_CLASS);
+    this._elements.bubbleElement[CLASS_LIST].remove(MessageStream.MESSAGE_CLASS);
     if (this._message) {
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
       this._messages.browserStorage?.addMessages(this._messages.messageToElements.map(([msg]) => msg));
@@ -185,9 +188,9 @@ export class MessageStream {
       messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
     this._endStreamAfterOperation = true;
     const {text, files} = await downloadCb();
-    if (text) this.updateBasedOnType(text, 'text', true);
+    if (text) this.updateBasedOnType(text, TEXT, true);
     this._endStreamAfterOperation = false;
     this.finaliseStreamedMessage();
-    if (files) messages.addNewMessage({files}); // adding later to trigger event later
+    if (files) messages.addNewMessage({[FILES]: files}); // adding later to trigger event later
   }
 }

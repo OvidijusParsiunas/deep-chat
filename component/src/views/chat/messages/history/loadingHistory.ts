@@ -1,4 +1,6 @@
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
+import {AI, HTML} from '../../../../utils/consts/messageConstants';
 import {MessageElementsStyles} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
 import {MessageUtils} from '../utils/messageUtils';
@@ -11,12 +13,12 @@ export class LoadingHistory {
   private static readonly SMALL_CLASS = 'loading-history-message-small';
 
   private static generateLoadingRingElement() {
-    const loadingRingElement = document.createElement('div');
-    loadingRingElement.classList.add('loading-history');
-    loadingRingElement.appendChild(document.createElement('div'));
-    loadingRingElement.appendChild(document.createElement('div'));
-    loadingRingElement.appendChild(document.createElement('div'));
-    loadingRingElement.appendChild(document.createElement('div'));
+    const loadingRingElement = CREATE_ELEMENT();
+    loadingRingElement[CLASS_LIST].add('loading-history');
+    loadingRingElement.appendChild(CREATE_ELEMENT());
+    loadingRingElement.appendChild(CREATE_ELEMENT());
+    loadingRingElement.appendChild(CREATE_ELEMENT());
+    loadingRingElement.appendChild(CREATE_ELEMENT());
     return loadingRingElement;
   }
 
@@ -30,9 +32,9 @@ export class LoadingHistory {
   }
 
   private static addLoadHistoryMessage(messageElements: MessageElements, messages: Messages, isInitial = true) {
-    messageElements.bubbleElement.classList.add(LoadingHistory.CLASS);
+    messageElements.bubbleElement[CLASS_LIST].add(LoadingHistory.CLASS);
     const viewClass = isInitial ? LoadingHistory.FULL_VIEW_CLASS : LoadingHistory.SMALL_CLASS;
-    messageElements.outerContainer.classList.add(viewClass);
+    messageElements.outerContainer[CLASS_LIST].add(viewClass);
     const styles = isInitial
       ? messages.messageStyles?.loading?.history?.full?.styles
       : messages.messageStyles?.loading?.history?.small?.styles;
@@ -41,7 +43,7 @@ export class LoadingHistory {
   }
 
   public static createDefaultElements(messages: Messages) {
-    const messageElements = messages.createMessageElements('', MessageUtils.AI_ROLE);
+    const messageElements = messages.createMessageElements('', AI);
     const {bubbleElement} = messageElements;
     const loadingRingElement = LoadingHistory.generateLoadingRingElement();
     bubbleElement.appendChild(loadingRingElement);
@@ -49,9 +51,9 @@ export class LoadingHistory {
   }
 
   public static addMessage(messages: Messages, isInitial = true) {
-    const html = messages.messageStyles?.loading?.history?.full?.html;
+    const html = messages.messageStyles?.loading?.history?.full?.[HTML];
     const messageElements = html
-      ? HTMLMessages.createElements(messages, html, MessageUtils.AI_ROLE, true, true)
+      ? HTMLMessages.createElements(messages, html, AI, true, true)
       : LoadingHistory.createDefaultElements(messages);
     LoadingHistory.addLoadHistoryMessage(messageElements, messages, isInitial);
     MessageUtils.softRemRoleElements(messageElements.innerContainer, messages.avatar, messages.name);
@@ -59,11 +61,11 @@ export class LoadingHistory {
   }
 
   private static tryChangeViewToSmall(messages: MessagesBase, messageElements?: MessageElements) {
-    if (messageElements?.outerContainer.classList.contains(LoadingHistory.FULL_VIEW_CLASS)) {
-      messageElements.outerContainer.classList.replace(LoadingHistory.FULL_VIEW_CLASS, LoadingHistory.SMALL_CLASS);
+    if (messageElements?.outerContainer[CLASS_LIST].contains(LoadingHistory.FULL_VIEW_CLASS)) {
+      messageElements.outerContainer[CLASS_LIST].replace(LoadingHistory.FULL_VIEW_CLASS, LoadingHistory.SMALL_CLASS);
       const styles = messages.messageStyles?.loading?.history?.small?.styles;
       if (styles) LoadingHistory.apply(messages, messageElements, styles);
-      const html = messages.messageStyles?.loading?.history?.small?.html;
+      const html = messages.messageStyles?.loading?.history?.small?.[HTML];
       if (html) messageElements.bubbleElement.innerHTML = html;
       return true;
     }

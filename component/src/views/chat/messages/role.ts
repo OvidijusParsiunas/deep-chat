@@ -1,3 +1,5 @@
+import {CLASS_LIST, STYLE} from '../../../utils/consts/htmlConstants';
+
 export class Role {
   protected className: string;
 
@@ -10,14 +12,14 @@ export class Role {
   }
 
   public tryHide(innerContainer: HTMLElement) {
-    this.getAvatarContainer(innerContainer).style.visibility ||= 'hidden';
+    this.getAvatarContainer(innerContainer)[STYLE].visibility ||= 'hidden';
   }
 
   public tryReveal(innerContainer: HTMLElement) {
-    this.getAvatarContainer(innerContainer).style.visibility = '';
+    this.getAvatarContainer(innerContainer)[STYLE].visibility = '';
   }
 
   public trySoftRem(innerContainer: HTMLElement) {
-    this.getAvatarContainer(innerContainer).classList.add('role-hidden');
+    this.getAvatarContainer(innerContainer)[CLASS_LIST].add('role-hidden');
   }
 }

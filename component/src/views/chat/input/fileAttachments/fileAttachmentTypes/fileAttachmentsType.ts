@@ -1,7 +1,10 @@
+import {ANY, AUDIO, FILE, IMAGE} from '../../../../../utils/consts/messageConstants';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {AudioFileAttachmentType} from './audioFileAttachmentType';
 import {MessageFileType} from '../../../../../types/messageFile';
+import {CLICK} from '../../../../../utils/consts/inputConstants';
 import {Browser} from '../../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {DeepChat} from '../../../../../deepChat';
@@ -69,40 +72,40 @@ export class FileAttachmentsType {
 
   public static getTypeFromBlob(file: File): MessageFileType {
     const {type} = file;
-    if (type.startsWith('image')) return 'image';
-    if (type.startsWith('audio')) return 'audio';
-    return 'any';
+    if (type.startsWith(IMAGE)) return IMAGE;
+    if (type.startsWith(AUDIO)) return AUDIO;
+    return ANY;
   }
 
   private addAttachmentBasedOnType(file: File, fileReaderResult: string, removable: boolean) {
-    const imageType = FileAttachmentsType.getTypeFromBlob(file);
-    if (imageType === 'image') {
+    const fileType = FileAttachmentsType.getTypeFromBlob(file);
+    if (fileType === IMAGE) {
       const imageAttachment = FileAttachmentsType.createImageAttachment(fileReaderResult);
-      this.addFileAttachment(file, 'image', imageAttachment, removable);
-    } else if (imageType === 'audio') {
+      this.addFileAttachment(file, IMAGE, imageAttachment, removable);
+    } else if (fileType === AUDIO) {
       const audioAttachment = AudioFileAttachmentType.createAudioAttachment(fileReaderResult);
-      this.addFileAttachment(file, 'audio', audioAttachment, removable);
+      this.addFileAttachment(file, AUDIO, audioAttachment, removable);
     } else {
       const anyFileAttachment = FileAttachmentsType.createAnyFileAttachment(file.name);
-      this.addFileAttachment(file, 'any', anyFileAttachment, removable);
+      this.addFileAttachment(file, ANY, anyFileAttachment, removable);
     }
   }
 
   private static createImageAttachment(src: string) {
     const image = new Image();
     image.src = src;
-    image.classList.add('image-attachment');
+    image[CLASS_LIST].add('image-attachment');
     return image;
   }
 
   private static createAnyFileAttachment(fileName: string) {
-    const container = document.createElement('div');
-    container.classList.add('border-bound-attachment');
-    if (Browser.IS_SAFARI) container.classList.add('border-bound-attachment-safari');
-    const text = document.createElement('div');
-    text.classList.add('any-file-attachment-text');
-    const textContainer = document.createElement('div');
-    textContainer.classList.add('file-attachment-text-container');
+    const container = CREATE_ELEMENT();
+    container[CLASS_LIST].add('border-bound-attachment');
+    if (Browser.IS_SAFARI) container[CLASS_LIST].add('border-bound-attachment-safari');
+    const text = CREATE_ELEMENT();
+    text[CLASS_LIST].add('any-file-attachment-text');
+    const textContainer = CREATE_ELEMENT();
+    textContainer[CLASS_LIST].add('file-attachment-text-container');
     textContainer.appendChild(text);
     text.textContent = fileName;
     container.appendChild(textContainer);
@@ -113,7 +116,7 @@ export class FileAttachmentsType {
     const containerElement = FileAttachmentsType.createContainer(attachmentElement);
     if (this._attachments.length >= this._fileCountLimit) {
       const removeButton = this._attachments[this._attachments.length - 1].removeButton;
-      removeButton?.click();
+      removeButton?.[CLICK]();
       const attachments = this._fileAttachmentsContainerRef.children;
       this._fileAttachmentsContainerRef.insertBefore(containerElement, attachments[0]);
     } else {
@@ -132,18 +135,18 @@ export class FileAttachmentsType {
   }
 
   private static createContainer(attachmentElement: HTMLElement) {
-    const containerElement = document.createElement('div');
-    containerElement.classList.add('file-attachment');
+    const containerElement = CREATE_ELEMENT();
+    containerElement[CLASS_LIST].add('file-attachment');
     containerElement.appendChild(attachmentElement);
     return containerElement;
   }
 
   createRemoveAttachmentButton(attachmentObject: AttachmentObject) {
-    const removeButtonElement = document.createElement('div');
-    removeButtonElement.classList.add('remove-file-attachment-button');
+    const removeButtonElement = CREATE_ELEMENT();
+    removeButtonElement[CLASS_LIST].add('remove-file-attachment-button');
     removeButtonElement.onclick = this.removeAttachment.bind(this, attachmentObject);
-    const xIcon = document.createElement('div');
-    xIcon.classList.add('x-icon');
+    const xIcon = CREATE_ELEMENT();
+    xIcon[CLASS_LIST].add('x-icon');
     xIcon.innerText = '×';
     removeButtonElement.appendChild(xIcon);
     return removeButtonElement;
@@ -161,14 +164,14 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map((attachment) => ({file: attachment.file, type: attachment.fileType}));
+    return Array.from(this._attachments).map((attachment) => ({[FILE]: attachment[FILE], type: attachment.fileType}));
   }
 
   hideAttachments() {
     this._hiddenAttachments.clear();
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
     this._attachments.forEach((attachment) => {
-      setTimeout(() => attachment.removeButton?.click());
+      setTimeout(() => attachment.removeButton?.[CLICK]());
       this._hiddenAttachments.add(attachment);
     });
   }
@@ -176,7 +179,7 @@ export class FileAttachmentsType {
   removeAttachments() {
     // the remove is in a timeout as otherwise the this._attachments.splice would cause iteration of the same file
     this._attachments.forEach((attachment) => {
-      setTimeout(() => attachment.removeButton?.click());
+      setTimeout(() => attachment.removeButton?.[CLICK]());
     });
     this._hiddenAttachments.clear();
   }

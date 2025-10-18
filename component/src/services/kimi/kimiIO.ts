@@ -1,10 +1,10 @@
 import {KIMI_BUILD_HEADERS, KIMI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/kimiUtils';
 import {KimiRequestBody, KimiMessage, KimiToolCall} from '../../types/kimiInternal';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -68,7 +68,7 @@ export class KimiIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: KimiResult, prevBody?: Kimi): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     if (result.choices && result.choices.length > 0) {
       const choice = result.choices[0];
@@ -86,11 +86,11 @@ export class KimiIO extends DirectServiceIO {
             prevBody
           );
         }
-        return {[TEXT_KEY]: choice.message.content || ''};
+        return {[TEXT]: choice.message.content || ''};
       }
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async extractStreamResult(choice: KimiResult['choices'][0], prevBody?: Kimi) {

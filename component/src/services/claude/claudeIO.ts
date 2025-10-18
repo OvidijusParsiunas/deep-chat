@@ -3,10 +3,10 @@ import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from 
 import {CLAUDE_BUILD_HEADERS, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/claudeUtils';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
+import {ERROR, IMAGE, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -24,7 +24,7 @@ export class ClaudeIO extends DirectServiceIO {
   permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private _messages?: Messages;
-  private _streamToolCalls: ClaudeToolUse = {type: 'tool_use', id: '', name: '', input: ''};
+  private _streamToolCalls: ClaudeToolUse = {[TYPE]: 'tool_use', id: '', name: '', input: ''};
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
@@ -52,12 +52,12 @@ export class ClaudeIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
     return files.map((file) => {
-      if (file.type === 'image') {
+      if (file.type === IMAGE) {
         const base64Data = file.src?.split(',')[1];
         const mediaType = file.src?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
-        return {type: 'image', source: {type: 'base64', media_type: mediaType, data: base64Data || ''}};
+        return {[TYPE]: IMAGE, source: {[TYPE]: 'base64', media_type: mediaType, data: base64Data || ''}};
       }
-      return {type: 'text', [TEXT_KEY]: `[Unsupported file type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported file type: ${file.type}]`};
     });
   }
 
@@ -86,7 +86,7 @@ export class ClaudeIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: ClaudeResult, prevBody?: ClaudeRequestBody): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     // Handle non-streaming response (final response)
     if (result.content && result.content.length > 0) {
@@ -96,16 +96,16 @@ export class ClaudeIO extends DirectServiceIO {
         return this.handleTools([toolUseContent], prevBody);
       }
 
-      const textContent = result.content.find((item): item is ClaudeTextContent => item.type === 'text');
+      const textContent = result.content.find((item): item is ClaudeTextContent => item.type === TEXT);
       if (textContent) {
-        return {[TEXT_KEY]: textContent.text};
+        return {[TEXT]: textContent[TEXT]};
       }
     }
 
     // Handle streaming events
     if (result.type === 'content_block_delta') {
       if (result.delta && result.delta.type === 'text_delta') {
-        return {[TEXT_KEY]: result.delta.text || ''};
+        return {[TEXT]: result.delta[TEXT] || ''};
       }
     }
 
@@ -121,7 +121,7 @@ export class ClaudeIO extends DirectServiceIO {
     }
 
     // Return empty for other event types (message_start, content_block_start, etc.)
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async handleTools(toolUseBlocks: ClaudeToolUse[], prevBody?: ClaudeRequestBody): Promise<ResponseI> {
@@ -137,7 +137,7 @@ export class ClaudeIO extends DirectServiceIO {
 
     // Add assistant message with tool use
     const assistantContent = toolUseBlocks.map((block) => ({
-      type: 'tool_use',
+      [TYPE]: 'tool_use',
       id: block.id,
       name: block.name,
       input: block.input,
@@ -150,12 +150,12 @@ export class ClaudeIO extends DirectServiceIO {
     // Add tool results
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       const toolResultContent = responses.map((resp, index) => ({
-        type: 'tool_result' as const,
+        [TYPE]: 'tool_result' as const,
         tool_use_id: toolUseBlocks[index].id,
         content: resp.response,
       }));
 
-      bodyCp.messages.push({role: 'user', content: toolResultContent});
+      bodyCp.messages.push({role: USER, content: toolResultContent});
 
       return this.makeAnotherRequest(bodyCp, this._messages);
     }

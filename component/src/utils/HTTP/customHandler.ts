@@ -1,12 +1,11 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {MessagesBase} from '../../views/chat/messages/messagesBase';
 import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
+import {AI, ERROR, SERVICE} from '../consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {RoleToStream, Websocket} from './websocket';
 import {ServiceIO} from '../../services/serviceIO';
-import {SERVICE} from '../consts/messageConstants';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
 import {Stream} from './stream';
@@ -24,15 +23,15 @@ export class CustomHandler {
       isHandlerActive = false; // need to set it here due to asynchronous code below
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
-        console.error(INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        console[ERROR](INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage(SERVICE, 'Error in server message');
         io.completionsHandlers.onFinish();
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find((message) => typeof message[ERROR] === 'string');
         if (errorMessage) {
-          console.error(errorMessage.error);
-          messages.addNewErrorMessage(SERVICE, errorMessage.error);
+          console[ERROR](errorMessage[ERROR]);
+          messages.addNewErrorMessage(SERVICE, errorMessage[ERROR]);
           io.completionsHandlers.onFinish();
         } else if (Stream.isSimulatable(io.stream, result as Response)) {
           Stream.simulate(messages, io.streamHandlers, result as Response);
@@ -56,7 +55,7 @@ export class CustomHandler {
         stream.finaliseStreamedMessage();
       }
     } catch (error) {
-      console.error(error);
+      console[ERROR](error);
       messages.addNewErrorMessage(SERVICE, error as Error);
     }
   }
@@ -84,8 +83,8 @@ export class CustomHandler {
         const errorMessage = INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result);
         CustomHandler.streamError(errorMessage, stream, io, messages);
         isHandlerActive = false;
-      } else if (result.error) {
-        CustomHandler.streamError(result.error, stream, io, messages);
+      } else if (result[ERROR]) {
+        CustomHandler.streamError(result[ERROR], stream, io, messages);
         isHandlerActive = false;
       } else {
         Stream.upsertContent(messages, stream.upsertStreamedMessage.bind(stream), stream, result);
@@ -102,7 +101,7 @@ export class CustomHandler {
   }
 
   private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
-    console.error(errorMessage);
+    console[ERROR](errorMessage);
     stream.finaliseStreamedMessage();
     messages.addNewErrorMessage(SERVICE, errorMessage);
     io.streamHandlers.onClose();
@@ -122,18 +121,18 @@ export class CustomHandler {
     const onResponse = async (response: Response | Response[]) => {
       const result = await RequestUtils.basicResponseProcessing(messages, response, {io, displayError: false});
       if (!result) {
-        console.error(INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
+        console[ERROR](INVALID_RESPONSE(response, 'server', !!io.deepChat.responseInterceptor, result));
         messages.addNewErrorMessage(SERVICE, 'Error in server message');
       } else {
         const messageDataArr = Array.isArray(result) ? result : [result];
-        const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
+        const errorMessage = messageDataArr.find((message) => typeof message[ERROR] === 'string');
         if (errorMessage) {
-          console.error(errorMessage.error);
-          if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, errorMessage.error);
+          console[ERROR](errorMessage[ERROR]);
+          if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, errorMessage[ERROR]);
         } else if (Stream.isSimulation(io.stream)) {
           const message = result as Response; // array not supported for streaming
           const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
-          const stream = (internalConfig.roleToStream as RoleToStream)[message.role || MessageUtils.AI_ROLE];
+          const stream = (internalConfig.roleToStream as RoleToStream)[message.role || AI];
           Stream.upsertContent(messages, upsertFunc, stream, message);
         } else {
           messageDataArr.forEach((message) => messages.addNewMessage(message));

@@ -1,4 +1,5 @@
 import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
+import {AUDIO, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -38,7 +39,7 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
   private preprocessBody(body: GroqTextToSpeechRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as GroqTextToSpeechRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
-    bodyCopy.input = lastMessage?.text || '';
+    bodyCopy.input = lastMessage?.[TEXT] || '';
     return bodyCopy;
   }
 
@@ -48,8 +49,8 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
 
   override async extractResultData(result: ArrayBuffer): Promise<ResponseI> {
     const format = this.rawBody.response_format || 'mp3';
-    const blob = new Blob([result], {type: `audio/${format}`});
+    const blob = new Blob([result], {[TYPE]: `audio/${format}`});
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{src: audioUrl, type: 'audio'}]};
+    return {files: [{[SRC]: audioUrl, [TYPE]: AUDIO}]};
   }
 }

@@ -2,6 +2,7 @@ import {FileAttachmentTypeFactory} from './fileAttachmentTypes/fileAttachmentTyp
 import {FileAttachments as FileAttachmentsT} from '../../../../types/fileAttachments';
 import {AudioFileAttachmentType} from './fileAttachmentTypes/audioFileAttachmentType';
 import {FileAttachmentsType} from './fileAttachmentTypes/fileAttachmentsType';
+import {CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {ServiceFileTypes, ServiceIO} from '../../../../services/serviceIO';
 import {CustomStyle} from '../../../../types/styles';
 import {DeepChat} from '../../../../deepChat';
@@ -21,7 +22,7 @@ export class FileAttachments implements HiddenFileAttachments {
     const displayOnStartup = typeof demo === 'object' && !!demo.displayFileAttachmentContainer;
     this.toggleContainerDisplay(displayOnStartup);
     inputElementRef.appendChild(this.elementRef);
-    if (attachmentContainerStyle) Object.assign(this.elementRef.style, attachmentContainerStyle);
+    if (attachmentContainerStyle) Object.assign(this.elementRef[STYLE], attachmentContainerStyle);
   }
 
   // prettier-ignore
@@ -33,16 +34,16 @@ export class FileAttachments implements HiddenFileAttachments {
   }
 
   private createAttachmentContainer() {
-    const attachmentContainerElement = document.createElement('div');
+    const attachmentContainerElement = CREATE_ELEMENT();
     attachmentContainerElement.id = 'file-attachment-container';
     return attachmentContainerElement;
   }
 
   private toggleContainerDisplay(display: boolean) {
     if (display) {
-      this.elementRef.style.display = 'block';
+      this.elementRef[STYLE].display = 'block';
     } else if (this.elementRef.children.length === 0) {
-      this.elementRef.style.display = 'none';
+      this.elementRef[STYLE].display = 'none';
     }
   }
 

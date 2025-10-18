@@ -1,4 +1,7 @@
+import {CREATE_ELEMENT} from '../utils/consts/htmlConstants';
 import {WebModelIntro} from '../types/webModel/webModel';
+import {FILES} from '../utils/consts/messageConstants';
+import {CLICK} from '../utils/consts/inputConstants';
 import {WebModel} from './webModel';
 
 export class WebModelIntroMessage {
@@ -29,10 +32,10 @@ export class WebModelIntroMessage {
       if (downloadButton) downloadButton.onclick = () => init();
       if (fileInput) {
         fileInput.onchange = () => {
-          if (fileInput.files && fileInput.files.length > 0) init(fileInput.files);
+          if (fileInput[FILES] && fileInput[FILES].length > 0) init(fileInput[FILES]);
         };
       }
-      if (uploadButton) uploadButton.onclick = () => fileInput.click();
+      if (uploadButton) uploadButton.onclick = () => fileInput[CLICK]();
       if (downloadButton || uploadButton) WebModelIntroMessage.enableButtons(downloadButton, uploadButton);
     });
     return (
@@ -48,7 +51,7 @@ export class WebModelIntroMessage {
   }
 
   private static exportFile(files: File[]) {
-    const a = document.createElement('a');
+    const a = CREATE_ELEMENT('a') as HTMLAnchorElement;
     const chunkSize = 4;
     // Generating a zip file crashes browser hence exporting in increments
     for (let i = 0; i < files.length / chunkSize; i += 1) {
@@ -59,7 +62,7 @@ export class WebModelIntroMessage {
           a.href = url;
           a.download = files[y].name;
           document.body.appendChild(a);
-          a.click();
+          a[CLICK]();
           URL.revokeObjectURL(url);
         }
       }, 500 * i);

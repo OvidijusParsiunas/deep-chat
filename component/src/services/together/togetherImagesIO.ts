@@ -1,5 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
+import {FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {TogetherImagesRequestBody} from '../../types/togetherInternal';
 import {TogetherImagesResult} from '../../types/togetherResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -23,7 +24,7 @@ export class TogetherImagesIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
-    const config = directConnectionCopy.together?.images as TogetherImages & APIKey;
+    const config = directConnectionCopy.together?.[IMAGES] as TogetherImages & APIKey;
     if (typeof config === OBJECT) {
       this.cleanConfig(config);
       Object.assign(this.rawBody, config);
@@ -38,7 +39,7 @@ export class TogetherImagesIO extends DirectServiceIO {
   private preprocessBody(body: TogetherImagesRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherImagesRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
-    bodyCopy.prompt = lastMessage?.text || '';
+    bodyCopy.prompt = lastMessage?.[TEXT] || '';
     return bodyCopy;
   }
 
@@ -49,13 +50,13 @@ export class TogetherImagesIO extends DirectServiceIO {
   override async extractResultData(result: TogetherImagesResult): Promise<ResponseI> {
     const files = result.data.map((imageData) => {
       if (imageData?.url) {
-        return {src: imageData.url, type: 'image'};
+        return {[SRC]: imageData.url, [TYPE]: IMAGE};
       }
       if (imageData?.b64_json) {
-        return {src: `data:image/png;base64,${imageData.b64_json}`, type: 'image'};
+        return {[SRC]: `data:image/png;base64,${imageData.b64_json}`, [TYPE]: IMAGE};
       }
-      return {src: '', type: 'image'};
+      return {[SRC]: '', [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

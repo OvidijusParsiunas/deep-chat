@@ -1,9 +1,9 @@
 import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
+import {AUDIO, ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIAudioResult} from '../../types/openAIResult';
@@ -27,7 +27,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey, {audio: {}});
-    const config = directConnectionCopy?.openAI?.audio as NonNullable<OpenAI['speechToText']>;
+    const config = directConnectionCopy?.openAI?.[AUDIO] as NonNullable<OpenAI['speechToText']>;
     if (typeof config === 'object') {
       this.processConfig(config);
       OpenAISpeechToTextIO.cleanConfig(config);
@@ -64,7 +64,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenAISpeechToText, messages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const lastMessage = messages[messages.length - 1]?.text?.trim();
+    const lastMessage = messages[messages.length - 1]?.[TEXT]?.trim();
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }
@@ -82,7 +82,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: OpenAIAudioResult): Promise<Response> {
-    if (result.error) throw result.error.message;
-    return {[TEXT_KEY]: result.text};
+    if (result[ERROR]) throw result[ERROR].message;
+    return {[TEXT]: result[TEXT]};
   }
 }

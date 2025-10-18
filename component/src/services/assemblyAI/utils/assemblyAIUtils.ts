@@ -2,6 +2,7 @@ import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/error
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {
   CONTENT_TYPE_H_KEY,
   CONTENT_TYPE_L_KEY,
@@ -9,7 +10,6 @@ import {
   AUTHORIZATION_H,
   AUTHORIZATION_L,
   COMPLETED,
-  ERROR,
   POST,
 } from '../../utils/serviceConstants';
 
@@ -46,7 +46,7 @@ export const ASSEMBLY_AI_POLL = async (api_token: string, audio_url: string) => 
     }
     // If the transcription has failed, throw an error with the error message
     else if (transcriptionResult.status === ERROR) {
-      throw new Error(`Transcription failed: ${transcriptionResult.error}`);
+      throw new Error(`Transcription failed: ${transcriptionResult[ERROR]}`);
     }
     // If the transcription is still in progress, wait for a few seconds before polling again
     else {
@@ -67,8 +67,8 @@ export const ASSEMBLY_AI_BUILD_HEADERS = (key: string) => {
 const handleVerificationResult = (result: object, key: string,
       onSuccess: (key: string) => void, onFail: (message: string) => void) => {
     const openAIResult = result as OpenAIConverseResult;
-    if (openAIResult.error) {
-      if (openAIResult.error.code === 'invalid_api_key') {
+    if (openAIResult[ERROR]) {
+      if (openAIResult[ERROR].code === 'invalid_api_key') {
         onFail(INVALID_KEY);
       } else {
         onFail(CONNECTION_FAILED);

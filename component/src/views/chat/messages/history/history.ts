@@ -1,7 +1,8 @@
+import {ERROR, SERVICE} from '../../../../utils/consts/messageConstants';
+import {CLASS_LIST, STYLE} from '../../../../utils/consts/htmlConstants';
 import {HistoryMessage, LoadHistory} from '../../../../types/history';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
-import {SERVICE} from '../../../../utils/consts/messageConstants';
 import {MessageContent} from '../../../../types/messages';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {Legacy} from '../../../../utils/legacy/legacy';
@@ -38,7 +39,7 @@ export class History {
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
     const {messageElementRefs, messageToElements, elementRef} = this._messages;
     const preLoadFirstMessageEl = messageElementRefs.find(
-      (messageElRefs) => !messageElRefs.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)
+      (messageElRefs) => !messageElRefs.outerContainer[CLASS_LIST].contains(MessagesBase.INTRO_CLASS)
     )?.outerContainer;
     const currentScrollTop = elementRef.scrollTop;
     historyMessages
@@ -79,7 +80,7 @@ export class History {
           this._messages.removeMessage(loadingElements);
           this._isPaginationComplete = true;
           this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
-          console.error(e);
+          console[ERROR](e);
         }
       }
     };
@@ -108,7 +109,7 @@ export class History {
       this._messages.removeMessage(loadingElements);
       this._isPaginationComplete = true;
       this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
-      console.error(e);
+      console[ERROR](e);
     }
     History.displayIntroMessages(this._messages.messageElementRefs);
     this._isLoading = false;
@@ -133,8 +134,8 @@ export class History {
   private static displayIntroMessages(messageElementRefs: MessageElements[]) {
     for (let i = 0; i < messageElementRefs.length; i += 1) {
       const messageEls = messageElementRefs[0];
-      if (messageEls.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)) {
-        messageEls.outerContainer.style.display = '';
+      if (messageEls.outerContainer[CLASS_LIST].contains(MessagesBase.INTRO_CLASS)) {
+        messageEls.outerContainer[STYLE].display = '';
       } else {
         break;
       }

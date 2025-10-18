@@ -1,27 +1,29 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles} from '../../../../types/messages';
+import {DEFAULT} from '../../../../utils/consts/inputConstants';
+import {USER} from '../../../../utils/consts/messageConstants';
 import {OverrideTypes} from '../../../../types/utilityTypes';
+import {STYLE} from '../../../../utils/consts/htmlConstants';
 import {GenericObject} from '../../../../types/object';
 import {CustomStyle} from '../../../../types/styles';
 import {MessageElements} from '../messages';
-import {MessageUtils} from './messageUtils';
 
 export class MessageStyleUtils {
   public static applyCustomStylesToElements(elements: MessageElements, isMedia: boolean, styles?: MessageElementsStyles) {
     if (!styles) return;
-    Object.assign(elements.outerContainer.style, styles.outerContainer);
-    Object.assign(elements.innerContainer.style, styles.innerContainer);
-    Object.assign(elements.bubbleElement.style, styles.bubble);
+    Object.assign(elements.outerContainer[STYLE], styles.outerContainer);
+    Object.assign(elements.innerContainer[STYLE], styles.innerContainer);
+    Object.assign(elements.bubbleElement[STYLE], styles.bubble);
     if (isMedia) {
       const bubbleContent = elements.bubbleElement.children[0] as HTMLElement;
       const mediaElement = bubbleContent.tagName.toLocaleLowerCase() !== 'a' ? bubbleContent : bubbleContent.children[0];
-      Object.assign((mediaElement as HTMLElement).style, styles.media);
+      Object.assign((mediaElement as HTMLElement)[STYLE], styles.media);
     }
   }
 
   private static applySideStyles(elements: MessageElements, role: string, media: boolean, styles?: MessageRoleStyles) {
     if (!styles) return;
     MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.shared);
-    if (role === MessageUtils.USER_ROLE) {
+    if (role === USER) {
       MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.user);
     } else {
       MessageStyleUtils.applyCustomStylesToElements(elements, media, styles.ai);
@@ -41,17 +43,17 @@ export class MessageStyleUtils {
   // prettier-ignore
   public static applyCustomStyles(messageStyles: MessageStyles,
       elements: MessageElements, role: string, media: boolean, otherStyles?: MessageRoleStyles | MessageElementsStyles) {
-    if (otherStyles && messageStyles.default !== otherStyles) {
+    if (otherStyles && messageStyles[DEFAULT] !== otherStyles) {
       if (MessageStyleUtils.isElementsStyles(otherStyles)) {
-        MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles.default?.shared);
+        MessageStyleUtils.applyCustomStylesToElements(elements, media, messageStyles[DEFAULT]?.shared);
         MessageStyleUtils.applyCustomStylesToElements(elements, media, otherStyles);
       } else {
-        MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
+        MessageStyleUtils.applySideStyles(elements, role, media, messageStyles[DEFAULT]);
         MessageStyleUtils.applySideStyles(elements, role, media, otherStyles);
       }
     } else {
       // just apply the default for all sides
-      MessageStyleUtils.applySideStyles(elements, role, media, messageStyles.default);
+      MessageStyleUtils.applySideStyles(elements, role, media, messageStyles[DEFAULT]);
     }
   }
 

@@ -1,5 +1,7 @@
 import {CustomStyle, StatefulStyles} from '../../types/styles';
+import {CLICK, DEFAULT, HOVER} from '../consts/inputConstants';
 import {GenericObject} from '../../types/object';
+import {STYLE} from '../consts/htmlConstants';
 
 export class StyleUtils {
   public static unsetStyle(element: HTMLElement, style: CustomStyle) {
@@ -7,43 +9,43 @@ export class StyleUtils {
       obj[styleName] = '';
       return obj;
     }, {});
-    Object.assign(element.style, unsetStyles);
+    Object.assign(element[STYLE], unsetStyles);
   }
 
   public static unsetActivityCSSMouseStates(element: HTMLElement, statefulStyle: StatefulStyles) {
-    if (statefulStyle.click) StyleUtils.unsetStyle(element, statefulStyle.click);
-    if (statefulStyle.hover) StyleUtils.unsetStyle(element, statefulStyle.hover);
+    if (statefulStyle[CLICK]) StyleUtils.unsetStyle(element, statefulStyle[CLICK]);
+    if (statefulStyle[HOVER]) StyleUtils.unsetStyle(element, statefulStyle[HOVER]);
   }
 
   public static unsetAllCSSMouseStates(element: HTMLElement, statefulStyle: StatefulStyles) {
     StyleUtils.unsetActivityCSSMouseStates(element, statefulStyle);
-    if (statefulStyle.default) StyleUtils.unsetStyle(element, statefulStyle.default);
+    if (statefulStyle[DEFAULT]) StyleUtils.unsetStyle(element, statefulStyle[DEFAULT]);
   }
 
   // if you want to asdd default styling - use pure css classes
   public static processStateful(styles: StatefulStyles): StatefulStyles {
-    const defaultStyle = styles.default || {};
-    const hoverStyle = Object.assign(JSON.parse(JSON.stringify(defaultStyle)), styles?.hover);
-    const clickStyle = Object.assign(JSON.parse(JSON.stringify(hoverStyle)), styles?.click);
-    return {default: defaultStyle, hover: hoverStyle, click: clickStyle};
+    const defaultStyle = styles[DEFAULT] || {};
+    const hoverStyle = Object.assign(JSON.parse(JSON.stringify(defaultStyle)), styles?.[HOVER]);
+    const clickStyle = Object.assign(JSON.parse(JSON.stringify(hoverStyle)), styles?.[CLICK]);
+    return {[DEFAULT]: defaultStyle, [HOVER]: hoverStyle, [CLICK]: clickStyle};
   }
 
   public static mergeStatefulStyles(stylesArr: StatefulStyles[]): StatefulStyles {
-    const statefulStyles = {default: {}, hover: {}, click: {}};
+    const statefulStyles = {[DEFAULT]: {}, [HOVER]: {}, [CLICK]: {}};
     stylesArr.forEach((styles) => {
-      statefulStyles.default = Object.assign(statefulStyles.default, styles.default);
-      statefulStyles.hover = Object.assign(statefulStyles.hover, styles.hover);
-      statefulStyles.click = Object.assign(statefulStyles.click, styles.click);
+      statefulStyles[DEFAULT] = Object.assign(statefulStyles[DEFAULT], styles[DEFAULT]);
+      statefulStyles[HOVER] = Object.assign(statefulStyles[HOVER], styles[HOVER]);
+      statefulStyles[CLICK] = Object.assign(statefulStyles[CLICK], styles[CLICK]);
     });
     return statefulStyles;
   }
 
   public static overwriteDefaultWithAlreadyApplied(styles: StatefulStyles, element: HTMLElement) {
-    Object.keys(styles.default || []).forEach((key) => {
+    Object.keys(styles[DEFAULT] || []).forEach((key) => {
       const styleKey = key as keyof CSSStyleDeclaration;
-      if (element.style[styleKey]) {
-        if (styles.default?.[styleKey]) {
-          (styles.default as GenericObject)[key] = element.style[styleKey] as string;
+      if (element[STYLE][styleKey]) {
+        if (styles[DEFAULT]?.[styleKey]) {
+          (styles[DEFAULT] as GenericObject)[key] = element[STYLE][styleKey] as string;
         }
       }
     });

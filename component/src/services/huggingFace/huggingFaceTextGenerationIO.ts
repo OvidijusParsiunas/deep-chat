@@ -1,5 +1,5 @@
 import {HuggingFaceTextGenerationResult} from '../../types/huggingFaceResult';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
@@ -13,7 +13,7 @@ export class HuggingFaceTextGenerationIO extends HuggingFaceIO {
   }
 
   override async extractResultData(result: HuggingFaceTextGenerationResult): Promise<Response> {
-    if (result.error) throw result.error;
-    return {[TEXT_KEY]: result[0]?.generated_text || ''};
+    if (result[ERROR]) throw result[ERROR];
+    return {[TEXT]: result[0]?.generated_text || ''};
   }
 }

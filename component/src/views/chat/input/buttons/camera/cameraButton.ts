@@ -1,6 +1,8 @@
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
+import {FILES, TEXT} from '../../../../../utils/consts/messageConstants';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
@@ -14,13 +16,13 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     const buttonPosition = fileService?.button?.position;
-    const dropupText = fileService?.button?.styles?.text?.content || 'Photo';
+    const dropupText = fileService?.button?.styles?.[TEXT]?.content || 'Photo';
     const tooltip = TooltipUtils.tryCreateConfig('Camera', fileService?.button?.tooltip);
     const styles = (fileService?.button?.styles as Styles) || {};
     super(CameraButton.createButtonElement(), CAMERA_ICON_STRING, buttonPosition, tooltip, styles, dropupText);
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     if (fileService) {
-      this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService.files);
+      this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService[FILES]);
     }
     this.changeElementsByState(innerElements.styles);
     this.reapplyStateStyle('styles');
@@ -33,8 +35,8 @@ export class CameraButton extends InputButton<Styles> {
   }
 
   private static createButtonElement() {
-    const buttonElement = document.createElement('div');
-    buttonElement.classList.add('input-button');
+    const buttonElement = CREATE_ELEMENT();
+    buttonElement[CLASS_LIST].add('input-button');
     return buttonElement;
   }
 

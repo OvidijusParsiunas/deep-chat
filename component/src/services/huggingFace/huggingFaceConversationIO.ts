@@ -1,7 +1,7 @@
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
+import {AI, ERROR, TEXT, USER} from '../../utils/consts/messageConstants';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -17,14 +17,16 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
 
   // prettier-ignore
   private processMessages(messages: MessageContentI[]) {
-    const textMessages = messages.filter((message) => message.text);
-    const mostRecentMessageText = textMessages[textMessages.length - 1].text;
+    const textMessages = messages.filter((message) => message[TEXT]);
+    const mostRecentMessageText = textMessages[textMessages.length - 1][TEXT];
     const previousMessages = textMessages.slice(0, textMessages.length - 1);
     if (!mostRecentMessageText) return;
-    const past_user_inputs = previousMessages.filter((message) => message.role === 'user').map((message) => message.text);
+    const past_user_inputs = previousMessages
+      .filter((message) => message.role === USER)
+      .map((message) => message[TEXT]);
     const generated_responses = previousMessages
-      .filter((message) => message.role === 'ai')
-      .map((message) => message.text);
+      .filter((message) => message.role === AI)
+      .map((message) => message[TEXT]);
     return {past_user_inputs, generated_responses, mostRecentMessageText};
   }
 
@@ -41,14 +43,14 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
       inputs: {
         past_user_inputs: processedMessagesDetails.past_user_inputs,
         generated_responses: processedMessagesDetails.generated_responses,
-        [TEXT_KEY]: processedMessagesDetails.mostRecentMessageText,
+        [TEXT]: processedMessagesDetails.mostRecentMessageText,
       },
       ...bodyCopy,
     } as unknown as {inputs: string};
   }
 
   override async extractResultData(result: HuggingFaceConversationResult): Promise<Response> {
-    if (result.error) throw result.error;
-    return {[TEXT_KEY]: result.generated_text || ''};
+    if (result[ERROR]) throw result[ERROR];
+    return {[TEXT]: result.generated_text || ''};
   }
 }

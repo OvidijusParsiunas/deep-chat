@@ -1,5 +1,5 @@
 import {HuggingFaceClassificationResult} from '../../types/huggingFaceResult';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
 import {PollResult} from '../serviceIO';
@@ -16,7 +16,7 @@ export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {
     if (result.estimated_time) return {timeoutMS: (result.estimated_time + 1) * 1000};
-    if (result.error) throw result.error;
-    return {[TEXT_KEY]: result[0]?.label || ''};
+    if (result[ERROR]) throw result[ERROR];
+    return {[TEXT]: result[0]?.label || ''};
   }
 }

@@ -1,11 +1,10 @@
 import {GEMINI_BUILD_HEADERS, GEMINI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/geminiUtils';
+import {ERROR, FILES, SRC, TEXT, USER} from '../../utils/consts/messageConstants';
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -25,8 +24,6 @@ import {
 
 // https://ai.google.dev/api/generate-content#method:-models.generatecontent
 // https://ai.google.dev/gemini-api/docs/text-generation
-// WORK - add a panel stating that you can upload images and ask the model to generate
-// images (gemini-2.5-flash-image-preview)
 // https://ai.google.dev/gemini-api/docs/models
 export class GeminiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Gemini');
@@ -65,12 +62,12 @@ export class GeminiIO extends DirectServiceIO {
   private static getContent(message: MessageContentI): GeminiContent {
     const parts: GeminiContent['parts'] = [];
 
-    if (message.text && message.text.trim().length > 0) {
-      parts.push({[TEXT_KEY]: message.text});
+    if (message[TEXT] && message[TEXT].trim().length > 0) {
+      parts.push({[TEXT]: message[TEXT]});
     }
 
-    if (message.files && message.files.length > 0) {
-      message.files.forEach((file) => {
+    if (message[FILES] && message[FILES].length > 0) {
+      message[FILES].forEach((file) => {
         if (file.src && file.src.includes('data:')) {
           const [mimeType, data] = file.src.split(',');
           parts.push({
@@ -85,7 +82,7 @@ export class GeminiIO extends DirectServiceIO {
 
     return {
       parts,
-      role: message.role === MessageUtils.USER_ROLE ? 'user' : 'model',
+      role: message.role === USER ? USER : 'model',
     };
   }
 
@@ -100,7 +97,7 @@ export class GeminiIO extends DirectServiceIO {
 
     if (this._systemPrompt) {
       bodyCopy.systemInstruction = {
-        parts: [{[TEXT_KEY]: this._systemPrompt}]
+        parts: [{[TEXT]: this._systemPrompt}]
       };
     }
 
@@ -126,7 +123,7 @@ export class GeminiIO extends DirectServiceIO {
 
   // https://ai.google.dev/gemini-api/docs/function-calling?example=weather
   override async extractResultData(result: GeminiGenerateContentResult, prevBody?: Gemini): Promise<Response> {
-    if (result.error) throw result.error.message || 'Gemini API Error';
+    if (result[ERROR]) throw result[ERROR].message || 'Gemini API Error';
     if (result.candidates?.[0]?.content?.parts) {
       const parts = result.candidates[0].content.parts;
 
@@ -135,15 +132,15 @@ export class GeminiIO extends DirectServiceIO {
         return this.handleTools([functionCall.functionCall], prevBody);
       }
 
-      const textPart = parts.find((part) => part.text);
+      const textPart = parts.find((part) => part[TEXT]);
       const imagePart = parts.find((part) => part.inlineData?.mimeType === 'image/png');
 
       return {
-        [TEXT_KEY]: textPart?.text || '',
-        files: imagePart?.inlineData?.data ? [{src: `data:image/png;base64,${imagePart.inlineData.data}`}] : [],
+        [TEXT]: textPart?.[TEXT] || '',
+        [FILES]: imagePart?.inlineData?.data ? [{[SRC]: `data:image/png;base64,${imagePart.inlineData.data}`}] : [],
       };
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async handleTools(functionCalls: {name: string; args: object}[], prevBody?: Gemini): Promise<Response> {
@@ -179,7 +176,7 @@ export class GeminiIO extends DirectServiceIO {
             },
           },
         })),
-        role: 'user',
+        role: USER,
       };
 
       bodyCp.contents.push(functionResponseContent);

@@ -1,11 +1,10 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {AI, ERROR, HTML, SERVICE, TEXT} from '../consts/messageConstants';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {OBJECT} from '../../services/utils/serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
-import {SERVICE} from '../consts/messageConstants';
 import {StreamConfig} from '../../types/stream';
 import {Response} from '../../types/response';
 import {RequestUtils} from './requestUtils';
@@ -44,11 +43,11 @@ export class Websocket {
         io.deepChat._validationHandler?.();
       };
       io.websocket.onerror = (event) => {
-        console.error(event);
+        console[ERROR](event);
         Websocket.retryConnection(io, messages);
       };
     } catch (error) {
-      console.error(error);
+      console[ERROR](error);
       Websocket.retryConnection(io, messages);
     }
   }
@@ -75,12 +74,12 @@ export class Websocket {
         }
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
-          const stream = roleToStream[result.role || MessageUtils.AI_ROLE];
+          const stream = roleToStream[result.role || AI];
           Stream.upsertContent(messages, upsertFunc, stream, finalResult);
         } else {
           const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
-          const errorMessage = messageDataArr.find((message) => typeof message.error === 'string');
-          if (errorMessage) throw errorMessage.error;
+          const errorMessage = messageDataArr.find((message) => typeof message[ERROR] === 'string');
+          if (errorMessage) throw errorMessage[ERROR];
           messageDataArr.forEach((data) => messages.addNewMessage(data));
         }
       } catch (error) {
@@ -88,7 +87,7 @@ export class Websocket {
       }
     };
     ws.onclose = () => {
-      console.error('Connection closed');
+      console[ERROR]('Connection closed');
       // this is used to prevent two error messages displayed when websocket throws error and close events at the same time
       if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, 'Connection error');
       if (io.stream) io.streamHandlers.onAbort?.();
@@ -106,7 +105,7 @@ export class Websocket {
     if (!Websocket.isWebSocket(ws)) return ws.newUserMessage.listener(interceptedBody);
     const processedBody = stringifyBody ? JSON.stringify(interceptedBody) : interceptedBody;
     if (ws.readyState === undefined || ws.readyState !== ws.OPEN) {
-      console.error('Connection is not open');
+      console[ERROR]('Connection is not open');
       if (!messages.isLastMessageError()) messages.addNewErrorMessage(SERVICE, 'Connection error');
     } else {
       ws.send(JSON.stringify(processedBody));
@@ -132,9 +131,9 @@ export class Websocket {
     if (!result) return;
     const simulation = (io.stream as StreamConfig).simulation;
     if (typeof simulation === 'string') {
-      const role = result.role || MessageUtils.AI_ROLE;
+      const role = result.role || AI;
       const stream = roleToStream[role];
-      if (result.text === simulation || result.html === simulation) {
+      if (result[TEXT] === simulation || result[HTML] === simulation) {
         stream?.finaliseStreamedMessage();
         delete roleToStream[role];
       } else {

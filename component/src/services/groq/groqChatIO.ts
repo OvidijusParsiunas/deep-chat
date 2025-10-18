@@ -1,11 +1,11 @@
 import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
+import {AI, ASSISTANT, ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {GroqResult, GroqToolCall, GroqChoice} from '../../types/groqResult';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -55,7 +55,7 @@ export class GroqChatIO extends DirectServiceIO {
     ).map((message) => {
       return {
         content: GroqChatIO.getTextWImagesContent(message),
-        role: message.role === 'ai' ? 'assistant' : (message.role as 'user'),
+        role: message.role === AI ? ASSISTANT : (message.role as 'user'),
       };
     });
     if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
@@ -69,7 +69,7 @@ export class GroqChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: GroqResult, prevBody?: GroqRequestBody): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     if (result.choices?.[0]?.delta) {
       return this.extractStreamResult(result.choices[0], prevBody);
     }
@@ -80,9 +80,9 @@ export class GroqChatIO extends DirectServiceIO {
           message: this._systemMessage,
         });
       }
-      return {[TEXT_KEY]: result.choices[0].message.content || ''};
+      return {[TEXT]: result.choices[0].message.content || ''};
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   // https://console.groq.com/docs/tool-use

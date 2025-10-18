@@ -2,6 +2,7 @@ import {AzureKeyRetrievalResult, AzureSummarizationResult} from '../../../types/
 import {APPLICATION_JSON, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {GenericObject} from '../../../types/object';
 
 const AZURE_SUBSCRIPTION_KEY_NAME = 'Ocp-Apim-Subscription-Key';
@@ -32,7 +33,7 @@ const AZURE_HANDLE_SPEECH_VERIFICATION_RESULT = (
   onFail: (message: string) => void
 ) => {
   const azureResult = result as AzureKeyRetrievalResult;
-  if (azureResult.error) {
+  if (azureResult[ERROR]) {
     onFail(INVALID_KEY);
   } else {
     onSuccess(key);
@@ -65,7 +66,7 @@ const AZURE_HANDLE_LANGUAGE_VERIFICATION_RESULT = (
 ) => {
   const azureResult = result as AzureSummarizationResult;
   // if the token is valid - it will throw a different error than a 401
-  if (azureResult.error?.code === '401') {
+  if (azureResult[ERROR]?.code === '401') {
     onFail(INVALID_KEY);
   } else {
     onSuccess(key);
@@ -92,7 +93,7 @@ const AZURE_HANDLE_TRANSLATION_VERIFICATION_RESULT = (
   const azureResult = result as Response;
   azureResult.json().then((result) => {
     // if the token is valid - it will throw a different error than a 401000
-    if (!Array.isArray(result) && result.error.code === 401000) {
+    if (!Array.isArray(result) && result[ERROR].code === 401000) {
       onFail(INVALID_KEY);
     } else {
       onSuccess(key);

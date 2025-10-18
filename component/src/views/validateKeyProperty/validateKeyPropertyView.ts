@@ -1,4 +1,5 @@
 import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
+import {CREATE_ELEMENT} from '../../utils/consts/htmlConstants';
 import {ErrorView} from '../error/errorView';
 
 export class ValidateKeyPropertyView {
@@ -7,7 +8,7 @@ export class ValidateKeyPropertyView {
   }
 
   private static createElements() {
-    const containerElement = document.createElement('div');
+    const containerElement = CREATE_ELEMENT();
     containerElement.id = 'validate-property-key-view';
     return containerElement;
   }

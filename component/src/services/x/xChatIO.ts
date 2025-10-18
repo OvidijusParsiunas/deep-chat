@@ -1,10 +1,10 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {X_BUILD_KEY_VERIFICATION_DETAILS, X_BUILD_HEADERS} from './utils/xUtils';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -46,7 +46,7 @@ export class XChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
+        content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as XMessage;
     });
@@ -59,22 +59,22 @@ export class XChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: XResult): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     // Handle streaming response
     if (result.object === 'chat.completion.chunk') {
       const choice = result.choices?.[0];
       if (choice?.delta?.content) {
-        return {[TEXT_KEY]: choice.delta.content};
+        return {[TEXT]: choice.delta.content};
       }
-      return {[TEXT_KEY]: ''};
+      return {[TEXT]: ''};
     }
 
     // Handle non-streaming response
     if (result.object === 'chat.completion' && result.choices?.[0]?.message) {
-      return {[TEXT_KEY]: result.choices[0].message.content || ''};
+      return {[TEXT]: result.choices[0].message.content || ''};
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 }

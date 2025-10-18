@@ -29,6 +29,7 @@ import {TogetherImagesIO} from './together/togetherImagesIO';
 import {AzureOpenAIChatIO} from './azure/azureOpenAIChatIO';
 import {BigModelChatIO} from './bigModel/bigModelChatIO';
 import {TogetherChatIO} from './together/togetherChatIO';
+import {IMAGES} from '../utils/consts/messageConstants';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
 import {PerplexityIO} from './perplexity/perplexityIO';
@@ -60,7 +61,7 @@ export class ServiceIOFactory {
     }
     if (directConnection) {
       if (directConnection.openAI) {
-        if (directConnection.openAI.images) {
+        if (directConnection.openAI[IMAGES]) {
           return new OpenAIImagesIO(deepChat);
         }
         if (directConnection.openAI.speechToText) {
@@ -166,7 +167,7 @@ export class ServiceIOFactory {
         return new KimiIO(deepChat);
       }
       if (directConnection.x) {
-        if (directConnection.x.images) {
+        if (directConnection.x[IMAGES]) {
           return new XImagesIO(deepChat);
         }
         return new XChatIO(deepChat);
@@ -175,7 +176,7 @@ export class ServiceIOFactory {
         return new QwenIO(deepChat);
       }
       if (directConnection.together) {
-        if (directConnection.together.images) {
+        if (directConnection.together[IMAGES]) {
           return new TogetherImagesIO(deepChat);
         }
         if (directConnection.together.textToSpeech) {
@@ -184,7 +185,7 @@ export class ServiceIOFactory {
         return new TogetherChatIO(deepChat);
       }
       if (directConnection.bigModel) {
-        if (directConnection.bigModel.images) {
+        if (directConnection.bigModel[IMAGES]) {
           return new BigModelImagesIO(deepChat);
         }
         if (directConnection.bigModel.textToSpeech) {

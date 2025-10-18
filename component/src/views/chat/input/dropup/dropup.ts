@@ -1,4 +1,6 @@
+import {CLICK, OUTSIDE_LEFT, OUTSIDE_RIGHT} from '../../../../utils/consts/inputConstants';
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../types/buttonInternal';
 import {TooltipUtils} from '../buttons/tooltip/tooltipUtils';
@@ -24,15 +26,15 @@ export class Dropup extends InputButton<Styles> {
     this.buttonContainer = Dropup.createButtonContainer();
     this.changeElementsByState(innerElements.styles);
     this.buttonContainer.appendChild(this.elementRef);
-    this.elementRef.classList.add(Dropup.BUTTON_ICON_CLASS);
+    this.elementRef[CLASS_LIST].add(Dropup.BUTTON_ICON_CLASS);
     this.buttonContainer.appendChild(this._menu.elementRef);
     this.reapplyStateStyle('styles');
     this.addContainerEvents(containerElement);
   }
 
   private static createButtonElement() {
-    const buttonElement = document.createElement('div');
-    buttonElement.classList.add('input-button');
+    const buttonElement = CREATE_ELEMENT();
+    buttonElement[CLASS_LIST].add('input-button');
     return buttonElement;
   }
 
@@ -47,7 +49,7 @@ export class Dropup extends InputButton<Styles> {
   }
 
   private static createButtonContainer() {
-    const buttonContainer = document.createElement('div');
+    const buttonContainer = CREATE_ELEMENT();
     buttonContainer.id = 'dropup-container';
     return buttonContainer;
   }
@@ -57,8 +59,8 @@ export class Dropup extends InputButton<Styles> {
   }
 
   private addContainerEvents(containerElement: HTMLElement) {
-    containerElement.addEventListener('click', (event) => {
-      const classes = (event.target as HTMLElement).classList;
+    containerElement.addEventListener(CLICK, (event) => {
+      const classes = (event.target as HTMLElement)[CLASS_LIST];
       if (!classes.contains(Dropup.BUTTON_ICON_CLASS) && !classes.contains(CustomButton.DISABLED_CONTAINER_CLASS)) {
         this._menu.close();
       }
@@ -69,9 +71,9 @@ export class Dropup extends InputButton<Styles> {
     if (dropupStyles?.button?.position) {
       return dropupStyles?.button?.position;
     }
-    if (pToBs['outside-left'].length > 0 && pToBs['outside-right'].length === 0) {
-      return 'outside-right';
+    if (pToBs[OUTSIDE_LEFT].length > 0 && pToBs[OUTSIDE_RIGHT].length === 0) {
+      return OUTSIDE_RIGHT;
     }
-    return 'outside-left';
+    return OUTSIDE_LEFT;
   }
 }

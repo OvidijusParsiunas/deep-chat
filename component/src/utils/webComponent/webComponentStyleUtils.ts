@@ -1,3 +1,4 @@
+import {CREATE_ELEMENT} from '../consts/htmlConstants';
 import {StyleUtils} from '../element/styleUtils';
 import {CustomStyle} from '../../types/styles';
 import {GoogleFont} from './googleFont';
@@ -37,7 +38,7 @@ export class WebComponentStyleUtils {
   }
 
   private static addStyleElement(style: string, shadowRoot: ShadowRoot) {
-    const stylesDocument = document.createElement('style');
+    const stylesDocument = CREATE_ELEMENT('style') as HTMLStyleElement;
     stylesDocument.innerHTML = style;
     shadowRoot.appendChild(stylesDocument);
   }

@@ -1,8 +1,8 @@
 import {AUTHENTICATION, AUTHORIZATION_H, INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
 import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {AssemblyAIResult} from '../../types/assemblyAIResult';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
@@ -39,9 +39,9 @@ export class AssemblyAIAudioIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: AssemblyAIResult): Promise<Response> {
-    if (result.error) throw result.error;
+    if (result[ERROR]) throw result[ERROR];
     const key = this.connectSettings?.headers?.[AUTHORIZATION_H] as string;
     const pollingResult = await ASSEMBLY_AI_POLL(key, result.upload_url);
-    return {[TEXT_KEY]: pollingResult.text};
+    return {[TEXT]: pollingResult[TEXT]};
   }
 }

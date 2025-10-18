@@ -2,11 +2,10 @@ import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from 
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
+import {AI, ASSISTANT, ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -48,8 +47,8 @@ export class TogetherChatIO extends DirectServiceIO {
       this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
     ).map((message) => {
       return {
-        content: message.text || '',
-        role: message.role === MessageUtils.AI_ROLE ? MessageUtils.ASSISTANT_ROLE : (message.role as 'user'),
+        content: message[TEXT] || '',
+        role: message.role === AI ? ASSISTANT : (message.role as 'user'),
       };
     });
     if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
@@ -62,15 +61,15 @@ export class TogetherChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: TogetherResult): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     if (result.choices.length > 0) {
       if ((result.choices[0] as TogetherNormalResult).message !== undefined) {
-        return {[TEXT_KEY]: (result.choices[0] as TogetherNormalResult).message.content};
+        return {[TEXT]: (result.choices[0] as TogetherNormalResult).message.content};
       }
       if ((result.choices[0] as TogetherStreamEvent).delta !== undefined) {
-        return {[TEXT_KEY]: (result.choices[0] as TogetherStreamEvent).delta.content};
+        return {[TEXT]: (result.choices[0] as TogetherStreamEvent).delta.content};
       }
     }
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 }

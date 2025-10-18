@@ -24,8 +24,6 @@ export const APPLICATION_JSON = 'application/json';
 
 export const OBJECT = 'object';
 
-export const ERROR = 'error';
-
 export const COMPLETED = 'completed';
 
 export const BEARER_PREFIX = 'Bearer ';

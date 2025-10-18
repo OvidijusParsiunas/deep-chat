@@ -1,4 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {X_BUILD_HEADERS, X_BUILD_KEY_VERIFICATION_DETAILS} from './utils/xUtils';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -22,13 +23,13 @@ export class XImagesIO extends DirectServiceIO {
     const {directConnection} = deepChat;
     const apiKey = directConnection?.x;
     super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
-    const config = directConnection?.x?.images as NonNullable<XImages>;
+    const config = directConnection?.x?.[IMAGES] as NonNullable<XImages>;
     if (typeof config === OBJECT) Object.assign(this.rawBody, config);
     this.rawBody.model ??= 'grok-2-image';
   }
 
   private preprocessBody(body: XImages, messages: MessageContentI[]) {
-    const lastMessage = messages[messages.length - 1].text;
+    const lastMessage = messages[messages.length - 1][TEXT];
     const bodyCopy = JSON.parse(JSON.stringify(body));
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
@@ -39,11 +40,11 @@ export class XImagesIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: XImageResult): Promise<Response> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
     const files = result.data.map((imageData) => {
-      if (imageData.url) return {src: imageData.url, type: 'image'};
-      return {src: `${BASE_64_PREFIX}${imageData.b64_json}`, type: 'image'};
+      if (imageData.url) return {[SRC]: imageData.url, [TYPE]: IMAGE};
+      return {[SRC]: `${BASE_64_PREFIX}${imageData.b64_json}`, [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

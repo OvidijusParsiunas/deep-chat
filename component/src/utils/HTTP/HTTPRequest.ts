@@ -3,6 +3,7 @@ import {OBJECT, POST} from '../../services/utils/serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {ServiceIO} from '../../services/serviceIO';
+import {ERROR} from '../consts/messageConstants';
 import {CustomHandler} from './customHandler';
 import {RequestUtils} from './requestUtils';
 import {Demo} from '../demo/demo';
@@ -36,7 +37,7 @@ export class HTTPRequest {
         if (!responseValid) throw result;
         if (!resultData || (typeof resultData !== OBJECT && !Array.isArray(resultData)))
           throw Error(INVALID_RESPONSE(result, 'response', !!io.deepChat.responseInterceptor, finalResult));
-        if (resultData.error) throw resultData.error;
+        if (resultData[ERROR]) throw resultData[ERROR];
         if (io.asyncCallInProgress) {
           io.asyncCallInProgress = false;
           return;
@@ -110,7 +111,7 @@ export class HTTPRequest {
       })
       .catch((err) => {
         onFail(CONNECTION_FAILED);
-        console.error(err);
+        console[ERROR](err);
       });
   }
 }

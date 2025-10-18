@@ -1,6 +1,6 @@
 import {HuggingFaceFillMaskResult} from '../../types/huggingFaceResult';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFace} from '../../types/huggingFace';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
@@ -16,7 +16,7 @@ export class HuggingFaceFillMaskIO extends HuggingFaceIO {
   }
 
   override async extractResultData(result: HuggingFaceFillMaskResult): Promise<Response> {
-    if (result.error) throw result.error;
-    return {[TEXT_KEY]: result[0]?.sequence || ''};
+    if (result[ERROR]) throw result[ERROR];
+    return {[TEXT]: result[0]?.sequence || ''};
   }
 }

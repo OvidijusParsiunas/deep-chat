@@ -1,7 +1,8 @@
 import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
 import {DirectConnection} from '../../types/directConnection';
-import {ERROR, OBJECT} from '../utils/serviceConstants';
+import {ERROR} from '../../utils/consts/messageConstants';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
+import {OBJECT} from '../utils/serviceConstants';
 import {DeepChat} from '../../deepChat';
 import {
   AZURE_OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS,

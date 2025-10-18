@@ -1,6 +1,8 @@
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {TEXT} from '../../../../utils/consts/messageConstants';
 import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
 import {TextInput} from '../../../../types/textInput';
@@ -28,7 +30,7 @@ export class TextInputEl {
     this.inputElementRef = this.createInputElement();
     this.elementRef.appendChild(this.inputElementRef);
     deepChat.setPlaceholderText = this.setPlaceholderText.bind(this);
-    deepChat.setPlaceholderText(this._config.placeholder?.text || 'Ask me anything!');
+    deepChat.setPlaceholderText(this._config.placeholder?.[TEXT] || 'Ask me anything!');
     setTimeout(() => {
       // in a timeout as deepChat._validationHandler initialised later
       TextInputEvents.add(this.inputElementRef, fileAttachments, this._config.characterLimit, deepChat._validationHandler);
@@ -40,14 +42,14 @@ export class TextInputEl {
     textInput ??= {};
     textInput.disabled ??= serviceIO.isTextInputDisabled;
     textInput.placeholder ??= {};
-    textInput.placeholder.text ??= serviceIO.textInputPlaceholderText;
+    textInput.placeholder[TEXT] ??= serviceIO.textInputPlaceholderText;
     return textInput;
   }
 
   private static createContainerElement(containerStyle?: CustomStyle) {
-    const contentContainerElement = document.createElement('div');
+    const contentContainerElement = CREATE_ELEMENT();
     contentContainerElement.id = 'text-input-container';
-    Object.assign(contentContainerElement.style, containerStyle);
+    Object.assign(contentContainerElement[STYLE], containerStyle);
     return contentContainerElement;
   }
 
@@ -65,8 +67,8 @@ export class TextInputEl {
   // this also similarly prevents scroll up
   public clear() {
     const scrollY = window.scrollY;
-    if (!this.inputElementRef.classList.contains('text-input-disabled')) {
-      Object.assign(this.inputElementRef.style, this._config.placeholder?.style);
+    if (!this.inputElementRef[CLASS_LIST].contains('text-input-disabled')) {
+      Object.assign(this.inputElementRef[STYLE], this._config.placeholder?.[STYLE]);
       this.inputElementRef.textContent = '';
       FocusUtils.focusEndOfInput(this.inputElementRef);
       this._onInput?.(false);
@@ -75,9 +77,9 @@ export class TextInputEl {
   }
 
   private createInputElement() {
-    const inputElement = document.createElement('div');
+    const inputElement = CREATE_ELEMENT() as HTMLDivElement;
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
-    inputElement.classList.add('text-input-styling');
+    inputElement[CLASS_LIST].add('text-input-styling');
     inputElement.role = 'textbox';
     // makes the element focusable on mobile
     // https://github.com/OvidijusParsiunas/deep-chat/pull/452/files/b8cf45dc559be2667e51f8cf2bb026527000076d
@@ -85,29 +87,29 @@ export class TextInputEl {
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
     if (typeof this._config.disabled === 'boolean' && this._config.disabled === true) {
       inputElement.contentEditable = 'false';
-      inputElement.classList.add('text-input-disabled');
+      inputElement[CLASS_LIST].add('text-input-disabled');
       inputElement.setAttribute('aria-disabled', 'true');
     } else {
       inputElement.contentEditable = 'true';
       inputElement.removeAttribute('aria-disabled');
       this.addEventListeners(inputElement);
     }
-    Object.assign(inputElement.style, this._config.styles?.text);
-    Object.assign(inputElement.style, this._config.placeholder?.style);
-    if (!this._config.placeholder?.style?.color) inputElement.setAttribute('textcolor', '');
+    Object.assign(inputElement[STYLE], this._config.styles?.[TEXT]);
+    Object.assign(inputElement[STYLE], this._config.placeholder?.[STYLE]);
+    if (!this._config.placeholder?.[STYLE]?.color) inputElement.setAttribute('textcolor', '');
     return inputElement;
   }
 
   public removePlaceholderStyle() {
-    if (!this.inputElementRef.classList.contains('text-input-disabled') && this._config.placeholder?.style) {
-      StyleUtils.unsetStyle(this.inputElementRef, this._config.placeholder?.style);
-      Object.assign(this.inputElementRef.style, this._config?.styles?.text);
+    if (!this.inputElementRef[CLASS_LIST].contains('text-input-disabled') && this._config.placeholder?.[STYLE]) {
+      StyleUtils.unsetStyle(this.inputElementRef, this._config.placeholder?.[STYLE]);
+      Object.assign(this.inputElementRef[STYLE], this._config?.styles?.[TEXT]);
     }
   }
 
   private addEventListeners(inputElement: HTMLElement) {
     if (this._config.styles?.focus) {
-      inputElement.onfocus = () => Object.assign(this.elementRef.style, this._config.styles?.focus);
+      inputElement.onfocus = () => Object.assign(this.elementRef[STYLE], this._config.styles?.focus);
       inputElement.onblur = this.onBlur.bind(this, this._config.styles.focus, this._config.styles?.container);
     }
     inputElement.addEventListener('keydown', this.onKeydown.bind(this));
@@ -119,7 +121,7 @@ export class TextInputEl {
 
   private onBlur(focusStyle: CustomStyle, containerStyle?: CustomStyle) {
     StyleUtils.unsetStyle(this.elementRef, focusStyle);
-    if (containerStyle) Object.assign(this.elementRef.style, containerStyle);
+    if (containerStyle) Object.assign(this.elementRef[STYLE], containerStyle);
   }
 
   private onKeydown(event: KeyboardEvent) {
@@ -137,7 +139,7 @@ export class TextInputEl {
     if (!this.isTextInputEmpty()) {
       this.removePlaceholderStyle();
     } else {
-      Object.assign(this.inputElementRef.style, this._config.placeholder?.style);
+      Object.assign(this.inputElementRef[STYLE], this._config.placeholder?.[STYLE]);
     }
     this._onInput?.(true);
   }

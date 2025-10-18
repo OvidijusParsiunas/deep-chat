@@ -1,5 +1,7 @@
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
+import {AI, ERROR_MESSAGE_TEXT_CLASS, FILES, HTML, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
@@ -58,7 +60,7 @@ export class MessagesBase {
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this.focusMode = Legacy.processFocusMode(deepChat.focusMode);
-    if (!this.focusMode) this._lastGroupMessagesElement = document.createElement('div');
+    if (!this.focusMode) this._lastGroupMessagesElement = CREATE_ELEMENT();
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.fade) {
       FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
     }
@@ -69,7 +71,7 @@ export class MessagesBase {
   }
 
   private static createContainerElement() {
-    const container = document.createElement('div');
+    const container = CREATE_ELEMENT();
     container.id = 'messages';
     return container;
   }
@@ -83,7 +85,7 @@ export class MessagesBase {
     const messageElements = isTop
       ? this.createAndPrependNewMessageElement(text, role, isTop)
       : this.createAndAppendNewMessageElement(text, role);
-    messageElements.bubbleElement.classList.add(MessagesBase.TEXT_BUBBLE_CLASS);
+    messageElements.bubbleElement[CLASS_LIST].add(MessagesBase.TEXT_BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, role, false);
     MessageUtils.fillEmptyMessageElement(messageElements.bubbleElement, text);
     return messageElements;
@@ -107,7 +109,7 @@ export class MessagesBase {
   private appendNewMessageElementFocusMode(text: string, role: string) {
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
-    if (role === 'user') {
+    if (role === USER) {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
       if (isAnimation) {
         setTimeout(() => {
@@ -121,10 +123,10 @@ export class MessagesBase {
   }
 
   private createNewGroupElementFocusMode() {
-    this._lastGroupMessagesElement?.classList.remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
-    const lastGroupMessageElement = document.createElement('div');
+    this._lastGroupMessagesElement?.[CLASS_LIST].remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    const lastGroupMessageElement = CREATE_ELEMENT();
     // first group should not have height 100% to not create a partial chat scroll bar
-    if (this._lastGroupMessagesElement) lastGroupMessageElement.classList.add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    if (this._lastGroupMessagesElement) lastGroupMessageElement[CLASS_LIST].add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
     this._lastGroupMessagesElement = lastGroupMessageElement;
   }
 
@@ -134,7 +136,7 @@ export class MessagesBase {
     this.appendOuterContainerElemet(messageElements.outerContainer);
     // timeout neeed when bubble font is large
     setTimeout(() => {
-      if (role === 'user') {
+      if (role === USER) {
         ElementUtils.scrollToBottom(this.elementRef);
       } else if (isCurrentlyAtBottom) {
         ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
@@ -144,14 +146,14 @@ export class MessagesBase {
   }
 
   public appendOuterContainerElemet(outerContainer: HTMLElement, role?: string) {
-    if (this.focusMode && (role === 'user' || !this._lastGroupMessagesElement)) this.createNewGroupElementFocusMode();
+    if (this.focusMode && (role === USER || !this._lastGroupMessagesElement)) this.createNewGroupElementFocusMode();
     this._lastGroupMessagesElement?.appendChild(outerContainer);
     this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
   }
 
   private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean, loading = false) {
     const messageElements = this.createNewMessageElement(text, role, isTop, loading);
-    if (isTop && (this.elementRef.firstChild as HTMLElement)?.classList.contains(MessagesBase.INTRO_CLASS)) {
+    if (isTop && (this.elementRef.firstChild as HTMLElement)?.[CLASS_LIST].contains(MessagesBase.INTRO_CLASS)) {
       (this.elementRef.firstChild as HTMLElement).insertAdjacentElement('afterend', messageElements.outerContainer);
       // swapping to place intro refs into correct position
       const introRefs = this.messageElementRefs[0];
@@ -188,7 +190,7 @@ export class MessagesBase {
       // if prev message before temp has a different role to the new one, make sure its avatar is revealed
       const prevMessageElements = this.messageElementRefs[this.messageElementRefs.length - 2];
       if (prevMessageElements && this.messageToElements.length > 0
-          && !tempElements.bubbleElement.classList.contains(MessageUtils.getRoleClass(newRole))) {
+          && !tempElements.bubbleElement[CLASS_LIST].contains(MessageUtils.getRoleClass(newRole))) {
         MessageUtils.revealRoleElements(prevMessageElements.innerContainer, this.avatar, this.name);
       }
     }
@@ -214,14 +216,14 @@ export class MessagesBase {
   }
 
   protected static createBaseElements(role: string): MessageElements {
-    const outerContainer = document.createElement('div');
-    const innerContainer = document.createElement('div');
-    innerContainer.classList.add('inner-message-container');
+    const outerContainer = CREATE_ELEMENT();
+    const innerContainer = CREATE_ELEMENT();
+    innerContainer[CLASS_LIST].add('inner-message-container');
     outerContainer.appendChild(innerContainer);
-    outerContainer.classList.add('outer-message-container');
-    outerContainer.classList.add(MessageUtils.buildRoleOuterContainerClass(role));
-    const bubbleElement = document.createElement('div');
-    bubbleElement.classList.add('message-bubble');
+    outerContainer[CLASS_LIST].add('outer-message-container');
+    outerContainer[CLASS_LIST].add(MessageUtils.buildRoleOuterContainerClass(role));
+    const bubbleElement = CREATE_ELEMENT();
+    bubbleElement[CLASS_LIST].add('message-bubble');
     innerContainer.appendChild(bubbleElement);
     return {outerContainer, innerContainer, bubbleElement};
   }
@@ -232,8 +234,8 @@ export class MessagesBase {
     if (MessageUtils.areOuterContainerClassRolesSame(role, previousElement) && !this.isLastMessageError()) {
       MessageUtils.hideRoleElements(previousElement.innerContainer, this.avatar, this.name);
     }
-    bubbleElement.classList.add('message-bubble', MessageUtils.getRoleClass(role),
-      role === MessageUtils.USER_ROLE ? 'user-message-text' : 'ai-message-text');
+    bubbleElement[CLASS_LIST].add('message-bubble', MessageUtils.getRoleClass(role),
+      role === USER ? 'user-message-text' : 'ai-message-text');
     this.renderText(bubbleElement, text, role);
     MessageUtils.addRoleElements(bubbleElement, role, this.avatar, this.name);
     return {bubbleElement};
@@ -250,11 +252,11 @@ export class MessagesBase {
   public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
     const {text, files, html, custom, _sessionId, role} = content;
-    const messageContent: MessageContentI = {role: role || MessageUtils.AI_ROLE};
-    if (text) messageContent.text = text;
-    if (files) messageContent.files = files;
-    if (html) messageContent.html = html;
-    if (!text && !files && !html) messageContent.text = '';
+    const messageContent: MessageContentI = {role: role || AI};
+    if (text) messageContent[TEXT] = text;
+    if (files) messageContent[FILES] = files;
+    if (html) messageContent[HTML] = html;
+    if (!text && !files && !html) messageContent[TEXT] = '';
     if (custom) messageContent.custom = custom;
     if (_sessionId) messageContent._sessionId = _sessionId;
     return messageContent;
@@ -273,13 +275,11 @@ export class MessagesBase {
   }
 
   public isLastMessageError() {
-    return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.classList.contains(
-      MessageUtils.ERROR_MESSAGE_TEXT_CLASS
-    );
+    return MessageUtils.getLastMessageBubbleElement(this.elementRef)?.[CLASS_LIST].contains(ERROR_MESSAGE_TEXT_CLASS);
   }
 
   public static isLoadingMessage(elements?: MessageElements) {
-    return elements?.bubbleElement.classList.contains(LoadingStyle.BUBBLE_CLASS);
+    return elements?.bubbleElement[CLASS_LIST].contains(LoadingStyle.BUBBLE_CLASS);
   }
 
   public sendClientUpdate(message: MessageContentI, isHistory = false) {
@@ -305,8 +305,8 @@ export class MessagesBase {
   protected refreshTextMessages(customConfig?: RemarkableOptions) {
     this._remarkable = RemarkableConfig.createNew(customConfig);
     this.messageToElements.forEach((msgToEls) => {
-      if (msgToEls[1].text && msgToEls[0].text) {
-        this.renderText(msgToEls[1].text.bubbleElement, msgToEls[0].text, msgToEls[0].role);
+      if (msgToEls[1][TEXT] && msgToEls[0][TEXT]) {
+        this.renderText(msgToEls[1][TEXT].bubbleElement, msgToEls[0][TEXT], msgToEls[0].role);
       }
     });
   }

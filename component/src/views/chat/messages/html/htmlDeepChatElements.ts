@@ -1,5 +1,7 @@
-import {TEXT_KEY} from '../../../../utils/consts/messageConstants';
+import {CLICK, DEFAULT, HOVER} from '../../../../utils/consts/inputConstants';
+import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
+import {TEXT} from '../../../../utils/consts/messageConstants';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
 import {MessagesBase} from '../messagesBase';
@@ -12,7 +14,7 @@ const DEEP_CHAT_SUGGESTION_BUTTON = 'deep-chat-suggestion-button';
 const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
   'deep-chat-button': {
     styles: {
-      default: {
+      [DEFAULT]: {
         backgroundColor: 'white',
         padding: '5px',
         paddingLeft: '7px',
@@ -21,10 +23,10 @@ const DEEP_CHAT_ELEMENTS: HTMLClassUtilities = {
         borderRadius: '6px',
         cursor: 'pointer',
       },
-      hover: {
+      [HOVER]: {
         backgroundColor: '#fafafa',
       },
-      click: {
+      [CLICK]: {
         backgroundColor: '#f1f1f1',
       },
     },
@@ -37,19 +39,19 @@ export class HTMLDeepChatElements {
   private static applySuggestionEvent(messages: MessagesBase, element: Element) {
     // needs to be in a timeout for submitMessage to be available
     setTimeout(() => {
-      element.addEventListener('click', () => {
-        messages.submitUserMessage?.({[TEXT_KEY]: element.textContent?.trim() || ''});
+      element.addEventListener(CLICK, () => {
+        messages.submitUserMessage?.({[TEXT]: element.textContent?.trim() || ''});
       });
     });
   }
 
   public static isElementTemporary(messageElements?: MessageElements) {
     if (!messageElements) return false;
-    return messageElements.bubbleElement.children[0]?.classList.contains(DEEP_CHAT_TEMPORARY_MESSAGE);
+    return messageElements.bubbleElement.children[0]?.[CLASS_LIST].contains(DEEP_CHAT_TEMPORARY_MESSAGE);
   }
 
   public static doesElementContainDeepChatClass(element: HTMLElement) {
-    return DEEP_CHAT_ELEMENT_CLASSES.find((className) => element.classList.contains(className));
+    return DEEP_CHAT_ELEMENT_CLASSES.find((className) => element[CLASS_LIST].contains(className));
   }
 
   private static applyEvents(element: Element, className: string) {
@@ -60,7 +62,7 @@ export class HTMLDeepChatElements {
   }
 
   private static getProcessedStyles(utilities: HTMLClassUtilities, element: Element, className: string) {
-    const customStyles = Array.from(element.classList).reduce<StatefulStyles[]>((styles, className) => {
+    const customStyles = Array.from(element[CLASS_LIST]).reduce<StatefulStyles[]>((styles, className) => {
       const statefulStyles = utilities[className]?.styles as StatefulStyles;
       if (statefulStyles && utilities[className].styles) {
         styles.push(statefulStyles);
@@ -70,7 +72,7 @@ export class HTMLDeepChatElements {
     const deepChatStyles = DEEP_CHAT_ELEMENTS[className].styles;
     if (deepChatStyles) {
       const stylesCp = JSON.parse(JSON.stringify(deepChatStyles));
-      if (stylesCp.default) StyleUtils.overwriteDefaultWithAlreadyApplied(stylesCp, element as HTMLElement);
+      if (stylesCp[DEFAULT]) StyleUtils.overwriteDefaultWithAlreadyApplied(stylesCp, element as HTMLElement);
       customStyles.unshift(stylesCp); // add it to the front to be primary
     }
     const mergedStyles = StyleUtils.mergeStatefulStyles(customStyles);

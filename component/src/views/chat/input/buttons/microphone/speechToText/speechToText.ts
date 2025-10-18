@@ -1,5 +1,6 @@
 import {ValidationHandler} from '../../../../../../types/validationHandler';
 import {SpeechToTextConfig} from '../../../../../../types/microphone';
+import {CLICK} from '../../../../../../utils/consts/inputConstants';
 import {OnPreResult} from 'speech-to-element/dist/types/options';
 import {TextInputEl} from '../../../textInput/textInput';
 import {Messages} from '../../../../messages/messages';
@@ -125,7 +126,7 @@ export class SpeechToText extends MicrophoneButton {
   }
 
   public static toggleSpeechAfterSubmit(microphoneButton: HTMLElement, stopAfterSubmit = true) {
-    microphoneButton.click();
-    if (!stopAfterSubmit) setTimeout(() => microphoneButton.click(), SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
+    microphoneButton[CLICK]();
+    if (!stopAfterSubmit) setTimeout(() => microphoneButton[CLICK](), SpeechToText.MICROPHONE_RESET_TIMEOUT_MS);
   }
 }

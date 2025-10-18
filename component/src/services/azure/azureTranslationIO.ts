@@ -1,7 +1,7 @@
 import {AZURE_BUILD_TRANSLATION_KEY_VERIFICATION_DETAILS, AZURE_BUILD_TRANSLATION_HEADERS} from './utils/azureUtils';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {AzureTranslationResult} from '../../types/azureResult';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {Response} from '../../types/response';
@@ -27,7 +27,7 @@ export class AzureTranslationIO extends DirectServiceIO {
   }
 
   preprocessBody(messages: MessageContentI[]) {
-    const mostRecentMessageText = messages[messages.length - 1].text;
+    const mostRecentMessageText = messages[messages.length - 1][TEXT];
     if (!mostRecentMessageText) return;
     return [{Text: mostRecentMessageText}];
   }
@@ -38,8 +38,8 @@ export class AzureTranslationIO extends DirectServiceIO {
 
   override async extractResultData(result: AzureTranslationResult): Promise<Response> {
     if (Array.isArray(result)) {
-      return {[TEXT_KEY]: result[0].translations?.[0].text || ''};
+      return {[TEXT]: result[0].translations?.[0][TEXT] || ''};
     }
-    throw result.error;
+    throw result[ERROR];
   }
 }

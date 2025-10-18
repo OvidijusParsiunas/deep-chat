@@ -1,8 +1,8 @@
 import {HuggingFace, HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {HuggingFaceQuestionAnswerResult} from '../../types/huggingFaceResult';
+import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -20,7 +20,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
   }
 
   override preprocessBody(_: HuggingFaceQuestionAnswerConfig, messages: MessageContentI[]) {
-    const mostRecentMessageText = messages[messages.length - 1].text;
+    const mostRecentMessageText = messages[messages.length - 1][TEXT];
     if (!mostRecentMessageText) return;
     return {
       inputs: {question: mostRecentMessageText, context: this._context, options: {wait_for_model: true}},
@@ -28,7 +28,7 @@ export class HuggingFaceQuestionAnswerIO extends HuggingFaceIO {
   }
 
   override async extractResultData(result: HuggingFaceQuestionAnswerResult): Promise<Response> {
-    if (result.error) throw result.error;
-    return {[TEXT_KEY]: result.answer || ''};
+    if (result[ERROR]) throw result[ERROR];
+    return {[TEXT]: result.answer || ''};
   }
 }

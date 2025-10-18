@@ -1,5 +1,7 @@
 import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
+import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
+import {TEXT} from '../../../../utils/consts/messageConstants';
 
 export class ButtonInnerElements {
   private static readonly INPUT_BUTTON_SVG_TEXT_CLASS = 'input-button-svg-text';
@@ -7,8 +9,8 @@ export class ButtonInnerElements {
   public static readonly INPUT_BUTTON_SVG_CLASS = 'input-button-svg';
 
   private static createTextElement(text: string) {
-    const textElement = document.createElement('div');
-    textElement.classList.add(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS);
+    const textElement = CREATE_ELEMENT();
+    textElement[CLASS_LIST].add(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS);
     textElement.innerText = text;
     return textElement;
   }
@@ -24,7 +26,7 @@ export class ButtonInnerElements {
 
   public static createCustomElements<T>(state: keyof T, base: SVGGraphicsElement, customStyles?: ButtonStateStyles<T>) {
     const stateStyle = customStyles?.[state];
-    const text = stateStyle?.text?.content;
+    const text = stateStyle?.[TEXT]?.content;
     const svg = stateStyle?.svg?.content;
     const elements: ButtonInnerElement[] = [];
     ButtonInnerElements.tryAddSVGElement(elements, base, svg, text);
@@ -33,11 +35,14 @@ export class ButtonInnerElements {
   }
 
   public static reassignClassBasedOnChildren(parentEl: HTMLElement, elements: ButtonInnerElement[]) {
-    parentEl.classList.remove(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS, ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
-    if (!elements.find((element) => element.classList.contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS))) {
-      parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS);
+    parentEl[CLASS_LIST].remove(
+      ButtonInnerElements.INPUT_BUTTON_SVG_CLASS,
+      ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS
+    );
+    if (!elements.find((element) => element[CLASS_LIST].contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS))) {
+      parentEl[CLASS_LIST].add(ButtonInnerElements.INPUT_BUTTON_SVG_CLASS);
     } else if (elements.length > 1) {
-      parentEl.classList.add(ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
+      parentEl[CLASS_LIST].add(ButtonInnerElements.INPUT_BUTTON_SVG_TEXT_CLASS);
     }
   }
 }

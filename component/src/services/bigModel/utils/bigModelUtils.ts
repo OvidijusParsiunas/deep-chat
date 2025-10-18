@@ -1,6 +1,7 @@
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {
   CONTENT_TYPE_H_KEY,
   APPLICATION_JSON,
@@ -30,8 +31,8 @@ const BIG_MODEL_HANDLE_VERIFICATION_RESULT = (
   onFail: (message: string) => void
 ) => {
   const bigModelResult = result as BigModelErrorResponse;
-  if (bigModelResult.error) {
-    if (bigModelResult.error.message === UNAUTHORIZED) {
+  if (bigModelResult[ERROR]) {
+    if (bigModelResult[ERROR].message === UNAUTHORIZED) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

@@ -1,8 +1,7 @@
+import {AI, ASSISTANT, FILES, IMAGE, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {MessageUtils} from '../../views/chat/messages/utils/messageUtils';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -75,11 +74,11 @@ export class DirectServiceIO extends BaseServiceIO {
   }
 
   protected static getRoleViaUser(role: string) {
-    return role === MessageUtils.USER_ROLE ? MessageUtils.USER_ROLE : MessageUtils.ASSISTANT_ROLE;
+    return role === USER ? USER : ASSISTANT;
   }
 
   protected static getRoleViaAI(role: string) {
-    return role === MessageUtils.AI_ROLE ? MessageUtils.ASSISTANT_ROLE : MessageUtils.USER_ROLE;
+    return role === AI ? ASSISTANT : USER;
   }
 
   async callDirectServiceServiceAPI(
@@ -106,8 +105,8 @@ export class DirectServiceIO extends BaseServiceIO {
     this.asyncCallInProgress = true;
     const handlerResponse = await functionHandler(functions);
     if (!Array.isArray(handlerResponse)) {
-      if (handlerResponse.text) {
-        const response = {[TEXT_KEY]: handlerResponse.text};
+      if (handlerResponse[TEXT]) {
+        const response = {[TEXT]: handlerResponse[TEXT]};
         const processedResponse = (await this.deepChat.responseInterceptor?.(response)) || response;
         if (Array.isArray(processedResponse)) throw Error('Function tool response interceptor cannot return an array');
         return {processedResponse};
@@ -127,7 +126,7 @@ export class DirectServiceIO extends BaseServiceIO {
           HTTPRequest.request(this, body, messages);
         }
       }
-      return {[TEXT_KEY]: ''};
+      return {[TEXT]: ''};
     } catch (e) {
       this.asyncCallInProgress = false;
       throw e;
@@ -146,9 +145,9 @@ export class DirectServiceIO extends BaseServiceIO {
     };
   }[] {
     return files
-      .filter((file) => file.type === 'image')
+      .filter((file) => file.type === IMAGE)
       .map((file) => ({
-        type: 'image_url' as const,
+        [TYPE]: 'image_url' as const,
         image_url: {
           url: file.src || '',
         },
@@ -157,25 +156,25 @@ export class DirectServiceIO extends BaseServiceIO {
   }
 
   protected static getTextWImagesContent(message: MessageContentI) {
-    if (message.files && message.files.length > 0) {
-      const content = this.getImageContent(message.files);
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text});
+    if (message[FILES] && message[FILES].length > 0) {
+      const content = this.getImageContent(message[FILES]);
+      if (message[TEXT] && message[TEXT].trim().length > 0) {
+        content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       }
-      return content.length > 0 ? content : message.text || '';
+      return content.length > 0 ? content : message[TEXT] || '';
     }
-    return message.text || '';
+    return message[TEXT] || '';
   }
 
   protected static getTextWFilesContent<T>(message: MessageContentI, getFileContent: (files: MessageFile[]) => T[]) {
-    if (message.files && message.files.length > 0) {
-      const content = getFileContent(message.files);
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text} as T);
+    if (message[FILES] && message[FILES].length > 0) {
+      const content = getFileContent(message[FILES]);
+      if (message[TEXT] && message[TEXT].trim().length > 0) {
+        content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]} as T);
       }
       return content;
     }
-    return message.text || '';
+    return message[TEXT] || '';
   }
 
   protected async extractStreamResultWToolsGeneric(
@@ -220,7 +219,7 @@ export class DirectServiceIO extends BaseServiceIO {
         });
       }
     }
-    return {[TEXT_KEY]: delta?.content || ''};
+    return {[TEXT]: delta?.content || ''};
   }
 
   protected async handleToolsGeneric(
@@ -252,7 +251,7 @@ export class DirectServiceIO extends BaseServiceIO {
       bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
       if (system.message) bodyCp.messages.unshift({role: 'system', content: system.message});
     }
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: 'assistant', content: null});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, role: ASSISTANT, content: null});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];

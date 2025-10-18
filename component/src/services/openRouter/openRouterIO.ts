@@ -1,10 +1,10 @@
 import {OPEN_ROUTER_BUILD_HEADERS, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openRouterUtils';
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {AUDIO, ERROR, FILES, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT_KEY} from '../../utils/consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -21,8 +21,6 @@ import {
 } from '../../types/openRouterInternal';
 
 // https://openrouter.ai/docs/api-reference/overview
-// WORK - add a panel stating that you can upload images and ask the model to generate
-// images (gemini-2.5-flash-image-preview)
 export class OpenRouterIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenRouter');
   override keyHelpUrl = 'https://openrouter.ai/keys';
@@ -57,13 +55,13 @@ export class OpenRouterIO extends DirectServiceIO {
 
   private static getAudioContent(files: MessageFile[]): OpenRouterContent[] {
     return files
-      .filter((file) => file.type === 'audio')
+      .filter((file) => file.type === AUDIO)
       .map((file) => {
         const base64Data = file.src?.split(',')[1];
         const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] as 'wav' | 'mp3';
 
         return {
-          type: 'input_audio' as const,
+          [TYPE]: 'input_audio' as const,
           input_audio: {
             data: base64Data || '',
             format: format === 'wav' || format === 'mp3' ? format : 'mp3',
@@ -74,17 +72,17 @@ export class OpenRouterIO extends DirectServiceIO {
   }
 
   private static getContent(message: MessageContentI): string | OpenRouterContent[] {
-    if (message.files && message.files.length > 0) {
+    if (message[FILES] && message[FILES].length > 0) {
       const content: OpenRouterContent[] = [
-        ...OpenRouterIO.getImageContent(message.files),
-        ...OpenRouterIO.getAudioContent(message.files),
+        ...OpenRouterIO.getImageContent(message[FILES]),
+        ...OpenRouterIO.getAudioContent(message[FILES]),
       ];
-      if (message.text && message.text.trim().length > 0) {
-        content.unshift({type: 'text', [TEXT_KEY]: message.text});
+      if (message[TEXT] && message[TEXT].trim().length > 0) {
+        content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       }
-      return content.length > 0 ? content : message.text || '';
+      return content.length > 0 ? content : message[TEXT] || '';
     }
-    return message.text || '';
+    return message[TEXT] || '';
   }
 
   private preprocessBody(body: OpenRouterRequestBody, pMessages: MessageContentI[]) {
@@ -113,7 +111,7 @@ export class OpenRouterIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: OpenRouterAPIResult, prevBody?: OpenRouter): Promise<ResponseI> {
-    if (result.error) throw result.error.message;
+    if (result[ERROR]) throw result[ERROR].message;
 
     // Handle streaming events
     if (result.object === 'chat.completion.chunk') {
@@ -123,18 +121,18 @@ export class OpenRouterIO extends DirectServiceIO {
       }
 
       // Handle streaming response with images
-      if (result.message?.images) {
-        const files = result.message.images.map((image) => ({
-          src: image.image_url.url,
+      if (result.message?.[IMAGES]) {
+        const files = result.message[IMAGES].map((image) => ({
+          [SRC]: image.image_url.url,
         }));
 
         return {
-          [TEXT_KEY]: result.message.content || '',
-          files,
+          [TEXT]: result.message.content || '',
+          [FILES]: files,
         };
       }
 
-      return {[TEXT_KEY]: ''};
+      return {[TEXT]: ''};
     }
 
     // Handle non-streaming response
@@ -152,31 +150,31 @@ export class OpenRouterIO extends DirectServiceIO {
         }
 
         const files =
-          choice.message.images?.map((image) => ({
-            src: image.image_url.url,
+          choice.message[IMAGES]?.map((image) => ({
+            [SRC]: image.image_url.url,
           })) || [];
 
         return {
-          [TEXT_KEY]: choice.message.content || '',
+          [TEXT]: choice.message.content || '',
           files,
         };
       }
     }
 
-    return {[TEXT_KEY]: ''};
+    return {[TEXT]: ''};
   }
 
   private async extractStreamResult(choice: OpenRouterStreamEvent['choices'][0], prevBody?: OpenRouter) {
     const {delta} = choice;
     // Handle streaming response with images
-    if (delta?.images) {
-      const files = delta.images.map((image) => ({
-        src: image.image_url.url,
+    if (delta?.[IMAGES]) {
+      const files = delta[IMAGES].map((image) => ({
+        [SRC]: image.image_url.url,
       }));
 
       return {
-        [TEXT_KEY]: delta.content || '',
-        files,
+        [TEXT]: delta.content || '',
+        [FILES]: files,
       };
     }
     return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);

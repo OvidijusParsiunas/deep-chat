@@ -1,4 +1,5 @@
 import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesInternal';
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {HiddenFileAttachments} from '../input/fileAttachments/fileAttachments';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
@@ -7,13 +8,12 @@ import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {OBJECT} from '../../../services/utils/serviceConstants';
-import {SERVICE} from '../../../utils/consts/messageConstants';
+import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {ErrorMessageOverrides} from '../../../types/error';
 import {LoadingToggleConfig} from '../../../types/loading';
 import {ResponseI} from '../../../types/responseInternal';
-import {FileMessageUtils} from './utils/fileMessageUtils';
 import {TextToSpeech} from './textToSpeech/textToSpeech';
 import {LoadingHistory} from './history/loadingHistory';
 import {ErrorResp} from '../../../types/errorInternal';
@@ -32,6 +32,19 @@ import {MessagesBase} from './messagesBase';
 import {DeepChat} from '../../../deepChat';
 import {HTMLUtils} from './html/htmlUtils';
 import {History} from './history/history';
+import {
+  ERROR_MESSAGE_TEXT_CLASS,
+  SERVICE,
+  FILES,
+  ERROR,
+  FILE,
+  USER,
+  TEXT,
+  HTML,
+  ANY,
+  SRC,
+  AI,
+} from '../../../utils/consts/messageConstants';
 
 export interface MessageElements {
   outerContainer: HTMLElement;
@@ -115,7 +128,7 @@ export class Messages extends MessagesBase {
         if (history?.full) LoadingHistory.addMessage(this);
       }
       if (demo.displayErrors) {
-        if (demo.displayErrors.default) this.addNewErrorMessage('' as 'service', '');
+        if (demo.displayErrors[DEFAULT]) this.addNewErrorMessage('' as 'service', '');
         if (demo.displayErrors.service) this.addNewErrorMessage(SERVICE, '');
         if (demo.displayErrors.speechToText) this.addNewErrorMessage('speechToText', '');
       }
@@ -128,8 +141,8 @@ export class Messages extends MessagesBase {
   private addSetupMessageIfNeeded(deepChat: DeepChat, serviceIO: ServiceIO) {
     const text = SetupMessages.getText(deepChat, serviceIO);
     if (text) {
-      const elements = this.createAndAppendNewMessageElement(text, MessageUtils.AI_ROLE);
-      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false);
+      const elements = this.createAndAppendNewMessageElement(text, AI);
+      this.applyCustomStyles(elements, AI, false);
     }
     return !!text;
   }
@@ -157,63 +170,63 @@ export class Messages extends MessagesBase {
 
   private addIntroductoryMessage(introMessage: IntroMessage, shouldHide: boolean) {
     let elements;
-    if (introMessage?.text) {
-      elements = this.createAndAppendNewMessageElement(introMessage.text, MessageUtils.AI_ROLE);
-    } else if (introMessage?.html) {
-      elements = HTMLMessages.add(this, introMessage.html, MessageUtils.AI_ROLE, false);
+    if (introMessage?.[TEXT]) {
+      elements = this.createAndAppendNewMessageElement(introMessage[TEXT], AI);
+    } else if (introMessage?.[HTML]) {
+      elements = HTMLMessages.add(this, introMessage[HTML], AI, false);
     }
     if (elements) {
-      this.applyCustomStyles(elements, MessageUtils.AI_ROLE, false, this.messageStyles?.intro);
-      elements.outerContainer.classList.add(MessagesBase.INTRO_CLASS);
-      if (shouldHide) elements.outerContainer.style.display = 'none';
+      this.applyCustomStyles(elements, AI, false, this.messageStyles?.intro);
+      elements.outerContainer[CLASS_LIST].add(MessagesBase.INTRO_CLASS);
+      if (shouldHide) elements.outerContainer[STYLE].display = 'none';
     }
     return elements;
   }
 
   public removeIntroductoryMessage() {
     const introMessage = this.messageElementRefs[0];
-    if (introMessage.outerContainer.classList.contains(MessagesBase.INTRO_CLASS)) {
+    if (introMessage.outerContainer[CLASS_LIST].contains(MessagesBase.INTRO_CLASS)) {
       introMessage.outerContainer.remove();
       this.messageElementRefs.shift();
     }
   }
 
   public addAnyMessage(message: ResponseI, isHistory = false, isTop = false) {
-    if (message.error) {
-      return this.addNewErrorMessage(SERVICE, message.error, isTop);
+    if (message[ERROR]) {
+      return this.addNewErrorMessage(SERVICE, message[ERROR], isTop);
     }
     return this.addNewMessage(message, isHistory, isTop);
   }
 
   private tryAddTextMessage(msg: MessageContentI, overwrite: Overwrite, data: ResponseI, history = false, isTop = false) {
-    if (msg.text !== undefined && data.text !== null) {
-      this.addNewTextMessage(msg.text, msg.role, overwrite, isTop);
-      if (!history && this.textToSpeech && msg.role !== MessageUtils.USER_ROLE) {
-        TextToSpeech.speak(msg.text, this.textToSpeech);
+    if (msg[TEXT] !== undefined && data[TEXT] !== null) {
+      this.addNewTextMessage(msg[TEXT], msg.role, overwrite, isTop);
+      if (!history && this.textToSpeech && msg.role !== USER) {
+        TextToSpeech.speak(msg[TEXT], this.textToSpeech);
       }
     }
   }
 
   private tryAddFileMessages(message: MessageContentI, isTop = false) {
-    if (message.files && Array.isArray(message.files)) {
-      FileMessages.addMessages(this, message.files, message.role, !!message.text, isTop);
+    if (message[FILES] && Array.isArray(message[FILES])) {
+      FileMessages.addMessages(this, message[FILES], message.role, !!message[TEXT], isTop);
     }
   }
 
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
-    if (message.html !== undefined && message.html !== null) {
-      const scroll = !message.text && (!message.files || message.files.length === 0);
-      const elements = HTMLMessages.add(this, message.html, message.role, scroll, overwrite, isTop);
-      if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message.html;
+    if (message[HTML] !== undefined && message[HTML] !== null) {
+      const scroll = !message[TEXT] && (!message[FILES] || message[FILES].length === 0);
+      const elements = HTMLMessages.add(this, message[HTML], message.role, scroll, overwrite, isTop);
+      if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message[HTML];
     }
   }
 
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
-    if (data.role !== MessageUtils.USER_ROLE) this._hiddenAttachments?.removeHiddenFiles();
+    if (data.role !== USER) this._hiddenAttachments?.removeHiddenFiles();
     const message = Messages.createMessageContent(data);
     const displayText = this.textToSpeech?.audio?.displayText;
-    if (typeof displayText === 'boolean' && !displayText) delete message.text;
+    if (typeof displayText === 'boolean' && !displayText) delete message[TEXT];
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (isTop) {
       this.tryAddHTMLMessage(message, overwrite, isTop);
@@ -233,7 +246,7 @@ export class Messages extends MessagesBase {
   }
 
   private isValidMessageContent(messageContent: MessageContentI) {
-    return messageContent.text || messageContent.html || (messageContent.files && messageContent.files.length > 0);
+    return messageContent[TEXT] || messageContent[HTML] || (messageContent[FILES] && messageContent[FILES].length > 0);
   }
 
   private updateStateOnMessage(messageContent: MessageContentI, overwritten?: boolean, update = true, isHistory = false) {
@@ -248,7 +261,7 @@ export class Messages extends MessagesBase {
   private removeMessageOnError() {
     const lastMessage = this.messageElementRefs[this.messageElementRefs.length - 1];
     const lastMessageBubble = lastMessage?.bubbleElement;
-    if ((lastMessageBubble?.classList.contains(MessageStream.MESSAGE_CLASS) && lastMessageBubble.textContent === '') ||
+    if ((lastMessageBubble?.[CLASS_LIST].contains(MessageStream.MESSAGE_CLASS) && lastMessageBubble.textContent === '') ||
         Messages.isTemporaryElement(lastMessage)) {
       this.removeLastMessage();
     }
@@ -259,16 +272,16 @@ export class Messages extends MessagesBase {
     this._hiddenAttachments?.readdHiddenFiles();
     this.removeMessageOnError();
     const text = this.getPermittedMessage(message) || this._errorMessageOverrides?.[type]
-      || this._errorMessageOverrides?.default || 'Error, please try again.';
-    const messageElements = this.createMessageElementsOnOrientation(text, 'error', isTop);
+      || this._errorMessageOverrides?.[DEFAULT] || 'Error, please try again.';
+    const messageElements = this.createMessageElementsOnOrientation(text, ERROR, isTop);
     MessageUtils.hideRoleElements(messageElements.innerContainer, this.avatar, this.name);
     const {bubbleElement, outerContainer} = messageElements;
-    bubbleElement.classList.add(MessageUtils.ERROR_MESSAGE_TEXT_CLASS);
+    bubbleElement[CLASS_LIST].add(ERROR_MESSAGE_TEXT_CLASS);
     this.renderText(bubbleElement, text);
     const fontElementStyles = MessageStyleUtils.extractParticularSharedStyles(['fontSize', 'fontFamily'],
-      this.messageStyles?.default);
+      this.messageStyles?.[DEFAULT]);
     MessageStyleUtils.applyCustomStylesToElements(messageElements, false, fontElementStyles);
-    MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.error);
+    MessageStyleUtils.applyCustomStylesToElements(messageElements, false, this.messageStyles?.[ERROR]);
     if (!isTop) this.appendOuterContainerElemet(outerContainer);
     if (this.textToSpeech) TextToSpeech.speak(text, this.textToSpeech);
     this._onError?.(text);
@@ -292,8 +305,8 @@ export class Messages extends MessagesBase {
     if (typeof message === 'string') {
       return [message];
     }
-    if (typeof message === 'object' && message.error) {
-      return [message.error];
+    if (typeof message === 'object' && message[ERROR]) {
+      return [message[ERROR]];
     }
     return [];
   }
@@ -319,12 +332,12 @@ export class Messages extends MessagesBase {
     if (this.isLastMessageError()) MessageUtils.getLastMessageElement(this.elementRef).remove();
   }
 
-  private addDefaultLoadingMessage(styles?: LoadingStyles, role = MessageUtils.AI_ROLE) {
+  private addDefaultLoadingMessage(styles?: LoadingStyles, role = AI) {
     const messageElements = this.createMessageElements('', role);
     const {bubbleElement} = messageElements;
-    messageElements.bubbleElement.classList.add(LoadingStyle.DOTS_CONTAINER_CLASS);
-    const dotsElement = document.createElement('div');
-    dotsElement.classList.add('loading-message-dots');
+    messageElements.bubbleElement[CLASS_LIST].add(LoadingStyle.DOTS_CONTAINER_CLASS);
+    const dotsElement = CREATE_ELEMENT();
+    dotsElement[CLASS_LIST].add('loading-message-dots');
     bubbleElement.appendChild(dotsElement);
     LoadingStyle.setDots(bubbleElement, styles);
     return messageElements;
@@ -334,16 +347,16 @@ export class Messages extends MessagesBase {
   public addLoadingMessage(override = false) {
     if (MessagesBase.isLoadingMessage(this.messageElementRefs[this.messageElementRefs.length - 1]) ||
       (!this._activeLoadingConfig && !override && !this._isLoadingMessageAllowed)) return;
-    const role = this._activeLoadingConfig?.role || MessageUtils.AI_ROLE;
-    const style = this._activeLoadingConfig?.style || this.messageStyles?.loading?.message;
-    const html = style?.html;
+    const role = this._activeLoadingConfig?.role || AI;
+    const style = this._activeLoadingConfig?.[STYLE] || this.messageStyles?.loading?.message;
+    const html = style?.[HTML];
     const messageElements = html
       ? HTMLMessages.createElements(this, html, role, false)
       : this.addDefaultLoadingMessage(style, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
-    messageElements.bubbleElement.classList.add(LoadingStyle.BUBBLE_CLASS);
+    messageElements.bubbleElement[CLASS_LIST].add(LoadingStyle.BUBBLE_CLASS);
     this.applyCustomStyles(messageElements, role, false, style?.styles);
-    this.avatar?.getAvatarContainer(messageElements.innerContainer)?.classList.add('loading-avatar-container');
+    this.avatar?.getAvatarContainer(messageElements.innerContainer)?.[CLASS_LIST].add('loading-avatar-container');
     const allowScroll = !this.focusMode && ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     if (allowScroll) ElementUtils.scrollToBottom(this.elementRef);
   }
@@ -361,15 +374,15 @@ export class Messages extends MessagesBase {
     return Promise.all<MessageFile>(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
-          if (!fileData.type || fileData.type === 'any') {
-            const name = fileData.file.name || FileMessageUtils.DEFAULT_FILE_NAME;
-            resolve({name, type: 'any', ref: fileData.file});
+          if (!fileData.type || fileData.type === ANY) {
+            const name = fileData[FILE].name || FILE;
+            resolve({name, type: ANY, ref: fileData[FILE]});
           } else {
             const reader = new FileReader();
-            reader.readAsDataURL(fileData.file);
+            reader.readAsDataURL(fileData[FILE]);
             reader.onload = () => {
-              const name = fileData.file.name;
-              resolve({src: reader.result as string, name, type: fileData.type, ref: fileData.file});
+              const name = fileData[FILE].name;
+              resolve({[SRC]: reader.result as string, name, type: fileData.type, ref: fileData[FILE]});
             };
           }
         });
@@ -390,7 +403,7 @@ export class Messages extends MessagesBase {
   private clearMessages(serviceIO: ServiceIO, isReset?: boolean) {
     const retainedElements: MessageElements[] = [];
     this.messageElementRefs.forEach((message) => {
-      if (Messages.isActiveElement(message.bubbleElement.classList)) {
+      if (Messages.isActiveElement(message.bubbleElement[CLASS_LIST])) {
         retainedElements.push(message);
       } else {
         message.outerContainer.remove();
@@ -400,7 +413,7 @@ export class Messages extends MessagesBase {
     // and can only be deleted by direct search
     Array.from(this.elementRef.children).forEach((messageElement) => {
       const bubbleClasslist = messageElement.children[0]?.children[0];
-      if (bubbleClasslist?.classList.contains(MessageUtils.ERROR_MESSAGE_TEXT_CLASS)) {
+      if (bubbleClasslist?.[CLASS_LIST].contains(ERROR_MESSAGE_TEXT_CLASS)) {
         messageElement.remove();
       }
     });
@@ -408,8 +421,8 @@ export class Messages extends MessagesBase {
     const retainedMessageToElements = this.messageToElements.filter((msgToEls) => {
       // safe because streamed messages can't contain multiple props (text, html)
       return (
-        (msgToEls[1].text && Messages.isActiveElement(msgToEls[1].text.bubbleElement.classList)) ||
-        (msgToEls[1].html && Messages.isActiveElement(msgToEls[1].html.bubbleElement.classList))
+        (msgToEls[1][TEXT] && Messages.isActiveElement(msgToEls[1][TEXT].bubbleElement[CLASS_LIST])) ||
+        (msgToEls[1][HTML] && Messages.isActiveElement(msgToEls[1][HTML].bubbleElement[CLASS_LIST]))
       );
     });
     this.messageToElements.splice(0, this.messageToElements.length, ...retainedMessageToElements);

@@ -1,17 +1,18 @@
 import {AudioFileAttachmentType} from './fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
 import {InputButtonStyleAdjustments} from './buttons/styleAdjustments/inputButtonStyleAdjustments';
+import {AUDIO, CAMERA, FILE, FILES, IMAGES, TEXT} from '../../../utils/consts/messageConstants';
 import {FileAttachmentsType} from './fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FileServiceIO, ServiceFileTypes, ServiceIO} from '../../../services/serviceIO';
 import {InputButtonPositions} from './buttons/styleAdjustments/inputButtonPositions';
 import {FILE_TYPE_BUTTON_ICONS} from '../../../utils/files/fileTypeButtonIcons';
 import {SpeechToText} from './buttons/microphone/speechToText/speechToText';
+import {CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {UploadFileButton} from './buttons/uploadFile/uploadFileButton';
 import {DragAndDrop} from './fileAttachments/dragAndDrop/dragAndDrop';
 import {ButtonContainers} from './buttonContainers/buttonContainers';
 import {FileAttachments} from './fileAttachments/fileAttachments';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {ValidationHandler} from './validation/validationHandler';
-import {TEXT_KEY} from '../../../utils/consts/messageConstants';
 import {RecordAudio} from './buttons/microphone/recordAudio';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {CustomButton} from './buttons/custom/customButton';
@@ -51,9 +52,9 @@ export class Input {
   }
 
   private static createPanelElement(customStyle?: CustomStyle) {
-    const panelElement = document.createElement('div');
+    const panelElement = CREATE_ELEMENT();
     panelElement.id = 'input';
-    Object.assign(panelElement.style, customStyle);
+    Object.assign(panelElement[STYLE], customStyle);
     return panelElement;
   }
 
@@ -62,14 +63,14 @@ export class Input {
       deepChat: DeepChat, serviceIO: ServiceIO, containerElement: HTMLElement, buttons: Buttons) {
     const fileAttachments = new FileAttachments(this.elementRef, deepChat.attachmentContainerStyle, serviceIO.demo);
     Input.createUploadButtons(deepChat, serviceIO, serviceIO.fileTypes || {}, fileAttachments, containerElement, buttons);
-    if (serviceIO.camera?.files) {
-      const cameraType = buttons.images?.fileType
-        || fileAttachments.addType(deepChat, serviceIO, serviceIO.camera.files, 'images');
-      buttons.camera = {button: new CameraButton(containerElement, cameraType, serviceIO.camera)};
+    if (serviceIO[CAMERA]?.[FILES]) {
+      const cameraType = buttons[IMAGES]?.fileType
+        || fileAttachments.addType(deepChat, serviceIO, serviceIO[CAMERA][FILES], IMAGES);
+      buttons[CAMERA] = {button: new CameraButton(containerElement, cameraType, serviceIO[CAMERA])};
     }
-    if (serviceIO.recordAudio?.files) {
-      const audioType = buttons.audio?.fileType
-        || fileAttachments.addType(deepChat, serviceIO, serviceIO.recordAudio.files, 'audio');
+    if (serviceIO.recordAudio?.[FILES]) {
+      const audioType = buttons[AUDIO]?.fileType
+        || fileAttachments.addType(deepChat, serviceIO, serviceIO.recordAudio[FILES], AUDIO);
       buttons.microphone = {button: new RecordAudio(audioType as AudioFileAttachmentType, serviceIO.recordAudio)};
     }
     if (DragAndDrop.isEnabled(fileAttachments, deepChat.dragAndDrop)) {
@@ -84,8 +85,8 @@ export class Input {
     Object.keys(fileTypes).forEach((key) => {
       const fileType = key as keyof ServiceFileTypes;
       const fileService = fileTypes[fileType] as FileServiceIO;
-      if (fileService.files) {
-        const fileAttachmentsType = fileAtt.addType(deepChat, serviceIO, fileService.files, fileType);
+      if (fileService[FILES]) {
+        const fileAttachmentsType = fileAtt.addType(deepChat, serviceIO, fileService[FILES], fileType);
         const {id, svgString, dropupText} = FILE_TYPE_BUTTON_ICONS[fileType];
         const button = new UploadFileButton(containerEl, fileAttachmentsType, fileService, id, svgString, dropupText);
         buttons[fileType] = {button, fileType: fileAttachmentsType};
@@ -109,8 +110,8 @@ export class Input {
       setTimeout(() => {
         const uploadedFilesData = fileAtts.getAllFileData();
         const inputText = textInput.inputElementRef.innerText.trim() as string;
-        const content: {text?: string; files?: File[]} = {[TEXT_KEY]: inputText};
-        if (uploadedFilesData) content.files = uploadedFilesData.map((file) => file.file);
+        const content: {text?: string; files?: File[]} = {[TEXT]: inputText};
+        if (uploadedFilesData) content[FILES] = uploadedFilesData.map((file) => file[FILE]);
         FireEvents.onInput(deepChat, content, isUser);
       });
     };

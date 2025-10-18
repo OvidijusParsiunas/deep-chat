@@ -1,5 +1,6 @@
 import {STABILITY_AI_BUILD_HEADERS, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/stabilityAIUtils';
 import {REQUEST_SETTINGS_ERROR, IMAGE_NOT_FOUND_ERROR} from '../../utils/errorMessages/errorMessages';
+import {FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAI, StabilityAIImageToImageMasking} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
@@ -21,7 +22,7 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   constructor(deepChat: DeepChat) {
     const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));
     const apiKey = directConnectionCp?.stabilityAI;
-    const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
+    const defaultFile = {[IMAGES]: {[FILES]: {acceptedFormats: '.png', maxNumberOfFiles: 2}}};
     super(deepChat, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS(), STABILITY_AI_BUILD_HEADERS, apiKey, defaultFile);
     const config = directConnectionCp?.stabilityAI?.imageToImageMasking as NonNullable<StabilityAI['imageToImageMasking']>;
     if (typeof config === 'object') {
@@ -67,7 +68,7 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
     if (!files || !files[0] || !files[1]) throw new Error(IMAGE_NOT_FOUND_ERROR);
-    const lastMessage = pMessages[pMessages.length - 1]?.text?.trim();
+    const lastMessage = pMessages[pMessages.length - 1]?.[TEXT]?.trim();
     const formData = this.createFormDataBody(this.rawBody, files[0], files[1], lastMessage);
     // need to pass stringifyBody boolean separately as binding is throwing an error for some reason
     RequestUtils.tempRemoveContentHeader(this.connectSettings,
@@ -77,8 +78,8 @@ export class StabilityAIImageToImageMaskingIO extends StabilityAIIO {
   override async extractResultData(result: StabilityAITextToImageResult): Promise<Response> {
     if (result.message) throw result.message;
     const files = result.artifacts.map((imageData) => {
-      return {src: `${BASE_64_PREFIX}${imageData.base64}`, type: 'image'};
+      return {[SRC]: `${BASE_64_PREFIX}${imageData.base64}`, [TYPE]: IMAGE};
     }) as MessageFiles;
-    return {files};
+    return {[FILES]: files};
   }
 }

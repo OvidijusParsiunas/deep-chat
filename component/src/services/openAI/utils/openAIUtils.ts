@@ -2,7 +2,7 @@ import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, GE
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
+import {DOCS_BASE_URL, ERROR} from '../../../utils/consts/messageConstants';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {ServiceIO} from '../../serviceIO';
@@ -23,8 +23,8 @@ export const OPEN_AI_BUILD_HEADERS = (key: string) => {
 export const OPEN_AI_HANDLE_VERIFICATION_RESULT = (result: object, key: string,
     onSuccess: (key: string) => void, onFail: (message: string) => void) => {
   const openAIResult = result as OpenAIConverseResult;
-  if (openAIResult.error) {
-    if (openAIResult.error.code === 'invalid_api_key') {
+  if (openAIResult[ERROR]) {
+    if (openAIResult[ERROR].code === 'invalid_api_key') {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);
@@ -44,6 +44,6 @@ export const OPEN_AI_DIRECT_FETCH = async (serviceIO: ServiceIO, body: any, meth
   const result = await RequestUtils.fetch(serviceIO, serviceIO.connectSettings.headers, stringify, body).then((resp) =>
     RequestUtils.processResponseByType(resp)
   );
-  if (result.error) throw result.error.message;
+  if (result[ERROR]) throw result[ERROR].message;
   return result;
 };
