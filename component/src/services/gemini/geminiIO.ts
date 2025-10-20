@@ -33,7 +33,6 @@ export class GeminiIO extends DirectServiceIO {
   permittedErrorPrefixes = ['API_KEY_INVALID'];
   private readonly _systemPrompt?: string;
   _functionHandler?: ChatFunctionHandler;
-  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -106,7 +105,7 @@ export class GeminiIO extends DirectServiceIO {
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
-    this._messages ??= messages;
+    this.messages ??= messages;
     const body = this.preprocessBody(this.rawBody, pMessages);
     const stream = this.stream;
     if ((stream && (typeof stream !== OBJECT || !(stream as StreamConfig).simulation)) || body.stream) {
@@ -181,7 +180,7 @@ export class GeminiIO extends DirectServiceIO {
 
       bodyCp.contents.push(functionResponseContent);
 
-      return this.makeAnotherRequest(bodyCp, this._messages);
+      return this.makeAnotherRequest(bodyCp, this.messages);
     }
     throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }

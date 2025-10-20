@@ -23,7 +23,6 @@ export class OllamaIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Error'];
   private readonly _systemMessage: string = '';
   _functionHandler?: ChatFunctionHandler;
-  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -82,7 +81,7 @@ export class OllamaIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {readable: true});
   }
 
@@ -129,7 +128,7 @@ export class OllamaIO extends DirectServiceIO {
         });
       });
 
-      return this.makeAnotherRequest(bodyCp, this._messages);
+      return this.makeAnotherRequest(bodyCp, this.messages);
     }
     throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }

@@ -64,7 +64,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   functionHandler?: AssistantFunctionHandler;
   filesToolType: OpenAIAssistant['files_tool_type'];
   readonly shouldFetchHistory: boolean = false;
-  private _messages?: Messages;
   private run_id?: string;
   private _searchedForThreadId = false;
   private readonly _config: OpenAIAssistant = {};
@@ -181,7 +180,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   }
 
   private callService(messages: Messages, pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
-    this._messages = messages;
+    this.messages = messages;
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/messages/createMessage
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/messages${this.urlSegments.createMessagePostfix}`;
@@ -246,7 +245,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     // https://platform.openai.com/docs/api-reference/runs/getRun
     const url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs/${this.run_id}${this.urlSegments.threadsPosfix}`;
     const requestInit = {method: GET, headers: this.connectSettings?.headers};
-    HTTPRequest.executePollRequest(this, url, requestInit, this._messages as Messages); // poll for run status
+    HTTPRequest.executePollRequest(this, url, requestInit, this.messages as Messages); // poll for run status
     return {[TEXT]: ''};
   }
 
@@ -261,8 +260,8 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.run_id = result.id;
       // updates the user sent message with the session id (the message event sent did not have this id)
       // user can clear the messages when they make a request, hence checking if messages length > 0
-      if (this._messages && this._messages.messageToElements.length > 0) {
-        this._messages.messageToElements[this._messages.messageToElements.length - 1][0]._sessionId = this.sessionId;
+      if (this.messages && this.messages.messageToElements.length > 0) {
+        this.messages.messageToElements[this.messages.messageToElements.length - 1][0]._sessionId = this.sessionId;
       }
     }
   }
@@ -280,7 +279,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   async extractPollResultData(result: OpenAIRunResult): PollResult {
     const {status, required_action} = result;
     if (status === 'queued' || status === 'in_progress') return {timeoutMS: OpenAIAssistantIOI.POLLING_TIMEOUT_MS};
-    if (status === COMPLETED && this._messages) {
+    if (status === COMPLETED && this.messages) {
       const threadMessages = await this.getThreadMessages(result.thread_id);
       const {text, files} = threadMessages.shift() as ResponseI;
       setTimeout(() => {
@@ -347,14 +346,14 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   // prettier-ignore
   private async parseStreamResult(result: OpenAIAssistantInitReqResult) {
-    if (result.content && result.content.length > 0 && this._messages) {
+    if (result.content && result.content.length > 0 && this.messages) {
       // if file is included and there is an annotation/link in text, process at the end
       const textContent = result.content.find((content) => content[TEXT]);
       if (textContent?.[TEXT]?.annotations && textContent[TEXT].annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content[TEXT]) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
           this, {role: ASSISTANT, content: result.content}, this.urlSegments, textFileFirst);
-        this._messageStream?.endStreamAfterFileDownloaded(this._messages, downloadCb);
+        this._messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
         return {[TEXT]: ''};
       }
     }
@@ -380,6 +379,6 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async createStreamRun(body: any) {
     body.stream = true;
     this._waitingForStreamResponse = true;
-    this._messageStream = (await Stream.request(this, body, this._messages as Messages, true, true)) as MessageStream;
+    this._messageStream = (await Stream.request(this, body, this.messages as Messages, true, true)) as MessageStream;
   }
 }

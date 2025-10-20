@@ -27,7 +27,6 @@ export class BigModelChatIO extends DirectServiceIO {
   url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
   permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
-  private _messages?: Messages;
   private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
@@ -78,7 +77,7 @@ export class BigModelChatIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
@@ -91,12 +90,7 @@ export class BigModelChatIO extends DirectServiceIO {
       if ((result.choices[0] as BigModelNormalResult).message !== undefined) {
         const message = (result.choices[0] as BigModelNormalResult).message;
         if (message.tool_calls) {
-          return this.handleToolsGeneric(
-            {tool_calls: message.tool_calls},
-            this._functionHandler,
-            this._messages,
-            prevBody
-          );
+          return this.handleToolsGeneric({tool_calls: message.tool_calls}, this._functionHandler, this.messages, prevBody);
         }
         return {[TEXT]: message.content};
       }
@@ -106,20 +100,20 @@ export class BigModelChatIO extends DirectServiceIO {
 
   private async extractStreamResult(choice: BigModelStreamEvent, prevBody?: BigModelChat) {
     const {delta, finish_reason} = choice;
-    const lastMessage = this._messages?.messageToElements[this._messages.messageToElements.length - 2];
+    const lastMessage = this.messages?.messageToElements[this.messages.messageToElements.length - 2];
     // This is used when AI responds first responds with something like "Let me think about this"
     // and then creates a new stream with the actual result. The problem is that the first
     // message can sometimes be completely empty which does not look good in the UI.
     // To repeat this behaviour, ask for something twice in same chat
     if (lastMessage?.[0].role === AI && lastMessage?.[0][TEXT]?.replace(/\n/g, '').trim().length === 0) {
-      this._messages?.removeMessage(lastMessage[1][TEXT] as MessageElements);
-      this._messages?.messageToElements.splice(this._messages.messageToElements.length - 2, 1);
+      this.messages?.removeMessage(lastMessage[1][TEXT] as MessageElements);
+      this.messages?.messageToElements.splice(this.messages.messageToElements.length - 2, 1);
     }
 
     if (finish_reason === 'tool_calls') {
       if (delta.tool_calls) {
         const tools = {tool_calls: delta.tool_calls};
-        return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
+        return this.handleToolsGeneric(tools, this._functionHandler, this.messages, prevBody);
       }
       return {[TEXT]: delta?.content || ''};
     }

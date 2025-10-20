@@ -74,6 +74,8 @@ export interface ServiceIO {
 
   recordAudio?: MicrophoneFilesServiceConfig;
 
+  messages?: Messages;
+
   connectSettings: Connect;
 
   // the reason why we use a set of prefixes to allow certain errors is because some errors can change

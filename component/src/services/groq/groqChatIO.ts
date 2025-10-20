@@ -23,7 +23,6 @@ export class GroqChatIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   _streamToolCalls?: GroqToolCall[];
   private readonly _systemMessage: string = '';
-  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -64,7 +63,7 @@ export class GroqChatIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
@@ -76,7 +75,7 @@ export class GroqChatIO extends DirectServiceIO {
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
         // Only using latest user prompt as for some reason on multiple requests it responds to first
-        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this._messages, prevBody, {
+        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this.messages, prevBody, {
           message: this._systemMessage,
         });
       }
@@ -87,6 +86,6 @@ export class GroqChatIO extends DirectServiceIO {
 
   // https://console.groq.com/docs/tool-use
   private async extractStreamResult(choice: GroqChoice, prevBody?: GroqRequestBody) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
   }
 }

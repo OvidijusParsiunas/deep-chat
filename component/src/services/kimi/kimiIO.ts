@@ -23,7 +23,6 @@ export class KimiIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   readonly _streamToolCalls?: KimiToolCall[];
   private readonly _systemMessage: string = '';
-  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -63,7 +62,7 @@ export class KimiIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
@@ -82,7 +81,7 @@ export class KimiIO extends DirectServiceIO {
           return this.handleToolsGeneric(
             {tool_calls: choice.message.tool_calls},
             this._functionHandler,
-            this._messages,
+            this.messages,
             prevBody
           );
         }
@@ -94,6 +93,6 @@ export class KimiIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: KimiResult['choices'][0], prevBody?: Kimi) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
   }
 }

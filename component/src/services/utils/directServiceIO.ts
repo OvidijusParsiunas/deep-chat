@@ -27,6 +27,7 @@ export class DirectServiceIO extends BaseServiceIO {
   keyHelpUrl = '';
   sessionId?: string;
   asyncCallInProgress = false;
+  messages?: Messages;
   private readonly _keyVerificationDetails: KeyVerificationDetails;
   private readonly _buildHeadersFunc: BuildHeadersFunc;
 
@@ -186,6 +187,7 @@ export class DirectServiceIO extends BaseServiceIO {
           arguments: string;
         };
       }[];
+      messages?: Messages;
     },
     choice: {
       delta?: {
@@ -201,7 +203,6 @@ export class DirectServiceIO extends BaseServiceIO {
       finish_reason?: 'stop' | 'length' | 'tool_calls' | string | null;
     },
     functionHandler?: ChatFunctionHandler,
-    messages?: Messages,
     prevBody?: unknown,
     system?: {message?: string}
   ) {
@@ -209,7 +210,7 @@ export class DirectServiceIO extends BaseServiceIO {
     if (finish_reason === 'tool_calls') {
       const tools = {tool_calls: service._streamToolCalls};
       service._streamToolCalls = undefined;
-      return this.handleToolsGeneric(tools, functionHandler, messages, prevBody, system);
+      return this.handleToolsGeneric(tools, functionHandler, service.messages, prevBody, system);
     } else if (delta?.tool_calls) {
       if (!service._streamToolCalls) {
         service._streamToolCalls = delta.tool_calls;

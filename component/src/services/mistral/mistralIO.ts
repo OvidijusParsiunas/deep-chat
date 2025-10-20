@@ -23,7 +23,6 @@ export class MistralIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   _functionHandler?: ChatFunctionHandler;
   private readonly _systemMessage: string = '';
-  private _messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -70,7 +69,7 @@ export class MistralIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
@@ -92,7 +91,7 @@ export class MistralIO extends DirectServiceIO {
           return this.handleToolsGeneric(
             {tool_calls: choice.message.tool_calls},
             this._functionHandler,
-            this._messages,
+            this.messages,
             prevBody
           );
         }
@@ -108,7 +107,7 @@ export class MistralIO extends DirectServiceIO {
     if (finish_reason === 'tool_calls' && delta?.tool_calls) {
       const tools = {tool_calls: delta.tool_calls};
       // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post
-      return this.handleToolsGeneric(tools, this._functionHandler, this._messages, prevBody);
+      return this.handleToolsGeneric(tools, this._functionHandler, this.messages, prevBody);
     }
     return {[TEXT]: delta?.content || ''};
   }

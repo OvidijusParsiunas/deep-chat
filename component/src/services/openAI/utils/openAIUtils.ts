@@ -5,6 +5,7 @@ import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {DOCS_BASE_URL, ERROR} from '../../../utils/consts/messageConstants';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
+import {RequestDetails} from '../../../types/interceptors';
 import {ServiceIO} from '../../serviceIO';
 
 export const OPEN_AI_FUNCTION_TOOL_RESP_ERROR =
@@ -40,8 +41,13 @@ export const OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS = (): KeyVerificationDetails
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const OPEN_AI_DIRECT_FETCH = async (serviceIO: ServiceIO, body: any, method: 'POST' | 'GET', stringify = true) => {
-  serviceIO.connectSettings.method = method;
-  const result = await RequestUtils.fetch(serviceIO, serviceIO.connectSettings.headers, stringify, body).then((resp) =>
+  const {connectSettings, deepChat, completionsHandlers, messages} = serviceIO;
+  connectSettings.method = method;
+  const requestDetails: RequestDetails = {body, headers: connectSettings.headers};
+  const {body: interceptedBody, headers, error} = await RequestUtils.processRequestInterceptor(deepChat, requestDetails);
+  const {onFinish} = completionsHandlers;
+  if (error && messages) return RequestUtils.onInterceptorError(messages, error, onFinish);
+  const result = await RequestUtils.fetch(serviceIO, headers, stringify, interceptedBody).then((resp) =>
     RequestUtils.processResponseByType(resp)
   );
   if (result[ERROR]) throw result[ERROR].message;

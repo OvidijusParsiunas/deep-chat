@@ -32,7 +32,6 @@ export class OpenAIChatIO extends DirectServiceIO {
   _functionHandler?: ChatFunctionHandler;
   _streamToolCalls?: ToolCalls;
   private readonly _systemMessage: string = '';
-  private _messages?: Messages;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
@@ -97,7 +96,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this._messages ??= messages;
+    this.messages ??= messages;
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
@@ -108,7 +107,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this._messages, prevBody);
+        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this.messages, prevBody);
       }
       if (result.choices[0].message?.[AUDIO]) {
         const tts = this.deepChat.textToSpeech;
@@ -124,6 +123,6 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, this._messages, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
   }
 }

@@ -22,7 +22,6 @@ export class AzureSummarizationIO extends AzureLanguageIO {
   url = '';
   textInputPlaceholderText = 'Insert text to summarize';
   isTextInputDisabled = false;
-  private messages?: Messages;
 
   constructor(deepChat: DeepChat) {
     const config = deepChat.directConnection?.azure?.summarization as NonNullable<Azure['summarization']>;
