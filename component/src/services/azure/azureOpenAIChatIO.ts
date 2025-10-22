@@ -25,7 +25,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
 
     if (typeof config === OBJECT) {
       const {function_handler} = deepChat.directConnection?.azure?.openAI?.chat as AzureOpenAIChat;
-      if (function_handler) this._functionHandler = function_handler;
+      if (function_handler) this.functionHandler = function_handler;
     }
     if (!AZURE_OPEN_AI_VALIDATE_URL_DETAILS(urlDetails)) {
       this.isTextInputDisabled = true;

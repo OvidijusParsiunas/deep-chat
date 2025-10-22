@@ -16,7 +16,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
   }
 
   // prettier-ignore
-  private processMessages(messages: MessageContentI[]) {
+  private processMessagesI(messages: MessageContentI[]) {
     const textMessages = messages.filter((message) => message[TEXT]);
     const mostRecentMessageText = textMessages[textMessages.length - 1][TEXT];
     const previousMessages = textMessages.slice(0, textMessages.length - 1);
@@ -35,7 +35,7 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as HuggingFaceQuestionAnswerConfig & {
       options?: {wait_for_model?: boolean};
     };
-    const processedMessagesDetails = this.processMessages(messages);
+    const processedMessagesDetails = this.processMessagesI(messages);
     if (!processedMessagesDetails) return;
     bodyCopy.options ??= {};
     bodyCopy.options.wait_for_model = true;

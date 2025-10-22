@@ -61,7 +61,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 500;
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Please send text', History.FAILED_ERROR_MESSAGE];
-  functionHandler?: AssistantFunctionHandler;
+  _functionHandlerI?: AssistantFunctionHandler;
   filesToolType: OpenAIAssistant['files_tool_type'];
   readonly shouldFetchHistory: boolean = false;
   private run_id?: string;

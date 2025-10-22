@@ -20,7 +20,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
     if (this.shouldFetchHistory && this.sessionId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
     if (typeof config === OBJECT) {
       const {function_handler, files_tool_type} = deepChat.directConnection?.openAI?.assistant as OpenAIAssistant;
-      if (function_handler) this.functionHandler = function_handler;
+      if (function_handler) this._functionHandlerI = function_handler;
       if (files_tool_type) this.filesToolType = files_tool_type;
     }
   }

@@ -11,7 +11,7 @@ export interface OllamaTool {
 
 export interface OllamaChat {
   model?: string;
-  system?: string;
+  system_prompt?: string;
   think?: boolean;
   keep_alive?: boolean;
   tools?: OllamaTool[];

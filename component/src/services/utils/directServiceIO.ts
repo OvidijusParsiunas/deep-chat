@@ -6,8 +6,10 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {MessageLimitUtils} from './messageLimitUtils';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
+import {MessageContent} from '../../types/messages';
 import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {BaseServiceIO} from './baseServiceIO';
@@ -28,6 +30,8 @@ export class DirectServiceIO extends BaseServiceIO {
   sessionId?: string;
   asyncCallInProgress = false;
   messages?: Messages;
+  protected systemMessage: string = '';
+  protected functionHandler?: ChatFunctionHandler;
   private readonly _keyVerificationDetails: KeyVerificationDetails;
   private readonly _buildHeadersFunc: BuildHeadersFunc;
 
@@ -52,6 +56,18 @@ export class DirectServiceIO extends BaseServiceIO {
     connectSettingsObj.headers ??= {};
     Object.assign(connectSettingsObj.headers, this._buildHeadersFunc(key));
     return connectSettingsObj;
+  }
+
+  protected completeConfig(
+    config: {system_prompt?: string; key?: string; function_handler?: ChatFunctionHandler},
+    function_handler?: ChatFunctionHandler
+  ) {
+    if (config.system_prompt) this.systemMessage = config.system_prompt;
+    if (function_handler) this.functionHandler = function_handler; // real not copied reference
+    delete config.system_prompt;
+    delete config.key;
+    delete config.function_handler;
+    Object.assign(this.rawBody, config);
   }
 
   private keyAuthenticated(onSuccess: () => void, key: string) {
@@ -80,6 +96,17 @@ export class DirectServiceIO extends BaseServiceIO {
 
   protected static getRoleViaAI(role: string) {
     return role === AI ? ASSISTANT : USER;
+  }
+
+  protected processMessages(pMessages: MessageContentI[]) {
+    return MessageLimitUtils.getCharacterLimitMessages(
+      pMessages,
+      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this.systemMessage.length : -1
+    );
+  }
+
+  protected addSystemMessage(processedMessages: (MessageContent & {content: unknown})[]) {
+    if (this.systemMessage) processedMessages.unshift({role: 'system', content: this.systemMessage});
   }
 
   async callDirectServiceServiceAPI(

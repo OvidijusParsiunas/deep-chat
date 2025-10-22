@@ -67,7 +67,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private _retrievingEphemeralKey?: Promise<string>;
   private _dc?: RTCDataChannel;
   private readonly _events?: SpeechToSpeechEvents;
-  private readonly _functionHandler?: OpenAIRealtimeFunctionHandler;
+  private readonly _functionHandlerI?: OpenAIRealtimeFunctionHandler;
   private static readonly BUTTON_DEFAULT = 'deep-chat-openai-realtime-button-default';
   private static readonly BUTTON_LOADING = 'deep-chat-openai-realtime-button-loading';
   private static readonly MICROPHONE_ACTIVE = 'deep-chat-openai-realtime-microphone-active';
@@ -86,7 +86,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       Object.assign(this.rawBody, config.config);
       const realtime = deepChat.directConnection?.openAI?.realtime as OpenAIRealtime;
       const {function_handler} = realtime.config || {};
-      if (function_handler) this._functionHandler = function_handler;
+      if (function_handler) this._functionHandlerI = function_handler;
       this._events = config.events;
       realtime.methods = this.generateMethods();
       this.setInputAudioTranscribe(deepChat, realtime.config?.input_audio_transcription);
@@ -607,10 +607,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   // https://platform.openai.com/docs/guides/function-calling?api-mode=responses
   private async handleTool(name: string, functionArguments: string, call_id: string) {
-    if (!this._functionHandler) {
+    if (!this._functionHandlerI) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const result = await this._functionHandler({name, arguments: functionArguments});
+    const result = await this._functionHandlerI({name, arguments: functionArguments});
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }

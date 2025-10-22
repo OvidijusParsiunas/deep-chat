@@ -3,12 +3,10 @@ import {ERROR, FILES, SRC, TEXT, USER} from '../../utils/consts/messageConstants
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {OBJECT} from '../utils/serviceConstants';
 import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
@@ -31,31 +29,23 @@ export class GeminiIO extends DirectServiceIO {
   urlPrefix = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   url = '';
   permittedErrorPrefixes = ['API_KEY_INVALID'];
-  private readonly _systemPrompt?: string;
-  _functionHandler?: ChatFunctionHandler;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.gemini as Gemini & APIKey;
     super(deepChat, GEMINI_BUILD_KEY_VERIFICATION_DETAILS(), GEMINI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemPrompt = config.system_prompt;
-      const {function_handler} = deepChat.directConnection?.gemini as Gemini;
-      if (function_handler) this._functionHandler = function_handler;
       if (config.model) {
         this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
       }
       this.cleanConfig(config);
+      this.completeConfig(config, (deepChat.directConnection?.gemini as Gemini)?.function_handler);
     }
-    Object.assign(this.rawBody, config);
     this.maxMessages ??= -1;
   }
 
   private cleanConfig(config: Gemini & APIKey) {
-    delete config.system_prompt;
-    delete config.function_handler;
     delete config.model;
-    delete config.key;
   }
 
   private static getContent(message: MessageContentI): GeminiContent {
@@ -85,21 +75,11 @@ export class GeminiIO extends DirectServiceIO {
     };
   }
 
-  // prettier-ignore
   private preprocessBody(body: GeminiRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - (this._systemPrompt?.length || 0) : -1)
-      .map((message) => GeminiIO.getContent(message));
-
+    const processedMessages = this.processMessages(pMessages).map((message) => GeminiIO.getContent(message));
     bodyCopy.contents = processedMessages;
-
-    if (this._systemPrompt) {
-      bodyCopy.systemInstruction = {
-        parts: [{[TEXT]: this._systemPrompt}]
-      };
-    }
-
+    if (this.systemMessage) bodyCopy.systemInstruction = {parts: [{[TEXT]: this.systemMessage}]};
     return bodyCopy;
   }
 
@@ -143,14 +123,14 @@ export class GeminiIO extends DirectServiceIO {
   }
 
   private async handleTools(functionCalls: {name: string; args: object}[], prevBody?: Gemini): Promise<Response> {
-    if (!functionCalls || !prevBody || !this._functionHandler) {
+    if (!functionCalls || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = functionCalls.map((call) => {
       return {name: call.name, arguments: JSON.stringify(call.args)};
     });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    const {responses, processedResponse} = await this.callToolFunction(this.functionHandler, functions);
     if (processedResponse) return processedResponse;
 
     const assistantContent: GeminiContent = {

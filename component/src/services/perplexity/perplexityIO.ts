@@ -4,7 +4,6 @@ import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceCons
 import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -19,39 +18,26 @@ export class PerplexityIO extends DirectServiceIO {
   override keyHelpUrl = 'https://www.perplexity.ai/settings/api';
   url = 'https://api.perplexity.ai/chat/completions';
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, AUTHENTICATION, 'Permission denied'];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.perplexity as Perplexity & APIKey;
     super(deepChat, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS(), PERPLEXITY_BUILD_HEADERS, config);
-    if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'sonar';
   }
 
-  private cleanConfig(config: Perplexity & APIKey) {
-    delete config.system_prompt;
-    delete config.key;
-  }
-
   private preprocessBody(body: PerplexityRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as PerplexityRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as PerplexityMessage;
     });
-
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    this.addSystemMessage(processedMessages);
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 

@@ -23,16 +23,9 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.together?.textToSpeech as TogetherTextToSpeech & APIKey;
-    if (typeof config === OBJECT) {
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.rawBody.model ??= 'cartesia/sonic';
     this.rawBody.voice ??= 'laidback woman';
-  }
-
-  private cleanConfig(config: TogetherTextToSpeech & APIKey) {
-    delete config.key;
   }
 
   private preprocessBody(body: TogetherTextToSpeechRequestBody, pMessages: MessageContentI[]) {

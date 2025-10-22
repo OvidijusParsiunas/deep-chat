@@ -3,12 +3,10 @@ import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from 
 import {AUDIO, ERROR, FILES, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {OpenRouter} from '../../types/openRouter';
 import {APIKey} from '../../types/APIKey';
@@ -26,30 +24,18 @@ export class OpenRouterIO extends DirectServiceIO {
   override keyHelpUrl = 'https://openrouter.ai/keys';
   url = 'https://openrouter.ai/api/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
-  _functionHandler?: ChatFunctionHandler;
   readonly _streamToolCalls?: OpenRouterToolCall[];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.openRouter as OpenRouter & APIKey;
     super(deepChat, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_ROUTER_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      const function_handler = (deepChat.directConnection?.openRouter as OpenRouter)?.function_handler;
-      if (function_handler) this._functionHandler = function_handler;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
+      this.completeConfig(config, (deepChat.directConnection?.openRouter as OpenRouter)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'openai/gpt-4o';
     this.rawBody.max_tokens ??= 1000;
-  }
-
-  private cleanConfig(config: OpenRouter & APIKey) {
-    delete config.system_prompt;
-    delete config.function_handler;
-    delete config.key;
   }
 
   private static getAudioContent(files: MessageFile[]): OpenRouterContent[] {
@@ -86,10 +72,7 @@ export class OpenRouterIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenRouterRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as OpenRouterRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: OpenRouterIO.getContent(message),
         role: DirectServiceIO.getRoleViaUser(message.role),
@@ -97,7 +80,7 @@ export class OpenRouterIO extends DirectServiceIO {
     });
 
     const messages: OpenRouterMessage[] = [];
-    if (this._systemMessage) messages.push({role: 'system', content: this._systemMessage});
+    if (this.systemMessage) messages.push({role: 'system', content: this.systemMessage});
     messages.push(...processedMessages);
 
     bodyCopy.messages = messages;
@@ -142,7 +125,7 @@ export class OpenRouterIO extends DirectServiceIO {
           // https://openrouter.ai/docs/features/tool-calling
           return this.handleToolsGeneric(
             {tool_calls: choice.message.tool_calls},
-            this._functionHandler,
+            this.functionHandler,
             this.messages,
             prevBody
           );
@@ -176,6 +159,6 @@ export class OpenRouterIO extends DirectServiceIO {
         [FILES]: files,
       };
     }
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this.functionHandler, prevBody);
   }
 }

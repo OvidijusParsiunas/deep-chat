@@ -4,14 +4,11 @@ import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/ser
 import {AI, ERROR, FILE, IMAGE, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {BigModelChat} from '../../types/bigModel';
-import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {
   BigModelRequestBody,
@@ -26,8 +23,6 @@ export class BigModelChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://open.bigmodel.cn/usercenter/apikeys';
   url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
   permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
-  _functionHandler?: ChatFunctionHandler;
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -35,20 +30,10 @@ export class BigModelChatIO extends DirectServiceIO {
     super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.bigModel?.chat as BigModelChat;
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      const function_handler = (deepChat.directConnection?.bigModel?.chat as BigModelChat)?.function_handler;
-      if (function_handler) this._functionHandler = function_handler;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
+      this.completeConfig(config, (deepChat.directConnection?.bigModel?.chat as BigModelChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'glm-4.5';
-  }
-
-  private cleanConfig(config: BigModelChat & APIKey) {
-    delete config.system_prompt;
-    delete config.function_handler;
-    delete config.key;
   }
 
   private static getFileContent(files: MessageFile[]): BigModelContentItem[] {
@@ -62,16 +47,13 @@ export class BigModelChatIO extends DirectServiceIO {
 
   private preprocessBody(body: BigModelRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelRequestBody;
-    const processedMessages: BigModelMessage[] = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages: BigModelMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: BigModelChatIO.getTextWFilesContent(message, BigModelChatIO.getFileContent),
         role: DirectServiceIO.getRoleViaAI(message.role),
       } as BigModelUserMessage;
     });
-    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
+    this.addSystemMessage(processedMessages);
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
@@ -90,7 +72,7 @@ export class BigModelChatIO extends DirectServiceIO {
       if ((result.choices[0] as BigModelNormalResult).message !== undefined) {
         const message = (result.choices[0] as BigModelNormalResult).message;
         if (message.tool_calls) {
-          return this.handleToolsGeneric({tool_calls: message.tool_calls}, this._functionHandler, this.messages, prevBody);
+          return this.handleToolsGeneric({tool_calls: message.tool_calls}, this.functionHandler, this.messages, prevBody);
         }
         return {[TEXT]: message.content};
       }
@@ -113,7 +95,7 @@ export class BigModelChatIO extends DirectServiceIO {
     if (finish_reason === 'tool_calls') {
       if (delta.tool_calls) {
         const tools = {tool_calls: delta.tool_calls};
-        return this.handleToolsGeneric(tools, this._functionHandler, this.messages, prevBody);
+        return this.handleToolsGeneric(tools, this.functionHandler, this.messages, prevBody);
       }
       return {[TEXT]: delta?.content || ''};
     }

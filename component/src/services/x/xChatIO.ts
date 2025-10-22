@@ -3,7 +3,6 @@ import {X_BUILD_KEY_VERIFICATION_DETAILS, X_BUILD_HEADERS} from './utils/xUtils'
 import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -18,39 +17,27 @@ export class XChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://console.x.ai/team/default/api-keys';
   url = 'https://api.x.ai/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.x;
     super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.x?.chat as XChat & APIKey;
-    if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'grok-3-latest';
   }
 
-  private cleanConfig(config: XChat & APIKey) {
-    delete config.system_prompt;
-    delete config.key;
-  }
-
   private preprocessBody(body: XRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as XRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as XMessage;
     });
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    this.addSystemMessage(processedMessages);
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 

@@ -5,12 +5,10 @@ import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claud
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {ERROR, IMAGE, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {MessageFile} from '../../types/messageFile';
 import {Claude} from '../../types/claude';
 import {APIKey} from '../../types/APIKey';
@@ -22,33 +20,20 @@ export class ClaudeIO extends DirectServiceIO {
   override keyHelpUrl = 'https://console.anthropic.com/settings/keys';
   url = 'https://api.anthropic.com/v1/messages';
   permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
-  _functionHandler?: ChatFunctionHandler;
   private _streamToolCalls: ClaudeToolUse = {[TYPE]: 'tool_use', id: '', name: '', input: ''};
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.claude as Claude & APIKey;
     super(deepChat, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS(), CLAUDE_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      const function_handler = deepChat.directConnection?.claude?.function_handler;
-      if (function_handler) this._functionHandler = function_handler;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
+      this.completeConfig(config, deepChat.directConnection?.claude?.function_handler);
     }
     // WORK - add a warning when using images to also use maxMessages: 1 to reduce cost
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'claude-3-5-sonnet-20241022';
     this.rawBody.max_tokens ??= 4096;
   }
-
-  private cleanConfig(config: Claude & APIKey) {
-    delete config.system_prompt;
-    delete config.function_handler;
-    delete config.key;
-  }
-
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
     return files.map((file) => {
       if (file.type === IMAGE) {
@@ -62,10 +47,7 @@ export class ClaudeIO extends DirectServiceIO {
 
   private preprocessBody(body: ClaudeRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as ClaudeRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: ClaudeIO.getTextWFilesContent(message, ClaudeIO.getFileContent),
         role: DirectServiceIO.getRoleViaUser(message.role),
@@ -73,8 +55,8 @@ export class ClaudeIO extends DirectServiceIO {
     });
 
     bodyCopy.messages = processedMessages;
-    if (this._systemMessage) {
-      bodyCopy.system = this._systemMessage;
+    if (this.systemMessage) {
+      bodyCopy.system = this.systemMessage;
     }
     return bodyCopy;
   }
@@ -124,14 +106,14 @@ export class ClaudeIO extends DirectServiceIO {
   }
 
   private async handleTools(toolUseBlocks: ClaudeToolUse[], prevBody?: ClaudeRequestBody): Promise<ResponseI> {
-    if (!toolUseBlocks || !prevBody || !this._functionHandler) {
+    if (!toolUseBlocks || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     const functions = toolUseBlocks.map((block) => {
       return {name: block.name, arguments: JSON.stringify(block.input)};
     });
-    const {responses, processedResponse} = await this.callToolFunction(this._functionHandler, functions);
+    const {responses, processedResponse} = await this.callToolFunction(this.functionHandler, functions);
     if (processedResponse) return processedResponse;
 
     // Add assistant message with tool use

@@ -23,17 +23,10 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
     const apiKey = directConnectionCopy.groq;
     super(deepChat, GROQ_BUILD_KEY_VERIFICATION_DETAILS(), GROQ_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.groq?.textToSpeech as GroqTextToSpeech & APIKey;
-    if (typeof config === OBJECT) {
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.rawBody.model ??= 'playai-tts';
     this.rawBody.voice ??= 'Fritz-PlayAI';
     this.rawBody.response_format ??= 'mp3';
-  }
-
-  private cleanConfig(config: GroqTextToSpeech & APIKey) {
-    delete config.key;
   }
 
   private preprocessBody(body: GroqTextToSpeechRequestBody, pMessages: MessageContentI[]) {

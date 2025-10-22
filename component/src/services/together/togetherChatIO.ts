@@ -4,7 +4,6 @@ import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../t
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
 import {AI, ASSISTANT, ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -19,39 +18,26 @@ export class TogetherChatIO extends DirectServiceIO {
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.together?.chat as TogetherChat & APIKey;
-    if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo';
   }
 
-  private cleanConfig(config: TogetherChat & APIKey) {
-    delete config.system_prompt;
-    delete config.key;
-  }
-
   private preprocessBody(body: TogetherRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherRequestBody;
-    const processedMessages: TogetherMessage[] = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages: TogetherMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
         role: message.role === AI ? ASSISTANT : (message.role as 'user'),
       };
     });
-    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
+    this.addSystemMessage(processedMessages);
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }

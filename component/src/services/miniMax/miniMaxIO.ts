@@ -3,7 +3,6 @@ import {MINI_MAX_BUILD_KEY_VERIFICATION_DETAILS, MINI_MAX_BUILD_HEADERS} from '.
 import {MiniMaxRequestBody, MiniMaxMessage} from '../../types/miniMaxInternal';
 import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
@@ -19,39 +18,26 @@ export class MiniMaxIO extends DirectServiceIO {
   override keyHelpUrl = 'https://www.minimaxi.com';
   url = 'https://api.minimax.io/v1/text/chatcompletion_v2';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX, 'insufficient balance'];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.miniMax as MiniMax & APIKey;
     super(deepChat, MINI_MAX_BUILD_KEY_VERIFICATION_DETAILS(), MINI_MAX_BUILD_HEADERS, config);
-    if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
-    }
+    if (typeof config === OBJECT) this.completeConfig(config);
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'MiniMax-M1';
   }
 
-  private cleanConfig(config: MiniMax & APIKey) {
-    delete config.system_prompt;
-    delete config.key;
-  }
-
   private preprocessBody(body: MiniMaxRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as MiniMaxRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as MiniMaxMessage;
     });
-
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    this.addSystemMessage(processedMessages);
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 

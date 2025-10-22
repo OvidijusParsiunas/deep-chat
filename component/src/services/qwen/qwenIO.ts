@@ -3,12 +3,10 @@ import {QwenRequestBody, QwenMessage, QwenToolCall} from '../../types/qwenIntern
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {ChatFunctionHandler} from '../../types/openAI';
 import {QwenResult} from '../../types/qwenResult';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -20,44 +18,29 @@ export class QwenIO extends DirectServiceIO {
   override keyHelpUrl = 'https://www.alibabacloud.com/help/en/model-studio/get-api-key';
   url = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
   permittedErrorPrefixes = ['No static', 'The model', INCORRECT_ERROR_PREFIX];
-  _functionHandler?: ChatFunctionHandler;
   readonly _streamToolCalls?: QwenToolCall[];
-  private readonly _systemMessage: string = '';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
     const config = directConnectionCopy.qwen as Qwen & APIKey;
     super(deepChat, QWEN_BUILD_KEY_VERIFICATION_DETAILS(), QWEN_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      const function_handler = (deepChat.directConnection?.qwen as Qwen)?.function_handler;
-      if (function_handler) this._functionHandler = function_handler;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
+      this.completeConfig(config, (deepChat.directConnection?.qwen as Qwen)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'qwen-plus';
   }
 
-  private cleanConfig(config: Qwen & APIKey) {
-    delete config.system_prompt;
-    delete config.function_handler;
-    delete config.key;
-  }
-
   private preprocessBody(body: QwenRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as QwenRequestBody;
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(
-      pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1
-    ).map((message) => {
+    const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: QwenIO.getTextWImagesContent(message),
         role: DirectServiceIO.getRoleViaUser(message.role),
       } as QwenMessage;
     });
-
-    bodyCopy.messages = [{role: 'system', content: this._systemMessage}, ...processedMessages];
+    this.addSystemMessage(processedMessages);
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 
@@ -82,7 +65,7 @@ export class QwenIO extends DirectServiceIO {
         if (choice.message.tool_calls) {
           return this.handleToolsGeneric(
             {tool_calls: choice.message.tool_calls},
-            this._functionHandler,
+            this.functionHandler,
             this.messages,
             prevBody
           );
@@ -95,6 +78,6 @@ export class QwenIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: QwenResult['choices'][0], prevBody?: Qwen) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this.functionHandler, prevBody);
   }
 }

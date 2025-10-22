@@ -4,15 +4,14 @@ import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIR
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {ChatFunctionHandler, OpenAIChat} from '../../types/openAI';
 import {DirectConnection} from '../../types/directConnection';
-import {MessageLimitUtils} from '../utils/messageLimitUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
+import {OpenAIChat} from '../../types/openAI';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -29,9 +28,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   // https://platform.openai.com/docs/api-reference/chat/create
   url = 'https://api.openai.com/v1/chat/completions';
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid value'];
-  _functionHandler?: ChatFunctionHandler;
   _streamToolCalls?: ToolCalls;
-  private readonly _systemMessage: string = '';
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
@@ -45,19 +42,10 @@ export class OpenAIChatIO extends DirectServiceIO {
     // can be undefined as this is the default service
     const config = (configArg || directConnectionCopy.openAI?.chat) as OpenAIChat;
     if (typeof config === OBJECT) {
-      if (config.system_prompt) this._systemMessage = config.system_prompt;
-      const function_handler = (deepChat.directConnection?.openAI?.chat as OpenAIChat)?.function_handler;
-      if (function_handler) this._functionHandler = function_handler;
-      this.cleanConfig(config);
-      Object.assign(this.rawBody, config);
+      this.completeConfig(config, (deepChat.directConnection?.openAI?.chat as OpenAIChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'gpt-4o';
-  }
-
-  private cleanConfig(config: OpenAIChat) {
-    delete config.system_prompt;
-    delete config.function_handler;
   }
 
   private static getFileContent(files: MessageFile[]): FileContent {
@@ -81,16 +69,13 @@ export class OpenAIChatIO extends DirectServiceIO {
     return message[TEXT];
   }
 
-  // prettier-ignore
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessages = MessageLimitUtils.getCharacterLimitMessages(pMessages,
-        this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this._systemMessage.length : -1)
-      .map((message) => ({
-        content: OpenAIChatIO.getContent(message),
-        role: DirectServiceIO.getRoleViaUser(message.role)
-      }));
-    if (this._systemMessage) processedMessages.unshift({role: 'system', content: this._systemMessage});
+    const processedMessages = this.processMessages(pMessages).map((message) => ({
+      content: OpenAIChatIO.getContent(message),
+      role: DirectServiceIO.getRoleViaUser(message.role),
+    }));
+    this.addSystemMessage(processedMessages);
     bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
@@ -107,7 +92,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     }
     if (result.choices?.[0]?.message) {
       if (result.choices[0].message.tool_calls) {
-        return this.handleToolsGeneric(result.choices[0].message, this._functionHandler, this.messages, prevBody);
+        return this.handleToolsGeneric(result.choices[0].message, this.functionHandler, this.messages, prevBody);
       }
       if (result.choices[0].message?.[AUDIO]) {
         const tts = this.deepChat.textToSpeech;
@@ -123,6 +108,6 @@ export class OpenAIChatIO extends DirectServiceIO {
   }
 
   private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this._functionHandler, prevBody);
+    return this.extractStreamResultWToolsGeneric(this, choice, this.functionHandler, prevBody);
   }
 }
