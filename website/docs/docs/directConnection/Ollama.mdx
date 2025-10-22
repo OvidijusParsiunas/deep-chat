@@ -1,0 +1,368 @@
+---
+sidebar_position: 14
+---
+
+# Ollama
+
+import ollamaLogo from '/img/ollamaLogo.png';
+
+# <img src={ollamaLogo} className="adaptive-logo-filter" width="36" style={{float: 'left', marginRight: '10px', marginTop: '10px'}} /><span className="direct-service-title">Ollama</span>
+
+Properties used to connect to [Ollama](https://ollama.com/).
+
+### `ollama` {#ollama}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `think?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `keep_alive?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: OllamaTool[]`](#OllamaTool), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `options?:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `top_k?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `min_p?: number` <br />
+  \}}
+- Default: _\{model: "llama3.2"\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to your locally running [Ollama](https://ollama.com/) instance. Ollama is a tool that allows you to run large language models locally on your machine. <br />
+`model` is the name of the Ollama model to use. See [here](https://ollama.com/library). <br />
+`system_prompt` provides system instructions for the model's behavior. <br />
+`think` enables the model's reasoning capabilities when supported. <br />
+`keep_alive` controls whether to keep the model loaded in memory after the request. <br />
+[`tools`](#OllamaTool) defines functions that the model can call. <br />
+[`function_handler`](#FunctionHandler) is the actual function called with the model's instructions. <br />
+`options` contains additional model configuration parameters. <br />
+
+:::info
+Ollama does not require an API key as it runs locally.
+:::
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    directConnection={{
+      ollama: {
+        system_prompt: 'You are a helpful assistant.',
+        options: {
+          temperature: 0.7,
+        },
+      },
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "ollama": {
+      "system_prompt": "You are a helpful assistant.",
+      "options": {"temperature": 0.7}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "ollama": {
+      "system_prompt": "You are a helpful assistant.",
+      "options": {"temperature": 0.7}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Custom URL Example
+
+By default, Ollama connects to `http://localhost:11434/api/chat`. You can specify a custom URL using the [`connect`](/docs/connect) property:
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    directConnection={{
+      ollama: true,
+    }}
+    connect={{
+      url: 'http://localhost:11434/api/chat',
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat directConnection='{"ollama": true}' connect='{"url": "http://localhost:11434/api/chat"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{"ollama": true}'
+  connect='{"url": "http://localhost:11434/api/chat"}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Vision Example
+
+Upload images alongside your text prompts for visual understanding. You must use a [vision-capable model](https://ollama.com/search?c=vision).
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        ollama: {
+          model: 'llava',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        ollama: {
+          model: 'llava',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "ollama": {
+      "model": "llava"
+    }
+  }'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "ollama": {
+      "model": "llava"
+    }
+  }'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+## Tool Calling
+
+Ollama supports [tool calling](https://ollama.com/blog/tool-support) functionality with compatible models:
+
+### `OllamaTool` {#OllamaTool}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `function:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `parameters: object` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  \}
+
+Array describing tools that the model may call. <br />
+`name` is the name of the tool function. <br />
+`description` explains what the tool does and when it should be used. <br />
+`parameters` defines the parameters the tool accepts in JSON Schema format. <br />
+
+### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants to use tools. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what tool functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each tool function (in the same order as in [`functionsDetails`](/docs/directConnection#FunctionsDetails))
+which will feed it back into the model to finalize a response, or return a JSON containing `text` which will immediately display it in the chat.
+
+#### Example
+
+<ContainersKeyToggleChatFunction service="ollama" withKeyToggle={false}></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  ollama: {
+    tools: [
+      {
+        type: 'function',
+        function: {
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'The city and state, e.g. San Francisco, CA',
+              },
+              unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+            },
+            required: ['location'],
+          },
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  ollama: {
+    tools: [
+      {
+        type: 'function',
+        function: {
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'The city and state, e.g. San Francisco, CA',
+              },
+              unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+            },
+            required: ['location'],
+          },
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Prerequisites
+
+To use Ollama with Deep Chat, you need to:
+
+1. **Install Ollama** on your machine from [ollama.com](https://ollama.com/)
+2. **Download a model**: Run `ollama pull llama3.2` (or any other model)
+3. **Start Ollama**: The service should be running on `http://localhost:11434`
+
+:::tip
+You can list available models with `ollama list` and see running models with `ollama ps`.
+:::

@@ -169,18 +169,35 @@ const SERVICE_TO_NAME = {
   demo: 'Default',
   custom: 'Service',
   webModel: 'Web Model',
-  openAI: {
-    chat: 'OpenAI: Chat',
-    assistant: 'OpenAI: Assistant',
-    realtime: 'OpenAI: Realtime',
-    images: 'OpenAI: Dalle',
-    textToSpeech: 'OpenAI: Text To Speech',
-    speechToText: 'OpenAI: Speech To Text',
+  assemblyAI: {
+    audio: 'AssemblyAI: Audio',
+  },
+  azure: {
+    textToSpeech: 'Azure: Text To Speech',
+    speechToText: 'Azure: Speech To Text',
+    summarization: 'Azure: Summarization',
+    translation: 'Azure: Translation',
+  },
+  bigModel: {
+    chat: 'BigModel: Chat',
+    images: 'BigModel: Images',
+    textToSpeech: 'BigModel: Text To Speech',
+  },
+  claude: {
+    chat: 'Claude: Chat',
   },
   cohere: {
     chat: 'Cohere: Chat',
-    textGeneration: 'Cohere: Text Generation',
-    summarization: 'Cohere: Summarization',
+  },
+  deepSeek: {
+    chat: 'DeepSeek: Chat',
+  },
+  gemini: {
+    chat: 'Gemini: Chat',
+  },
+  groq: {
+    chat: 'Groq: Chat',
+    textToSpeech: 'Groq: Text To Speech',
   },
   huggingFace: {
     conversation: 'Hugging Face: Conversation',
@@ -193,11 +210,34 @@ const SERVICE_TO_NAME = {
     audioClassification: 'Hugging Face: Audio Classification',
     imageClassification: 'Hugging Face: Image Classification',
   },
-  azure: {
-    textToSpeech: 'Azure: Text To Speech',
-    speechToText: 'Azure: Speech To Text',
-    summarization: 'Azure: Summarization',
-    translation: 'Azure: Translation',
+  kimi: {
+    chat: 'Kimi: Chat',
+  },
+  miniMax: {
+    chat: 'MiniMax: Chat',
+  },
+  mistral: {
+    chat: 'Mistral: Chat',
+  },
+  ollama: {
+    chat: 'Ollama: Chat',
+  },
+  openAI: {
+    chat: 'OpenAI: Chat',
+    assistant: 'OpenAI: Assistant',
+    realtime: 'OpenAI: Realtime',
+    images: 'OpenAI: Dalle',
+    textToSpeech: 'OpenAI: Text To Speech',
+    speechToText: 'OpenAI: Speech To Text',
+  },
+  openRouter: {
+    chat: 'OpenRouter: Chat',
+  },
+  perplexity: {
+    chat: 'Perplexity: Chat',
+  },
+  qwen: {
+    chat: 'Qwen: Chat',
   },
   stabilityAI: {
     textToImage: 'StabilityAI: Text To Image',
@@ -205,7 +245,13 @@ const SERVICE_TO_NAME = {
     imageToImageMasking: 'StabilityAI: Image To Image Masking',
     imageToImageUpscale: 'StabilityAI: Image To Image Upscale',
   },
-  assemblyAI: {
-    audio: 'AssemblyAI: Audio',
+  together: {
+    chat: 'Together: Chat',
+    images: 'Together: Images',
+    textToSpeech: 'Together: Text To Speech',
+  },
+  x: {
+    chat: 'X: Chat',
+    images: 'X: Images',
   },
 };

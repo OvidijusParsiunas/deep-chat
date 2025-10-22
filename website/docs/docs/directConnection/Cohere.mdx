@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 6
 ---
 
 # Cohere
@@ -12,8 +12,14 @@ Properties used to connect to [Cohere](https://docs.cohere.com/docs).
 
 ### `cohere` {#cohere}
 
-- Type: \{[`chat?: Chat`](#Chat), [`textGeneration?: TextGeneration`](#TextGeneration), [`summarization?: Summarization`](#Summarization)\}
-- Default: _\{chat: true\}_
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `prompt_truncation?:` `"AUTO"` | `"OFF"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `connectors?:` `{id: string}[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `documents?:` `{title: string; snippet: string}[]` <br />
+  \}
+- Default: _\{model: "command-a-03-2025"\}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -25,26 +31,12 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-## Service Types
-
-### `Chat` {#Chat}
-
-- Type: `true` | \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `prompt_truncation?:` `"AUTO"` | `"OFF"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `connectors?:` `{id: string}[]`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `documents?:` `{title: string; snippet: string}[]` <br />
-  \}
-
-Connect to Cohere's [`chat`](https://docs.cohere.com/reference/chat) API. You can set this property to _true_ or configure it using an object: <br />
-`model` is the name of the model used to generate text. <br />
+Connect to Cohere's [`chat`](https://docs.cohere.com/v2/reference/chat) API. <br />
+`model` is the name of the Cohere model to be used by the API. <br />
 `temperature` is the degree of the response randomness. <br />
-`prompt_truncation` dictates how the prompt will be constructed. Default is _"OFF"_ which uses all resources. _"AUTO"_ drops some chat history and documents
-to construct a prompt that fits within the model's context length limit. <br />
+`prompt_truncation` dictates how the prompt will be constructed. Default is _"OFF"_ which uses all resources. _"AUTO"_ drops some chat history and documents to construct a prompt that fits within the model's context length limit. <br />
 `connectors` is an array of objects that define custom connectors. <br />
-`documents` is an array of objects that define relevant documents which the model can use to enrich its reply.
-See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#document-mode) for more info. <br />
+`documents` is an array of objects that define relevant documents which the model can use to enrich its reply. See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-rag#document-mode) for more info. <br />
 
 #### Example
 
@@ -55,7 +47,7 @@ See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-
       directConnection={{
         cohere: {
           key: 'placeholder key',
-          chat: {temperature: 1},
+          temperature: 0.7,
         },
       }}
     ></DeepChatBrowser>
@@ -65,7 +57,7 @@ See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-
       style={{borderRadius: '8px'}}
       directConnection={{
         cohere: {
-          chat: {temperature: 1},
+          temperature: 0.7,
         },
       }}
     ></DeepChatBrowser>
@@ -80,7 +72,7 @@ See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-
   directConnection='{
     "cohere": {
       "key": "placeholder key",
-      "chat": {"temperature": 1}
+      "temperature": 0.7
     }
   }'
 ></deep-chat>
@@ -96,7 +88,7 @@ See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-
   directConnection='{
     "cohere": {
       "key": "placeholder key",
-      "chat": {"temperature": 1}
+      "temperature": 0.7
     }
   }'
   style="border-radius: 8px"
@@ -108,178 +100,8 @@ See [Document Mode](https://docs.cohere.com/docs/retrieval-augmented-generation-
 
 <LineBreak></LineBreak>
 
-### `TextGeneration` {#TextGeneration}
-
-- Type: `true` | \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `model?:` `"command"` | `"base"` | `"base-light"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `k?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `p?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `end_sequences?: string[]`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `stop_sequences?: string[]`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `logit_bias?: {[string]: number}`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `truncate?:` `"NONE"` | `"START"` | `"END"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `preset?: string` <br />
-  \}
-
-- Default: _\{max_tokens: 1000\}_
-
-Connect to Cohere's [`text generation`](https://docs.cohere.com/reference/generate) API. You can set this property to _true_ or configure it using an object: <br />
-`model` is the name of the model used to generate text. <br />
-`max_tokens` denotes the number of tokens to predict per generation. <br />
-`temperature` is a non-negative float that tunes the degree of randomness in generation. Lower temperatures mean less random generations. <br />
-`k` ensures only the top k most likely tokens are considered for generation at each step. The maximum value is 500. <br />
-`p` is the probability (between 0.0 and 1.0) which ensures that only the most likely tokens - with total probability mass of p are considered for generation at each step. If both `k` and `p` are set, `p` acts after `k`. <br />
-`frequency_penalty` (between 0.0 and 1.0) can be used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation. <br />
-`presence_penalty` (between 0.0 and 1.0) can be used to reduce repetitiveness of generated tokens. Similar to frequency\*penalty, except that this penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies. <br />
-`end_sequences` is used to cut the generated text at the beginning of the earliest occurence of an end sequence of strings. <br />
-`stop_sequences` is used to cut the generated text at the end of the earliest occurence of stop sequence strings. <br />
-`logit_bias` is used to prevent the model from generating unwanted tokens or to incentivize it to include desired ibes. The format is _\{token_id: bias\}_ where bias is a float between -10 and 10. Tokens can be obtained from text using [Tokenize](https://docs.cohere.com/reference/tokenize). E.g. if the value _\{"11": -10\}_ is provided, the model will be very unlikely to include the token _11_ ("\n", the newline character) anywhere in the generated text. In contrast _\{"11": 10\}_ will result in generations that nearly only contain that token. <br />
-`truncate` is used to specify how the API will handle inputs longer than the maximum token length. Passing _"START"_ will discard the start of the input. _"END"_ will discard the end of the input. _"NONE"_ will throw an error when the input exceeds the maximum input token length. <br />
-`preset` is a combination of parameters, such as prompt, temperature etc. Create presets in the [Cohere Playground](https://dashboard.cohere.com/playground/generate). <br />
-
-#### Example
-
-<ContainersKeyToggle>
-  <ComponentContainer>
-    <DeepChatBrowser
-      style={{borderRadius: '8px'}}
-      directConnection={{
-        cohere: {
-          key: 'placeholder key',
-          textGeneration: {model: 'command'},
-        },
-      }}
-    ></DeepChatBrowser>
-  </ComponentContainer>
-  <ComponentContainer>
-    <DeepChatBrowser
-      style={{borderRadius: '8px'}}
-      directConnection={{
-        cohere: {
-          textGeneration: {model: 'command'},
-        },
-      }}
-    ></DeepChatBrowser>
-  </ComponentContainer>
-</ContainersKeyToggle>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat
-  directConnection='{
-    "cohere": {
-      "key": "placeholder key",
-      "textGeneration": {"model": "command"}
-    }
-  }'
-></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat
-  directConnection='{
-    "cohere": {
-      "key": "placeholder key",
-      "textGeneration": {"model": "command"}
-    }
-  }'
-  style="border-radius: 8px"
-></deep-chat>
-```
-
-</TabItem>
-</Tabs>
-
-<LineBreak></LineBreak>
-
-### `Summarization` {#Summarization}
-
-- Type: `true` | \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `length?`: `"auto"` | `"short"` | `"medium"` | `"long"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `format?:` `"auto"` | `"paragraph"` | `"bullets"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `extractiveness?:` `"auto"` | `"low"` | `"medium"` | `"high"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `additional_command?: string` <br />
-  \}
-
-Connect to Cohere's [`summarize`](https://docs.cohere.com/reference/summarize-2) API. You can set this property to _true_ or configure it using an object: <br />
-`model` is the name of the model used to generate a summary. <br />
-`length` indicates the approximate length of the summary. _"auto"_ chooses the best option based on the input text. <br />
-`format` indicates the style in which the summary will be delivered - in a free form paragraph or in bullet points. <br />
-`extractiveness` controls how close to the original text the summary is. _"high"_ extractiveness summaries will lean towards reusing sentences verbatim, while _"low"_ extractiveness summaries will tend to paraphrase more. <br />
-`temperature` (from 0 to 5) controls the randomness of the output. Lower values tend to generate more predictable outputs, while higher values tend to generate more creative outputs. The sweet spot is typically between _0_ and _1_. <br />
-`additional_command` is a free-form instruction for modifying how the summaries get generated. Should start with _"Generate a summary \_"_. and end with Eg. _"focusing on the next steps"_ or _"written by Yoda"_. <br />
-
-#### Example
-
-<ContainersKeyToggle>
-  <ComponentContainer>
-    <DeepChatBrowser
-      style={{borderRadius: '8px'}}
-      directConnection={{
-        cohere: {
-          key: 'placeholder key',
-          summarization: {model: 'summarize-xlarge'},
-        },
-      }}
-    ></DeepChatBrowser>
-  </ComponentContainer>
-  <ComponentContainer>
-    <DeepChatBrowser
-      style={{borderRadius: '8px'}}
-      directConnection={{
-        cohere: {
-          summarization: {model: 'summarize-xlarge'},
-        },
-      }}
-    ></DeepChatBrowser>
-  </ComponentContainer>
-</ContainersKeyToggle>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```html
-<deep-chat
-  directConnection='{
-    "cohere": {
-      "key": "placeholder key",
-      "summarization": {"model": "summarize-xlarge"}
-    }
-  }'
-></deep-chat>
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
-<deep-chat
-  directConnection='{
-    "cohere": {
-      "key": "placeholder key",
-      "summarization": {"model": "summarize-xlarge"}
-    }
-  }'
-  style="border-radius: 8px"
-></deep-chat>
-```
-
-</TabItem>
-</Tabs>
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
 
 <LineBreak></LineBreak>

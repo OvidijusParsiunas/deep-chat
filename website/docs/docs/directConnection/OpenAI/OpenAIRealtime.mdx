@@ -440,6 +440,10 @@ Configuration for the various sates of a button. <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `threshold?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `prefix_padding_ms?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `silence_duration_ms?: number`\} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `input_audio_transcription?:` `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `language?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `prompt?: string`\} <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `tools?:` \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type?:` `"function"`|`"code_interpreter"`|`"file_search"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name?: string`, <br />
@@ -448,7 +452,7 @@ Configuration for the various sates of a button. <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `tool_choice?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: OpenAIRealtimeFunction`](#OpenAIRealtimeFunction) <br />
   \}
-- Default: _\{model: "gpt-4o-realtime-preview-2024-12-17"\}_
+- Default: _\{model: "gpt-4o-realtime-preview-2025-06-03"\}_
 
 Session configuration. This object follows the configuration referenced [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create). <br />
 **IMPORTANT:** If you are providing your own `ephemeralKey` or using the [`fetchEphemeralKey`](#FetchEphemeralKey) function, this configuration will need to be used there.
@@ -459,6 +463,7 @@ However, this does not apply to the [`function_handler`](#OpenAIRealtimeFunction
 `temperature` is the sampling temperature for the model. <br />
 `max_response_output_tokens` is the maximum number of output tokens for a single assistant response. <br />
 `turn_detection` is configuration to detect when the model should start speaking. More info can be found [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create#realtime-sessions-create-turn_detection). <br />
+`input_audio_transcription` enables transcription of user audio. Set to _true_ to use default settings with _"whisper-1"_ model or provide an object. This is required to receive user message transcripts via [`onMessage`](/docs/messages#onMessage). <br />
 `tools` is a list of tools available to the model. More info can be found [here](https://platform.openai.com/docs/api-reference/realtime-sessions/create#realtime-sessions-create-tools). <br />
 `tool_choice` is used to define how the model chooses tools. <br />
 
@@ -678,7 +683,6 @@ chatElementRef.openAI.realtime.methods.sendMessage('Are you a real human?', 'use
 `started`/`sts-session-started` is triggered when the conversion has started. <br />
 `stopped`/`sts-session-stopped` is triggered when the conversion has stopped. <br />
 
-{' '}
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser

@@ -84,7 +84,6 @@ export default function ChatComponent({config}) {
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
                   auxiliaryStyle={darkAuxiliaryStyle}
-                  introPanelStyle={darkPanelStyle}
                 ></DeepChatBrowser>
               ) : config?.connect?.demo ? (
                 <DeepChatBrowser
@@ -97,7 +96,6 @@ export default function ChatComponent({config}) {
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
                   auxiliaryStyle={darkAuxiliaryStyle}
-                  introPanelStyle={darkPanelStyle}
                 ></DeepChatBrowser>
               ) : config?.connect?.webModel ? (
                 <DeepChatBrowser
@@ -125,7 +123,6 @@ export default function ChatComponent({config}) {
                   textInput={darkTextInput}
                   submitButtonStyles={darkButtonStyles}
                   auxiliaryStyle={darkAuxiliaryStyle}
-                  introPanelStyle={darkPanelStyle}
                 ></DeepChatBrowser>
               )}
             </div>

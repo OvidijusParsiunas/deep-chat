@@ -1,0 +1,186 @@
+---
+sidebar_position: 21
+---
+
+# X
+
+import xLogo from '/img/xLogo.webp';
+
+# <img src={xLogo} className="adaptive-logo-filter" width="38" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title"></span>
+
+<br />
+<br />
+
+Properties used to connect to [xAI](https://x.ai/).
+
+### `x` {#x}
+
+- Type: \{[`chat?: Chat`](#Chat), [`images?: Images`](#Images)}
+- Default: _\{chat: true\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `Chat` {#Chat}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string` <br />
+  \}
+- Default: _\{model: "grok-3-latest"\}_
+
+Connect to X's chat API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the X model to be used by the API. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness of responses. Higher values produce more creative outputs. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        x: {
+          key: 'placeholder key',
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        x: {
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "x": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "x": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+### `Images` {#Images}
+
+- Type: `true` | \{`model?: string`,`n?: number`}
+- Default: _\{model: "grok-2-image"\}_
+
+Connect to X's image generation API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the image generation model. <br />
+`n` is the number of images to generate. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        x: {
+          key: 'placeholder key',
+          images: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        x: {
+          images: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "x": {
+      "key": "placeholder key",
+      "images": true
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "x": {
+      "key": "placeholder key",
+      "images": true
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

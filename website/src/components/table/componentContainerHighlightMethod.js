@@ -20,7 +20,10 @@ export default function ComponentContainerHighlightMethod({children}) {
         <ComponentContainer>{children}</ComponentContainer>
       </div>
       <div className="documentation-example-container method-example-container">
-        <button className="documentation-button" onClick={() => click(containerRef.current.children[0])}>
+        <button
+          className="documentation-button documentation-button-middle"
+          onClick={() => click(containerRef.current.children[0])}
+        >
           Call Method
         </button>
       </div>

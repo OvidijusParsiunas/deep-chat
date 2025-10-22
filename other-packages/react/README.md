@@ -17,7 +17,7 @@
 - Text To Speech to hear message responses
 - Support for MarkDown and custom elements to help structure text and render code
 - Introduction panel and dynamic modals to help describe functionality for your users
-- Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
+- Connect to more than 20 popular AI APIs such as OpenAI or Claude directly from the browser
 - Communicate with Speech to Speech models
 - Support for all major ui frameworks/libraries
 - Host a model on the browser
@@ -138,28 +138,6 @@ $ npm run build
 ```
 
 If you wish to edit the component functionality, please see the core [Deep Chat](https://www.npmjs.com/package/deep-chat) package and import your forked package into this component as has been done for `deep-chat`.
-
-## :star2: Sponsors
-
-Thankyou to our generous sponsors!
-
-<p align="center">
-    &nbsp; &nbsp; &nbsp; 
-    <img src="https://github.com/dorra.png" width="110px"/>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
-    <img src="https://github.com/techpeace.png" width="110px" />
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
-    <img src="https://github.com/ChiaoGeek.png" width="110px" />
-</p>
-<p align="center">
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-    <a href="https://github.com/dorra">dorra</a>
-    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; 
-    <a href="https://github.com/techpeace">techpeace</a>
-      &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-    <a href="https://github.com/ChiaoGeek">ChiaoGeek</a>
-     &nbsp;
-</p>
 
 ## :heart: Contributions
 

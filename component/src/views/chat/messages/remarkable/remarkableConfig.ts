@@ -29,8 +29,8 @@ export class RemarkableConfig {
     }
     if (customConfig?.math) {
       if (!window.katex) {
-        // WORK - link to the documentation
         console.warn('window.katex not found, use chatElementRef.refreshMessages to re-render messages');
+        console.warn('See https://deepchat.dev/examples/externalModules');
       }
       const delimiter = typeof customConfig.math === 'object' ? customConfig.math.delimiter : '';
       const options = typeof customConfig.math === 'object' && customConfig.math.options ? customConfig.math.options : {};

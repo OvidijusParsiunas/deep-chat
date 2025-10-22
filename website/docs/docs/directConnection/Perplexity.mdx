@@ -1,0 +1,133 @@
+---
+sidebar_position: 17
+---
+
+# Perplexity
+
+import perplexityLogo from '/img/perplexityLogo.png';
+
+# <img src={perplexityLogo} className="adaptive-logo-filter" width="38" style={{float: 'left', marginRight: '10px', marginTop: '10px'}} /><span className="direct-service-title">Perplexity</span>
+
+Properties used to connect to [Perplexity](https://www.perplexity.ai/).
+
+### `perplexity` {#perplexity}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_k?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `search_mode?: 'web' | 'academic'`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `reasoning_effort?: 'low' | 'medium' | 'high'`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `search_domain_filter?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `disable_search?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `enable_search_classifier?: boolean` <br />
+  \}
+- Default: _\{model: "sonar"\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Perplexity's [`chat completions`](https://docs.perplexity.ai/api-reference/chat-completions-post) API. <br />
+`model` is the name of the Perplexity model to be used by the API. Check [available models](https://docs.perplexity.ai/docs/model-cards) for more. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness/creativity of responses (0.0-2.0). Higher values produce more diverse outputs. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`top_k` limits the number of highest probability tokens to consider (1+). <br />
+`frequency_penalty` penalizes frequent tokens to reduce repetition (-2.0 to 2.0). <br />
+`presence_penalty` penalizes new tokens to encourage topic diversity (-2.0 to 2.0). <br />
+`stop` string or array of strings that will stop generation when encountered. <br />
+`search_mode` specifies whether to search the web or academic sources ('web' or 'academic'). <br />
+`reasoning_effort` controls the reasoning intensity ('low', 'medium', or 'high'). <br />
+`search_domain_filter` array of domains to restrict search results to specific websites. <br />
+`disable_search` when true, disables web search functionality. <br />
+`enable_search_classifier` when true, enables automatic classification of search queries. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        perplexity: {
+          key: 'placeholder key',
+          system_prompt: 'You are a helpful research assistant.',
+          temperature: 0.7,
+          search_mode: 'web',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        perplexity: {
+          system_prompt: 'You are a helpful research assistant.',
+          temperature: 0.7,
+          search_mode: 'web',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "perplexity": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful research assistant.",
+      "temperature": 0.7,
+      "search_mode": "web"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "perplexity": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful research assistant.",
+      "temperature": 0.7,
+      "search_mode": "web"
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>

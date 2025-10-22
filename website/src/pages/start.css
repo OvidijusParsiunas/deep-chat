@@ -92,41 +92,118 @@
   margin-left: 0px !important;
 }
 
-.start-page-display-logos > .start-page-logo {
+#start-page-connect-to-popular > .start-page-logos {
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.start-page-display-logos-row {
+  display: flex;
+}
+
+.start-page-display-logos > .start-page-logo,
+.start-page-display-logos > div > .start-page-logo {
   opacity: 1;
   margin-left: 0px;
 }
 
-.start-page-display-logos > div:nth-child(1) {
+.start-page-display-logos > div:nth-child(1),
+.start-page-display-logos > div > div:nth-child(1) {
   transition: all 1s 0s;
 }
 
-.start-page-display-logos > div:nth-child(2) {
+.start-page-display-logos > div:nth-child(2),
+.start-page-display-logos > div > div:nth-child(2) {
   transition: all 1s 0.1s;
 }
 
-.start-page-display-logos > div:nth-child(3) {
+.start-page-display-logos > div:nth-child(3),
+.start-page-display-logos > div > div:nth-child(3) {
   transition: all 1s 0.2s;
 }
 
-.start-page-display-logos > div:nth-child(4) {
+.start-page-display-logos > div:nth-child(4),
+.start-page-display-logos > div > div:nth-child(4) {
   transition: all 1s 0.3s;
 }
 
-.start-page-display-logos > div:nth-child(5) {
+.start-page-display-logos > div:nth-child(5),
+.start-page-display-logos > div > div:nth-child(5) {
   transition: all 1s 0.4s;
 }
 
-.start-page-display-logos > div:nth-child(6) {
+.start-page-display-logos > div:nth-child(6),
+.start-page-display-logos > div > div:nth-child(6) {
   transition: all 1s 0.5s;
 }
 
-.start-page-display-logos > div:nth-child(7) {
+.start-page-display-logos > div:nth-child(7),
+.start-page-display-logos > div > div:nth-child(7) {
   transition: all 1s 0.6s;
 }
 
-.start-page-display-logos > div:nth-child(8) {
+.start-page-display-logos > div:nth-child(8),
+.start-page-display-logos > div > div:nth-child(8) {
   transition: all 1s 0.7s;
+}
+
+.start-page-display-logos > div:nth-child(9),
+.start-page-display-logos > div > div:nth-child(9) {
+  transition: all 1s 0.8s;
+}
+
+.start-page-display-logos > div:nth-child(10),
+.start-page-display-logos > div > div:nth-child(10) {
+  transition: all 1s 0.9s;
+}
+
+.start-page-display-logos > div:nth-child(11),
+.start-page-display-logos > div > div:nth-child(11) {
+  transition: all 1s 1s;
+}
+
+.start-page-display-logos > div:nth-child(12),
+.start-page-display-logos > div > div:nth-child(12) {
+  transition: all 1s 1.1s;
+}
+
+.start-page-display-logos > div:nth-child(13),
+.start-page-display-logos > div > div:nth-child(13) {
+  transition: all 1s 1.2s;
+}
+
+.start-page-display-logos > div:nth-child(14),
+.start-page-display-logos > div > div:nth-child(14) {
+  transition: all 1s 1.3s;
+}
+
+.start-page-display-logos > div:nth-child(15),
+.start-page-display-logos > div > div:nth-child(15) {
+  transition: all 1s 1.4s;
+}
+
+.start-page-display-logos > div:nth-child(16),
+.start-page-display-logos > div > div:nth-child(16) {
+  transition: all 1s 1.5s;
+}
+
+.start-page-display-logos > div:nth-child(17),
+.start-page-display-logos > div > div:nth-child(17) {
+  transition: all 1s 1.6s;
+}
+
+.start-page-display-logos > div:nth-child(18),
+.start-page-display-logos > div > div:nth-child(18) {
+  transition: all 1s 1.7s;
+}
+
+.start-page-display-logos > div:nth-child(19),
+.start-page-display-logos > div > div:nth-child(19) {
+  transition: all 1s 1.8s;
+}
+
+.start-page-display-logos > div:nth-child(20),
+.start-page-display-logos > div > div:nth-child(20) {
+  transition: all 1s 1.9s;
 }
 
 .start-page-logo {
@@ -135,7 +212,12 @@
   transition: 1s;
 }
 
-.start-page-hoverable-logos > .start-page-logo {
+#start-page-create-component > div > .start-page-logo {
+  margin-right: 14px;
+}
+
+.start-page-hoverable-logos > .start-page-logo,
+.start-page-hoverable-logos > div > .start-page-logo {
   transition: all 0.1s 0s !important;
 }
 
@@ -211,5 +293,18 @@
 
   #start-page-small-screen {
     display: block;
+  }
+}
+
+@media (max-width: 900px) or (max-height: 590px) {
+  .start-page-display-logos > div > .start-page-logo {
+    transform: scale(0.8);
+    margin-right: 9px;
+  }
+}
+
+@media (max-width: 670px) {
+  .start-page-display-logos > div > .start-page-logo {
+    margin-right: 0px;
   }
 }

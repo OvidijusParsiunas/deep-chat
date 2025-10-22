@@ -40,7 +40,7 @@
 
 #start-panel-animation-content-container {
   position: relative;
-  width: 650px;
+  width: 814px;
   margin-top: 65px;
   margin-left: auto;
   margin-right: auto;
@@ -90,16 +90,30 @@
   left: 395px;
 }
 
+.logos-slide-visible {
+  visibility: visible !important;
+  transition: 1s;
+  left: 466px !important;
+}
+
 .start-panel-logo {
   background-color: white;
   border-radius: 10px;
   width: 54px;
   height: 55px;
-  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
   display: inline-block;
   transition: margin-bottom 1s;
   cursor: pointer;
   user-select: none;
+}
+
+#start-panel-animation-content-container > #start-panel-logos > .start-panel-logo {
+  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
+}
+
+.logos-slide-visible > .start-panel-logo {
+  transition: box-shadow 1s;
+  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
 }
 
 .start-panel-logo:hover {
@@ -158,6 +172,23 @@
   }
 }
 
+@keyframes sparkle {
+  0% {
+    background-color: var(--sparkle-base-color, white);
+  }
+  50% {
+    background-color: var(--sparkle-highlight-color, #f8f8e7);
+    box-shadow: 0 0 15px var(--sparkle-glow-color, rgba(245, 245, 220, 0.4));
+  }
+  100% {
+    background-color: var(--sparkle-base-color, white);
+  }
+}
+
+.sparkle-animation {
+  animation: sparkle 0.25s ease-in-out;
+}
+
 @media (max-height: 830px) {
   #start-panel-content {
     top: 43%;
@@ -185,18 +216,27 @@
   }
 }
 
+@media (max-width: 1000px) {
+  #start-panel-animation-content-container {
+    margin-left: -30px;
+  }
+}
+
 @media (max-width: 1250px) {
   #start-panel-sub-header {
     font-size: 2.3rem;
-  }
-  #start-panel-animation-content-container {
-    padding-left: 10px;
   }
 }
 
 @media (max-width: 945px) {
   #start-panel-content {
     top: 48%;
+  }
+}
+
+@media (max-width: 925px) {
+  #start-panel-animation-content-container {
+    margin-left: -46px;
   }
 }
 
@@ -213,8 +253,23 @@
   .start-panel-component-center {
     margin-left: 120px;
   }
-  .start-panel-logos-left {
-    left: 345px;
+  #start-panel-animation-content-container {
+    padding-left: 40px;
+  }
+  #start-panel-animation-content-container {
+    margin-left: -80px;
+  }
+}
+
+@media (max-width: 840px) {
+  #start-panel-animation-content-container {
+    margin-left: -100px;
+  }
+}
+
+@media (max-width: 816px) {
+  #start-panel-animation-content-container {
+    margin-left: -110px;
   }
 }
 
@@ -232,84 +287,14 @@
     margin-left: 4%;
   }
   #start-panel-animation-content-container {
-    margin-left: -5px;
+    padding-left: 64px;
+  }
+  #start-panel-animation-content-container {
+    margin-left: -140px;
   }
 }
 
 @media (max-width: 720px) {
-  #start-panel-animation-content-container {
-    width: 500px;
-    margin-left: -10px;
-    padding-left: 0px;
-  }
-  .start-panel-component-center {
-    margin-left: 110px;
-  }
-}
-
-@media (max-width: 694px) {
-  #start-panel-animation-content-container {
-    margin-left: -20px;
-  }
-}
-
-@media (max-width: 650px) {
-  #start-panel-animation-content-container {
-    margin-left: -30px;
-  }
-}
-
-@media (max-width: 641px) {
-  #start-panel-sub-header {
-    width: 100%;
-    margin-left: 0%;
-  }
-}
-
-@media (max-width: 630px) {
-  #start-panel-animation-content-container {
-    margin-left: -35px;
-  }
-}
-
-@media (max-width: 620px) {
-  #start-panel-animation-content-container {
-    margin-left: -45px;
-  }
-}
-
-@media (max-width: 605px) {
-  #start-panel-sub-header {
-    width: 109%;
-    margin-left: -5%;
-  }
-}
-
-@media (max-width: 594px) {
-  #start-panel-animation-content-container {
-    margin-left: -50px;
-  }
-}
-
-@media (max-width: 580px) {
-  #start-panel-animation-content-container {
-    margin-left: -57px;
-  }
-}
-
-@media (max-width: 573px) {
-  #start-panel-animation-content-container {
-    margin-left: -63px;
-  }
-}
-
-@media (max-width: 562px) {
-  #start-panel-animation-content-container {
-    margin-left: -67px;
-  }
-}
-
-@media (max-width: 557px) {
   #start-panel-animation-content-container {
     display: none;
   }
@@ -425,10 +410,4 @@
 /* need !important for build/serve website */
 .start-panel-component-left {
   margin-left: 45px !important;
-}
-
-/* needs to be here for start-panel-logos-left to take effect for different screen sizes */
-/* need !important for build/serve website */
-.start-panel-logos-right {
-  left: 495px !important;
 }

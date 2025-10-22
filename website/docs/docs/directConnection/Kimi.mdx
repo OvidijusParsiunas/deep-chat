@@ -1,0 +1,333 @@
+---
+sidebar_position: 11
+---
+
+# Kimi
+
+import kimiLogo from '/img/kimiLogo.png';
+
+# <img src={kimiLogo} className="adaptive-logo-filter" width="38" style={{float: 'left', marginRight: '2px', marginTop: '9px'}} /><span className="direct-service-title">imi</span>
+
+Properties used to connect to [Moonshot AI Kimi](https://platform.moonshot.ai/).
+
+### `kimi` {#kimi}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: KimiTool[]`](#KimiTool), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler) <br />
+  \}
+- Default: _\{model: "moonshot-v1-8k"\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Moonshot AI's [`chat completion`](https://platform.moonshot.ai/docs/api/chat#chat-completion) API. <br />
+`model` is the name of the Kimi model to be used by the API. <br />
+`temperature` controls the randomness of responses (0.0-2.0). Higher values produce more creative outputs. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`frequency_penalty` reduces repetition by penalizing frequently used tokens (-2.0 to 2.0). <br />
+`presence_penalty` reduces repetition by penalizing tokens that have appeared (-2.0 to 2.0). <br />
+`stop` defines stop sequences that will halt generation when encountered. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+[`tools`](#KimiTool) defines available function declarations for the model to call. <br />
+[`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        kimi: {
+          key: 'placeholder key',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        kimi: {
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "kimi": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "kimi": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Vision Example
+
+Upload images alongside your text prompts for visual understanding. These capabilities are only available for vision models such as _moonshot-v1-8k-vision-preview_ or _moonshot-v1-32k-vision-preview_.
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        kimi: {
+          key: 'placeholder key',
+          model: 'moonshot-v1-8k',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        kimi: {
+          model: 'moonshot-v1-8k',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "kimi": {
+      "key": "placeholder key",
+      "model": "moonshot-v1-8k"
+    }
+  }'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "kimi": {
+      "key": "placeholder key",
+      "model": "moonshot-v1-8k"
+    }
+  }'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+## Tool Calling
+
+Kimi supports [function calling](https://platform.moonshot.ai/docs/api/chat#chat-completion) functionality:
+
+### `KimiTool` {#KimiTool}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `function:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `parameters: object` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  \}
+
+Array describing tools that the model may call. <br />
+`type` must be "function" for function tools. <br />
+`name` is the name of the tool function. <br />
+`description` explains what the tool does and when it should be used. <br />
+`parameters` defines the parameters the tool accepts in JSON Schema format. <br />
+
+### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants to use tools. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what tool functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each tool function (in the same order as in [`functionsDetails`](/docs/directConnection#FunctionsDetails))
+which will feed it back into the model to finalize a response, or return a JSON containing `text` which will immediately display it in the chat.
+
+#### Example
+
+<ContainersKeyToggleChatFunction service="kimi"></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  kimi: {
+    tools: [
+      {
+        type: 'function',
+        function: {
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'The city and state, e.g. San Francisco, CA',
+              },
+              unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+            },
+            required: ['location'],
+          },
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  kimi: {
+    tools: [
+      {
+        type: 'function',
+        function: {
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'The city and state, e.g. San Francisco, CA',
+              },
+              unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+            },
+            required: ['location'],
+          },
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

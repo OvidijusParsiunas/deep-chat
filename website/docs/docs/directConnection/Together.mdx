@@ -1,0 +1,281 @@
+---
+sidebar_position: 20
+---
+
+# Together
+
+import togetherLogo from '/img/togetherLogo.webp';
+
+# <img src={togetherLogo} width="44" style={{float: 'left', marginRight: '12px', marginTop: '6px'}} /><span className="direct-service-title">Together</span>
+
+Properties used to connect to [Together AI](https://www.together.ai/).
+
+### `together` {#together}
+
+- Type: \{[`chat?: Chat`](#Chat), [`images?: Images`](#Images), [`textToSpeech?: TextToSpeech`](#TextToSpeech)\}
+- Default: _\{chat: true\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `Chat` {#Chat}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_k?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `repetition_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string[]` <br />
+  \}
+- Default: _\{model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"\}_
+
+Connect to Together AI's [`chat/completions`](https://docs.together.ai/reference/chat-completions-1) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the Together AI model to be used by the API. Check [available models](https://docs.together.ai/docs/inference-models) for more. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness/creativity of responses (0.0-2.0). Higher values produce more diverse outputs. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`top_k` limits the number of highest probability tokens to consider (1+). <br />
+`repetition_penalty` penalizes repeated tokens (0.0-2.0). Values > 1.0 discourage repetition. <br />
+`stop` array of strings that will stop generation when encountered. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          key: 'placeholder key',
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+### `Images` {#Images}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `width?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `height?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `steps?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `n?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `seed?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `response_format?: 'url' | 'base64'` <br />
+  \}
+- Default: _\{model: "black-forest-labs/FLUX.1-schnell-Free"\}_
+
+Connect to Together AI's [`images/generations`](https://docs.together.ai/reference/post-images-generations) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the image generation model. Check [available models](https://docs.together.ai/docs/inference-models#image-models) for more. <br />
+`width` specifies the width of the generated image in pixels. <br />
+`height` specifies the height of the generated image in pixels. <br />
+`steps` controls the number of denoising steps (1-50). More steps generally produce higher quality images. <br />
+`n` specifies the number of images to generate (1-10). <br />
+`seed` provides a seed for reproducible generation. <br />
+`response_format` determines whether images are returned as URLs or base64-encoded data. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          key: 'placeholder key',
+          images: {steps: 20, n: 2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          images: {steps: 20, n: 2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "images": {"steps": 20, "n": 2}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "images": {"steps": 20, "n": 2}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `TextToSpeech` {#TextToSpeech}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `voice?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `speed?: number` <br />
+  \}
+- Default: _\{model: "cartesia/sonic", voice: "laidback woman"\}_
+
+Connect to Together AI's [`audio/speech`](https://docs.together.ai/reference/audio-speech) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the text-to-speech model. <br />
+`voice` specifies the voice to use for speech synthesis. <br />
+`speed` controls the speed of the generated speech (0.25-4.0). <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          key: 'placeholder key',
+          textToSpeech: {voice: 'enthusiastic woman', speed: 1.2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        together: {
+          textToSpeech: {voice: 'enthusiastic woman', speed: 1.2},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "textToSpeech": {"voice": "enthusiastic woman", "speed": 1.2}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "together": {
+      "key": "placeholder key",
+      "textToSpeech": {"voice": "enthusiastic woman", "speed": 1.2}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

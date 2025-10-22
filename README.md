@@ -1,6 +1,6 @@
 <br />
 
-![Deep Chat](./assets/readme/banner-2.png)
+![Deep Chat](https://github.com/user-attachments/assets/1e60ad6f-7825-40d7-8b1a-f7bb52e6fbff)
 
 <b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with just _one line of code_. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
 
@@ -17,7 +17,7 @@
 - Text To Speech to hear message responses
 - Support for MarkDown and custom elements to help structure text and render code
 - Introduction panel and dynamic modals to help describe functionality for your users
-- Connect to popular AI APIs such as OpenAI, HuggingFace, Cohere directly from the browser
+- Connect to more than 20 popular AI APIs such as OpenAI or Claude directly from the browser
 - Communicate with Speech to Speech models
 - Support for all major ui frameworks/libraries
 - Host a model on the browser
@@ -26,9 +26,21 @@
 
 ### :tada: Latest Updates
 
-Deep Chat version `2.2.2` brings a ton of new features into the Deep Chat ecosystem:
+Deep Chat version `2.3.0` brings a ton of new features into the Deep Chat ecosystem:
 
-- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you store messages locally on your browser without worrying about a backend message integration.
+- [`directConnection`](https://deepchat.dev/docs/directConnection) now supports more than 20 AI APIs!
+- [`htmlWrappers`](https://deepchat.dev/docs/messages/#browserStorage) can now be used to standardize custom styling for all messages.
+- You can now use custom plugins for [remarkable](https://deepchat.dev/docs/messages/styles#remarkable) such as [Katex](https://katex.org/).
+- Change the loading bubble style via the `toggle` function in [`displayLoadingBubble`](https://deepchat.dev/docs/messages/#displayLoadingBubble).
+- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.3.0) for more!
+
+<p align="center">
+    <img width="960" src="https://github.com/user-attachments/assets/f808f994-a64d-456b-bacb-e08ab55d92e5" alt="version 2.3.0">
+</p>
+
+`2.2.2` update:
+
+- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you to store messages locally on your browser without worrying about a backend message integration.
 - Button [tooltips](https://deepchat.dev/docs/styles/buttons#Tooltip).
 - Place your streamed messages inside custom [`htmlWrappers`](https://deepchat.dev/docs/messages/HTML#htmlWrappers).
 - See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.2.2) for more!
@@ -48,19 +60,6 @@ Deep Chat version `2.2.2` brings a ton of new features into the Deep Chat ecosys
 
 <p align="center">
     <img width="1000" src="https://github.com/user-attachments/assets/6089a0b4-0fe6-43e9-b9ce-840a9cfda885" alt="version 2.2.0">
-</p>
-
-`2.1.1` update:
-
-- [Azure OpenAI API](https://deepchat.dev/docs/directConnection/Azure#OpenAI)
-- [`loadHistory`](https://deepchat.dev/docs/interceptors#loadHistory) interceptor to asynchronously load history and pagination
-- [`updateMessage`](https://deepchat.dev/docs/methods#updateMessage) method to dynamically update messages
-- Custom configuration for message text [MarkDown](https://deepchat.dev/docs/messages/styles#remarkable) rendering
-- Ability to [group messages](https://deepchat.dev/docs/messages/styles#groupedMessages)
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.1.1) for more!
-
-<p align="center">
-    <img width="1000" src="https://github.com/user-attachments/assets/1e86d151-a7e4-4add-961e-af2c55315a9d" alt="version 2.1.0">
 </p>
 
 ### :computer: Getting started
@@ -184,28 +183,6 @@ Create, configure and use Deep Chat components without writing any code in the o
 
 <p align="center">
     <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/6b78907c-c4c2-44de-b4c7-d73c1e887fa8" alt="Expanded View">
-</p>
-
-## :star2: Sponsors
-
-Thankyou to our generous sponsors!
-
-<p align="center">
-    &nbsp; &nbsp; &nbsp; 
-    <img src="https://github.com/dorra.png" width="110px"/>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
-    <img src="https://github.com/techpeace.png" width="110px" />
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
-    <img src="https://github.com/ChiaoGeek.png" width="110px" />
-</p>
-<p align="center">
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-    <a href="https://github.com/dorra">dorra</a>
-    &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; 
-    <a href="https://github.com/techpeace">techpeace</a>
-      &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-    <a href="https://github.com/ChiaoGeek">ChiaoGeek</a>
-     &nbsp;
 </p>
 
 ## :heart: Contributions

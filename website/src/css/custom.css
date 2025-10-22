@@ -376,6 +376,12 @@ code {
   display: block;
 }
 
+.documentation-button-middle {
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
 .documentation-button {
   padding: 10px;
   font-size: 15px;

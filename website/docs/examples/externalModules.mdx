@@ -5,17 +5,21 @@ sidebar_position: 3
 import azureLogo from '/img/azureLogo.png';
 import hljsLogo from '/img/hljsLogo.png';
 import WebModelLogo from '/img/chip.svg';
+import Link from '/img/link.svg';
+import Math from '/img/math.svg';
 
 # External Modules
 
 To keep Deep Chat as lightweight as possible, some of its functionality requires the use of external modules.
 The component has been set up to recognise them by using the `window` object:
 
-| Functionality                                                                       | Module                                                                                                                                                                                                          | Window             |
-| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Higlighting [code](/docs/messages#code-messages)                                    | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`      |
-| [Speech to text](/docs/speech#speechToText) with [Azure](/docs/speech#AzureOptions) | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK` |
-| LLM [web model](/docs/webModel#webModel)                                            | <WebModelLogo width="18" style={{float: 'left', marginRight: '6px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[deep-chat-web-llm](https://github.com/OvidijusParsiunas/web-llm)                    | `window.webLLM`    |
+| Functionality                                                                                    | Module                                                                                                                                                                                                          | Window                      |
+| ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| Higlighting [code](/docs/messages#code-messages)                                                 | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`               |
+| [Remarkable plugins](https://github.com/jonschlinkert/remarkable/blob/master/docs/plugins.md)    | <Link width="16" style={{float: 'left', marginRight: '7px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[Custom plugins](https://github.com/jonschlinkert/remarkable?tab=readme-ov-file#plugins)     | `window.remarkable_plugins` |
+| [Remarkable](https://github.com/jonschlinkert/remarkable) [math](https://katex.org/docs/options) | <Math width="18" style={{float: 'left', marginRight: '5px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[KaTeX](https://katex.org/docs/options)                                                      | `window.katex`              |
+| [Speech to text](/docs/speech#speechToText) with [Azure](/docs/speech#AzureOptions)              | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK`          |
+| LLM [web model](/docs/webModel#webModel)                                                         | <WebModelLogo width="18" style={{float: 'left', marginRight: '6px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[deep-chat-web-llm](https://github.com/OvidijusParsiunas/web-llm)                    | `window.webLLM`             |
 
 ## Implementation
 
@@ -24,62 +28,45 @@ Here are some simple approaches you can use to add these modules to your project
 - <b>Import from a dependancy</b> <br />
   If you are using a dependancy manager such as npm, you can import the modules and assign them to window:
 
-  <br />
-  <br />
-
-  | Module                                                                            | URL                                                                                            |
-  | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)          | import hljs from "highlight.js"; <br /> window.hljs = hljs;                                    |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)    | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk; |
-  | [web model](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import \* as webLLM from 'deep-chat-web-llm' <br /> window.webLLM = webLLM;                    |
-
-  <br />
+  | Module                                                                                   | URL                                                                                                     |
+  | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)                 | import hljs from "highlight.js"; <br /> window.hljs = hljs;                                             |
+  | [linkify](https://github.com/jonschlinkert/remarkable?tab=readme-ov-file#linkify-plugin) | import \{linkify\} from 'remarkable/linkify'; <br /> window.remarkable_plugins = [\{plugin: linkify\}]; |
+  | [katex](https://katex.org/)                                                              | import katex from 'katex'; <br /> window.katex = katex;                                                 |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)           | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk;          |
+  | [web model](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)        | import \* as webLLM from 'deep-chat-web-llm' <br /> window.webLLM = webLLM;                             |
 
 - <b>Dynamic import from a dependancy (recommended for SSR)</b> <br />
   If you are using a dependancy manager such as npm, you can dynamically import the modules and assign them to the window
   object. The highlightjs module can load after messages are generated, use the refreshMessages method to apply it:
 
-  <br />
-  <br />
-
-  | Module                                                                         | URL                                                                                                                                                                                                                              |
-  | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | import("highlight.js").then((module) => \{ <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> \}); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | import('microsoft-cognitiveservices-speech-sdk').then((module) => \{ <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.SpeechSDK = module; <br /> \});                                                                                      |
-  | [web model](https://github.com/OvidijusParsiunas/web-llm)                      | import('deep-chat-web-llm').then((module) => \{ <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.webLLM = module; <br /> \});                                                                                                              |
-
-  <br />
+  | Module                                                                   | URL                                                                                                                                                                                                                              |
+  | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme) | import("highlight.js").then((module) => \{ <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.hljs = module.default; <br /> &nbsp;&nbsp;&nbsp;&nbsp; chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> \}); |
+  | any other                                                                | import('name').then((module) => \{ <br /> &nbsp;&nbsp;&nbsp;&nbsp; window.name = module; <br /> \});                                                                                                                             |
 
 - <b>Script from a CDN</b> <br />
-  You can create script tags with the following URLs and append them to the document body (or manually add the scripts to
-  your markup). The highlightjs module can load after messages are generated, use the refreshMessages method to apply it
-  (window object is automatically populated).
+Create a \<script\> tag using any of the URLs (still need to populate the `window` object except for highlightjs).
+The highlightjs module can load after messages are generated, use the refreshMessages method to apply it. <br />
 
-  <br />
-  <br />
-
-  | Module                                                                         | URL                                                                                                                                                                                                                                                                                                    |
-  | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)       | const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
-  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | const script = document.createElement('script'); <br /> script.src = 'https://aka.ms/csspeech/jsbrowserpackageraw'; <br /> document.body.appendChild(script);                                                                                                                                          |
-  | [web model](https://github.com/OvidijusParsiunas/web-llm)                      | const script = document.createElement('script'); <br /> script.src = 'https://cdn.jsdelivr.net/gh/OvidijusParsiunas/web-llm/lib/index.js'; <br /> document.body.appendChild(script);                                                                                                                   |
-
-  <br />
+  | Module                                                                                   | URL                                                                                                                                                                                                                                                                                                                             |
+  | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme)                 | // manual example <br /> const script = document.createElement('script'); <br /> script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
+  | [linkify](https://github.com/jonschlinkert/remarkable?tab=readme-ov-file#linkify-plugin) | \<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/2.0.1/remarkable.js" /\> <br /> // special window setting <br /> window.remarkable_plugins = [\{plugin: remarkable.linkify\}];                                                                                                                                  |
+  | [katex](https://katex.org/)                                                              | \<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" /\>                                                                                                                                                                                                                                                 |
+  | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)           | \<script src="https://aka.ms/csspeech/jsbrowserpackageraw" /\>                                                                                                                                                                                                                                                                  |
+  | [web model](https://github.com/OvidijusParsiunas/web-llm)                                | \<script src="https://cdn.jsdelivr.net/gh/OvidijusParsiunas/web-llm/lib/index.js" /\>                                                                                                                                                                                                                                           |
 
 - <b>Script from within the project</b> <br />
-  You can manually download the files from the URLs above, add them to the script tags and append them to the document body
-  (or manually add the scripts to your markup). The highlightjs module can load after messages are generated, use the
-  refreshMessages method to apply it (window object is automatically populated).
+You can manually download the files from the URLs above and add their paths to the \<script\> tags. The highlightjs module can load after messages are generated, use the
+refreshMessages method to apply it (window object is automatically populated).
 
-  <br />
-  <br />
+  | Module                                                                   | Path                                                                                                                                                                                                                                      |
+  | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme) | const script = document.createElement('path'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
+  | any other                                                                | \<script src="path" /\>                                                                                                                                                                                                                   |
 
-  | Module                                                                   | URL                                                                                                                                                                                                                                         |
-  | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | [highlight](https://www.npmjs.com/package/highlight.js?activeTab=readme) | const script = document.createElement('script'); <br /> script.src = 'highlight.min.js'; <br /> script.onload = () => chatElementRef.current?.[refreshMessages](/docs/methods#refreshMessages)(); <br /> document.body.appendChild(script); |
-  | any other                                                                | const script = document.createElement('script'); <br /> script.src = 'name.js'; <br /> document.body.appendChild(script);                                                                                                                   |
-
-  <br />
+<br />
 
 If your project is using `TypeScript`, add this to the file where the modules are being used:
 
@@ -91,6 +78,8 @@ import * as webLLM from 'deep-chat-web-llm';
 declare global {
   interface Window {
     hljs: typeof hljs;
+    remarkable_plugins: {plugin: unknown; options?: unknown}[];
+    katex: unknown;
     SpeechSDK: typeof sdk;
     webLLM: typeof webLLM;
   }

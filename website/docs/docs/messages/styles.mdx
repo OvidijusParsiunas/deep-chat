@@ -46,12 +46,13 @@ Object defining the styling for various message types. <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `xhtmlOut?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `html?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `breaks?: boolean`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `linkify?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `langPrefix?: "language-${string}"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `linkTarget?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `typographer?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `quotes?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `highlight?: (str: string, lang: string) => void` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `highlight?: (str: string, lang: string) => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `math?: true` | `{delimiter?: string; options?: KatexOptions}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `applyHTML?: boolean` <br />
   \}
 
 - Default: _\{ breaks: true, linkTarget: "\_blank" \}_
@@ -61,15 +62,17 @@ Use this object to change its configuration. <br />
 `xhtmlOut` uses '/' to close single tags via \<br />\. <br />
 `html` enables HTML tags in source. <br />
 `breaks` converts '\n' in paragraphs into \<br>\. <br />
-`linkify` auto converts URL-like text to links. <br />
 `langPrefix` is a CSS language prefix for fenced blocks. <br />
 `linkTarget` sets the target to open links in. `"\_blank"` is used to open links in a new tab. <br />
 `typographer` enables some language-neutral replacement + quotes beautification. <br />
 `quotes` is double + single quotes replacement pairs. <br />
 `highlight` is a function that should return escaped HTML or '' if the source string is not changed. This is mostly used with [highlight.js](https://deepchat.dev/examples/externalModules). See [here](https://github.com/OvidijusParsiunas/deep-chat/blob/35ad0574ddcf45341585aeadf10e6cb4b9cf7eda/component/src/views/chat/messages/remarkable/remarkableConfig.ts#L16) on how you can set up this configuration. <br />
+`math` uses the [KaTex](https://katex.org/docs/options) library to render math expressions. <br />
+`applyHTML` applies [`html`](/docs/messages/HTML) capabilities to remarkable responses such as [Deep Chat classes](/docs/messages/HTML#deepChatClasses). <br />
 
 :::tip
-Use [this playground](https://jonschlinkert.github.io/remarkable/demo) to find the configuration that suits you.
+Use [this demo](https://jonschlinkert.github.io/remarkable/demo) to experiment and find the configuration that suits you. <br />
+See [external modules](/examples/externalModules) for remarkable plugins such as linkify and [KaTex](https://katex.org/docs/options), more [info1](https://github.com/OvidijusParsiunas/deep-chat/issues/426#issuecomment-3073569853), [info2](https://github.com/OvidijusParsiunas/deep-chat/issues/432).
 :::
 
 <ComponentContainer>
@@ -570,6 +573,35 @@ Object defining the styling for elements that contain a loading animation. <br /
 
 </TabItem>
 </Tabs>
+
+<LineBreak></LineBreak>
+
+### `KatexOptions` {#KatexOptions}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `leqno?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `fleqn?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `throwOnError?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `errorColor?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `macros?: Record<string, string>`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `minRuleThickness?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `colorIsTextColor?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxSize?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxExpand?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `globalGroup?: boolean` <br />
+  \}
+
+Object defining the options for the [KaTex](https://katex.org/docs/options) math renderer. <br />
+`leqno` is used to display math has `\tags` rendered on the left instead of the right. <br />
+`fleqn` displays math renders flush left with a 2em left margin. <br />
+`throwOnError` throws a `ParseError` when it encounters an unsupported command . <br />
+`errorColor` is a color string for errors defined in the format "#xxx" or "#xxxxxx". <br />
+`macros` is a collection of custom macros. E.g. `macros: {"\\R": "\\mathbb{R}"}` <br />
+`minRuleThickness` is the minimum thickness of horizontal rules. <br />
+`colorIsTextColor` is used to enable color functions prior to Katex version 0.8.0. <br />
+`maxSize` caps all user specified sizes. <br />
+`maxExpand` limits the number of macro expansions. <br />
+`globalGroup` is used to run KaTex code in the global group.
 
 <LineBreak></LineBreak>
 

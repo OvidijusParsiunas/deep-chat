@@ -1,0 +1,335 @@
+---
+sidebar_position: 8
+---
+
+# Gemini
+
+import geminiLogo from '/img/geminiLogo.webp';
+
+# <img src={geminiLogo} width="40" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title">Gemini</span>
+
+Properties used to connect to [Google AI Gemini](https://ai.google.dev/).
+
+### `gemini` {#gemini}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxOutputTokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `topP?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `topK?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stopSequences?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `responseMimeType?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `responseSchema?: object`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: GeminiTool[]`](#GeminiTool) <br />
+  \}
+- Default: _\{model: "gemini-2.0-flash"\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Google AI's [`generateContent`](https://ai.google.dev/api/rest/v1beta/models/generateContent) API. <br />
+`model` is the name of the Gemini model to be used by the API. Check [available models](https://ai.google.dev/models/gemini) for more. <br />
+`system_prompt` is used to provide behavioral context and instructions to the model. <br />
+`maxOutputTokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness/creativity of responses (0.0-1.0). Higher values produce more diverse outputs. <br />
+`topP` controls diversity through nucleus sampling (0.0-1.0). <br />
+`topK` limits token selection to the top K most probable tokens for controlling randomness. <br />
+`stopSequences` are strings that will cause generation to stop when encountered. <br />
+`responseMimeType` specifies the desired output format (e.g., "application/json"). <br />
+`responseSchema` defines a structured schema for JSON responses when using JSON output format. <br />
+[`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
+[`tools`](#GeminiTool) defines available function declarations for the model to call. <br />
+
+#### Basic Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        gemini: {
+          key: 'placeholder key',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        gemini: {
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "gemini": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "gemini": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Vision Example
+
+Upload images alongside your text prompts for visual understanding.
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        gemini: {
+          key: 'placeholder key',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        gemini: {},
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "gemini": {
+      "key": "placeholder key",
+    }
+  }'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "gemini": {
+      "key": "placeholder key",
+    }
+  }'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+## Tool Calling
+
+Gemini supports [function calling](https://ai.google.dev/gemini-api/docs/function-calling) functionality:
+
+### `GeminiTool` {#GeminiTool}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `functionDeclarations:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `parameters:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `properties: object`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `required?: string[]` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \}[] <br />
+  \}
+
+Array describing tools that the model may call. <br />
+`functionDeclarations` contains an array of function definitions. <br />
+`name` is the name of the tool function. <br />
+`description` explains what the tool does and when it should be used. <br />
+`parameters` defines the parameters the tool accepts in JSON Schema format. <br />
+
+### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants to use tools. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what tool functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each tool function (in the same order as in [`functionsDetails`](/docs/directConnection#FunctionsDetails))
+which will feed it back into the model to finalize a response, or return a JSON containing `text` which will immediately display it in the chat.
+
+#### Example
+
+<ContainersKeyToggleChatFunction service="gemini"></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  gemini: {
+    tools: [
+      {
+        functionDeclarations: [
+          {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        ],
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  gemini: {
+    tools: [
+      {
+        functionDeclarations: [
+          {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        ],
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

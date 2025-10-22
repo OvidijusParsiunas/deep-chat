@@ -39,7 +39,7 @@ export default function ComponentContainerMethods({children, propertyName, displ
         style={{paddingBottom: withEvent ? 0 : ''}}
       >
         <button
-          className="documentation-button"
+          className="documentation-button documentation-button-middle"
           onClick={() =>
             click(containerRef.current.children[0], resultText, setResultText, propertyName, displayResults, args, onClick)
           }

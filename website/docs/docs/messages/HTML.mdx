@@ -277,6 +277,69 @@ To unset/change the message bubble styling, use the `html` property in the [mess
 
 <LineBreak></LineBreak>
 
+### `htmlWrappers` {#htmlWrappers}
+
+- Type: \{`default?: string`, `ai?: string`, `role-name?: string`\}
+
+Inserts `text`/`html` [message content](/docs/messages/#MessageContent) _inside_ a custom HTML wrapper. <br />
+Use the `default` property for all roles, `ai` for ai responses or define any other custom role via a property key e.g. _"role-name"_.
+The `string` value must use a valid HTML format. <br />
+Denote the tag in which the content is going to be populated in by using the `html-wrapper` class. <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    demo={true}
+    htmlWrappers={{
+      default: `
+        <div>
+          <b>Wrapper title</b>
+          <span class="html-wrapper"></span>
+        </div>`,
+    }}
+    style={{height: '370px', borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.htmlWrappers = {
+  default: `
+    <div>
+      <b>Wrapper title</b>
+      <span class="html-wrapper"></span>
+    </div>`,
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.htmlWrappers = {
+  default: `
+    <div>
+      <b>Wrapper title</b>
+      <span class="html-wrapper"></span>
+    </div>`,
+};
+
+Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### Custom Elements {#customElements}
 
 If the `html` string includes your own custom tags (e.g. `<custom-element>`), they cannot be for the components in your framework
@@ -356,80 +419,6 @@ When passing values into your custom element, you need to pass them as [attribut
 If you are experiencing problems with embedding your custom elements inside the chat, you can always raise an [issue](https://github.com/OvidijusParsiunas/deep-chat/issues) on GitHub.
 When you do please provide us with either a [sandbox](https://codesandbox.io/) example or sufficient information to enable us to replicate the problem.
 :::
-
-<LineBreak></LineBreak>
-
-### `HTMLWrappers` {#htmlWrappers}
-
-- Type: \{`default?: string`, `ai?: string`, `role-name?: string`\}
-
-When a message is [streamed](/docs/connect#stream), its content will be populated _inside_ a custom HTML wrapper. <br />
-To denote the tag in which the content is going to be populated in use the `stream-wrapper` class. <br />
-You can define a string with HTML format for all roles using the `default` property, only ai responses using the `ai` role or
-any other custom roles using the `role-name` property.
-
-#### Example
-
-<ComponentContainer>
-  <DeepChatBrowser
-    demo={true}
-    connect={{
-      stream: {
-        htmlWrappers: {
-          default: `
-            <div>
-              <b>Wrapper title</b>
-              <span class="stream-wrapper"></span>
-            </div>`,
-        },
-      },
-    }}
-    style={{height: '370px', borderRadius: '8px'}}
-  ></DeepChatBrowser>
-</ComponentContainer>
-
-<Tabs>
-<TabItem value="js" label="Sample code">
-
-```js
-// using JavaScript for a simplified example
-
-chatElementRef.connect = {
-  stream: {
-    htmlWrappers: {
-      default: `
-        <div>
-          <b>Wrapper title</b>
-          <span class="stream-wrapper"></span>
-        </div>`,
-    },
-  },
-};
-```
-
-</TabItem>
-<TabItem value="py" label="Full code">
-
-```js
-// using JavaScript for a simplified example
-
-chatElementRef.connect = {
-  stream: {
-    htmlWrappers: {
-      default: `
-        <div>
-          <b>Wrapper title</b>
-          <span class="stream-wrapper"></span>
-        </div>`,
-    },
-  },
-};
-Object.assign(chatElementRef.style, {height: '370px', borderRadius: '8px'});
-chatElementRef.demo = true;
-```
-
-</TabItem>
-</Tabs>
 
 <LineBreak></LineBreak>
 

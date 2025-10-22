@@ -132,6 +132,10 @@ chatElementRef.browserStorage.clear();
 `browserStorage` does not work when [`history`](#history) is used.
 :::
 
+:::tip
+If you want the storage to be cleared on app load, use `localStorage.removeItem("key-name")` in your code.
+:::
+
 <LineBreak></LineBreak>
 
 ### `introMessage` {#introMessage}
@@ -475,10 +479,18 @@ This object is used to configure names that are displayed beside messages. <br /
 
 ### `displayLoadingBubble` {#displayLoadingBubble}
 
-- Type: `boolean` | \{`toggle: () => void`\}
+- Type: `boolean` | \{`toggle: (config?: LoadingToggleConfig) => void`\}
+- Default: _`true`_
 
-Toggle whether the loading bubble should be displayed when waiting for a message response. <br />
-When using an object with a `toggle` function property, the loading bubble can be toggled manually. More info [here](https://github.com/OvidijusParsiunas/deep-chat/issues/342#issuecomment-2644514873).
+#### `LoadingToggleConfig` {#LoadingToggleConfig}
+
+- Type: \{[`style?: LoadingStyles`](/docs/messages/styles#LoadingStyles), `role?: string`\}
+
+Define if the loading bubble should be displayed. <br />
+When using the `toggle` function the loading bubble will not be displayed until called first and only hide when it is called _again_ with no arguments e.g. `toggle()`.
+Calling it with the `LoadingToggleConfig` object (e.g. `toggle({...})`) will display/update the loading bubble with the defined contents.
+More info [here](https://github.com/OvidijusParsiunas/deep-chat/issues/342). <br />
+In `LoadingToggleConfig` the `role` property is useful for setting the [avatars](/docs/messages#avatars) or [names](/docs/messages#names) associated with it.
 
 #### Example
 
@@ -501,19 +513,32 @@ When using an object with a `toggle` function property, the loading bubble can b
 </TabItem>
 <TabItem value="py" label="Full code">
 
-```html
-<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
-
+```js
+// HTML boolean
 <deep-chat
   displayLoadingBubble="false"
   introMessage='{"text": "Send a new message to observe a response with no loading bubble."}'
   style="border-radius: 8px"
   demo="true"
-></deep-chat>
+></deep-chat>;
+
+// JS toggle property
+chatElementRef.displayLoadingBubble.toggle({
+  role: 'loading',
+  style: {
+    html: '<div>Loading...</div>',
+  },
+});
 ```
 
 </TabItem>
 </Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When `toggle` is defined we recommend using [`onMessage`](/docs/messages#onMessage)/[`interceprots`](/docs/interceptors) to help display the loading bubble.
+:::
 
 <LineBreak></LineBreak>
 

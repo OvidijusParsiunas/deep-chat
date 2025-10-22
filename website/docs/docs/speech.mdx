@@ -17,7 +17,8 @@ import azureCredentials from '/img/azure-credentials.png';
   &nbsp;&nbsp;&nbsp;&nbsp; `lang?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `pitch?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `rate?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `volume?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`audio?: AudioResponse`](#AudioResponse) <br />
   \}
 
 When the chat receives a new text message - your device will automatically read it out. <br />
@@ -25,7 +26,8 @@ When the chat receives a new text message - your device will automatically read 
 support different voices. Use the following code snippet to see the available voices for your device: `window.speechSynthesis.getVoices()` <br />
 `lang` is used to set the utterance language. See the following [`QA`](https://stackoverflow.com/questions/23733537/what-are-the-supported-languages-for-web-speech-api-in-html5) for the available options. <br />
 `pitch` sets the pitch at which the utterance will be spoken at. <br />
-`volume` set the volume at which the utterance will be spoken at.
+`volume` set the volume at which the utterance will be spoken at. <br />
+`audio` is used to control audio file [response message](/docs/connect#Response) behaviour. <br />
 
 :::info
 Text to speech is using [`SpeechSynthesis`](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) Web API
@@ -188,7 +190,42 @@ Support for `webSpeech` varies across different browsers, please check the [`Can
 
 ## Types
 
-Object types for [`speechToText`](#speechToText):
+<LineBreak></LineBreak>
+
+### `AudioResponse` {#AudioResponse}
+
+- Type: \{`autoPlay?: boolean`, `displayAudio?: boolean`, `displayText?: boolean`}
+
+Controls the behaviour of an audio file in a [response message](/docs/connect#Response): <br />
+`autoPlay` toggles if the audio is played automatically. <br />
+`displayAudio` toggles if the audio message bubble is displayed. <br />
+`displayText` toggles if the `text` in the same [response message](/docs/connect#Response) is displayed.
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat speechToText='{"audio": {"autoPlay": true}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  speechToText='{"audio": {"autoPlay": true}}'
+  introMessage='{"text": "Click the microphone to start transcribing your speech."}'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
 
 ### `WebSpeechOptions` {#WebSpeechOptions}
 

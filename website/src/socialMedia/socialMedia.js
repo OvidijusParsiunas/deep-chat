@@ -2,9 +2,23 @@ import DeepChatBrowser from '../components/table/deepChatBrowser';
 import huggingFaceLogo from '/img/huggingFaceLogo.png';
 import stabilityAILogo from '/img/stabilityAILogo.png';
 import assemblyAILogo from '/img/assemblyAILogo.png';
-import openAILogo from '/img/openAILogo.png';
+import openRouterLogo from '/img/openRouterLogo.png';
+import perplexityLogo from '/img/perplexityLogo.png';
+import togetherLogo from '/img/togetherLogo.webp';
+import bigModelLogo from '/img/bigModelLogo.png';
+import deepSeekLogo from '/img/deepSeekLogo.png';
+import minimaxLogo from '/img/minimaxLogo.png';
+import mistralLogo from '/img/mistralLogo.png';
+import geminiLogo from '/img/geminiLogo.webp';
+import claudeLogo from '/img/claudeLogo.png';
 import cohereLogo from '/img/cohereLogo.png';
+import ollamaLogo from '/img/ollamaLogo.png';
+import openAILogo from '/img/openAILogo.png';
 import azureLogo from '/img/azureLogo.png';
+import groqLogo from '/img/groqLogo.png';
+import kimiLogo from '/img/kimiLogo.png';
+import qwenLogo from '/img/qwenLogo.png';
+import xLogo from '/img/xLogo.webp';
 import React from 'react';
 
 // used in the startPanel.js file
@@ -14,90 +28,156 @@ import React from 'react';
 // add the following property to customize - background: 'linear-gradient(19deg, rgba(255,255,255,1) 32%, rgba(247,250,255,1) 100%)',
 // replace the customize-sub-header marginTop: '40px' with paddingTop: '40px'
 const Logos = React.forwardRef((_, ref) => {
+  const logoStyle = {
+    textAlign: 'center',
+    marginRight: '60px',
+    transform: 'scale(1.5)',
+    boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
+  };
+
   return (
     <div
       id="start-panel-logos"
       ref={ref}
-      style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: '125px'}}
+      style={{flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: '125px'}}
     >
-      <div style={{position: 'absolute', width: '1060px', height: '2px', backgroundColor: '#e5e5e5', top: '-60px'}}></div>
       <div
-        className="start-panel-logo"
         style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
+          position: 'absolute',
+          width: '1106px',
+          height: '2px',
+          backgroundColor: '#e5e5e5',
+          top: '-60px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          left: '0',
+          right: '16px',
+        }}
+      ></div>
+
+      {/* First row */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginBottom: '50px',
+          transform: 'scale(0.96)',
+          marginRight: '16px',
         }}
       >
-        <a href="docs/directConnection/HuggingFace" target="_blank">
-          <img src={huggingFaceLogo} width="60" />
-        </a>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/OpenAI" target="_blank">
+            <img src={openAILogo} width="40" style={{marginTop: '7px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Cohere" target="_blank">
+            <img src={cohereLogo} width="60" style={{marginTop: '1px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Azure" target="_blank">
+            <img src={azureLogo} width="42" style={{marginTop: '8px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/AssemblyAI" target="_blank">
+            <img src={assemblyAILogo} width="35" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/MiniMax" target="_blank">
+            <img src={minimaxLogo} width="36" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/StabilityAI" target="_blank">
+            <img src={stabilityAILogo} width="44" style={{marginTop: '6px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Claude" target="_blank">
+            <img src={claudeLogo} width="36" style={{marginTop: '10px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Gemini" target="_blank">
+            <img src={geminiLogo} width="39" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Groq" target="_blank">
+            <img src={groqLogo} width="40" style={{marginTop: '9px', marginRight: '2px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={{...logoStyle, marginRight: '0px'}}>
+          <a href="docs/directConnection/Mistral" target="_blank">
+            <img src={mistralLogo} width="39" style={{marginTop: '15px'}} />
+          </a>
+        </div>
       </div>
+
+      {/* Second row */}
       <div
-        className="start-panel-logo"
         style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          transform: 'scale(0.96)',
+          marginRight: '16px',
         }}
       >
-        <a href="docs/directConnection/OpenAI" target="_blank">
-          <img src={openAILogo} width="40" style={{marginTop: '7px'}} />
-        </a>
-      </div>
-      <div
-        className="start-panel-logo"
-        style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
-        }}
-      >
-        <a href="docs/directConnection/Cohere" target="_blank">
-          <img src={cohereLogo} width="60" style={{marginTop: '1px'}} />
-        </a>
-      </div>
-      <div
-        className="start-panel-logo"
-        style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
-        }}
-      >
-        <a href="docs/directConnection/Azure" target="_blank">
-          <img src={azureLogo} width="42" style={{marginTop: '8px'}} />
-        </a>
-      </div>
-      <div
-        className="start-panel-logo"
-        style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
-        }}
-      >
-        <a href="docs/directConnection/AssemblyAI" target="_blank">
-          <img src={assemblyAILogo} width="35" style={{marginTop: '9px'}} />
-        </a>
-      </div>
-      <div
-        className="start-panel-logo"
-        style={{
-          textAlign: 'center',
-          marginRight: '60px',
-          transform: 'scale(1.5)',
-          boxShadow: '0 0.2rem 1rem 0 rgba(44, 51, 73, 0.1)',
-        }}
-      >
-        <a href="docs/directConnection/StabilityAI" target="_blank">
-          <img src={stabilityAILogo} width="44" style={{marginTop: '6px'}} />
-        </a>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/HuggingFace" target="_blank">
+            <img src={huggingFaceLogo} width="60" />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Ollama" target="_blank">
+            <img src={ollamaLogo} width="37" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/OpenRouter" target="_blank">
+            <img src={openRouterLogo} width="35" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Perplexity" target="_blank">
+            <img src={perplexityLogo} width="38" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/BigModel" target="_blank">
+            <img src={bigModelLogo} width="32" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Together" target="_blank">
+            <img src={togetherLogo} width="37" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/DeepSeek" target="_blank">
+            <img src={deepSeekLogo} width="40" style={{marginTop: '8px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Kimi" target="_blank">
+            <img src={kimiLogo} width="35" style={{marginTop: '9px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={logoStyle}>
+          <a href="docs/directConnection/Qwen" target="_blank">
+            <img src={qwenLogo} width="38" style={{marginTop: '8px'}} />
+          </a>
+        </div>
+        <div className="start-panel-logo" style={{...logoStyle, marginRight: '0px'}}>
+          <a href="docs/directConnection/X" target="_blank">
+            <img src={xLogo} width="35" style={{marginTop: '9px'}} />
+          </a>
+        </div>
       </div>
     </div>
   );

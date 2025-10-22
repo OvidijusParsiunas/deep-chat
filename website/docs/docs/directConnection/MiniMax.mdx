@@ -1,0 +1,121 @@
+---
+sidebar_position: 12
+---
+
+# MiniMax
+
+import minimaxLogo from '/img/minimaxLogo.png';
+
+# <img src={minimaxLogo} width="40" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title">MiniMax</span>
+
+Properties used to connect to [MiniMax](https://www.minimax.io/).
+
+### `miniMax` {#miniMax}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]` <br />
+  \}
+- Default: _\{model: "MiniMax-M1"\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to MiniMax's [`ChatCompletion v2`](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek) API. <br />
+`model` is the name of the MiniMax model to be used by the API. Check [available models](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model) for more. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness/creativity of responses (0.0-2.0). Higher values produce more diverse outputs. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`frequency_penalty` penalizes frequent tokens to reduce repetition (-2.0 to 2.0). <br />
+`presence_penalty` penalizes new tokens to encourage topic diversity (-2.0 to 2.0). <br />
+`stop` string or array of strings that will stop generation when encountered. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        miniMax: {
+          key: 'placeholder key',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+          max_tokens: 1000,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        miniMax: {
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+          max_tokens: 1000,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "miniMax": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7,
+      "max_tokens": 1000
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "miniMax": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7,
+      "max_tokens": 1000
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>

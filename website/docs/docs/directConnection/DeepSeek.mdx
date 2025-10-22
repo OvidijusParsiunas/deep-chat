@@ -1,0 +1,117 @@
+---
+sidebar_position: 7
+---
+
+# DeepSeek
+
+import deepSeekLogo from '/img/deepSeekLogo.png';
+
+# <img src={deepSeekLogo} width="48" style={{float: 'left', marginRight: '8px', marginTop: '6px'}} /><span className="direct-service-title">DeepSeek</span>
+
+Properties used to connect to [DeepSeek AI](https://www.deepseek.com/).
+
+### `deepSeek` {#deepSeek}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string` <br />
+  \}
+- Default: _\{model: "deepseek-chat", temperature: 1, max_tokens: 4096\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to DeepSeek's [`chat completion`](https://api-docs.deepseek.com/api/create-chat-completion) API. <br />
+`model` is the DeepSeek model to use ("deepseek-chat" or "deepseek-reasoner"). <br />
+`temperature` controls randomness (0.0-2.0). Higher values produce more creative outputs. <br />
+`max_tokens` limits the maximum number of tokens in the response (1-8192). <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`frequency_penalty` penalizes tokens based on their frequency in the text (-2.0 to 2.0). <br />
+`presence_penalty` penalizes tokens based on their presence in the text (-2.0 to 2.0). <br />
+`stop` defines sequences where the API will stop generating (up to 16 sequences). <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        deepSeek: {
+          key: 'placeholder key',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        deepSeek: {
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "deepSeek": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "deepSeek": {
+      "key": "placeholder key",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>

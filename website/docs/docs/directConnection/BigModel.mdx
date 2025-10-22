@@ -1,0 +1,457 @@
+---
+sidebar_position: 4
+---
+
+# BigModel
+
+import bigModelLogo from '/img/bigModelLogo.png';
+
+# <img src={bigModelLogo} width="36" style={{float: 'left', marginTop: '8px', marginRight: '10px'}} /><span className="direct-service-title">BigModel</span>
+
+Properties used to connect to [BigModel (智谱 AI)](https://open.bigmodel.cn/).
+
+### `bigModel` {#bigModel}
+
+- Type: \{[`chat?: Chat`](#Chat), [`images?: Images`](#Images), [`textToSpeech?: TextToSpeech`](#TextToSpeech)\}
+- Default: _\{chat: true\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `Chat` {#Chat}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tools?: object[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_choice?: 'auto' | {type: 'function'; function: {name: string}}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler) <br />
+  \}
+- Default: _\{model: "glm-4.5"\}_
+
+Connect to BigModel's [`chat/completions`](https://docs.bigmodel.cn/api-reference/模型-api/对话补全) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the BigModel model to be used by the API. Check [available models](https://docs.bigmodel.cn/docs/model-list) for more. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`temperature` controls the randomness/creativity of responses (0.0-1.0). Higher values produce more diverse outputs. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`tools` array of function definitions that the model can call. <br />
+`tool_choice` controls how the model uses tools - 'auto' lets model decide, or specify a particular function. <br />
+[`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          key: 'placeholder key',
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          chat: {system_prompt: 'You are a helpful assistant.', temperature: 0.7},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "chat": {"system_prompt": "You are a helpful assistant.", "temperature": 0.7}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Files Example
+
+Upload images or other files alongside your text prompts. These capabilities are available for [GLM-4V models](https://open.bigmodel.cn/dev/api/normal-model/glm-4v).
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          key: 'placeholder key',
+          chat: {model: 'glm-4v'},
+        },
+      }}
+      images={true}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          chat: {model: 'glm-4v'},
+        },
+      }}
+      images={true}
+      mixedFiles={true}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "chat": {"model": "glm-4v"}
+    }
+  }'
+  images="true"
+  mixedFiles="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "chat": {"model": "glm-4v"}
+    }
+  }'
+  images="true"
+  mixedFiles="true"
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending files we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+### `Images` {#Images}
+
+- Type: `true` | \{`model?: string`\}
+- Default: _\{model: "cogview-4-250304"\}_
+
+Connect to BigModel's [`images/generations`](https://docs.bigmodel.cn/api-reference/模型-api/图像生成) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the image generation model. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          key: 'placeholder key',
+          images: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          images: true,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "images": true
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "images": true
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `TextToSpeech` {#TextToSpeech}
+
+- Type: `true` | \{`model?: string`, `voice?: string`\}
+- Default: _\{model: "cogtts", voice: "tongtong"\}_
+
+Connect to BigModel's [`audio/speech`](https://docs.bigmodel.cn/api-reference/模型-api/文本转语音) API. You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the text-to-speech model. <br />
+`voice` specifies the voice to use for speech synthesis. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          key: 'placeholder key',
+          textToSpeech: {voice: 'tongtong'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        bigModel: {
+          textToSpeech: {voice: 'tongtong'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "textToSpeech": {"voice": "tongtong"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "bigModel": {
+      "key": "placeholder key",
+      "textToSpeech": {"voice": "tongtong"}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Tool Calling
+
+BigModel supports [function calling](https://docs.bigmodel.cn/docs/api/function-call) functionality:
+
+### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants to use tools. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what tool functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each tool function (in the same order as in [`functionsDetails`](/docs/directConnection#FunctionsDetails))
+which will feed it back into the model to finalize a response, or return a JSON containing `text` which will immediately display it in the chat.
+
+#### Example
+
+<ContainersKeyToggleChatFunction service="bigModel"></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  bigModel: {
+    chat: {
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        },
+      ],
+      function_handler: (functionsDetails) => {
+        return functionsDetails.map((functionDetails) => {
+          return {
+            response: getCurrentWeather(functionDetails.arguments),
+          };
+        });
+      },
+    },
+    key: 'placeholder-key',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  bigModel: {
+    chat: {
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        },
+      ],
+      function_handler: (functionsDetails) => {
+        return functionsDetails.map((functionDetails) => {
+          return {
+            response: getCurrentWeather(functionDetails.arguments),
+          };
+        });
+      },
+    },
+    key: 'placeholder-key',
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>

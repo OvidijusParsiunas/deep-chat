@@ -29,7 +29,6 @@ export class ClaudeIO extends DirectServiceIO {
     if (typeof config === OBJECT) {
       this.completeConfig(config, deepChat.directConnection?.claude?.function_handler);
     }
-    // WORK - add a warning when using images to also use maxMessages: 1 to reduce cost
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'claude-3-5-sonnet-20241022';
     this.rawBody.max_tokens ??= 4096;

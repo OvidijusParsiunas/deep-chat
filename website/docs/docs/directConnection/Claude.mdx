@@ -1,0 +1,388 @@
+---
+sidebar_position: 5
+---
+
+# Claude
+
+import claudeLogo from '/img/claudeLogo.png';
+
+# <img src={claudeLogo} width="38" style={{float: 'left', marginTop: '10px', marginRight: '10px'}} /><span className="direct-service-title">Claude</span>
+
+Properties used to connect to [Claude](https://www.anthropic.com/claude).
+
+### `claude` {#claude}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_k?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop_sequences?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: ClaudeTool[]`](#ClaudeTool), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_choice?: "auto" | "any" | {type: "tool", name: string} | {type: "function", name: string}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`mcp_servers?: ClaudeMCPServer[]`](#ClaudeMCPServer) <br />
+  \}
+- Default: _\{model: "claude-3-5-sonnet-20241022", max_tokens: 4096\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Claude's [`messages`](https://docs.anthropic.com/en/api/messages) API. <br />
+`model` is the Claude model to use (e.g., "claude-3-5-sonnet-20241022", "claude-3-haiku-20240307"). <br />
+`max_tokens` is the maximum number of tokens to generate. <br />
+`temperature` controls randomness (0.0-1.0). Higher values produce more creative outputs. <br />
+`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
+`top_k` controls diversity by limiting token choices to the top K tokens. <br />
+`stop_sequences` defines sequences where the API will stop generating. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+[`tools`](#ClaudeTool) is an array that defines functions that the model can call. <br />
+`tool_choice` controls which (if any) tool should be called. <br />
+[`function_handler`](#FunctionHandler) is the actual function called with the model's instructions. <br />
+`mcp_servers` enables integration with [Model Context Protocol](https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector) servers. <br />
+
+#### Basic Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        claude: {
+          key: 'placeholder key',
+          max_tokens: 1000,
+          system_prompt: 'You are a helpful assistant.',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        claude: {
+          max_tokens: 1000,
+          system_prompt: 'You are a helpful assistant.',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder key",
+      "max_tokens": 1000,
+      "system_prompt": "You are a helpful assistant."
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder key",
+      "max_tokens": 1000,
+      "system_prompt": "You are a helpful assistant."
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Vision Example
+
+Upload images alongside your text prompts for visual understanding.
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        claude: {
+          key: 'placeholder key',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        claude: {},
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder key"
+    }
+  }'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder key"
+    }
+  }'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+## Tool Calling
+
+Claude supports [tool calling](https://docs.anthropic.com/en/docs/tool-use) functionality:
+
+### `ClaudeTool` {#ClaudeTool}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `description: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `input_schema:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type: "object"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `properties: object`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `required?: string[]` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  \}
+
+Array describing tools that the model may call. <br />
+`name` is the name of the tool function. <br />
+`description` explains what the tool does and when it should be used. <br />
+`input_schema` defines the parameters the tool accepts in JSON Schema format. <br />
+
+### `ClaudeMCPServer` {#ClaudeMCPServer}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "url"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `authorization_token?: string` <br />
+  \}
+
+Configuration for [Model Context Protocol](https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector) server integration. <br />
+`type` must be "url" for URL-based MCP servers. <br />
+`url` is the endpoint URL of the MCP server. <br />
+`name` is a unique identifier for the MCP server. <br />
+`authorization_token` is an optional token for server authentication. <br />
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder-key",
+      "mcp_servers": [
+        {
+          "type": "url",
+          "url": "https://example-server.modelcontextprotocol.io/sse",
+          "name": "my-mcp-server",
+          "authorization_token": "my-auth-token"
+        }
+      ]
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "claude": {
+      "key": "placeholder-key",
+      "mcp_servers": [
+        {
+          "type": "url",
+          "url": "https://example-server.modelcontextprotocol.io/sse",
+          "name": "my-mcp-server",
+          "authorization_token": "my-auth-token"
+        }
+      ]
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants to use tools. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what tool functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each tool function (in the same order as in
+[`functionsDetails`](/docs/directConnection#FunctionsDetails)) which will feed it back into the model to finalize a response, or return a JSON containing
+`text` which will immediately display it in the chat.
+
+#### Example
+
+<ContainersKeyToggleChatFunction service="claude"></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  claude: {
+    tools: [
+      {
+        name: 'get_weather',
+        description: 'Get the current weather in a given location',
+        input_schema: {
+          type: 'object',
+          properties: {
+            location: {
+              type: 'string',
+              description: 'The city and state, e.g. San Francisco, CA',
+            },
+            unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+          },
+          required: ['location'],
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  claude: {
+    tools: [
+      {
+        name: 'get_weather',
+        description: 'Get the current weather in a given location',
+        input_schema: {
+          type: 'object',
+          properties: {
+            location: {
+              type: 'string',
+              description: 'The city and state, e.g. San Francisco, CA',
+            },
+            unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+          },
+          required: ['location'],
+        },
+      },
+    ],
+    function_handler: (functionsDetails) => {
+      return functionsDetails.map((functionDetails) => {
+        return {
+          response: getCurrentWeather(functionDetails.arguments),
+        };
+      });
+    },
+    key: 'placeholder-key',
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>

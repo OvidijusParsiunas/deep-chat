@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 10
 ---
 
 # Modes
@@ -139,11 +139,13 @@ chatElementRef.demo = {
 
 ### `focusMode` {#focusMode}
 
-- Type: `true` | \{`scroll?: boolean`, `fade?:` `true` | `number`\}
+- Type: `true` | \{`smoothScroll?: boolean`, `streamAutoScroll?: boolean`, `fade?:` `true` | `number`\}
+- Default: _\{streamAutoScroll: true\}_
 
 This mode displays the latest user request and AI response messages only, providing a modern AI chatbot experience.
 You can enable it by using the boolean `true` or an object with any of the following: <br />
-`scroll` toggles a scrolling animation when the user posts a new message. <br />
+`smoothScroll` toggles a scrolling animation when the user posts a new message. <br />
+`streamAutoScroll` controls if the chat scrolls down automatically when [streaming](/docs/connect#Stream) a response message. <br />
 `fade` toggles a fade effect when the user posts a new message.
 It can be enabled with a boolean `true` or a `number` which is the milliseconds duration of the fade. <br />
 

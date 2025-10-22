@@ -334,10 +334,11 @@ function ComponentsLight() {
           alwaysEnabled: true,
           submit: {
             container: {
-              default: {backgroundColor: '#42a4ff'},
-              hover: {backgroundColor: '#2b8ee9'},
-              click: {backgroundColor: '#2280d8'},
+              default: {backgroundColor: '#60b2ff'},
+              hover: {backgroundColor: '#4ca8ff'},
+              click: {backgroundColor: '#2d99ff'},
             },
+            svg: {content: ''},
             text: {
               content: 'Submit',
               styles: {default: {color: 'white'}},
@@ -345,24 +346,26 @@ function ComponentsLight() {
           },
           loading: {
             container: {
-              hover: {backgroundColor: '#2b8ee9'},
-              click: {backgroundColor: '#2280d8'},
+              hover: {backgroundColor: '#4ca8ff'},
+              click: {backgroundColor: '#2d99ff'},
             },
+            svg: {content: ''},
             text: {
               content: 'Loading',
             },
           },
           stop: {
             container: {
-              hover: {backgroundColor: '#2b8ee9'},
-              click: {backgroundColor: '#2280d8'},
+              hover: {backgroundColor: '#4ca8ff'},
+              click: {backgroundColor: '#2d99ff'},
             },
+            svg: {content: ''},
             text: {
               content: 'Stop',
             },
           },
         }}
-        messageStyles={{default: {user: {bubble: {backgroundColor: '#3da0ec'}}}}}
+        messageStyles={{default: {user: {bubble: {backgroundColor: '#4db0fd'}}}}}
         htmlClassUtilities={{
           ['custom-container']: {
             styles: {
