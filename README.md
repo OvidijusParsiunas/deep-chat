@@ -35,7 +35,7 @@ Deep Chat version `2.3.0` brings a ton of new features into the Deep Chat ecosys
 - See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.3.0) for more!
 
 <p align="center">
-    <img width="960" src="https://github.com/user-attachments/assets/f808f994-a64d-456b-bacb-e08ab55d92e5" alt="version 2.3.0">
+    <img width="960" src="https://github.com/user-attachments/assets/e4202e3d-d740-4218-aa46-769622b519a7" alt="version 2.3.0">
 </p>
 
 `2.2.2` update:
