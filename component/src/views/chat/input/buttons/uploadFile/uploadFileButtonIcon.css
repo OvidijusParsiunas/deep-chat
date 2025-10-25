@@ -3,8 +3,8 @@
   pointer-events: none;
   width: 1.45em;
   height: 1.45em;
-  left: 0.11em;
-  bottom: 0.08em;
+  inset-inline-start: 0.11em;
+  inset-block-end: 0.08em;
   filter: brightness(0) saturate(100%) invert(43%) sepia(0%) saturate(740%) hue-rotate(77deg) brightness(99%) contrast(92%);
 }
 
@@ -13,8 +13,8 @@
   pointer-events: none;
   width: 1.5em;
   height: 1.48em;
-  left: 0.07em;
-  bottom: 0.08em;
+  inset-inline-start: 0.07em;
+  inset-block-end: 0.08em;
   filter: brightness(0) saturate(100%) invert(49%) sepia(0%) saturate(2586%) hue-rotate(12deg) brightness(93%)
     contrast(90%);
 }
@@ -24,8 +24,8 @@
   pointer-events: none;
   width: 1.21em;
   height: 1.21em;
-  left: 0.17em;
-  bottom: 0.2em;
+  inset-inline-start: 0.17em;
+  inset-block-end: 0.2em;
   filter: brightness(0) saturate(100%) invert(15%) sepia(0%) saturate(337%) hue-rotate(125deg) brightness(91%)
     contrast(94%);
   transform: scale(0.95, 1);
@@ -36,8 +36,8 @@
   pointer-events: none;
   width: 1.21em;
   height: 1.21em;
-  left: 0.23em;
-  bottom: 0.2em;
+  inset-inline-start: 0.23em;
+  inset-block-end: 0.2em;
   filter: brightness(0) saturate(100%) invert(52%) sepia(0%) saturate(161%) hue-rotate(164deg) brightness(91%)
     contrast(92%);
   transform: scale(0.95, 1);
@@ -48,8 +48,8 @@
   pointer-events: none;
   width: 1.21em;
   height: 1.21em;
-  left: 0.25em;
-  bottom: 0.2em;
+  inset-inline-start: 0.25em;
+  inset-block-end: 0.2em;
   filter: brightness(0) saturate(100%) invert(53%) sepia(0%) saturate(36%) hue-rotate(74deg) brightness(98%) contrast(93%);
   transform: scale(0.95, 1);
 }

@@ -9,11 +9,11 @@ import {CustomButton} from '../custom/customButton';
 import {InputButton} from '../inputButton';
 import {Dropup} from '../../dropup/dropup';
 import {
-  OUTSIDE_RIGHT,
-  INSIDE_RIGHT,
-  OUTSIDE_LEFT,
+  OUTSIDE_START,
+  INSIDE_START,
+  OUTSIDE_END,
   DROPUP_MENU,
-  INSIDE_LEFT,
+  INSIDE_END,
 } from '../../../../../utils/consts/inputConstants';
 
 export type PositionToButtons = {[key in ButtonPosition]: ButtonProps[]};
@@ -45,7 +45,7 @@ export class InputButtonPositions {
   }
 
   private static addToSideContainer(buttonContainers: ButtonContainersT, pToBs: PositionToButtons) {
-    const sideContainerPositions = [INSIDE_LEFT, INSIDE_RIGHT, OUTSIDE_LEFT, OUTSIDE_RIGHT];
+    const sideContainerPositions = [INSIDE_START, INSIDE_END, OUTSIDE_START, OUTSIDE_END];
     sideContainerPositions.forEach((sideContainerPosition) => {
       const position = sideContainerPosition as keyof PositionToButtons;
       pToBs[position].forEach((buttonProps) => {
@@ -63,10 +63,10 @@ export class InputButtonPositions {
   private static createPositionsToButtonsObj(): PositionToButtons {
     return {
       [DROPUP_MENU]: [],
-      [OUTSIDE_LEFT]: [],
-      [INSIDE_LEFT]: [],
-      [INSIDE_RIGHT]: [],
-      [OUTSIDE_RIGHT]: [],
+      [OUTSIDE_START]: [],
+      [INSIDE_START]: [],
+      [INSIDE_END]: [],
+      [OUTSIDE_END]: [],
     };
   }
 
@@ -80,30 +80,30 @@ export class InputButtonPositions {
       if (position) InputButtonPositions.setPosition(buttonsObj, key as keyof Buttons, pToBs[position]);
     });
     // if nothing set to be on inside right and submit is not set -> place submit
-    if (pToBs[INSIDE_RIGHT].length === 0 && buttonsObj.submit) {
-      InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[INSIDE_RIGHT]);
+    if (pToBs[INSIDE_END].length === 0 && buttonsObj.submit) {
+      InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[INSIDE_END]);
     }
     // if nothing set to be on outside right -> place submit/microphone/camera
-    if (pToBs[OUTSIDE_RIGHT].length === 0) {
+    if (pToBs[OUTSIDE_END].length === 0) {
       if (buttonsObj.submit) {
-        InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[OUTSIDE_RIGHT]);
+        InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[OUTSIDE_END]);
       } else if (buttonsObj.microphone) {
-        InputButtonPositions.setPosition(buttonsObj, MICROPHONE, pToBs[OUTSIDE_RIGHT]);
+        InputButtonPositions.setPosition(buttonsObj, MICROPHONE, pToBs[OUTSIDE_END]);
       } else if (buttonsObj.camera) {
-        InputButtonPositions.setPosition(buttonsObj, CAMERA, pToBs[OUTSIDE_RIGHT]);
+        InputButtonPositions.setPosition(buttonsObj, CAMERA, pToBs[OUTSIDE_END]);
       } else if (buttonsObj[`${CustomButton.INDICATOR_PREFIX}1`]) {
-        InputButtonPositions.setPosition(buttonsObj, `${CustomButton.INDICATOR_PREFIX}1`, pToBs[OUTSIDE_RIGHT]);
+        InputButtonPositions.setPosition(buttonsObj, `${CustomButton.INDICATOR_PREFIX}1`, pToBs[OUTSIDE_END]);
       }
     }
-    // if submit still without a position - check if anything on outside-left - otherwise set outside-right
+    // if submit still without a position - check if anything on outside-start - otherwise set outside-end
     if (buttonsObj.submit) {
       InputButtonPositions.setPosition(buttonsObj, 'submit',
-        pToBs[OUTSIDE_LEFT].length === 0 ? pToBs[OUTSIDE_LEFT] : pToBs[INSIDE_RIGHT]);
+        pToBs[OUTSIDE_START].length === 0 ? pToBs[OUTSIDE_START] : pToBs[INSIDE_END]);
     }
-    // if microphone still without a position - attempt outside-left - otherwise set outside-right
+    // if microphone still without a position - attempt outside-start - otherwise set outside-end
     if (buttonsObj.microphone) {
       InputButtonPositions.setPosition(buttonsObj, MICROPHONE,
-        pToBs[OUTSIDE_LEFT].length === 0 ? pToBs[OUTSIDE_LEFT] : pToBs[INSIDE_RIGHT]);
+        pToBs[OUTSIDE_START].length === 0 ? pToBs[OUTSIDE_START] : pToBs[INSIDE_END]);
     }
     // if there are multiple buttons without a position -> dropdown
     const buttonsWithoutPositions = Object.keys(buttonsObj);
@@ -120,9 +120,9 @@ export class InputButtonPositions {
       });
       // if there is one button without a position
     } else if (buttonsWithoutPositions.length === 1) {
-      // if nothing on outside-right set it there - otherwise overwrite left
+      // if nothing on outside-end set it there - otherwise overwrite start
       InputButtonPositions.setPosition(buttonsObj, buttonsWithoutPositions[0] as keyof Buttons,
-        pToBs[OUTSIDE_RIGHT].length === 0 ? pToBs[OUTSIDE_RIGHT] : pToBs[OUTSIDE_LEFT]);
+        pToBs[OUTSIDE_END].length === 0 ? pToBs[OUTSIDE_END] : pToBs[OUTSIDE_START]);
     }
     return pToBs;
   }

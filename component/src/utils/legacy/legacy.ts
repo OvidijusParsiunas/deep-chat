@@ -1,4 +1,5 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
+import {INSIDE_END, INSIDE_START, OUTSIDE_END, OUTSIDE_START} from '../consts/inputConstants';
 import {DOCS_BASE_URL, ERROR, FILE, FILES, TEXT} from '../consts/messageConstants';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {OBJECT} from '../../services/utils/serviceConstants';
@@ -6,6 +7,7 @@ import {CLASS_LIST, STYLE} from '../consts/htmlConstants';
 import {ValidateInput} from '../../types/validateInput';
 import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
+import {ButtonPosition} from '../../types/button';
 import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
@@ -107,7 +109,7 @@ export class Legacy {
   public static fireOnNewMessage(deepChat: DeepChat, updateBody: {message: MessageContent; isHistory: boolean}) {
     const legacyDeepchat = deepChat as unknown as DeepChat & LegacyDeepChat;
     if (legacyDeepchat.onNewMessage) {
-      console[ERROR]('The onNewMessage event has been deprecated since version 2.0.0.');
+      console[ERROR](`The onNewMessage event${IS_DEPRECATED}2.0.0.`);
       console[ERROR](`${SEE}onMessage event: ${DOCS_BASE_URL}events#onMessage`);
       legacyDeepchat.onNewMessage?.(updateBody);
     }
@@ -128,7 +130,7 @@ export class Legacy {
     const messageStylesCp = JSON.parse(JSON.stringify(messageStyles));
     const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
-      console[ERROR]('The loading message styles are defined using LoadingMessageStyles interface since version 2.1.0.');
+      console[ERROR](`The loading message styles are defined using LoadingMessageStyles interface${SINCE_VERSION}2.1.0.`);
       console[ERROR](`Check it out here: ${DOCS_BASE_URL}messages/styles#LoadingMessageStyles`);
       messageStylesCp.loading = {message: {styles: loading}};
     }
@@ -172,7 +174,7 @@ export class Legacy {
     if (!stream || typeof stream !== OBJECT) return;
     const htmlWrappers = (stream as {htmlWrappers?: HTMLWrappers}).htmlWrappers;
     if (htmlWrappers) {
-      console[ERROR](`The htmlWrappers property${MOVED_TO}Deep Chat's base since version 2.3.0.`);
+      console[ERROR](`The htmlWrappers property${MOVED_TO}Deep Chat's base${SINCE_VERSION}2.3.0.`);
       console[ERROR](`Check it out here: ${DOCS_BASE_URL}messages/HTML#htmlWrappers`);
       return htmlWrappers;
     }
@@ -183,17 +185,40 @@ export class Legacy {
     if (!focusMode || typeof focusMode === 'boolean') return focusMode;
     const scroll = (focusMode as unknown as {scroll?: boolean}).scroll;
     if (scroll) {
-      console[ERROR]('The scroll property in focusMode has been changed to smoothScroll since version 2.3.0.');
+      console[ERROR](`The scroll property in focusMode has been changed to smoothScroll${SINCE_VERSION}2.3.0.`);
       console[ERROR](`Check it out here: ${DOCS_BASE_URL}modes#focusMode`);
       focusMode.smoothScroll = true;
     }
     return focusMode;
   }
+
+  public static processPosition(buttonPosition?: string): ButtonPosition {
+    if (!buttonPosition) return buttonPosition as ButtonPosition;
+    const error = `Position names have been updated${SINCE_VERSION}2.3.1.`;
+    if (buttonPosition === 'inside-left') {
+      console[ERROR](error);
+      return INSIDE_START;
+    }
+    if (buttonPosition === 'inside-right') {
+      console[ERROR](error);
+      return INSIDE_END;
+    }
+    if (buttonPosition === 'outside-left') {
+      console[ERROR](error);
+      return OUTSIDE_START;
+    }
+    if (buttonPosition === 'outside-right') {
+      console[ERROR](error);
+      return OUTSIDE_END;
+    }
+    return buttonPosition as ButtonPosition;
+  }
 }
 
 // These are used to allow bundled to mangle names to reduce the bundle size
-const IS_DEPRECATED = ' is deprecated since version ';
+const SINCE_VERSION = ' since version ';
+const IS_DEPRECATED = ` is deprecated ${SINCE_VERSION}`;
 const PLEASE_CHANGE = 'Please change to using ';
 const SEE = 'Please see the ';
-const NOT_SUPPORTED_SINCE = ' is not supported since version ';
+const NOT_SUPPORTED_SINCE = ` is not supported ${SINCE_VERSION}`;
 const MOVED_TO = ' has been moved to ';

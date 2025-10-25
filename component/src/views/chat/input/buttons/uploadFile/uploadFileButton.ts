@@ -6,6 +6,7 @@ import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {CLICK} from '../../../../../utils/consts/inputConstants';
 import {FileServiceIO} from '../../../../../services/serviceIO';
+import {Legacy} from '../../../../../utils/legacy/legacy';
 import {Modal} from '../../fileAttachments/modal/modal';
 import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {InputButton} from '../inputButton';
@@ -20,7 +21,7 @@ export class UploadFileButton extends InputButton<Styles> {
   // prettier-ignore
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
-    const buttonPosition = fileService?.button?.position;
+    const buttonPosition = Legacy.processPosition(fileService?.button?.position);
     const dropupItemText = fileService?.button?.styles?.[TEXT]?.content || dropupText;
     const tooltip = TooltipUtils.tryCreateConfig('Upload File', fileService?.button?.tooltip);
     super(

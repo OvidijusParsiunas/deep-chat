@@ -12,32 +12,32 @@
   position: relative;
 }
 
-.text-input-container-left-adjustment {
-  margin-left: 1.5em;
+.text-input-container-start-adjustment {
+  margin-inline-start: 1.5em;
 }
 
-.text-input-container-right-adjustment {
-  margin-right: 1.5em;
+.text-input-container-end-adjustment {
+  margin-inline-end: 1.5em;
 }
 
-.text-input-container-left-small-adjustment {
-  margin-left: 1.1em;
+.text-input-container-start-small-adjustment {
+  margin-inline-start: 1.1em;
 }
 
-.text-input-container-left-small-adjustment > .outside-left {
-  right: calc(14px - 0.55em);
+.text-input-container-start-small-adjustment > .outside-start {
+  inset-inline-end: calc(14px - 0.55em);
 }
 
-.text-input-container-right-small-adjustment {
-  margin-right: 1.1em;
+.text-input-container-end-small-adjustment {
+  margin-inline-end: 1.1em;
 }
 
-.text-input-container-right-small-adjustment > .outside-right {
-  left: calc(14px - 0.55em);
+.text-input-container-end-small-adjustment > .outside-end {
+  inset-inline-start: calc(14px - 0.55em);
 }
 
 #text-input {
-  text-align: left;
+  text-align: start;
   outline: none;
   word-wrap: break-word;
   /* test in Safari using following text - seduijasiudj iasojd iasdjas oijdioa joisaj doij */
@@ -56,12 +56,12 @@
   width: 100%;
 }
 
-.text-input-inner-left-adjustment {
-  padding-left: 2.2em;
+.text-input-inner-start-adjustment {
+  padding-inline-start: 2.2em;
 }
 
-.text-input-inner-right-adjustment {
-  padding-right: 2em;
+.text-input-inner-end-adjustment {
+  padding-inline-end: 2em;
 }
 
 .text-input-disabled {

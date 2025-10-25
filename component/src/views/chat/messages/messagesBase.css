@@ -11,8 +11,7 @@
 
 .inner-message-container {
   display: flex;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   width: calc(97.5% - 24px);
   max-width: 100%;
 }
@@ -31,15 +30,15 @@
 .user-message-text {
   color: white;
   background-color: #0084ff;
-  margin-right: 0px;
-  margin-left: auto;
+  margin-inline-end: 0px;
+  margin-inline-start: auto;
 }
 
 .ai-message-text {
   color: black;
   background-color: #e4e6eb;
-  margin-left: 0px;
-  margin-right: auto;
+  margin-inline-start: 0px;
+  margin-inline-end: auto;
 }
 
 .deep-chat-last-group-messages-active {

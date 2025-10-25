@@ -1,4 +1,4 @@
-import {CLICK, OUTSIDE_LEFT, OUTSIDE_RIGHT} from '../../../../utils/consts/inputConstants';
+import {CLICK, OUTSIDE_START, OUTSIDE_END} from '../../../../utils/consts/inputConstants';
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
@@ -7,6 +7,7 @@ import {TooltipUtils} from '../buttons/tooltip/tooltipUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {CustomButton} from '../buttons/custom/customButton';
+import {Legacy} from '../../../../utils/legacy/legacy';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
 
@@ -69,11 +70,11 @@ export class Dropup extends InputButton<Styles> {
 
   static getPosition(pToBs: PositionToButtons, dropupStyles?: DropupStyles) {
     if (dropupStyles?.button?.position) {
-      return dropupStyles?.button?.position;
+      return Legacy.processPosition(dropupStyles?.button?.position);
     }
-    if (pToBs[OUTSIDE_LEFT].length > 0 && pToBs[OUTSIDE_RIGHT].length === 0) {
-      return OUTSIDE_RIGHT;
+    if (pToBs[OUTSIDE_START].length > 0 && pToBs[OUTSIDE_END].length === 0) {
+      return OUTSIDE_END;
     }
-    return OUTSIDE_LEFT;
+    return OUTSIDE_START;
   }
 }

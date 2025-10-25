@@ -7,7 +7,7 @@ export interface SubmitButtonStyles {
   stop?: ButtonStyles;
   disabled?: ButtonStyles;
   alwaysEnabled?: boolean;
-  position?: 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right';
+  position?: 'inside-start' | 'inside-end' | 'outside-start' | 'outside-end';
   tooltip?: true | Tooltip;
 }
 

@@ -27,7 +27,7 @@
 }
 
 .input-button-svg-text > div {
-  margin-left: 2px;
+  margin-inline-start: 2px;
 }
 
 .input-button:hover,
@@ -58,8 +58,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-inline: 4px;
   height: 1.6em;
   width: max-content;
 }
@@ -83,7 +82,7 @@
 
 .custom-button-container-default > .dropup-menu-item-icon > svg {
   position: absolute;
-  left: 0.2em;
+  inset-inline-start: 0.2em;
 }
 
 .custom-button-container-active {

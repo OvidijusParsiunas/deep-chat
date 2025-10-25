@@ -7,8 +7,7 @@
 }
 
 .error-message-text {
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   background-color: #f4c0c0;
   color: #474747;
   text-align: center;
@@ -21,8 +20,8 @@
   width: 1em;
   padding-top: 0.6em;
   padding-bottom: 0.6em;
-  padding-left: 1.3em;
-  padding-right: 0.75em;
+  padding-inline-start: 1.3em;
+  padding-inline-end: 0.75em;
 }
 
 .loading-message-dots {
@@ -45,7 +44,7 @@
 }
 
 .loading-message-dots::before {
-  left: -0.7em;
+  inset-inline-start: -0.7em;
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
@@ -56,7 +55,7 @@
 }
 
 .loading-message-dots::after {
-  left: 0.7em;
+  inset-inline-start: 0.7em;
   width: 0.45em;
   height: 0.45em;
   border-radius: 5px;
@@ -140,12 +139,12 @@ pre {
   width: 40px;
 }
 
-.audio-player-safari-left {
-  float: left;
+.audio-player-safari-start {
+  float: inline-start;
 }
 
-.audio-player-safari-right {
-  float: right;
+.audio-player-safari-end {
+  float: inline-end;
 }
 
 .any-file-message {
@@ -161,8 +160,8 @@ pre {
   min-width: 1.3em;
   position: relative;
   border-radius: 4px;
-  margin-left: 6px;
-  margin-right: 2px;
+  margin-inline-start: 6px;
+  margin-inline-end: 2px;
 }
 
 .any-file-message-icon {
@@ -182,7 +181,7 @@ pre {
   padding-top: 5px;
   overflow-wrap: anywhere;
   padding-bottom: 5px;
-  padding-right: 7px;
+  padding-inline-end: 7px;
 }
 
 /* If any file message text is a link - inherit the message bubble color */
@@ -190,12 +189,12 @@ pre {
   color: inherit;
 }
 
-.left-item-position {
-  margin-right: 10px;
+.start-item-position {
+  margin-inline-end: 10px;
 }
 
-.right-item-position {
-  margin-left: 10px;
+.end-item-position {
+  margin-inline-start: 10px;
 }
 
 .role-hidden {

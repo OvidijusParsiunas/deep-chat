@@ -12,7 +12,7 @@ export interface ButtonStyles {
   text?: ButtonInnerStyles;
 }
 
-export type ButtonPosition = 'inside-left' | 'inside-right' | 'outside-left' | 'outside-right' | 'dropup-menu';
+export type ButtonPosition = 'inside-start' | 'inside-end' | 'outside-start' | 'outside-end' | 'dropup-menu';
 
 export interface Button {
   styles?: ButtonStyles;

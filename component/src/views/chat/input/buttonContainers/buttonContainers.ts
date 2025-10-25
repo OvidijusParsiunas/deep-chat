@@ -1,8 +1,8 @@
-import {INSIDE_LEFT, INSIDE_RIGHT, OUTSIDE_LEFT, OUTSIDE_RIGHT} from '../../../../utils/consts/inputConstants';
+import {INSIDE_START, INSIDE_END, OUTSIDE_START, OUTSIDE_END} from '../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {ButtonPosition} from '../../../../types/button';
 
-// outside-left, inside-left, inside-right, outside-right
+// outside-start, inside-start, inside-end, outside-end
 export type ButtonContainersT = readonly [HTMLDivElement, HTMLDivElement, HTMLDivElement, HTMLDivElement];
 
 export class ButtonContainers {
@@ -24,9 +24,9 @@ export class ButtonContainers {
   }
 
   private static getContainerIndex(position: ButtonPosition) {
-    if (position === OUTSIDE_LEFT) return 0;
-    if (position === INSIDE_LEFT) return 1;
-    if (position === INSIDE_RIGHT) return 2;
+    if (position === OUTSIDE_START) return 0;
+    if (position === INSIDE_START) return 1;
+    if (position === INSIDE_END) return 2;
     return 3;
   }
 
@@ -35,6 +35,6 @@ export class ButtonContainers {
     const containerIndex = ButtonContainers.getContainerIndex(position);
     buttonContainers[containerIndex].appendChild(elementRef);
     // explicitly defining the class incase client uses an incorrect string
-    if (containerIndex === 3) elementRef[CLASS_LIST].add(OUTSIDE_RIGHT);
+    if (containerIndex === 3) elementRef[CLASS_LIST].add(OUTSIDE_END);
   }
 }

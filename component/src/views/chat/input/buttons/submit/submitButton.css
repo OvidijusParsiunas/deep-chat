@@ -9,20 +9,19 @@
   position: absolute;
   width: 0.95em;
   height: 0.95em;
-  left: 0.35em;
-  bottom: 0.35em;
+  inset-inline-start: 0.35em;
+  inset-block-end: 0.35em;
   border-radius: 2px;
 }
 
 .submit-button-enlarged {
   scale: 1.1;
-  margin-right: 0.3em;
-  margin-left: 0.3em;
+  margin-inline: 0.3em;
 }
 
 .loading-submit-button {
   position: relative;
-  left: calc(-9990px + 0.275em);
+  inset-inline-start: calc(-9990px + 0.275em);
   width: 0.22em;
   height: 0.22em;
   border-radius: 5px;
@@ -33,7 +32,7 @@
     calc(9990px + 0.44em) 0 0 0 #848484,
     calc(9990px + 0.8em) 0 0 0 #848484;
   animation: loading-submit-button 1.5s infinite linear;
-  bottom: -0.75em;
+  inset-block-end: -0.75em;
 }
 
 @keyframes loading-submit-button {

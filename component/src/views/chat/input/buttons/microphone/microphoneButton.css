@@ -11,8 +11,8 @@
   pointer-events: none;
   width: 1.21em;
   height: 1.21em;
-  left: 0.25em;
-  bottom: 0.25em;
+  inset-inline-start: 0.25em;
+  inset-block-end: 0.25em;
 }
 
 .default-microphone-icon {

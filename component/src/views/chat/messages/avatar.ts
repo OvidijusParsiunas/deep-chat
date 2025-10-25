@@ -18,7 +18,7 @@ export class Avatar extends Role {
     const styles = typeof this._avatars === 'boolean' ? undefined : this._avatars;
     const avatarContainerElement = this.createAvatar(role, styles);
     const position = this.getPosition(role, styles);
-    avatarContainerElement[CLASS_LIST].add(position === 'left' ? 'left-item-position' : 'right-item-position');
+    avatarContainerElement[CLASS_LIST].add(position === 'left' ? 'start-item-position' : 'end-item-position');
     messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatarContainerElement);
   }
 

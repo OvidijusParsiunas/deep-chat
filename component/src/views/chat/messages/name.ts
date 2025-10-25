@@ -16,7 +16,7 @@ export class Name extends Role {
     const customConfig = typeof this._names === 'boolean' ? {} : this._names;
     const nameElement = this.createName(role, customConfig);
     const position = Name.getPosition(role, customConfig);
-    nameElement[CLASS_LIST].add(position === 'left' ? 'left-item-position' : 'right-item-position');
+    nameElement[CLASS_LIST].add(position === 'left' ? 'start-item-position' : 'end-item-position');
     messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', nameElement);
   }
 

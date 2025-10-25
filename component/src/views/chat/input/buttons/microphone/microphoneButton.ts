@@ -1,5 +1,5 @@
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {DEFAULT, DROPUP_MENU, OUTSIDE_RIGHT} from '../../../../../utils/consts/inputConstants';
+import {DEFAULT, DROPUP_MENU, OUTSIDE_END} from '../../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {MicrophoneStyles} from '../../../../../types/microphone';
@@ -18,7 +18,7 @@ export class MicrophoneButton extends InputButton<Styles> {
   isActive = false;
 
   constructor(styles?: AllMicrophoneStyles) {
-    if (styles?.position === DROPUP_MENU) styles.position = OUTSIDE_RIGHT; // not allowed to be in dropup for UX
+    if (styles?.position === DROPUP_MENU) styles.position = OUTSIDE_END; // not allowed to be in dropup for UX
     const tooltip = TooltipUtils.tryCreateConfig('Microphone', styles?.tooltip);
     super(MicrophoneButton.createMicrophoneElement(), MICROPHONE_ICON_STRING, styles?.position, tooltip, styles);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);

@@ -7,6 +7,7 @@ import {STYLE} from '../../../../utils/consts/htmlConstants';
 import {ButtonInnerElements} from './buttonInnerElements';
 import {StatefulStyles} from '../../../../types/styles';
 import {ButtonAccessibility} from './buttonAccessility';
+import {Legacy} from '../../../../utils/legacy/legacy';
 import {ButtonStyles} from '../../../../types/button';
 import {TooltipUtils} from './tooltip/tooltipUtils';
 import {ButtonCSS} from './buttonCSS';
@@ -35,7 +36,7 @@ export class InputButton<T extends Styles = Styles> {
     this.elementRef = buttonElement;
     this.svg = SVGIconUtils.createSVGElement(svg);
     this.customStyles = customStyles;
-    this.position = position;
+    this.position = Legacy.processPosition(position);
     this._tooltipSettings = tooltip;
     this.dropupText = dropupText;
   }

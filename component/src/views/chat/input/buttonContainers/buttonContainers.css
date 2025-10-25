@@ -6,27 +6,27 @@
 /* Using absolute in order to not move the button element when the input el height increases */
 
 /* Input element padding will need to be changed accordingly */
-.inside-right {
+.inside-end {
   position: absolute;
-  right: calc(10% + 0.35em);
-  bottom: 0.85em;
+  inset-inline-end: calc(10% + 0.35em);
+  inset-block-end: 0.85em;
 }
 
-.inside-left {
+.inside-start {
   position: absolute;
-  left: calc(10% + 0.35em);
-  bottom: 0.85em;
+  inset-inline-start: calc(10% + 0.35em);
+  inset-block-end: 0.85em;
 }
 
 /* Input container element padding will need to be changed accordingly */
-.outside-left {
+.outside-start {
   position: absolute;
-  right: calc(11px - 0.55em);
-  bottom: 0.88em;
+  inset-inline-end: calc(11px - 0.55em);
+  inset-block-end: 0.88em;
 }
 
-.outside-right {
+.outside-end {
   position: absolute;
-  left: calc(11px - 0.55em);
-  bottom: 0.88em;
+  inset-inline-start: calc(11px - 0.55em);
+  inset-block-end: 0.88em;
 }

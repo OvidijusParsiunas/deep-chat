@@ -86,7 +86,7 @@
 .deep-chat-openai-realtime-toggle > * {
   height: 32px;
   width: 32px;
-  padding-left: 3px;
+  padding-inline-start: 3px;
   filter: brightness(0) saturate(100%) invert(22%) sepia(0%) saturate(4537%) hue-rotate(208deg) brightness(105%)
     contrast(91%);
 }
@@ -100,7 +100,7 @@
   color: red;
   position: absolute;
   top: calc(50% + 40px);
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
   font-size: 17px;
 }
@@ -109,6 +109,6 @@
   position: absolute;
   font-size: 15px;
   top: 50%;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
 }

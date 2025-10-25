@@ -6,8 +6,8 @@
 #insert-key-contents {
   text-align: center;
   position: absolute;
-  top: 44%;
-  left: 50%;
+  inset-block-start: 44%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
   width: 82%;
   display: flex;
@@ -19,7 +19,7 @@
 }
 
 #insert-key-input-container {
-  margin-right: 2.7em;
+  margin-inline-end: 2.7em;
   width: calc(100% - 80px);
 }
 
@@ -42,7 +42,7 @@
 
 #visibility-icon-container {
   position: relative;
-  float: right;
+  float: inline-end;
   cursor: pointer;
   user-select: none;
 }
@@ -50,12 +50,12 @@
 .visibility-icon {
   filter: brightness(0) saturate(100%) invert(63%) sepia(1%) saturate(9%) hue-rotate(43deg) brightness(98%) contrast(92%);
   position: absolute;
-  right: -1.7em;
-  top: -1.43em;
+  inset-inline-end: -1.7em;
+  inset-block-start: -1.43em;
 }
 
 #visible-icon {
-  top: -1.4em;
+  inset-block-start: -1.4em;
 }
 
 .visibility-icon:hover {
