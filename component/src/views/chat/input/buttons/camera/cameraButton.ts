@@ -6,6 +6,7 @@ import {FILES, TEXT} from '../../../../../utils/consts/messageConstants';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
+import {ButtonPosition} from '../../../../../types/button';
 import {Legacy} from '../../../../../utils/legacy/legacy';
 import {CameraFiles} from '../../../../../types/camera';
 import {CustomStyle} from '../../../../../types/styles';
@@ -16,7 +17,7 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
 export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
-    const buttonPosition = Legacy.processPosition(fileService?.button?.position);
+    const buttonPosition = Legacy.processPosition<ButtonPosition>(fileService?.button?.position);
     const dropupText = fileService?.button?.styles?.[TEXT]?.content || 'Photo';
     const tooltip = TooltipUtils.tryCreateConfig('Camera', fileService?.button?.tooltip);
     const styles = (fileService?.button?.styles as Styles) || {};

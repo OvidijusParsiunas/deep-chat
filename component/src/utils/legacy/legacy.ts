@@ -192,8 +192,8 @@ export class Legacy {
     return focusMode;
   }
 
-  public static processPosition(buttonPosition?: string): ButtonPosition {
-    if (!buttonPosition) return buttonPosition as ButtonPosition;
+  public static processPosition<T>(buttonPosition?: string) {
+    if (!buttonPosition) return buttonPosition as T;
     const error = `Position names have been updated${SINCE_VERSION}2.3.1.`;
     if (buttonPosition === 'inside-left') {
       console[ERROR](error);
@@ -211,7 +211,7 @@ export class Legacy {
       console[ERROR](error);
       return OUTSIDE_END;
     }
-    return buttonPosition as ButtonPosition;
+    return buttonPosition as T;
   }
 }
 

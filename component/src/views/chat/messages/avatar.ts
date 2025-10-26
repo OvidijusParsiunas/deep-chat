@@ -1,9 +1,10 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
+import {AI, END, START, USER} from '../../../utils/consts/messageConstants';
 import aiLogoUrl from '../../../../assets/machine-learning.svg';
-import {AI, USER} from '../../../utils/consts/messageConstants';
 import avatarUrl from '../../../../assets/person-avatar.png';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
+import {Legacy} from '../../../utils/legacy/legacy';
 import {Role} from './role';
 
 export class Avatar extends Role {
@@ -18,8 +19,8 @@ export class Avatar extends Role {
     const styles = typeof this._avatars === 'boolean' ? undefined : this._avatars;
     const avatarContainerElement = this.createAvatar(role, styles);
     const position = this.getPosition(role, styles);
-    avatarContainerElement[CLASS_LIST].add(position === 'left' ? 'start-item-position' : 'end-item-position');
-    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', avatarContainerElement);
+    avatarContainerElement[CLASS_LIST].add(position === START ? 'start-item-position' : 'end-item-position');
+    messageText.insertAdjacentElement(position === START ? 'beforebegin' : 'afterend', avatarContainerElement);
   }
 
   private createAvatar(role: string, avatars?: CustomAvatars) {
@@ -41,10 +42,10 @@ export class Avatar extends Role {
   }
 
   private getPosition(role: string, avatars?: CustomAvatars) {
-    let position: AvatarStyles['position'] | undefined = avatars?.[role]?.styles?.position;
+    let position = Legacy.processPosition<AvatarStyles['position'] | undefined>(avatars?.[role]?.styles?.position);
     if (role !== USER) position ??= avatars?.ai?.styles?.position;
     position ??= avatars?.[DEFAULT]?.styles?.position;
-    position ??= role === USER ? 'right' : 'left';
+    position ??= role === USER ? END : START;
     return position;
   }
 

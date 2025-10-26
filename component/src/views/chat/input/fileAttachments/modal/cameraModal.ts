@@ -1,10 +1,10 @@
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {FileAttachmentsType} from '../fileAttachmentTypes/fileAttachmentsType';
 import {CameraDimensions, CameraFiles} from '../../../../../types/camera';
+import {ERROR, START} from '../../../../../utils/consts/messageConstants';
 import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
-import {ERROR} from '../../../../../utils/consts/messageConstants';
 import {CLOSE_ICON_STRING} from '../../../../../icons/closeIcon';
 import {CLICK} from '../../../../../utils/consts/inputConstants';
 import {TICK_ICON_STRING} from '../../../../../icons/tickIcon';
@@ -151,7 +151,7 @@ export class CameraModal extends Modal {
 
   private openCameraModal(cameraModal: CameraModal) {
     this.displayModalElements();
-    cameraModal.start();
+    cameraModal[START]();
   }
 
   // prettier-ignore

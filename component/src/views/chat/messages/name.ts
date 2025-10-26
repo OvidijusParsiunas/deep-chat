@@ -1,7 +1,8 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
+import {USER, AI, TEXT, START, END} from '../../../utils/consts/messageConstants';
 import {Names, Name as NameT, CustomNames} from '../../../types/names';
-import {USER, AI, TEXT} from '../../../utils/consts/messageConstants';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
+import {Legacy} from '../../../utils/legacy/legacy';
 import {Role} from './role';
 
 export class Name extends Role {
@@ -16,8 +17,8 @@ export class Name extends Role {
     const customConfig = typeof this._names === 'boolean' ? {} : this._names;
     const nameElement = this.createName(role, customConfig);
     const position = Name.getPosition(role, customConfig);
-    nameElement[CLASS_LIST].add(position === 'left' ? 'start-item-position' : 'end-item-position');
-    messageText.insertAdjacentElement(position === 'left' ? 'beforebegin' : 'afterend', nameElement);
+    nameElement[CLASS_LIST].add(position === START ? 'start-item-position' : 'end-item-position');
+    messageText.insertAdjacentElement(position === START ? 'beforebegin' : 'afterend', nameElement);
   }
 
   private createName(role: string, names: CustomNames) {
@@ -29,10 +30,10 @@ export class Name extends Role {
   }
 
   private static getPosition(role: string, names: CustomNames) {
-    let position: NameT['position'] | undefined = names?.[role]?.position;
+    let position = Legacy.processPosition<NameT['position'] | undefined>(names?.[role]?.position);
     if (role !== USER) position ??= names?.[AI]?.position;
     position ??= names?.[DEFAULT]?.position;
-    position ??= role === USER ? 'right' : 'left';
+    position ??= role === USER ? END : START;
     return position;
   }
 

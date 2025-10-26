@@ -36,7 +36,7 @@ export class InputButton<T extends Styles = Styles> {
     this.elementRef = buttonElement;
     this.svg = SVGIconUtils.createSVGElement(svg);
     this.customStyles = customStyles;
-    this.position = Legacy.processPosition(position);
+    this.position = Legacy.processPosition<ButtonPositionT>(position);
     this._tooltipSettings = tooltip;
     this.dropupText = dropupText;
   }

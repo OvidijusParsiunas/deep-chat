@@ -3,7 +3,7 @@ import {CustomStyle} from './styles';
 export interface AvatarStyles {
   container?: CustomStyle;
   avatar?: CustomStyle;
-  position?: 'left' | 'right';
+  position?: 'start' | 'end';
 }
 
 export interface Avatar {

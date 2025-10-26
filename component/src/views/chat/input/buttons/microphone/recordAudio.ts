@@ -1,6 +1,6 @@
 import {AudioFileAttachmentType} from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
+import {AUDIO, ERROR, FILES, START} from '../../../../../utils/consts/messageConstants';
 import {MicrophoneFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
-import {AUDIO, ERROR, FILES} from '../../../../../utils/consts/messageConstants';
 import {NewFileName} from '../../fileAttachments/newFileName';
 import {AudioFormat} from '../../../../../types/microphone';
 import {MicrophoneButton} from './microphoneButton';
@@ -56,7 +56,7 @@ export class RecordAudio extends MicrophoneButton {
         this._mediaRecorder.addEventListener('dataavailable', (event) => {
           this.createFile(event);
         });
-        this._mediaRecorder.start();
+        this._mediaRecorder[START]();
       })
       .catch((err) => {
         console[ERROR](err);

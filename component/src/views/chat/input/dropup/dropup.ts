@@ -7,6 +7,7 @@ import {TooltipUtils} from '../buttons/tooltip/tooltipUtils';
 import {DropupStyles} from '../../../../types/dropupStyles';
 import {PLUS_ICON_STRING} from '../../../../icons/plusIcon';
 import {CustomButton} from '../buttons/custom/customButton';
+import {ButtonPosition} from '../../../../types/button';
 import {Legacy} from '../../../../utils/legacy/legacy';
 import {InputButton} from '../buttons/inputButton';
 import {DropupMenu} from './dropupMenu';
@@ -70,7 +71,7 @@ export class Dropup extends InputButton<Styles> {
 
   static getPosition(pToBs: PositionToButtons, dropupStyles?: DropupStyles) {
     if (dropupStyles?.button?.position) {
-      return Legacy.processPosition(dropupStyles?.button?.position);
+      return Legacy.processPosition<ButtonPosition>(dropupStyles?.button?.position);
     }
     if (pToBs[OUTSIDE_START].length > 0 && pToBs[OUTSIDE_END].length === 0) {
       return OUTSIDE_END;
