@@ -1,6 +1,7 @@
 import {CameraFilesServiceConfig, FilesServiceConfig, MicrophoneFilesServiceConfig} from './types/fileServiceConfigs';
-import {MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage} from './types/messages';
+import {MessageContent, IntroMessage, MessageStyles, UserContent, OnMessage, DefaultInput} from './types/messages';
 import {ValidateKeyPropertyView} from './views/validateKeyProperty/validateKeyPropertyView';
+import {FUNCTION_FAILED_WAIT_FOR_RENDER} from './utils/errorMessages/errorMessages';
 import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtils';
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
@@ -89,6 +90,9 @@ export class DeepChat extends InternalHTML {
   textInput?: TextInput;
 
   @Property('object')
+  defaultInput?: DefaultInput;
+
+  @Property('object')
   submitButtonStyles?: SubmitButtonStyles;
 
   @Property('object')
@@ -163,10 +167,10 @@ export class DeepChat extends InternalHTML {
   getMessages: () => MessageContent[] = () => [];
 
   submitUserMessage: (content: UserContent) => void = () =>
-    console.warn('submitUserMessage failed - please wait for chat view to render before calling this property.');
+    console.warn(FUNCTION_FAILED_WAIT_FOR_RENDER('submitUserMessage'));
 
   addMessage: (message: Response, isUpdate?: boolean) => void = () =>
-    console.warn('addMessage failed - please wait for chat view to render before calling this property.');
+    console.warn(FUNCTION_FAILED_WAIT_FOR_RENDER('addMessage'));
 
   updateMessage: (messageBody: MessageBody, index: number) => void = () => {};
 

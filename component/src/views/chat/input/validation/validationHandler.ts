@@ -1,4 +1,5 @@
 import {FILE, FILES, TEXT} from '../../../../utils/consts/messageConstants';
+import {BrowserStorage} from '../../messages/browserStorage/browserStorage';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {UserContentI} from '../../../../types/messagesInternal';
 import {SubmitButton} from '../buttons/submit/submitButton';
@@ -13,32 +14,33 @@ type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) =>
 
 export class ValidationHandler {
   // prettier-ignore
-  private static validate(validation: ValidateFunc,
-      submitButton: SubmitButton, text?: string, files?: File[], isProgrammatic?: boolean) {
+  private static validate(validation: ValidateFunc, submitButton: SubmitButton,
+      text?: string, files?: File[], browserStorage?: BrowserStorage, isProgrammatic?: boolean) {
     const isValid = validation(text as string, files, isProgrammatic);
     if (isValid) {
       submitButton.changeToSubmitIcon();
     } else {
       submitButton.changeToDisabledIcon();
     }
+    browserStorage?.addInputText(text || '');
     return isValid;
   }
 
   // prettier-ignore
-  private static async useValidationFunc(validation: ValidateFunc,
-      textInput: TextInputEl, fileAttachments: FileAttachments, submitButton: SubmitButton) {
+  private static async useValidationFunc(validation: ValidateFunc, textInput: TextInputEl,
+      fileAttachments: FileAttachments, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
     const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData[FILE]);
-    return ValidationHandler.validate(validation, submitButton, text as string, fileData);
+    return ValidationHandler.validate(validation, submitButton, text as string, fileData, browserStorage);
   }
 
   // prettier-ignore
   private static async useValidationFuncProgrammatic(validation: ValidateFunc,
-      programmatic: UserContentI, submitButton: SubmitButton) {
+      programmatic: UserContentI, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
     const files = programmatic[FILES]?.map((file) => file[FILE]);
-    return ValidationHandler.validate(validation, submitButton, programmatic[TEXT], files, true);
+    return ValidationHandler.validate(validation, submitButton, programmatic[TEXT], files, browserStorage, true);
   }
 
   private static validateWebsocket(serviceIO: ServiceIO, submitButton: SubmitButton) {
@@ -52,7 +54,7 @@ export class ValidationHandler {
 
   // prettier-ignore
   public static attach(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
-      fileAttachments: FileAttachments, submitButton: SubmitButton) {
+      fileAttachments: FileAttachments, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
     const validateInput = deepChat.validateInput || Legacy.processValidateInput(deepChat);
     deepChat._validationHandler = async (programmatic?: UserContentI) => {
       if (submitButton.status.loadingActive || submitButton.status.requestInProgress) return false;
@@ -60,8 +62,10 @@ export class ValidationHandler {
       if (!ValidationHandler.validateWebsocket(serviceIO, submitButton)) return false;
       const validation = validateInput || serviceIO.canSendMessage;
       if (validation) {
-        if (programmatic) return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton);
-        return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton);
+        if (programmatic) {
+          return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton, browserStorage);
+        }
+        return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton, browserStorage);
       }
       return null;
     };

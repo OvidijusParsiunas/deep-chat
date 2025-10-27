@@ -1,5 +1,6 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
 import {INSIDE_END, INSIDE_START, OUTSIDE_END, OUTSIDE_START} from '../consts/inputConstants';
+import {BrowserStorage} from '../../views/chat/messages/browserStorage/browserStorage';
 import {DOCS_BASE_URL, ERROR, FILE, FILES, TEXT} from '../consts/messageConstants';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {OBJECT} from '../../services/utils/serviceConstants';
@@ -7,7 +8,6 @@ import {CLASS_LIST, STYLE} from '../consts/htmlConstants';
 import {ValidateInput} from '../../types/validateInput';
 import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
-import {ButtonPosition} from '../../types/button';
 import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
 import {Connect} from '../../types/connect';
@@ -212,6 +212,11 @@ export class Legacy {
       return OUTSIDE_END;
     }
     return buttonPosition as T;
+  }
+
+  public static processBrowserStorage(browserStorage: BrowserStorage) {
+    const item = browserStorage.get();
+    if (item && Array.isArray(item)) browserStorage.addMessages(item);
   }
 }
 

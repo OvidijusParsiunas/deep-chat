@@ -43,9 +43,14 @@ function getModelRequestMessage(result: object, isInterceptor: boolean) {
   );
 }
 
+function getFunctionFailedMessage(name: string) {
+  return `${name} failed - please wait for chat view to render before calling this property.`;
+}
+
 export const INVALID_RESPONSE = getInvalidResponseMessage;
 export const INVALID_MODEL_REQUEST = getModelRequestMessage;
 export const INVALID_MODEL_RESPONSE = getModelResponseMessage;
+export const FUNCTION_FAILED_WAIT_FOR_RENDER = getFunctionFailedMessage;
 export const INVALID_KEY = 'Invalid API Key';
 export const CONNECTION_FAILED = 'Failed to connect';
 export const REQUEST_SETTINGS_ERROR = 'Request settings have not been set up';

@@ -57,3 +57,5 @@ export type IntroMessage = InterfacesUnion<{text: string} | {html: string}>;
 
 // eslint-disable-next-line
 export type UserContent = {text?: string; files?: File[] | FileList; custom?: any};
+
+export type DefaultInput = Omit<UserContent, 'custom'>;

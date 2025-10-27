@@ -37,13 +37,13 @@ export class Input {
     this.elementRef = Input.createPanelElement(deepChat.inputAreaStyle);
     const buttons: Buttons = {};
     const fileAtts = this.createFileUploadComponents(deepChat, serviceIO, containerElement, buttons);
-    const textInput = new TextInputEl(deepChat, serviceIO, fileAtts);
+    const textInput = new TextInputEl(deepChat, serviceIO, fileAtts, messages.browserStorage);
     if (deepChat.speechToText && !buttons.microphone) {
       buttons.microphone = {button: new SpeechToText(deepChat, textInput, messages.addNewErrorMessage.bind(messages))};
     }
     const submitButton = new SubmitButton(deepChat, textInput, messages, serviceIO, fileAtts, buttons);
     textInput.submit = submitButton.submitFromInput.bind(submitButton);
-    ValidationHandler.attach(deepChat, serviceIO, textInput, fileAtts, submitButton);
+    ValidationHandler.attach(deepChat, serviceIO, textInput, fileAtts, submitButton, messages.browserStorage);
     deepChat.submitUserMessage = submitButton.programmaticSubmit.bind(submitButton);
     buttons.submit = {button: submitButton};
     if (deepChat.customButtons) CustomButton.add(deepChat, buttons);
