@@ -30,6 +30,7 @@ import {
   APPLICATION_JSON,
   AUTHORIZATION_H,
   BEARER_PREFIX,
+  FUNCTION_CALL,
   OBJECT,
   POST,
 } from '../../utils/serviceConstants';
@@ -420,7 +421,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       } else if (response.type === 'response.done') {
         const message = JSON.parse(e.data);
         const output = message.response.output?.[0];
-        if (output?.type === 'function_call') {
+        if (output?.type === FUNCTION_CALL) {
           const {name, call_id} = output;
           try {
             await this.handleTool(name, output.arguments, call_id);

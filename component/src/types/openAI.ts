@@ -90,21 +90,29 @@ export type ChatFunctionHandler = (
 
 export interface OpenAIChatFunctions {
   // parameters use the JSON Schema type
-  tools?: {type: 'function' | 'object'; function: {name: string; description?: string; parameters: object}}[];
+  tools?: {
+    type: 'function' | 'web_search' | 'file_search' | 'code_interpreter';
+    [name: string]: unknown;
+  }[];
   tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
   function_handler?: ChatFunctionHandler;
 }
 
 // https://platform.openai.com/docs/api-reference/chat
 // https://platform.openai.com/docs/guides/audio?example=audio-in
+// https://platform.openai.com/docs/api-reference/responses
 export type OpenAIChat = {
-  system_prompt?: string;
+  instructions?: string;
   model?: string;
   max_tokens?: number; // number of tokens to reply - recommended to be set by the client
   temperature?: number;
   top_p?: number;
   modalities?: ['text', 'audio'];
   audio?: {format: string; voice: string};
+  // Responses API specific options
+  store?: boolean; // Enable server-side state management
+  background?: boolean; // Enable background processing
+  previous_response_id?: string; // Continue from previous response
 } & OpenAIChatFunctions;
 
 export interface OpenAI {

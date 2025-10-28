@@ -1,8 +1,9 @@
+import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
+import {OpenAIResult, ResponsesFunctionCall, OpenAIMessage} from '../../types/openAIResult';
 import {AUDIO, ERROR, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
-import {OpenAIConverseResult, ResultChoice, ToolCalls} from '../../types/openAIResult';
+import {FUNCTION_CALL, INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
-import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -17,18 +18,24 @@ import {DeepChat} from '../../deepChat';
 
 type FileContent = {
   type: string;
-  image_url?: {url?: string};
+  image_url?: string;
   input_audio?: {data?: string; format: string};
   text?: string;
 }[];
 
+// Have option to make system message developer
+// https://platform.openai.com/docs/api-reference/chat/create
+// WORK - wait for audio to work
+// https://platform.openai.com/docs/guides/migrate-to-responses
+
+// WORK - ability to generate images
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  // https://platform.openai.com/docs/api-reference/chat/create
-  url = 'https://api.openai.com/v1/chat/completions';
+  // https://platform.openai.com/docs/api-reference/responses
+  url = 'https://api.openai.com/v1/responses';
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid value'];
-  _streamToolCalls?: ToolCalls;
+  private _functionStramInProgress = false;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
@@ -55,7 +62,7 @@ export class OpenAIChatIO extends DirectServiceIO {
         const format = file.name?.split('.').pop()?.toLowerCase() || 'wav';
         return {[TYPE]: 'input_audio', input_audio: {data: base64Data, format}};
       }
-      return {[TYPE]: 'image_url', image_url: {url: file.src}};
+      return {detail: 'auto', [TYPE]: 'input_image', image_url: file.src};
     });
     return content;
   }
@@ -63,7 +70,7 @@ export class OpenAIChatIO extends DirectServiceIO {
   private static getContent(message: MessageContentI) {
     if (message[FILES] && message[FILES].length > 0) {
       const content: FileContent = OpenAIChatIO.getFileContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
+      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: 'input_text', [TEXT]: message[TEXT]});
       return content;
     }
     return message[TEXT];
@@ -75,8 +82,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       content: OpenAIChatIO.getContent(message),
       role: DirectServiceIO.getRoleViaUser(message.role),
     }));
-    this.addSystemMessage(processedMessages);
-    bodyCopy.messages = processedMessages;
+    bodyCopy.input = processedMessages;
     return bodyCopy;
   }
 
@@ -85,29 +91,76 @@ export class OpenAIChatIO extends DirectServiceIO {
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
-  override async extractResultData(result: OpenAIConverseResult, prevBody?: OpenAIChat): Promise<ResponseI> {
+  override async extractResultData(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result[ERROR]) throw result[ERROR].message;
-    if (result.choices?.[0]?.delta) {
-      return this.extractStreamResult(result.choices[0], prevBody);
+    if (result.status) {
+      if (result.output_text) {
+        return {[TEXT]: result.output_text};
+      }
+      if (result.output?.[0]) {
+        const firstOutput = result.output[0];
+        if (firstOutput.call_id && (firstOutput as ResponsesFunctionCall).type === FUNCTION_CALL) {
+          return this.handleResponsesFunctionCalls(result.output as ResponsesFunctionCall[], prevBody);
+        }
+        const message = firstOutput as OpenAIMessage;
+        if (message?.[AUDIO]) {
+          const tts = this.deepChat.textToSpeech;
+          const displayText = typeof tts === 'object' && typeof tts?.[AUDIO]?.displayText === 'boolean';
+          return {
+            [FILES]: [{[SRC]: `data:audio/wav;base64,${message[AUDIO].data}`, [TYPE]: AUDIO}],
+            [TEXT]: displayText ? message[AUDIO].transcript : undefined,
+          };
+        }
+        return {[TEXT]: (message.content as unknown as {text: string}[])[0].text};
+      }
+      return {[TEXT]: ''};
     }
-    if (result.choices?.[0]?.message) {
-      if (result.choices[0].message.tool_calls) {
-        return this.handleToolsGeneric(result.choices[0].message, this.functionHandler, this.messages, prevBody);
-      }
-      if (result.choices[0].message?.[AUDIO]) {
-        const tts = this.deepChat.textToSpeech;
-        const displayText = typeof tts === 'object' && typeof tts?.[AUDIO]?.displayText === 'boolean';
-        return {
-          [FILES]: [{[SRC]: `data:audio/wav;base64,${result.choices[0].message[AUDIO].data}`, [TYPE]: AUDIO}],
-          [TEXT]: displayText ? result.choices[0].message[AUDIO].transcript : undefined,
-        };
-      }
-      return {[TEXT]: result.choices[0].message.content};
+    if (result.item?.type === FUNCTION_CALL && result.type) {
+      return this.handleStreamedResponsesFunctionCall(result, prevBody);
+    }
+    if (result.delta && !this._functionStramInProgress) {
+      return {[TEXT]: result.delta};
     }
     return {[TEXT]: ''};
   }
 
-  private async extractStreamResult(choice: ResultChoice, prevBody?: OpenAIChat) {
-    return this.extractStreamResultWToolsGeneric(this, choice, this.functionHandler, prevBody);
+  private async handleStreamedResponsesFunctionCall(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
+    if (result.type === 'response.output_item.done') {
+      this._functionStramInProgress = false;
+      if (result.item?.type === FUNCTION_CALL) return this.handleResponsesFunctionCalls([result.item], prevBody);
+    } else if (result.type === 'response.output_item.added') {
+      this._functionStramInProgress = true;
+    }
+    return {[TEXT]: ''};
+  }
+
+  private async handleResponsesFunctionCalls(
+    functionCalls: ResponsesFunctionCall[],
+    prevBody?: OpenAIChat
+  ): Promise<ResponseI> {
+    if (!prevBody || !this.functionHandler) throw Error(DEFINE_FUNCTION_HANDLER);
+
+    const functions = functionCalls.map((call) => ({name: call.name, arguments: call.arguments}));
+
+    const {responses, processedResponse} = await this.callToolFunction(this.functionHandler, functions);
+    if (processedResponse) return processedResponse;
+
+    // For responses API, we need to include the original function calls in conversation history
+    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    if (bodyCp.input) {
+      // Add original function calls to the conversation history which is equired to prevent error based on this thread:
+      // eslint-disable-next-line max-len
+      // https://community.openai.com/t/issue-with-new-responses-api-400-no-tool-call-found-for-function-call-output-with-call-id/1142327
+      functionCalls.forEach((functionCall) => bodyCp.input.push(functionCall));
+      // Then add the function call outputs
+      if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
+        responses.forEach((resp, index) => {
+          const functionCall = functionCalls[index];
+          bodyCp.input.push({type: 'function_call_output', call_id: functionCall.call_id, output: resp.response});
+        });
+        return this.makeAnotherRequest(bodyCp, this.messages);
+      }
+    }
+    throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
 }

@@ -33,3 +33,5 @@ export const GET = 'GET';
 export const POST = 'POST';
 
 export const UPLOAD_AN_AUDIO_FILE = 'Upload an audio file';
+
+export const FUNCTION_CALL = 'function_call';
