@@ -51,8 +51,7 @@ export interface OpenAIRunResult {
 }
 
 export interface ToolAPI {
-  tool_calls?: ToolCalls;
-  tool_call_id?: string;
+  call_id?: string;
   name?: string;
 }
 
@@ -64,17 +63,49 @@ export type OpenAIMessage = {
 
 export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};
 
-// text for completion request & stream
-// message for chat completion request
-// delta for chat completion stream
-export type ResultChoice = InterfacesUnion<
-  {text: string} | {message: OpenAIMessage} | {delta: OpenAIMessage; finish_reason?: string}
->;
-
 export interface OpenAIConverseResult {
-  choices: ResultChoice[];
   usage: {total_tokens: number};
   error?: {code: string; message: string};
+}
+
+// Unified OpenAI result type for all streaming and non-streaming responses
+export interface OpenAIResult {
+  // Responses API properties
+  id?: string;
+  status?: 'completed' | 'queued' | 'in_progress' | 'failed';
+  output_text?: string;
+  output?: (OpenAIMessage | ResponsesFunctionCall)[];
+  usage?: {total_tokens: number};
+
+  // Stream properties
+  delta?: string;
+
+  // Streaming event properties
+  type?: string;
+  sequence_number?: number;
+  item_id?: string;
+  output_index?: number;
+  arguments?: string;
+  item?: {
+    id: string;
+    type: 'function_call';
+    status: string;
+    arguments: string;
+    call_id: string;
+    name: string;
+  };
+
+  // Error handling
+  error?: {code?: string; message: string};
+}
+
+// Responses API function call format
+export interface ResponsesFunctionCall {
+  id: string;
+  call_id: string;
+  type: 'function_call';
+  name: string;
+  arguments: string;
 }
 
 export interface OpenAIImageResult {
