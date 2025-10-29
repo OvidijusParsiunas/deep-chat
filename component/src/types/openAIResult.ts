@@ -59,6 +59,7 @@ export type OpenAIMessage = {
   role: 'user' | 'system' | 'ai' | 'tool';
   content: string;
   audio?: {data: string; transcript: string};
+  status?: string;
 } & ToolAPI;
 
 export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};
@@ -99,10 +100,10 @@ export interface OpenAIResult {
   error?: {code?: string; message: string};
 }
 
-// Responses API function call format
 export interface ResponsesFunctionCall {
   id: string;
   call_id: string;
+  status?: string;
   type: 'function_call';
   name: string;
   arguments: string;

@@ -25,10 +25,7 @@ type FileContent = {
 
 // Have option to make system message developer
 // https://platform.openai.com/docs/api-reference/chat/create
-// WORK - wait for audio to work
-// https://platform.openai.com/docs/guides/migrate-to-responses
 
-// WORK - ability to generate images
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
@@ -94,13 +91,11 @@ export class OpenAIChatIO extends DirectServiceIO {
   override async extractResultData(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result[ERROR]) throw result[ERROR].message;
     if (result.status) {
-      if (result.output_text) {
-        return {[TEXT]: result.output_text};
-      }
-      if (result.output?.[0]) {
-        const firstOutput = result.output[0];
+      const completetdOutputs = result.output?.filter((output) => output.status === 'completed');
+      if (completetdOutputs && completetdOutputs.length > 0) {
+        const firstOutput = completetdOutputs[0];
         if (firstOutput.call_id && (firstOutput as ResponsesFunctionCall).type === FUNCTION_CALL) {
-          return this.handleResponsesFunctionCalls(result.output as ResponsesFunctionCall[], prevBody);
+          return this.handleResponsesFunctionCalls(completetdOutputs as ResponsesFunctionCall[], prevBody);
         }
         const message = firstOutput as OpenAIMessage;
         if (message?.[AUDIO]) {

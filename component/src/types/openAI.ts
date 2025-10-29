@@ -1,4 +1,5 @@
 import {OpenAIRealtime} from './openAIRealtime';
+import {OpenAITool} from './openAITools';
 
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
@@ -89,30 +90,31 @@ export type ChatFunctionHandler = (
 ) => ChatFunctionHandlerResponse | Promise<ChatFunctionHandlerResponse> | Promise<{response: string}>[];
 
 export interface OpenAIChatFunctions {
-  // parameters use the JSON Schema type
-  tools?: {
-    type: 'function' | 'web_search' | 'file_search' | 'code_interpreter';
-    [name: string]: unknown;
-  }[];
-  tool_choice?: 'auto' | {type: 'function'; function: {name: string}};
+  tools?: OpenAITool[];
+  max_tool_calls?: number;
+  parallel_tool_calls?: boolean;
+  tool_choice?:
+    | 'auto'
+    | 'required'
+    | 'none'
+    | {mode: 'auto' | 'required'; type: 'allowed_tools'; tools: OpenAITool[]}
+    | {type: string; name?: string; server_label?: string};
   function_handler?: ChatFunctionHandler;
 }
 
-// https://platform.openai.com/docs/api-reference/chat
-// https://platform.openai.com/docs/guides/audio?example=audio-in
-// https://platform.openai.com/docs/api-reference/responses
+// https://platform.openai.com/docs/api-reference/responses/create
 export type OpenAIChat = {
-  instructions?: string;
   model?: string;
-  max_tokens?: number; // number of tokens to reply - recommended to be set by the client
+  instructions?: string;
+  background?: boolean;
+  max_output_tokens?: number;
+  reasoning?: {effort?: string; summary?: string};
+  safety_identifier?: string;
+  service_tier?: string;
+  store?: boolean;
   temperature?: number;
   top_p?: number;
-  modalities?: ['text', 'audio'];
-  audio?: {format: string; voice: string};
-  // Responses API specific options
-  store?: boolean; // Enable server-side state management
-  background?: boolean; // Enable background processing
-  previous_response_id?: string; // Continue from previous response
+  truncation?: string;
 } & OpenAIChatFunctions;
 
 export interface OpenAI {

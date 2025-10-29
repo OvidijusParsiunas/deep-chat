@@ -19,8 +19,8 @@ export class SetupMessages {
         return `Please define a valid service inside
           the [directConnection](${DOCS_BASE_URL}directConnection/#directConnection) object.`;
       }
-      const openAIChat = deepChat.directConnection.openAI?.chat;
-      if (typeof openAIChat === 'object' && openAIChat.tools && !openAIChat.function_handler) {
+      const chat = deepChat.directConnection.openAI?.chat;
+      if (typeof chat === 'object' && chat.tools?.find((tool) => tool.type === 'function') && !chat.function_handler) {
         return (
           'Please define the `function_handler` property inside' +
           ` the openAI [chat](${DOCS_BASE_URL}directConnection/openAI#Chat) object.`
