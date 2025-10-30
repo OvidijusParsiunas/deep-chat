@@ -57,9 +57,10 @@ export interface ToolAPI {
 
 export type OpenAIMessage = {
   role: 'user' | 'system' | 'ai' | 'tool';
-  content: string;
+  content: [{text: string}];
   audio?: {data: string; transcript: string};
   status?: string;
+  type?: string;
 } & ToolAPI;
 
 export type OpenAITextToSpeechResult = Blob | {error?: {code: string; message: string}};
@@ -69,13 +70,15 @@ export interface OpenAIConverseResult {
   error?: {code: string; message: string};
 }
 
+export type OpenAIOutput = (OpenAIMessage | ResponsesFunctionCall | ResponsesImageGenerationCall)[];
+
 // Unified OpenAI result type for all streaming and non-streaming responses
 export interface OpenAIResult {
   // Responses API properties
   id?: string;
   status?: 'completed' | 'queued' | 'in_progress' | 'failed';
   output_text?: string;
-  output?: (OpenAIMessage | ResponsesFunctionCall)[];
+  output?: OpenAIOutput;
   usage?: {total_tokens: number};
 
   // Stream properties
@@ -96,6 +99,10 @@ export interface OpenAIResult {
     name: string;
   };
 
+  // Image generation streaming properties
+  partial_image_index?: number;
+  partial_image_b64?: string;
+
   // Error handling
   error?: {code?: string; message: string};
 }
@@ -107,6 +114,15 @@ export interface ResponsesFunctionCall {
   type: 'function_call';
   name: string;
   arguments: string;
+}
+
+export interface ResponsesImageGenerationCall {
+  id: string;
+  call_id: string;
+  type: 'image_generation_call';
+  status: 'completed' | 'in_progress' | 'failed';
+  revised_prompt?: string;
+  result: string;
 }
 
 export interface OpenAIImageResult {

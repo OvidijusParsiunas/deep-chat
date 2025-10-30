@@ -145,7 +145,7 @@ export class DirectServiceIO extends BaseServiceIO {
     return {responses};
   }
 
-  protected makeAnotherRequest(body: object, messages?: Messages) {
+  protected makeAnotherRequest(body: object, messages?: Messages, text?: string) {
     try {
       if (messages) {
         if (this.stream) {
@@ -154,7 +154,7 @@ export class DirectServiceIO extends BaseServiceIO {
           HTTPRequest.request(this, body, messages);
         }
       }
-      return {[TEXT]: ''};
+      return {[TEXT]: text || ''};
     } catch (e) {
       this.asyncCallInProgress = false;
       throw e;
