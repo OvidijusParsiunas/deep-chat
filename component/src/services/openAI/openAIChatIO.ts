@@ -22,16 +22,13 @@ import {
   OpenAIOutput,
 } from '../../types/openAIResult';
 
-// Have option to make system message developer
-// https://platform.openai.com/docs/api-reference/chat/create
-
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
   // https://platform.openai.com/docs/api-reference/responses
   url = 'https://api.openai.com/v1/responses';
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid value'];
-  private _functionStramInProgress = false;
+  private _functionStreamInProgress = false;
   private static readonly IMAGE_BASE64_PREFIX = 'data:image/png;base64,';
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
@@ -110,7 +107,7 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (result.type === 'response.image_generation_call.partial_image' && result.partial_image_b64) {
       return {[FILES]: [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${result.partial_image_b64}`, [TYPE]: IMAGE}]};
     }
-    if (result.delta && !this._functionStramInProgress) {
+    if (result.delta && !this._functionStreamInProgress && result.type === 'response.output_text.delta') {
       return {[TEXT]: result.delta};
     }
     return {[TEXT]: ''};
@@ -118,12 +115,12 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   private async handleStreamedResponsesFunctionCall(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result.type === 'response.output_item.done') {
-      this._functionStramInProgress = false;
+      this._functionStreamInProgress = false;
       if (result.item?.type === FUNCTION_CALL) {
         return this.handleResponsesFunctionCalls([result.item], prevBody) as ResponseI;
       }
     } else if (result.type === 'response.output_item.added') {
-      this._functionStramInProgress = true;
+      this._functionStreamInProgress = true;
     }
     return {[TEXT]: ''};
   }
