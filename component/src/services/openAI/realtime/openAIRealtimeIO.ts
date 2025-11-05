@@ -1,3 +1,4 @@
+import {FUNCTION_CALL_OUTPUT, INPUT_TEXT, OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from '../openAIConsts';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
 import {SPEECH_SESSION_STARTED, SPEECH_SESSION_STOPPED} from '../../utils/speechConstants';
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
@@ -49,7 +50,7 @@ import {
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
   private readonly _avatarConfig: OpenAIRealtime['avatar'];
   private readonly _buttonsConfig: OpenAIRealtime['buttons'];
   private readonly _errorConfig: OpenAIRealtime['error'];
@@ -193,7 +194,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
 
   private async getEphemeralKey(key: string) {
     // https://platform.openai.com/docs/api-reference/realtime-sessions/create
-    const result = await fetch('https://api.openai.com/v1/realtime/sessions', {
+    const result = await fetch(`${OPEN_AI_BASE_URL}realtime/sessions`, {
       method: POST,
       body: JSON.stringify(this.rawBody),
       headers: {
@@ -214,7 +215,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
         const messageRole = role || 'system';
-        const content = [{[TYPE]: messageRole === 'system' || messageRole === USER ? 'input_text' : TEXT, text}];
+        const content = [{[TYPE]: messageRole === 'system' || messageRole === USER ? INPUT_TEXT : TEXT, text}];
         const item = {role: messageRole, [TYPE]: 'message', content};
         this.sendMessage(item);
       },
@@ -454,7 +455,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setLocalDescription(offer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
-      const sdpResponse = await fetch('https://api.openai.com/v1/realtime', {
+      const sdpResponse = await fetch(`${OPEN_AI_BASE_URL}realtime`, {
         method: POST,
         body: offer.sdp,
         headers: {
@@ -615,7 +616,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (typeof result !== 'object' || !ObjectUtils.isJson(result)) {
       throw Error('The `function_handler` response must be a JSON object, e.g. {response: "My response"}');
     }
-    const item = {[TYPE]: 'function_call_output', call_id, output: JSON.stringify(result)};
+    const item = {[TYPE]: FUNCTION_CALL_OUTPUT, call_id, output: JSON.stringify(result)};
     this.sendMessage(item);
   }
 

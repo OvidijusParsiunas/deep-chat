@@ -66,3 +66,4 @@ export const NO_VALID_STREAM_EVENTS_SENT = `No valid stream events were sent.\n$
 export const READABLE_STREAM_CONNECTION_ERROR = 'Readable Stream connection error.';
 export const DEFINE_FUNCTION_HANDLER = 'Please define a `function_handler` property inside the service config.';
 export const FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR = 'Function tool response must be an array or contain a text property';
+export const FAILED_TO_FETCH_HISTORY = 'Failed to fetch history';

@@ -1,5 +1,4 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
-import {REQUEST_SETTINGS_ERROR, DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {ASSISTANT, ERROR, FILES, IMAGES, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {COMPLETED, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
@@ -16,6 +15,7 @@ import {HTTPRequest} from '../../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {OPEN_AI_DIRECT_FETCH} from '../utils/openAIUtils';
 import {BuildHeadersFunc} from '../../../types/headers';
+import {OPEN_AI_KEY_HELP_URL} from '../openAIConsts';
 import {Stream} from '../../../utils/HTTP/stream';
 import {APIKey} from '../../../types/APIKey';
 import {DeepChat} from '../../../deepChat';
@@ -27,6 +27,11 @@ import {
   OpenAIRunResult,
   ToolCalls,
 } from '../../../types/openAIResult';
+import {
+  DEFINE_FUNCTION_HANDLER,
+  FAILED_TO_FETCH_HISTORY,
+  REQUEST_SETTINGS_ERROR,
+} from '../../../utils/errorMessages/errorMessages';
 
 // https://platform.openai.com/docs/api-reference/messages/createMessage
 type MessageContentArr = {
@@ -57,7 +62,7 @@ export type URLSegments = {
 // https://platform.openai.com/docs/guides/responses-vs-chat-completions
 export class OpenAIAssistantIOI extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
   url = ''; // set dynamically
   private static readonly POLLING_TIMEOUT_MS = 500;
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Please send text', History.FAILED_ERROR_MESSAGE];
@@ -96,7 +101,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.deepChat.disableSubmitButton(false);
       return threadMessages;
     } catch (_) {
-      return [{[ERROR]: 'Failed to fetch history'}];
+      return [{[ERROR]: FAILED_TO_FETCH_HISTORY}];
     }
   }
 

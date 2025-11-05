@@ -2,6 +2,7 @@ import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMess
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
 import {AUDIO, ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from './openAIConsts';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -14,9 +15,9 @@ import {DeepChat} from '../../deepChat';
 
 export class OpenAISpeechToTextIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  private static readonly AUDIO_TRANSCRIPTIONS_URL = 'https://api.openai.com/v1/audio/transcriptions';
-  private static readonly AUDIO_TRANSLATIONS_URL = 'https://api.openai.com/v1/audio/translations';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
+  private static readonly AUDIO_TRANSCRIPTIONS_URL = `${OPEN_AI_BASE_URL}audio/transcriptions`;
+  private static readonly AUDIO_TRANSLATIONS_URL = `${OPEN_AI_BASE_URL}audio/translations`;
   private static readonly DEFAULT_MODEL = 'whisper-1';
   url = ''; // set dynamically
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];

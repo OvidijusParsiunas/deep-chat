@@ -1,8 +1,7 @@
-import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
-import {AUDIO, ERROR, FILES, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
-import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
+import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS, OPEN_AI_DIRECT_FETCH} from './utils/openAIUtils';
+import {COMPLETED, FUNCTION_CALL, GET, INCORRECT_ERROR_PREFIX, OBJECT, POST} from '../utils/serviceConstants';
+import {AI, AUDIO, ERROR, FILES, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {OpenAIFileContent, OpenAIConverseBodyInternal} from '../../types/openAIInternal';
-import {FUNCTION_CALL, INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -21,15 +20,34 @@ import {
   OpenAIResult,
   OpenAIOutput,
 } from '../../types/openAIResult';
+import {
+  FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR,
+  DEFINE_FUNCTION_HANDLER,
+  FAILED_TO_FETCH_HISTORY,
+} from '../../utils/errorMessages/errorMessages';
+import {
+  IMAGE_GENERATION_CALL,
+  OPEN_AI_KEY_HELP_URL,
+  FUNCTION_CALL_OUTPUT,
+  OPEN_AI_BASE_URL,
+  OUTPUT_TEXT,
+  INPUT_IMAGE,
+  INPUT_TEXT,
+  RESPONSE,
+} from './openAIConsts';
 
 export class OpenAIChatIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
   // https://platform.openai.com/docs/api-reference/responses
-  url = 'https://api.openai.com/v1/responses';
+  url = `${OPEN_AI_BASE_URL}responses`;
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid value'];
   private _functionStreamInProgress = false;
   private static readonly IMAGE_BASE64_PREFIX = 'data:image/png;base64,';
+  private _conversationId?: string;
+  private readonly _useConversation: boolean = false;
+  private readonly _conversationLoadLimit?: number = 50;
+  fetchHistory?: () => Promise<ResponseI[]>;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
   // prettier-ignore
@@ -43,10 +61,22 @@ export class OpenAIChatIO extends DirectServiceIO {
     // can be undefined as this is the default service
     const config = (configArg || directConnectionCopy.openAI?.chat) as OpenAIChat;
     if (typeof config === OBJECT) {
+      if (config.conversation) {
+        this._useConversation = true;
+        if (typeof config.conversation === 'string') this._conversationId = config.conversation;
+      }
+      if (typeof config.conversationLoadLimit === 'number') this._conversationLoadLimit = config.conversationLoadLimit;
+      this.cleanConfig(config);
       this.completeConfig(config, (deepChat.directConnection?.openAI?.chat as OpenAIChat)?.function_handler);
     }
+    if (this._conversationId) this.fetchHistory = this.fetchHistoryFunc.bind(this);
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'gpt-4o';
+  }
+
+  private cleanConfig(config: OpenAIChat) {
+    delete config.conversation;
+    delete config.conversationLoadLimit;
   }
 
   private static getFileContent(files: MessageFile[]): OpenAIFileContent {
@@ -56,7 +86,7 @@ export class OpenAIChatIO extends DirectServiceIO {
         const format = file.name?.split('.').pop()?.toLowerCase() || 'wav';
         return {[TYPE]: 'input_audio', input_audio: {data: base64Data, format}};
       }
-      return {detail: 'auto', [TYPE]: 'input_image', image_url: file.src};
+      return {detail: 'auto', [TYPE]: INPUT_IMAGE, image_url: file.src};
     });
     return content;
   }
@@ -65,37 +95,102 @@ export class OpenAIChatIO extends DirectServiceIO {
     // Attaching history files only allowed for user
     if (message.role === USER && message[FILES] && message[FILES].length > 0) {
       const content: OpenAIFileContent = OpenAIChatIO.getFileContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: 'input_text', [TEXT]: message[TEXT]});
+      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: INPUT_TEXT, [TEXT]: message[TEXT]});
       return content;
     }
     return message[TEXT];
   }
 
+  private async fetchHistoryFunc(): Promise<ResponseI[]> {
+    setTimeout(() => this.deepChat.disableSubmitButton(), 2);
+    try {
+      const originalUrl = this.url;
+      this.url = `${OPEN_AI_BASE_URL}conversations/${this._conversationId}/items?limit=${this._conversationLoadLimit}`;
+      const conversationData = await OPEN_AI_DIRECT_FETCH(this, {}, GET);
+      this.connectSettings.method = POST;
+      this.url = originalUrl;
+      this.deepChat.disableSubmitButton(false);
+      return this.processConversationHistory(conversationData);
+    } catch (_) {
+      this.deepChat.disableSubmitButton(false);
+      return [{[ERROR]: FAILED_TO_FETCH_HISTORY}];
+    }
+  }
+
+  private static filterCompleted(data?: OpenAIOutput) {
+    return data?.filter((output) => output.status === COMPLETED) || [];
+  }
+
+  private processConversationHistory(conversationData: {data: OpenAIOutput}): ResponseI[] {
+    if (!conversationData.data || !Array.isArray(conversationData.data)) return [];
+    const messages: ResponseI[] = [];
+    for (const item of OpenAIChatIO.filterCompleted(conversationData.data.reverse())) {
+      if (item.type === 'message' && item.content && Array.isArray(item.content)) {
+        for (const content of item.content) {
+          if ((content.type === INPUT_TEXT || content.type === OUTPUT_TEXT) && content[TEXT]) {
+            messages.push({role: item.role, [TEXT]: content[TEXT]});
+          } else if (content.type === INPUT_IMAGE) {
+            messages.push({
+              role: item.role,
+              [FILES]: OpenAIChatIO.generateImageFile(content.image_url || ''),
+            });
+          }
+        }
+      } else if (item.type === IMAGE_GENERATION_CALL) {
+        messages.push({
+          role: AI,
+          [FILES]: OpenAIChatIO.generateImageFile((item as ResponsesImageGenerationCall).result),
+        });
+      }
+    }
+    return messages;
+  }
+
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body));
-    const processedMessages = this.processMessages(pMessages).map((message) => ({
+    pMessages = this.processMessages(pMessages);
+    pMessages = this._useConversation ? [pMessages[pMessages.length - 1]] : pMessages;
+    const processedMessages = pMessages.map((message) => ({
       content: OpenAIChatIO.getContent(message),
       role: DirectServiceIO.getRoleViaUser(message.role),
     }));
     bodyCopy.input = processedMessages;
+    if (this._conversationId) bodyCopy.conversation = this._conversationId;
     return bodyCopy;
+  }
+
+  private async createConversation(): Promise<string> {
+    try {
+      const originalUrl = this.url;
+      this.url = `${OPEN_AI_BASE_URL}conversations`;
+      const result = await OPEN_AI_DIRECT_FETCH(this, {}, POST);
+      this.url = originalUrl;
+      return result.id;
+    } catch (error) {
+      console[ERROR]('Failed to create conversation:', error);
+      throw error;
+    }
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
     this.messages ??= messages;
+    if (this._useConversation && !this._conversationId) {
+      this._conversationId = await this.createConversation();
+    }
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result[ERROR]) throw result[ERROR].message;
     if (result.status) {
-      const completetdOutputs = result.output?.filter((output) => output.status === 'completed');
-      if (completetdOutputs && completetdOutputs.length > 0) {
-        const text = (completetdOutputs as OpenAIMessage[]).find((output) => typeof output.content?.[0]?.text === 'string')
-          ?.content?.[0]?.text;
-        const functionResponse = await this.handleResponsesFunctionCalls(completetdOutputs, prevBody, text);
+      const completedOutputs = OpenAIChatIO.filterCompleted(result.output);
+      if (completedOutputs.length > 0) {
+        const text = (completedOutputs as OpenAIMessage[]).find(
+          (output) => typeof output.content?.[0]?.[TEXT] === 'string'
+        )?.content?.[0]?.[TEXT];
+        const functionResponse = await this.handleResponsesFunctionCalls(completedOutputs, prevBody, text);
         if (functionResponse) return functionResponse as ResponseI;
-        const fileResponse = this.handleFileGenerationResponse(completetdOutputs, text);
+        const fileResponse = this.handleFileGenerationResponse(completedOutputs, text);
         if (fileResponse) return fileResponse as ResponseI;
         return {[TEXT]: text};
       }
@@ -104,22 +199,22 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (result.item?.type === FUNCTION_CALL && result.type) {
       return this.handleStreamedResponsesFunctionCall(result, prevBody);
     }
-    if (result.type === 'response.image_generation_call.partial_image' && result.partial_image_b64) {
+    if (result.type === `${RESPONSE}.${IMAGE_GENERATION_CALL}.partial_image` && result.partial_image_b64) {
       return {[FILES]: [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${result.partial_image_b64}`, [TYPE]: IMAGE}]};
     }
-    if (result.delta && !this._functionStreamInProgress && result.type === 'response.output_text.delta') {
+    if (result.delta && !this._functionStreamInProgress && result.type === `${RESPONSE}.${OUTPUT_TEXT}.delta`) {
       return {[TEXT]: result.delta};
     }
     return {[TEXT]: ''};
   }
 
   private async handleStreamedResponsesFunctionCall(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
-    if (result.type === 'response.output_item.done') {
+    if (result.type === `${RESPONSE}.output_item.done`) {
       this._functionStreamInProgress = false;
       if (result.item?.type === FUNCTION_CALL) {
         return this.handleResponsesFunctionCalls([result.item], prevBody) as ResponseI;
       }
-    } else if (result.type === 'response.output_item.added') {
+    } else if (result.type === `${RESPONSE}.output_item.added`) {
       this._functionStreamInProgress = true;
     }
     return {[TEXT]: ''};
@@ -127,15 +222,19 @@ export class OpenAIChatIO extends DirectServiceIO {
 
   private handleFileGenerationResponse(completetdOutputs: OpenAIOutput, text?: string) {
     const imageMessage = completetdOutputs.find(
-      (output) => output.type === 'image_generation_call'
+      (output) => output.type === IMAGE_GENERATION_CALL
     ) as ResponsesImageGenerationCall;
     if (imageMessage) {
       return {
-        [FILES]: [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${imageMessage.result}`, [TYPE]: IMAGE}],
+        [FILES]: OpenAIChatIO.generateImageFile(imageMessage.result),
         [TEXT]: text,
       };
     }
     return null;
+  }
+
+  private static generateImageFile(result: string): MessageFile[] {
+    return [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${result}`, [TYPE]: IMAGE}];
   }
 
   private async handleResponsesFunctionCalls(completetdOutputs: OpenAIOutput, prevBody?: OpenAIChat, text?: string) {
@@ -159,7 +258,7 @@ export class OpenAIChatIO extends DirectServiceIO {
       if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
         responses.forEach((resp, index) => {
           const functionCall = functionCalls[index];
-          bodyCp.input.push({type: 'function_call_output', call_id: functionCall.call_id, output: resp.response});
+          bodyCp.input.push({type: FUNCTION_CALL_OUTPUT, call_id: functionCall.call_id, output: resp[RESPONSE]});
         });
         return this.makeAnotherRequest(bodyCp, this.messages, text);
       }

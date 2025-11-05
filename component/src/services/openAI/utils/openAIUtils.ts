@@ -6,6 +6,7 @@ import {DOCS_BASE_URL, ERROR} from '../../../utils/consts/messageConstants';
 import {OpenAIConverseResult} from '../../../types/openAIResult';
 import {RequestUtils} from '../../../utils/HTTP/requestUtils';
 import {RequestDetails} from '../../../types/interceptors';
+import {OPEN_AI_BASE_URL} from '../openAIConsts';
 import {ServiceIO} from '../../serviceIO';
 
 export const OPEN_AI_FUNCTION_TOOL_RESP_ERROR =
@@ -36,7 +37,7 @@ export const OPEN_AI_HANDLE_VERIFICATION_RESULT = (result: object, key: string,
 };
 
 export const OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS = (): KeyVerificationDetails => {
-  return BUILD_KEY_VERIFICATION_DETAILS('https://api.openai.com/v1/models', GET, OPEN_AI_HANDLE_VERIFICATION_RESULT);
+  return BUILD_KEY_VERIFICATION_DETAILS(`${OPEN_AI_BASE_URL}models`, GET, OPEN_AI_HANDLE_VERIFICATION_RESULT);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

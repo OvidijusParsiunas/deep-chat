@@ -3,6 +3,7 @@ import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './u
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from './openAIConsts';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -18,10 +19,10 @@ type OpenAIImagesDalle = OpenAIImagesDalle2 | OpenAIImagesDalle3;
 
 export class OpenAIImagesIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  private static readonly IMAGE_GENERATION_URL = 'https://api.openai.com/v1/images/generations';
-  private static readonly IMAGE_VARIATIONS_URL = 'https://api.openai.com/v1/images/variations';
-  private static readonly IMAGE_EDIT_URL = 'https://api.openai.com/v1/images/edits';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
+  private static readonly IMAGE_GENERATION_URL = `${OPEN_AI_BASE_URL}images/generations`;
+  private static readonly IMAGE_VARIATIONS_URL = `${OPEN_AI_BASE_URL}images/variations`;
+  private static readonly IMAGE_EDIT_URL = `${OPEN_AI_BASE_URL}images/edits`;
   url = ''; // set dynamically
   permittedErrorPrefixes = [INCORRECT_ERROR_PREFIX, 'Invalid input image'];
 

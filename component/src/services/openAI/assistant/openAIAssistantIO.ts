@@ -4,6 +4,7 @@ import {Response as ResponseI} from '../../../types/response';
 import {OpenAIAssistantIOI} from './openAIAssistantIOI';
 import {OpenAIAssistant} from '../../../types/openAI';
 import {OBJECT} from '../../utils/serviceConstants';
+import {OPEN_AI_BASE_URL} from '../openAIConsts';
 import {DeepChat} from '../../../deepChat';
 
 export class OpenAIAssistantIO extends OpenAIAssistantIOI {
@@ -26,7 +27,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
   }
 
   private static buildUrlSegments(config: true | OpenAIAssistant | undefined) {
-    const baseUrl = (typeof config === 'object' && config.custom_base_url) || 'https://api.openai.com/v1';
+    const baseUrl = (typeof config === 'object' && config.custom_base_url) || OPEN_AI_BASE_URL;
     return {
       threadsPrefix: `${baseUrl}/threads`,
       threadsPosfix: '',

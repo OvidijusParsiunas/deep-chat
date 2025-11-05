@@ -57,7 +57,7 @@ export interface ToolAPI {
 
 export type OpenAIMessage = {
   role: 'user' | 'system' | 'ai' | 'tool';
-  content: [{text: string}];
+  content: [{text: string; type?: string}];
   audio?: {data: string; transcript: string};
   status?: string;
   type?: string;

@@ -115,6 +115,8 @@ export type OpenAIChat = {
   temperature?: number;
   top_p?: number;
   truncation?: string;
+  conversation?: boolean | string;
+  conversationLoadLimit?: number;
 } & OpenAIChatFunctions;
 
 export interface OpenAI {

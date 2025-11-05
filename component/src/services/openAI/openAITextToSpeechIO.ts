@@ -1,6 +1,7 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {AUDIO, ERROR, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from './openAIConsts';
 import {OpenAITextToSpeechResult} from '../../types/openAIResult';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
@@ -12,8 +13,8 @@ import {DeepChat} from '../../deepChat';
 
 export class OpenAITextToSpeechIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
-  override keyHelpUrl = 'https://platform.openai.com/account/api-keys';
-  url = 'https://api.openai.com/v1/audio/speech';
+  override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
+  url = `${OPEN_AI_BASE_URL}audio/speech`;
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX];
   private static readonly DEFAULT_MODEL = 'tts-1';
   private static readonly DEFAULT_VOIDE = 'alloy';
