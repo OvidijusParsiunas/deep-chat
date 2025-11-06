@@ -295,4 +295,11 @@ export class DirectServiceIO extends BaseServiceIO {
     }
     throw Error(FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR);
   }
+
+  protected updateSessionId(sessionId?: string) {
+    // user can clear the messages when they make a request, hence checking if messages length > 0
+    if (this.messages && this.messages.messageToElements.length > 0) {
+      this.messages.messageToElements[this.messages.messageToElements.length - 1][0]._sessionId = sessionId;
+    }
+  }
 }

@@ -177,10 +177,17 @@ export class OpenAIChatIO extends DirectServiceIO {
     if (this._useConversation && !this._conversationId) {
       this._conversationId = await this.createConversation();
     }
+    if (this._conversationId) this.updateSessionId(this._conversationId);
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
   override async extractResultData(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
+    const resultData = await this.extractResult(result, prevBody);
+    if (this._conversationId) resultData._sessionId = this._conversationId;
+    return resultData;
+  }
+
+  private async extractResult(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
     if (result[ERROR]) throw result[ERROR].message;
     if (result.status) {
       const completedOutputs = OpenAIChatIO.filterCompleted(result.output);

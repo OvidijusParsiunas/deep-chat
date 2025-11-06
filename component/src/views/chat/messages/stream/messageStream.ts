@@ -35,6 +35,7 @@ export class MessageStream {
   private _partialText: string = '';
   private _partialBubble?: HTMLDivElement;
   private _targetWrapper?: HTMLElement;
+  private _sessionId?: string;
 
   constructor(messages: MessagesBase, stream?: Stream) {
     this._messages = messages;
@@ -66,6 +67,7 @@ export class MessageStream {
     } else {
       this.updateBasedOnType(content, streamType, response?.overwrite);
     }
+    if (response?._sessionId) this._sessionId = response?._sessionId;
     if (isScrollbarAtBottomOfElement && this.allowScroll) ElementUtils.scrollToBottom(this._messages.elementRef);
   }
 
@@ -173,6 +175,7 @@ export class MessageStream {
     }
     this._elements.bubbleElement[CLASS_LIST].remove(MessageStream.MESSAGE_CLASS);
     if (this._message) {
+      if (this._sessionId) this._message._sessionId = this._sessionId;
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
       this._messages.browserStorage?.addMessages(this._messages.messageToElements.map(([msg]) => msg));
     }
