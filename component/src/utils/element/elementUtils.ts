@@ -1,3 +1,5 @@
+import {UPWARDS_MODE_CLASS} from '../consts/classConstants';
+
 export class ElementUtils {
   private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
 
@@ -25,12 +27,15 @@ export class ElementUtils {
   }
 
   public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
+    const overflowElement = messagesElementRef.parentElement?.classList.contains(UPWARDS_MODE_CLASS)
+      ? messagesElementRef.children[0]
+      : messagesElementRef;
     if (targetElement) {
-      messagesElementRef.scrollTo({left: 0, top: targetElement.offsetTop});
+      overflowElement.scrollTo({left: 0, top: targetElement.offsetTop});
     } else if (isAnimation) {
-      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
+      overflowElement.scrollTo({left: 0, top: overflowElement.scrollHeight, behavior: 'smooth'});
     } else {
-      messagesElementRef.scrollTop = messagesElementRef.scrollHeight;
+      overflowElement.scrollTop = overflowElement.scrollHeight;
     }
   }
 

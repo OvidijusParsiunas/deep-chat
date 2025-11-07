@@ -6,8 +6,16 @@
 
 #chat-view {
   height: 100%;
-  display: grid;
   grid-template-columns: 100%;
+}
+
+.deep-chat-downwards-mode {
+  display: grid;
+}
+
+.deep-chat-upwards-mode {
+  display: flex;
+  flex-direction: column;
 }
 
 ::-webkit-scrollbar {

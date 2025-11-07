@@ -1,8 +1,16 @@
-#messages {
+#messages,
+.deep-chat-upwards-mode #messages > div {
   overflow: auto;
   /* prevents the browser from automatically scrolling to keep expanding heights in view
   which prevents streamAutoScroll: false from working correctly */
   overflow-anchor: none;
+}
+
+.deep-chat-upwards-mode #messages {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .outer-message-container:last-child {

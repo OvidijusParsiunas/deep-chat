@@ -48,7 +48,6 @@ import {Names} from './types/names';
 import {Demo} from './types/demo';
 
 // TO-DO - ability to export files
-// TO-DO - perhaps chat bubbles should start at the bottom which would allow nice slide up animation (optional)
 export class DeepChat extends InternalHTML {
   @Property('object')
   connect?: Connect;
@@ -163,6 +162,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('object')
   focusMode?: FocusMode;
+
+  @Property('boolean')
+  upwardsMode?: boolean;
 
   getMessages: () => MessageContent[] = () => [];
 
