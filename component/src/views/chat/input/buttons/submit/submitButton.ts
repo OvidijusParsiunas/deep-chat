@@ -1,4 +1,4 @@
-import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/inputConstants';
+import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/classConstants';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FILE, FILES, TEXT, USER} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';

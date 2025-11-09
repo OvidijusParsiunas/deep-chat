@@ -1,3 +1,4 @@
+import {OUTSIDE_START, INSIDE_START, OUTSIDE_END, INSIDE_END} from '../../../../../utils/consts/inputConstants';
 import {ButtonContainersT} from '../../buttonContainers/buttonContainers';
 import {CLASS_LIST} from '../../../../../utils/consts/htmlConstants';
 import {PositionToButtons} from './inputButtonPositions';
@@ -6,11 +7,7 @@ import {
   INPUT_OUTSIDE_END_SMALL_ADJUSTMENT_CLASS,
   INPUT_OUTSIDE_START_ADJUSTMENT_CLASS,
   INPUT_OUTSIDE_END_ADJUSTMENT_CLASS,
-  OUTSIDE_START,
-  INSIDE_START,
-  OUTSIDE_END,
-  INSIDE_END,
-} from '../../../../../utils/consts/inputConstants';
+} from '../../../../../utils/consts/classConstants';
 
 export class InputButtonStyleAdjustments {
   private static adjustInputPadding(textInputEl: HTMLElement, pToBs: PositionToButtons) {
