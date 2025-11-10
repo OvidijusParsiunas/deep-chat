@@ -57,8 +57,8 @@ export class GeminiIO extends DirectServiceIO {
 
     if (message[FILES] && message[FILES].length > 0) {
       message[FILES].forEach((file) => {
-        if (file.src && file.src.includes('data:')) {
-          const [mimeType, data] = file.src.split(',');
+        if (file[SRC] && file[SRC].includes('data:')) {
+          const [mimeType, data] = file[SRC].split(',');
           parts.push({
             inlineData: {
               mimeType: mimeType.replace('data:', '').replace(';base64', ''),

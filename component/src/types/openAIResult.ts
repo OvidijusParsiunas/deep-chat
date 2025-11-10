@@ -134,3 +134,25 @@ export interface OpenAIAudioResult {
   text: string;
   error?: {code: string; message: string};
 }
+
+export type OpenAIConverseMessage = {
+  role: 'user' | 'system' | 'ai' | 'tool';
+  content: string;
+  audio?: {data: string; transcript: string};
+  tool_calls?: ToolCalls;
+  tool_call_id?: string;
+  name?: string;
+};
+
+// text for completion request & stream
+// message for chat completion request
+// delta for chat completion stream
+export type OpenAICompletionsResultChoice = InterfacesUnion<
+  {text: string} | {message: OpenAIConverseMessage} | {delta: OpenAIConverseMessage; finish_reason?: string}
+>;
+
+export interface OpenAICompletionsResult {
+  choices: OpenAICompletionsResultChoice[];
+  usage: {total_tokens: number};
+  error?: {code: string; message: string};
+}

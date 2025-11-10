@@ -1,7 +1,7 @@
 import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
-import {AUDIO, ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {AUDIO, ERROR, FILE, TEXT} from '../../utils/consts/messageConstants';
 import {OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from './openAIConsts';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -56,7 +56,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   private static createFormDataBody(body: OpenAISpeechToText, audio: File) {
     const formData = new FormData();
-    formData.append('file', audio);
+    formData.append(FILE, audio);
     Object.keys(body).forEach((key) => {
       formData.append(key, String(body[key as keyof OpenAISpeechToText]));
     });

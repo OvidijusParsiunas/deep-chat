@@ -1,3 +1,4 @@
+import {SRC} from '../../../../utils/consts/messageConstants';
 import {KatexOptions} from '../../../../types/remarkable';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -29,7 +30,7 @@ export class KatexPlugin {
         return false;
       }
 
-      const marker = state.src.charAt(pos);
+      const marker = state[SRC].charAt(pos);
       if (marker !== delimiter) {
         return false;
       }
@@ -58,7 +59,7 @@ export class KatexPlugin {
         if (pos < max && state.tShift[nextLine] < state.blkIndent) {
           break;
         }
-        if (state.src.charAt(pos) !== delimiter) {
+        if (state[SRC].charAt(pos) !== delimiter) {
           continue;
         }
         if (state.tShift[nextLine] - state.blkIndent >= 4) {
@@ -107,17 +108,17 @@ export class KatexPlugin {
       let pos = start;
 
       // Unexpected starting character
-      if (state.src.charAt(pos) !== delimiter) {
+      if (state[SRC].charAt(pos) !== delimiter) {
         return false;
       }
 
       ++pos;
-      while (pos < max && state.src.charAt(pos) === delimiter) {
+      while (pos < max && state[SRC].charAt(pos) === delimiter) {
         ++pos;
       }
 
       // Capture the length of the starting delimiter -- closing one must match in size
-      const marker = state.src.slice(start, pos);
+      const marker = state[SRC].slice(start, pos);
       if (marker.length > 2) {
         return false;
       }
@@ -125,10 +126,10 @@ export class KatexPlugin {
       const spanStart = pos;
       let escapedDepth = 0;
       while (pos < max) {
-        const char = state.src.charAt(pos);
-        if (char === '{' && (pos === 0 || state.src.charAt(pos - 1) !== backslash)) {
+        const char = state[SRC].charAt(pos);
+        if (char === '{' && (pos === 0 || state[SRC].charAt(pos - 1) !== backslash)) {
           escapedDepth += 1;
-        } else if (char === '}' && (pos === 0 || state.src.charAt(pos - 1) !== backslash)) {
+        } else if (char === '}' && (pos === 0 || state[SRC].charAt(pos - 1) !== backslash)) {
           escapedDepth -= 1;
           if (escapedDepth < 0) {
             return false;
@@ -136,14 +137,13 @@ export class KatexPlugin {
         } else if (char === delimiter && escapedDepth === 0) {
           const matchStart = pos;
           let matchEnd = pos + 1;
-          while (matchEnd < max && state.src.charAt(matchEnd) === delimiter) {
+          while (matchEnd < max && state[SRC].charAt(matchEnd) === delimiter) {
             ++matchEnd;
           }
 
           if (matchEnd - matchStart === marker.length) {
             if (!silent) {
-              const content = state.src
-                .slice(spanStart, matchStart)
+              const content = state[SRC].slice(spanStart, matchStart)
                 .replace(/[ \n]+/g, ' ')
                 .trim();
               state.push({type: 'katex', content: content, block: marker.length > 1, level: state.level});

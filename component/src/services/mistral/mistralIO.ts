@@ -1,7 +1,7 @@
 import {MistralMessage, MistralRequestBody, MistralContentItem} from '../../types/mistralInternal';
 import {MISTRAL_BUILD_HEADERS, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS} from './utils/mistralUtils';
-import {ERROR, IMAGE, TEXT, TYPE} from '../../utils/consts/messageConstants';
-import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ERROR, FILE, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {IMAGE_URL, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -34,9 +34,9 @@ export class MistralIO extends DirectServiceIO {
   private static getFileContent(files: MessageFile[]): MistralContentItem[] {
     return files.map((file) => {
       if (file.type === IMAGE) {
-        return {[TYPE]: 'image_url', image_url: file.src || ''};
+        return {[TYPE]: IMAGE_URL, [IMAGE_URL]: file[SRC] || ''};
       }
-      return {[TYPE]: TEXT, [TEXT]: `[Unsupported file type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} type: ${file.type}]`};
     });
   }
 

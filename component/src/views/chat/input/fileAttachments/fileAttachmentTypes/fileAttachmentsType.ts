@@ -1,4 +1,4 @@
-import {ANY, AUDIO, FILE, IMAGE} from '../../../../../utils/consts/messageConstants';
+import {ANY, AUDIO, FILE, IMAGE, SRC} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../../../../types/fileAttachments';
@@ -93,7 +93,7 @@ export class FileAttachmentsType {
 
   private static createImageAttachment(src: string) {
     const image = new Image();
-    image.src = src;
+    image[SRC] = src;
     image[CLASS_LIST].add('image-attachment');
     return image;
   }

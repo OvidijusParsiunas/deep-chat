@@ -1,6 +1,7 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
 import {DirectConnection} from '../../../types/directConnection';
 import {Response as ResponseI} from '../../../types/response';
+import {FILES} from '../../../utils/consts/messageConstants';
 import {OpenAIAssistantIOI} from './openAIAssistantIOI';
 import {OpenAIAssistant} from '../../../types/openAI';
 import {OBJECT} from '../../utils/serviceConstants';
@@ -34,8 +35,8 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
       newAssistantUrl: `${baseUrl}/assistants`,
       createMessagePostfix: '',
       listMessagesPostfix: 'order=desc',
-      storeFiles: `${baseUrl}/files`,
-      getFilesPrefix: `${baseUrl}/files/`,
+      storeFiles: `${baseUrl}/${FILES}`,
+      getFilesPrefix: `${baseUrl}/${FILES}/`,
       getFilesPostfix: '/content',
     };
   }

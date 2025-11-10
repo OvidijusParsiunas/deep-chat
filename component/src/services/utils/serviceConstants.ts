@@ -35,3 +35,7 @@ export const POST = 'POST';
 export const UPLOAD_AN_AUDIO_FILE = 'Upload an audio file';
 
 export const FUNCTION_CALL = 'function_call';
+
+export const INPUT_AUDIO = 'input_audio';
+
+export const IMAGE_URL = 'image_url';

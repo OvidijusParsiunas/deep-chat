@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
+import {AI, END, SRC, START, USER} from '../../../utils/consts/messageConstants';
 import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
-import {AI, END, START, USER} from '../../../utils/consts/messageConstants';
 import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
@@ -26,10 +26,10 @@ export class Avatar extends Role {
   private createAvatar(role: string, avatars?: CustomAvatars) {
     const avatar = CREATE_ELEMENT('img') as HTMLImageElement;
     if (role === USER) {
-      avatar.src = avatars?.[USER]?.src || avatars?.[DEFAULT]?.src || avatarUrl;
+      avatar[SRC] = avatars?.[USER]?.[SRC] || avatars?.[DEFAULT]?.[SRC] || avatarUrl;
       avatar.onerror = Avatar.errorFallback.bind(this, avatarUrl);
     } else {
-      avatar.src = avatars?.[role]?.src || avatars?.[AI]?.src || avatars?.[DEFAULT]?.src || aiLogoUrl;
+      avatar[SRC] = avatars?.[role]?.[SRC] || avatars?.[AI]?.[SRC] || avatars?.[DEFAULT]?.[SRC] || aiLogoUrl;
       avatar.onerror = Avatar.errorFallback.bind(this, aiLogoUrl);
     }
     avatar[CLASS_LIST].add('avatar');
@@ -52,7 +52,7 @@ export class Avatar extends Role {
   private static errorFallback(fallbackLogo: string, e: Event | string) {
     const target = (e as Event).target as HTMLImageElement;
     target.onerror = null; // Prevent infinite loop if fallback also fails
-    target.src = fallbackLogo;
+    target[SRC] = fallbackLogo;
   }
 
   private static applyCustomStylesToElements(container: HTMLElement, avatar: HTMLElement, style: AvatarStyles) {

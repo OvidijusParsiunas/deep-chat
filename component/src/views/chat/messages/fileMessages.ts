@@ -1,4 +1,4 @@
-import {ANY, AUDIO, FILE, IMAGE, USER} from '../../../utils/consts/messageConstants';
+import {ANY, AUDIO, FILE, IMAGE, SRC, USER} from '../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {MessageFile, MessageFiles} from '../../../types/messageFile';
 import {ElementUtils} from '../../../utils/element/elementUtils';
@@ -16,9 +16,9 @@ export class FileMessages {
 
   private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, el: HTMLElement, scroll: boolean) {
     const imageElement = new Image();
-    imageElement.src = imageData.src as string;
-    if (scroll) FileMessageUtils.scrollDownOnImageLoad(imageElement.src, messagesContainerEl, el);
-    return FileMessageUtils.processContent(IMAGE, imageElement, imageElement.src, imageData.name);
+    imageElement[SRC] = imageData[SRC] as string;
+    if (scroll) FileMessageUtils.scrollDownOnImageLoad(imageElement[SRC], messagesContainerEl, el);
+    return FileMessageUtils.processContent(IMAGE, imageElement, imageElement[SRC], imageData.name);
   }
 
   // WORK - image still does not scroll down when loaded
@@ -33,7 +33,7 @@ export class FileMessages {
 
   private static createAudioElement(audioData: MessageFile, role: string) {
     const audioElement = CREATE_ELEMENT(AUDIO) as HTMLAudioElement;
-    audioElement.src = audioData.src as string;
+    audioElement[SRC] = audioData[SRC] as string;
     audioElement[CLASS_LIST].add('audio-player');
     audioElement.controls = true;
     if (Browser.IS_SAFARI) {
@@ -72,7 +72,7 @@ export class FileMessages {
     fileNameElement.textContent = imageData.name || FILE;
     contents.appendChild(svgContainer);
     contents.appendChild(fileNameElement);
-    return FileMessageUtils.processContent(ANY, contents, imageData.src, fileNameElement.textContent);
+    return FileMessageUtils.processContent(ANY, contents, imageData[SRC], fileNameElement.textContent);
   }
 
   private static createNewAnyFileMessage(messages: MessagesBase, data: MessageFile, role: string, isTop: boolean) {

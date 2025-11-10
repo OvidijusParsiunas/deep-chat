@@ -1,4 +1,4 @@
-import {AI, ASSISTANT, FILES, IMAGE, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
+import {AI, ASSISTANT, FILES, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
@@ -8,6 +8,7 @@ import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {BuildHeadersFunc} from '../../types/headers';
+import {IMAGE_URL, OBJECT} from './serviceConstants';
 import {MessageFile} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {StreamConfig} from '../../types/stream';
@@ -15,7 +16,6 @@ import {Stream} from '../../utils/HTTP/stream';
 import {BaseServiceIO} from './baseServiceIO';
 import {Connect} from '../../types/connect';
 import {APIKey} from '../../types/APIKey';
-import {OBJECT} from './serviceConstants';
 import {DeepChat} from '../../deepChat';
 import {
   FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR,
@@ -168,19 +168,19 @@ export class DirectServiceIO extends BaseServiceIO {
   protected static getImageContent(files: MessageFile[]): {
     type: 'text' | 'image_url';
     text?: string;
-    image_url?: {
+    [IMAGE_URL]?: {
       url: string;
     };
   }[] {
     return files
       .filter((file) => file.type === IMAGE)
       .map((file) => ({
-        [TYPE]: 'image_url' as const,
-        image_url: {
-          url: file.src || '',
+        [TYPE]: IMAGE_URL as 'image_url',
+        [IMAGE_URL]: {
+          url: file[SRC] || '',
         },
       }))
-      .filter((content) => content.image_url.url.length > 0);
+      .filter((content) => content[IMAGE_URL].url.length > 0);
   }
 
   protected static getTextWImagesContent(message: MessageContentI) {

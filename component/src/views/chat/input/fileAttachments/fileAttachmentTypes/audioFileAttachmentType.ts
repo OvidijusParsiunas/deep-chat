@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
+import {AUDIO, FILE, SRC} from '../../../../../utils/consts/messageConstants';
 import {AttachmentObject, FileAttachmentsType} from './fileAttachmentsType';
-import {AUDIO, FILE} from '../../../../../utils/consts/messageConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {FileAttachments} from '../../../../../types/fileAttachments';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
@@ -34,7 +34,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     // this is a simple workaround to remove all event listeners from the placeholder element
     const container = oldContainer.parentElement ? ElementUtils.cloneElement(oldContainer) : oldContainer;
     const audio = CREATE_ELEMENT(AUDIO) as HTMLAudioElement;
-    audio.src = fileReaderResult;
+    audio[SRC] = fileReaderResult;
     const play = SVGIconUtils.createSVGElement(PLAY_ICON_STRING);
     play[CLASS_LIST].add('attachment-icon', 'play-icon');
     const stop = SVGIconUtils.createSVGElement(STOP_ICON_STRING);

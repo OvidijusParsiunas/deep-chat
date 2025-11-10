@@ -1,5 +1,4 @@
 import {OPEN_ROUTER_BUILD_HEADERS, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openRouterUtils';
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {AUDIO, ERROR, FILES, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -17,6 +16,13 @@ import {
   OpenRouterMessage,
   OpenRouterContent,
 } from '../../types/openRouterInternal';
+import {
+  INVALID_REQUEST_ERROR_PREFIX,
+  AUTHENTICATION_ERROR_PREFIX,
+  INPUT_AUDIO,
+  IMAGE_URL,
+  OBJECT,
+} from '../utils/serviceConstants';
 
 // https://openrouter.ai/docs/api-reference/overview
 export class OpenRouterIO extends DirectServiceIO {
@@ -42,18 +48,17 @@ export class OpenRouterIO extends DirectServiceIO {
     return files
       .filter((file) => file.type === AUDIO)
       .map((file) => {
-        const base64Data = file.src?.split(',')[1];
-        const format = file.src?.match(/data:audio\/([^;]+)/)?.[1] as 'wav' | 'mp3';
-
+        const base64Data = file[SRC]?.split(',')[1];
+        const format = file[SRC]?.match(/data:audio\/([^;]+)/)?.[1] as 'wav' | 'mp3';
         return {
-          [TYPE]: 'input_audio' as const,
-          input_audio: {
+          [TYPE]: INPUT_AUDIO as 'input_audio',
+          [INPUT_AUDIO]: {
             data: base64Data || '',
             format: format === 'wav' || format === 'mp3' ? format : 'mp3',
           },
         };
       })
-      .filter((content) => content.input_audio.data.length > 0);
+      .filter((content) => content[INPUT_AUDIO].data.length > 0);
   }
 
   private static getContent(message: MessageContentI): string | OpenRouterContent[] {
@@ -105,7 +110,7 @@ export class OpenRouterIO extends DirectServiceIO {
       // Handle streaming response with images
       if (result.message?.[IMAGES]) {
         const files = result.message[IMAGES].map((image) => ({
-          [SRC]: image.image_url.url,
+          [SRC]: image[IMAGE_URL].url,
         }));
 
         return {
@@ -133,7 +138,7 @@ export class OpenRouterIO extends DirectServiceIO {
 
         const files =
           choice.message[IMAGES]?.map((image) => ({
-            [SRC]: image.image_url.url,
+            [SRC]: image[IMAGE_URL].url,
           })) || [];
 
         return {
@@ -151,7 +156,7 @@ export class OpenRouterIO extends DirectServiceIO {
     // Handle streaming response with images
     if (delta?.[IMAGES]) {
       const files = delta[IMAGES].map((image) => ({
-        [SRC]: image.image_url.url,
+        [SRC]: image[IMAGE_URL].url,
       }));
 
       return {

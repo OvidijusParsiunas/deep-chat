@@ -46,6 +46,7 @@ import {
   TYPE,
   USER,
   AI,
+  SRC,
 } from '../../../utils/consts/messageConstants';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
@@ -269,7 +270,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     const avatar = CREATE_ELEMENT('img') as HTMLImageElement;
     avatar.id = 'deep-chat-openai-realtime-avatar';
     Object.assign(avatar[STYLE], config?.styles?.[IMAGE]);
-    avatar.src = config?.src || avatarUrl;
+    avatar[SRC] = config?.[SRC] || avatarUrl;
     return avatar;
   }
 

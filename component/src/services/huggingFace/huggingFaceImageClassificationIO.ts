@@ -1,5 +1,5 @@
 import {HuggingFaceClassificationResult} from '../../types/huggingFaceResult';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, FILE, TEXT} from '../../utils/consts/messageConstants';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
 import {PollResult} from '../serviceIO';
@@ -11,7 +11,7 @@ export class HuggingFaceImageClassificationIO extends HuggingFaceFileIO {
       HuggingFace['imageClassification']
     >;
     const apiKey = deepChat.directConnection?.huggingFace;
-    super(deepChat, 'Attach an image file', 'google/vit-base-patch16-224', config, apiKey, {images: {}});
+    super(deepChat, `Attach an image ${FILE}`, 'google/vit-base-patch16-224', config, apiKey, {images: {}});
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

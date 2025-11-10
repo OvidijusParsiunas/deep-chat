@@ -1,4 +1,4 @@
-import {AUDIO, ERROR, FILES, IMAGE, SERVICE, TEXT} from '../consts/messageConstants';
+import {AUDIO, ERROR, FILES, IMAGE, SERVICE, SRC, TEXT} from '../consts/messageConstants';
 import {MessageContentI, MessageToElements} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {ServiceIO} from '../../services/serviceIO';
@@ -17,7 +17,7 @@ export class Demo {
         return 'These are interesting files!';
       }
       const file = requestMessage[FILES][0];
-      if (file.src && file.src.startsWith('data:image/gif')) {
+      if (file[SRC] && file[SRC].startsWith('data:image/gif')) {
         return 'That is a nice gif!';
       }
       if (file.type === IMAGE) {

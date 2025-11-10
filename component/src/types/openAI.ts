@@ -1,6 +1,18 @@
 import {OpenAIRealtime} from './openAIRealtime';
 import {OpenAITool} from './openAITools';
 
+// https://platform.openai.com/docs/api-reference/chat
+// https://platform.openai.com/docs/guides/audio?example=audio-in
+export type OpenAICompletions = {
+  system_prompt?: string;
+  model?: string;
+  max_tokens?: number; // number of tokens to reply - recommended to be set by the client
+  temperature?: number;
+  top_p?: number;
+  modalities?: ['text', 'audio'];
+  audio?: {format: string; voice: string};
+} & OpenAIChatFunctions;
+
 // https://platform.openai.com/docs/api-reference/audio/createSpeech
 export type OpenAITextToSpeech = {
   model?: string;
@@ -123,6 +135,7 @@ export interface OpenAI {
   chat?: true | OpenAIChat;
   assistant?: true | OpenAIAssistant;
   realtime?: true | OpenAIRealtime;
+  completions?: true | OpenAICompletions;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;
   textToSpeech?: true | OpenAITextToSpeech;
   speechToText?: true | OpenAISpeechToText;

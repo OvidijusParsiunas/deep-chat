@@ -1,7 +1,7 @@
+import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, IMAGE_URL, OBJECT} from '../utils/serviceConstants';
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
-import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
-import {AI, ERROR, FILE, IMAGE, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AI, ERROR, FILE, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -39,9 +39,9 @@ export class BigModelChatIO extends DirectServiceIO {
   private static getFileContent(files: MessageFile[]): BigModelContentItem[] {
     return files.map((file) => {
       if (file.type === IMAGE) {
-        return {[TYPE]: 'image_url', image_url: {url: file.src || ''}};
+        return {[TYPE]: IMAGE_URL, [IMAGE_URL]: {url: file[SRC] || ''}};
       }
-      return {[TYPE]: FILE, file_url: {url: file.src || ''}};
+      return {[TYPE]: FILE, file_url: {url: file[SRC] || ''}};
     });
   }
 

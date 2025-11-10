@@ -1,6 +1,6 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
+import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT} from '../../utils/consts/messageConstants';
 import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
-import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, TEXT} from '../../utils/consts/messageConstants';
 import {OLLAMA_BUILD_HEADERS, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS} from './utils/ollamaUtils';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -36,7 +36,7 @@ export class OllamaIO extends DirectServiceIO {
     return files
       .filter((file) => file.type === IMAGE)
       .map((file) => {
-        const base64Data = file.src?.split(',')[1];
+        const base64Data = file[SRC]?.split(',')[1];
         return base64Data || '';
       })
       .filter((data) => data.length > 0);

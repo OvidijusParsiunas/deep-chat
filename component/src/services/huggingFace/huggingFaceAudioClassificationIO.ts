@@ -1,5 +1,5 @@
 import {HuggingFaceClassificationResult} from '../../types/huggingFaceResult';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, FILE, TEXT} from '../../utils/consts/messageConstants';
 import {HuggingFaceFileIO} from './huggingFaceFileIO';
 import {HuggingFace} from '../../types/huggingFace';
 import {PollResult} from '../serviceIO';
@@ -13,7 +13,7 @@ export class HuggingFaceAudioClassificationIO extends HuggingFaceFileIO {
     >;
     const apiKey = deepChat.directConnection?.huggingFace;
     super(deepChat,
-      'Attach an audio file', 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, apiKey, {audio: {}});
+      `Attach an audio ${FILE}`, 'ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition', config, apiKey, {audio: {}});
   }
 
   async extractPollResultData(result: HuggingFaceClassificationResult): PollResult {

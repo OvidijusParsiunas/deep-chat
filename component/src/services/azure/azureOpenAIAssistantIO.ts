@@ -1,6 +1,6 @@
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
+import {ERROR, FILES} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
-import {ERROR} from '../../utils/consts/messageConstants';
 import {OpenAIAssistant} from '../../types/openAI';
 import {OBJECT} from '../utils/serviceConstants';
 import {AzureOpenAI} from '../../types/azure';
@@ -34,8 +34,8 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
       newAssistantUrl: `${commonPrefix}${AzureOpenAIAssistantIO.NEW_ASSISTANT_RESOURCE}${commonPostfix}`,
       createMessagePostfix: commonPostfix,
       listMessagesPostfix: `order=desc&api-version=${config?.urlDetails?.version}`,
-      storeFiles: `${commonPrefix}files${commonPostfix}`,
-      getFilesPrefix: `${commonPrefix}files/`,
+      storeFiles: `${commonPrefix}${FILES}${commonPostfix}`,
+      getFilesPrefix: `${commonPrefix}${FILES}/`,
       getFilesPostfix: `/content${commonPostfix}`,
     };
 

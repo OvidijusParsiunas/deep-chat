@@ -1,9 +1,9 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {CLAUDE_BUILD_HEADERS, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/claudeUtils';
+import {ERROR, FILE, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
-import {ERROR, IMAGE, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -36,11 +36,11 @@ export class ClaudeIO extends DirectServiceIO {
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
     return files.map((file) => {
       if (file.type === IMAGE) {
-        const base64Data = file.src?.split(',')[1];
-        const mediaType = file.src?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
+        const base64Data = file[SRC]?.split(',')[1];
+        const mediaType = file[SRC]?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
         return {[TYPE]: IMAGE, source: {[TYPE]: 'base64', media_type: mediaType, data: base64Data || ''}};
       }
-      return {[TYPE]: TEXT, [TEXT]: `[Unsupported file type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} type: ${file.type}]`};
     });
   }
 

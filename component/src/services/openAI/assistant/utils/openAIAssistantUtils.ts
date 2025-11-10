@@ -96,10 +96,10 @@ export class OpenAIAssistantUtils {
       files = await OpenAIAssistantUtils.getFiles(io, fileDetails, getFilesPrefix, getFilesPostfix);
       if (content?.[TEXT]?.value) {
         files.forEach((file, index) => {
-          if (!file.src) return;
+          if (!file[SRC]) return;
           const path = fileDetails[index].path;
           if (content?.[TEXT]?.value && path) {
-            content[TEXT].value = content[TEXT].value.replace(path, file.src);
+            content[TEXT].value = content[TEXT].value.replace(path, file[SRC]);
           }
         });
       }

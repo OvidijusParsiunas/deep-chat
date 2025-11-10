@@ -1,5 +1,5 @@
 import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
-import {AUDIO, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -44,6 +44,6 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
     const format = this.rawBody.response_format || 'mp3';
     const blob = new Blob([result], {[TYPE]: `audio/${format}`});
     const audioUrl = URL.createObjectURL(blob);
-    return {files: [{[SRC]: audioUrl, [TYPE]: AUDIO}]};
+    return {[FILES]: [{[SRC]: audioUrl, [TYPE]: AUDIO}]};
   }
 }
