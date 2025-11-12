@@ -153,8 +153,9 @@ export class FileAttachmentsType {
   }
 
   removeAttachment(attachmentObject: AttachmentObject, event?: MouseEvent) {
-    this._onInput?.(!!event?.isTrusted);
     const index = this._attachments.findIndex((attachment) => attachment === attachmentObject);
+    if (index < 0) return; // fix for issue when `handler` returns result immediately
+    this._onInput?.(!!event?.isTrusted);
     const containerElement = this._attachments[index].attachmentContainerElement;
     this._attachments.splice(index, 1);
     AudioFileAttachmentType.stopAttachmentPlayback(containerElement);
