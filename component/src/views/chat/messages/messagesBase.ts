@@ -151,7 +151,9 @@ export class MessagesBase {
   public appendOuterContainerElemet(outerContainer: HTMLElement, role?: string) {
     if (this.focusMode && (role === USER || !this._lastGroupMessagesElement)) this.createNewGroupElementFocusMode();
     this._lastGroupMessagesElement?.appendChild(outerContainer);
-    this.elementRef.appendChild(this._lastGroupMessagesElement as HTMLElement);
+    if (this._lastGroupMessagesElement && (this.focusMode || !this.elementRef.contains(this._lastGroupMessagesElement))) {
+      this.elementRef.appendChild(this._lastGroupMessagesElement);
+    }
   }
 
   private createAndPrependNewMessageElement(text: string, role: string, isTop: boolean, loading = false) {
