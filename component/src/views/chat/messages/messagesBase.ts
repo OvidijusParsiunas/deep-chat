@@ -107,6 +107,7 @@ export class MessagesBase {
   }
 
   private appendNewMessageElementFocusMode(text: string, role: string) {
+    const isScrollAtBottom = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     const messageElements = this.createNewMessageElement(text, role);
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === USER) {
@@ -118,6 +119,8 @@ export class MessagesBase {
       } else {
         ElementUtils.scrollToBottom(this.elementRef);
       }
+    } else if (isScrollAtBottom) {
+      ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
     }
     return messageElements;
   }
