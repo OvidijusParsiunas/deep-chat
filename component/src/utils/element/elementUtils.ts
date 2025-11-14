@@ -7,11 +7,16 @@ export class ElementUtils {
     elements.forEach((element) => parent.appendChild(element));
   }
 
+  private static getOverflowElement(element: HTMLElement) {
+    return element.parentElement?.classList.contains(UPWARDS_MODE_CLASS) ? element.children[0] || element : element;
+  }
+
   public static isScrollbarAtBottomOfElement(element: HTMLElement) {
+    const overflowElement = ElementUtils.getOverflowElement(element);
     // Get the scroll height, visible height, and current scroll position
-    const scrollHeight = element.scrollHeight;
-    const visibleHeight = element.clientHeight;
-    const scrollPosition = element.scrollTop;
+    const scrollHeight = overflowElement.scrollHeight;
+    const visibleHeight = overflowElement.clientHeight;
+    const scrollPosition = overflowElement.scrollTop;
 
     // Calculate the remaining scroll height
     const remainingScrollHeight = scrollHeight - visibleHeight;
@@ -27,9 +32,7 @@ export class ElementUtils {
   }
 
   public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
-    const overflowElement = messagesElementRef.parentElement?.classList.contains(UPWARDS_MODE_CLASS)
-      ? messagesElementRef.children[0]
-      : messagesElementRef;
+    const overflowElement = ElementUtils.getOverflowElement(messagesElementRef);
     if (targetElement) {
       overflowElement.scrollTo({left: 0, top: targetElement.offsetTop});
     } else if (isAnimation) {
