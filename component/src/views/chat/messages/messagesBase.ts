@@ -112,13 +112,9 @@ export class MessagesBase {
     this.appendOuterContainerElemet(messageElements.outerContainer, role);
     if (role === USER) {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
-      if (isAnimation) {
-        setTimeout(() => {
-          ElementUtils.scrollToBottom(this.elementRef, isAnimation); // in timeout for it to move to the loading bubble
-        });
-      } else {
-        ElementUtils.scrollToBottom(this.elementRef);
-      }
+      setTimeout(() => {
+        ElementUtils.scrollToBottom(this.elementRef, isAnimation); // in timeout for it to move to the loading bubble
+      });
     } else if (isScrollAtBottom) {
       ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
     }
