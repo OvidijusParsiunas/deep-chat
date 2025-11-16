@@ -34,6 +34,7 @@ export class ElementUtils {
   public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
     const overflowElement = ElementUtils.getOverflowElement(messagesElementRef);
     if (targetElement) {
+      // scrolls targetElement.offsetTop to be at top of visible chat
       overflowElement.scrollTo({left: 0, top: targetElement.offsetTop});
     } else if (isAnimation) {
       overflowElement.scrollTo({left: 0, top: overflowElement.scrollHeight, behavior: 'smooth'});

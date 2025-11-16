@@ -173,7 +173,7 @@ export class Messages extends MessagesBase {
     if (introMessage?.[TEXT]) {
       elements = this.createAndAppendNewMessageElement(introMessage[TEXT], AI);
     } else if (introMessage?.[HTML]) {
-      elements = HTMLMessages.add(this, introMessage[HTML], AI, false);
+      elements = HTMLMessages.add(this, introMessage[HTML], AI);
     }
     if (elements) {
       this.applyCustomStyles(elements, AI, false, this.messageStyles?.intro);
@@ -207,16 +207,15 @@ export class Messages extends MessagesBase {
     }
   }
 
-  private tryAddFileMessages(message: MessageContentI, isTop = false) {
+  private tryAddFileMessages(message: MessageContentI, isScrollAtBottom: boolean, isTop = false) {
     if (message[FILES] && Array.isArray(message[FILES])) {
-      FileMessages.addMessages(this, message[FILES], message.role, !!message[TEXT], isTop);
+      FileMessages.addMessages(this, message[FILES], message.role, isScrollAtBottom, isTop);
     }
   }
 
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
     if (message[HTML] !== undefined && message[HTML] !== null) {
-      const scroll = !message[TEXT] && (!message[FILES] || message[FILES].length === 0);
-      const elements = HTMLMessages.add(this, message[HTML], message.role, scroll, overwrite, isTop);
+      const elements = HTMLMessages.add(this, message[HTML], message.role, overwrite, isTop);
       if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message[HTML];
     }
   }
@@ -227,18 +226,21 @@ export class Messages extends MessagesBase {
     const message = Messages.createMessageContent(data);
     const displayText = this.textToSpeech?.audio?.displayText;
     if (typeof displayText === 'boolean' && !displayText) delete message[TEXT];
+    const isScrollAtBottom = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     const overwrite: Overwrite = {status: data.overwrite}; // if did not overwrite, create a new message
     if (isTop) {
+      this.tryAddFileMessages(message, isScrollAtBottom, isTop);
       this.tryAddHTMLMessage(message, overwrite, isTop);
-      this.tryAddFileMessages(message, isTop);
       this.tryAddTextMessage(message, overwrite, data, isHistory, isTop);
     } else {
       this.tryAddTextMessage(message, overwrite, data, isHistory, isTop);
-      this.tryAddFileMessages(message, isTop);
       this.tryAddHTMLMessage(message, overwrite, isTop);
+      this.tryAddFileMessages(message, isScrollAtBottom, isTop);
     }
     if (this.isValidMessageContent(message) && !isTop) {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
+      // in timeout for it to move to the loading bubble and when bubble font is large
+      setTimeout(() => this.scrollToFirstElement(message.role, isScrollAtBottom, overwrite));
       if (!isHistory) this.browserStorage?.addMessages(this.messageToElements.map(([msg]) => msg));
     }
     if (this._activeLoadingConfig) this.addLoadingMessage(false);

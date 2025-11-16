@@ -1,7 +1,6 @@
 import {ANY, AUDIO, FILE, IMAGE, SRC, USER} from '../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {MessageFile, MessageFiles} from '../../../types/messageFile';
-import {ElementUtils} from '../../../utils/element/elementUtils';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
 import {FileMessageUtils} from './utils/fileMessageUtils';
 import {FILE_ICON_STRING} from '../../../icons/fileIcon';
@@ -14,18 +13,18 @@ export class FileMessages {
   private static readonly AUDIO_BUBBLE_CLASS = 'audio-message';
   private static readonly ANY_FILE_BUBBLE_CLASS = 'any-file-message';
 
-  private static createImage(imageData: MessageFile, messagesContainerEl: HTMLElement, el: HTMLElement, scroll: boolean) {
+  private static createImage(imageData: MessageFile, asyncScroll?: () => void) {
     const imageElement = new Image();
     imageElement[SRC] = imageData[SRC] as string;
-    if (scroll) FileMessageUtils.scrollDownOnImageLoad(imageElement[SRC], messagesContainerEl, el);
+    if (asyncScroll) FileMessageUtils.scrollDownOnImageLoad(imageElement[SRC], asyncScroll);
     return FileMessageUtils.processContent(IMAGE, imageElement, imageElement[SRC], imageData.name);
   }
 
   // WORK - image still does not scroll down when loaded
-  private static createImageMessage(msg: MessagesBase, image: MessageFile, role: string, isTop: boolean, scroll: boolean) {
+  private static createImageMessage(msg: MessagesBase, image: MessageFile, role: string, scrollAllowed: boolean) {
     const elements = msg.createNewMessageElement('', role);
-    const allowScroll = !isTop && !msg.focusMode && scroll;
-    const imageEl = FileMessages.createImage(image, msg.elementRef, elements.outerContainer, allowScroll);
+    const asyncScroll = scrollAllowed ? msg.scrollToFirstElement.bind(msg, role, scrollAllowed) : undefined;
+    const imageEl = FileMessages.createImage(image, asyncScroll);
     elements.bubbleElement.appendChild(imageEl);
     elements.bubbleElement[CLASS_LIST].add(FileMessages.IMAGE_BUBBLE_CLASS);
     return {type: IMAGE, elements};
@@ -97,7 +96,7 @@ export class FileMessages {
           return audioMessage;
         }
         if (FileMessageUtils.isImageFile(fileData)) {
-          return FileMessages.createImageMessage(msg, fileData, role, isTop, scroll && index === 0);
+          return FileMessages.createImageMessage(msg, fileData, role, !isTop && scroll && index === 0);
         }
         return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
       })
@@ -105,14 +104,12 @@ export class FileMessages {
   }
 
   // no overwrite previous message logic as it is complex to track which files are to be overwritten
-  public static addMessages(messages: MessagesBase, files: MessageFiles, role: string, hasText: boolean, isTop: boolean) {
-    const scroll = !hasText && ElementUtils.isScrollbarAtBottomOfElement(messages.elementRef);
+  public static addMessages(messages: MessagesBase, files: MessageFiles, role: string, scroll: boolean, isTop: boolean) {
     const typeToElements = FileMessages.createMessages(messages, files, role, scroll, isTop);
     typeToElements
       .filter((element) => element !== undefined)
-      .forEach(({type, elements}, index) => {
-        const allowScroll = index === 0 && scroll;
-        FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop, allowScroll);
+      .forEach(({type, elements}) => {
+        FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop);
       });
   }
 }

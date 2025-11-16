@@ -22,7 +22,6 @@ import {
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
   private static readonly PARTIAL_RENDER_TEXT_MARK = '\n\n';
-  private readonly allowScroll: boolean = true;
   private readonly _partialRender?: boolean;
   private readonly _messages: MessagesBase;
   private _fileAdded = false;
@@ -39,16 +38,9 @@ export class MessageStream {
 
   constructor(messages: MessagesBase, stream?: Stream) {
     this._messages = messages;
-    if (MessageStream.isFocusModeScrollAllowed(this._messages.focusMode)) {
-      this.allowScroll = false;
-    }
     if (typeof stream === 'object') {
       this._partialRender = stream.partialRender;
     }
-  }
-
-  private static isFocusModeScrollAllowed(focusMode?: FocusMode) {
-    return typeof focusMode === 'object' && typeof focusMode.streamAutoScroll === 'boolean' && !focusMode.streamAutoScroll;
   }
 
   public upsertStreamedMessage(response?: Response) {
@@ -68,7 +60,7 @@ export class MessageStream {
       this.updateBasedOnType(content, streamType, response?.overwrite);
     }
     if (response?._sessionId) this._sessionId = response?._sessionId;
-    if (isScrollbarAtBottomOfElement && this.allowScroll) ElementUtils.scrollToBottom(this._messages.elementRef);
+    if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages.elementRef);
   }
 
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {
@@ -81,7 +73,7 @@ export class MessageStream {
     this._elements =
       streamType === TEXT
         ? this._messages.addNewTextMessage(initContent, role)
-        : HTMLMessages.add(this._messages, initContent, role, true);
+        : HTMLMessages.add(this._messages, initContent, role);
     if (this._elements) {
       this._elements.bubbleElement[CLASS_LIST].add(MessageStream.MESSAGE_CLASS);
       this._activeMessageRole = role;

@@ -48,6 +48,7 @@ export class MessagesBase {
   public static readonly TEXT_BUBBLE_CLASS = 'text-message';
   public static readonly INTRO_CLASS = 'deep-chat-intro';
   public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
+  public readonly autoScrollAllowed: boolean = true;
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
@@ -65,6 +66,7 @@ export class MessagesBase {
       FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
     }
     this._customWrappers = deepChat.htmlWrappers || Legacy.processStreamHTMLWrappers(deepChat.connect?.stream);
+    if (typeof this.focusMode !== 'boolean' && this.focusMode?.streamAutoScroll === false) this.autoScrollAllowed = false;
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -100,24 +102,8 @@ export class MessagesBase {
   }
 
   protected createAndAppendNewMessageElement(text: string, role: string) {
-    if (this.focusMode) {
-      return this.appendNewMessageElementFocusMode(text, role);
-    }
-    return this.createAndAppendNewMessageElementDefault(text, role);
-  }
-
-  private appendNewMessageElementFocusMode(text: string, role: string) {
-    const isScrollAtBottom = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     const messageElements = this.createNewMessageElement(text, role);
-    this.appendOuterContainerElemet(messageElements.outerContainer, role);
-    if (role === USER) {
-      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
-      setTimeout(() => {
-        ElementUtils.scrollToBottom(this.elementRef, isAnimation); // in timeout for it to move to the loading bubble
-      });
-    } else if (isScrollAtBottom) {
-      ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
-    }
+    this.appendOuterContainerElemet(messageElements.outerContainer, this.focusMode ? role : undefined);
     return messageElements;
   }
 
@@ -127,21 +113,6 @@ export class MessagesBase {
     // first group should not have height 100% to not create a partial chat scroll bar
     if (this._lastGroupMessagesElement) lastGroupMessageElement[CLASS_LIST].add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
     this._lastGroupMessagesElement = lastGroupMessageElement;
-  }
-
-  private createAndAppendNewMessageElementDefault(text: string, role: string) {
-    const messageElements = this.createNewMessageElement(text, role);
-    const isCurrentlyAtBottom = ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
-    this.appendOuterContainerElemet(messageElements.outerContainer);
-    // timeout neeed when bubble font is large
-    setTimeout(() => {
-      if (role === USER) {
-        ElementUtils.scrollToBottom(this.elementRef);
-      } else if (isCurrentlyAtBottom) {
-        ElementUtils.scrollToBottom(this.elementRef, false, messageElements.outerContainer);
-      }
-    });
-    return messageElements;
   }
 
   public appendOuterContainerElemet(outerContainer: HTMLElement, role?: string) {
@@ -310,5 +281,17 @@ export class MessagesBase {
         this.renderText(msgToEls[1][TEXT].bubbleElement, msgToEls[0][TEXT], msgToEls[0].role);
       }
     });
+  }
+
+  public scrollToFirstElement(role: string, isScrollAtBottom: boolean, overwrite?: Overwrite) {
+    if (role === USER) {
+      const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
+      ElementUtils.scrollToBottom(this.elementRef, isAnimation);
+    } else if (isScrollAtBottom && this.autoScrollAllowed) {
+      const {text, html, files} = this.messageToElements[this.messageToElements.length - 1][1];
+      let outerContainer = text || html || files?.[0];
+      if (outerContainer === html && overwrite?.status) outerContainer = files?.[0];
+      ElementUtils.scrollToBottom(this.elementRef, false, outerContainer?.outerContainer);
+    }
   }
 }

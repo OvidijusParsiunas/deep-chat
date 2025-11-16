@@ -1,4 +1,3 @@
-import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {HTML} from '../../../../utils/consts/messageConstants';
 import {Overwrite} from '../../../../types/messagesInternal';
@@ -10,14 +9,6 @@ import {HTMLUtils} from './htmlUtils';
 
 export class HTMLMessages {
   public static readonly HTML_BUBBLE_CLASS = 'html-message';
-
-  private static addElement(messages: MessagesBase, outerElement: HTMLElement, allowScroll: boolean) {
-    const isCurrentlyAtBottom = ElementUtils.isScrollbarAtBottomOfElement(messages.elementRef);
-    messages.appendOuterContainerElemet(outerElement);
-    if (!messages.focusMode && allowScroll && isCurrentlyAtBottom) {
-      ElementUtils.scrollToBottom(messages.elementRef, false, outerElement);
-    }
-  }
 
   public static createElements(messages: MessagesBase, html: string, role: string, isTop: boolean, loading = false) {
     const messageElements = messages.createMessageElementsOnOrientation('', role, isTop, loading);
@@ -53,9 +44,7 @@ export class HTMLMessages {
     return messageElements;
   }
 
-  // prettier-ignore
-  public static add(
-      messages: MessagesBase, html: string, role: string, scroll: boolean, overwrite?: Overwrite, isTop = false) {
+  public static add(messages: MessagesBase, html: string, role: string, overwrite?: Overwrite, isTop = false) {
     if (overwrite?.status) {
       const overwrittenElements = this.overwrite(messages, html, role, messages.messageElementRefs);
       if (overwrittenElements) return overwrittenElements;
@@ -66,7 +55,7 @@ export class HTMLMessages {
       return;
     }
     const messageElements = HTMLMessages.create(messages, html, role, isTop);
-    if (!isTop) HTMLMessages.addElement(messages, messageElements.outerContainer, scroll);
+    if (!isTop) messages.appendOuterContainerElemet(messageElements.outerContainer);
     return messageElements;
   }
 }
