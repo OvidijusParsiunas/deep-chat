@@ -6,7 +6,6 @@ import {DEFAULT} from '../../../../utils/consts/inputConstants';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
 import {MessageFile} from '../../../../types/messageFile';
 import {MessageElements, Messages} from '../messages';
-import {FocusMode} from '../../../../types/focusMode';
 import {Response} from '../../../../types/response';
 import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
