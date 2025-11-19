@@ -15,32 +15,32 @@ type ValidateFunc = (text?: string, files?: File[], isProgrammatic?: boolean) =>
 export class ValidationHandler {
   // prettier-ignore
   private static validate(validation: ValidateFunc, submitButton: SubmitButton,
-      text?: string, files?: File[], browserStorage?: BrowserStorage, isProgrammatic?: boolean) {
-    const isValid = validation(text as string, files, isProgrammatic);
+      io: ServiceIO, text?: string, files?: File[], storage?: BrowserStorage, isProgrammatic?: boolean) {
+    const isValid = io.isSubmitProgrammaticallyDisabled ? false : validation(text as string, files, isProgrammatic);
     if (isValid) {
       submitButton.changeToSubmitIcon();
     } else {
       submitButton.changeToDisabledIcon();
     }
-    browserStorage?.addInputText(text || '');
+    storage?.addInputText(text || '');
     return isValid;
   }
 
   // prettier-ignore
   private static async useValidationFunc(validation: ValidateFunc, textInput: TextInputEl,
-      fileAttachments: FileAttachments, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
+      fileAttachments: FileAttachments, submitButton: SubmitButton, io: ServiceIO, storage?: BrowserStorage) {
     const text = textInput.isTextInputEmpty() ? '' : textInput.inputElementRef.textContent;
     await fileAttachments.completePlaceholders();
     const uploadedFilesData = fileAttachments.getAllFileData();
     const fileData = uploadedFilesData?.map((fileData) => fileData[FILE]);
-    return ValidationHandler.validate(validation, submitButton, text as string, fileData, browserStorage);
+    return ValidationHandler.validate(validation, submitButton, io, text as string, fileData, storage);
   }
 
   // prettier-ignore
   private static async useValidationFuncProgrammatic(validation: ValidateFunc,
-      programmatic: UserContentI, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
+      programmatic: UserContentI, submitButton: SubmitButton, io: ServiceIO, storage?: BrowserStorage) {
     const files = programmatic[FILES]?.map((file) => file[FILE]);
-    return ValidationHandler.validate(validation, submitButton, programmatic[TEXT], files, browserStorage, true);
+    return ValidationHandler.validate(validation, submitButton, io, programmatic[TEXT], files, storage, true);
   }
 
   private static validateWebsocket(serviceIO: ServiceIO, submitButton: SubmitButton) {
@@ -53,19 +53,18 @@ export class ValidationHandler {
   }
 
   // prettier-ignore
-  public static attach(deepChat: DeepChat, serviceIO: ServiceIO, textInput: TextInputEl,
-      fileAttachments: FileAttachments, submitButton: SubmitButton, browserStorage?: BrowserStorage) {
+  public static attach(deepChat: DeepChat, io: ServiceIO, textInput: TextInputEl,
+      fileAttachments: FileAttachments, submitButton: SubmitButton, storage?: BrowserStorage) {
     const validateInput = deepChat.validateInput || Legacy.processValidateInput(deepChat);
     deepChat._validationHandler = async (programmatic?: UserContentI) => {
       if (submitButton.status.loadingActive || submitButton.status.requestInProgress) return false;
-      if (serviceIO.isSubmitProgrammaticallyDisabled === true) return false;
-      if (!ValidationHandler.validateWebsocket(serviceIO, submitButton)) return false;
-      const validation = validateInput || serviceIO.canSendMessage;
+      if (!ValidationHandler.validateWebsocket(io, submitButton)) return false;
+      const validation = validateInput || io.canSendMessage;
       if (validation) {
         if (programmatic) {
-          return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton, browserStorage);
+          return ValidationHandler.useValidationFuncProgrammatic(validation, programmatic, submitButton, io, storage);
         }
-        return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton, browserStorage);
+        return ValidationHandler.useValidationFunc(validation, textInput, fileAttachments, submitButton, io, storage);
       }
       return null;
     };
