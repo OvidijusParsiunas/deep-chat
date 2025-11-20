@@ -1,5 +1,5 @@
+import {CREATE_ELEMENT, STYLE, TARGET_WRAPPER_CLASS} from '../../../../utils/consts/htmlConstants';
 import {EventToFunction, HTMLClassUtility, HTMLClassUtilities} from '../../../../types/html';
-import {CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {DEFAULT} from '../../../../utils/consts/inputConstants';
@@ -9,8 +9,6 @@ import {HTMLWrappers} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
 
 export class HTMLUtils {
-  static readonly TARGET_WRAPPER_CLASS = 'html-wrapper';
-
   public static applyStylesToElement(element: HTMLElement, styles: StatefulStyles) {
     const statefulStyles = StyleUtils.processStateful(styles);
     StatefulEvents.add(element, statefulStyles);
@@ -97,6 +95,6 @@ export class HTMLUtils {
   }
 
   public static getTargetWrapper(bubbleElement: HTMLElement) {
-    return (bubbleElement.getElementsByClassName(HTMLUtils.TARGET_WRAPPER_CLASS)[0] || bubbleElement) as HTMLElement;
+    return (bubbleElement.getElementsByClassName(TARGET_WRAPPER_CLASS)[0] || bubbleElement) as HTMLElement;
   }
 }

@@ -2,6 +2,7 @@ import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {DEFAULT} from '../../../../../utils/consts/inputConstants';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
 import {TEXT} from '../../../../../utils/consts/messageConstants';
+import {UNSET} from '../../../../../utils/consts/htmlConstants';
 import {ButtonStyles} from '../../../../../types/button';
 import {SubmitButton} from './submitButton';
 
@@ -27,7 +28,7 @@ export class SubmitButtonStateStyle {
   // prettier-ignore
   private static setUpDisabledButton(styles: SubmitButtonStyles) {
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', DEFAULT, 'backgroundColor'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', DEFAULT, 'backgroundColor'], 'unset');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['disabled', 'container', DEFAULT, 'backgroundColor'], UNSET);
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', DEFAULT, 'filter'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.disabled, ['svg', 'styles', DEFAULT, 'filter'],
       'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(5564%)' +
