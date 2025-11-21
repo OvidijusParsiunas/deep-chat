@@ -30,7 +30,7 @@ export class ClaudeIO extends DirectServiceIO {
       this.completeConfig(config, deepChat.directConnection?.claude?.function_handler);
     }
     this.maxMessages ??= -1;
-    this.rawBody.model ??= 'claude-3-5-sonnet-20241022';
+    this.rawBody.model ??= 'claude-sonnet-4-5-20250929';
     this.rawBody.max_tokens ??= 4096;
   }
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
