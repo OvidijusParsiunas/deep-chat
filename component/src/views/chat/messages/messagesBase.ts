@@ -1,5 +1,5 @@
+import {AI, ERROR_MESSAGE_TEXT_CLASS, FILES, HTML, MESSAGES_ID, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
-import {AI, ERROR_MESSAGE_TEXT_CLASS, FILES, HTML, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
@@ -61,7 +61,11 @@ export class MessagesBase {
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
     this.focusMode = Legacy.processFocusMode(deepChat.focusMode);
-    if (!this.focusMode) this._lastGroupMessagesElement = CREATE_ELEMENT();
+    if (!this.focusMode) {
+      this._lastGroupMessagesElement = CREATE_ELEMENT();
+      this.elementRef.appendChild(this._lastGroupMessagesElement);
+      if (deepChat.upwardsMode) this.elementRef = this._lastGroupMessagesElement;
+    }
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.fade) {
       FocusModeUtils.setFade(this.elementRef, this.focusMode.fade);
     }
@@ -74,7 +78,7 @@ export class MessagesBase {
 
   private static createContainerElement() {
     const container = CREATE_ELEMENT();
-    container.id = 'messages';
+    container.id = MESSAGES_ID;
     return container;
   }
 
@@ -111,7 +115,12 @@ export class MessagesBase {
     this._lastGroupMessagesElement?.[CLASS_LIST].remove(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
     const lastGroupMessageElement = CREATE_ELEMENT();
     // first group should not have height 100% to not create a partial chat scroll bar
-    if (this._lastGroupMessagesElement) lastGroupMessageElement[CLASS_LIST].add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    if (
+      this.messageToElements.length > 1 ||
+      (this.messageToElements.length === 1 && this.messageToElements[0][0].role !== USER)
+    ) {
+      lastGroupMessageElement[CLASS_LIST].add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
+    }
     this._lastGroupMessagesElement = lastGroupMessageElement;
   }
 

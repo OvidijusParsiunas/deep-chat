@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
+import {AI, HTML, MESSAGES_ID} from '../../../../utils/consts/messageConstants';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
-import {AI, HTML} from '../../../../utils/consts/messageConstants';
 import {MessageElementsStyles} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
 import {MessageUtils} from '../utils/messageUtils';
@@ -39,7 +39,9 @@ export class LoadingHistory {
       ? messages.messageStyles?.loading?.history?.full?.styles
       : messages.messageStyles?.loading?.history?.small?.styles;
     LoadingHistory.apply(messages, messageElements, styles);
-    messages.elementRef.prepend(messageElements.outerContainer);
+    const messagesElement =
+      isInitial && messages.elementRef.id === MESSAGES_ID ? messages.elementRef : messages.elementRef.parentElement;
+    messagesElement?.prepend(messageElements.outerContainer);
   }
 
   public static createDefaultElements(messages: Messages) {

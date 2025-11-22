@@ -1,5 +1,3 @@
-import {UPWARDS_MODE_CLASS} from '../consts/classConstants';
-
 export class ElementUtils {
   private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
 
@@ -7,16 +5,11 @@ export class ElementUtils {
     elements.forEach((element) => parent.appendChild(element));
   }
 
-  private static getOverflowElement(element: HTMLElement) {
-    return element.parentElement?.classList.contains(UPWARDS_MODE_CLASS) ? element.children[0] || element : element;
-  }
-
   public static isScrollbarAtBottomOfElement(element: HTMLElement) {
-    const overflowElement = ElementUtils.getOverflowElement(element);
     // Get the scroll height, visible height, and current scroll position
-    const scrollHeight = overflowElement.scrollHeight;
-    const visibleHeight = overflowElement.clientHeight;
-    const scrollPosition = overflowElement.scrollTop;
+    const scrollHeight = element.scrollHeight;
+    const visibleHeight = element.clientHeight;
+    const scrollPosition = element.scrollTop;
 
     // Calculate the remaining scroll height
     const remainingScrollHeight = scrollHeight - visibleHeight;
@@ -32,14 +25,13 @@ export class ElementUtils {
   }
 
   public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
-    const overflowElement = ElementUtils.getOverflowElement(messagesElementRef);
     if (targetElement) {
       // scrolls targetElement.offsetTop to be at top of visible chat
-      overflowElement.scrollTo({left: 0, top: targetElement.offsetTop});
+      messagesElementRef.scrollTo({left: 0, top: targetElement.offsetTop});
     } else if (isAnimation) {
-      overflowElement.scrollTo({left: 0, top: overflowElement.scrollHeight, behavior: 'smooth'});
+      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
     } else {
-      overflowElement.scrollTop = overflowElement.scrollHeight;
+      messagesElementRef.scrollTop = messagesElementRef.scrollHeight;
     }
   }
 

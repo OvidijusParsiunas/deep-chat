@@ -12,11 +12,13 @@ export class ChatView {
   private static createElements(deepChat: DeepChat, serviceIO: ServiceIO, panel?: HTMLElement) {
     const containerEl = CREATE_ELEMENT();
     containerEl.id = 'chat-view';
-    containerEl.classList.add(!deepChat.focusMode && deepChat.upwardsMode ? UPWARDS_MODE_CLASS : DOWNWARDS_MODE_CLASS);
+    const isUpwardsMode = !deepChat.focusMode && deepChat.upwardsMode;
+    containerEl.classList.add(isUpwardsMode ? UPWARDS_MODE_CLASS : DOWNWARDS_MODE_CLASS);
     const messages = new Messages(deepChat, serviceIO, panel);
     if (serviceIO.websocket) Websocket.createConnection(serviceIO, messages);
     const userInput = new Input(deepChat, messages, serviceIO, containerEl);
-    ElementUtils.addElements(containerEl, messages.elementRef, userInput.elementRef);
+    const messagesElement = isUpwardsMode ? messages.elementRef.parentElement : messages.elementRef;
+    ElementUtils.addElements(containerEl, messagesElement!, userInput.elementRef);
     return containerEl;
   }
 

@@ -55,3 +55,5 @@ export const FILE_BUBBLE_CLASS = 'file-message';
 export const START = 'start';
 
 export const END = 'end';
+
+export const MESSAGES_ID = 'messages';

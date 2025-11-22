@@ -6,6 +6,10 @@
   align-items: center;
 }
 
+.deep-chat-upwards-mode #messages .loading-history-message-full-view {
+  height: 100%;
+}
+
 .loading-history-message-small {
   height: 20px;
   margin-bottom: 30px;
