@@ -38,6 +38,8 @@ export class MessagesBase {
   readonly messageToElements: MessageToElements = [];
   readonly avatar?: Avatar;
   readonly name?: Name;
+  readonly hiddenMessageElements = new Set<HTMLElement>();
+  intersectionObserver?: IntersectionObserver;
   protected _introPanel?: IntroPanel;
   private _remarkable: Remarkable;
   readonly _customWrappers?: HTMLWrappers;
@@ -71,6 +73,7 @@ export class MessagesBase {
     }
     this._customWrappers = deepChat.htmlWrappers || Legacy.processStreamHTMLWrappers(deepChat.connect?.stream);
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.streamAutoScroll === false) this.autoScrollAllowed = false;
+    if (deepChat.hiddenMessages) this.initIntersectionObserver();
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -292,15 +295,45 @@ export class MessagesBase {
     });
   }
 
-  public scrollToFirstElement(role: string, isScrollAtBottom: boolean, overwrite?: Overwrite) {
+  public scrollToFirstElement(role: string, isScrollAtBottom: boolean) {
     if (role === USER) {
       const isAnimation = typeof this.focusMode !== 'boolean' && this.focusMode?.smoothScroll;
-      ElementUtils.scrollToBottom(this.elementRef, isAnimation);
+      ElementUtils.scrollToBottom(this, isAnimation);
     } else if (isScrollAtBottom && this.autoScrollAllowed) {
-      const {text, html, files} = this.messageToElements[this.messageToElements.length - 1][1];
-      let outerContainer = text || html || files?.[0];
-      if (outerContainer === html && overwrite?.status) outerContainer = files?.[0];
-      ElementUtils.scrollToBottom(this.elementRef, false, outerContainer?.outerContainer);
+      const firstContentElement = this.getFirstMessageContentEl();
+      ElementUtils.scrollToBottom(this, false, firstContentElement?.outerContainer);
     }
+  }
+
+  private getFirstMessageContentEl() {
+    const {text, html, files} = this.messageToElements[this.messageToElements.length - 1][1];
+    return text || html || files?.[0];
+  }
+
+  private initIntersectionObserver() {
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && this.hiddenMessageElements.has(entry.target as HTMLElement)) {
+            this.hiddenMessageElements.delete(entry.target as HTMLElement);
+            this.intersectionObserver?.unobserve(entry.target);
+          }
+        });
+      },
+      {root: this.elementRef, threshold: 0.1}
+    );
+  }
+
+  public updateHiddenMessageCount() {
+    const lastMessageContainer = this.getFirstMessageContentEl()?.outerContainer;
+    if (lastMessageContainer && !ElementUtils.isVisibleInParent(lastMessageContainer, this.elementRef)) {
+      this.hiddenMessageElements.add(lastMessageContainer);
+      this.intersectionObserver?.observe(lastMessageContainer);
+    }
+  }
+
+  public clearHiddenMessageCount() {
+    this.hiddenMessageElements.forEach((element) => this.intersectionObserver?.unobserve(element));
+    this.hiddenMessageElements.clear();
   }
 }

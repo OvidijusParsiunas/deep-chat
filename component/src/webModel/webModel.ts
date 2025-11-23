@@ -167,7 +167,7 @@ export class WebModel extends BaseServiceIO {
     const initProgressCallback = (report: WebLLM.InitProgressReport) => {
       this._messages?.addNewMessage({html: `<div>${report[TEXT]}</div>`, overwrite: true, sendUpdate: false});
       if (isNewMessage) {
-        setTimeout(() => ElementUtils.scrollToBottom(this._messages?.elementRef as HTMLElement));
+        setTimeout(() => ElementUtils.scrollToBottom(this._messages!));
         isNewMessage = false;
       }
     };

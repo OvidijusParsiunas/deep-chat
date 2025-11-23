@@ -33,7 +33,7 @@ export class History {
     History.displayIntroMessages(this._messages.messageElementRefs);
     history.forEach((message) => this._messages.addAnyMessage(message, true));
     // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-    setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+    setTimeout(() => ElementUtils.scrollToBottom(this._messages), 0);
   }
 
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
@@ -103,7 +103,7 @@ export class History {
       // force scroll to bottom if user has not scrolled anywhere themselves (at start), otherwise keep at current location
       if (scrollTop === 0) {
         // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-        setTimeout(() => ElementUtils.scrollToBottom(this._messages.elementRef), 0);
+        setTimeout(() => ElementUtils.scrollToBottom(this._messages), 0);
       }
     } catch (e) {
       this._messages.removeMessage(loadingElements);

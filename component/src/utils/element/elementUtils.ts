@@ -1,3 +1,5 @@
+import {MessagesBase} from '../../views/chat/messages/messagesBase';
+
 export class ElementUtils {
   private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
 
@@ -24,18 +26,26 @@ export class ElementUtils {
     return newElement;
   }
 
-  public static scrollToBottom(messagesElementRef: HTMLElement, isAnimation = false, targetElement?: HTMLElement) {
+  public static scrollToBottom(message: MessagesBase, isAnimation = false, targetElement?: HTMLElement) {
+    if (message.hiddenMessageElements.size > 0) message.clearHiddenMessageCount();
     if (targetElement) {
       // scrolls targetElement.offsetTop to be at top of visible chat
-      messagesElementRef.scrollTo({left: 0, top: targetElement.offsetTop});
+      message.elementRef.scrollTo({left: 0, top: targetElement.offsetTop});
     } else if (isAnimation) {
-      messagesElementRef.scrollTo({left: 0, top: messagesElementRef.scrollHeight, behavior: 'smooth'});
+      message.elementRef.scrollTo({left: 0, top: message.elementRef.scrollHeight, behavior: 'smooth'});
     } else {
-      messagesElementRef.scrollTop = messagesElementRef.scrollHeight;
+      message.elementRef.scrollTop = message.elementRef.scrollHeight;
     }
   }
 
   public static scrollToTop(element: HTMLElement) {
     element.scrollTop = 0;
+  }
+
+  public static isVisibleInParent(element: HTMLElement, parent: HTMLElement) {
+    const elementRect = element.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    // Check if element is at least partially within parent vertically
+    return elementRect.bottom > parentRect.top && elementRect.top < parentRect.bottom;
   }
 }
