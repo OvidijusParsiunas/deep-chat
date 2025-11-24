@@ -1,7 +1,7 @@
 import {AI, ERROR_MESSAGE_TEXT_CLASS, FILES, HTML, MESSAGES_ID, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
 import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
-import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
+import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {ProcessedTextToSpeechConfig} from './textToSpeech/textToSpeech';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
@@ -40,6 +40,7 @@ export class MessagesBase {
   readonly name?: Name;
   readonly hiddenMessageElements = new Set<HTMLElement>();
   intersectionObserver?: IntersectionObserver;
+  private readonly hiddenMessagesElement?: HTMLElement;
   protected _introPanel?: IntroPanel;
   private _remarkable: Remarkable;
   readonly _customWrappers?: HTMLWrappers;
@@ -62,6 +63,11 @@ export class MessagesBase {
     if (deepChat.browserStorage) this.browserStorage = new BrowserStorage(deepChat.browserStorage);
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
+    if (deepChat.hiddenMessages) {
+      this.initIntersectionObserver();
+      this.hiddenMessagesElement = this.createHiddenMessagesElement();
+      this.elementRef.appendChild(this.hiddenMessagesElement);
+    }
     this.focusMode = Legacy.processFocusMode(deepChat.focusMode);
     if (!this.focusMode) {
       this._lastGroupMessagesElement = CREATE_ELEMENT();
@@ -73,7 +79,6 @@ export class MessagesBase {
     }
     this._customWrappers = deepChat.htmlWrappers || Legacy.processStreamHTMLWrappers(deepChat.connect?.stream);
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.streamAutoScroll === false) this.autoScrollAllowed = false;
-    if (deepChat.hiddenMessages) this.initIntersectionObserver();
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -310,6 +315,16 @@ export class MessagesBase {
     return text || html || files?.[0];
   }
 
+  private createHiddenMessagesElement() {
+    const hiddenMessagesElement = CREATE_ELEMENT();
+    hiddenMessagesElement.id = 'hidden-messages';
+    hiddenMessagesElement.onclick = () => {
+      const firstElement = this.hiddenMessageElements.values().next().value;
+      firstElement?.scrollIntoView({behavior: 'smooth'});
+    };
+    return hiddenMessagesElement;
+  }
+
   private initIntersectionObserver() {
     this.intersectionObserver = new IntersectionObserver(
       (entries) => {
@@ -317,6 +332,7 @@ export class MessagesBase {
           if (entry.isIntersecting && this.hiddenMessageElements.has(entry.target as HTMLElement)) {
             this.hiddenMessageElements.delete(entry.target as HTMLElement);
             this.intersectionObserver?.unobserve(entry.target);
+            this.updateHiddenMessagesElement();
           }
         });
       },
@@ -329,11 +345,25 @@ export class MessagesBase {
     if (lastMessageContainer && !ElementUtils.isVisibleInParent(lastMessageContainer, this.elementRef)) {
       this.hiddenMessageElements.add(lastMessageContainer);
       this.intersectionObserver?.observe(lastMessageContainer);
+      this.updateHiddenMessagesElement();
     }
   }
 
   public clearHiddenMessageCount() {
     this.hiddenMessageElements.forEach((element) => this.intersectionObserver?.unobserve(element));
     this.hiddenMessageElements.clear();
+    this.updateHiddenMessagesElement();
+  }
+
+  private updateHiddenMessagesElement() {
+    if (this.hiddenMessagesElement) {
+      const number = this.hiddenMessageElements.size;
+      if (number) {
+        this.hiddenMessagesElement.textContent = `${number} new message${number === 1 ? '' : 's'}`;
+        this.hiddenMessagesElement[STYLE].display = 'flex';
+      } else {
+        this.hiddenMessagesElement[STYLE].display = 'none';
+      }
+    }
   }
 }

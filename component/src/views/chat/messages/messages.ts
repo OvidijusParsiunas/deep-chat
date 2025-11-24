@@ -467,8 +467,8 @@ export class Messages extends MessagesBase {
       this.addIntroductoryMessages();
     }
     this.browserStorage?.clear();
+    this.clearHiddenMessageCount();
     this._onClearMessages?.();
     delete serviceIO.sessionId;
-    this.clearHiddenMessageCount();
   }
 }

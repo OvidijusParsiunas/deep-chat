@@ -52,3 +52,27 @@
 .deep-chat-last-group-messages-active {
   height: 100%;
 }
+
+#hidden-messages {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px;
+  width: fit-content;
+  height: fit-content;
+  background-color: white;
+  border: 0.5px solid #000000;
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#hidden-messages:hover {
+  background-color: #fafafa;
+}
