@@ -9,6 +9,10 @@ export interface ClaudeTool {
     properties: object;
     required?: string[];
   };
+  // https://www.anthropic.com/engineering/advanced-tool-use
+  defer_loading?: boolean;
+  type?: string;
+  allowed_callers?: string[];
 }
 
 // https://docs.anthropic.com/en/docs/agents-and-tools/mcp-connector#using-the-mcp-connector-in-the-messages-api
