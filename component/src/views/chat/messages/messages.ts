@@ -250,7 +250,7 @@ export class Messages extends MessagesBase {
       // in timeout for it to move to the loading bubble and when bubble font is large
       if (!overwrite.status) setTimeout(() => this.scrollToFirstElement(message.role, isScrollAtBottom));
       if (!isHistory) this.browserStorage?.addMessages(this.messageToElements.map(([msg]) => msg));
-      if (this.intersectionObserver && message.role !== USER) this.tryUpdateHiddenMessageCount(isHistory, data);
+      if (this.hiddenMessages && message.role !== USER) this.tryUpdateHiddenMessageCount(isHistory, data);
     }
     if (this._activeLoadingConfig) this.addLoadingMessage(false);
     return message;
@@ -270,7 +270,7 @@ export class Messages extends MessagesBase {
     // false false false -> should be true
     if (!isHistory || data.sendUpdate !== undefined) {
       // in timeout as above scrollToFirstElement is also in timeout
-      setTimeout(() => this.updateHiddenMessageCount());
+      setTimeout(() => this.hiddenMessages?.update?.());
     }
   }
 
@@ -467,7 +467,7 @@ export class Messages extends MessagesBase {
       this.addIntroductoryMessages();
     }
     this.browserStorage?.clear();
-    this.clearHiddenMessageCount();
+    this.hiddenMessages?.clear();
     this._onClearMessages?.();
     delete serviceIO.sessionId;
   }

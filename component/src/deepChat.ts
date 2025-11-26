@@ -20,6 +20,7 @@ import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
 import {SpeechToTextConfig} from './types/microphone';
 import {BrowserStorage} from './types/browserStorage';
+import {HiddenMessages} from './types/hiddenMessages';
 import {RemarkableOptions} from './types/remarkable';
 import {MessageBody} from './types/messagesInternal';
 import {ErrorMessages, OnError} from './types/error';
@@ -167,7 +168,7 @@ export class DeepChat extends InternalHTML {
   upwardsMode?: boolean;
 
   @Property('object')
-  hiddenMessages?: boolean;
+  hiddenMessages?: boolean | HiddenMessages;
 
   getMessages: () => MessageContent[] = () => [];
 
