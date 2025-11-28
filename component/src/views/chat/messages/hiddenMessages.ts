@@ -74,11 +74,13 @@ export class HiddenMessages {
     if (this.element) {
       const number = this.hiddenElements.size;
       const content = `${number} new message${number === 1 ? '' : 's'}`;
-      let html = content;
       if (this.config?.onUpdate) {
-        html = this.config?.onUpdate?.(content, number);
+        const newContent = this.config.onUpdate(content, number);
+        this.element.innerHTML = newContent;
+        HTMLUtils.apply(this._messages, this.element);
+      } else {
+        this.element.innerHTML = content;
       }
-      this.element.innerHTML = html;
       this.element[STYLE].display = number ? 'flex' : 'none';
     }
   }
