@@ -50,6 +50,7 @@ export class MessagesBase {
   public static readonly INTRO_CLASS = 'deep-chat-intro';
   public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
   public readonly autoScrollAllowed: boolean = true;
+  private readonly maxVisibleMessages: number = 4000;
   readonly hiddenMessages?: HiddenMessages;
 
   constructor(deepChat: DeepChat) {
@@ -74,6 +75,7 @@ export class MessagesBase {
     }
     this._customWrappers = deepChat.htmlWrappers || Legacy.processStreamHTMLWrappers(deepChat.connect?.stream);
     if (typeof this.focusMode !== 'boolean' && this.focusMode?.streamAutoScroll === false) this.autoScrollAllowed = false;
+    if (deepChat.maxVisibleMessages) this.maxVisibleMessages = deepChat.maxVisibleMessages;
     setTimeout(() => {
       this.submitUserMessage = deepChat.submitUserMessage; // wait for it to be available in input.ts
     });
@@ -156,6 +158,11 @@ export class MessagesBase {
   }
 
   public createNewMessageElement(text: string, role: string, isTop = false, loading = false) {
+    if (!loading && this.messageElementRefs.length >= this.maxVisibleMessages) {
+      // in timeout because messages are added after this function
+      // so on initial load first messages (e.g. files not added)
+      setTimeout(() => this.removeFirstMessage());
+    }
     if (!loading) this._introPanel?.hide();
     const lastMessageElements = this.messageElementRefs[this.messageElementRefs.length - 1];
     LoadingHistory.changeFullViewToSmall(this);
@@ -250,6 +257,12 @@ export class MessagesBase {
     messageElements.outerContainer.remove();
     const messageElementsIndex = this.messageElementRefs.findIndex((elRefs) => elRefs === messageElements);
     this.messageElementRefs.splice(messageElementsIndex, 1);
+  }
+
+  public removeFirstMessage() {
+    const firstMessage = this.messageElementRefs[0];
+    firstMessage.outerContainer.remove();
+    this.messageElementRefs.shift();
   }
 
   public removeLastMessage() {

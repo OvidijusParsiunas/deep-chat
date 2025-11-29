@@ -170,6 +170,9 @@ export class DeepChat extends InternalHTML {
   @Property('object')
   hiddenMessages?: boolean | HiddenMessages;
 
+  @Property('number')
+  maxVisibleMessages?: number;
+
   getMessages: () => MessageContent[] = () => [];
 
   submitUserMessage: (content: UserContent) => void = () =>
