@@ -39,8 +39,10 @@ export class LoadingHistory {
       ? messages.messageStyles?.loading?.history?.full?.styles
       : messages.messageStyles?.loading?.history?.small?.styles;
     LoadingHistory.apply(messages, messageElements, styles);
-    const messagesElement =
-      isInitial && messages.elementRef.id === MESSAGES_ID ? messages.elementRef : messages.elementRef.parentElement;
+    let messagesElement = messages.elementRef;
+    if (isInitial && messages.elementRef.id !== MESSAGES_ID) {
+      messagesElement = messages.elementRef.parentElement as HTMLElement;
+    }
     messagesElement?.prepend(messageElements.outerContainer);
   }
 
