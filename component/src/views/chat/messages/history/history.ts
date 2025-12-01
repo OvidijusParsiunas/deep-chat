@@ -36,6 +36,10 @@ export class History {
     setTimeout(() => ElementUtils.scrollToBottom(this._messages), 0);
   }
 
+  private scrollToPreloadFirstEl(preLoadFirstMessageEl: HTMLElement, currentScrollTop: number) {
+    this._messages.elementRef.scrollTop = currentScrollTop + preLoadFirstMessageEl.offsetTop - 40;
+  }
+
   private processLoadedHistory(historyMessages: HistoryMessage[]) {
     const {messageElementRefs, messageToElements, elementRef} = this._messages;
     const preLoadFirstMessageEl = messageElementRefs.find(
@@ -55,7 +59,13 @@ export class History {
       .filter((message) => !!message)
       .reverse()
       .forEach((message) => this._messages.sendClientUpdate(message as MessageContentI, true));
-    if (preLoadFirstMessageEl) elementRef.scrollTop = currentScrollTop + preLoadFirstMessageEl.offsetTop - 40;
+    if (preLoadFirstMessageEl) {
+      if (this._messages.messageElementRefs.length >= this._messages.maxVisibleMessages) {
+        setTimeout(() => this.scrollToPreloadFirstEl(preLoadFirstMessageEl, currentScrollTop));
+      } else {
+        this.scrollToPreloadFirstEl(preLoadFirstMessageEl, currentScrollTop);
+      }
+    }
   }
 
   private populateMessages(loadingElements: MessageElements, messages: HistoryMessage[]) {

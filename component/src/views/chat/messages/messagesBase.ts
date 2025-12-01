@@ -42,6 +42,7 @@ export class MessagesBase {
   protected _introPanel?: IntroPanel;
   private _remarkable: Remarkable;
   readonly _customWrappers?: HTMLWrappers;
+  readonly maxVisibleMessages: number = 4000;
   private _lastGroupMessagesElement?: HTMLElement;
   private readonly _applyHTMLToRemarkable?: boolean;
   private readonly _onMessage?: (message: MessageContentI, isHistory: boolean) => void;
@@ -50,7 +51,6 @@ export class MessagesBase {
   public static readonly INTRO_CLASS = 'deep-chat-intro';
   public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
   public readonly autoScrollAllowed: boolean = true;
-  private readonly maxVisibleMessages: number = 4000;
   readonly hiddenMessages?: HiddenMessages;
 
   constructor(deepChat: DeepChat) {
@@ -161,6 +161,7 @@ export class MessagesBase {
     if (!loading && this.messageElementRefs.length >= this.maxVisibleMessages) {
       // in timeout because messages are added after this function
       // so on initial load first messages (e.g. files not added)
+      // or on initial dynamic history load adds first element
       setTimeout(() => this.removeFirstMessage());
     }
     if (!loading) this._introPanel?.hide();
