@@ -157,8 +157,15 @@ export class MessagesBase {
       : this.createNewMessageElement(text, role, isTop, loading);
   }
 
+  private getNumberOfContentMessages() {
+    const length = this.messageElementRefs.length;
+    return this.messageElementRefs[length - 1]?.bubbleElement?.[CLASS_LIST].contains(LoadingStyle.BUBBLE_CLASS)
+      ? length - 1
+      : length;
+  }
+
   public createNewMessageElement(text: string, role: string, isTop = false, loading = false) {
-    if (!loading && this.messageElementRefs.length >= this.maxVisibleMessages) {
+    if (!loading && this.getNumberOfContentMessages() >= this.maxVisibleMessages) {
       // in timeout because messages are added after this function
       // so on initial load first messages (e.g. files not added)
       // or on initial dynamic history load adds first element
