@@ -1,13 +1,14 @@
 import {MessagesBase} from '../../views/chat/messages/messagesBase';
 
 export class ElementUtils {
-  private static readonly CODE_SNIPPET_GENERATION_JUMP = 0.5;
+  // this is also used for when there is a lot of history and font loads up late
+  private static readonly CODE_SNIPPET_GENERATION_JUMP = 1;
 
   public static addElements(parent: HTMLElement, ...elements: HTMLElement[]) {
     elements.forEach((element) => parent.appendChild(element));
   }
 
-  public static isScrollbarAtBottomOfElement(element: HTMLElement) {
+  public static isScrollbarAtBottomOfElement(element: HTMLElement, jump = ElementUtils.CODE_SNIPPET_GENERATION_JUMP) {
     // Get the scroll height, visible height, and current scroll position
     const scrollHeight = element.scrollHeight;
     const visibleHeight = element.clientHeight;
@@ -17,7 +18,7 @@ export class ElementUtils {
     const remainingScrollHeight = scrollHeight - visibleHeight;
 
     // Check if the current scroll position is at the bottom
-    return scrollPosition >= remainingScrollHeight - ElementUtils.CODE_SNIPPET_GENERATION_JUMP;
+    return scrollPosition >= remainingScrollHeight - jump;
   }
 
   public static cloneElement(element: HTMLElement) {
