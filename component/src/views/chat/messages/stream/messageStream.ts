@@ -56,7 +56,12 @@ export class MessageStream {
     } else if (this._streamType !== streamType) {
       return console[ERROR](INVALID_STREAM_EVENT_MIX);
     } else {
-      this.updateBasedOnType(content, streamType, response?.overwrite);
+      if (response?.role !== this._activeMessageRole) {
+        this.finaliseStreamedMessage(false);
+        this.setInitialState(streamType, content, response?.role);
+      } else {
+        this.updateBasedOnType(content, streamType, response?.overwrite);
+      }
     }
     if (response?._sessionId) this._sessionId = response?._sessionId;
     if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages);
@@ -155,7 +160,7 @@ export class MessageStream {
     }
   }
 
-  public finaliseStreamedMessage() {
+  public finaliseStreamedMessage(hasStreamEnded = true) {
     if (this._endStreamAfterOperation || !this._message) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(NO_VALID_STREAM_EVENTS_SENT);
@@ -171,7 +176,7 @@ export class MessageStream {
       this._messages.sendClientUpdate(MessagesBase.createMessageContent(this._message), false);
       this._messages.browserStorage?.addMessages(this._messages.messageToElements.map(([msg]) => msg));
     }
-    this._hasStreamEnded = true;
+    this._hasStreamEnded = hasStreamEnded;
   }
 
   public markFileAdded() {
