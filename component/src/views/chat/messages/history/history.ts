@@ -22,7 +22,6 @@ export class History {
   constructor(deepChat: DeepChat, messages: Messages, serviceIO: ServiceIO) {
     this._messages = messages;
     if (serviceIO.fetchHistory) this.fetchHistory(serviceIO.fetchHistory); // direct service
-    if (deepChat.loadHistory) this.setupLoadHistoryOnScroll(deepChat.loadHistory); // custom service
     this.setupInitialHistory(deepChat);
   }
 
@@ -77,7 +76,7 @@ export class History {
     MessageUtils.resetAllRoleElements(messageElementRefs, avatar, name);
   }
 
-  private async setupLoadHistoryOnScroll(loadHistory: LoadHistory) {
+  public async loadHistoryOnScroll(loadHistory: LoadHistory) {
     this._messages.elementRef.onscroll = async () => {
       if (!this._isLoading && !this._isPaginationComplete && this._messages.elementRef.scrollTop === 0) {
         this._isLoading = true;

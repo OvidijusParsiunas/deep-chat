@@ -6,6 +6,7 @@ import {WebComponentStyleUtils} from './utils/webComponent/webComponentStyleUtil
 import {DisableSubmitButton, SubmitButtonStyles} from './types/submitButton';
 import {RequestInterceptor, ResponseInterceptor} from './types/interceptors';
 import {TooltipUtils} from './views/chat/input/buttons/tooltip/tooltipUtils';
+import {HiddenMessages, ScrollButton} from './types/scrollToBottom';
 import {FocusUtils} from './views/chat/input/textInput/focusUtils';
 import {DirectServiceIO} from './services/utils/directServiceIO';
 import {InsertKeyViewStyles} from './types/insertKeyViewStyles';
@@ -20,7 +21,6 @@ import {DirectConnection} from './types/directConnection';
 import {TextToSpeechConfig} from './types/textToSpeech';
 import {SpeechToTextConfig} from './types/microphone';
 import {BrowserStorage} from './types/browserStorage';
-import {HiddenMessages} from './types/hiddenMessages';
 import {RemarkableOptions} from './types/remarkable';
 import {MessageBody} from './types/messagesInternal';
 import {ErrorMessages, OnError} from './types/error';
@@ -166,6 +166,9 @@ export class DeepChat extends InternalHTML {
 
   @Property('boolean')
   upwardsMode?: boolean;
+
+  @Property('object')
+  scrollButton?: boolean | ScrollButton;
 
   @Property('object')
   hiddenMessages?: boolean | HiddenMessages;

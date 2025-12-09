@@ -28,7 +28,7 @@ export class ElementUtils {
   }
 
   public static scrollToBottom(message: MessagesBase, isAnimation = false, targetElement?: HTMLElement) {
-    if (message.hiddenMessages && message.hiddenMessages.hiddenElements.size > 0) message.hiddenMessages.clear();
+    if (message.scrollButton && message.scrollButton.hiddenElements.size > 0) message.scrollButton.clearHidden();
     if (targetElement) {
       // scrolls targetElement.offsetTop to be at top of visible chat
       message.elementRef.scrollTo({left: 0, top: targetElement.offsetTop});

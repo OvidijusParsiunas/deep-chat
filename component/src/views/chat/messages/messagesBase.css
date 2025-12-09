@@ -53,19 +53,21 @@
   height: 100%;
 }
 
-#hidden-messages {
+#scroll-button {
   position: absolute;
   top: 75%;
   left: 50%;
   right: 50%;
   transform: translate(-50%, -50%);
+  transition: opacity 0.1s ease;
+  display: flex;
+  opacity: 0;
   padding: 8px;
   width: fit-content;
   height: fit-content;
   background-color: white;
   border: 0.5px solid #000000;
   z-index: 2;
-  display: none;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -73,6 +75,6 @@
   cursor: pointer;
 }
 
-#hidden-messages:hover {
+#scroll-button:hover {
   background-color: #fafafa;
 }

@@ -84,7 +84,7 @@ export class MessageStream {
       this._message = {role: this._activeMessageRole, [streamType]: initContent};
       this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
       if (customWrapper) this.setTargetWrapperIfNeeded(this._elements, content, this._streamType, customWrapper);
-      this._messages.hiddenMessages?.update();
+      this._messages.scrollButton?.updateHidden();
     }
   }
 

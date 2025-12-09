@@ -19,8 +19,8 @@ import {Legacy} from '../../../utils/legacy/legacy';
 import {FocusMode} from '../../../types/focusMode';
 import {HTMLWrappers} from '../../../types/stream';
 import {MessageUtils} from './utils/messageUtils';
-import {HiddenMessages} from './hiddenMessages';
 import {Response} from '../../../types/response';
+import {ScrollButton} from './scrollButton';
 import {DeepChat} from '../../../deepChat';
 import {MessageElements} from './messages';
 import {HTMLUtils} from './html/htmlUtils';
@@ -51,7 +51,7 @@ export class MessagesBase {
   public static readonly INTRO_CLASS = 'deep-chat-intro';
   public static readonly LAST_GROUP_MESSAGES_ACTIVE = 'deep-chat-last-group-messages-active';
   public readonly autoScrollAllowed: boolean = true;
-  readonly hiddenMessages?: HiddenMessages;
+  readonly scrollButton?: ScrollButton;
 
   constructor(deepChat: DeepChat) {
     this.elementRef = MessagesBase.createContainerElement();
@@ -63,7 +63,9 @@ export class MessagesBase {
     if (deepChat.browserStorage) this.browserStorage = new BrowserStorage(deepChat.browserStorage);
     this._onMessage = FireEvents.onMessage.bind(this, deepChat);
     if (deepChat.htmlClassUtilities) this.htmlClassUtilities = deepChat.htmlClassUtilities;
-    if (deepChat.hiddenMessages) this.hiddenMessages = new HiddenMessages(this, deepChat.hiddenMessages);
+    if (deepChat.hiddenMessages || deepChat.scrollButton) {
+      this.scrollButton = new ScrollButton(this, deepChat.hiddenMessages, deepChat.scrollButton);
+    }
     this.focusMode = Legacy.processFocusMode(deepChat.focusMode);
     if (!this.focusMode) {
       this._lastGroupMessagesElement = CREATE_ELEMENT();
