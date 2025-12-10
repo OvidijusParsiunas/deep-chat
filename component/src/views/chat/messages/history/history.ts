@@ -109,11 +109,7 @@ export class History {
       const messages = await loadHistory(this._index++);
       const scrollTop = this._messages.elementRef.scrollTop;
       this.populateMessages(loadingElements, messages);
-      // force scroll to bottom if user has not scrolled anywhere themselves (at start), otherwise keep at current location
-      if (scrollTop === 0) {
-        // https://github.com/OvidijusParsiunas/deep-chat/issues/84
-        setTimeout(() => ElementUtils.scrollToBottom(this._messages), 0);
-      }
+      this.restoreScrollOrScrollToBottom(scrollTop === 0);
     } catch (e) {
       this._messages.removeMessage(loadingElements);
       this._isPaginationComplete = true;
@@ -128,10 +124,23 @@ export class History {
     if (deepChat.loadHistory) {
       this.loadInitialHistory(deepChat.loadHistory);
     }
-    const history = deepChat.history || Legacy.processHistory(deepChat) || this._messages.browserStorage?.get().messages;
+    const browserStorageData = this._messages.browserStorage?.get();
+    const history = deepChat.history || Legacy.processHistory(deepChat) || browserStorageData?.messages;
     if (history) {
       this.populateInitialHistory(history);
+      this.restoreScrollOrScrollToBottom(true);
       this._index += 1;
+    }
+  }
+
+  private restoreScrollOrScrollToBottom(shouldScrollToBottom: boolean) {
+    const savedScrollHeight = this._messages.browserStorage?.get()?.scrollHeight;
+    if (savedScrollHeight !== undefined && this._messages.browserStorage?.trackScrollHeight) {
+      setTimeout(() => {
+        this._messages.elementRef.scrollTop = savedScrollHeight;
+      }, 0);
+    } else if (shouldScrollToBottom) {
+      setTimeout(() => ElementUtils.scrollToBottom(this._messages), 0);
     }
   }
 

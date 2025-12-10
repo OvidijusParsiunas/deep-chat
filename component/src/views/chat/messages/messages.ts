@@ -98,6 +98,9 @@ export class Messages extends MessagesBase {
     this.elementRef.onscroll = async () => {
       if (deepChat.loadHistory) history.loadHistoryOnScroll(deepChat.loadHistory);
       this.scrollButton?.updateScroll();
+      if (this.browserStorage?.trackScrollHeight) {
+        this.browserStorage.addScrollHeight(this.elementRef.scrollTop);
+      }
     };
   }
 
