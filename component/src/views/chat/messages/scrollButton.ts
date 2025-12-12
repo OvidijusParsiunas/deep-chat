@@ -2,6 +2,7 @@ import {HiddenMessages as HiddenMessagesT, ScrollButton as ScrollButtonT} from '
 import {CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../utils/element/statefulEvents';
 import {ElementUtils} from '../../../utils/element/elementUtils';
+import {ONE, ZERO} from '../../../utils/consts/messageConstants';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../utils/element/styleUtils';
 import {StatefulStyles} from '../../../types/styles';
@@ -16,16 +17,36 @@ export class ScrollButton {
   private readonly scrollButtonConfig?: ScrollButtonT;
   private readonly _messages: MessagesBase;
   private isScrollButton = false;
+  private isScrollingToBottom = false;
 
   constructor(messages: MessagesBase, hiddenMessages?: boolean | HiddenMessagesT, scrollButton?: boolean | ScrollButtonT) {
     this._messages = messages;
     if (hiddenMessages) {
-      this.hiddenMessagesConfig = typeof hiddenMessages === 'object' ? hiddenMessages : {};
+      const config: HiddenMessagesT = typeof hiddenMessages === 'object' ? JSON.parse(JSON.stringify(hiddenMessages)) : {};
+      config.styles ??= {};
+      const fitContent = 'fit-content';
+      config.styles.default = {borderRadius: '10px', width: fitContent, height: fitContent, ...config.styles.default};
+      this.hiddenMessagesConfig = config;
       this.io = this.initIntersectionObserver(this._messages.elementRef);
     }
-    if (scrollButton) this.scrollButtonConfig = typeof scrollButton === 'object' ? scrollButton : {};
+    if (scrollButton) {
+      const config: ScrollButtonT = typeof scrollButton === 'object' ? JSON.parse(JSON.stringify(scrollButton)) : {};
+      config.styles ??= {};
+      config.styles.default = {borderRadius: '50%', width: '1.4rem', height: '1.4rem', ...config.styles.default};
+      this.scrollButtonConfig = config;
+    }
     this.element = this.createElement();
     this._messages.elementRef.appendChild(this.element);
+  }
+
+  private static displayElement(element: HTMLElement) {
+    element[STYLE].opacity = ONE;
+    element[STYLE].pointerEvents = 'auto';
+  }
+
+  private static hideElement(element: HTMLElement) {
+    element[STYLE].opacity = ZERO;
+    element[STYLE].pointerEvents = 'none';
   }
 
   private initIntersectionObserver(messagesElement: HTMLElement) {
@@ -53,6 +74,13 @@ export class ScrollButton {
       const isAnimation = typeof smoothScroll === 'boolean' ? smoothScroll : true;
       if (this.isScrollButton || this.hiddenMessagesConfig?.clickScroll === 'last') {
         ElementUtils.scrollToBottom(this._messages, isAnimation);
+        if (isAnimation && this.element) {
+          ScrollButton.hideElement(this.element);
+          this.isScrollingToBottom = true;
+          ElementUtils.waitForScrollEnd(this._messages.elementRef, () => {
+            this.isScrollingToBottom = false;
+          });
+        }
       } else {
         const firstElement = this.hiddenElements.values().next().value;
         // using this instead of scrollIntoView as it caused the whole screen to scroll
@@ -79,26 +107,34 @@ export class ScrollButton {
     if (this.element) {
       this.isScrollButton = false;
       const number = this.hiddenElements.size;
+      if (number === 0) {
+        ScrollButton.hideElement(this.element);
+        return;
+      }
       const content = `${number} new message${number === 1 ? '' : 's'}`;
       if (this.hiddenMessagesConfig?.onUpdate) {
         const newContent = this.hiddenMessagesConfig.onUpdate(content, number);
         this.element.innerHTML = newContent;
-        if (this.hiddenMessagesConfig?.styles) this.assignStyles(this.hiddenMessagesConfig.styles);
         HTMLUtils.apply(this._messages, this.element);
       } else {
         this.element.innerHTML = content;
       }
-      this.element[STYLE].opacity = number ? '1' : '0';
+      if (this.hiddenMessagesConfig?.styles) this.assignStyles(this.hiddenMessagesConfig.styles);
+      ScrollButton.displayElement(this.element);
     }
   }
 
   public updateHidden() {
-    if (!this.hiddenMessagesConfig) return;
-    const lastMessageContainer = this._messages.getFirstMessageContentEl()?.outerContainer;
-    if (lastMessageContainer && !ElementUtils.isVisibleInParent(lastMessageContainer, this._messages.elementRef)) {
-      this.hiddenElements.add(lastMessageContainer);
-      this.io?.observe(lastMessageContainer);
-      this.updateHiddenElement();
+    if (this.isScrollingToBottom) return;
+    if (this.hiddenMessagesConfig) {
+      const lastMessageContainer = this._messages.getFirstMessageContentEl()?.outerContainer;
+      if (lastMessageContainer && !ElementUtils.isVisibleInParent(lastMessageContainer, this._messages.elementRef)) {
+        this.hiddenElements.add(lastMessageContainer);
+        this.io?.observe(lastMessageContainer);
+        this.updateHiddenElement();
+      }
+    } else {
+      this.updateScroll();
     }
   }
 
@@ -109,23 +145,18 @@ export class ScrollButton {
   }
 
   private displayScroll() {
-    if (this.element && this.element[STYLE].opacity !== '1') {
-      this.element[STYLE].opacity = '1';
+    if (this.element && this.element[STYLE].opacity !== ONE) {
+      ScrollButton.displayElement(this.element);
       this.element.innerHTML =
-        this.scrollButtonConfig?.content || '<span style="font-size: 20px; user-select: none;">&darr;</span>';
+        this.scrollButtonConfig?.content || '<span style="font-size: 1.2rem; user-select: none;">&darr;</span>';
       if (this.scrollButtonConfig?.styles) this.assignStyles(this.scrollButtonConfig.styles);
     }
   }
 
-  private hideScroll() {
-    if (this.element && this.element[STYLE].opacity !== '0') {
-      this.element[STYLE].opacity = '0';
-    }
-  }
-
   public updateScroll() {
-    if (ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef, this.scrollButtonConfig?.scrollDelta || 60)) {
-      this.hideScroll();
+    if (this.isScrollingToBottom || !this.scrollButtonConfig) return;
+    if (ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef, this.scrollButtonConfig?.scrollDelta || 80)) {
+      if (this.element && this.element[STYLE].opacity !== ZERO) ScrollButton.hideElement(this.element);
     } else {
       this.displayScroll();
       this.isScrollButton = true;

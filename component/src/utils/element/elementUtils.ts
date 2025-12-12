@@ -49,4 +49,27 @@ export class ElementUtils {
     // Check if element is at least partially within parent vertically
     return elementRect.bottom > parentRect.top && elementRect.top < parentRect.bottom;
   }
+
+  public static waitForScrollEnd(overflowElement: HTMLElement, callback: () => void) {
+    let lastPosition = -1;
+    let stillCount = 0;
+
+    const check = () => {
+      const current = overflowElement.scrollTop;
+      if (current === lastPosition) {
+        stillCount++;
+        // Require stability for a few frames
+        if (stillCount > 2) {
+          callback();
+          return;
+        }
+      } else {
+        stillCount = 0;
+        lastPosition = current;
+      }
+      requestAnimationFrame(check);
+    };
+
+    requestAnimationFrame(check);
+  }
 }

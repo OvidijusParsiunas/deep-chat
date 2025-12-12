@@ -57,3 +57,7 @@ export const START = 'start';
 export const END = 'end';
 
 export const MESSAGES_ID = 'messages';
+
+export const ZERO = '0';
+
+export const ONE = '1';
