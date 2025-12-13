@@ -69,6 +69,10 @@ export class MessageStream {
 
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {
     this._streamType = streamType;
+    this._targetWrapper = undefined;
+    this._fileAdded = false;
+    this._partialText = '';
+    this._partialBubble = undefined;
     role ??= AI;
     const customWrapper = this._messages._customWrappers?.[role] || this._messages._customWrappers?.[DEFAULT];
     const initContent = customWrapper ? '' : content;
