@@ -47,7 +47,6 @@ export class MessageStream {
     if (response?.[TEXT] === undefined && response?.[HTML] === undefined) {
       return console[ERROR](INVALID_STREAM_EVENT);
     }
-    if (response?.custom && this._message) this._message.custom = response.custom;
     const content = response?.[TEXT] || response?.[HTML] || '';
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef);
     const streamType = response?.[TEXT] !== undefined ? TEXT : HTML;
@@ -64,6 +63,7 @@ export class MessageStream {
       }
     }
     if (response?._sessionId) this._sessionId = response?._sessionId;
+    if (response?.custom && this._message) this._message.custom = response.custom;
     if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages);
   }
 
