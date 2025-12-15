@@ -12,20 +12,25 @@ import {DropupMenu} from './dropupMenu';
 
 export class DropupItem {
   public static MENU_ITEM_CLASS = 'dropup-menu-item';
+  public static CUSTOM_BUTTON_ITEM_CLASS = 'dropup-menu-item-custom-button';
   public static TEXT_CLASS = 'dropup-menu-item-text';
   public static ICON_CLASS = 'dropup-menu-item-icon';
 
-  private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
-    StatefulEvents.add(item, styles);
-    item.addEventListener(CLICK, () => {
-      inputButton[CLICK]();
-    });
+  public static addHighlightEvents(menu: DropupMenu, item: HTMLElement) {
     item.addEventListener('mouseenter', (event) => {
       menu.highlightedItem = event.target as HTMLElement;
     });
     item.addEventListener('mouseleave', () => {
       menu.highlightedItem = undefined;
     });
+  }
+
+  private static addItemEvents(menu: DropupMenu, item: HTMLElement, inputButton: HTMLElement, styles: StatefulStyles) {
+    StatefulEvents.add(item, styles);
+    item.addEventListener(CLICK, () => {
+      inputButton[CLICK]();
+    });
+    DropupItem.addHighlightEvents(menu, item);
   }
 
   public static createItemText(dropupText?: string, textStyle?: CustomStyle) {
@@ -62,9 +67,10 @@ export class DropupItem {
     Object.assign(item[STYLE], styles?.item?.[DEFAULT]);
     DropupItem.populateItem(inputButton, item, styles);
     item[CLASS_LIST].add(DropupItem.MENU_ITEM_CLASS);
+    item.tabIndex = 0;
     const {elementRef} = inputButton;
     if (inputButton.isCustom) {
-      (inputButton as CustomButton).setDropupItem(item);
+      (inputButton as CustomButton).setDropupItem(menu, item);
     } else {
       const statefulStyles = StyleUtils.processStateful(styles?.item || {});
       DropupItem.addItemEvents(menu, item, elementRef, statefulStyles);

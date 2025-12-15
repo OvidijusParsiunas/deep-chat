@@ -1,6 +1,7 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
-import {CLICK, DEFAULT} from '../../../../../utils/consts/inputConstants';
+import {ElementUtils} from '../../../../../utils/element/elementUtils';
+import {DEFAULT} from '../../../../../utils/consts/inputConstants';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
 import {StyleUtils} from '../../../../../utils/element/styleUtils';
@@ -9,6 +10,7 @@ import {HTMLUtils} from '../../../messages/html/htmlUtils';
 import {ButtonAccessibility} from '../buttonAccessility';
 import {ButtonStyles} from '../../../../../types/button';
 import {TooltipUtils} from '../tooltip/tooltipUtils';
+import {DropupMenu} from '../../dropup/dropupMenu';
 import {DropupItem} from '../../dropup/dropupItem';
 import {DeepChat} from '../../../../../deepChat';
 import {InputButton} from '../inputButton';
@@ -38,8 +40,9 @@ export class CustomButton extends InputButton<Styles> {
   private static readonly DEFAULT_CONTAINER_CLASS = 'custom-button-container-default';
   private static readonly ACTIVE_CONTAINER_CLASS = 'custom-button-container-active';
   private readonly _innerElements: DefinedButtonInnerElements<Styles>;
-  private _originalElementRef: HTMLElement | undefined; // currently used only for dropup items
+  private _originalElementRef?: HTMLElement; // currently used only for dropup items
   private _state: keyof CustomButtonStyles = DEFAULT;
+  private _menu?: DropupMenu;
   private readonly _onClick: CustomButtonT['onClick'];
   private readonly _dropupStyles?: CustomDropupItemStyles;
   private readonly _menuStyles?: DropupMenuStyles;
@@ -86,7 +89,7 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   private addClickListener(focusInput?: () => void) {
-    this.elementRef.addEventListener(CLICK, () => {
+    ElementUtils.assignButtonEvents(this.elementRef, () => {
       const resultState = this._onClick?.(this._state);
       focusInput?.();
       if (resultState === DEFAULT || resultState === 'active' || resultState === 'disabled') {
@@ -133,6 +136,7 @@ export class CustomButton extends InputButton<Styles> {
   private assignDropupItemStyle(dropupStyles?: CustomDropupItemStateStyles, buttonStyles?: ButtonStyles) {
     // doesn't have a parent element when inserted at the start
     if (this.elementRef.parentElement && this._originalElementRef) this.resetDropupItem(buttonStyles);
+    DropupItem.addHighlightEvents(this._menu!, this.elementRef);
     this.applyDropupContentStyles(dropupStyles);
     Object.assign(this.elementRef[STYLE], dropupStyles?.item?.[DEFAULT]);
     const statefulStyles = StyleUtils.processStateful(dropupStyles?.item || {});
@@ -187,7 +191,8 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   // called after class is initialised
-  public setDropupItem(dropupItem: HTMLElement) {
+  public setDropupItem(menu: DropupMenu, dropupItem: HTMLElement) {
+    this._menu = menu;
     this.elementRef = dropupItem;
     this._originalElementRef = dropupItem.cloneNode(true) as HTMLElement;
     this.changeState(this._state, true);

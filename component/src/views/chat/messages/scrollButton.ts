@@ -67,7 +67,7 @@ export class ScrollButton {
   private createElement() {
     const element = CREATE_ELEMENT();
     element.id = 'scroll-button';
-    element.onclick = () => {
+    ElementUtils.assignButtonEvents(element, () => {
       const smoothScroll = this.isScrollButton
         ? this.scrollButtonConfig?.smoothScroll
         : this.hiddenMessagesConfig?.smoothScroll;
@@ -91,7 +91,7 @@ export class ScrollButton {
             behavior: isAnimation ? 'smooth' : 'auto',
           });
       }
-    };
+    });
     HTMLUtils.apply(this._messages, element);
     return element;
   }

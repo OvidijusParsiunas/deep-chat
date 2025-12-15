@@ -1,4 +1,5 @@
 import {MessagesBase} from '../../views/chat/messages/messagesBase';
+import {KEYBOARD_KEY} from '../buttons/keyboardKeys';
 
 export class ElementUtils {
   // this is also used for when there is a lot of history and font loads up late
@@ -71,5 +72,13 @@ export class ElementUtils {
     };
 
     requestAnimationFrame(check);
+  }
+
+  public static assignButtonEvents(element: HTMLElement, func: () => void) {
+    element.onclick = func;
+    element.onkeydown = (event: KeyboardEvent) => {
+      // in timeout to prevent creating new line input or closing modal
+      if (event.key === KEYBOARD_KEY.ENTER) setTimeout(func);
+    };
   }
 }

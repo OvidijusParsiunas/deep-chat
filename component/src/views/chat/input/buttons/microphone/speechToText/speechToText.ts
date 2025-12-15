@@ -1,4 +1,5 @@
 import {ValidationHandler} from '../../../../../../types/validationHandler';
+import {ElementUtils} from '../../../../../../utils/element/elementUtils';
 import {SpeechToTextConfig} from '../../../../../../types/microphone';
 import {CLICK} from '../../../../../../utils/consts/inputConstants';
 import {OnPreResult} from 'speech-to-element/dist/types/options';
@@ -28,7 +29,10 @@ export class SpeechToText extends MicrophoneButton {
       this.changeToUnsupported();
     } else {
       const isInputEnabled = !deepChat.textInput || !deepChat.textInput.disabled;
-      this.elementRef.onclick = this.buttonClick.bind(this, textInput, isInputEnabled, serviceName, processedConfig);
+      ElementUtils.assignButtonEvents(
+        this.elementRef,
+        this.buttonClick.bind(this, textInput, isInputEnabled, serviceName, processedConfig)
+      );
     }
     setTimeout(() => {
       this._validationHandler = deepChat._validationHandler;

@@ -3,6 +3,7 @@ import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConsta
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FILES, TEXT} from '../../../../../utils/consts/messageConstants';
+import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
 import {ServiceIO} from '../../../../../services/serviceIO';
@@ -47,6 +48,6 @@ export class CameraButton extends InputButton<Styles> {
       modalContainerStyle?: CustomStyle, cameraFiles?: CameraFiles) {
     const openModalFunc = CameraModal.createCameraModalFunc(
       containerElement, fileAttachmentsType, modalContainerStyle, cameraFiles);
-    this.elementRef.onclick = openModalFunc;
+    ElementUtils.assignButtonEvents(this.elementRef, openModalFunc);
   }
 }

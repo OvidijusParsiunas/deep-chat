@@ -83,12 +83,14 @@ export class DropupMenu {
         this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
       } else if (event.key === KEYBOARD_KEY.ARROW_DOWN) {
         DropupItemNavigation.focusSiblingItem(
+          this,
           this.highlightedItem || (this.elementRef.children[this.elementRef.children.length - 1] as HTMLElement),
-          this.elementRef, true);
+          true);
       } else if (event.key === KEYBOARD_KEY.ARROW_UP) {
         DropupItemNavigation.focusSiblingItem(
+          this,
           this.highlightedItem || (this.elementRef.children[0] as HTMLElement),
-          this.elementRef, false);
+          false);
       }
     }
   }

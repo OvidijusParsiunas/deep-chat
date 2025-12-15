@@ -50,13 +50,13 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     audio.onended = () => {
       container.replaceChildren(play);
     };
-    container.onclick = () => {
+    ElementUtils.assignButtonEvents(container, () => {
       if (audio.paused) {
         audio.play();
       } else {
         audio.pause();
       }
-    };
+    });
   }
 
   public static createAudioAttachment(fileReaderResult: string) {

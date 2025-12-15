@@ -2,11 +2,11 @@ import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConsta
 import {FileAttachmentsType} from '../fileAttachmentTypes/fileAttachmentsType';
 import {CameraDimensions, CameraFiles} from '../../../../../types/camera';
 import {ERROR, START} from '../../../../../utils/consts/messageConstants';
+import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CLOSE_ICON_STRING} from '../../../../../icons/closeIcon';
-import {CLICK} from '../../../../../utils/consts/inputConstants';
 import {TICK_ICON_STRING} from '../../../../../icons/tickIcon';
 import {CustomStyle} from '../../../../../types/styles';
 import {FileAttachments} from '../fileAttachments';
@@ -62,16 +62,14 @@ export class CameraModal extends Modal {
   // prettier-ignore
   private addButtonEvents(captureButton: HTMLElement, closeButton: HTMLElement, submitButton: HTMLElement,
       fileAttachmentsType: FileAttachmentsType) {
-    captureButton.onclick = () => {
-      this.capture();
-    };
-    closeButton.addEventListener(CLICK, this.stop.bind(this));
-    submitButton.onclick = () => {
+    ElementUtils.assignButtonEvents(captureButton, this.capture.bind(this));
+    ElementUtils.assignButtonEvents(closeButton, this.stop.bind(this));
+    ElementUtils.assignButtonEvents(submitButton, () => {
       const file = this.getFile();
       if (file) FileAttachments.addFilesToType([file], [fileAttachmentsType]);
       this.stop();
       this.close();
-    };
+    });
   }
 
   private stop() {

@@ -7,6 +7,7 @@ import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessage
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
+import {ElementUtils} from '../../../utils/element/elementUtils';
 import avatarUrl from '../../../../assets/person-avatar.png';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
@@ -298,7 +299,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private createMicophoneButton() {
     const micorphoneButton = new OpenAIRealtimeButton(this._buttonsConfig?.[MICROPHONE] as OpenAIRealtimeButtonT);
     micorphoneButton.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-microphone');
-    micorphoneButton.elementRef.onclick = () => {
+    ElementUtils.assignButtonEvents(micorphoneButton.elementRef, () => {
       if (micorphoneButton.isActive) {
         this.toggleMicorphone(true);
         micorphoneButton.elementRef[CLASS_LIST].replace(
@@ -317,7 +318,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         micorphoneButton.changeToActive();
         this._isMuted = true;
       }
-    };
+    });
     return micorphoneButton;
   }
 
@@ -328,7 +329,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private createToggleButton() {
     const toggleButton = new OpenAIRealtimeButton(this._buttonsConfig?.toggle as OpenAIRealtimeButtonT);
     toggleButton.elementRef[CLASS_LIST].add(OpenAIRealtimeIO.BUTTON_DEFAULT, 'deep-chat-openai-realtime-toggle');
-    toggleButton.elementRef.onclick = async () => {
+    ElementUtils.assignButtonEvents(toggleButton.elementRef, async () => {
       if (toggleButton.isActive) {
         toggleButton.changeToDefault();
         this.stop();
@@ -353,7 +354,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           this.hideLoading();
         }
       }
-    };
+    });
     return toggleButton;
   }
 
