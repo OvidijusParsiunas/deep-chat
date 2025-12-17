@@ -3,6 +3,7 @@ import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
 import {OpenRouter} from './openRouter';
 import {Perplexity} from './perplexity';
+import {OpenWebUI} from './openWebUI';
 import {DeepSeek} from './deepSeek';
 import {Together} from './together';
 import {BigModel} from './bigModel';
@@ -41,4 +42,5 @@ export interface DirectConnection {
   groq?: Groq & APIKey;
   perplexity?: Perplexity & APIKey;
   ollama?: Ollama;
+  openWebUI?: OpenWebUI & APIKey;
 }

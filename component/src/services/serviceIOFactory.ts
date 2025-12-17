@@ -35,6 +35,7 @@ import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
 import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
+import {OpenWebUIIO} from './openWebUI/openWebUIIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
@@ -208,6 +209,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.ollama) {
         return new OllamaIO(deepChat);
+      }
+      if (directConnection.openWebUI) {
+        return new OpenWebUIIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {
