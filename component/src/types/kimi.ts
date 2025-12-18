@@ -1,7 +1,7 @@
 import {ChatFunctionHandler} from './openAI';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
-export interface Kimi {
+export interface KimiChat {
   model?: string;
   temperature?: number;
   max_tokens?: number;
@@ -13,3 +13,5 @@ export interface Kimi {
   tools?: {type: 'function'; function: {name: string; description?: string; parameters: object}}[];
   function_handler?: ChatFunctionHandler;
 }
+
+export type Kimi = true | KimiChat;

@@ -1,5 +1,5 @@
 // https://docs.spring.io/spring-ai/reference/api/chat/minimax-chat.html
-export interface MiniMax {
+export interface MiniMaxChat {
   model?: string;
   temperature?: number;
   max_tokens?: number;
@@ -9,3 +9,5 @@ export interface MiniMax {
   stop?: string | string[];
   system_prompt?: string;
 }
+
+export type MiniMax = true | MiniMaxChat;

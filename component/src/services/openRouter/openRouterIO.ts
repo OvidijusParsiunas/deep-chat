@@ -1,13 +1,13 @@
 import {OPEN_ROUTER_BUILD_HEADERS, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openRouterUtils';
 import {AUDIO, ERROR, FILES, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
+import {OpenRouter, OpenRouterChat} from '../../types/openRouter';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {MessageFile} from '../../types/messageFile';
-import {OpenRouter} from '../../types/openRouter';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {
@@ -37,7 +37,7 @@ export class OpenRouterIO extends DirectServiceIO {
     const config = directConnectionCopy.openRouter as OpenRouter & APIKey;
     super(deepChat, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_ROUTER_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      this.completeConfig(config, (deepChat.directConnection?.openRouter as OpenRouter)?.function_handler);
+      this.completeConfig(config, (deepChat.directConnection?.openRouter as OpenRouterChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'openai/gpt-4o';

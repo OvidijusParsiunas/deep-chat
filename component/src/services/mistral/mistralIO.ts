@@ -6,10 +6,10 @@ import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {Mistral, MistralChat} from '../../types/mistral';
 import {MistralResult} from '../../types/mistralResult';
 import {MessageFile} from '../../types/messageFile';
 import {Response} from '../../types/response';
-import {Mistral} from '../../types/mistral';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -25,7 +25,7 @@ export class MistralIO extends DirectServiceIO {
     const config = directConnectionCopy.mistral as Mistral & APIKey;
     super(deepChat, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS(), MISTRAL_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      this.completeConfig(config, deepChat.directConnection?.mistral?.function_handler);
+      this.completeConfig(config, (deepChat.directConnection?.mistral as MistralChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'mistral-small-latest';

@@ -1,5 +1,5 @@
 // https://api-docs.deepseek.com/api/create-chat-completion
-export interface DeepSeek {
+export interface DeepSeekChat {
   model?: string;
   temperature?: number;
   max_tokens?: number;
@@ -9,3 +9,5 @@ export interface DeepSeek {
   stop?: string | string[];
   system_prompt?: string;
 }
+
+export type DeepSeek = true | DeepSeekChat;

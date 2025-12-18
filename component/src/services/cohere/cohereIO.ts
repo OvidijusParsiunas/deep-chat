@@ -4,10 +4,10 @@ import {ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {Cohere, CohereChat} from '../../types/cohere';
 import {Legacy} from '../../utils/legacy/legacy';
 import {OBJECT} from '../utils/serviceConstants';
 import {Response} from '../../types/response';
-import {Cohere} from '../../types/cohere';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -31,7 +31,7 @@ export class CohereIO extends DirectServiceIO {
     this.rawBody.model ??= 'command-a-03-2025';
   }
 
-  private cleanConfig(config: Cohere & APIKey) {
+  private cleanConfig(config: CohereChat & APIKey) {
     delete config.key;
   }
 

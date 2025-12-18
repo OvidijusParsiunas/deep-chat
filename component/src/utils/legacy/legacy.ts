@@ -10,8 +10,8 @@ import {HTMLWrappers, Stream} from '../../types/stream';
 import {MessageFile} from '../../types/messageFile';
 import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
+import {CohereChat} from '../../types/cohere';
 import {Connect} from '../../types/connect';
-import {Cohere} from '../../types/cohere';
 import {DeepChat} from '../../deepChat';
 import {Demo} from '../../types/demo';
 
@@ -147,7 +147,7 @@ export class Legacy {
     return demo;
   }
 
-  public static processCohere(cohere: Cohere) {
+  public static processCohere(cohere: CohereChat) {
     const cohereObj = cohere as unknown as {chat?: object; textGeneration?: object; summarization?: object};
     const documentationMsg = `${SEE}official documentation: ${DOCS_BASE_URL}directConnection/Cohere`;
     if (cohereObj.chat) {

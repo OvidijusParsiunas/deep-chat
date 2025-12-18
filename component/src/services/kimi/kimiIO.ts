@@ -8,9 +8,9 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {KimiResult} from '../../types/kimiResult';
+import {Kimi, KimiChat} from '../../types/kimi';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-import {Kimi} from '../../types/kimi';
 
 // https://platform.moonshot.ai/docs/api/chat#chat-completion
 export class KimiIO extends DirectServiceIO {
@@ -25,7 +25,7 @@ export class KimiIO extends DirectServiceIO {
     const config = directConnectionCopy.kimi as Kimi & APIKey;
     super(deepChat, KIMI_BUILD_KEY_VERIFICATION_DETAILS(), KIMI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      this.completeConfig(config, (deepChat.directConnection?.kimi as Kimi)?.function_handler);
+      this.completeConfig(config, (deepChat.directConnection?.kimi as KimiChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'moonshot-v1-8k';

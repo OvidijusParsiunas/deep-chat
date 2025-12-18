@@ -1,5 +1,3 @@
-import {OpenWebUITool} from './openWebUI';
-
 export interface OpenWebUIMessage {
   role: string;
   content: string | {type: 'text' | 'image_url'; text?: string; image_url?: {url: string}}[];
@@ -18,5 +16,5 @@ export interface OpenWebUIConverseBodyInternal {
   temperature?: number;
   max_tokens?: number;
   top_p?: number;
-  tools?: OpenWebUITool[];
+  tools?: object[];
 }

@@ -24,7 +24,7 @@ export interface ClaudeMCPServer {
 }
 
 // https://docs.anthropic.com/en/api/messages
-export interface Claude {
+export interface ClaudeChat {
   model?: string;
   max_tokens?: number;
   temperature?: number;
@@ -37,3 +37,5 @@ export interface Claude {
   function_handler?: ChatFunctionHandler;
   mcp_servers?: ClaudeMCPServer[];
 }
+
+export type Claude = true | ClaudeChat;

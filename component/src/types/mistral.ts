@@ -1,7 +1,7 @@
 import {ChatFunctionHandler} from './openAI';
 
 // https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post
-export type Mistral = {
+export interface MistralChat {
   system_prompt?: string;
   model?: string;
   max_tokens?: number;
@@ -16,4 +16,6 @@ export type Mistral = {
   tools?: {type: 'function'; function: {name: string; description?: string; parameters: object}}[];
   tool_choice?: 'auto' | 'any' | 'none' | {type: 'function'; function: {name: string}};
   function_handler?: ChatFunctionHandler;
-};
+}
+
+export type Mistral = true | MistralChat;

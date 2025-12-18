@@ -8,9 +8,9 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {QwenResult} from '../../types/qwenResult';
+import {Qwen, QwenChat} from '../../types/qwen';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
-import {Qwen} from '../../types/qwen';
 
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
 export class QwenIO extends DirectServiceIO {
@@ -25,7 +25,7 @@ export class QwenIO extends DirectServiceIO {
     const config = directConnectionCopy.qwen as Qwen & APIKey;
     super(deepChat, QWEN_BUILD_KEY_VERIFICATION_DETAILS(), QWEN_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      this.completeConfig(config, (deepChat.directConnection?.qwen as Qwen)?.function_handler);
+      this.completeConfig(config, (deepChat.directConnection?.qwen as QwenChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'qwen-plus';

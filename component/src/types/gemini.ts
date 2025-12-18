@@ -12,7 +12,7 @@ export interface GeminiGeneration {
 }
 
 // https://ai.google.dev/api/rest/v1beta/models/generateContent
-export interface Gemini extends GeminiGeneration {
+export interface GeminiChat extends GeminiGeneration {
   model?: string;
   system_prompt?: string;
   function_handler?: ChatFunctionHandler;
@@ -28,3 +28,5 @@ export interface Gemini extends GeminiGeneration {
     }[];
   }[];
 }
+
+export type Gemini = true | GeminiChat;

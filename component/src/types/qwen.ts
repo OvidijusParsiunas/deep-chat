@@ -10,7 +10,7 @@ export interface QwenTool {
 }
 
 // https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api
-export interface Qwen {
+export interface QwenChat {
   model?: string;
   temperature?: number;
   max_tokens?: number;
@@ -23,3 +23,5 @@ export interface Qwen {
   tools?: QwenTool[];
   tool_choice?: 'auto' | 'none' | {type: 'function'; function: {name: string}};
 }
+
+export type Qwen = true | QwenChat;

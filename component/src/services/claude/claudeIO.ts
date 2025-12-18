@@ -9,8 +9,8 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {Claude, ClaudeChat} from '../../types/claude';
 import {MessageFile} from '../../types/messageFile';
-import {Claude} from '../../types/claude';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
@@ -27,7 +27,7 @@ export class ClaudeIO extends DirectServiceIO {
     const config = directConnectionCopy.claude as Claude & APIKey;
     super(deepChat, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS(), CLAUDE_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      this.completeConfig(config, deepChat.directConnection?.claude?.function_handler);
+      this.completeConfig(config, (deepChat.directConnection?.claude as ClaudeChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'claude-sonnet-4-5-20250929';

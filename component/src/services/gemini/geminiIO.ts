@@ -7,11 +7,11 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {Gemini, GeminiChat} from '../../types/gemini';
 import {OBJECT} from '../utils/serviceConstants';
 import {StreamConfig} from '../../types/stream';
 import {Stream} from '../../utils/HTTP/stream';
 import {Response} from '../../types/response';
-import {Gemini} from '../../types/gemini';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {
@@ -35,16 +35,17 @@ export class GeminiIO extends DirectServiceIO {
     const config = directConnectionCopy.gemini as Gemini & APIKey;
     super(deepChat, GEMINI_BUILD_KEY_VERIFICATION_DETAILS(), GEMINI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
-      if (config.model) {
-        this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent`;
+      const configObj = config as GeminiChat;
+      if (configObj.model) {
+        this.urlPrefix = `https://generativelanguage.googleapis.com/v1beta/models/${configObj.model}:generateContent`;
       }
-      this.cleanConfig(config);
-      this.completeConfig(config, (deepChat.directConnection?.gemini as Gemini)?.function_handler);
+      this.cleanConfig(configObj);
+      this.completeConfig(configObj, (deepChat.directConnection?.gemini as GeminiChat)?.function_handler);
     }
     this.maxMessages ??= -1;
   }
 
-  private cleanConfig(config: Gemini & APIKey) {
+  private cleanConfig(config: GeminiChat & APIKey) {
     delete config.model;
   }
 

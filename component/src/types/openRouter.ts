@@ -10,7 +10,7 @@ export interface OpenRouterTool {
 }
 
 // https://openrouter.ai/docs/api-reference/chat-completion
-export interface OpenRouter {
+export interface OpenRouterChat {
   model?: string;
   max_tokens?: number;
   temperature?: number;
@@ -21,3 +21,5 @@ export interface OpenRouter {
   tools?: OpenRouterTool[];
   function_handler?: ChatFunctionHandler;
 }
+
+export type OpenRouter = true | OpenRouterChat;

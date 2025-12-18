@@ -1,5 +1,5 @@
 // https://docs.perplexity.ai/api-reference/chat-completions-post
-export interface Perplexity {
+export interface PerplexityChat {
   model?: string;
   temperature?: number;
   max_tokens?: number;
@@ -15,3 +15,5 @@ export interface Perplexity {
   disable_search?: boolean;
   enable_search_classifier?: boolean;
 }
+
+export type Perplexity = true | PerplexityChat;
