@@ -22,7 +22,11 @@ export class ScrollButton {
   constructor(messages: MessagesBase, hiddenMessages?: boolean | HiddenMessagesT, scrollButton?: boolean | ScrollButtonT) {
     this._messages = messages;
     if (hiddenMessages) {
-      const config: HiddenMessagesT = typeof hiddenMessages === 'object' ? JSON.parse(JSON.stringify(hiddenMessages)) : {};
+      let config: HiddenMessagesT = {};
+      if (typeof hiddenMessages === 'object') {
+        config = JSON.parse(JSON.stringify(hiddenMessages));
+        config.onUpdate = hiddenMessages.onUpdate;
+      }
       config.styles ??= {};
       const fitContent = 'fit-content';
       config.styles.default = {borderRadius: '10px', width: fitContent, height: fitContent, ...config.styles.default};
