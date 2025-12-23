@@ -26,7 +26,7 @@ import {
 export class GeminiIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Gemini');
   override keyHelpUrl = 'https://aistudio.google.com/app/apikey';
-  urlPrefix = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+  urlPrefix = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
   url = '';
   permittedErrorPrefixes = ['API_KEY_INVALID'];
 
