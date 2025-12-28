@@ -20,7 +20,7 @@ import {
 
 export class MessageStream {
   static readonly MESSAGE_CLASS = 'streamed-message';
-  private static readonly PARTIAL_RENDER_TEXT_MARK = '\n\n';
+  private static readonly PARTIAL_RENDER_MARK = '\n\n';
   private readonly _partialRender?: boolean;
   private readonly _messages: MessagesBase;
   private _fileAdded = false;
@@ -30,7 +30,7 @@ export class MessageStream {
   private _activeMessageRole?: string;
   private _message?: MessageContentI;
   private _endStreamAfterOperation?: boolean;
-  private _partialText: string = '';
+  private _partialContent: string = '';
   private _partialBubble?: HTMLDivElement;
   private _targetWrapper?: HTMLElement;
   private _sessionId?: string;
@@ -71,7 +71,7 @@ export class MessageStream {
     this._streamType = streamType;
     this._targetWrapper = undefined;
     this._fileAdded = false;
-    this._partialText = '';
+    this._partialContent = '';
     this._partialBubble = undefined;
     role ??= AI;
     const customWrapper = this._messages._customWrappers?.[role] || this._messages._customWrappers?.[DEFAULT];
@@ -114,10 +114,18 @@ export class MessageStream {
       this.partialRenderNewParagraph(bubbleElement);
     }
     if (this._partialBubble) {
-      this.partialRenderBubbleUpdate(text);
+      this.updatePartialRenderBubble(text);
     } else {
-      this._messages.renderText(bubbleElement, this._message[TEXT]);
+      this._messages.renderText(bubbleElement, this._message[TEXT]!);
     }
+  }
+
+  private containsPartialRenderMark(content: string): boolean {
+    const markIndex = content.indexOf(MessageStream.PARTIAL_RENDER_MARK);
+    if (markIndex === -1) return false;
+    // Check if this is part of a markdown horizontal rule pattern - "a \n\n---\n\n a"
+    const textAfterMark = content.substring(markIndex + MessageStream.PARTIAL_RENDER_MARK.length);
+    return !textAfterMark.startsWith('---');
   }
 
   private isNewPartialRenderParagraph(bubbleElement: HTMLElement, isOverwrite: boolean) {
@@ -125,42 +133,46 @@ export class MessageStream {
       bubbleElement.innerHTML = '';
       return true;
     }
+    const key = this._streamType as 'text' | 'html';
     if (!this._partialBubble) {
-      return this._message?.[TEXT] && this.shouldCreateNewParagraph(this._message[TEXT]);
+      const content = this._message?.[key];
+      return !!content && this.containsPartialRenderMark(content);
     }
-    return this._partialText && this.shouldCreateNewParagraph(this._partialText);
-  }
-
-  private shouldCreateNewParagraph(text: string): boolean {
-    const markIndex = text.indexOf(MessageStream.PARTIAL_RENDER_TEXT_MARK);
-    if (markIndex === -1) return false;
-    // Check if this is part of a markdown horizontal rule pattern - "a \n\n---\n\n a"
-    const textAfterMark = text.substring(markIndex + MessageStream.PARTIAL_RENDER_TEXT_MARK.length);
-    return !textAfterMark.startsWith('---');
+    return !!this._partialContent && this.containsPartialRenderMark(this._partialContent);
   }
 
   private partialRenderNewParagraph(bubbleElement: HTMLElement) {
-    this._partialText = '';
+    this._partialContent = '';
     this._partialBubble = CREATE_ELEMENT() as HTMLDivElement;
     this._partialBubble[CLASS_LIST].add('partial-render-message');
     bubbleElement.appendChild(this._partialBubble);
   }
 
-  private partialRenderBubbleUpdate(text: string) {
-    this._partialText += text;
-    this._messages.renderText(this._partialBubble as HTMLDivElement, this._partialText);
+  private updatePartialRenderBubble(content: string) {
+    this._partialContent += content;
+    if (this._streamType === TEXT) {
+      this._messages.renderText(this._partialBubble as HTMLDivElement, this._partialContent);
+    } else {
+      (this._partialBubble as HTMLDivElement).innerHTML = this._partialContent;
+    }
   }
 
   private updateHTML(html: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
     if (!this._message) return;
-    if (isOverwrite) {
-      this._message[HTML] = html;
-      bubbleElement.innerHTML = html;
+    this._message[HTML] = isOverwrite ? html : (this._message[HTML] || '') + html;
+    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, isOverwrite)) {
+      this.partialRenderNewParagraph(bubbleElement);
+    }
+    if (this._partialBubble) {
+      this.updatePartialRenderBubble(html);
     } else {
-      const wrapper = CREATE_ELEMENT('span');
-      wrapper.innerHTML = html;
-      bubbleElement.appendChild(wrapper);
-      this._message[HTML] = bubbleElement?.innerHTML || '';
+      if (isOverwrite) {
+        bubbleElement.innerHTML = html;
+      } else {
+        const wrapper = CREATE_ELEMENT('span');
+        wrapper.innerHTML = html;
+        bubbleElement.appendChild(wrapper);
+      }
     }
   }
 
