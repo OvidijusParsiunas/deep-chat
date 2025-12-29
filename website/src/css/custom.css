@@ -318,12 +318,6 @@ img + h2 {
   border-left: unset;
 }
 
-.menu {
-  width: fit-content !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-
 code {
   border: 1px solid var(--text-code-border-color) !important;
   background-color: var(--text-code-background-color);
